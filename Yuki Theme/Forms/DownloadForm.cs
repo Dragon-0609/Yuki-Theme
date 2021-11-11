@@ -28,7 +28,7 @@ namespace Yuki_Theme.Forms
 
 		public async void CheckUpdate ()
 		{
-			var url = "https://api.github.com/repos/doki-theme/doki-theme-jetbrains/releases/latest";
+			var url = "https://github.com/Dragon-0609/Yuki-Theme/releases/latest";
 			try
 			{
 				using (var client = new HttpClient ())
