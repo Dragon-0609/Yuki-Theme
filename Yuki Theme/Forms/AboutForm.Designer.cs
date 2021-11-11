@@ -34,13 +34,13 @@ namespace Yuki_Theme.Forms
 			this.pictureBox1 = new System.Windows.Forms.PictureBox ();
 			this.linkLabel4 = new System.Windows.Forms.LinkLabel ();
 			this.vers = new System.Windows.Forms.Label ();
-			this.label3 = new System.Windows.Forms.Label ();
 			this.button1 = new System.Windows.Forms.Button ();
 			this.linkLabel1 = new System.Windows.Forms.LinkLabel ();
 			this.label2 = new System.Windows.Forms.Label ();
 			this.label4 = new System.Windows.Forms.Label ();
 			this.linkLabel2 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel3 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel5 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.SuspendLayout ();
 			// 
@@ -82,20 +82,10 @@ namespace Yuki_Theme.Forms
 			this.vers.Text = "version: 1.0";
 			this.vers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
-			// label3
-			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label3.Font = new System.Drawing.Font ("Times New Roman", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label3.Location = new System.Drawing.Point (0, 398);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size (204, 45);
-			this.label3.TabIndex = 4;
-			this.label3.Text = "Made by: Dragon-LV";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point (210, 408);
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Location = new System.Drawing.Point (210, 307);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size (65, 29);
 			this.button1.TabIndex = 5;
@@ -161,17 +151,32 @@ namespace Yuki_Theme.Forms
 			this.linkLabel3.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel3_LinkClicked);
 			// 
+			// linkLabel5
+			// 
+			this.linkLabel5.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel5.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.linkLabel5.Font = new System.Drawing.Font ("Times New Roman", 16F);
+			this.linkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel5.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel5.Location = new System.Drawing.Point (7, 306);
+			this.linkLabel5.Name = "linkLabel5";
+			this.linkLabel5.Size = new System.Drawing.Size (204, 27);
+			this.linkLabel5.TabIndex = 12;
+			this.linkLabel5.TabStop = true;
+			this.linkLabel5.Text = "Made by: Dragon-LV";
+			this.linkLabel5.VisitedLinkColor = System.Drawing.Color.Black;
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size (287, 443);
+			this.ClientSize = new System.Drawing.Size (287, 342);
+			this.Controls.Add (this.linkLabel5);
 			this.Controls.Add (this.linkLabel3);
 			this.Controls.Add (this.linkLabel2);
 			this.Controls.Add (this.label4);
 			this.Controls.Add (this.label2);
 			this.Controls.Add (this.linkLabel1);
 			this.Controls.Add (this.button1);
-			this.Controls.Add (this.label3);
 			this.Controls.Add (this.vers);
 			this.Controls.Add (this.linkLabel4);
 			this.Controls.Add (this.pictureBox1);
@@ -182,6 +187,8 @@ namespace Yuki_Theme.Forms
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel linkLabel5;
 
 		private System.Windows.Forms.LinkLabel linkLabel3;
 
@@ -196,7 +203,6 @@ namespace Yuki_Theme.Forms
 		private System.Windows.Forms.Button button1;
 
 		private System.Windows.Forms.Label vers;
-		private System.Windows.Forms.Label label3;
 
 		private System.Windows.Forms.LinkLabel linkLabel4;
 

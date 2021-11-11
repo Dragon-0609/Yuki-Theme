@@ -114,7 +114,7 @@ namespace Yuki_Theme.Forms
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ThemeManager";
-			this.Text = "SchemeManager";
+			this.Text = "Scheme Manager";
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}

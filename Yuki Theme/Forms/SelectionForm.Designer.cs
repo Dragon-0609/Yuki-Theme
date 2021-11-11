@@ -129,7 +129,7 @@ namespace Yuki_Theme.Forms
 			this.MinimizeBox = false;
 			this.Name = "SelectionForm";
 			this.ShowInTaskbar = false;
-			this.Text = "SelectionForm";
+			this.Text = "Selection";
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}

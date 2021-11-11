@@ -276,7 +276,7 @@ namespace Yuki_Theme.Forms
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "SettingsForm";
-			this.Text = "SettingsForm";
+			this.Text = "Settings";
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}

@@ -96,7 +96,7 @@ namespace Yuki_Theme.Forms
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "QuestionForm";
-			this.Text = "QuestionForm_Designer";
+			this.Text = "Question";
 			this.ResumeLayout (false);
 		}
 

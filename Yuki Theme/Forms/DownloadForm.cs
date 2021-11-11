@@ -39,11 +39,11 @@ namespace Yuki_Theme.Forms
 					if (response != null)
 					{
 						var json = await response.Content.ReadAsStringAsync ();
-						Console.WriteLine (json);
+						// Console.WriteLine (json);
 
 						var jresponse = JObject.Parse (json);
 						var ver = jresponse ["tag_name"].ToString ();
-						Console.WriteLine (ver);
+						// Console.WriteLine (ver);
 						if (SettingsForm.current_version != ver)
 						{
 							size = jresponse ["assets"] [0] ["size"].ToString ();
@@ -61,19 +61,24 @@ namespace Yuki_Theme.Forms
 							form.changeNotificationLocation ();
 							size = jresponse ["assets"] [0] ["size"].ToString ();
 							size = string.Format ("{0:0.0}", double.Parse (size) / 1024 / 1024);
+						} else
+						{
+							form.ShowNotification ("Up to date", "Your version is the latest.");
+							form.nf.button1.Visible = false;
+							form.changeNotificationLocation ();
 						}
 					}
 				}
 			} catch (Exception ex)
 			{
-				Console.WriteLine (ex.Message);
+				// Console.WriteLine (ex.Message);
 			}
 		}
 
 		private void startUpdate (object sender, EventArgs e)
 		{
 			form.nf.button1.Click -= startUpdate;
-			Console.WriteLine ("Update is started");
+			// Console.WriteLine ("Update is started");
 			
 			form.showDownloader ();
 			form.df.downloadlink = downloadlink;
@@ -158,7 +163,7 @@ namespace Yuki_Theme.Forms
 			                    user_agent);
 			web.DownloadFileCompleted += new AsyncCompletedEventHandler (DownloadCompleted);
 			web.DownloadProgressChanged += new DownloadProgressChangedEventHandler (ProgressChanged);
-			Console.WriteLine($"{downloadlink}, {dest}");
+			// Console.WriteLine($"{downloadlink}, {dest}");
 			web.DownloadFileAsync (new Uri (downloadlink), dest);
 		}
 

@@ -119,12 +119,13 @@ namespace Yuki_Theme
 			PopulateByXMLNodeSingleType ("CaretMarker", doc.SelectSingleNode ("/scheme/colors/option[@name='CARET_COLOR']"), null);
 
 			Dictionary <string, string> df = attributes ["Default"];
-			foreach (KeyValuePair <string, string> rf in df)
+			/*foreach (KeyValuePair <string, string> rf in df)
 			{
 				Console.WriteLine($"{rf.Key}: {rf.Value}");
 			}
+			*/
 
-			Console.WriteLine (attributes.Count);
+			// Console.WriteLine (attributes.Count);
 			PopulateByXMLNodeSingleType ("LineNumbers", doc.SelectSingleNode ("/scheme/colors/option[@name='LINE_NUMBERS_COLOR']"),
 			                             null, new Dictionary <string, string> (){{"bgcolor",df["bgcolor"]}});
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_NUMBER']"));
@@ -147,11 +148,11 @@ namespace Yuki_Theme
 
 		private void PopulateByXMLNodeTreeType (XmlNode node)
 		{
-			Console.WriteLine (node.Name);
-			foreach (XmlAttribute att in node.Attributes)
+			// Console.WriteLine (node.Name);
+			/*foreach (XmlAttribute att in node.Attributes)
 			{
 				Console.WriteLine ($"{node.Name}, {att.Name}: {att.Value}");				
-			}
+			}*/
 			var name = getName (node.Attributes ["name"].Value);
 
 			var attrs = new Dictionary <string, string> ();
