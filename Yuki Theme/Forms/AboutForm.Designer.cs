@@ -165,6 +165,7 @@ namespace Yuki_Theme.Forms
 			this.linkLabel5.TabStop = true;
 			this.linkLabel5.Text = "Made by: Dragon-LV";
 			this.linkLabel5.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel5.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel5_LinkClicked);
 			// 
 			// AboutForm
 			// 
