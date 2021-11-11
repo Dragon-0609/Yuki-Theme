@@ -793,11 +793,32 @@ namespace Yuki_Theme.Forms
 			fd.DefaultExt = "icls";
 			fd.Title = "Import";
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
-			fd.Filter = "JetBrains IDE Scheme(*.icls)|*.icls";
+			fd.Filter = "JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme)|*.yukitheme";
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
-				jetparser.Parse (fd.FileName, this);
+				if (fd.FileName.EndsWith (".yukitheme", StringComparison.Ordinal))
+				{
+					string st = Path.GetFileNameWithoutExtension (fd.FileName);
+					string path = $"Themes/{st}.yukitheme";;
+					bool wants = true;
+					if(File.Exists (path))
+					{
+						wants = false;
+						if (MessageBox.Show ((IWin32Window) this, "Theme is already exist. Do you want to override?",
+						                     "Theme is exist",
+						                     MessageBoxButtons.YesNo) == DialogResult.Yes) wants = true;
+
+					}
+					if(wants)
+					{
+						File.Copy (fd.FileName, path, true);
+						load_schemes ();
+					}
+				} else
+				{
+					jetparser.Parse (fd.FileName, this);
+				}
 			}
 		}
 

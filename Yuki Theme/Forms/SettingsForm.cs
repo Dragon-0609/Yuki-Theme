@@ -16,7 +16,7 @@ namespace Yuki_Theme.Forms
 		public const int SETTINGMODE = 6;
 		public const int AUTOUPDATE = 7;
 		
-		public const string current_version = "v20.0.0";
+		public const string current_version = "v1.0";
 		public static string next_version = "";
 
 		private MForm form;

@@ -49,5 +49,10 @@ namespace Yuki_Theme.Forms
 		{
 			Process.Start ("https://github.com/Dragon-0609");
 		}
+
+		private void linkLabel6_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start ("https://github.com/JamesNK/Newtonsoft.Json");
+		}
 	}
 }

@@ -41,6 +41,7 @@ namespace Yuki_Theme.Forms
 			this.linkLabel2 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel3 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel5 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel6 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.SuspendLayout ();
 			// 
@@ -85,7 +86,7 @@ namespace Yuki_Theme.Forms
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point (210, 307);
+			this.button1.Location = new System.Drawing.Point (210, 346);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size (65, 29);
 			this.button1.TabIndex = 5;
@@ -158,7 +159,7 @@ namespace Yuki_Theme.Forms
 			this.linkLabel5.Font = new System.Drawing.Font ("Times New Roman", 16F);
 			this.linkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel5.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel5.Location = new System.Drawing.Point (7, 306);
+			this.linkLabel5.Location = new System.Drawing.Point (7, 345);
 			this.linkLabel5.Name = "linkLabel5";
 			this.linkLabel5.Size = new System.Drawing.Size (204, 27);
 			this.linkLabel5.TabIndex = 12;
@@ -167,10 +168,25 @@ namespace Yuki_Theme.Forms
 			this.linkLabel5.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel5.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel5_LinkClicked);
 			// 
+			// linkLabel6
+			// 
+			this.linkLabel6.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel6.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel6.Location = new System.Drawing.Point (100, 292);
+			this.linkLabel6.Name = "linkLabel6";
+			this.linkLabel6.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel6.TabIndex = 13;
+			this.linkLabel6.TabStop = true;
+			this.linkLabel6.Text = "Newtonsoft.Json";
+			this.linkLabel6.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel6.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel6_LinkClicked);
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size (287, 342);
+			this.ClientSize = new System.Drawing.Size (287, 381);
+			this.Controls.Add (this.linkLabel6);
 			this.Controls.Add (this.linkLabel5);
 			this.Controls.Add (this.linkLabel3);
 			this.Controls.Add (this.linkLabel2);
@@ -188,6 +204,8 @@ namespace Yuki_Theme.Forms
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel linkLabel6;
 
 		private System.Windows.Forms.LinkLabel linkLabel5;
 
