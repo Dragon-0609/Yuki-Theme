@@ -928,6 +928,11 @@ namespace Yuki_Theme.Core.Forms
 		public void CopyFromMemory (string file, string path, bool extract = false)
 		{
 			var a = Assembly.GetExecutingAssembly ();
+			if (file.Contains (":"))
+			{
+				file = file.Replace (": ", "__").Replace (":", "");
+			}
+
 			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}.yukitheme");
 			string nxp = extract ? path + "A" : path;
 			using (var fs = new FileStream (nxp, FileMode.Create))

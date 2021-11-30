@@ -1,25 +1,57 @@
-# Yuki-Theme
+# Yuki Theme
 
 This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: `Darcula`, `Monokai` and etc.
+Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl.
+
 Or, you can make your own color scheme by clicking `plus` button. Also, you can import your color scheme from any JetBrains IDE, by clicking `Import`.
 
-Before     |    After
+Before 
 
-![Before and After](./screen.png)
+![Before](./Screenshots/screen.png)
+
+After
+
+![After](./Screenshots/screen1.png)
 
 ## Installation
 
-Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) and extract it: <br>
-Extract the zip file to anywhere, after that open `Yuki Theme.exe`.
+There're 2 types of `Yuki Theme`. `Program (.exe)` and `Plugin (.dll)`.
+I recommend you to use `Plugin` version, but if there is something that crashes PascalABC.NET, you can use `Program` version. 
+
+
+If you want to use `Plugin`:
+
+Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) of plugin and extract it in `PascalABC.NET` directory.
+
+If you want to use `Program`:
+
+Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) of program and extract the zip file to anywhere, after that open `Yuki Theme.exe`.
+
+---
+
+## What is difference between `Program` and `Plugin`?
+Well, both of them are `Yuki Theme`. The difference is in integration of them with PascalABC.NET IDE.
+
+If you use program version, you can change color syntax of the IDE, but it has limitations:
+
+- [ ] Can't set background image
+- [ ] Can't change color of some UI parts
+- [ ] You have to restart PascalABC.NET to change theme
+
+`Plugin` version:
+- [x] Can set background image
+- [x] Can change color of some UI parts
+- [x] Easily change theme at runtime
 
 ---
 
 ## Documentation
 - [Configuration](#configuration)
 - [Default Themes](#default-themes)
+- [Doki Theme](#doki-theme)
 - [Custom Themes](#custom-themes)
 
-## Configuration
+### Configuration
 
 You can access the settings menu by clicking `Settings` button. Here's some fields, that you can set:
 
@@ -31,7 +63,7 @@ You can access the settings menu by clicking `Settings` button. Here's some fiel
 - [Setting Mode](#setting-mode)
 - [Check Update](#check-update)
 
-#### Path to PascalABC.NET:
+#### Path to PascalABC.NET (You don't need it in `plugin` version):
 It's necessary to export the scheme to the IDE.
 
 #### Active Scheme
@@ -40,10 +72,10 @@ It will be shown in next program opening.
 #### Remember Active Scheme
 It sets current scheme to active scheme, so it will be shown in next program opening
 
-#### Ask if there are other themes in PascalABC directory
+#### Ask if there are other themes in PascalABC directory (You don't need it in `plugin` version)
 It asks on exporting scheme to the IDE, if there are other themes in `Highlighting` directory inside `PascalABC.NET` directory
 
-#### Do action if there are other themes 
+#### Do action if there are other themes  (You don't need it in `plugin` version)
 
 If you uncheck `Ask if there are other themes in PascalABC directory`, the selected action will be done. There're 3 actions:
 - Delete (old scheme)
@@ -60,7 +92,7 @@ If the checkbox is checked, the programm will check updates in every program run
 
 ---
 
-## Default Themes
+### Default Themes
 - Darcula (from JetBrains IDEA)
 - Dracula
 - Github Dark
@@ -71,19 +103,54 @@ If the checkbox is checked, the programm will check updates in every program run
 - Oblivion
 - Shades of Purple
 
-![Darcula](./screen1.png)
-
-![Monokai Dark](./screen2.png)
+![Themes](./Screenshots/screen2.png)
 
 ---
 
-## Custom Themes
-You can create your own theme by pressing `Add` button. In there you can choose Name of the theme and default scheme for copy. After that, you can change colors of the theme.
+## Doki Theme
+
+You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
+
+- Blend S
+- Daily Life with a Monster Girl
+- DanganRonpa
+- Doki-Doki Literature Club
+- Don't Toy With Me, Miss Nagatoro
+- Fate/Type-Moon
+- Future Diary
+- Gate
+- High School DxD
+- Jahy-sama Will Not Be Discouraged!
+- Kakegurui
+- Kill La Kill
+- KonoSuba
+- Love Live!
+- Lucky Star
+- Miss Kobayashi's Dragon Maid
+- Monogatari
+- NekoPara
+- Neon Genesis Evangelion
+- OreGairu
+- Quintessential Quintuplets
+- Re:Zero
+- Steins Gate
+- Sword Art Online
+- Yuru Camp
+
+![Themes](./Screenshots/screen3.png)
+---
+
+### Custom Themes
+You can create your own theme by pressing `Add` button. In there you can choose Name of the theme and default scheme for copy. After that, you can change colors and background image of the theme.
 Also, you can import your favourite color scheme from any JetBrains IDE. Click to `Import` button and select the file of the scheme.
+
+![Themes](./Screenshots/screen4.png)
+
+---
 
 ### Attributions
 Was inspired by [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
-Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json).
+Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample).
 
 
 ---
