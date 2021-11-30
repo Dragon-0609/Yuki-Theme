@@ -1,0 +1,14 @@
+﻿ColorSlider.dll
+Cyotek.Windows.Forms.ColorPicker.dll
+FastColoredTextBox.dll
+Fizzler.dll
+Microsoft.WindowsAPICodePack.dll
+Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll
+Microsoft.WindowsAPICodePack.Sensors.dll
+Newtonsoft.Json.dll
+Svg.dll
+System.Memory.dll
+System.Runtime.CompilerServices.Unsafe.dll
+Yuki Theme.Core.dll
+Yuki Installer.exe
+Yuki Theme Plugin.dll

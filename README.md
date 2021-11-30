@@ -9,16 +9,28 @@ Before     |    After
 
 ## Installation
 
+<<<<<<< HEAD
+Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) and extract it: <br>
+Extract the zip file to anywhere, after that open `Yuki Theme.exe`.
+  
+---
+
+=======
   Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) and extract it: <br>
   Extract the zip file to anywhere, after that open `Yuki Theme.exe`.
   
   ---
   
+>>>>>>> 1f87f69fbfd8403996a827e322e41e4d1d17cfb6
 ## Documentation
 - [Configuration](#configuration)
 - [Default Themes](#default-themes)
 - [Custom Themes](#custom-themes)
+<<<<<<< HEAD
+
+=======
   
+>>>>>>> 1f87f69fbfd8403996a827e322e41e4d1d17cfb6
 ## Configuration
 
 You can access the settings menu by clicking `Settings` button. Here's some fields, that you can set:
@@ -43,7 +55,11 @@ It sets current scheme to active scheme, so it will be shown in next program ope
 #### Ask if there are other themes in PascalABC directory
 It asks on exporting scheme to the IDE, if there are other themes in `Highlighting` directory inside `PascalABC.NET` directory
 
+<<<<<<< HEAD
+#### Do action if there are other themes
+=======
 #### Do action if there are other themes 
+>>>>>>> 1f87f69fbfd8403996a827e322e41e4d1d17cfb6
 If you uncheck `Ask if there are other themes in PascalABC directory`, the selected action will be done. There're 3 actions:
 - Delete (old scheme)
 - Import and Delete (old scheme)
@@ -97,7 +113,11 @@ Help make this plugin better!
 ---
 
 <div align="center">
+<<<<<<< HEAD
+    <img src="./Yuki Theme.Core/yuki128_2.png" ></img>
+=======
     <img src="./Yuki Theme/yuki128.png" ></img>
+>>>>>>> 1f87f69fbfd8403996a827e322e41e4d1d17cfb6
 </div>
 
 

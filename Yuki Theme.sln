@@ -1,8 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme", "Yuki Theme\Yuki Theme.csproj", "{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Installer", "Yuki Installer\Yuki Installer.csproj", "{8B2619A4-D9AA-4946-90CA-1815E651E918}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Core", "Yuki Theme.Core\Yuki Theme.Core.csproj", "{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme", "Yuki Theme\Yuki Theme.csproj", "{A4A29993-E643-48B2-A2C6-D4EAD69313B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme Plugin", "Yuki Theme Plugin\Yuki Theme Plugin.csproj", "{36B36D1A-9A45-4015-822F-B50FEE67E63F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,13 +14,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B2619A4-D9AA-4946-90CA-1815E651E918}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B2619A4-D9AA-4946-90CA-1815E651E918}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B2619A4-D9AA-4946-90CA-1815E651E918}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B2619A4-D9AA-4946-90CA-1815E651E918}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A29993-E643-48B2-A2C6-D4EAD69313B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A29993-E643-48B2-A2C6-D4EAD69313B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A29993-E643-48B2-A2C6-D4EAD69313B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A29993-E643-48B2-A2C6-D4EAD69313B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B36D1A-9A45-4015-822F-B50FEE67E63F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B36D1A-9A45-4015-822F-B50FEE67E63F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B36D1A-9A45-4015-822F-B50FEE67E63F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B36D1A-9A45-4015-822F-B50FEE67E63F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

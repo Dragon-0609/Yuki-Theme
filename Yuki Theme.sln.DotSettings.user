@@ -20,9 +20,12 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005Cpackages_005CEntityFramework_002E6_002E4_002E4_005Clib_005Cnet45_005CEntityFramework_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005Cpackages_005CEntityFramework_002E6_002E4_002E4_005Clib_005Cnet45_005CEntityFramework_002ESqlServer_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005CScheme_0020Assistant_005Cbin_005CDebug_005CScheme_005FAssistant_002Eexe/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CColorSlider_002Dmaster_005CColorSlider_002Dmaster_005Cbin_005CDebug_005CColorSlider_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CBinary_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_005Cbin_005CDebug_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer /&gt;</s:String>
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Users\User\Documents\CSharp\Yuki Theme\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/Environment/Hierarchy/EntityFrameworkOptions/IsAlreadyNotifiedAboutEntityFramework/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FForms_002FAboutForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FForms_002FColorPicker/@EntryIndexedValue">True</s:Boolean>
@@ -35,6 +38,9 @@
 	
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_0020Plugin_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMForm/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
 	
 	
 	
@@ -50,5 +56,7 @@
 	
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>
+	
+	
 	
 	</wpf:ResourceDictionary>
