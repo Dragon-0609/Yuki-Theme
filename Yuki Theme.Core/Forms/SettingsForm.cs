@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -48,25 +49,27 @@ namespace Yuki_Theme.Core.Forms
 
 		private void button1_Click (object sender, EventArgs e)
 		{
-			FolderBrowserDialog fb = new FolderBrowserDialog ();
-			fb.Description = "Select Path to the PascalABC.NET directory";
-			fb.ShowNewFolderButton = false;
-			selectFolder (fb);
+			CommonOpenFileDialog co = new CommonOpenFileDialog ();
+			co.IsFolderPicker = true;
+			co.Multiselect = false;
+			co.Title = "Select Path to the PascalABC.NET directory";
+			selectFolder (co);
 		}
 
-		private void selectFolder (FolderBrowserDialog fb)
+		private void selectFolder (CommonOpenFileDialog co)
 		{
-			if (fb.ShowDialog () == DialogResult.OK)
+			CommonFileDialogResult res = co.ShowDialog ();
+			if (res == CommonFileDialogResult.Ok)
 			{
-				if (Directory.Exists (fb.SelectedPath))
+				if (Directory.Exists (co.FileName))
 				{
-					if (Directory.Exists (System.IO.Path.Combine (fb.SelectedPath, "Highlighting")))
+					if (Directory.Exists (System.IO.Path.Combine (co.FileName, "Highlighting")))
 					{
-						textBox1.Text = fb.SelectedPath;
+						textBox1.Text = co.FileName;
 					} else
 					{
-						fb.Description = "It isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory";
-						selectFolder (fb);
+						co.Title = "It isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory";
+						selectFolder (co);
 					}
 				} else
 				{
