@@ -13,11 +13,11 @@ Or, you can make your own color scheme by clicking `plus` button. Also, you can 
 
 Before 
 
-![Before](./Screenshots/screen.png)
+![Before](.././Screenshots/screen.png)
 
 After
 
-![After](./Screenshots/screen1.png)
+![After](.././Screenshots/screen1.png)
 
 ## Installation
 
@@ -118,7 +118,7 @@ If the checkbox is checked, the programm will check updates in every program run
 - Oblivion
 - Shades of Purple
 
-![Themes](./Screenshots/screen2.png)
+![Themes](.././Screenshots/screen2.png)
 
 ---
 
@@ -153,14 +153,14 @@ You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki T
 - Sword Art Online
 - Yuru Camp
 
-![Themes](./Screenshots/screen3.png)
+![Themes](.././Screenshots/screen3.png)
 ---
 
 ### Custom Themes
 You can create your own theme by pressing `Add` button. In there you can choose Name of the theme and default scheme for copy. After that, you can change colors and background image of the theme.
 Also, you can import your favourite color scheme from any JetBrains IDE. Click to `Import` button and select the file of the scheme.
 
-![Themes](./Screenshots/screen4.png)
+![Themes](.././Screenshots/screen4.png)
 
 ---
 
@@ -181,7 +181,7 @@ Help make this plugin better!
 ---
 
 <div align="center">
-    <img src="./Yuki Theme.Core/yuki128_2.png" />
+    <img src=".././Yuki Theme.Core/yuki128_2.png" />
 </div>
 
 ## Русский
@@ -193,11 +193,11 @@ Help make this plugin better!
 
 До
 
-![До](./Screenshots/screen.png)
+![До](.././Screenshots/screen.png)
 
 После
 
-![После](./Screenshots/screen1.png)
+![После](.././Screenshots/screen1.png)
 
 ## Установка
 
@@ -298,7 +298,7 @@ Help make this plugin better!
 - Oblivion
 - Shades of Purple
 
-![Темы](./Screenshots/screen2.png)
+![Темы](.././Screenshots/screen2.png)
 
 ---
 
@@ -336,14 +336,14 @@ Help make this plugin better!
 | Лагерь на свежем воздухе  | Yuru Camp  |
 
 
-![Темы](./Screenshots/screen3.png)
+![Темы](.././Screenshots/screen3.png)
 ---
 
 ### Пользовательские Темы
 Вы можете создать свою тему кликая по кнопке `Добавить`. Тут вы можете выбрать имя и тему для копирования. После этого вы можете изменить цвета и фоновое изобрание темы.
 А ещё вы можете импортировать любимую тему из IDE от JetBrains. Нажмите кнопку `Import` и выберите файл темы.
 
-![Темы](./Screenshots/screen4.png)
+![Темы](.././Screenshots/screen4.png)
 
 ---
 
@@ -364,7 +364,7 @@ Help make this plugin better!
 ---
 
 <div align="center">
-    <img src="./Yuki Theme.Core/yuki128_2.png" />
+    <img src=".././Yuki Theme.Core/yuki128_2.png" />
 </div>
 
 
