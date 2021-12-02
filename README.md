@@ -181,7 +181,7 @@ Help make this plugin better!
 ---
 
 <div align="center">
-    <img src="./Yuki Theme.Core/yuki128_2.png" ></img>
+    <img src="./Yuki Theme.Core/yuki128_2.png" />
 </div>
 
 ## Русский
@@ -364,7 +364,7 @@ Help make this plugin better!
 ---
 
 <div align="center">
-    <img src="./Yuki Theme.Core/yuki128_2.png" ></img>
+    <img src="./Yuki Theme.Core/yuki128_2.png" />
 </div>
 
 
