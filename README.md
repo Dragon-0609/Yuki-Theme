@@ -305,31 +305,35 @@ Help make this plugin better!
 
 Вы можете выбрать темы из различных аниме, манги или визуальных новелл от [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
 
-- Садистская смесь (Blend S)
-- Повседневная жизнь с девушкой-монстром (Daily Life with a Monster Girl)
-- Школа отчаяния (DanganRonpa)
-- Doki-Doki Literature Club
-- Не издевайся, Нагаторо (Don't Toy With Me, Miss Nagatoro)
-- Судьба/Type-Moon (Fate/Type-Moon)
-- Дневник будущего (Future Diary)
-- Врата: Там бьются наши воины (Gate)
-- Демоны старшей школы (High School DxD)
-- Джахи не будет отчаиваться! (Jahy-sama Will Not Be Discouraged!)
-- Безумный азарт (Kakegurui)
-- Убей или умри (Kill La Kill)
-- Богиня благословляет этот прекрасный мир (KonoSuba)
-- Живая любовь! Проект «Школьный идол» (Love Live!)
-- Счастливая звезда (Lucky Star)
-- Кобаяши и её горничная-дракон (Miss Kobayashi's Dragon Maid)
-- Истории (Monogatari)
-- Кошачий рай (NekoPara)
-- Евангелион (Neon Genesis Evangelion)
-- Как и ожидал, моя школьная романтическая жизнь не удалась (OreGairu)
-- Пять невест (Quintessential Quintuplets)
-- Жизнь в другом мире с нуля (Re:Zero)
-- Врата Штейна (Steins Gate)
-- Мастера Меча Онлайн (Sword Art Online)
-- Лагерь на свежем воздухе (Yuru Camp)
+| на Русском | на Английском |
+|---|---|
+| Садистская смесь | Blend S |
+| Повседневная жизнь с девушкой-монстром  | Daily Life with a Monster Girl |
+| Школа отчаяния  | DanganRonpa  |
+|   | Doki-Doki Literature Club  |
+| Не издевайся, Нагаторо  | Don't Toy With Me, Miss Nagatoro  |
+| Милый во Франксе  | Darling in the FranXX  |
+| Судьба/Type-Moon  | Fate/Type-Moon  |
+| Дневник будущего  | Future Diary  |
+| Врата: Там бьются наши воины  | Gate  |
+| Демоны старшей школы  | High School DxD  |
+| Джахи не будет отчаиваться!  | Jahy-sama Will Not Be Discouraged!  |
+| Безумный азарт  | Kakegurui  |
+| Убей или умри  | Kill La Kill  |
+| Богиня благословляет этот прекрасный мир  | KonoSuba  |
+| Живая любовь! Проект «Школьный идол»  | Love Live!  |
+| Счастливая звезда  | Lucky Star  |
+| Кобаяши и её горничная-дракон  | Miss Kobayashi's Dragon Maid  |
+| Истории  | Monogatari  |
+| Кошачий рай  | NekoPara  |
+| Евангелион  | Neon Genesis Evangelion  |
+| Как и ожидал, моя школьная романтическая жизнь не удалась  | OreGairu  |
+| Пять невест  | Quintessential Quintuplets  |
+| Жизнь в другом мире с нуля  | Re:Zero  |
+| Врата Штейна  | Steins Gate  |
+| Мастера Меча Онлайн  | Sword Art Online  |
+| Лагерь на свежем воздухе  | Yuru Camp  |
+
 
 ![Темы](./Screenshots/screen3.png)
 ---
