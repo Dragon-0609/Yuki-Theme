@@ -131,6 +131,7 @@ You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki T
 - DanganRonpa
 - Doki-Doki Literature Club
 - Don't Toy With Me, Miss Nagatoro
+- Darling in the FranXX
 - Fate/Type-Moon
 - Future Diary
 - Gate
