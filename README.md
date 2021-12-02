@@ -1,5 +1,11 @@
 # Yuki Theme
 
+## Languages | Языки
+- [English](#english)
+- [Русский](#русский)
+
+## English
+
 This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: `Darcula`, `Monokai` and etc.
 Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl.
 
@@ -42,6 +48,15 @@ If you use program version, you can change color syntax of the IDE, but it has l
 - [x] Can set background image
 - [x] Can change color of some UI parts
 - [x] Easily change theme at runtime
+
+
+Without plugin:
+
+![without](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/8/8d7919095e7fb19ff1274868864e6d0d3215eb4f.png)
+
+With plugin:
+
+![with](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/9/97c96681b5d9d60e12cdbf9244962c8e7d2ff93d.png)
 
 ---
 
@@ -168,5 +183,182 @@ Help make this plugin better!
     <img src="./Yuki Theme.Core/yuki128_2.png" ></img>
 </div>
 
+## Русский
+
+Это программа для людей, которые хотят изменить PascalABC.NET IDE. С помощью этой программы вы можете выбрать любую встроенную популярную тему, как:  `Darcula`, `Monokai` и др.
+А ещё, программа включает в себя `Doki Theme`, с более чем 50 тем, думаю вы найдёте лучшую девушку.
+
+Или вы можете создать свою тему кликая `плюс` кнопку. Также, вы можете импортировать свою световую схему из любой IDE от JetBrains, кликая `Импорт`.
+
+До
+
+![До](./Screenshots/screen.png)
+
+После
+
+![После](./Screenshots/screen1.png)
+
+## Установка
+
+Тут есть 2 типа `Yuki Theme`. `Программа (.exe)` и `Плагин (.dll)`.
+Я рекомендую вам использовать версию `Плагин`, но если по какой-то причине ломается PascalABC.NET, то вы можете использовать версию `Программа`. 
+
+
+Если вы хотите использовать `Плагин`:
+
+Скачайте [последную версию](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) плагина и распокуйте в папку с `PascalABC.NET`.
+
+Если вы хотите использовать `Программу`:
+
+Скачайте [последную версию](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) программы и распокуйте её в любом месте, после чего откройте `Yuki Theme.exe`.
+
+---
+
+## В чём различие между `Программой` и `Плагином`?
+Чтож, они обе `Yuki Theme`. Но отличие в их интеграции с PascalABC.NET IDE.
+
+Если вы используете версию программы вы можете изменить цвета редактора, но он имеет лимиты:
+
+- [ ] Может изменить фоновое изображение
+- [ ] Может менять цвета в некоторых частах интерфейса
+- [x] Тебе придётся запустить PascalABC.NET заново, чтобы применить тему.
+
+версия `Плагина`:
+- [x] Может изменить фоновое изображение
+- [x] Может менять цвета в некоторых частах интерфейса
+- [x] Может с лёгкостю применять тему.
+
+
+Без плагина:
+
+![without](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/8/8d7919095e7fb19ff1274868864e6d0d3215eb4f.png)
+
+С плагином:
+
+![with](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/9/97c96681b5d9d60e12cdbf9244962c8e7d2ff93d.png)
+---
+
+## Документация
+- [Настройки](#настройки)
+- [Встроенные Темы](#встроенные-темы)
+- [Doki Theme](#doki-theme)
+- [Пользовательские Темы](#пользовательские-темы)
+
+### Настройки
+
+Вы можете зайти в настройки кликая по `Настройки` (Шестирёнка) кнопку. Тут есть некторые поля, которые вы можете изменить:
+
+- [Путь до PascalABC.NET](#путь-до-pascalabcnet)
+- [Активная Тема](#активная-тема)
+- [Запомнить Активную Тему](#запомнить-активную-тему)
+- [Спросить если в папке PascalABC есть другие темы](#спросить-если-в-папке-pascalabc-есть-другие-темы)
+- [Действие, если есть другие темы](#действие-если-есть-другие-темы)
+- [Режим настройки](#режим-настройки)
+- [Проверить обновления](#проверить-обновления)
+
+#### Путь до PascalABC.NET (Вам не нужно в версии `Плагина`):
+Это необходимо для экспорта темы в IDE.
+
+#### Активная Тема
+Тема будет выбрана при следующем запуске.
+
+#### Запомнить Активную Тему
+Оно запоминает текущую тему, так что тема будет выбрана при следующем запуске.
+
+#### Спросить если в папке PascalABC есть другие темы (Вам не нужно в версии `Плагина`)
+It asks on exporting scheme to the IDE, if there are other themes in `Highlighting` directory inside `PascalABC.NET` directory
+
+#### Действие, если есть другие темы  (Вам не нужно в версии `Плагина`)
+
+Если вы отключите `Спросить если в папке PascalABC есть другие темы`, то выбранное дейстие будет исполнено. Тут есть 3 действий:
+- Удалить (старую тему)
+- Импортировать и Удалить (старую тему)
+- Игнорировать (старую тему)
+
+#### Режим настройки
+Это для пользовательской темы. Тут есть 2 значение: `Легкий`  `Полный`.
+`Легкий` это самый легкий путь для изменения цветов. Оно показывает только основные цвета синтаксиса и применяет копиям светов сам. Тут есть 4 типа цветов для комментариев. В режиме `Легкий`, оно показывается как 1 цвет.
+`Полный` показывает все света. Также тут есть копии светов. Например: Тут есть 4 типа цветов для комментариев и др.
+
+#### Проверить обновления
+Если выбрано, то программа сама проверит обновление при каждом запуске. Если есть обновление, оно уведомить вас.
+
+---
+
+### Встроенные Темы
+- Darcula (из JetBrains IDEA)
+- Dracula
+- Github Dark
+- Github Light
+- Monokai Dark
+- Monokai Light
+- Nightshade
+- Oblivion
+- Shades of Purple
+
+![Темы](./Screenshots/screen2.png)
+
+---
+
+## Doki Theme
+
+Вы можете выбрать темы из различных аниме, манги или визуальных новелл от [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
+
+- Blend S
+- Daily Life with a Monster Girl
+- DanganRonpa
+- Doki-Doki Literature Club
+- Don't Toy With Me, Miss Nagatoro
+- Fate/Type-Moon
+- Future Diary
+- Gate
+- High School DxD
+- Jahy-sama Will Not Be Discouraged!
+- Kakegurui
+- Kill La Kill
+- KonoSuba
+- Love Live!
+- Lucky Star
+- Miss Kobayashi's Dragon Maid
+- Monogatari
+- NekoPara
+- Neon Genesis Evangelion
+- OreGairu
+- Quintessential Quintuplets
+- Re:Zero
+- Steins Gate
+- Sword Art Online
+- Yuru Camp
+
+![Темы](./Screenshots/screen3.png)
+---
+
+### Пользовательские Темы
+Вы можете создать свою тему кликая по кнопке `Добавить`. Тут вы можете выбрать имя и тему для копирования. После этого вы можете изменить цвета и фоновое изобрание темы.
+А ещё вы можете импортировать любимую тему из IDE от JetBrains. Нажмите кнопку `Import` и выберите файл темы.
+
+![Темы](./Screenshots/screen4.png)
+
+---
+
+### Аттрибуты
+Был вдохновлён [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
+Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample).
+
+
+---
+
+## Сотрудничество?
+
+У вас наверняка есть хорошые идеи, поэтому чувствуйте себя свободным и отправьте мне отзыв как [проблема](https://github.com/Dragon-0609/Yuki-Theme/issues/new). Я прочту ваш отзыв, так что не стесняйтесь!
+
+Помогите сделать плагин лучше!
+
+
+---
+
+<div align="center">
+    <img src="./Yuki Theme.Core/yuki128_2.png" ></img>
+</div>
 
 
