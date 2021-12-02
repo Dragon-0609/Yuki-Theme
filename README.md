@@ -266,7 +266,7 @@ Help make this plugin better!
 Оно запоминает текущую тему, так что тема будет выбрана при следующем запуске.
 
 #### Спросить если в папке PascalABC есть другие темы (Вам не нужно в версии `Плагина`)
-It asks on exporting scheme to the IDE, if there are other themes in `Highlighting` directory inside `PascalABC.NET` directory
+Оно спросит вас при экспорте, если в папке `Highlighting` в `PascalABC.NET` есть другие темы.
 
 #### Действие, если есть другие темы  (Вам не нужно в версии `Плагина`)
 
