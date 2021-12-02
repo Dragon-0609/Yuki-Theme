@@ -34,9 +34,9 @@ Well, both of them are `Yuki Theme`. The difference is in integration of them wi
 
 If you use program version, you can change color syntax of the IDE, but it has limitations:
 
-- [ ] Can't set background image
-- [ ] Can't change color of some UI parts
-- [ ] You have to restart PascalABC.NET to change theme
+- [ ] Can set background image
+- [ ] Can change color of some UI parts
+- [x] You have to restart PascalABC.NET to change theme
 
 `Plugin` version:
 - [x] Can set background image
