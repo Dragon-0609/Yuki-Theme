@@ -28,6 +28,8 @@ I recommend you to use `Plugin` version, but if there is something that crashes 
 If you want to use `Plugin`:
 
 Download the [latest release](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) of plugin and extract it in `PascalABC.NET` directory.
+[Guide](https://drive.google.com/file/d/1vCBG9YSQoLVYNxusWN7dstO2Tm2k7MtM/view?usp=sharing)
+
 
 If you want to use `Program`:
 
@@ -208,6 +210,7 @@ Help make this plugin better!
 Если вы хотите использовать `Плагин`:
 
 Скачайте [последную версию](https://github.com/Dragon-0609/Yuki-Theme/releases/latest) плагина и распокуйте в папку с `PascalABC.NET`.
+[Гайд](https://drive.google.com/file/d/1vCBG9YSQoLVYNxusWN7dstO2Tm2k7MtM/view?usp=sharing)
 
 Если вы хотите использовать `Программу`:
 
