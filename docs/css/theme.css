@@ -1,0 +1,14 @@
+code {
+	background-color: rgba(0,0,0,0.2);
+	padding: 3px 6px;
+	margin: 4px;
+	border-radius: 6px;
+}
+
+.bg-dark-transparent {
+	background-color: rgba(0,0,0,0.2) !important;
+}
+
+a.list-group-item:hover {
+	background-color: rgba(0,0,0,0.5) !important;
+}
