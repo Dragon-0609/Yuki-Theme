@@ -34,53 +34,53 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="ColorSlider, Version=1.0.0.4, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\ColorSlider.dll</HintPath>
+          <HintPath>..\..\..\..\Downloads\Compressed\ColorSlider-master\ColorSlider-master\bin\Debug\ColorSlider.dll</HintPath>
         </Reference>
         <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221">
-          <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+          <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.2.0.0-beta.6\lib\net452\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="FastColoredTextBox, Version=2.16.26.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b">
-          <HintPath>..\packages\FastColoredTextBox.dll</HintPath>
+          <HintPath>..\..\..\..\Downloads\Compressed\FastColoredTextBox-master\FastColoredTextBox-master\FastColoredTextBox\bin\Debug\FastColoredTextBox.dll</HintPath>
         </Reference>
         <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
-          <HintPath>..\packages\\Fizzler.dll</HintPath>
+          <HintPath>..\packages\Fizzler.1.2.1\lib\netstandard1.0\Fizzler.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-          <HintPath>..\packages\Microsoft.WindowsAPICodePack.dll</HintPath>
+          <HintPath>..\packages\WindowsAPICodePack.1.1.2\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.WindowsAPICodePack.ExtendedLinguisticServices, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-          <HintPath>..\packages\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll</HintPath>
+          <HintPath>..\packages\WindowsAPICodePack.1.1.2\lib\Microsoft.WindowsAPICodePack.ExtendedLinguisticServices.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.WindowsAPICodePack.Sensors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-          <HintPath>..\packages\Microsoft.WindowsAPICodePack.Sensors.dll</HintPath>
+          <HintPath>..\packages\WindowsAPICodePack.1.1.2\lib\Microsoft.WindowsAPICodePack.Sensors.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-          <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+          <HintPath>..\packages\WindowsAPICodePack.1.1.2\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-          <HintPath>..\packages\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+          <HintPath>..\packages\WindowsAPICodePack.1.1.2\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-          <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+          <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
         <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
-          <HintPath>..\packages\Svg.dll</HintPath>
+          <HintPath>..\packages\Svg.3.3.0\lib\net452\Svg.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Buffers.dll</HintPath>
+          <HintPath>..\packages\System.Buffers.4.5.1\lib\netstandard1.1\System.Buffers.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.ComponentModel.Composition" />
@@ -92,13 +92,13 @@
         <Reference Include="System.IO.Compression" />
         <Reference Include="System.IO.Compression.FileSystem" />
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Memory.dll</HintPath>
+          <HintPath>..\packages\System.Memory.4.5.4\lib\netstandard1.1\System.Memory.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Net.Http" />
         <Reference Include="System.Numerics" />
         <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Runtime.DurableInstancing" />
@@ -112,6 +112,7 @@
         <Reference Include="WindowsBase" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="CLI.cs" />
         <Compile Include="Controls\CustomButton.cs" />
         <Compile Include="Controls\CustomText.cs" />
         <Compile Include="Controls\FlatNumericUpDown.cs" />

@@ -24,20 +24,22 @@ namespace Yuki_Theme.Core.Parsers
 			if (!Directory.Exists ("Themes"))
 				Directory.CreateDirectory ("Themes");
 			Console.WriteLine (outname);
-			
-			string syt = form.schemes.Items [1].ToString ();
+
+			string syt = CLI.cli.schemes [1];
 			if (DefaultThemes.isDefault (syt))
-				form.CopyFromMemory (syt, outname);
+				CLI.cli.CopyFromMemory (syt, outname);
 			else
-				File.Copy ($"Themes/{st}.yukitheme", outname, true);
+				File.Copy ($"Themes/{syt}.yukitheme", outname, true);
 
 			MergeFiles (outname);
 			finishParsing (path);
 			if (!overwrite)
 			{
-				form.schemes.Items.Add (flname);
+				CLI.cli.names.Add (flname);
+				if (form != null)
+					form.schemes.Items.Add (flname);
 			}
-			if(select)
+			if(select && form != null)
 				form.schemes.SelectedItem = flname;
 		}
 

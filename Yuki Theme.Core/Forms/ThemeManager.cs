@@ -63,44 +63,40 @@ namespace Yuki_Theme.Core.Forms
 
 			if (form.selform.ShowDialog () == DialogResult.OK)
 			{
-				string syto = form.selform.comboBox1.SelectedItem.ToString ();
-				string syt = syto.Replace (": ", "__").Replace (":", "");
-				string patsh = $"Themes/{form.selform.textBox1.Text}.yukitheme";
-				if (DefaultThemes.isDefault (syto))
-					form.CopyFromMemory (syt, patsh);
-				else
-					File.Copy ($"Themes/{syt}.yukitheme", patsh );
+				CLI.cli.add (form.selform.textBox1.Text, form.selform.comboBox1.SelectedItem.ToString ());
 				form.schemes.Items.Add (form.selform.textBox1.Text);
 				form.schemes.SelectedItem = form.selform.textBox1.Text;
 				DialogResult = DialogResult.OK;
 			}
 		}
 
+		public bool askDelete (string content, string title)
+		{
+			return MessageBox.Show (content, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+		}
+		
+		public object afterAsk (string sel)
+		{
+			ListViewItem sifr = scheme.SelectedItems [0];
+			if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
+			{
+				form.schemes.SelectedIndex = 0;
+			}
+
+			return (object) sifr;
+		}
+		
+		public void afterDelete (string sel, object sifr)
+		{
+			scheme.Items.Remove ((ListViewItem) sifr);
+			form.schemes.Items.Remove (sel);
+		}
+		
 		private void remove_Click (object sender, EventArgs e)
 		{
 			if (scheme.SelectedItems.Count > 0)
 			{
-				ReItem re = (ReItem) scheme.SelectedItems [0];
-				if (!re.isGroup && !re.rgroupItem.Name.Equals ("default", StringComparison.OrdinalIgnoreCase)
-				                && !re.rgroupItem.Name.Equals ("doki theme", StringComparison.OrdinalIgnoreCase))
-				{
-					string sel = re.Name;
-					DialogResult sr = MessageBox.Show ((IWin32Window) this, $"Do you really want to delete '{sel}'?", "Delete",
-					                                   MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-					if (sr == DialogResult.Yes)
-					{
-						ListViewItem sifr = scheme.SelectedItems [0];
-						if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
-						{
-							form.schemes.SelectedIndex = 0;
-						}
-
-						form.saveData ();
-						File.Delete ($"Themes/{sel}.yukitheme");
-						scheme.Items.Remove (sifr);
-						form.schemes.Items.Remove (sel);
-					}
-				}
+				CLI.cli.remove (scheme.SelectedItems[0].Text, askDelete, afterAsk, afterDelete);
 			}
 		}
 

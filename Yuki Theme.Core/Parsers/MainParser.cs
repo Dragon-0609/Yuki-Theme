@@ -10,11 +10,11 @@ namespace Yuki_Theme.Core.Parsers
 		private static JetBrainsParser jetparser;
 		private static DokiThemeParser dokiparser;
 
-		public static void Parse (string path, MForm form, bool ask = true, bool select = true)
+		public static void Parse (string path, MForm form = null, bool ask = true, bool select = true)
 		{
 			string st = Path.GetFileNameWithoutExtension (path);
 			string pathe = $"Themes/{st}.yukitheme";
-			if (checkAvailableAndAsk (path, pathe, form, ask))
+			if (checkAvailableAndAsk (path, pathe, ask))
 			{
 				string ext = Path.GetExtension (path);
 				switch (ext)
@@ -28,21 +28,23 @@ namespace Yuki_Theme.Core.Parsers
 					case ".icls" :
 					{
 						bool has = checkAvailable (pathe);
+						jetparser = new JetBrainsParser ();
+						jetparser.Parse (path, st, pathe, form, has, select);
+						
 						jetparser = null;
 						GC.Collect();
 						GC.WaitForPendingFinalizers();
-						jetparser = new JetBrainsParser ();
-						jetparser.Parse (path, st, pathe, form, has, select);
 					}
 						break;
 					case ".json" :
 					{
 						bool has = checkAvailable (pathe);
+						dokiparser = new DokiThemeParser ();
+						dokiparser.Parse (path, st, pathe, form, has, select);
+						
 						dokiparser = null;
 						GC.Collect();
 						GC.WaitForPendingFinalizers();
-						dokiparser = new DokiThemeParser ();
-						dokiparser.Parse (path, st, pathe, form, has, select);
 					}
 						break;
 
@@ -55,14 +57,14 @@ namespace Yuki_Theme.Core.Parsers
 			return File.Exists (nxpath);
 		}
 
-		private static bool checkAvailableAndAsk (string path, string nxpath, MForm form, bool ask = true)
+		private static bool checkAvailableAndAsk (string path, string nxpath, bool ask = true)
 		{
 
 			bool wants = true;
 			if (File.Exists (nxpath) && ask)
 			{
 				wants = false;
-				if (MessageBox.Show ((IWin32Window) form, "Theme is already exist. Do you want to override?",
+				if (MessageBox.Show ("Theme is already exist. Do you want to override?",
 				                     "Theme is exist",
 				                     MessageBoxButtons.YesNo) == DialogResult.Yes) wants = true;
 			}

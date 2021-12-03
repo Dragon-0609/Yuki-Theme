@@ -1,11 +1,20 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Yuki_Theme.Core
 {
 	public class Populater
 	{
-		public bool isInList (string str, ListBox.ObjectCollection coll)
+		public static bool isInList (string str, ListBox.ObjectCollection coll)
 		{
+			return isInList (str, coll.Cast <String> ().ToList ());
+		}
+		
+		public static bool isInList (string str, List<string> coll)
+		{
+			
 			bool res = false;
 			switch (str)
 			{
@@ -46,7 +55,7 @@ namespace Yuki_Theme.Core
 			return res;
 		}
 		
-		public string[] getDependencies (string str)
+		public static string[] getDependencies (string str)
 		{
 			string [] res = new string [] { };
 			switch (str)

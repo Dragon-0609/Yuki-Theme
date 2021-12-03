@@ -21,7 +21,7 @@ namespace Yuki_Theme.Core
 		private Dictionary <string, Dictionary <string, string>> localAttributes => form.localAttributes;
 
 		private Dictionary <string, Regex>     regexes;
-		private Dictionary <string, TextStyle> styles;
+		public static Dictionary <string, TextStyle> styles;
 
 		private string [] names =
 		{
@@ -202,7 +202,7 @@ namespace Yuki_Theme.Core
 			regexes.Add ("direcivevalues", new Regex (@"\b(?i)(console|windows|dll|pcu)\b", RegexCompiledOption));
 		}
 
-		private void InitStyles ()
+		public static void InitStyles ()
 		{
 			styles = new Dictionary <string, TextStyle> ();
 			styles.Add ("string", new TextStyle (DarkRed, null, FontStyle.Regular));
@@ -257,7 +257,7 @@ namespace Yuki_Theme.Core
 			{
 				if (form.settingMode == 0)
 				{
-					string [] srt = form.populater.getDependencies (str);
+					string [] srt = Populater.getDependencies (str);
 					if (srt != null)
 					{
 						string rgx = $"{regexes [str.ToLower ()]}";
@@ -334,7 +334,7 @@ namespace Yuki_Theme.Core
 			return ColorTranslator.ToHtml (clr);
 		}
 
-		public bool isInNames (string str)
+		public static bool isInNames (string str)
 		{
 			if (styles == null)
 				InitStyles ();

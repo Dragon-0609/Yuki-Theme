@@ -190,7 +190,7 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void updateZip (string path, string content, Image img)
+		public static void updateZip (string path, string content, Image img, bool wantToKeep = false)
 		{
 				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
@@ -205,20 +205,23 @@ namespace Yuki_Theme.Core
 						writer.Write (content);
 					}
 
-					entry = archive.GetEntry ("background.png");
-
-					entry?.Delete ();
-					if(img != null)
+					if(!wantToKeep)
 					{
-						var file = archive.CreateEntry ("background.png", CompressionLevel.Optimal);
-						using (var stream = new MemoryStream ())
+						entry = archive.GetEntry ("background.png");
+
+						entry?.Delete ();
+						if (img != null)
 						{
-							img.Save (stream, ImageFormat.Png);
-							using (var entryStream = file.Open ())
+							var file = archive.CreateEntry ("background.png", CompressionLevel.Optimal);
+							using (var stream = new MemoryStream ())
 							{
-								// to keep it as image better to have it as bytes
-								var bytes = stream.ToArray ();
-								entryStream.Write (bytes, 0, bytes.Length);
+								img.Save (stream, ImageFormat.Png);
+								using (var entryStream = file.Open ())
+								{
+									// to keep it as image better to have it as bytes
+									var bytes = stream.ToArray ();
+									entryStream.Write (bytes, 0, bytes.Length);
+								}
 							}
 						}
 					}
