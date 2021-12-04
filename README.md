@@ -21,6 +21,8 @@ After
 
 ## Installation
 
+[How to install](https://dragon-0609.github.io/Yuki-Theme/usage.html)
+
 There're 2 types of `Yuki Theme`. `Program (.exe)` and `Plugin (.dll)`.
 I recommend you to use `Plugin` version, but if there is something that crashes PascalABC.NET, you can use `Program` version. 
 
@@ -202,6 +204,8 @@ Help make this plugin better!
 ![После](./Screenshots/screen1.png)
 
 ## Установка
+
+[Как установить](https://dragon-0609.github.io/Yuki-Theme/usage.html)
 
 Тут есть 2 типа `Yuki Theme`. `Программа (.exe)` и `Плагин (.dll)`.
 Я рекомендую вам использовать версию `Плагин`, но если по какой-то причине ломается PascalABC.NET, то вы можете использовать версию `Программа`. 
