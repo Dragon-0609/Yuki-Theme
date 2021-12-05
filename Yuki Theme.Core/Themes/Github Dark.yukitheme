@@ -6,7 +6,7 @@
     <Selection bgcolor="#284667" />
     <VRuler color="#444D56" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#3E3D32" />
+    <CaretMarker color="#9E8089" />
     <LineNumbers color="#E1E4E8" bgcolor="#24292E" />
     <FoldLine color="#8C8C8C" />
     <FoldMarker color="#E1E4CA" bgcolor="#24292E" />
@@ -282,4 +282,8 @@
       </KeyWords>
     </RuleSet>
   </RuleSets>
+  <!--name:Github Dark-->
+  <!--align:2-->
+  <!--opacity:15-->
+  <!--sopacity:100-->
 </SyntaxDefinition>

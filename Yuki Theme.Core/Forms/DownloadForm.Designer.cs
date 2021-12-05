@@ -36,11 +36,12 @@ namespace Yuki_Theme.Core.Forms
 			this.pr = new System.Windows.Forms.Label ();
 			this.button1 = new System.Windows.Forms.Button ();
 			this.pr_mb = new System.Windows.Forms.Label ();
-			this.downl = new CustomButton ();
+			this.downl = new Yuki_Theme.Core.Controls.CustomButton ();
 			this.SuspendLayout ();
 			// 
 			// progressBar1
 			// 
+			this.progressBar1.BackColor = System.Drawing.Color.Gray;
 			this.progressBar1.Location = new System.Drawing.Point (8, 11);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size (263, 15);
@@ -99,6 +100,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Name = "DownloadForm";
 			this.Text = "DownloadForm";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler (this.DownloadForm_FormClosing);
+			this.Shown += new System.EventHandler (this.DownloadForm_Shown);
 			this.ResumeLayout (false);
 		}
 

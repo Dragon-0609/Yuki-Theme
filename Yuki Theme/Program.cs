@@ -13,8 +13,9 @@ namespace Yuki_Theme
 		[STAThread]
 		private static void Main ()
 		{
+			if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
 			Application.EnableVisualStyles ();
-			Application.SetCompatibleTextRenderingDefault (false);
+			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run (new MForm ());
 
 			/*string [] files = Directory.GetFiles (@"C:\Users\User\Documents\CSharp\Yuki Theme\Yuki Theme\bin\Debug\Themes");
@@ -23,5 +24,8 @@ namespace Yuki_Theme
 				Console.Write ($"case \"{Path.GetFileNameWithoutExtension (file)}\": ");
 			}*/
 		}
+		
+		[System.Runtime.InteropServices.DllImport("user32.dll")]
+		private static extern bool SetProcessDPIAware();
 	}
 }

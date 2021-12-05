@@ -34,10 +34,8 @@ namespace Yuki_Theme.Core.Forms
 			this.label1 = new System.Windows.Forms.Label ();
 			this.textBox1 = new Yuki_Theme.Core.Controls.CustomText ();
 			this.button1 = new System.Windows.Forms.Button ();
-			this.checkBox1 = new System.Windows.Forms.CheckBox ();
 			this.button2 = new System.Windows.Forms.Button ();
 			this.button3 = new System.Windows.Forms.Button ();
-			this.label2 = new System.Windows.Forms.Label ();
 			this.askC = new System.Windows.Forms.CheckBox ();
 			this.label3 = new System.Windows.Forms.Label ();
 			this.label4 = new System.Windows.Forms.Label ();
@@ -46,9 +44,11 @@ namespace Yuki_Theme.Core.Forms
 			this.button5 = new System.Windows.Forms.Button ();
 			this.label5 = new System.Windows.Forms.Label ();
 			this.button6 = new System.Windows.Forms.Button ();
-			this.schemes = new CustomControls.RJControls.RJComboBox ();
 			this.ActionBox = new CustomControls.RJControls.RJComboBox ();
 			this.mode = new CustomControls.RJControls.RJComboBox ();
+			this.backImage = new System.Windows.Forms.CheckBox ();
+			this.swsticker = new System.Windows.Forms.CheckBox ();
+			this.swStatusbar = new System.Windows.Forms.CheckBox ();
 			this.SuspendLayout ();
 			// 
 			// label1
@@ -86,15 +86,6 @@ namespace Yuki_Theme.Core.Forms
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler (this.button1_Click);
 			// 
-			// checkBox1
-			// 
-			this.checkBox1.Location = new System.Drawing.Point (12, 93);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size (210, 29);
-			this.checkBox1.TabIndex = 3;
-			this.checkBox1.Text = "Remember active scheme";
-			this.checkBox1.UseVisualStyleBackColor = true;
-			// 
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -120,17 +111,6 @@ namespace Yuki_Theme.Core.Forms
 			this.button3.Text = "Cancel";
 			this.button3.UseVisualStyleBackColor = true;
 			this.button3.Click += new System.EventHandler (this.button3_Click);
-			// 
-			// label2
-			// 
-			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label2.Location = new System.Drawing.Point (12, 59);
-			this.label2.Margin = new System.Windows.Forms.Padding (4, 0, 4, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size (203, 31);
-			this.label2.TabIndex = 11;
-			this.label2.Text = "Active Scheme";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// askC
 			// 
@@ -222,25 +202,6 @@ namespace Yuki_Theme.Core.Forms
 			this.button6.UseVisualStyleBackColor = true;
 			this.button6.Click += new System.EventHandler (this.button6_Click);
 			// 
-			// schemes
-			// 
-			this.schemes.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.schemes.BorderColor = System.Drawing.Color.MediumSlateBlue;
-			this.schemes.BorderSize = 1;
-			this.schemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.schemes.Font = new System.Drawing.Font ("Lucida Fax", 10F);
-			this.schemes.ForeColor = System.Drawing.Color.DimGray;
-			this.schemes.IconColor = System.Drawing.Color.MediumSlateBlue;
-			this.schemes.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
-			this.schemes.ListTextColor = System.Drawing.Color.DimGray;
-			this.schemes.Location = new System.Drawing.Point (262, 60);
-			this.schemes.MinimumSize = new System.Drawing.Size (200, 30);
-			this.schemes.Name = "schemes";
-			this.schemes.Padding = new System.Windows.Forms.Padding (1);
-			this.schemes.Size = new System.Drawing.Size (256, 30);
-			this.schemes.TabIndex = 22;
-			this.schemes.Texts = "";
-			// 
 			// ActionBox
 			// 
 			this.ActionBox.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -279,14 +240,43 @@ namespace Yuki_Theme.Core.Forms
 			this.mode.TabIndex = 24;
 			this.mode.Texts = "";
 			// 
+			// backImage
+			// 
+			this.backImage.Location = new System.Drawing.Point (16, 55);
+			this.backImage.Name = "backImage";
+			this.backImage.Size = new System.Drawing.Size (211, 29);
+			this.backImage.TabIndex = 25;
+			this.backImage.Text = "Show Background Image";
+			this.backImage.UseVisualStyleBackColor = true;
+			// 
+			// swsticker
+			// 
+			this.swsticker.Location = new System.Drawing.Point (16, 90);
+			this.swsticker.Name = "swsticker";
+			this.swsticker.Size = new System.Drawing.Size (167, 29);
+			this.swsticker.TabIndex = 26;
+			this.swsticker.Text = "Show Sticker";
+			this.swsticker.UseVisualStyleBackColor = true;
+			// 
+			// swStatusbar
+			// 
+			this.swStatusbar.Location = new System.Drawing.Point (262, 90);
+			this.swStatusbar.Name = "swStatusbar";
+			this.swStatusbar.Size = new System.Drawing.Size (211, 29);
+			this.swStatusbar.TabIndex = 27;
+			this.swStatusbar.Text = "Name in StatusBar";
+			this.swStatusbar.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size (533, 343);
+			this.Controls.Add (this.swStatusbar);
+			this.Controls.Add (this.swsticker);
+			this.Controls.Add (this.backImage);
 			this.Controls.Add (this.mode);
 			this.Controls.Add (this.ActionBox);
-			this.Controls.Add (this.schemes);
 			this.Controls.Add (this.button6);
 			this.Controls.Add (this.label5);
 			this.Controls.Add (this.button5);
@@ -295,10 +285,8 @@ namespace Yuki_Theme.Core.Forms
 			this.Controls.Add (this.label4);
 			this.Controls.Add (this.label3);
 			this.Controls.Add (this.askC);
-			this.Controls.Add (this.label2);
 			this.Controls.Add (this.button3);
 			this.Controls.Add (this.button2);
-			this.Controls.Add (this.checkBox1);
 			this.Controls.Add (this.button1);
 			this.Controls.Add (this.textBox1);
 			this.Controls.Add (this.label1);
@@ -313,6 +301,14 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		public System.Windows.Forms.CheckBox swStatusbar;
+
+		public System.Windows.Forms.CheckBox swsticker;
+
+		public System.Windows.Forms.CheckBox backImage;
+
+		public System.Windows.Forms.CheckBox checkBox1;
 
 		public CustomControls.RJControls.RJComboBox ActionBox;
 
@@ -333,14 +329,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public System.Windows.Forms.ComboBox comboBox1;
 
-		private System.Windows.Forms.Label label2;
-
-		public CustomControls.RJControls.RJComboBox schemes;
-
 		private System.Windows.Forms.Button button2;
 		private System.Windows.Forms.Button button3;
-
-		private System.Windows.Forms.CheckBox checkBox1;
 
 		private Yuki_Theme.Core.Controls.CustomText textBox1;
 		private System.Windows.Forms.Button         button1;

@@ -25,9 +25,9 @@ namespace Yuki_Theme.Core.Parsers
 				Directory.CreateDirectory ("Themes");
 			Console.WriteLine (outname);
 
-			string syt = CLI.cli.schemes [1];
+			string syt = CLI.schemes [1];
 			if (DefaultThemes.isDefault (syt))
-				CLI.cli.CopyFromMemory (syt, outname);
+				CLI.CopyFromMemory (syt, outname);
 			else
 				File.Copy ($"Themes/{syt}.yukitheme", outname, true);
 
@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.Parsers
 			finishParsing (path);
 			if (!overwrite)
 			{
-				CLI.cli.names.Add (flname);
+				CLI.names.Add (flname);
 				if (form != null)
 					form.schemes.Items.Add (flname);
 			}

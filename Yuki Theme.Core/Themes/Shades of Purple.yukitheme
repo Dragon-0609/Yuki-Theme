@@ -6,7 +6,7 @@
     <Selection bgcolor="#7448AF" />
     <VRuler color="#4C487B" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#3E3D32" />
+    <CaretMarker color="#B52A94" />
     <LineNumbers color="#A599E9" bgcolor="#28284E" />
     <FoldLine color="#A08068" />
     <FoldMarker color="#C8CEDE" bgcolor="#28284E" />
@@ -282,4 +282,8 @@
       </KeyWords>
     </RuleSet>
   </RuleSets>
+  <!--name:Shades of Purple-->
+  <!--align:2-->
+  <!--opacity:15-->
+  <!--sopacity:100-->
 </SyntaxDefinition>

@@ -12,13 +12,16 @@ namespace Yuki_Theme.Core.Forms
 	{
 		public const int PASCALPATH = 1;
 		public const int ACTIVE = 2;
-		public const int SETACTIVE = 3;
 		public const int ASKCHOICE = 4;
 		public const int CHOICEINDEX = 5;
 		public const int SETTINGMODE = 6;
 		public const int AUTOUPDATE = 7;
+		public const int BGIMAGE = 8;
+		public const int STICKER = 9;
+		public const int STATUSBAR = 10;
 		
-		public const double current_version = 2.0;
+		public const double current_version = 3.0;
+		public const string current_version_add = "beta";
 		public static string next_version = "";
 
 		private MForm form;
@@ -29,10 +32,22 @@ namespace Yuki_Theme.Core.Forms
 			set => textBox1.Text = value;
 		}
 
-		public bool Active
+		public bool bgImage
 		{
-			get => checkBox1.Checked;
-			set => checkBox1.Checked = value;
+			get => backImage.Checked;
+			set => backImage.Checked = value;
+		}
+
+		public bool Sticker
+		{
+			get => swsticker.Checked;
+			set => swsticker.Checked = value;
+		}
+
+		public bool StatusBar
+		{
+			get => swStatusbar.Checked;
+			set => swStatusbar.Checked = value;
 		}
 		
 		public SettingsForm ( MForm mf)
@@ -166,13 +181,13 @@ namespace Yuki_Theme.Core.Forms
 		private void SettingsForm_Shown (object sender, EventArgs e)
 		{
 			BackColor = button1.BackColor = button2.BackColor = button3.BackColor = button4.BackColor =
-				button5.BackColor = button6.BackColor = schemes.ListBackColor = schemes.BackColor = 
+				button5.BackColor = button6.BackColor = 
 				ActionBox.ListBackColor = ActionBox.BackColor = mode.ListBackColor = mode.BackColor = textBox1.BackColor = Helper.bgColor;
 				
 			ForeColor = button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
 				button3.FlatAppearance.BorderColor = button4.FlatAppearance.BorderColor =
 					button5.FlatAppearance.BorderColor = button6.FlatAppearance.BorderColor =
-						schemes.ForeColor = schemes.ListTextColor = ActionBox.ForeColor = ActionBox.ListTextColor = 
+						ActionBox.ForeColor = ActionBox.ListTextColor = 
 							mode.ForeColor = mode.ListTextColor = textBox1.ForeColor = Helper.fgColor;
 						
 			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
@@ -180,13 +195,13 @@ namespace Yuki_Theme.Core.Forms
 					button5.FlatAppearance.MouseOverBackColor =
 						button6.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 
-			schemes.BorderColor = schemes.IconColor = ActionBox.BorderColor = ActionBox.IconColor = 
+			ActionBox.BorderColor = ActionBox.IconColor = 
 			mode.BorderColor = mode.IconColor = textBox1.BorderColor = Helper.bgBorder;
 		}
 
 		public void setVisible (bool vis)
 		{
-			textBox1.Enabled = button1.Enabled = checkBox1.Enabled = askC.Enabled = ActionBox.Enabled = vis;
+			textBox1.Enabled = button1.Enabled = askC.Enabled = ActionBox.Enabled = vis;
 		}
 
 		private void loadSVG ()

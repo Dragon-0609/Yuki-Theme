@@ -6,6 +6,9 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class NotificationForm : Form
 	{
+		public Action onClick;
+		public Action onClick2;
+		
 		public NotificationForm ()
 		{
 			InitializeComponent ();
@@ -15,6 +18,8 @@ namespace Yuki_Theme.Core.Forms
 		public void changeContent(string title, string content){
 			ttitle.Text = title;
 			tcontent.Text = content;
+			button1.Visible = false;
+			button3.Visible = false;
 		}
 
 		private void label1_Click (object sender, EventArgs e)
@@ -24,6 +29,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private void button1_Click (object sender, EventArgs e)
 		{
+			if (onClick != null)
+				onClick ();
 			this.Close ();
 		}
 
@@ -39,8 +46,9 @@ namespace Yuki_Theme.Core.Forms
 			button2.FlatAppearance.MouseDownBackColor = button2.BackColor =
 					button2.FlatAppearance.MouseOverBackColor = tcontent.BackColor = Color.Transparent;
 			BackColor = button2.FlatAppearance.BorderColor = Helper.bgColor;
-			button2.ForeColor = button1.ForeColor = button1.VisitedLinkColor = ForeColor = Helper.fgColor;
-			button1.LinkColor = Helper.fgHover;
+			button2.ForeColor = button1.ForeColor = button1.VisitedLinkColor =
+				button3.ForeColor = button3.VisitedLinkColor = ForeColor = Helper.fgColor;
+			button3.LinkColor = button1.LinkColor = Helper.fgHover;
 		}
 		
 		protected override void OnPaint(PaintEventArgs e)
@@ -56,6 +64,13 @@ namespace Yuki_Theme.Core.Forms
 		private void button2_MouseLeave (object sender, EventArgs e)
 		{
 			button2.ForeColor = Helper.fgColor;
+		}
+
+		private void button3_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			if (onClick2 != null)
+				onClick2 ();
+			this.Close ();
 		}
 	}
 }

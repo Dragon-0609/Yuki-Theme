@@ -35,6 +35,7 @@ namespace Yuki_Theme.Core.Forms
 			this.ttitle = new System.Windows.Forms.Label ();
 			this.button2 = new System.Windows.Forms.Button ();
 			this.button1 = new System.Windows.Forms.LinkLabel ();
+			this.button3 = new System.Windows.Forms.LinkLabel ();
 			this.SuspendLayout ();
 			// 
 			// tcontent
@@ -84,10 +85,26 @@ namespace Yuki_Theme.Core.Forms
 			this.button1.VisitedLinkColor = System.Drawing.Color.Black;
 			this.button1.Click += new System.EventHandler (this.button1_Click);
 			// 
+			// button3
+			// 
+			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+			this.button3.LinkColor = System.Drawing.Color.Black;
+			this.button3.Location = new System.Drawing.Point (111, 52);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size (93, 17);
+			this.button3.TabIndex = 6;
+			this.button3.TabStop = true;
+			this.button3.Text = "linkLabel1";
+			this.button3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.button3.VisitedLinkColor = System.Drawing.Color.Black;
+			this.button3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.button3_LinkClicked);
+			// 
 			// NotificationForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size (315, 78);
+			this.Controls.Add (this.button3);
 			this.Controls.Add (this.button1);
 			this.Controls.Add (this.button2);
 			this.Controls.Add (this.ttitle);
@@ -102,6 +119,10 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		public System.Windows.Forms.LinkLabel button3;
+
+		public System.Windows.Forms.LinkLabel linkLabel1;
 
 		public System.Windows.Forms.Button button2;
 

@@ -13,65 +13,63 @@ using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core
 {
-	public class CLI
+	public static class CLI
 	{
-		private string          getPath => $"Themes/{currentFile}.yukitheme";
-		private string          gp      => $"Yuki_Theme.Core.Themes.{currentFile}.yukitheme";
+		private static string getPath => $"Themes/{currentFile}.yukitheme";
+		private static string gp      => $"Yuki_Theme.Core.Themes.{currentFile}.yukitheme";
 
-		#region Singleton
+		#region Public Fields
 
-		public static CLI cli;
+		public static List <string>   names    = new List <string> ();
+		public static List <string>   schemes  = new List <string> ();
+		public static DatabaseManager database = new DatabaseManager ();
+
+		public static int       actionChoice;
+		public static bool      askChoice;
+		public static bool      update;
+		public static string    pascalPath = "empty";
+		public static bool      bgImage;
+		public static bool      swSticker;
+		public static bool      swStatusbar;
+		public static int       settingMode;
+		public static string    currentFile  = "N|L";
+		public static string    currentoFile = "N|L";
+		public static string    selectedItem = "empty";
+		public static string    imagePath    = "";
+		public static string    currentPath  = Path.GetDirectoryName (Application.ExecutablePath);
+		public static Alignment align        = Alignment.Left;
+		public static int       opacity      = 10;
+		public static int       sopacity      = 100;
+
+		public static Dictionary <string, Dictionary <string, string>> localAttributes =
+			new Dictionary <string, Dictionary <string, string>> ();
+
+		public static Func <string, string, bool> SaveInExport;
+		public static Action <string, string>     setPath;
+		public static Action <string, string>     FinishExport;
+		public static Action <string, string>     ErrorExport;
+		public static Func <DialogResult>         AskChoice;
+		public static Action <string>             hasProblem      = null;
+		public static Action               onBGIMAGEChange = null;
+		public static Action               onSTICKERChange = null;
+		public static Action               onSTATUSChange = null;
+		public static Action <Image> ifHasImage = null;
+		public static Action ifDoesntHave = null;
+		public static Action <Image> ifHasSticker = null;
+		public static Action ifDoesntHaveSticker = null;
 
 		#endregion
-		
-		#region  Public Fields
 
-		public List <string>   names;
-		public List <string>   schemes;
-		public DatabaseManager database;
-		
-		public int       actionChoice;
-		public bool      askChoice;
-		public bool      update;
-		public string    pascalPath = "empty";
-		public bool      selectActive;
-		public int       settingMode;
-		public string    currentFile  = "N|L";
-		public string    currentoFile = "N|L";
-		public string    selectedItem = "empty";
-		public string    imagePath    = "";
-		public Alignment align        = Alignment.Left;
-		public int       opacity      = 10;
-		
-		public Dictionary <string, Dictionary <string, string>> localAttributes;
-
-		public Func <string, string, bool> SaveInExport;
-		public Action <string, string>     setPath;
-		public Action <string, string>     FinishExport;
-		public Action <string, string>     ErrorExport;
-		public Func <DialogResult>         AskChoice;
-		public Action <string>             hasProblem = null;
-		
-		#endregion
-
-
-		public CLI ()
-		{
-			cli = this;
-			names = new List <string> ();
-			schemes = new List <string> ();
-			localAttributes = new Dictionary <string, Dictionary <string, string>> ();
-		}
 
 		#region Main Commands
 
-		public void load_schemes (Func <string> ifZero =null)
+		public static void load_schemes (Func <string> ifZero = null)
 		{
 			schemes.Clear ();
 
 			schemes.AddRange (DefaultThemes.def);
 
-			if (Directory.Exists ("Themes"))
+			if (Directory.Exists (Path.Combine (currentPath, "Themes")))
 				foreach (var file in Directory.GetFiles ("Themes/", "*.yukitheme"))
 				{
 					var pts = Path.GetFileNameWithoutExtension (file);
@@ -86,7 +84,7 @@ namespace Yuki_Theme.Core
 								// Console.WriteLine(nod.Attributes ["name"].Value);
 								schemes.Add (sp);
 							}
-						}else
+						} else
 						{
 							schemes.Add (pts);
 						}
@@ -102,21 +100,21 @@ namespace Yuki_Theme.Core
 					{
 						currentFile = Path.GetFileNameWithoutExtension (sm);
 						currentoFile = currentFile;
-						File.Copy (sm,getPath);
+						File.Copy (sm, getPath);
 						schemes.Add (currentFile);
 					}
 				}
 			}
 		}
 
-		public void add (string name, string copyFrom)
+		public static void add (string name, string copyFrom)
 		{
 			string syt = copyFrom.Replace (": ", "__").Replace (":", "");
 			string patsh = $"Themes/{name}.yukitheme";
 			if (DefaultThemes.isDefault (copyFrom))
-				CLI.cli.CopyFromMemory (syt, patsh);
+				CopyFromMemory (syt, patsh);
 			else
-				File.Copy ($"Themes/{syt}.yukitheme", patsh );
+				File.Copy ($"Themes/{syt}.yukitheme", patsh);
 
 			if (copyFrom.Contains ("__"))
 			{
@@ -144,38 +142,49 @@ namespace Yuki_Theme.Core
 				var node = doc.SelectSingleNode ("/SyntaxDefinition") ??
 				           throw new ArgumentNullException ("doc.SelectSingleNode (\"/SyntaxDefinition\")");
 				XmlNodeList comms = node.SelectNodes ("//comment()");
-				if(comms.Count >= 1)
+				if (comms.Count >= 1)
 				{
+					bool hasOp = false;
 					foreach (XmlComment comm in comms)
 					{
 						if (comm.Value.StartsWith ("name"))
 						{
 							comm.Value = "name:" + name;
 						}
+
+						if (comm.Value.StartsWith ("sopacity"))
+							hasOp = true;
+					}
+
+					if (!hasOp)
+					{
+						node.AppendChild (doc.CreateComment ("sopacity:" + (sopacity).ToString ()));	
 					}
 				} else
 				{
 					node.AppendChild (doc.CreateComment ("name:" + name));
 					node.AppendChild (doc.CreateComment ("align:" + ((int) align).ToString ()));
 					node.AppendChild (doc.CreateComment ("opacity:" + (opacity).ToString ()));
+					node.AppendChild (doc.CreateComment ("sopacity:" + (sopacity).ToString ()));
 				}
 
 
 				string txml = doc.OuterXml;
 				if (iszip)
 				{
-					Helper.updateZip (getPath, txml, null, true);
+					Helper.updateZip (getPath, txml, null, true, null, true);
 				} else
 				{
 					doc.Save (patsh);
 				}
 			}
 		}
-		
-		public void remove (string st, Func<string, string, bool> askD, Func<string, object> afterAsk = null, Action<string, object> afterDelete = null)
+
+		public static void remove (string st, Func <string, string, bool> askD, Func <string, object> afterAsk = null,
+		                           Action <string, object> afterDelete = null)
 		{
 			st = st.Substring (7);
-			if(DefaultThemes.getCategory(st).ToLower() == "custom")
+			if (DefaultThemes.getCategory (st).ToLower () == "custom")
 			{
 				if (askD ($"Do you really want to delete '{st}'?", "Delete"))
 				{
@@ -188,19 +197,19 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
-		
-		public void save (Image img2 = null)
+
+		public static void save (Image img2 = null, Image img3 = null)
 		{
 			if (!isDefault ())
-				saveList (img2);
+				saveList (img2, img3);
 		}
-		
-		public void export (Image img2, Action setTheme = null, Action startSettingTheme = null)
+
+		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null)
 		{
 			if (!isDefault () && Helper.mode != ProductMode.Plugin)
 				if (SaveInExport ("Do you want to save current scheme?", "Save"))
 					save (img2);
-			if (pascalPath.Length < 6  && Helper.mode != ProductMode.Plugin)
+			if (pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
 			{
 				setPath ("Please, set path to the PascalABC.NET Direcory.",
 				         "Path to the PascalABC.NET Direcory");
@@ -221,7 +230,7 @@ namespace Yuki_Theme.Core
 					if (can)
 					{
 						var result = DialogResult.No;
-						if(Helper.mode != ProductMode.Plugin)
+						if (Helper.mode != ProductMode.Plugin)
 						{
 							if (askChoice)
 							{
@@ -250,7 +259,7 @@ namespace Yuki_Theme.Core
 						if (result != DialogResult.No)
 						{
 							if (result == DialogResult.Ignore) CopyFiles (files);
-		
+
 							DeleteFiles (files);
 							files = Directory.GetFiles (Path.Combine (pascalPath, "Highlighting"), "*.png");
 							DeleteFiles (files);
@@ -264,12 +273,14 @@ namespace Yuki_Theme.Core
 				{
 					ExportTheme (path);
 				}
-				if(Helper.mode != ProductMode.Plugin)
+
+				if (Helper.mode != ProductMode.Plugin)
 					if (FinishExport != null)
 						FinishExport (
 							"Your scheme has been exported to the Pascal Directory. Restart PascalABC.NET to activate this scheme",
 							"Done");
 
+				Helper.CurrentTheme = currentoFile;
 				if (setTheme != null)
 					setTheme ();
 			} else
@@ -280,13 +291,13 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public void import (string path)
+		public static void import (string path)
 		{
 			MainParser.Parse (path);
 		}
-		
-		
-		public void palign (Alignment algn)
+
+
+		public static void palign (Alignment algn)
 		{
 			if (align != algn)
 			{
@@ -295,28 +306,28 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public void restore (bool wantClean = true, Action<Image> ifHasImage = null, Action ifDoesntHave =null, Action onSelect = null)
+		public static void restore (bool wantClean = true, Action onSelect = null)
 		{
 			localAttributes.Clear ();
 			names.Clear ();
-			populateList (ifHasImage, ifDoesntHave, onSelect);
-			if(wantClean)
+			populateList (onSelect);
+			if (wantClean)
 			{
 				GC.Collect ();
 				GC.WaitForPendingFinalizers ();
 			}
 		}
-		
-		public void populateList (Action<Image> ifHasImage = null, Action ifDoesntHave=null, Action onSelect = null)
+
+		public static void populateList (Action onSelect = null)
 		{
 			var doc = new XmlDocument ();
 			if (isDefault ())
 			{
 				var a = GetCore ();
-				Console.WriteLine(currentFile);
+				Console.WriteLine (currentFile);
 				// doc.Load (a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{currentFile}.yukitheme"));
-				
-				
+
+
 				Tuple <bool, string> content = Helper.getThemeFromMemory (gp, a);
 				if (content.Item1)
 				{
@@ -325,7 +336,7 @@ namespace Yuki_Theme.Core
 					if (iag.Item1)
 					{
 						// img = iag.Item2;
-						if(ifHasImage != null)
+						if (ifHasImage != null)
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
@@ -334,10 +345,28 @@ namespace Yuki_Theme.Core
 						if (ifDoesntHave != null)
 							ifDoesntHave ();
 					}
+
+					iag = null;
+					iag = Helper.getStickerFromMemory (gp, a);
+					if (iag.Item1)
+					{
+						// img = iag.Item2;
+						if (ifHasSticker != null)
+						{
+							ifHasSticker ((Image) iag.Item2);
+						}
+					} else
+					{
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
+					}
 				} else
 				{
 					if (ifDoesntHave != null)
 						ifDoesntHave ();
+					
+					if (ifDoesntHaveSticker != null)
+						ifDoesntHaveSticker ();
 					doc.Load (a.GetManifestResourceStream (gp));
 				}
 			} else
@@ -351,7 +380,7 @@ namespace Yuki_Theme.Core
 					if (iag.Item1)
 					{
 						// img = iag.Item2;
-						if(ifHasImage != null)
+						if (ifHasImage != null)
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
@@ -360,17 +389,33 @@ namespace Yuki_Theme.Core
 						if (ifDoesntHave != null)
 							ifDoesntHave ();
 					}
+					iag = Helper.getSticker (getPath);
+					if (iag.Item1)
+					{
+						// img = iag.Item2;
+						if (ifHasSticker != null)
+						{
+							ifHasSticker ((Image) iag.Item2);
+						}
+					} else
+					{
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
+					}
 				} else
 				{
 					if (ifDoesntHave != null)
 						ifDoesntHave ();
+					if (ifDoesntHaveSticker != null)
+						ifDoesntHaveSticker ();
 					try
 					{
 						doc.Load (getPath);
 					} catch (System.Xml.XmlException)
 					{
 						if (hasProblem != null)
-							hasProblem ("There's problem in your theme file. Sorry, but I can't open it. The default scheme will be selected");
+							hasProblem (
+								"There's problem in your theme file. Sorry, but I can't open it. The default scheme will be selected");
 
 						return;
 					}
@@ -381,37 +426,42 @@ namespace Yuki_Theme.Core
 			PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
 			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0]);
 			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0]);
-			
+
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
-			string al = ((int) Alignment.Center).ToString();
+			string al = ((int) Alignment.Center).ToString ();
 			string op = "15";
-			
+			string sop = "100";
+
 			foreach (XmlComment comm in comms)
 			{
 				if (comm.Value.StartsWith ("align"))
 				{
 					al = comm.Value.Substring (6);
-				}else if (comm.Value.StartsWith ("opacity"))
+				} else if (comm.Value.StartsWith ("opacity"))
 				{
 					op = comm.Value.Substring (8);
+				} else if (comm.Value.StartsWith ("sopacity"))
+				{
+					sop = comm.Value.Substring (9);
 				}
 			}
 
 			localAttributes.Add ("BackgroundImage",
 			                     new Dictionary <string, string> () {{"align", al}, {"opacity", op}});
-			
-			if (localAttributes.ContainsKey ("BackgroundImage"))
-			{
-				align = (Alignment) (int.Parse (localAttributes ["BackgroundImage"] ["align"]));
-				opacity = int.Parse (localAttributes ["BackgroundImage"] ["opacity"]);
-			}
 
-			if (onSelect != null)
+			localAttributes.Add ("Sticker",
+			                     new Dictionary <string, string> () {{"opacity", sop}});
+
+			align = (Alignment) (int.Parse (localAttributes ["BackgroundImage"] ["align"]));
+			opacity = int.Parse (localAttributes ["BackgroundImage"] ["opacity"]);
+			sopacity = int.Parse (localAttributes ["Sticker"] ["opacity"]);
+
+				if (onSelect != null)
 				onSelect ();
 		}
 
-		public void CopyFromMemory (string file, string path, bool extract = false)
+		public static void CopyFromMemory (string file, string path, bool extract = false)
 		{
 			var a = GetCore ();
 			if (file.Contains (":"))
@@ -426,7 +476,7 @@ namespace Yuki_Theme.Core
 				stream.Seek (0, SeekOrigin.Begin);
 				stream.CopyTo (fs);
 			}
-			
+
 			if (extract)
 			{
 				if (Helper.isZip (stream))
@@ -443,35 +493,39 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public void saveData ()
+		public static void saveData ()
 		{
 			var dict = new Dictionary <int, string> ();
 			dict.Add (SettingsForm.PASCALPATH, pascalPath);
-			dict.Add (SettingsForm.SETACTIVE, selectActive.ToString ());
 			dict.Add (SettingsForm.ACTIVE, selectedItem);
 			dict.Add (SettingsForm.ASKCHOICE, askChoice.ToString ());
 			dict.Add (SettingsForm.CHOICEINDEX, actionChoice.ToString ());
 			dict.Add (SettingsForm.SETTINGMODE, settingMode.ToString ());
 			dict.Add (SettingsForm.AUTOUPDATE, update.ToString ());
+			dict.Add (SettingsForm.BGIMAGE, bgImage.ToString ());
+			dict.Add (SettingsForm.STICKER, swSticker.ToString ());
+			dict.Add (SettingsForm.STATUSBAR, swStatusbar.ToString ());
 			database.UpdateData (dict);
+			if (onBGIMAGEChange != null) onBGIMAGEChange ();
+			if (onSTICKERChange != null) onSTICKERChange ();
+			if (onSTATUSChange != null) onSTATUSChange ();
 		}
 
 		#endregion
 
 		#region XML
 
-		
-		private void PopulateByXMLNodeParent (XmlNode node)
+		private static void PopulateByXMLNodeParent (XmlNode node)
 		{
 			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNode (xne);
 		}
 
-		private void PopulateByXMLNode (XmlNode node)
+		private static void PopulateByXMLNode (XmlNode node)
 		{
 			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingular (xn);
 		}
 
-		private void PopulateByXMLNodeSingular (XmlNode node)
+		private static void PopulateByXMLNodeSingular (XmlNode node)
 		{
 			// Console.WriteLine("TEST");
 			var attrs = new Dictionary <string, string> ();
@@ -532,6 +586,7 @@ namespace Yuki_Theme.Core
 						localAttributes.Add (nm, attrs);
 						if (!Populater.isInList (nm, names)) names.Add (nm);
 					}
+
 					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
 					    !names.Contains ("BackgroundImage"))
 					{
@@ -539,29 +594,35 @@ namespace Yuki_Theme.Core
 						names.Add ("BackgroundImage");
 						names.Add ("Selection");
 					}
+
+					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
+					    !names.Contains ("Sticker"))
+					{
+						names.Remove ("Selection");
+						names.Add ("Sticker");
+						names.Add ("Selection");
+					}
 				}
 			}
 		}
 
-
 		#endregion
-		
 
-		private bool isPasalDirectory (string st)
+
+		private static bool isPasalDirectory (string st)
 		{
 			return Directory.Exists (System.IO.Path.Combine (st, "Highlighting"));
 		}
 
-		public void connectAndGet ()
+		public static void connectAndGet ()
 		{
-			database = new DatabaseManager ();
 			var data = database.ReadData ();
 			pascalPath = data [SettingsForm.PASCALPATH] == "empty" ? null : data [SettingsForm.PASCALPATH];
 			if (Helper.mode == ProductMode.Plugin)
 			{
 				pascalPath = Path.GetDirectoryName (Application.ExecutablePath);
 			}
-			
+
 			if (pascalPath == null)
 			{
 				string defpas = "";
@@ -592,9 +653,11 @@ namespace Yuki_Theme.Core
 
 			if (pascalPath == null) pascalPath = "";
 
-			selectActive = bool.Parse (data [SettingsForm.SETACTIVE]);
 			askChoice = bool.Parse (data [SettingsForm.ASKCHOICE]);
 			update = bool.Parse (data [SettingsForm.AUTOUPDATE]);
+			bgImage = bool.Parse (data [SettingsForm.BGIMAGE]);
+			swSticker = bool.Parse (data [SettingsForm.STICKER]);
+			swStatusbar = bool.Parse (data [SettingsForm.STATUSBAR]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
@@ -603,13 +666,12 @@ namespace Yuki_Theme.Core
 			int.TryParse (data [SettingsForm.SETTINGMODE], out os);
 			settingMode = os;
 		}
-		
-		
 
-		public string GetNameOfTheme (string sps)
+
+		public static string GetNameOfTheme (string sps)
 		{
 			XmlDocument docu = new XmlDocument ();
-					
+
 			Tuple <bool, string> content = Helper.getTheme (sps);
 			if (content.Item1)
 			{
@@ -622,7 +684,7 @@ namespace Yuki_Theme.Core
 			XmlNode nod = docu.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
 			string nm = "";
-			
+
 			foreach (XmlComment comm in comms)
 			{
 				if (comm.Value.StartsWith ("name"))
@@ -631,11 +693,12 @@ namespace Yuki_Theme.Core
 					break;
 				}
 			}
+
 			return nm;
 		}
-		
 
-		private void saveList (Image img2 = null)
+
+		private static void saveList (Image img2 = null, Image img3 = null)
 		{
 			if (!isDefault ())
 			{
@@ -723,11 +786,12 @@ namespace Yuki_Theme.Core
 
 
 				node = doc.SelectSingleNode ("/SyntaxDefinition");
-				
+
 				XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 				XmlNodeList comms = nod.SelectNodes ("//comment()");
-				if(comms.Count >= 3)
+				if (comms.Count >= 3)
 				{
+					bool hasOp = false;
 					foreach (XmlComment comm in comms)
 					{
 						if (comm.Value.StartsWith ("align"))
@@ -736,38 +800,48 @@ namespace Yuki_Theme.Core
 						} else if (comm.Value.StartsWith ("opacity"))
 						{
 							comm.Value = "opacity:" + (opacity).ToString ();
+						} else if (comm.Value.StartsWith ("sopacity"))
+						{
+							comm.Value = "sopacity:" + (sopacity).ToString ();
+							hasOp = true;
 						}
 					}
-				}else
+
+					if (!hasOp)
+					{
+						node.AppendChild (doc.CreateComment ("sopacity:" + (sopacity).ToString ()));						
+					}
+				} else
 				{
 					node.AppendChild (doc.CreateComment ("name:" + currentoFile));
 					node.AppendChild (doc.CreateComment ("align:" + ((int) align).ToString ()));
 					node.AppendChild (doc.CreateComment ("opacity:" + (opacity).ToString ()));
+					node.AppendChild (doc.CreateComment ("sopacity:" + (sopacity).ToString ()));
 				}
-				
-				if (!iszip && img2 == null)
+
+				if (!iszip && img2 == null && img3 == null)
 					doc.Save (getPath);
 				else
 				{
 					string txml = doc.OuterXml;
 					if (iszip)
 					{
-						Helper.updateZip (getPath, txml, img2);
+						Helper.updateZip (getPath, txml, img2, false, img3);
 					} else
 					{
-						Helper.zip (getPath, txml, img2);
+						Helper.zip (getPath, txml, img2, img3);
 					}
 				}
 			}
 		}
 
 
-		private void convertAlign ()
+		private static void convertAlign ()
 		{
 			localAttributes ["BackgroundImage"] ["align"] = ((int) align).ToString ();
 		}
-		
-		private void CleanDestination ()
+
+		private static void CleanDestination ()
 		{
 			var fil = Directory.GetFiles (Path.Combine (pascalPath, "Highlighting"), "*.png");
 			foreach (string s in fil)
@@ -775,8 +849,8 @@ namespace Yuki_Theme.Core
 				File.Delete (s);
 			}
 		}
-		
-		private void CopyFiles (string [] files)
+
+		private static void CopyFiles (string [] files)
 		{
 			foreach (var file in files)
 			{
@@ -785,8 +859,8 @@ namespace Yuki_Theme.Core
 					File.Copy (file, fs);
 			}
 		}
-		
-		private void ExportTheme (string path)
+
+		private static void ExportTheme (string path)
 		{
 			string source = getPath;
 			bool iszip = Helper.isZip (source);
@@ -800,24 +874,24 @@ namespace Yuki_Theme.Core
 				Helper.extractZip (source, path);
 			}
 		}
-		
-		private void DeleteFiles (string [] files)
+
+		private static void DeleteFiles (string [] files)
 		{
 			foreach (var file in files) File.Delete (file);
 		}
 
-		public Assembly GetCore ()
+		public static Assembly GetCore ()
 		{
 			return GetAssemblyByName ("Yuki Theme.Core");
 		}
-		
-		private Assembly GetAssemblyByName(string name)
+
+		private static Assembly GetAssemblyByName (string name)
 		{
-			return AppDomain.CurrentDomain.GetAssemblies().
-			                 SingleOrDefault(assembly => assembly.GetName().Name == name);
+			return AppDomain.CurrentDomain.GetAssemblies ()
+			                .SingleOrDefault (assembly => assembly.GetName ().Name == name);
 		}
-		
-		public bool isDefault ()
+
+		public static bool isDefault ()
 		{
 			return DefaultThemes.isDefault (currentoFile);
 		}

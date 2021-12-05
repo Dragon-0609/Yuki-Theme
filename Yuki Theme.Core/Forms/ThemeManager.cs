@@ -63,7 +63,7 @@ namespace Yuki_Theme.Core.Forms
 
 			if (form.selform.ShowDialog () == DialogResult.OK)
 			{
-				CLI.cli.add (form.selform.textBox1.Text, form.selform.comboBox1.SelectedItem.ToString ());
+				CLI.add (form.selform.textBox1.Text, form.selform.comboBox1.SelectedItem.ToString ());
 				form.schemes.Items.Add (form.selform.textBox1.Text);
 				form.schemes.SelectedItem = form.selform.textBox1.Text;
 				DialogResult = DialogResult.OK;
@@ -96,7 +96,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (scheme.SelectedItems.Count > 0)
 			{
-				CLI.cli.remove (scheme.SelectedItems[0].Text, askDelete, afterAsk, afterDelete);
+				CLI.remove (scheme.SelectedItems[0].Text, askDelete, afterAsk, afterDelete);
 			}
 		}
 

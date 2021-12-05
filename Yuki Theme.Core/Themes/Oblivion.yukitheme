@@ -6,7 +6,7 @@
     <Selection bgcolor="#555753" />
     <VRuler color="#555651" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#3E3D32" />
+    <CaretMarker color="#CBBF3D" />
     <LineNumbers color="#555753" bgcolor="#000000" />
     <FoldLine color="#000000" />
     <FoldMarker color="#BCBC89" bgcolor="#000000" />
@@ -282,4 +282,8 @@
       </KeyWords>
     </RuleSet>
   </RuleSets>
+  <!--name:Oblivion-->
+  <!--align:2-->
+  <!--opacity:15-->
+  <!--sopacity:100-->
 </SyntaxDefinition>

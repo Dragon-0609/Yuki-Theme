@@ -6,7 +6,7 @@
     <Selection bgcolor="#49483E" />
     <VRuler color="#555651" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#3E3D32" />
+    <CaretMarker color="#999332" />
     <LineNumbers color="#8F908A" bgcolor="#2F3129" />
     <FoldLine color="#8C8C8C" />
     <FoldMarker color="#BCBC89" bgcolor="#272727" />
@@ -282,4 +282,8 @@
       </KeyWords>
     </RuleSet>
   </RuleSets>
+  <!--name:Monokai Dark-->
+  <!--align:2-->
+  <!--opacity:15-->
+  <!--sopacity:100-->
 </SyntaxDefinition>

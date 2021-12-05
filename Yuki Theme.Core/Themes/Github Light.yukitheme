@@ -6,7 +6,7 @@
     <Selection bgcolor="#EDF4FC" />
     <VRuler color="#D7DBE0" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#3E3D32" />
+    <CaretMarker color="#5C314B" />
     <LineNumbers color="#BABBBD" bgcolor="#FFFFFF" />
     <FoldLine color="#B2B2B2" />
     <FoldMarker color="#000000" bgcolor="#FFFFFF" />
@@ -282,4 +282,8 @@
       </KeyWords>
     </RuleSet>
   </RuleSets>
+  <!--name:Github Light-->
+  <!--align:2-->
+  <!--opacity:15-->
+  <!--sopacity:100-->
 </SyntaxDefinition>

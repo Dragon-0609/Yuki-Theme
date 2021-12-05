@@ -22,11 +22,13 @@ namespace Yuki_Theme.Core.Database
          {
             ke.SetValue (SettingsForm.PASCALPATH.ToString(), "empty");
             ke.SetValue (SettingsForm.ACTIVE.ToString(), "empty");
-            ke.SetValue (SettingsForm.SETACTIVE.ToString(), "false");
             ke.SetValue (SettingsForm.ASKCHOICE.ToString(), "true");
             ke.SetValue (SettingsForm.CHOICEINDEX.ToString(), "0");
             ke.SetValue (SettingsForm.SETTINGMODE.ToString(), "0");
             ke.SetValue (SettingsForm.AUTOUPDATE.ToString(), "true");
+            ke.SetValue (SettingsForm.BGIMAGE.ToString(), "true");
+            ke.SetValue (SettingsForm.STICKER.ToString(), "true");
+            ke.SetValue (SettingsForm.STATUSBAR.ToString(), "true");
          }
       }
       
@@ -133,7 +135,9 @@ namespace Yuki_Theme.Core.Database
          RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme");
          dictionary.Add (SettingsForm.PASCALPATH,key.GetValue (SettingsForm.PASCALPATH.ToString(), "empty").ToString ());
          dictionary.Add (SettingsForm.ACTIVE,key.GetValue (SettingsForm.ACTIVE.ToString(), "empty").ToString ());
-         dictionary.Add (SettingsForm.SETACTIVE,key.GetValue (SettingsForm.SETACTIVE.ToString(), "false").ToString ());
+         dictionary.Add (SettingsForm.BGIMAGE,key.GetValue (SettingsForm.BGIMAGE.ToString(), "true").ToString ());
+         dictionary.Add (SettingsForm.STICKER,key.GetValue (SettingsForm.STICKER.ToString(), "true").ToString ());
+         dictionary.Add (SettingsForm.STATUSBAR,key.GetValue (SettingsForm.STATUSBAR.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.ASKCHOICE,key.GetValue (SettingsForm.ASKCHOICE.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.CHOICEINDEX,key.GetValue (SettingsForm.CHOICEINDEX.ToString(), "0").ToString ());
          dictionary.Add (SettingsForm.SETTINGMODE,key.GetValue (SettingsForm.SETTINGMODE.ToString(), "0").ToString ());

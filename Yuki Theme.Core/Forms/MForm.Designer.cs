@@ -44,6 +44,10 @@
 			this.import_directory = new System.Windows.Forms.Button ();
 			this.schemes = new CustomControls.RJControls.RJComboBox ();
 			this.imageEditor = new System.Windows.Forms.Panel ();
+			this.alignpanel = new System.Windows.Forms.Panel ();
+			this.pleft = new System.Windows.Forms.Button ();
+			this.pcenter = new System.Windows.Forms.Button ();
+			this.pright = new System.Windows.Forms.Button ();
 			this.numericUpDown1 = new Yuki_Theme.Core.Controls.FlatNumericUpDown ();
 			this.label3 = new System.Windows.Forms.Label ();
 			this.opacity_slider = new Yuki_Theme.Core.Controls.Slider ();
@@ -51,9 +55,6 @@
 			this.button11 = new System.Windows.Forms.Button ();
 			this.button10 = new System.Windows.Forms.Button ();
 			this.imagePath = new Yuki_Theme.Core.Controls.CustomText ();
-			this.pright = new System.Windows.Forms.Button ();
-			this.pcenter = new System.Windows.Forms.Button ();
-			this.pleft = new System.Windows.Forms.Button ();
 			this.colorEditor = new System.Windows.Forms.Panel ();
 			this.check_italic = new System.Windows.Forms.CheckBox ();
 			this.check_bold = new System.Windows.Forms.CheckBox ();
@@ -69,6 +70,7 @@
 			((System.ComponentModel.ISupportInitialize) (this.sBox)).BeginInit ();
 			this.panel1.SuspendLayout ();
 			this.imageEditor.SuspendLayout ();
+			this.alignpanel.SuspendLayout ();
 			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).BeginInit ();
 			this.colorEditor.SuspendLayout ();
 			this.SuspendLayout ();
@@ -155,6 +157,7 @@
 			// 
 			// close_btn
 			// 
+			this.close_btn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.close_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.close_btn.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
 			this.close_btn.Location = new System.Drawing.Point (446, 6);
@@ -260,6 +263,7 @@
 			// 
 			// imageEditor
 			// 
+			this.imageEditor.Controls.Add (this.alignpanel);
 			this.imageEditor.Controls.Add (this.numericUpDown1);
 			this.imageEditor.Controls.Add (this.label3);
 			this.imageEditor.Controls.Add (this.opacity_slider);
@@ -267,14 +271,57 @@
 			this.imageEditor.Controls.Add (this.button11);
 			this.imageEditor.Controls.Add (this.button10);
 			this.imageEditor.Controls.Add (this.imagePath);
-			this.imageEditor.Controls.Add (this.pright);
-			this.imageEditor.Controls.Add (this.pcenter);
-			this.imageEditor.Controls.Add (this.pleft);
 			this.imageEditor.Location = new System.Drawing.Point (16, 66);
 			this.imageEditor.Name = "imageEditor";
 			this.imageEditor.Size = new System.Drawing.Size (497, 73);
 			this.imageEditor.TabIndex = 16;
 			this.imageEditor.Visible = false;
+			// 
+			// alignpanel
+			// 
+			this.alignpanel.Controls.Add (this.pleft);
+			this.alignpanel.Controls.Add (this.pcenter);
+			this.alignpanel.Controls.Add (this.pright);
+			this.alignpanel.Location = new System.Drawing.Point (294, 3);
+			this.alignpanel.Name = "alignpanel";
+			this.alignpanel.Size = new System.Drawing.Size (198, 36);
+			this.alignpanel.TabIndex = 10;
+			// 
+			// pleft
+			// 
+			this.pleft.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.left;
+			this.pleft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.pleft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.pleft.Location = new System.Drawing.Point (11, 1);
+			this.pleft.Name = "pleft";
+			this.pleft.Size = new System.Drawing.Size (54, 32);
+			this.pleft.TabIndex = 0;
+			this.pleft.UseVisualStyleBackColor = true;
+			this.pleft.Click += new System.EventHandler (this.pleft_Click);
+			// 
+			// pcenter
+			// 
+			this.pcenter.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.center;
+			this.pcenter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.pcenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.pcenter.Location = new System.Drawing.Point (74, 0);
+			this.pcenter.Name = "pcenter";
+			this.pcenter.Size = new System.Drawing.Size (54, 32);
+			this.pcenter.TabIndex = 1;
+			this.pcenter.UseVisualStyleBackColor = true;
+			this.pcenter.Click += new System.EventHandler (this.pcenter_Click);
+			// 
+			// pright
+			// 
+			this.pright.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.right;
+			this.pright.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.pright.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.pright.Location = new System.Drawing.Point (136, 1);
+			this.pright.Name = "pright";
+			this.pright.Size = new System.Drawing.Size (54, 32);
+			this.pright.TabIndex = 2;
+			this.pright.UseVisualStyleBackColor = true;
+			this.pright.Click += new System.EventHandler (this.pright_Click);
 			// 
 			// numericUpDown1
 			// 
@@ -383,42 +430,6 @@
 			this.imagePath.Name = "imagePath";
 			this.imagePath.Size = new System.Drawing.Size (215, 24);
 			this.imagePath.TabIndex = 3;
-			// 
-			// pright
-			// 
-			this.pright.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.right;
-			this.pright.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pright.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.pright.Location = new System.Drawing.Point (438, 7);
-			this.pright.Name = "pright";
-			this.pright.Size = new System.Drawing.Size (54, 32);
-			this.pright.TabIndex = 2;
-			this.pright.UseVisualStyleBackColor = true;
-			this.pright.Click += new System.EventHandler (this.pright_Click);
-			// 
-			// pcenter
-			// 
-			this.pcenter.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.center;
-			this.pcenter.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pcenter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.pcenter.Location = new System.Drawing.Point (378, 7);
-			this.pcenter.Name = "pcenter";
-			this.pcenter.Size = new System.Drawing.Size (54, 32);
-			this.pcenter.TabIndex = 1;
-			this.pcenter.UseVisualStyleBackColor = true;
-			this.pcenter.Click += new System.EventHandler (this.pcenter_Click);
-			// 
-			// pleft
-			// 
-			this.pleft.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.left;
-			this.pleft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.pleft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.pleft.Location = new System.Drawing.Point (318, 7);
-			this.pleft.Name = "pleft";
-			this.pleft.Size = new System.Drawing.Size (54, 32);
-			this.pleft.TabIndex = 0;
-			this.pleft.UseVisualStyleBackColor = true;
-			this.pleft.Click += new System.EventHandler (this.pleft_Click);
 			// 
 			// colorEditor
 			// 
@@ -587,10 +598,13 @@
 			this.panel1.ResumeLayout (false);
 			this.imageEditor.ResumeLayout (false);
 			this.imageEditor.PerformLayout ();
+			this.alignpanel.ResumeLayout (false);
 			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).EndInit ();
 			this.colorEditor.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.Panel alignpanel;
 
 		private Yuki_Theme.Core.Controls.FlatNumericUpDown numericUpDown1;
 

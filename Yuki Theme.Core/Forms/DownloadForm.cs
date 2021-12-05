@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 
@@ -58,10 +60,19 @@ namespace Yuki_Theme.Core.Forms
 							size = jresponse ["assets"] [md] ["size"].ToString ();
 							size = string.Format ("{0:0.0} MB", double.Parse (size) / 1024 / 1024);
 							downloadlink = jresponse ["assets"] [md] ["browser_download_url"].ToString ();
-							form.nf.button1.Visible = true;
-							form.nf.button1.Click += startUpdate;
+							form.nf.onClick = startUpdate;
+							form.nf.onClick2 = openInGithub;
 							form.nf.button1.Text = "Update";
-							form.nf.changeContent ("New version is available", $"Yuki theme {ver} \n Size: {size}");
+							form.nf.button3.Text = "Open in Github";
+							string sw = tg.Substring (1);
+							int n = 0;
+							if( (n=tg.IndexOf('.')) != -1 )
+								sw = string.Concat(tg.Substring(0,n+1),tg.Substring(n+1).Replace(".0",""));
+							form.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
+							
+							form.nf.button1.Visible = true;
+							form.nf.button3.Visible = true;
+							
 							form.nf.Show (form);
 							lock (SettingsForm.next_version)
 							{
@@ -74,6 +85,7 @@ namespace Yuki_Theme.Core.Forms
 						{
 							form.ShowNotification ("Up to date", "Your version is the latest.");
 							form.nf.button1.Visible = false;
+							form.nf.button3.Visible = false;
 							form.changeNotificationLocation ();
 						}
 					}
@@ -84,9 +96,17 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		private void startUpdate (object sender, EventArgs e)
+		private void openInGithub ()
 		{
-			form.nf.button1.Click -= startUpdate;
+			form.nf.onClick = null;
+			form.nf.onClick2 = null;
+			Process.Start ("https://github.com/Dragon-0609/Yuki-Theme/releases/latest");
+		}
+		
+		private void startUpdate ()
+		{
+			form.nf.onClick = null;
+			form.nf.onClick2 = null;
 			// Console.WriteLine ("Update is started");
 			
 			form.showDownloader ();
@@ -95,7 +115,7 @@ namespace Yuki_Theme.Core.Forms
 			if (!File.Exists(Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 			                               "yuki_theme.zip")))
 			{
-				form.df.downl.ClickHere (e);
+				form.df.downl.ClickHere (EventArgs.Empty);
 			} else
 			{
 				var fi = new FileInfo (Path.Combine (
@@ -104,7 +124,7 @@ namespace Yuki_Theme.Core.Forms
 				string siz = string.Format ("{0:0.0}", fi.Length / 1024 / 1024.0);
 				if (siz != size)
 				{
-					form.df.downl.ClickHere (e);
+					form.df.downl.ClickHere (EventArgs.Empty);
 				} else
 				{
 					startUpdating ();
@@ -132,18 +152,50 @@ namespace Yuki_Theme.Core.Forms
 
 		private void DownloadCompleted (object sender, AsyncCompletedEventArgs e)
 		{
-			// Console.WriteLine(e.Error.Message);
-			if (e.Cancelled)
+			if (e.Error != null)
 			{
-				form.ShowNotification ("Canceled", $"Downloading is canceled");
-				form.nf.button1.Visible = false;
-				form.changeNotificationLocation ();
+				string title = "Error";
+				string message = e.Error.Message;
+				
+				if(e.Error.InnerException != null)
+				{
+					if (e.Error.InnerException is SocketException)
+					{
+						title = "Refused";
+						message = "Downloading is canceled, because server refused the request";
+					} else
+					{
+						message = e.Error.InnerException.Message;
+					}
+				}
+
+				if (e.Error is WebException)
+				{
+					form.ShowNotification (title, message);
+					form.nf.onClick = openInGithub;
+					form.nf.onClick2 = null;
+					form.nf.button1.Text = "Open in Github";
+					form.nf.button1.Visible = true;
+					
+					form.changeNotificationLocation ();
+				}
+				else
+					throw e.Error;
 			}else
 			{
-				form.ShowNotification ("New version is downloaded", $"Installing...The program will be closed.");
-				form.nf.button1.Visible = false;
-				form.changeNotificationLocation ();
-				startUpdating ();
+				// Console.WriteLine(e.Error.Message);
+				if (e.Cancelled)
+				{
+					form.ShowNotification ("Canceled", $"Downloading is canceled");
+					form.nf.button1.Visible = false;
+					form.changeNotificationLocation ();
+				} else
+				{
+					form.ShowNotification ("New version is downloaded", $"Installing...The program will be closed.");
+					form.nf.button1.Visible = false;
+					form.changeNotificationLocation ();
+					startUpdating ();
+				}
 			}
 		}
 
@@ -181,6 +233,14 @@ namespace Yuki_Theme.Core.Forms
 			e.Cancel = true;
 			this.Hide();
 			this.Parent = null;
+		}
+
+		private void DownloadForm_Shown (object sender, EventArgs e)
+		{
+			ForeColor = button1.FlatAppearance.BorderColor = Helper.fgColor;
+			BackColor = Helper.bgColor;
+			
+			button1.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 		}
 	}
 }

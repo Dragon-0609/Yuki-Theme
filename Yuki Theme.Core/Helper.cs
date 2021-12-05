@@ -23,7 +23,7 @@ namespace Yuki_Theme.Core
 		Program = 0,
 		Plugin  = 1
 	}
-
+	
 	public static class Helper
 	{
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;
@@ -40,15 +40,28 @@ namespace Yuki_Theme.Core
 
 			return res;
 		}
-		
+
+		public static string CurrentTheme;
+
+		public static Action <string> GiveMessage;
 
 		public static Tuple <bool, Image> getImage (string path)
+		{
+			return getImage (path, "background.png");
+		}
+		
+		public static Tuple <bool, Image> getSticker (string path)
+		{
+			return getImage (path, "sticker.png");
+		}
+
+		private static Tuple <bool, Image> getImage (string path, string filename)
 		{
 			try
 			{
 				using (ZipArchive zipFile = ZipFile.OpenRead (path))
 				{
-					ZipArchiveEntry imag = zipFile.GetEntry ("background.png");
+					ZipArchiveEntry imag = zipFile.GetEntry (filename);
 					if (imag != null)
 					{
 						Image img = null;
@@ -73,13 +86,23 @@ namespace Yuki_Theme.Core
 		}
 
 
+		public static Tuple <bool, Image> getStickerFromMemory (string path, Assembly a)
+		{
+			return getImageFromMemory (path, "sticker.png", a);
+		}
+
 		public static Tuple <bool, Image> getImageFromMemory (string path, Assembly a)
+		{
+			return getImageFromMemory (path, "background.png", a);
+		}
+		
+		public static Tuple <bool, Image> getImageFromMemory (string path, string filename, Assembly a)
 		{
 			try
 			{
 				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
 				{
-					ZipArchiveEntry imag = zipFile.GetEntry ("background.png");
+					ZipArchiveEntry imag = zipFile.GetEntry (filename);
 					if (imag != null)
 					{
 						Image img = null;
@@ -190,7 +213,7 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void updateZip (string path, string content, Image img, bool wantToKeep = false)
+		public static void updateZip (string path, string content, Image img, bool wantToKeep = false, Image sticker = null, bool wantToKeepSticker = false)
 		{
 				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
@@ -210,20 +233,15 @@ namespace Yuki_Theme.Core
 						entry = archive.GetEntry ("background.png");
 
 						entry?.Delete ();
-						if (img != null)
-						{
-							var file = archive.CreateEntry ("background.png", CompressionLevel.Optimal);
-							using (var stream = new MemoryStream ())
-							{
-								img.Save (stream, ImageFormat.Png);
-								using (var entryStream = file.Open ())
-								{
-									// to keep it as image better to have it as bytes
-									var bytes = stream.ToArray ();
-									entryStream.Write (bytes, 0, bytes.Length);
-								}
-							}
-						}
+						AddImageToZip (archive, img, "background.png");
+					}
+
+					if(!wantToKeepSticker)
+					{
+						entry = archive.GetEntry ("sticker.png");
+
+						entry?.Delete ();
+						AddImageToZip (archive, sticker, "sticker.png");
 					}
 				}
 			
@@ -235,11 +253,33 @@ namespace Yuki_Theme.Core
 			{
 				ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
 				entry.ExtractToFile (destination, true);
-				entry = archive.GetEntry ("background.png");
-				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), "background.png"), true);
+				extractFile (archive, entry, "background.png", destination);
+				extractFile (archive, entry, "sticker.png", destination);
+				
+				
 			} 
 		}
 
+		private static void extractFile (ZipArchive archive, ZipArchiveEntry entry, string filename, string destination)
+		{
+			try
+			{
+				entry = archive.GetEntry (filename);
+				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), filename), true);
+			}
+			catch (Exception ex)            
+			{                
+				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
+				{
+					if (GiveMessage != null)
+						GiveMessage ($"There's no { filename }");
+				} else
+				{
+					throw;
+				}
+			}
+		}
+		
 		public static void extractZip (Stream stream, string destination)
 		{
 			using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
@@ -251,7 +291,7 @@ namespace Yuki_Theme.Core
 			} 
 		}
 
-		public static void zip (string path, string content, Image img)
+		public static void zip (string path, string content, Image img, Image sticker = null)
 		{
 			using (var fileStream = new FileStream(path, FileMode.Create))
 			{
@@ -265,25 +305,31 @@ namespace Yuki_Theme.Core
 					{
 						writer.Write (content);
 					}
-					
-					if(img != null)
-					{
-						var file = archive.CreateEntry ("background.png", CompressionLevel.Optimal);
-						using (var stream = new MemoryStream ())
-						{
-							img.Save (stream, ImageFormat.Png);
-							using (var entryStream = file.Open ())
-							{
-								// to keep it as image better to have it as bytes
-								var bytes = stream.ToArray ();
-								entryStream.Write (bytes, 0, bytes.Length);
-							}
-						}
-					}
+
+					AddImageToZip (archive, img, "background.png");
+					AddImageToZip (archive, sticker, "sticker.png");
 				}
 			}
 		}
 
+		private static void AddImageToZip (ZipArchive archive, Image img, string filename)
+		{
+			if(img != null)
+			{
+				var file = archive.CreateEntry (filename, CompressionLevel.Optimal);
+				using (var stream = new MemoryStream ())
+				{
+					img.Save (stream, ImageFormat.Png);
+					using (var entryStream = file.Open ())
+					{
+						// to keep it as image better to have it as bytes
+						var bytes = stream.ToArray ();
+						entryStream.Write (bytes, 0, bytes.Length);
+					}
+				}
+			}
+		}
+		
 		public static Color ChangeColorBrightness(Color color, float correctionFactor)
 		{
 			float red = (float)color.R;
@@ -322,10 +368,10 @@ namespace Yuki_Theme.Core
 				return Helper.ChangeColorBrightness (clr, -percent);
 		}
 		
-		public static SvgDocument loadsvg (string name, Assembly a)
+		public static SvgDocument loadsvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
 		{
 			var doc = new XmlDocument ();
-			doc.Load (a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.SVG.{name}.svg"));
+			doc.Load (a.GetManifestResourceStream ($"{customName}.{name}.svg"));
 			SvgDocument svg = SvgDocument.Open (doc);
 			return svg;
 		}
@@ -335,6 +381,7 @@ namespace Yuki_Theme.Core
 			im.BackgroundImage?.Dispose ();
 			
 			svg.Color = new SvgColourServer (fgColor);
+			
 			if(!custom)
 				im.BackgroundImage = svg.Draw (im.Width, im.Height);
 			else
@@ -359,7 +406,31 @@ namespace Yuki_Theme.Core
 			return bmp;
 		}
 
+		public static void LoadCurrent ()
+		{
+			CLI.load_schemes ();
+			string [] files = Directory.GetFiles (Path.Combine (CLI.pascalPath, "Highlighting"), "*.xshd");
+			bool sett = false;
+			if (files.Length > 0)
+			{
+				foreach (string s in files)
+				{
+					string sp = CLI.GetNameOfTheme (s);
+					if (CLI.schemes.Contains (sp))
+					{
+						// Console.WriteLine(nod.Attributes ["name"].Value);
+						CurrentTheme = sp;
+						CLI.selectedItem = CurrentTheme;
+						sett = true;
+						break;
+					}
+				}
+			}
 
+			if (!sett)
+				CurrentTheme = "unknown";
+		}
+		
 	}
 
 }

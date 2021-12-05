@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -10,10 +11,12 @@ using System.Windows.Forms;
 using System.Xml;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
+using Svg;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Forms;
 using Timer = System.Windows.Forms.Timer;
 
@@ -46,21 +49,30 @@ namespace Yuki_Theme_Plugin
 		private TextArea                          textArea;
 		private CodeFileDocumentTextEditorControl textEditor;
 
-		private Image         img;
-		private Color         bg;
-		private Color         bgdef;
-		private Color         clr;
-		private Color         bgBorder;
-		private Alignment     align;
-		private int           opacity;
-		private Timer         tim;
-		private Timer         tim2;
-		private Timer         tim3;
-		private IconBarMargin margin;
-		private MForm         mf;
-		private ListView      cr;
-		private TextBox       con;
-		private PictureBox    logoBox;
+		private Image           img;
+		private Color           bg;
+		private Color           bgdef;
+		private Color           clr;
+		private Color           bgBorder;
+		private Alignment       align;
+		private int             opacity;
+		private Timer           tim;
+		private Timer           tim2;
+		private Timer           tim3;
+		private IconBarMargin   margin;
+		private MForm           mf;
+		private ListView        cr;
+		private TextBox         con;
+		private PictureBox      logoBox;
+		private ToolStripButton currentTheme;
+		private Image           sticker;
+		private CustomPicture   stickerControl;
+		
+		private bool  isMoving                = false;         // true while dragging the image
+		private Point movingPicturePosition   = new Point(80, 20);   // the position of the moving image
+		private Point offset;   // mouse position inside the moving image while dragging
+		
+		private bool  bgImage => CLI.bgImage;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -181,10 +193,119 @@ end.");*/
 			};
 
 			UpdateColors ();
-
+			CLI.connectAndGet ();
 			MenuRenderer renderer = new MenuRenderer ();
 			menu.Renderer = renderer;
 			setTim2 ();
+			CLI.onBGIMAGEChange = RefreshEditor;
+			CLI.onSTICKERChange = LoadSticker;
+			CLI.onSTATUSChange = RefreshStatusBar;
+
+			Helper.LoadCurrent ();
+			
+			currentTheme = new ToolStripButton ();
+			currentTheme.Alignment = ToolStripItemAlignment.Right;
+			loadSVG ();
+
+			// statusBar.Items.Add (logo);
+			currentTheme.Padding = new Padding (2, 0, 2, 0);
+			currentTheme.Margin = Padding.Empty;
+			statusBar.Items.Add (currentTheme);
+			RefreshStatusBar ();
+			
+			stickerControl = new CustomPicture ();
+			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+			stickerControl.margin = new Point (10, statusBar.Size.Height);
+
+			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
+			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
+			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
+			
+			
+			fm.Controls.Add (stickerControl);
+			LoadSticker ();
+			// stickerControl.SetNonClickable ();
+			stickerControl.Enabled = false;
+			stickerControl.BringToFront ();
+		}
+
+		private void stickerControl_MouseDown(object sender, MouseEventArgs e)
+		{
+			var r = new Rectangle (Point.Empty, sticker.Size);
+			if (r.Contains(e.Location))
+			{
+				isMoving = true;
+				offset = new Point(movingPicturePosition.X - e.X, movingPicturePosition.Y - e.Y);
+			}
+		}
+
+		private void stickerControl_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (isMoving)
+			{
+				movingPicturePosition = e.Location;
+				movingPicturePosition.Offset(offset);
+			}
+		}
+
+		private void stickerControl_MouseUp(object sender, MouseEventArgs e)
+		{
+			isMoving = false;
+			// MessageBox.Show ($"Before: {stickerControl.Location}, After: {movingPicturePosition}, offset: {offset}");
+			
+			stickerControl.Location = movingPicturePosition;
+		}
+
+		private void LoadSticker ()
+		{
+			if (CLI.swSticker)
+			{
+				string pth = "Highlighting/sticker.png";
+				if(File.Exists (pth))
+				{
+					sticker = Image.FromFile (pth);
+
+					if (CLI.sopacity != 100)
+						sticker = Helper.setOpacity (sticker, CLI.sopacity);
+					stickerControl.Visible = true;
+				} else
+				{
+					sticker = null;
+					stickerControl.Visible = false;	
+				}
+			}
+			else
+			{
+				sticker = null;
+				stickerControl.Visible = false;
+			}
+			
+			stickerControl.img = sticker;
+			movingPicturePosition = stickerControl.Location;
+		}
+
+		private void RefreshStatusBar ()
+		{
+			currentTheme.Visible = CLI.swStatusbar;
+		}
+		
+		private void loadSVG ()
+		{
+			if(currentTheme.Image != null)
+				currentTheme.Image.Dispose ();
+			SvgDocument svg = Helper.loadsvg ("favorite", Assembly.GetExecutingAssembly (), "Yuki_Theme_Plugin.Resources");
+			svg.Fill = new SvgColourServer (bgBorder);
+			svg.Stroke = new SvgColourServer (bgBorder);
+			currentTheme.Image = svg.Draw (16, 16);
+
+			if (Helper.CurrentTheme.Contains (":"))
+			{
+				string [] spl = Helper.CurrentTheme.Split (':');
+				currentTheme.Text = spl [spl.Length-1];
+				spl = null;
+			}else
+				currentTheme.Text = Helper.CurrentTheme;
+
 		}
 
 		private void errorListHeaderDrawer (object sender, DrawListViewColumnHeaderEventArgs e)
@@ -230,6 +351,11 @@ end.");*/
 			tim2.Stop ();
 			tim2.Dispose ();
 		}
+
+		private void RefreshEditor ()
+		{
+			textArea.Refresh ();
+		}
 		
 		private void PaintBG (object sender, PaintEventArgs e)
 		{
@@ -238,7 +364,7 @@ end.");*/
 					                          margin.DrawingPosition.Y,
 					                          margin.DrawingPosition.Width, margin.DrawingPosition.Height);
 
-			if(img != null)
+			if(img != null && bgImage)
 			{
 				if (oldV.Width != textArea.ClientRectangle.Width || oldV.Height != textArea.ClientRectangle.Height)
 				{
@@ -264,6 +390,13 @@ end.");*/
 			{
 				img.Dispose ();
 				img = null;
+			}
+			
+			if (sticker != null)
+			{
+				sticker.Dispose ();
+				sticker = null;
+				stickerControl.img = null;
 			}
 		}
 		
@@ -304,7 +437,6 @@ end.");*/
 		
 		private void LoadImage ()
 		{
-			var fo = Directory.GetFiles ("Highlighting/", "bac.png");
 			if(File.Exists ("Highlighting/background.png"))
 			{
 				string pth = "Highlighting/background.png";
@@ -355,9 +487,11 @@ end.");*/
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
 			LoadImage ();
+			LoadSticker ();
 			LoadColors ();
 			UpdateColors ();
 			fm.Refresh ();
+			loadSVG ();
 		}
 		
 		private void Click1 ()
@@ -385,7 +519,8 @@ end.");*/
 		{
 			tim3 = new Timer () {Interval = 2200};
 			tim3.Tick += hideLogo;
-			logoBox = new PictureBox (); 
+			logoBox = new PictureBox ();
+			logoBox.BackColor = bgdef;
 			logoBox.Image = global::Yuki_Theme_Plugin.Properties.Resources.YukiTheme;
 			logoBox.Location = new System.Drawing.Point (fm.ClientSize.Width/2 - 50, fm.ClientSize.Height/2 - 50);
 			logoBox.Name = "logoBox";
@@ -403,5 +538,6 @@ end.");*/
 			logoBox.Dispose ();
 			tim3.Stop ();
 		}
+		
 	}
 }

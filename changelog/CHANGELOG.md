@@ -1,5 +1,11 @@
 ﻿### Changelog
 
+## 3.0 (beta)
+Added to `Plugin`:
+1. Stickers!
+2. Name in status bar
+3. Fixed some small issues
+
 ## 2.0
 Added `Plugin` version. In plugin version you can:
 - [x] Set Background image
