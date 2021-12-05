@@ -25,6 +25,8 @@ namespace Yuki_Installer
 						if (!File.Exists (zip))
 							Console.WriteLine (
 								$"ERROR> ZIP ISN'T EXIST. PATH: {zip}");
+							Console.Readln();
+						} else {
 						string path = args [1];
 						string targetProcessName = "Yuki Theme";
 
@@ -170,11 +172,13 @@ namespace Yuki_Installer
 				{
 					Console.WriteLine (
 						$"ERROR> ARG ISN'T INSTALL. ARG: {args [0]}, LENGTH: {args.Length}");
+					Console.Readln();
 				}
 			} else
 			{
 				Console.WriteLine (
 					$"ERROR> ARGS ARE NULL OR LENGTH ISN'T ENOUGH. IS NULL: {args == null}, LENGTH: {args.Length}");
+				Console.Readln();
 			}
 		}
 
