@@ -1,0 +1,36 @@
+CACHE MANIFEST
+# 2021-12-05 v1.0.0
+css/theme.css
+js/language.js
+img/favicon.ico
+img/guide_1.png
+img/guide_2.png
+img/guide_2_ru.png
+img/guide_3.png
+img/guide_4.png
+img/install_1.png
+img/install_2.png
+img/install_3.png
+img/install_4.png
+img/install_5.png
+img/install_6.png
+img/install_6_1.png
+img/install_7.png
+img/screen.png
+img/screen1.png
+img/screen2.png
+img/screen3.png
+img/screen4.png
+img/with.png
+img/without.png
+img/yuki128_2.png
+img/YukiTheme.gif
+
+NETWORK:
+index.html
+usage.html
+about.html
+
+FALLBACK:
+/index.html /usage.html
+/index.html /about.html
