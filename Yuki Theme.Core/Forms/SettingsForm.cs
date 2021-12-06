@@ -19,9 +19,11 @@ namespace Yuki_Theme.Core.Forms
 		public const int BGIMAGE = 8;
 		public const int STICKER = 9;
 		public const int STATUSBAR = 10;
+		public const int LOGO = 11;
+		public const int LOCATION = 12;
 		
 		public const double current_version = 3.0;
-		public const string current_version_add = "beta";
+		public const string current_version_add = "beta 2";
 		public static string next_version = "";
 
 		private MForm form;
@@ -48,6 +50,12 @@ namespace Yuki_Theme.Core.Forms
 		{
 			get => swStatusbar.Checked;
 			set => swStatusbar.Checked = value;
+		}
+		
+		public bool Logo
+		{
+			get => logo.Checked;
+			set => logo.Checked = value;
 		}
 		
 		public SettingsForm ( MForm mf)

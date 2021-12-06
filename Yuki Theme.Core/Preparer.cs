@@ -15,7 +15,7 @@ namespace Yuki_Theme.Core
 			string path = Path.Combine (
 				Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 				"Yuki Installer.exe");
-			File.Copy ("Yuki Installer.exe", path, true);
+			File.Copy (Path.Combine (CLI.currentPath, "Yuki Installer.exe"), path, true);
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			ke.SetValue ("mode", ((int) Helper.mode).ToString ());

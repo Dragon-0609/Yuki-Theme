@@ -99,7 +99,10 @@ namespace Yuki_Theme_Plugin
 			ToolBarItems.Add (item1);
 			
 			fm = (Form1) workbench.MainForm;
-			showLogo ();
+			Helper.mode = ProductMode.Plugin;
+			CLI.connectAndGet ();
+			if(CLI.swLogo)
+				showLogo ();
 			Initialize ();
 		}
 
@@ -113,11 +116,6 @@ namespace Yuki_Theme_Plugin
 			textArea = textEditor.ActiveTextAreaControl.TextArea;
 			LoadImage ();
 			
-			/*
-			textArea.InsertString (@"var a:string;
-begin
-  Readln(a);
-end.");*/
 
 			about = fm.AboutBox1;
 			about.BackColor = Color.Red;
@@ -191,9 +189,8 @@ end.");*/
 			{
 				tim.Start ();
 			};
-
 			UpdateColors ();
-			CLI.connectAndGet ();
+			
 			MenuRenderer renderer = new MenuRenderer ();
 			menu.Renderer = renderer;
 			setTim2 ();
@@ -224,7 +221,6 @@ end.");*/
 			
 			fm.Controls.Add (stickerControl);
 			LoadSticker ();
-			// stickerControl.SetNonClickable ();
 			stickerControl.Enabled = false;
 			stickerControl.BringToFront ();
 		}
@@ -260,7 +256,7 @@ end.");*/
 		{
 			if (CLI.swSticker)
 			{
-				string pth = "Highlighting/sticker.png";
+				string pth = Path.Combine (CLI.pascalPath, "Highlighting","sticker.png");
 				if(File.Exists (pth))
 				{
 					sticker = Image.FromFile (pth);
@@ -437,12 +433,10 @@ end.");*/
 		
 		private void LoadImage ()
 		{
-			if(File.Exists ("Highlighting/background.png"))
+			string pth = Path.Combine (CLI.pascalPath, "Highlighting","background.png");
+			if(File.Exists (pth))
 			{
-				string pth = "Highlighting/background.png";
 				img = Image.FromFile (pth);
-				// @"C:\Users\User\Documents\CSharp\Yuki Theme Plugin\Yuki Theme Plugin\Resources\asuna_dark.png");
-				// @"C:\Users\User\Documents\CSharp\Yuki Theme Plugin\Yuki Theme Plugin\Resources\emilia_dark.png");
 
 				align = Alignment.Center;
 				opacity = 10;
@@ -450,7 +444,7 @@ end.");*/
 				XmlDocument doc = new XmlDocument ();
 				IHighlightingStrategy high = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
 				
-				var fls = Directory.GetFiles ("Highlighting/", "*.xshd");
+				var fls = Directory.GetFiles (Path.Combine (CLI.pascalPath, "Highlighting/"), "*.xshd");
 
 				foreach (string fl in fls)
 				{
