@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using Microsoft.Win32;
 using Yuki_Theme.Core.Forms; // using System.Data.SQLite;
 
@@ -29,6 +31,7 @@ namespace Yuki_Theme.Core.Database
             ke.SetValue (SettingsForm.BGIMAGE.ToString(), "true");
             ke.SetValue (SettingsForm.STICKER.ToString(), "true");
             ke.SetValue (SettingsForm.STATUSBAR.ToString(), "true");
+            ke.SetValue (SettingsForm.LOGO.ToString(), "true");
          }
       }
       
@@ -138,6 +141,7 @@ namespace Yuki_Theme.Core.Database
          dictionary.Add (SettingsForm.BGIMAGE,key.GetValue (SettingsForm.BGIMAGE.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.STICKER,key.GetValue (SettingsForm.STICKER.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.STATUSBAR,key.GetValue (SettingsForm.STATUSBAR.ToString(), "true").ToString ());
+         dictionary.Add (SettingsForm.LOGO,key.GetValue (SettingsForm.LOGO.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.ASKCHOICE,key.GetValue (SettingsForm.ASKCHOICE.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.CHOICEINDEX,key.GetValue (SettingsForm.CHOICEINDEX.ToString(), "0").ToString ());
          dictionary.Add (SettingsForm.SETTINGMODE,key.GetValue (SettingsForm.SETTINGMODE.ToString(), "0").ToString ());
@@ -158,6 +162,23 @@ namespace Yuki_Theme.Core.Database
       {
          RegistryKey kes = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
          kes.SetValue (key.ToString (), value);
+      }
+
+      public Point ReadLocation ()
+      {
+         RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme");
+         string sp = key.GetValue (SettingsForm.LOCATION.ToString(), "0:0").ToString ();
+         if (!sp.Contains (":"))
+            sp = "0:0";
+         string [] spp = sp.Split (':');
+         Console.WriteLine (sp);
+         return new Point (int.Parse (spp [0]), int.Parse (spp [1]));
+      }
+
+      public void SaveLocation (Point loc)
+      {
+         RegistryKey kes = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+         kes.SetValue (SettingsForm.LOCATION.ToString (), $"{loc.X}:{loc.Y}");
       }
       
 	}

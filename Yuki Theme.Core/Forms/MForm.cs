@@ -86,6 +86,12 @@ namespace Yuki_Theme.Core.Forms
 			set => CLI.swSticker = value;
 		}
 		
+		private bool swLogo
+		{
+			get => CLI.swLogo;
+			set => CLI.swLogo = value;
+		}
+		
 		private bool swStatusbar
 		{
 			get => CLI.swStatusbar;
@@ -154,11 +160,11 @@ namespace Yuki_Theme.Core.Forms
 
 		public MForm (int mode = 0)
 		{
-			Helper.mode = (ProductMode) mode;
-			textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178;
+			Helper.mode = (ProductMode) mode; // Write current type
+			textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
 			notHeight =  Helper.mode == ProductMode.Program ? 50 : 88;
 			InitializeComponent ();
-			
+			// Set Actions
 			CLI.AskChoice = AskChoice;
 			CLI.SaveInExport = SaveInExport;
 			CLI.FinishExport = FinishExport;
@@ -172,23 +178,26 @@ namespace Yuki_Theme.Core.Forms
 			Helper.GiveMessage = GiveMessage;
 			
 			if(Helper.mode != ProductMode.Plugin)
-				CLI.connectAndGet ();
+				CLI.connectAndGet (); // Get Data
 			initSticker ();
 			
 			highlighter = new Highlighter (sBox, this);
 			load_schemes ();
 			if(Helper.mode == ProductMode.Plugin)
 				initPlugin ();
-			if (currentFile != "N|L")
+			
+			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
+			DesktopLocation = database.ReadLocation ();
+			Console.WriteLine (DesktopLocation);
+			
+			if (currentFile != "N|L") // If theme couldn't find
 			{
 				col = new ColorPicker (this);
 				highlighter.InitializeSyntax ();
 				loadSVG ();
 				save_button.Visible = !isDefault ();
 				AddEvents ();
-				// img = Image.FromFile (
-				// 	// @"C:\Users\User\Documents\CSharp\Yuki Theme Plugin\Yuki Theme Plugin\Resources\asuna_dark.png");
-				// 	@"C:\Users\User\Documents\CSharp\Yuki Theme Plugin\Yuki Theme Plugin\Resources\emilia_dark.png");
+				
 				sBox.Paint += bgImagePaint;
 				if (update)
 					button7_Click (this, EventArgs.Empty);
@@ -200,8 +209,7 @@ namespace Yuki_Theme.Core.Forms
 
 				isUpdated ();
 
-				// df = new DownloadForm (this);
-				// nf = new NotificationForm ();
+				
 			} else
 			{
 				throw new ApplicationException ("Error on loading the scheme file");
@@ -461,7 +469,7 @@ namespace Yuki_Theme.Core.Forms
 		public void ifHasSticker (Image imgc)
 		{
 			img3 = imgc;
-			sttext = "background.png";
+			sttext = "sticker.png";
 		}
 		public void ifDoesntHaveSticker ()
 		{
@@ -534,7 +542,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			currentoFile = schemes.SelectedItem.ToString ();
 			Console.WriteLine (currentoFile);
-			currentFile = currentoFile.Replace (": ", "__").Replace (":","");
+			currentFile = Helper.ConvertNameToPath (currentoFile);
 			save_button.Visible = !isDefault ();
 			restore_Click (sender, e);
 			
@@ -581,20 +589,86 @@ namespace Yuki_Theme.Core.Forms
 
 			if (selform.ShowDialog () == DialogResult.OK)
 			{
-				if (!Directory.Exists ("Themes"))
-					Directory.CreateDirectory ("Themes");
+				if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
+					Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
 				string syt = selform.comboBox1.SelectedItem.ToString ();
-				string patsh = $"Themes/{selform.textBox1.Text}.yukitheme";
+				string toname = selform.textBox1.Text;
+				string tname = Helper.ConvertNameToPath (toname);
+				string patsh = Path.Combine (CLI.currentPath, "Themes", $"{tname}.yukitheme");
+				bool exist = false;
+				
+				if (File.Exists (patsh))
+				{
+					if (!SaveInExport ("The file is exist. Do you want to override?", "Override?")) return;
+					exist = true;
+					File.Delete (patsh);
+				}
 				if (DefaultThemes.isDefault (syt))
 					CLI.CopyFromMemory (syt, patsh);
 				else
-					File.Copy ($"Themes/{selform.comboBox1.SelectedItem}.yukitheme", patsh);
-				schemes.Items.Add (selform.textBox1.Text);
-				schemes.SelectedItem = selform.textBox1.Text;
+					File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), patsh);
+				WriteName (patsh, toname);
+				if(!exist)
+				{
+					schemes.Items.Add (toname);
+					schemes.SelectedItem = toname;
+				}
 			}
 		}
 
-		private void button4_Click (object sender, EventArgs e)
+		private void WriteName (string path, string name)
+		{
+			var doc = new XmlDocument ();
+			bool iszip = false;
+			Tuple <bool, string> content = Helper.getTheme (path);
+			if (content.Item1)
+			{
+				doc.LoadXml (content.Item2);
+				iszip = true;
+			} else
+			{
+				doc.Load (path);
+			}
+
+			XmlNode node = doc.SelectSingleNode ("/SyntaxDefinition");
+
+			XmlNodeList comms = node.SelectNodes ("//comment()");
+			if (comms.Count >= 3)
+			{
+
+				bool hasName = false;
+
+					string nl = "name:" + name;
+					foreach (XmlComment comm in comms)
+					{
+						if (comm.Value.StartsWith ("name"))
+						{
+							comm.Value = nl;
+							hasName = true;
+						}
+					}
+
+					if (!hasName)
+					{
+						node.AppendChild (doc.CreateComment (nl));
+					}
+			} else
+			{
+				node.AppendChild (doc.CreateComment ("name:" + currentoFile));
+			}
+			
+			if (!iszip)
+				doc.Save (getPath);
+			else
+			{
+				string txml = doc.OuterXml;
+
+				Helper.updateZip (getPath, txml, null, true, null, true);
+			}
+
+		}
+
+		private void settings_Click (object sender, EventArgs e)
 		{
 			if (setform == null)
 				setform = new SettingsForm (this);
@@ -607,6 +681,7 @@ namespace Yuki_Theme.Core.Forms
 			}
 			setform.bgImage = bgImage;
 			setform.Sticker = swSticker;
+			setform.Logo = swLogo;
 			setform.StatusBar = swStatusbar;
 			setform.askC.Checked = askChoice;
 			setform.checkBox2.Checked = update;
@@ -620,6 +695,7 @@ namespace Yuki_Theme.Core.Forms
 				pascalPath = setform.Path;
 				bgImage = setform.bgImage;
 				swSticker = setform.Sticker;
+				swLogo = setform.Logo;
 				swStatusbar = setform.StatusBar;
 				askChoice = setform.askC.Checked;
 				update = setform.checkBox2.Checked;
@@ -643,11 +719,6 @@ namespace Yuki_Theme.Core.Forms
 			MessageBox.Show (content, title);
 		}
 		
-		public void ActionInExport (string content, string title)
-		{
-			MessageBox.Show (content, title);
-		}
-		
 		public void ErrorExport (string content, string title)
 		{
 			MessageBox.Show (content, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -663,7 +734,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			MessageBox.Show (content, title, MessageBoxButtons.OK,
 			                 MessageBoxIcon.Exclamation);
-			button4_Click (this, EventArgs.Empty);
+			settings_Click (this, EventArgs.Empty);
 		}
 
 		public void startSettingThemeDelegate ()
@@ -882,6 +953,7 @@ namespace Yuki_Theme.Core.Forms
 				nf.Dispose ();
 			if (df != null)
 				df.Dispose ();
+			database.SaveLocation (DesktopLocation);
 			this.Dispose (true);
 		}
 
@@ -894,7 +966,7 @@ namespace Yuki_Theme.Core.Forms
 			if (op.ShowDialog () == DialogResult.OK)
 			{
 				imagePath.Text = op.FileName;
-				button10_Click (sender, e);
+				Apply_Click (sender, e);
 			}
 		}
 
@@ -999,7 +1071,7 @@ namespace Yuki_Theme.Core.Forms
 				nf.NotificationForm_Shown (this, EventArgs.Empty);
 		}
 
-		private void button10_Click (object sender, EventArgs e)
+		private void Apply_Click (object sender, EventArgs e)
 		{
 			if (imgCurrent == 1)
 			{
@@ -1009,10 +1081,8 @@ namespace Yuki_Theme.Core.Forms
 				sttext = imagePath.Text;
 			}
 			
-			if (imagePath.Text == "background.png")
+			if (imagePath.Text == "background.png" && imgCurrent == 1)
 			{
-				if(imgCurrent == 1)
-				{
 					Tuple <bool, Image> iag = isDefault ()
 						? Helper.getImageFromMemory (gp, Assembly.GetExecutingAssembly ())
 						: Helper.getImage (getPath);
@@ -1025,20 +1095,20 @@ namespace Yuki_Theme.Core.Forms
 
 					unblockedScrool = true;
 					opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
-				} else if (imgCurrent == 2)
+				
+			} else if (imagePath.Text == "sticker.png" && imgCurrent == 2)
+			{
+				Tuple <bool, Image> iag = isDefault ()
+					? Helper.getStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
+					: Helper.getSticker (getPath);
+				if (iag.Item1)
 				{
-					Tuple <bool, Image> iag = isDefault ()
-						? Helper.getStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
-						: Helper.getSticker (getPath);
-					if (iag.Item1)
-					{
-						// img = iag.Item2;
-						img3 = iag.Item2;
-					}
-
-					unblockedScrool = true;
-					opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
+					// img = iag.Item2;
+					img3 = iag.Item2;
 				}
+
+				unblockedScrool = true;
+				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
 			} else if (File.Exists (imagePath.Text))
 			{
 				if (imagePath.Text.ToLower ().EndsWith (".png"))
@@ -1095,7 +1165,7 @@ namespace Yuki_Theme.Core.Forms
 		private void button7_Click_1 (object sender, EventArgs e)
 		{
 			imagePath.Text = "";
-			button10_Click (sender, e);
+			Apply_Click (sender, e);
 		}
 
 		private void loadSVG ()

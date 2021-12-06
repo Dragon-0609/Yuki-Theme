@@ -17,12 +17,6 @@ namespace Yuki_Theme
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run (new MForm ());
-
-			/*string [] files = Directory.GetFiles (@"C:\Users\User\Documents\CSharp\Yuki Theme\Yuki Theme\bin\Debug\Themes");
-			foreach (string file in files)
-			{
-				Console.Write ($"case \"{Path.GetFileNameWithoutExtension (file)}\": ");
-			}*/
 		}
 		
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

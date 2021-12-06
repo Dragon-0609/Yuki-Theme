@@ -49,6 +49,7 @@ namespace Yuki_Theme.Core.Forms
 			this.backImage = new System.Windows.Forms.CheckBox ();
 			this.swsticker = new System.Windows.Forms.CheckBox ();
 			this.swStatusbar = new System.Windows.Forms.CheckBox ();
+			this.logo = new System.Windows.Forms.CheckBox ();
 			this.SuspendLayout ();
 			// 
 			// label1
@@ -267,11 +268,21 @@ namespace Yuki_Theme.Core.Forms
 			this.swStatusbar.Text = "Name in StatusBar";
 			this.swStatusbar.UseVisualStyleBackColor = true;
 			// 
+			// logo
+			// 
+			this.logo.Location = new System.Drawing.Point (262, 55);
+			this.logo.Name = "logo";
+			this.logo.Size = new System.Drawing.Size (211, 29);
+			this.logo.TabIndex = 28;
+			this.logo.Text = "Logo on Start";
+			this.logo.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size (533, 343);
+			this.Controls.Add (this.logo);
 			this.Controls.Add (this.swStatusbar);
 			this.Controls.Add (this.swsticker);
 			this.Controls.Add (this.backImage);
@@ -301,6 +312,8 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		public System.Windows.Forms.CheckBox logo;
 
 		public System.Windows.Forms.CheckBox swStatusbar;
 

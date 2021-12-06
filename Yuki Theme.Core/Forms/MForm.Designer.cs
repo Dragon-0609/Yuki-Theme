@@ -420,7 +420,7 @@
 			this.button10.Text = "Apply";
 			this.button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.button10.UseVisualStyleBackColor = true;
-			this.button10.Click += new System.EventHandler (this.button10_Click);
+			this.button10.Click += new System.EventHandler (this.Apply_Click);
 			// 
 			// imagePath
 			// 
@@ -527,7 +527,7 @@
 			this.settings_button.Size = new System.Drawing.Size (28, 28);
 			this.settings_button.TabIndex = 11;
 			this.settings_button.UseVisualStyleBackColor = false;
-			this.settings_button.Click += new System.EventHandler (this.button4_Click);
+			this.settings_button.Click += new System.EventHandler (this.settings_Click);
 			// 
 			// add_button
 			// 
