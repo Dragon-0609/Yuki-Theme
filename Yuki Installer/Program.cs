@@ -21,109 +21,103 @@ namespace Yuki_Installer
 						string zip =
 							Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
 							              "Yuki Theme", "yuki_theme.zip");
-						
+
 						if (!File.Exists (zip))
+						{
 							Console.WriteLine (
 								$"ERROR> ZIP ISN'T EXIST. PATH: {zip}");
-							Console.Readline();
-						} else {
-						string path = args [1];
-						string targetProcessName = "Yuki Theme";
-
-						Process [] runningProcesses = Process.GetProcesses ();
-						foreach (Process process in runningProcesses)
+							Console.ReadLine ();
+						} else
 						{
-							if (process.ProcessName == targetProcessName &&
-							    process.MainModule != null &&
-							    string.Compare (process.MainModule.FileName, path,
-							                    StringComparison.InvariantCultureIgnoreCase) == 0)
+							string path = args [1];
+							string targetProcessName = "Yuki Theme";
+
+							Process [] runningProcesses = Process.GetProcesses ();
+							foreach (Process process in runningProcesses)
 							{
-								process.Kill ();
+								if (process.ProcessName == targetProcessName &&
+								    process.MainModule != null &&
+								    string.Compare (process.MainModule.FileName, path,
+								                    StringComparison.InvariantCultureIgnoreCase) == 0)
+								{
+									process.Kill ();
+								}
 							}
-						}
 
-						int mode = getMode ();
+							int mode = getMode ();
 
-						string dir = Path.GetDirectoryName (path);
-						string ndr = dir + "_tmp";
-						Console.WriteLine ($"DIR> {dir}");
-						// Directory.Move (dir, dir + "_tmp");
-						// if(mode == 0)
-						// {
+							string dir = Path.GetDirectoryName (path);
+							string ndr = dir + "_tmp";
+							Console.WriteLine ($"DIR> {dir}");
+							// Directory.Move (dir, dir + "_tmp");
+							// if(mode == 0)
+							// {
 							if (Directory.Exists (ndr))
 							{
 								Directory.Delete (ndr, true);
 							}
-						/*} else if (mode == 1)
-						{
-							string[] lines = File.ReadAllLines("files.txt");  
-  
-							foreach (string line in lines)
+							/*} else if (mode == 1)
 							{
-								File.Delete (line);
-							}
-						}*/
+								string[] lines = File.ReadAllLines("files.txt");  
+	  
+								foreach (string line in lines)
+								{
+									File.Delete (line);
+								}
+							}*/
 
-						Directory.CreateDirectory (ndr);
-						if(mode == 0)
-						{
-							foreach (var file in new DirectoryInfo (dir).GetFiles ())
+							Directory.CreateDirectory (ndr);
+							if (mode == 0)
+							{
+								foreach (var file in new DirectoryInfo (dir).GetFiles ())
+								{
+									try
+									{
+										file.MoveTo ($@"{ndr}\{file.Name}");
+									} catch (IOException e)
+									{
+										Console.WriteLine ("ERROR> {0}", e);
+									}
+								}
+							} else
+							{
+								string [] lines = File.ReadAllLines (
+									Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+									              "Yuki Theme", "files.txt"));
+
+								foreach (string line in lines)
+								{
+									try
+									{
+										File.Move (Path.Combine (dir, line), $@"{ndr}\{line}");
+									} catch (IOException e)
+									{
+										Console.WriteLine ("ERROR> {0}", e);
+									}
+									// File.Delete (line);
+								}
+							}
+
+							Directory.Move (Path.Combine (dir, "Themes"), Path.Combine (ndr, "Themes"));
+
+							System.IO.Compression.ZipFile.ExtractToDirectory (zip, dir);
+							string ndir = Path.Combine (dir, "Themes");
+							Console.WriteLine ($"DIR2> {dir}");
+
+							foreach (var file in new DirectoryInfo (Path.Combine (ndr, "Themes")).GetFiles ())
 							{
 								try
 								{
-									file.MoveTo ($@"{ndr}\{file.Name}");
+									file.MoveTo ($@"{ndir}\{file.Name}");
 								} catch (IOException e)
 								{
 									Console.WriteLine ("ERROR> {0}", e);
 								}
 							}
-						} else
-						{
-							string[] lines = File.ReadAllLines(Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-							                                                 "Yuki Theme", "files.txt"));  
-  
-							foreach (string line in lines)
-							{
-								try
-								{
-									File.Move (Path.Combine(dir, line), $@"{ndr}\{line}");
-								} catch (IOException e)
-								{
-									Console.WriteLine ("ERROR> {0}", e);
-								}
-								// File.Delete (line);
-							}
-						}
 
-						Directory.Move (Path.Combine (dir, "Themes"), Path.Combine (ndr, "Themes"));
-
-						System.IO.Compression.ZipFile.ExtractToDirectory (zip, dir);
-						string ndir = Path.Combine (dir, "Themes");
-						Console.WriteLine ($"DIR2> {dir}");
-						
-						foreach (var file in new DirectoryInfo (Path.Combine (ndr, "Themes")).GetFiles ())
-						{
-							try
-							{
-								file.MoveTo ($@"{ndir}\{file.Name}");
-							} catch (IOException e)
-							{
-								Console.WriteLine ("ERROR> {0}", e);
-							}
+							ndir = Path.Combine (dir, "Yuki Installer.exe");
+							Process.Start (ndir, $"\"{dir}_tmp\" \"{zip}\"");
 						}
-						// Directory.Move (Path.Combine (ndr, "Themes"), Path.Combine (dir, "Themes"));
-						/*foreach (var file in new DirectoryInfo(Path.Combine (dir+ "_tmp", "Themes")).GetFiles())
-						{
-							try
-							{
-								file.MoveTo($@"{ndir}\{file.Name}");
-							} catch (IOException e)
-							{
-								Console.WriteLine (e);
-							}
-						}*/
-						ndir = Path.Combine (dir, "Yuki Installer.exe");
-						Process.Start (ndir, $"\"{dir}_tmp\" \"{zip}\"");
 					} catch (Exception e)
 					{
 						Console.WriteLine (
@@ -151,9 +145,10 @@ namespace Yuki_Installer
 					}
 
 					RegistryKey ke =
-						Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+						Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme",
+						                                   RegistryKeyPermissionCheck.ReadWriteSubTree);
 					ke.SetValue ("install", "1");
-					
+
 					int mode = getMode ();
 					switch (mode)
 					{
@@ -172,13 +167,13 @@ namespace Yuki_Installer
 				{
 					Console.WriteLine (
 						$"ERROR> ARG ISN'T INSTALL. ARG: {args [0]}, LENGTH: {args.Length}");
-					Console.Readline();
+					Console.ReadLine ();
 				}
 			} else
 			{
 				Console.WriteLine (
 					$"ERROR> ARGS ARE NULL OR LENGTH ISN'T ENOUGH. IS NULL: {args == null}, LENGTH: {args.Length}");
-				Console.Readline();
+				Console.ReadLine ();
 			}
 		}
 
