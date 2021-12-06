@@ -212,10 +212,10 @@ namespace Yuki_Theme.Core
 			if (!isDefault () && Helper.mode != ProductMode.Plugin)
 			{
 				if (SaveInExport ("Do you want to save current scheme?", "Save"))
-					save (img2);
+					save (img2, img3);
 			} else if (!isDefault ())
 			{
-				save (img2);
+				save (img2, img3);
 			}
 
 			if (pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
