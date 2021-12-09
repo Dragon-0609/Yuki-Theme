@@ -50,6 +50,7 @@ namespace Yuki_Theme.Core.Forms
 			this.swsticker = new System.Windows.Forms.CheckBox ();
 			this.swStatusbar = new System.Windows.Forms.CheckBox ();
 			this.logo = new System.Windows.Forms.CheckBox ();
+			this.editor = new System.Windows.Forms.CheckBox ();
 			this.SuspendLayout ();
 			// 
 			// label1
@@ -92,7 +93,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.AutoSize = true;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Location = new System.Drawing.Point (361, 301);
+			this.button2.Location = new System.Drawing.Point (361, 328);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size (71, 30);
 			this.button2.TabIndex = 4;
@@ -105,7 +106,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button3.AutoSize = true;
 			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button3.Location = new System.Drawing.Point (447, 301);
+			this.button3.Location = new System.Drawing.Point (447, 328);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size (71, 30);
 			this.button3.TabIndex = 5;
@@ -115,7 +116,8 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// askC
 			// 
-			this.askC.Location = new System.Drawing.Point (12, 128);
+			this.askC.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.askC.Location = new System.Drawing.Point (16, 155);
 			this.askC.Name = "askC";
 			this.askC.Size = new System.Drawing.Size (395, 29);
 			this.askC.TabIndex = 12;
@@ -125,8 +127,9 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label3
 			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label3.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label3.Location = new System.Drawing.Point (12, 163);
+			this.label3.Location = new System.Drawing.Point (12, 190);
 			this.label3.Margin = new System.Windows.Forms.Padding (4, 0, 4, 0);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size (268, 31);
@@ -136,8 +139,9 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label4
 			// 
+			this.label4.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label4.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label4.Location = new System.Drawing.Point (12, 205);
+			this.label4.Location = new System.Drawing.Point (12, 232);
 			this.label4.Margin = new System.Windows.Forms.Padding (4, 0, 4, 0);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size (203, 31);
@@ -150,7 +154,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button4.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button4.AutoSize = true;
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button4.Location = new System.Drawing.Point (16, 301);
+			this.button4.Location = new System.Drawing.Point (16, 328);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size (71, 30);
 			this.button4.TabIndex = 17;
@@ -160,7 +164,8 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// checkBox2
 			// 
-			this.checkBox2.Location = new System.Drawing.Point (12, 257);
+			this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox2.Location = new System.Drawing.Point (16, 283);
 			this.checkBox2.Name = "checkBox2";
 			this.checkBox2.Size = new System.Drawing.Size (127, 29);
 			this.checkBox2.TabIndex = 18;
@@ -172,7 +177,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button5.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button5.AutoSize = true;
 			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button5.Location = new System.Drawing.Point (447, 256);
+			this.button5.Location = new System.Drawing.Point (447, 283);
 			this.button5.Name = "button5";
 			this.button5.Size = new System.Drawing.Size (71, 30);
 			this.button5.TabIndex = 19;
@@ -195,7 +200,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button6.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button6.AutoSize = true;
 			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button6.Location = new System.Drawing.Point (311, 256);
+			this.button6.Location = new System.Drawing.Point (311, 283);
 			this.button6.Name = "button6";
 			this.button6.Size = new System.Drawing.Size (130, 30);
 			this.button6.TabIndex = 21;
@@ -205,6 +210,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// ActionBox
 			// 
+			this.ActionBox.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.ActionBox.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.ActionBox.BorderColor = System.Drawing.Color.MediumSlateBlue;
 			this.ActionBox.BorderSize = 1;
@@ -214,7 +220,7 @@ namespace Yuki_Theme.Core.Forms
 			this.ActionBox.IconColor = System.Drawing.Color.MediumSlateBlue;
 			this.ActionBox.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
 			this.ActionBox.ListTextColor = System.Drawing.Color.DimGray;
-			this.ActionBox.Location = new System.Drawing.Point (320, 163);
+			this.ActionBox.Location = new System.Drawing.Point (320, 190);
 			this.ActionBox.MinimumSize = new System.Drawing.Size (200, 30);
 			this.ActionBox.Name = "ActionBox";
 			this.ActionBox.Padding = new System.Windows.Forms.Padding (1);
@@ -224,6 +230,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// mode
 			// 
+			this.mode.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mode.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.mode.BorderColor = System.Drawing.Color.MediumSlateBlue;
 			this.mode.BorderSize = 1;
@@ -233,7 +240,7 @@ namespace Yuki_Theme.Core.Forms
 			this.mode.IconColor = System.Drawing.Color.MediumSlateBlue;
 			this.mode.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
 			this.mode.ListTextColor = System.Drawing.Color.DimGray;
-			this.mode.Location = new System.Drawing.Point (321, 206);
+			this.mode.Location = new System.Drawing.Point (321, 233);
 			this.mode.MinimumSize = new System.Drawing.Size (200, 30);
 			this.mode.Name = "mode";
 			this.mode.Padding = new System.Windows.Forms.Padding (1);
@@ -277,11 +284,21 @@ namespace Yuki_Theme.Core.Forms
 			this.logo.Text = "Logo on Start";
 			this.logo.UseVisualStyleBackColor = true;
 			// 
+			// editor
+			// 
+			this.editor.Location = new System.Drawing.Point (16, 125);
+			this.editor.Name = "editor";
+			this.editor.Size = new System.Drawing.Size (167, 29);
+			this.editor.TabIndex = 29;
+			this.editor.Text = "Editor Mode";
+			this.editor.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size (533, 343);
+			this.ClientSize = new System.Drawing.Size (533, 370);
+			this.Controls.Add (this.editor);
 			this.Controls.Add (this.logo);
 			this.Controls.Add (this.swStatusbar);
 			this.Controls.Add (this.swsticker);
@@ -312,6 +329,8 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		public System.Windows.Forms.CheckBox editor;
 
 		public System.Windows.Forms.CheckBox logo;
 

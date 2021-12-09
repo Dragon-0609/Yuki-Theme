@@ -72,7 +72,10 @@ namespace Yuki_Theme_Plugin
 		private Point movingPicturePosition   = new Point(80, 20);   // the position of the moving image
 		private Point offset;   // mouse position inside the moving image while dragging
 		
-		private bool  bgImage => CLI.bgImage;
+		private bool bgImage => CLI.bgImage;
+		
+		bool tg = false; // is toggle activated
+		int enbld = 0; // what is enabled
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -92,15 +95,28 @@ namespace Yuki_Theme_Plugin
 			
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon icon = ((Icon) (resources.GetObject ($"$this.Icon")));
-			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", icon.ToBitmap (), Color.Transparent, Click1);
+			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", icon.ToBitmap (), Color.Transparent, InitCore);
 			//Добавляем в меню
 			MenuItems.Add (item1);
 			//Добавляем на панель
+			
 			ToolBarItems.Add (item1);
+
+			PluginGUIItem gui =
+				new PluginGUIItem ("Quiet Mode | Yuki Theme", "Quiet Mode", icon.ToBitmap (), Color.Transparent,
+				                   ToggleQuiet, Keys.Alt | Keys.A, "Alt + A");
+
+			MenuItems.Add(gui);
 			
 			fm = (Form1) workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
 			CLI.connectAndGet ();
+
+			enbld = 0;
+			enbld += CLI.bgImage ? 1 : 0;
+			enbld += CLI.swSticker ? 2 : 0;
+			
+			 
 			if(CLI.swLogo)
 				showLogo ();
 			Initialize ();
@@ -195,7 +211,7 @@ namespace Yuki_Theme_Plugin
 			menu.Renderer = renderer;
 			setTim2 ();
 			CLI.onBGIMAGEChange = RefreshEditor;
-			CLI.onSTICKERChange = LoadSticker;
+			CLI.onSTICKERChange = ReloadSticker;
 			CLI.onSTATUSChange = RefreshStatusBar;
 
 			Helper.LoadCurrent ();
@@ -250,6 +266,14 @@ namespace Yuki_Theme_Plugin
 			// MessageBox.Show ($"Before: {stickerControl.Location}, After: {movingPicturePosition}, offset: {offset}");
 			
 			stickerControl.Location = movingPicturePosition;
+		}
+
+		private void ReloadSticker ()
+		{
+			enbld = 0;
+			enbld += CLI.bgImage ? 1 : 0;
+			enbld += CLI.swSticker ? 2 : 0;
+			LoadSticker ();
 		}
 
 		private void LoadSticker ()
@@ -351,6 +375,9 @@ namespace Yuki_Theme_Plugin
 		private void RefreshEditor ()
 		{
 			textArea.Refresh ();
+			enbld = 0;
+			enbld += CLI.bgImage ? 1 : 0;
+			enbld += CLI.swSticker ? 2 : 0;
 		}
 		
 		private void PaintBG (object sender, PaintEventArgs e)
@@ -488,7 +515,7 @@ namespace Yuki_Theme_Plugin
 			loadSVG ();
 		}
 		
-		private void Click1 ()
+		private void InitCore ()
 		{
 			// if (MessageBox.Show ("The program needs restart", "Restart", MessageBoxButtons.OKCancel) ==
 			    // DialogResult.OK)
@@ -507,6 +534,23 @@ namespace Yuki_Theme_Plugin
 			    }
 			    if (mf.Visible) return;
 			    mf.Show();
+		}
+
+
+		private void ToggleQuiet ()
+		{
+			if (!tg)
+			{
+				CLI.bgImage = false;
+				CLI.swSticker = false;
+			} else
+			{
+				CLI.bgImage = enbld == 1 || enbld == 3;
+				CLI.swSticker = enbld == 2 || enbld == 3;
+			}
+			tg = !tg;
+			textArea.Refresh ();
+			LoadSticker ();
 		}
 
 		private void showLogo ()

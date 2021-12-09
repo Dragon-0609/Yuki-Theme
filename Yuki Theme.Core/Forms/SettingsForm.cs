@@ -21,6 +21,7 @@ namespace Yuki_Theme.Core.Forms
 		public const int STATUSBAR = 10;
 		public const int LOGO = 11;
 		public const int LOCATION = 12;
+		public const int EDITOR = 13;
 		
 		public const double current_version = 3.0;
 		public const string current_version_add = "beta 2";
@@ -56,6 +57,12 @@ namespace Yuki_Theme.Core.Forms
 		{
 			get => logo.Checked;
 			set => logo.Checked = value;
+		}
+		
+		public bool Editor
+		{
+			get => editor.Checked;
+			set => editor.Checked = value;
 		}
 		
 		public SettingsForm ( MForm mf)

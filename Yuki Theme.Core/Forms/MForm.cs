@@ -92,6 +92,12 @@ namespace Yuki_Theme.Core.Forms
 			set => CLI.swLogo = value;
 		}
 		
+		private bool Editor
+		{
+			get => CLI.Editor;
+			set => CLI.Editor = value;
+		}
+		
 		private bool swStatusbar
 		{
 			get => CLI.swStatusbar;
@@ -186,6 +192,7 @@ namespace Yuki_Theme.Core.Forms
 			if(Helper.mode == ProductMode.Plugin)
 				initPlugin ();
 			
+			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
 			Console.WriteLine (DesktopLocation);
@@ -682,13 +689,14 @@ namespace Yuki_Theme.Core.Forms
 			setform.bgImage = bgImage;
 			setform.Sticker = swSticker;
 			setform.Logo = swLogo;
+			setform.Editor = Editor;
 			setform.StatusBar = swStatusbar;
 			setform.askC.Checked = askChoice;
 			setform.checkBox2.Checked = update;
 			setform.ActionBox.SelectedIndex = actionChoice;
 			setform.mode.SelectedIndex = settingMode;
 			setform.swStatusbar.Enabled = Helper.mode == ProductMode.Plugin;
-
+			bool oldeditor = Editor;
 			var st = settingMode;
 			if (setform.ShowDialog () == DialogResult.OK)
 			{
@@ -696,6 +704,7 @@ namespace Yuki_Theme.Core.Forms
 				bgImage = setform.bgImage;
 				swSticker = setform.Sticker;
 				swLogo = setform.Logo;
+				Editor = setform.Editor;
 				swStatusbar = setform.StatusBar;
 				askChoice = setform.askC.Checked;
 				update = setform.checkBox2.Checked;
@@ -704,6 +713,8 @@ namespace Yuki_Theme.Core.Forms
 				CLI.saveData ();
 				sBox.Refresh ();
 				LoadSticker ();
+				if (oldeditor != Editor) // Check if the Editor is changed
+					checkEditor ();
 				if (settingMode != st) restore_Click (this, EventArgs.Empty);
 			}
 		}
@@ -1307,6 +1318,22 @@ namespace Yuki_Theme.Core.Forms
 				
 				
 			}
+		}
+
+		private void checkEditor ()
+		{
+			import_directory.Visible = import_button.Visible =
+				editorpanel.Visible = editorp2.Visible = list_1.Visible = Editor;
+			if (Editor)
+			{
+				panel1.Size = new Size (panel1.Width, 140);
+				textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178;
+			} else
+			{
+				panel1.Size = new Size (panel1.Width, 51);
+				textBoxHeight =  Helper.mode == ProductMode.Program ? 51 : 89;
+			}
+			MForm_SizeChanged (this, EventArgs.Empty);
 		}
 
 	}

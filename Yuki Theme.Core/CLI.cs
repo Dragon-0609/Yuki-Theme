@@ -32,6 +32,7 @@ namespace Yuki_Theme.Core
 		public static bool      swSticker;
 		public static bool      swStatusbar;
 		public static bool      swLogo;
+		public static bool      Editor;
 		public static int       settingMode;
 		public static string    currentFile  = "N|L";
 		public static string    currentoFile = "N|L";
@@ -40,7 +41,7 @@ namespace Yuki_Theme.Core
 		public static string    currentPath  = Path.GetDirectoryName (Application.ExecutablePath);
 		public static Alignment align        = Alignment.Left;
 		public static int       opacity      = 10;
-		public static int       sopacity      = 100;
+		public static int       sopacity     = 100;
 
 		public static Dictionary <string, Dictionary <string, string>> localAttributes =
 			new Dictionary <string, Dictionary <string, string>> ();
@@ -516,6 +517,7 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.STICKER, swSticker.ToString ());
 			dict.Add (SettingsForm.STATUSBAR, swStatusbar.ToString ());
 			dict.Add (SettingsForm.LOGO, swLogo.ToString ());
+			dict.Add (SettingsForm.EDITOR, Editor.ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
@@ -670,6 +672,7 @@ namespace Yuki_Theme.Core
 			swSticker = bool.Parse (data [SettingsForm.STICKER]);
 			swStatusbar = bool.Parse (data [SettingsForm.STATUSBAR]);
 			swLogo = bool.Parse (data [SettingsForm.LOGO]);
+			Editor = bool.Parse (data [SettingsForm.EDITOR]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;

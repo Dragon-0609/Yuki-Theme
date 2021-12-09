@@ -41,8 +41,7 @@
 			this.close_btn = new System.Windows.Forms.Button ();
 			this.sBox = new FastColoredTextBoxNS.FastColoredTextBox ();
 			this.panel1 = new System.Windows.Forms.Panel ();
-			this.import_directory = new System.Windows.Forms.Button ();
-			this.schemes = new CustomControls.RJControls.RJComboBox ();
+			this.editorp2 = new System.Windows.Forms.Panel ();
 			this.imageEditor = new System.Windows.Forms.Panel ();
 			this.alignpanel = new System.Windows.Forms.Panel ();
 			this.pleft = new System.Windows.Forms.Button ();
@@ -58,21 +57,26 @@
 			this.colorEditor = new System.Windows.Forms.Panel ();
 			this.check_italic = new System.Windows.Forms.CheckBox ();
 			this.check_bold = new System.Windows.Forms.CheckBox ();
+			this.editorpanel = new System.Windows.Forms.Panel ();
+			this.add_button = new System.Windows.Forms.Button ();
+			this.manage_button = new System.Windows.Forms.Button ();
+			this.save_button = new System.Windows.Forms.Button ();
+			this.restore_button = new System.Windows.Forms.Button ();
+			this.import_directory = new System.Windows.Forms.Button ();
+			this.schemes = new CustomControls.RJControls.RJComboBox ();
 			this.import_button = new System.Windows.Forms.Button ();
 			this.export_button = new System.Windows.Forms.Button ();
-			this.manage_button = new System.Windows.Forms.Button ();
 			this.settings_button = new System.Windows.Forms.Button ();
-			this.add_button = new System.Windows.Forms.Button ();
-			this.restore_button = new System.Windows.Forms.Button ();
-			this.save_button = new System.Windows.Forms.Button ();
 			this.tip = new System.Windows.Forms.ToolTip (this.components);
 			this.bottomPanel.SuspendLayout ();
 			((System.ComponentModel.ISupportInitialize) (this.sBox)).BeginInit ();
 			this.panel1.SuspendLayout ();
+			this.editorp2.SuspendLayout ();
 			this.imageEditor.SuspendLayout ();
 			this.alignpanel.SuspendLayout ();
 			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).BeginInit ();
 			this.colorEditor.SuspendLayout ();
+			this.editorpanel.SuspendLayout ();
 			this.SuspendLayout ();
 			// 
 			// list_1
@@ -209,57 +213,27 @@
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add (this.editorp2);
+			this.panel1.Controls.Add (this.editorpanel);
 			this.panel1.Controls.Add (this.import_directory);
 			this.panel1.Controls.Add (this.schemes);
-			this.panel1.Controls.Add (this.imageEditor);
-			this.panel1.Controls.Add (this.colorEditor);
 			this.panel1.Controls.Add (this.import_button);
 			this.panel1.Controls.Add (this.export_button);
-			this.panel1.Controls.Add (this.manage_button);
 			this.panel1.Controls.Add (this.settings_button);
-			this.panel1.Controls.Add (this.add_button);
-			this.panel1.Controls.Add (this.restore_button);
-			this.panel1.Controls.Add (this.save_button);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point (170, 0);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size (520, 142);
 			this.panel1.TabIndex = 6;
 			// 
-			// import_directory
+			// editorp2
 			// 
-			this.import_directory.BackColor = System.Drawing.Color.Chocolate;
-			this.import_directory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.import_directory.FlatAppearance.BorderSize = 0;
-			this.import_directory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.import_directory.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.import_directory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.import_directory.Location = new System.Drawing.Point (453, 10);
-			this.import_directory.Name = "import_directory";
-			this.import_directory.Size = new System.Drawing.Size (28, 28);
-			this.import_directory.TabIndex = 17;
-			this.import_directory.UseVisualStyleBackColor = false;
-			this.import_directory.Click += new System.EventHandler (this.import_directory_Click);
-			// 
-			// schemes
-			// 
-			this.schemes.BackColor = System.Drawing.Color.WhiteSmoke;
-			this.schemes.BorderColor = System.Drawing.Color.Red;
-			this.schemes.BorderSize = 1;
-			this.schemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.schemes.Font = new System.Drawing.Font ("Lucida Fax", 10F);
-			this.schemes.ForeColor = System.Drawing.Color.DimGray;
-			this.schemes.IconColor = System.Drawing.Color.Red;
-			this.schemes.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
-			this.schemes.ListTextColor = System.Drawing.Color.DimGray;
-			this.schemes.Location = new System.Drawing.Point (16, 12);
-			this.schemes.MinimumSize = new System.Drawing.Size (200, 30);
-			this.schemes.Name = "schemes";
-			this.schemes.Padding = new System.Windows.Forms.Padding (1);
-			this.schemes.Size = new System.Drawing.Size (214, 30);
-			this.schemes.TabIndex = 1;
-			this.schemes.Texts = "";
-			this.schemes.OnSelectedIndexChanged += new System.EventHandler (this.schemes_SelectedIndexChanged);
+			this.editorp2.Controls.Add (this.imageEditor);
+			this.editorp2.Controls.Add (this.colorEditor);
+			this.editorp2.Location = new System.Drawing.Point (13, 63);
+			this.editorp2.Name = "editorp2";
+			this.editorp2.Size = new System.Drawing.Size (501, 76);
+			this.editorp2.TabIndex = 19;
 			// 
 			// imageEditor
 			// 
@@ -271,7 +245,7 @@
 			this.imageEditor.Controls.Add (this.button11);
 			this.imageEditor.Controls.Add (this.button10);
 			this.imageEditor.Controls.Add (this.imagePath);
-			this.imageEditor.Location = new System.Drawing.Point (16, 66);
+			this.imageEditor.Location = new System.Drawing.Point (3, 3);
 			this.imageEditor.Name = "imageEditor";
 			this.imageEditor.Size = new System.Drawing.Size (497, 73);
 			this.imageEditor.TabIndex = 16;
@@ -439,7 +413,7 @@
 			this.colorEditor.Controls.Add (this.bgButton);
 			this.colorEditor.Controls.Add (this.label1);
 			this.colorEditor.Controls.Add (this.label2);
-			this.colorEditor.Location = new System.Drawing.Point (16, 66);
+			this.colorEditor.Location = new System.Drawing.Point (3, 3);
 			this.colorEditor.Name = "colorEditor";
 			this.colorEditor.Size = new System.Drawing.Size (497, 57);
 			this.colorEditor.TabIndex = 15;
@@ -471,6 +445,109 @@
 			this.check_bold.UseVisualStyleBackColor = true;
 			this.check_bold.CheckedChanged += new System.EventHandler (this.check_bold_CheckedChanged);
 			// 
+			// editorpanel
+			// 
+			this.editorpanel.Controls.Add (this.add_button);
+			this.editorpanel.Controls.Add (this.manage_button);
+			this.editorpanel.Controls.Add (this.save_button);
+			this.editorpanel.Controls.Add (this.restore_button);
+			this.editorpanel.Location = new System.Drawing.Point (241, 10);
+			this.editorpanel.Name = "editorpanel";
+			this.editorpanel.Size = new System.Drawing.Size (138, 32);
+			this.editorpanel.TabIndex = 18;
+			// 
+			// add_button
+			// 
+			this.add_button.BackColor = System.Drawing.Color.Chocolate;
+			this.add_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.add_button.FlatAppearance.BorderSize = 0;
+			this.add_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.add_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.add_button.Location = new System.Drawing.Point (3, 0);
+			this.add_button.Name = "add_button";
+			this.add_button.Size = new System.Drawing.Size (28, 28);
+			this.add_button.TabIndex = 10;
+			this.add_button.UseVisualStyleBackColor = false;
+			this.add_button.Click += new System.EventHandler (this.button3_Click);
+			// 
+			// manage_button
+			// 
+			this.manage_button.BackColor = System.Drawing.Color.Chocolate;
+			this.manage_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.manage_button.FlatAppearance.BorderSize = 0;
+			this.manage_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.manage_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.manage_button.Location = new System.Drawing.Point (42, 0);
+			this.manage_button.Name = "manage_button";
+			this.manage_button.Size = new System.Drawing.Size (28, 28);
+			this.manage_button.TabIndex = 12;
+			this.manage_button.UseVisualStyleBackColor = false;
+			this.manage_button.Click += new System.EventHandler (this.button5_Click);
+			// 
+			// save_button
+			// 
+			this.save_button.BackColor = System.Drawing.Color.Chocolate;
+			this.save_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.save_button.FlatAppearance.BorderSize = 0;
+			this.save_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.save_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.save_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.save_button.Location = new System.Drawing.Point (76, 0);
+			this.save_button.Name = "save_button";
+			this.save_button.Size = new System.Drawing.Size (28, 28);
+			this.save_button.TabIndex = 5;
+			this.save_button.UseVisualStyleBackColor = false;
+			this.save_button.Click += new System.EventHandler (this.save_Click);
+			// 
+			// restore_button
+			// 
+			this.restore_button.BackColor = System.Drawing.Color.Chocolate;
+			this.restore_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.restore_button.FlatAppearance.BorderSize = 0;
+			this.restore_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.restore_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.restore_button.Location = new System.Drawing.Point (110, 0);
+			this.restore_button.Name = "restore_button";
+			this.restore_button.Size = new System.Drawing.Size (28, 28);
+			this.restore_button.TabIndex = 6;
+			this.restore_button.UseVisualStyleBackColor = false;
+			this.restore_button.Click += new System.EventHandler (this.restore_Click);
+			// 
+			// import_directory
+			// 
+			this.import_directory.BackColor = System.Drawing.Color.Chocolate;
+			this.import_directory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.import_directory.FlatAppearance.BorderSize = 0;
+			this.import_directory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.import_directory.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.import_directory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.import_directory.Location = new System.Drawing.Point (453, 10);
+			this.import_directory.Name = "import_directory";
+			this.import_directory.Size = new System.Drawing.Size (28, 28);
+			this.import_directory.TabIndex = 17;
+			this.import_directory.UseVisualStyleBackColor = false;
+			this.import_directory.Click += new System.EventHandler (this.import_directory_Click);
+			// 
+			// schemes
+			// 
+			this.schemes.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.schemes.BorderColor = System.Drawing.Color.Red;
+			this.schemes.BorderSize = 1;
+			this.schemes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.schemes.Font = new System.Drawing.Font ("Lucida Fax", 10F);
+			this.schemes.ForeColor = System.Drawing.Color.DimGray;
+			this.schemes.IconColor = System.Drawing.Color.Red;
+			this.schemes.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
+			this.schemes.ListTextColor = System.Drawing.Color.DimGray;
+			this.schemes.Location = new System.Drawing.Point (16, 12);
+			this.schemes.MinimumSize = new System.Drawing.Size (200, 30);
+			this.schemes.Name = "schemes";
+			this.schemes.Padding = new System.Windows.Forms.Padding (1);
+			this.schemes.Size = new System.Drawing.Size (214, 30);
+			this.schemes.TabIndex = 1;
+			this.schemes.Texts = "";
+			this.schemes.OnSelectedIndexChanged += new System.EventHandler (this.schemes_SelectedIndexChanged);
+			// 
 			// import_button
 			// 
 			this.import_button.BackColor = System.Drawing.Color.Chocolate;
@@ -501,20 +578,6 @@
 			this.export_button.UseVisualStyleBackColor = false;
 			this.export_button.Click += new System.EventHandler (this.export);
 			// 
-			// manage_button
-			// 
-			this.manage_button.BackColor = System.Drawing.Color.Chocolate;
-			this.manage_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.manage_button.FlatAppearance.BorderSize = 0;
-			this.manage_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.manage_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.manage_button.Location = new System.Drawing.Point (283, 10);
-			this.manage_button.Name = "manage_button";
-			this.manage_button.Size = new System.Drawing.Size (28, 28);
-			this.manage_button.TabIndex = 12;
-			this.manage_button.UseVisualStyleBackColor = false;
-			this.manage_button.Click += new System.EventHandler (this.button5_Click);
-			// 
 			// settings_button
 			// 
 			this.settings_button.BackColor = System.Drawing.Color.Chocolate;
@@ -528,49 +591,6 @@
 			this.settings_button.TabIndex = 11;
 			this.settings_button.UseVisualStyleBackColor = false;
 			this.settings_button.Click += new System.EventHandler (this.settings_Click);
-			// 
-			// add_button
-			// 
-			this.add_button.BackColor = System.Drawing.Color.Chocolate;
-			this.add_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.add_button.FlatAppearance.BorderSize = 0;
-			this.add_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.add_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.add_button.Location = new System.Drawing.Point (249, 10);
-			this.add_button.Name = "add_button";
-			this.add_button.Size = new System.Drawing.Size (28, 28);
-			this.add_button.TabIndex = 10;
-			this.add_button.UseVisualStyleBackColor = false;
-			this.add_button.Click += new System.EventHandler (this.button3_Click);
-			// 
-			// restore_button
-			// 
-			this.restore_button.BackColor = System.Drawing.Color.Chocolate;
-			this.restore_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.restore_button.FlatAppearance.BorderSize = 0;
-			this.restore_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.restore_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.restore_button.Location = new System.Drawing.Point (351, 10);
-			this.restore_button.Name = "restore_button";
-			this.restore_button.Size = new System.Drawing.Size (28, 28);
-			this.restore_button.TabIndex = 6;
-			this.restore_button.UseVisualStyleBackColor = false;
-			this.restore_button.Click += new System.EventHandler (this.restore_Click);
-			// 
-			// save_button
-			// 
-			this.save_button.BackColor = System.Drawing.Color.Chocolate;
-			this.save_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.save_button.FlatAppearance.BorderSize = 0;
-			this.save_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.save_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.save_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.save_button.Location = new System.Drawing.Point (317, 10);
-			this.save_button.Name = "save_button";
-			this.save_button.Size = new System.Drawing.Size (28, 28);
-			this.save_button.TabIndex = 5;
-			this.save_button.UseVisualStyleBackColor = false;
-			this.save_button.Click += new System.EventHandler (this.save_Click);
 			// 
 			// MForm
 			// 
@@ -596,13 +616,19 @@
 			this.bottomPanel.ResumeLayout (false);
 			((System.ComponentModel.ISupportInitialize) (this.sBox)).EndInit ();
 			this.panel1.ResumeLayout (false);
+			this.editorp2.ResumeLayout (false);
 			this.imageEditor.ResumeLayout (false);
 			this.imageEditor.PerformLayout ();
 			this.alignpanel.ResumeLayout (false);
 			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).EndInit ();
 			this.colorEditor.ResumeLayout (false);
+			this.editorpanel.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.Panel editorp2;
+
+		private System.Windows.Forms.Panel editorpanel;
 
 		private System.Windows.Forms.Panel alignpanel;
 
