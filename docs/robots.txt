@@ -1,2 +1,3 @@
 User-Agent: *
+Allow: /
 Sitemap: https://dragon-0609.github.io/Yuki-Theme/sitemap.xml
