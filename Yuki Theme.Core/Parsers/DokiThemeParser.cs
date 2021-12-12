@@ -27,7 +27,8 @@ namespace Yuki_Theme.Core.Parsers
 			fname = json ["stickers"] ["default"].ToString();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 			flname = ofname;
-			outname = $"Themes/{ofname.Replace (": ", "__").Replace (":", "")}.yukitheme";
+			outname = Path.Combine (CLI.currentPath, "Themes",
+			                        $"{ofname.Replace (": ", "__").Replace (":", "")}.yukitheme");
 			dark = bool.Parse (json ["dark"].ToString ());
 			
 			foreach (JProperty cl in json ["colors"])

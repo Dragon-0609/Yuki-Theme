@@ -21,7 +21,8 @@ namespace Yuki_Theme.Core
 	public enum ProductMode:int
 	{
 		Program = 0,
-		Plugin  = 1
+		Plugin  = 1,
+		CLI  = 2
 	}
 	
 	public static class Helper
@@ -395,11 +396,14 @@ namespace Yuki_Theme.Core
 			return svg;
 		}
 
-		public static void renderSVG (Control im, SvgDocument svg, bool custom = false, Size cSize = default)
+		public static void renderSVG (Control im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
 		{
 			im.BackgroundImage?.Dispose ();
-			
-			svg.Color = new SvgColourServer (fgColor);
+
+			if (customColor)
+				svg.Color = new SvgColourServer (clr);
+			else
+				svg.Color = new SvgColourServer (fgColor);
 			
 			if(!custom)
 				im.BackgroundImage = svg.Draw (im.Width, im.Height);

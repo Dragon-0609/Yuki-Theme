@@ -21,15 +21,15 @@ namespace Yuki_Theme.Core.Parsers
 			outname = patsh;
 			flname = st;
 			populateList (path);
-			if (!Directory.Exists ("Themes"))
-				Directory.CreateDirectory ("Themes");
+			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
+				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
 			Console.WriteLine (outname);
 
 			string syt = CLI.schemes [1];
 			if (DefaultThemes.isDefault (syt))
 				CLI.CopyFromMemory (syt, outname);
 			else
-				File.Copy ($"Themes/{syt}.yukitheme", outname, true);
+				File.Copy (Path.Combine (CLI.currentPath,  "Themes",$"{syt}.yukitheme"), outname, true);
 
 			MergeFiles (outname);
 			finishParsing (path);

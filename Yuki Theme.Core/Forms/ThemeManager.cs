@@ -39,7 +39,8 @@ namespace Yuki_Theme.Core.Forms
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
-			
+			CLI.onRename = onRename;
+			CLI.ErrorRename = ErrorRename;
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
@@ -60,6 +61,14 @@ namespace Yuki_Theme.Core.Forms
 			}
 
 			form.selform.comboBox1.SelectedIndex = 0;
+			if (scheme.SelectedItems.Count > 0 && (scheme.SelectedItems [0] is ReItem))
+			{
+				ReItem re = (ReItem) scheme.SelectedItems [0];
+				if (!re.isGroup)
+				{
+					form.selform.comboBox1.SelectedItem = re.Name;
+				}
+			}
 
 			if (form.selform.ShowDialog () == DialogResult.OK)
 			{
@@ -91,19 +100,27 @@ namespace Yuki_Theme.Core.Forms
 			scheme.Items.Remove ((ListViewItem) sifr);
 			form.schemes.Items.Remove (sel);
 		}
-		
+
+		public void onRename (string from, string to)
+		{
+			ListViewItem res = scheme.Items.Find (from, true) [0];
+			res.Text = "       " + to;
+			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
+		}
+
 		private void remove_Click (object sender, EventArgs e)
 		{
 			if (scheme.SelectedItems.Count > 0)
 			{
-				CLI.remove (scheme.SelectedItems[0].Text, askDelete, afterAsk, afterDelete);
+				CLI.remove (scheme.SelectedItems[0].Text.Substring (7), askDelete, afterAsk, afterDelete);
 			}
 		}
 
 		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
 		{
-			remove.Enabled = false;
-			remove.BackColor = Helper.bgBorder;
+			var a = Assembly.GetExecutingAssembly ();
+			remove.Enabled = rename_btn.Enabled = false;
+			remove.BackColor = rename_btn.BackColor  = Helper.bgBorder;
 			if (scheme.SelectedItems.Count > 0)
 			{
 				if (!(scheme.SelectedItems [0] is ReItem)) return;
@@ -119,8 +136,8 @@ namespace Yuki_Theme.Core.Forms
 				                          && !re.rgroupItem.Name.Equals (
 					                             "doki theme", StringComparison.OrdinalIgnoreCase))
 				{
-					remove.Enabled = true;
-					remove.BackColor = cbg;
+					remove.Enabled = rename_btn.Enabled = true;
+					remove.BackColor = rename_btn.BackColor = cbg;
 				}
 			}
 		}
@@ -129,17 +146,19 @@ namespace Yuki_Theme.Core.Forms
 		{
 			add.BackColor = scheme.BackColor = BackColor = button2.BackColor = cbg = Helper.bgColor;
 			
-			add.ForeColor = remove.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
-			
+			add.ForeColor = remove.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
+
 			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor =
-				button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+				rename_btn.FlatAppearance.MouseOverBackColor =
+					button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 				
-			remove.BackColor = Helper.bgBorder;
 			bg = new SolidBrush (BackColor);
 			fg = new SolidBrush (ForeColor);
 			fgsp = new SolidBrush (Helper.fgKeyword);
 			cbgclick = Helper.bgClick;
 			loadSVG();
+			remove.Enabled = rename_btn.Enabled = false;
+			remove.BackColor = rename_btn.BackColor = Helper.bgBorder;
 		}
 
 		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
@@ -199,7 +218,8 @@ namespace Yuki_Theme.Core.Forms
 		private void loadSVG(){
 			var a = Assembly.GetExecutingAssembly ();
         	Helper.renderSVG (add, Helper.loadsvg ("plus-square", a));
-        	Helper.renderSVG (remove, Helper.loadsvg ("dash-square", a));
+            Helper.renderSVG (remove, Helper.loadsvg ("dash-square", a));
+            Helper.renderSVG (rename_btn, Helper.loadsvg ("edit", a));
 		}
 
 		private Size MeasureString (string candidate, Font fnt)
@@ -214,6 +234,40 @@ namespace Yuki_Theme.Core.Forms
 
 			return new Size (Convert.ToInt32 (formatted.Width), Convert.ToInt32 (formatted.Height));
 		}
-		
+
+		private void ErrorRename (string content, string title)
+		{
+			MessageBox.Show (content, title,
+			                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		private void rename_btn_Click (object sender, EventArgs e)
+		{
+			if (scheme.SelectedItems.Count > 0)
+			{
+				RenameForm rf = new RenameForm ();
+				rf.fromTBox.Text = scheme.SelectedItems [0].Text.Substring (7);
+				if (rf.ShowDialog (this) == DialogResult.OK)
+				{
+					if (rf.toTBox.Text.Length > 0)
+					{
+						if (rf.toTBox.Text != rf.fromTBox.Text)
+						{
+							CLI.rename (rf.fromTBox.Text, rf.toTBox.Text);
+						} else
+						{
+							MessageBox.Show ("You didn't change the name", "Canceled",
+							                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						}
+					} else
+					{
+						MessageBox.Show ("Invalid name. You must enter at least 1 character", "Invalid name",
+						                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+
+				rf.Dispose ();
+			}
+		}
 	}
 }
