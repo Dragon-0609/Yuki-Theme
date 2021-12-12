@@ -13,7 +13,7 @@ namespace Yuki_Theme.Core.Parsers
 		public static void Parse (string path, MForm form = null, bool ask = true, bool select = true)
 		{
 			string st = Path.GetFileNameWithoutExtension (path);
-			string pathe = $"Themes/{st}.yukitheme";
+			string pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
 			if (checkAvailableAndAsk (path, pathe, ask))
 			{
 				string ext = Path.GetExtension (path);

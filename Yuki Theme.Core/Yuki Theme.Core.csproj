@@ -150,6 +150,12 @@
         <Compile Include="Forms\QuestionForm.Designer.cs">
           <DependentUpon>QuestionForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Forms\RenameForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\RenameForm.Designer.cs">
+          <DependentUpon>RenameForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Forms\SelectionForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -200,6 +206,9 @@
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\QuestionForm.resx">
           <DependentUpon>QuestionForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Forms\RenameForm.resx">
+          <DependentUpon>RenameForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\SelectionForm.resx">
           <DependentUpon>SelectionForm.cs</DependentUpon>
@@ -302,24 +311,26 @@
       <EmbeddedResource Include="Themes\TypeMoon__Tohsaka Rin.yukitheme" />
       <EmbeddedResource Include="Themes\Vocaloid__Hatsune Miku.yukitheme" />
       <EmbeddedResource Include="Themes\YuruCamp__Shima Rin.yukitheme" />
-      <Content Include="Windows Logo.png" />
-      <EmbeddedResource Include="Database\files.txt" />
-      <Content Include="Resources\arrow_clockwise.png" />
-      <Content Include="Resources\center.png" />
-      <Content Include="Resources\dash_square.png" />
-      <Content Include="Resources\download.png" />
-      <Content Include="Resources\left.png" />
-      <Content Include="Resources\list_task.png" />
-      <Content Include="Resources\plus_square.png" />
-      <Content Include="Resources\right.png" />
-      <Content Include="Resources\save.png" />
+      <EmbeddedResource Include="Resources\SVG\edit.svg" />
       <EmbeddedResource Include="Resources\SVG\arrow-clockwise.svg" />
       <EmbeddedResource Include="Resources\SVG\box-arrow-down.svg" />
       <EmbeddedResource Include="Resources\SVG\dash-square.svg" />
       <EmbeddedResource Include="Resources\SVG\gear.svg" />
+      <EmbeddedResource Include="Resources\SVG\save.svg" />
+      <Content Include="Windows Logo.png" />
+      <EmbeddedResource Include="Database\files.txt" />
+      <EmbeddedResource Include="Resources\arrow_clockwise.png" />
+      <EmbeddedResource Include="Resources\center.png" />
+      <EmbeddedResource Include="Resources\dash_square.png" />
+      <EmbeddedResource Include="Resources\download.png" />
+      <EmbeddedResource Include="Resources\left.png" />
+      <EmbeddedResource Include="Resources\list_task.png" />
+      <EmbeddedResource Include="Resources\plus_square.png" />
+      <EmbeddedResource Include="Resources\right.png" />
+      <EmbeddedResource Include="Resources\save.png" />
+      <EmbeddedResource Include="Resources\SVG\box-arrow-down.svg" />
       <EmbeddedResource Include="Resources\SVG\list-task.svg" />
       <EmbeddedResource Include="Resources\SVG\plus-square.svg" />
-      <EmbeddedResource Include="Resources\SVG\save.svg" />
       <EmbeddedResource Include="Resources\SVG\sliders.svg" />
       <EmbeddedResource Include="Resources\SVG\three-dots.svg" />
       <EmbeddedResource Include="Resources\SVG\upload.svg" />

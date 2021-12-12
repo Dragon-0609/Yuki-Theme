@@ -33,6 +33,7 @@ namespace Yuki_Theme.Core.Database
             ke.SetValue (SettingsForm.STATUSBAR.ToString(), "true");
             ke.SetValue (SettingsForm.LOGO.ToString(), "true");
             ke.SetValue (SettingsForm.EDITOR.ToString(), "false");
+            ke.SetValue (SettingsForm.BETA.ToString(), "true");
          }
       }
       
@@ -53,6 +54,7 @@ namespace Yuki_Theme.Core.Database
          dictionary.Add (SettingsForm.STATUSBAR,key.GetValue (SettingsForm.STATUSBAR.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.LOGO,key.GetValue (SettingsForm.LOGO.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.EDITOR,key.GetValue (SettingsForm.EDITOR.ToString(), "false").ToString ());
+         dictionary.Add (SettingsForm.BETA,key.GetValue (SettingsForm.BETA.ToString(), "true").ToString ());
          
          return dictionary;
       }

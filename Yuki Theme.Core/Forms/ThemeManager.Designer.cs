@@ -36,6 +36,7 @@ namespace Yuki_Theme.Core.Forms
 			this.remove = new System.Windows.Forms.Button ();
 			this.add = new System.Windows.Forms.Button ();
 			this.button2 = new System.Windows.Forms.Button ();
+			this.rename_btn = new System.Windows.Forms.Button ();
 			this.SuspendLayout ();
 			// 
 			// scheme
@@ -75,9 +76,9 @@ namespace Yuki_Theme.Core.Forms
 			this.remove.FlatAppearance.BorderSize = 0;
 			this.remove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.remove.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.remove.Location = new System.Drawing.Point (50, 391);
+			this.remove.Location = new System.Drawing.Point (45, 396);
 			this.remove.Name = "remove";
-			this.remove.Size = new System.Drawing.Size (32, 32);
+			this.remove.Size = new System.Drawing.Size (24, 24);
 			this.remove.TabIndex = 11;
 			this.remove.UseVisualStyleBackColor = true;
 			this.remove.Click += new System.EventHandler (this.remove_Click);
@@ -90,9 +91,9 @@ namespace Yuki_Theme.Core.Forms
 			this.add.FlatAppearance.BorderSize = 0;
 			this.add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.add.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.add.Location = new System.Drawing.Point (12, 391);
+			this.add.Location = new System.Drawing.Point (12, 396);
 			this.add.Name = "add";
-			this.add.Size = new System.Drawing.Size (32, 32);
+			this.add.Size = new System.Drawing.Size (24, 24);
 			this.add.TabIndex = 12;
 			this.add.UseVisualStyleBackColor = true;
 			this.add.Click += new System.EventHandler (this.button3_Click);
@@ -111,11 +112,27 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.UseVisualStyleBackColor = true;
 			this.button2.Click += new System.EventHandler (this.button2_Click);
 			// 
+			// rename_btn
+			// 
+			this.rename_btn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.rename_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.rename_btn.Enabled = false;
+			this.rename_btn.FlatAppearance.BorderSize = 0;
+			this.rename_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.rename_btn.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.rename_btn.Location = new System.Drawing.Point (78, 396);
+			this.rename_btn.Name = "rename_btn";
+			this.rename_btn.Size = new System.Drawing.Size (24, 24);
+			this.rename_btn.TabIndex = 14;
+			this.rename_btn.UseVisualStyleBackColor = false;
+			this.rename_btn.Click += new System.EventHandler (this.rename_btn_Click);
+			// 
 			// ThemeManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size (334, 431);
+			this.Controls.Add (this.rename_btn);
 			this.Controls.Add (this.button2);
 			this.Controls.Add (this.add);
 			this.Controls.Add (this.remove);
@@ -130,6 +147,10 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		private System.Windows.Forms.Button rename_btn;
+
+		private System.Windows.Forms.Button button1;
 
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 

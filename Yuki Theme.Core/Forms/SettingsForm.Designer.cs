@@ -51,6 +51,7 @@ namespace Yuki_Theme.Core.Forms
 			this.swStatusbar = new System.Windows.Forms.CheckBox ();
 			this.logo = new System.Windows.Forms.CheckBox ();
 			this.editor = new System.Windows.Forms.CheckBox ();
+			this.checkBox1 = new System.Windows.Forms.CheckBox ();
 			this.SuspendLayout ();
 			// 
 			// label1
@@ -293,11 +294,22 @@ namespace Yuki_Theme.Core.Forms
 			this.editor.Text = "Editor Mode";
 			this.editor.UseVisualStyleBackColor = true;
 			// 
+			// checkBox1
+			// 
+			this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkBox1.Location = new System.Drawing.Point (167, 283);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size (127, 29);
+			this.checkBox1.TabIndex = 30;
+			this.checkBox1.Text = "Beta version";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
 			// SettingsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size (533, 370);
+			this.Controls.Add (this.checkBox1);
 			this.Controls.Add (this.editor);
 			this.Controls.Add (this.logo);
 			this.Controls.Add (this.swStatusbar);
