@@ -40,7 +40,6 @@ namespace Yuki_Theme.Core.Forms
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
 			CLI.onRename = onRename;
-			CLI.ErrorRename = ErrorRename;
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
@@ -72,7 +71,7 @@ namespace Yuki_Theme.Core.Forms
 
 			if (form.selform.ShowDialog () == DialogResult.OK)
 			{
-				CLI.add (form.selform.textBox1.Text, form.selform.comboBox1.SelectedItem.ToString ());
+				CLI.add (form.selform.comboBox1.SelectedItem.ToString (), form.selform.textBox1.Text);
 				form.schemes.Items.Add (form.selform.textBox1.Text);
 				form.schemes.SelectedItem = form.selform.textBox1.Text;
 				DialogResult = DialogResult.OK;
@@ -233,12 +232,6 @@ namespace Yuki_Theme.Core.Forms
 			);
 
 			return new Size (Convert.ToInt32 (formatted.Width), Convert.ToInt32 (formatted.Height));
-		}
-
-		private void ErrorRename (string content, string title)
-		{
-			MessageBox.Show (content, title,
-			                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 		private void rename_btn_Click (object sender, EventArgs e)

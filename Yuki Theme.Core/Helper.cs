@@ -458,7 +458,12 @@ namespace Yuki_Theme.Core
 		{
 			return name.Replace (": ", "__").Replace (":", "");
 		}
-		
+
+		public static void CreateThemeDirectory ()
+		{
+			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
+				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+		}
 	}
 
 }

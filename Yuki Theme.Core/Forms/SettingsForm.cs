@@ -23,6 +23,7 @@ namespace Yuki_Theme.Core.Forms
 		public const int LOCATION = 12;
 		public const int EDITOR = 13;
 		public const int BETA = 14;
+		public const int LOGIN = 15;
 		
 		public const double current_version = 3.0;
 		public const string current_version_add = "";

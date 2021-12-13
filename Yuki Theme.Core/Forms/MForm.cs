@@ -179,8 +179,8 @@ namespace Yuki_Theme.Core.Forms
 			// Set Actions
 			CLI.AskChoice = AskChoice;
 			CLI.SaveInExport = SaveInExport;
-			CLI.FinishExport = FinishExport;
-			CLI.ErrorExport = ErrorExport;
+			CLI.showSuccess = FinishExport;
+			CLI.showError = ErrorExport;
 			CLI.setPath = setPath;
 			CLI.hasProblem = hasProblem;
 			CLI.ifHasImage = ifHasImage;
@@ -602,26 +602,9 @@ namespace Yuki_Theme.Core.Forms
 
 			if (selform.ShowDialog () == DialogResult.OK)
 			{
-				if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-					Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
 				string syt = selform.comboBox1.SelectedItem.ToString ();
 				string toname = selform.textBox1.Text;
-				string tname = Helper.ConvertNameToPath (toname);
-				string patsh = Path.Combine (CLI.currentPath, "Themes", $"{tname}.yukitheme");
-				bool exist = false;
-				
-				if (File.Exists (patsh))
-				{
-					if (!SaveInExport ("The file is exist. Do you want to override?", "Override?")) return;
-					exist = true;
-					File.Delete (patsh);
-				}
-				if (DefaultThemes.isDefault (syt))
-					CLI.CopyFromMemory (syt, patsh);
-				else
-					File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), patsh);
-				CLI.WriteName (patsh, toname);
-				if(!exist)
+				if (!CLI.add (syt, toname))
 				{
 					schemes.Items.Add (toname);
 					schemes.SelectedItem = toname;
