@@ -99,5 +99,10 @@ namespace Yuki_Theme.Core.Forms
 		{
 			Process.Start ("https://github.com/r-aghaei/FlatNumericUpDownExample");
 		}
+
+		private void linkLabel13_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start ("https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/");
+		}
 	}
 }

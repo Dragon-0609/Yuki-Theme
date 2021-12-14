@@ -66,6 +66,10 @@ namespace Yuki_Theme.Core
 
 		#region Main Commands
 
+		/// <summary>
+		/// Load Themes from default themes and from 'Themes' directory
+		/// </summary>
+		/// <param name="ifZero">If there isn't any theme, ask to set it</param>
 		public static void load_schemes (Func <string> ifZero = null)
 		{
 			schemes.Clear ();
@@ -110,6 +114,12 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Copy theme
+		/// </summary>
+		/// <param name="copyFrom">Copy from</param>
+		/// <param name="name">Copy to</param>
+		/// <returns></returns>
 		public static bool add (string copyFrom, string name)
 		{
 			string syt = Helper.ConvertNameToPath (copyFrom);
@@ -146,6 +156,13 @@ namespace Yuki_Theme.Core
 			return exist;
 		}
 
+		/// <summary>
+		/// Delete the theme
+		/// </summary>
+		/// <param name="st">Theme to be deleted</param>
+		/// <param name="askD">Ask to delete</param>
+		/// <param name="afterAsk">Do action after asked</param>
+		/// <param name="afterDelete">Do action after deleted</param>
 		public static void remove (string st, Func <string, string, bool> askD, Func <string, object> afterAsk = null,
 		                           Action <string, object> afterDelete = null)
 		{
@@ -177,6 +194,11 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Save current theme
+		/// </summary>
+		/// <param name="img2">Background image</param>
+		/// <param name="img3">Sticker</param>
 		public static void save (Image img2 = null, Image img3 = null)
 		{
 			Helper.CreateThemeDirectory ();
@@ -184,6 +206,13 @@ namespace Yuki_Theme.Core
 				saveList (img2, img3);
 		}
 
+		/// <summary>
+		/// Export current theme to pascal directory
+		/// </summary>
+		/// <param name="img2">Background image</param>
+		/// <param name="img3">Sticker</param>
+		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
+		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
 		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null)
 		{
 			if (!isDefault () && Helper.mode != ProductMode.Plugin)
@@ -276,11 +305,20 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Import theme
+		/// </summary>
+		/// <param name="path">Theme from</param>
 		public static void import (string path)
 		{
 			MainParser.Parse (path);
 		}
 
+		/// <summary>
+		/// Rename the theme
+		/// </summary>
+		/// <param name="from">From</param>
+		/// <param name="to">To</param>
 		public static void rename (string from, string to)
 		{
 			string frm = Helper.ConvertNameToPath (from);
@@ -315,7 +353,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-
+		/// <summary>
+		/// Set align 
+		/// </summary>
+		/// <param name="algn"></param>
 		public static void palign (Alignment algn)
 		{
 			if (align != algn)
@@ -325,6 +366,11 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Restore to saved (default) state 
+		/// </summary>
+		/// <param name="wantClean">Do you want to clean garbage?</param>
+		/// <param name="onSelect">Action, after populating list</param>
 		public static void restore (bool wantClean = true, Action onSelect = null)
 		{
 			localAttributes.Clear ();
@@ -337,6 +383,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
+		/// </summary>
+		/// <param name="onSelect">Action, after populating list</param>
 		public static void populateList (Action onSelect = null)
 		{
 			var doc = new XmlDocument ();
@@ -481,6 +531,12 @@ namespace Yuki_Theme.Core
 				onSelect ();
 		}
 
+		/// <summary>
+		/// Copy theme from memory. It's used to copy default themes.
+		/// </summary>
+		/// <param name="file">Copy from (theme name)</param>
+		/// <param name="path">Copy to path</param>
+		/// <param name="extract">Do you want to extract background image and sticker?</param>
 		public static void CopyFromMemory (string file, string path, bool extract = false)
 		{
 			var a = GetCore ();
@@ -515,6 +571,9 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Save current settings
+		/// </summary>
 		public static void saveData ()
 		{
 			var dict = new Dictionary <int, string> ();
@@ -537,6 +596,11 @@ namespace Yuki_Theme.Core
 		}
 
 
+		/// <summary>
+		/// Write name of the theme to the theme file (.xshd), so Yuki Theme can show it properly (symbols like ':')
+		/// </summary>
+		/// <param name="path">Full path to theme</param>
+		/// <param name="name">New name of the theme</param>
 		public static void WriteName (string path, string name)
 		{
 			var doc = new XmlDocument ();
@@ -591,16 +655,28 @@ namespace Yuki_Theme.Core
 
 		#region XML
 
+		/// <summary>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// </summary>
+		/// <param name="node"></param>
 		private static void PopulateByXMLNodeParent (XmlNode node)
 		{
 			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNode (xne);
 		}
 
+		/// <summary>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// </summary>
+		/// <param name="node"></param>
 		private static void PopulateByXMLNode (XmlNode node)
 		{
 			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingular (xn);
 		}
 
+		/// <summary>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// </summary>
+		/// <param name="node"></param>
 		private static void PopulateByXMLNodeSingular (XmlNode node)
 		{
 			// Console.WriteLine("TEST");
@@ -684,12 +760,19 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-
-		private static bool isPasalDirectory (string st)
+		/// <summary>
+		/// Check if the path is Pascal Directory. To check it, I check if there is <code>Highlighting</code> directory in it.
+		/// </summary>
+		/// <param name="path">Path</param>
+		/// <returns>True if it is Pascal Directory</returns>
+		private static bool isPasalDirectory (string path)
 		{
-			return Directory.Exists (System.IO.Path.Combine (st, "Highlighting"));
+			return Directory.Exists (System.IO.Path.Combine (path, "Highlighting"));
 		}
 
+		/// <summary>
+		/// Get settings
+		/// </summary>
 		public static void connectAndGet ()
 		{
 			var data = database.ReadData ();
@@ -746,18 +829,22 @@ namespace Yuki_Theme.Core
 			settingMode = os;
 		}
 
-
-		public static string GetNameOfTheme (string sps)
+		/// <summary>
+		/// Get name of the theme.
+		/// </summary>
+		/// <param name="path">Path to the theme</param>
+		/// <returns>Name of the theme</returns>
+		public static string GetNameOfTheme (string path)
 		{
 			XmlDocument docu = new XmlDocument ();
 
-			Tuple <bool, string> content = Helper.getTheme (sps);
+			Tuple <bool, string> content = Helper.getTheme (path);
 			if (content.Item1)
 			{
 				docu.LoadXml (content.Item2);
 			} else
 			{
-				docu.Load (sps);
+				docu.Load (path);
 			}
 
 			XmlNode nod = docu.SelectSingleNode ("/SyntaxDefinition");
@@ -776,7 +863,11 @@ namespace Yuki_Theme.Core
 			return nm;
 		}
 
-
+		/// <summary>
+		/// Save current theme
+		/// </summary>
+		/// <param name="img2">Background image</param>
+		/// <param name="img3">Sticker</param>
 		private static void saveList (Image img2 = null, Image img3 = null)
 		{
 			if (!isDefault ())
@@ -947,12 +1038,17 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-
+		/// <summary>
+		/// Convert align to int and add it to variables
+		/// </summary>
 		private static void convertAlign ()
 		{
 			localAttributes ["BackgroundImage"] ["align"] = ((int) align).ToString ();
 		}
 
+		/// <summary>
+		/// Clean destination before export. Delete background image and sticker 
+		/// </summary>
 		private static void CleanDestination ()
 		{
 			var fil = Directory.GetFiles (Path.Combine (pascalPath, "Highlighting"), "*.png");
@@ -962,6 +1058,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Copy files to <code>Themes</code> directory
+		/// </summary>
+		/// <param name="files">Files to be copied</param>
 		private static void CopyFiles (string [] files)
 		{
 			foreach (var file in files)
@@ -972,6 +1072,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Export theme to the path (pascal directory)
+		/// </summary>
+		/// <param name="path">Path</param>
 		private static void ExportTheme (string path)
 		{
 			string source = getPath;
@@ -990,6 +1094,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Delete files if exist
+		/// </summary>
+		/// <param name="files"></param>
 		private static void DeleteFiles (string [] files)
 		{
 			foreach (var file in files)
@@ -999,6 +1107,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Get this assembly
+		/// </summary>
+		/// <returns></returns>
 		public static Assembly GetCore ()
 		{
 			// return GetAssemblyByName ("Yuki Theme.Core");
@@ -1011,6 +1123,10 @@ namespace Yuki_Theme.Core
 			                .SingleOrDefault (assembly => assembly.GetName ().Name == name);
 		}
 
+		/// <summary>
+		/// Is current theme in default themes
+		/// </summary>
+		/// <returns></returns>
 		public static bool isDefault ()
 		{
 			return DefaultThemes.isDefault (currentoFile);

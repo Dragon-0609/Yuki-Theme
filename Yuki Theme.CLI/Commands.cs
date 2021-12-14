@@ -4,11 +4,11 @@ using CommandLine;
 namespace Yuki_Theme.CLI
 {
 	
-	[Verb("duplicate", HelpText = "Duplicate the specified themes\nduplicate <from> <to>")]
-	public class DuplicateCommand
+	[Verb("copy", HelpText = "Copy the specified themes\ncopy <from> <to>")]
+	public class CopyCommand
 	{
 		
-		[Value( 0, HelpText = "Duplicate <from> <to>", Min = 2, Max = 2, MetaName = "Names")]
+		[Value( 0, HelpText = "Copy <from> <to>", Min = 2, Max = 2, MetaName = "Names")]
 		public IEnumerable<string> Names {get; set;}
 	}
 
@@ -46,16 +46,20 @@ namespace Yuki_Theme.CLI
 		public IEnumerable<string> Names {get; set;}
 	}
 
-	[Verb("settings", HelpText = "Change Setting")]
+	[Verb ("settings", HelpText = "Change Setting")]
 	public class SettingsCommand
 	{
-		[Option('p', "path", Required = false, HelpText = "Set path to pascal.")]
+		[Option ('p', "path", Required = false, HelpText = "Set path to pascal.")]
 		public string Path { get; set; }
-	
-		[Option('q', "quiet", Required = false, HelpText = "Ask if there're other themes.")]
+
+		[Option ('q', "quiet", Required = false, HelpText = "Ask if there're other themes.")]
 		public string Quiet { get; set; }
-	
-		[Option('m', "mode", Required = false, HelpText = "Setting mode. There're two options: Light and Advanced")]
+
+		[Option ('m', "mode", Required = false, HelpText = "Setting mode. There're two options: Light and Advanced")]
 		public string Mode { get; set; }
+
+		[Option ('a', "action", Required = false,
+		         HelpText = "Setting mode. There're three options: Delete, Import, Ignore")]
+		public string Action { get; set; }
 	}
 }

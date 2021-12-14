@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
 using Yuki_Theme.Core;
@@ -12,6 +13,8 @@ namespace Yuki_Theme.CLI
 {
 	class MainClass
 	{
+		private static bool quit = false;
+		
 		#region Other Methods
 
 		private static void AskPath (string content, string title)
@@ -33,12 +36,12 @@ namespace Yuki_Theme.CLI
 						isPath = true;
 					} else
 					{
-						Console.WriteLine (
-							"It isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
+						ShowError (
+							$"{path} isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
 					}
 				} else
 				{
-					Console.WriteLine ("The directory isn't exist");
+					ShowError ("The directory isn't exist");
 				}
 			}
 
@@ -197,9 +200,12 @@ namespace Yuki_Theme.CLI
 		
 		#endregion
 
+		/// <summary>
+		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
+		/// </summary>
 		public static void LoadCLI ()
 		{
-			if (Helper.mode != ProductMode.CLI)
+			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
 			{
 				Helper.mode = ProductMode.CLI;
 				Core.CLI.setPath = AskPath;
@@ -213,17 +219,30 @@ namespace Yuki_Theme.CLI
 			}
 		}
 
-		public static void SetFile (string file)
+		/// <summary>
+		/// Set current theme to process it. For example export it.
+		/// </summary>
+		/// <param name="theme">Theme name</param>
+		public static void SetFile (string theme)
 		{
-			Core.CLI.currentoFile = file;
-			Core.CLI.currentFile = Helper.ConvertNameToPath (file);
+			Core.CLI.currentoFile = theme;
+			Core.CLI.currentFile = Helper.ConvertNameToPath (theme);
 		}
 
+		/// <summary>
+		/// If something went wrong, here we can Write it to console with Red Color.
+		/// </summary>
+		/// <param name="str">Content</param>
+		/// <param name="str2">Title</param>
 		public static void ShowError (string str, string str2)
 		{
 			ShowError ($"{str2}:\n {str}");
 		}
 
+		/// <summary>
+		/// If something went wrong, here we can Write it to console with Red Color.
+		/// </summary>
+		/// <param name="str">Content</param>
 		public static void ShowError (string str)
 		{
 			ConsoleColor clr = Console.ForegroundColor; 
@@ -245,12 +264,44 @@ namespace Yuki_Theme.CLI
 				parserSettings.IgnoreUnknownArguments = false;
 			});
 
+			if (args != null && args.Length > 0)
+			{
+				Parse (parser, args);
+			} else
+			{
+				ShowError ("Loop mode is activated. To exit write 'QUIT'.\n".ToUpper ());
+				while (!quit)
+				{
+					Console.Write ("yuki >");
+					string command = Console.ReadLine ();
+					if (command.ToLower ().Contains ("quit")) break;
+					Regex argReg = new Regex (@"\w+|""[\w\s]*""");
+					string [] cmds = new string[argReg.Matches (command).Count];
+					int i = 0;
+					foreach (var enumer in argReg.Matches (command))
+					{
+						cmds [i] = (string) enumer.ToString ();
+						i++;
+					}
+
+					Parse (parser, cmds);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Parse commands.
+		/// </summary>
+		/// <param name="parser">Parser</param>
+		/// <param name="args">Arguments of commands</param>
+		private static void Parse (Parser parser, string[] args)
+		{
 			var res = parser
-				.ParseArguments <DuplicateCommand, ListCommand, ExportCommand, ImportCommand, DeleteCommand,
+				.ParseArguments <CopyCommand, ListCommand, ExportCommand, ImportCommand, DeleteCommand,
 					RenameCommand,
 					SettingsCommand> (args);
 
-			res.WithParsed <DuplicateCommand> (o =>
+			res.WithParsed <CopyCommand> (o =>
 			   {
 				   string fr = ConvertToText (o.Names.ElementAt (0));
 				   string to = ConvertToText (o.Names.ElementAt (1));
@@ -283,9 +334,9 @@ namespace Yuki_Theme.CLI
 				   if(o.Name !=null)
 				   {
 					   o.Name = ConvertToText (o.Name);
+					   LoadCLI ();
 					   if (Contains (o.Name))
 					   {
-						   LoadCLI ();
 						   SetFile (o.Name);
 						   Image img = LoadImage ();
 						   Image stick = LoadSticker ();
@@ -378,23 +429,103 @@ namespace Yuki_Theme.CLI
 				   }
 			   }).WithParsed <SettingsCommand> (o =>
 			   {
+				   LoadCLI ();
+				   bool changed = false;
 				   if (!isNull (o.Path))
 				   {
-					   Console.WriteLine ("Path: " + o.Path);
+					   if (Directory.Exists (System.IO.Path.Combine (o.Path, "Highlighting")))
+					   {
+						   Core.CLI.pascalPath = o.Path;
+						   changed = true;
+					   } else
+					   {
+						   ShowError (
+							   $"{o.Path} isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
+					   }   
 				   }
-				   else if (!isNull (o.Quiet))
+				   if (!isNull (o.Quiet))
 				   {
 					   bool resa = false;
 					   if (bool.TryParse (o.Quiet, out resa))
 					   {
-						   Console.WriteLine ("Quiet: " + resa);
+						   Core.CLI.askChoice = resa;
+						   changed = true;
 					   } else
 					   {
 						   ShowError ("Wrong input. Acceptable values: 'true' or 'false'", "Quiet: ");
 					   }
-				   } else if (!isNull (o.Mode))
+				   }
+				   if (!isNull (o.Mode))
 				   {
-					   Console.WriteLine ("Mode: " + o.Mode);
+					   bool isValid = false;
+					   switch (o.Mode.ToLower ())
+					   {
+						   case "light" :
+						   {
+							   isValid = true;
+						   }
+							   break;
+						   case "advanced" :
+						   {
+							   isValid = true;
+						   }
+							   break;
+
+					   }
+
+					   if (isValid)
+					   {
+						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? 0 : 1;
+						   changed = true;
+					   } else
+					   {
+						   ShowError ("Invalid input! Acceptable values: 'LIGHT' or 'ADVANCED'");
+					   }
+				   }
+				   if (!isNull (o.Action))
+				   {
+					   bool isValid = false;
+					   int act = 0;
+					   switch (o.Action.ToLower ())
+					   {
+						   case "delete" :
+						   {
+							   isValid = true;
+							   act = 0;
+						   }
+							   break;
+						   case "import" :
+						   {
+							   isValid = true;
+							   act = 1;
+						   }
+							   break;
+						   case "ignore" :
+						   {
+							   isValid = true;
+							   act = 2;
+						   }
+							   break;
+
+					   }
+
+					   if (isValid)
+					   {
+						   Core.CLI.settingMode = act;
+						   changed = true;
+					   } else
+					   {
+						   ShowError ("Invalid input! Acceptable values: 'DELETE', 'IMPORT' or 'IGNORE'");
+					   }
+				   }
+
+				   if (changed)
+				   {
+					   Core.CLI.saveData ();
+					   ShowSuccess ("Settings are saved!", "Saved");
+				   } else
+				   {
+					   ShowError ("Settings aren't saved!", "Not saved");
 				   }
 			   })
 			   .WithNotParsed (errors =>
