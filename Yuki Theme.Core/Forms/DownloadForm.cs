@@ -17,6 +17,7 @@ namespace Yuki_Theme.Core.Forms
 		public           string    downloadlink;
 		public           string    size;
 		private          WebClient web;
+		private          string    github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 
 		private string user_agent =
 			"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
@@ -34,7 +35,9 @@ namespace Yuki_Theme.Core.Forms
 
 		public async void CheckUpdate ()
 		{
-			var url = "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+			var url = CLI.Beta
+				? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
+				: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
 			try
 			{
 				using (var client = new HttpClient ())
@@ -45,16 +48,37 @@ namespace Yuki_Theme.Core.Forms
 					if (response != null)
 					{
 						var json = await response.Content.ReadAsStringAsync ();
-						// Console.WriteLine (json);
-
+						if (CLI.Beta) // If can get beta, parse latest release (even pre-release)
+							json = "{\n\""+ json.Split (new [] {"{\n    \"","\"\n  },"}, StringSplitOptions.None) [1] + "\"\n}";
+						
+						Console.WriteLine (json);
 						var jresponse = JObject.Parse (json);
 						string tg = jresponse ["tag_name"].ToString ();
-						string nv = tg.Substring (1, tg.Length - 3);
+						Console.WriteLine (tg);
+						if (CLI.Beta)
+						{
+							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/" + tg;
+						} else
+						{
+							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/latest";
+						}
+						string nv = "";
+						bool hasBeta = false;
+						if (tg.Contains ("-"))
+						{
+							nv = tg.Split ('-') [0];
+							Console.WriteLine (nv);
+							nv = nv.Substring (1, nv.Length - 3);
+							hasBeta = true;
+						}else
+						{
+							nv = tg.Substring (1, tg.Length - 3);
+						}
 						Console.WriteLine (nv);
 						
 						double ver = double.Parse (nv, CultureInfo.InvariantCulture);
 						Console.WriteLine (ver);
-						if (SettingsForm.current_version < ver)
+						if (SettingsForm.current_version < ver || (SettingsForm.current_version == ver && SettingsForm.current_version_add.Length != 0 && !hasBeta))
 						{
 							int md = (int) Helper.mode;
 							size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -64,10 +88,7 @@ namespace Yuki_Theme.Core.Forms
 							form.nf.onClick2 = openInGithub;
 							form.nf.button1.Text = "Update";
 							form.nf.button3.Text = "Open in Github";
-							string sw = tg.Substring (1);
-							int n = 0;
-							if( (n=tg.IndexOf('.')) != -1 )
-								sw = string.Concat(tg.Substring(0,n+1),tg.Substring(n+1).Replace(".0",""));
+							string sw = jresponse ["name"].ToString ().Substring (1);
 							form.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
 							
 							form.nf.button1.Visible = true;
@@ -90,9 +111,9 @@ namespace Yuki_Theme.Core.Forms
 						}
 					}
 				}
-			} catch (Exception)
+			} catch (Exception ex)
 			{
-				// Console.WriteLine (ex.Message);
+				Console.WriteLine (ex.Message + "\n" + ex.StackTrace);
 			}
 		}
 
@@ -100,7 +121,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			form.nf.onClick = null;
 			form.nf.onClick2 = null;
-			Process.Start ("https://github.com/Dragon-0609/Yuki-Theme/releases/latest");
+			Process.Start (github_url);
 		}
 		
 		private void startUpdate ()

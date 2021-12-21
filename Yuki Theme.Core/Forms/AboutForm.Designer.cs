@@ -48,6 +48,8 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel10 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel11 = new System.Windows.Forms.LinkLabel ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel12 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.panel1.SuspendLayout ();
@@ -59,7 +61,7 @@ namespace Yuki_Theme.Core.Forms
 			this.pictureBox1.Image = global::Yuki_Theme.Core.Properties.Resources.yuki;
 			this.pictureBox1.Location = new System.Drawing.Point (0, 0);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size (319, 141);
+			this.pictureBox1.Size = new System.Drawing.Size (312, 141);
 			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
@@ -72,7 +74,7 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel4.LinkColor = System.Drawing.Color.Black;
 			this.linkLabel4.Location = new System.Drawing.Point (0, 141);
 			this.linkLabel4.Name = "linkLabel4";
-			this.linkLabel4.Size = new System.Drawing.Size (319, 51);
+			this.linkLabel4.Size = new System.Drawing.Size (312, 51);
 			this.linkLabel4.TabIndex = 2;
 			this.linkLabel4.TabStop = true;
 			this.linkLabel4.Text = "Yuki Theme";
@@ -86,7 +88,7 @@ namespace Yuki_Theme.Core.Forms
 			this.vers.Font = new System.Drawing.Font ("Times New Roman", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.vers.Location = new System.Drawing.Point (0, 192);
 			this.vers.Name = "vers";
-			this.vers.Size = new System.Drawing.Size (319, 23);
+			this.vers.Size = new System.Drawing.Size (312, 23);
 			this.vers.TabIndex = 3;
 			this.vers.Text = "version: 1.0";
 			this.vers.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -95,12 +97,12 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Location = new System.Drawing.Point (249, 469);
+			this.button1.Location = new System.Drawing.Point (242, 469);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size (58, 29);
 			this.button1.TabIndex = 5;
 			this.button1.Text = "Back";
-			this.button1.UseVisualStyleBackColor = true;
+			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler (this.button1_Click);
 			// 
 			// linkLabel1
@@ -264,6 +266,8 @@ namespace Yuki_Theme.Core.Forms
 			// panel1
 			// 
 			this.panel1.AutoScroll = true;
+			this.panel1.Controls.Add (this.linkLabel14);
+			this.panel1.Controls.Add (this.linkLabel13);
 			this.panel1.Controls.Add (this.linkLabel12);
 			this.panel1.Controls.Add (this.linkLabel2);
 			this.panel1.Controls.Add (this.linkLabel11);
@@ -275,8 +279,36 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.Controls.Add (this.linkLabel7);
 			this.panel1.Location = new System.Drawing.Point (87, 242);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size (221, 210);
+			this.panel1.Size = new System.Drawing.Size (215, 210);
 			this.panel1.TabIndex = 19;
+			// 
+			// linkLabel14
+			// 
+			this.linkLabel14.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel14.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.Location = new System.Drawing.Point (7, 300);
+			this.linkLabel14.Name = "linkLabel14";
+			this.linkLabel14.Size = new System.Drawing.Size (187, 27);
+			this.linkLabel14.TabIndex = 21;
+			this.linkLabel14.TabStop = true;
+			this.linkLabel14.Text = "CommonMark.NET";
+			this.linkLabel14.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel14_LinkClicked);
+			// 
+			// linkLabel13
+			// 
+			this.linkLabel13.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel13.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel13.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel13.Location = new System.Drawing.Point (7, 252);
+			this.linkLabel13.Name = "linkLabel13";
+			this.linkLabel13.Size = new System.Drawing.Size (175, 43);
+			this.linkLabel13.TabIndex = 20;
+			this.linkLabel13.TabStop = true;
+			this.linkLabel13.Text = "MechanikaDesign.WinForms.UI.ColorPicker";
+			this.linkLabel13.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel13.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel13_LinkClicked);
 			// 
 			// linkLabel12
 			// 
@@ -295,7 +327,7 @@ namespace Yuki_Theme.Core.Forms
 			// AboutForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size (319, 504);
+			this.ClientSize = new System.Drawing.Size (312, 504);
 			this.ControlBox = false;
 			this.Controls.Add (this.panel1);
 			this.Controls.Add (this.linkLabel5);
@@ -317,6 +349,10 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel linkLabel14;
+
+		private System.Windows.Forms.LinkLabel linkLabel13;
 
 		private System.Windows.Forms.Panel     panel1;
 		private System.Windows.Forms.LinkLabel linkLabel12;

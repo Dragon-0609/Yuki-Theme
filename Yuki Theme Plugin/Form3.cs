@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace Yuki_Theme_Plugin
 {
@@ -8,5 +9,6 @@ namespace Yuki_Theme_Plugin
 		{
 			InitializeComponent ();
 		}
+
 	}
 }

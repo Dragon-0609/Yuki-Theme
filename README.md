@@ -6,7 +6,7 @@
 
 ## English
 
-This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: `Darcula`, `Monokai` and etc.
+This program is for people, who want to customize (change) PascalABC.NET IDE. By this program you can select and export default popular color schemes like: `Darcula`, `Monokai` and etc.
 Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl.
 
 Or, you can make your own color scheme by clicking `plus` button. Also, you can import your color scheme from any JetBrains IDE, by clicking `Import`.
@@ -45,30 +45,40 @@ Well, both of them are `Yuki Theme`. The difference is in integration of them wi
 If you use program version, you can change color syntax of the IDE, but it has limitations:
 
 - [ ] Can set background image
-- [ ] Can change color of some UI parts
+- [ ] Can set sticker
+- [ ] Can change color of UI parts
 - [x] You have to restart PascalABC.NET to change theme
 
 `Plugin` version:
 - [x] Can set background image
-- [x] Can change color of some UI parts
+- [x] Can set sticker
+- [x] Can change color of UI parts
 - [x] Easily change theme at runtime
+- [x] Name in the status bar of Pascal
 
 
 Without plugin:
 
-![without](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/8/8d7919095e7fb19ff1274868864e6d0d3215eb4f.png)
+![with](./Screenshots/screen6.png)
 
 With plugin:
 
-![with](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/9/97c96681b5d9d60e12cdbf9244962c8e7d2ff93d.png)
+![with](./Screenshots/screen5.png)
 
 ---
 
 ## Documentation
+- [Features for plugin](#features-for-plugin)
 - [Configuration](#configuration)
 - [Default Themes](#default-themes)
 - [Doki Theme](#doki-theme)
 - [Custom Themes](#custom-themes)
+
+### Features for plugin
+In the 4th version you can easily change theme by using `switch theme`. To use it, press <code>Ctrl + `</code> (below Esc) in Pascal. After that small panel will appear on the center.
+
+Also, you can easily hide background image and sticker by pressing `Alt + A`. To show them, just press `Alt + A` again. To easily enter to `Yuki Theme` window, press `Alt + S`.
+
 
 ### Configuration
 
@@ -130,31 +140,38 @@ If the checkbox is checked, the programm will check updates in every program run
 
 You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
 
+- Azur Lane
 - Blend S
-- Daily Life with a Monster Girl
+- Bunny Senpai
+- Daily Life With A Monster Girl
 - DanganRonpa
+- Darling in the Franxx
 - Doki-Doki Literature Club
-- Don't Toy With Me, Miss Nagatoro
-- Darling in the FranXX
+- Don't Toy with me Miss Nagatoro
+- EroManga Sensei
 - Fate/Type-Moon
 - Future Diary
 - Gate
 - High School DxD
 - Jahy-sama Will Not Be Discouraged!
 - Kakegurui
-- Kill La Kill
+- Kill la Kill
 - KonoSuba
+- Literature Club
 - Love Live!
 - Lucky Star
+- Miscellaneous
 - Miss Kobayashi's Dragon Maid
 - Monogatari
 - NekoPara
 - Neon Genesis Evangelion
 - OreGairu
+- OreImo
 - Quintessential Quintuplets
-- Re:Zero
+- Re Zero
 - Steins Gate
 - Sword Art Online
+- Vocaloid
 - Yuru Camp
 
 ![Themes](./Screenshots/screen3.png)
@@ -170,7 +187,7 @@ Also, you can import your favourite color scheme from any JetBrains IDE. Click t
 
 ### Attributions
 Was inspired by [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
-Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample).
+Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET).
 
 
 ---
@@ -190,7 +207,7 @@ Help make this plugin better!
 
 ## Русский
 
-Это программа для людей, которые хотят изменить PascalABC.NET IDE. С помощью этой программы вы можете выбрать любую встроенную популярную тему, как:  `Darcula`, `Monokai` и др.
+Это программа для людей, которые хотят изменить (кастомизация) PascalABC.NET IDE. С помощью этой программы вы можете выбрать любую встроенную популярную тему, как:  `Darcula`, `Monokai` и др.
 А ещё, программа включает в себя `Doki Theme`, с более чем 50 тем, думаю вы найдёте лучшую девушку.
 
 Или вы можете создать свою тему кликая `плюс` кнопку. Также, вы можете импортировать свою световую схему из любой IDE от JetBrains, кликая `Импорт`.
@@ -234,23 +251,32 @@ Help make this plugin better!
 версия `Плагина`:
 - [x] Может изменить фоновое изображение
 - [x] Может менять цвета в некоторых частах интерфейса
-- [x] Может с лёгкостю применять тему.
+- [x] Может с лёгкостю применять тему
+- [x] Имя темы в статус баре Паскаль
+
 
 
 Без плагина:
 
-![without](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/8/8d7919095e7fb19ff1274868864e6d0d3215eb4f.png)
+![with](./Screenshots/screen6.png)
 
 С плагином:
 
-![with](http://forum.mmcs.sfedu.ru/uploads/default/original/2X/9/97c96681b5d9d60e12cdbf9244962c8e7d2ff93d.png)
+![with](./Screenshots/screen5.png)
+
 ---
 
 ## Документация
+- [Возможности плагина](#возможности-плагина)
 - [Настройки](#настройки)
 - [Встроенные Темы](#встроенные-темы)
 - [Doki Theme](#doki-theme)
 - [Пользовательские Темы](#пользовательские-темы)
+
+### Возможности плагина
+В 4-ой версии с лёгкостью можете менять тему с помощью `switch theme`. Чтобы использовать её, нажмите <code>Ctrl + `</code> (внизу Esc) в паскаль . После этого появиться маленький панель в центре.
+
+А ещё, вы можете без проблем скрыть фоновое изображение и стикер нажимая `Alt + A`. Чтобы показать их, вновь нажмите `Alt + A`. Чтобы с лёгкостью открыть окно `Yuki Theme`, нажмите `Alt + S`.
 
 ### Настройки
 
@@ -313,14 +339,18 @@ Help make this plugin better!
 
 Вы можете выбрать темы из различных аниме, манги или визуальных новелл от [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
 
+
 | на Русском | на Английском |
 |---|---|
+| Лазурный путь | Azur Lane |
 | Садистская смесь | Blend S |
+| Этот глупый свин не понимает мечту девочки-зайки | Bunny Senpai |
 | Повседневная жизнь с девушкой-монстром  | Daily Life with a Monster Girl |
 | Школа отчаяния  | DanganRonpa  |
+| Милый во Франксе  | Darling in the FranXX  |
 |   | Doki-Doki Literature Club  |
 | Не издевайся, Нагаторо  | Don't Toy With Me, Miss Nagatoro  |
-| Милый во Франксе  | Darling in the FranXX  |
+| Эроманга-сэнсэй  | EroManga Sensei  |
 | Судьба/Type-Moon  | Fate/Type-Moon  |
 | Дневник будущего  | Future Diary  |
 | Врата: Там бьются наши воины  | Gate  |
@@ -336,10 +366,12 @@ Help make this plugin better!
 | Кошачий рай  | NekoPara  |
 | Евангелион  | Neon Genesis Evangelion  |
 | Как и ожидал, моя школьная романтическая жизнь не удалась  | OreGairu  |
+| Ну не может моя сестрёнка быть такой милой  | OreImo  |
 | Пять невест  | Quintessential Quintuplets  |
 | Жизнь в другом мире с нуля  | Re:Zero  |
 | Врата Штейна  | Steins Gate  |
 | Мастера Меча Онлайн  | Sword Art Online  |
+| Вокалоиды  | Vocaloid  |
 | Лагерь на свежем воздухе  | Yuru Camp  |
 
 
@@ -356,7 +388,7 @@ Help make this plugin better!
 
 ### Аттрибуты
 Был вдохновлён [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
-Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample).
+Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET).
 
 
 ---

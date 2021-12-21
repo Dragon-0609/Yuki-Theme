@@ -19,8 +19,13 @@ namespace Yuki_Theme.Core.Forms
 		public const int BGIMAGE = 8;
 		public const int STICKER = 9;
 		public const int STATUSBAR = 10;
+		public const int LOGO = 11;
+		public const int LOCATION = 12;
+		public const int EDITOR = 13;
+		public const int BETA = 14;
+		public const int LOGIN = 15;
 		
-		public const double current_version = 3.0;
+		public const double current_version = 4.0;
 		public const string current_version_add = "beta";
 		public static string next_version = "";
 
@@ -48,6 +53,24 @@ namespace Yuki_Theme.Core.Forms
 		{
 			get => swStatusbar.Checked;
 			set => swStatusbar.Checked = value;
+		}
+		
+		public bool Logo
+		{
+			get => logo.Checked;
+			set => logo.Checked = value;
+		}
+		
+		public bool Editor
+		{
+			get => editor.Checked;
+			set => editor.Checked = value;
+		}
+		
+		public bool Beta
+		{
+			get => checkBox1.Checked;
+			set => checkBox1.Checked = value;
 		}
 		
 		public SettingsForm ( MForm mf)
@@ -202,6 +225,7 @@ namespace Yuki_Theme.Core.Forms
 		public void setVisible (bool vis)
 		{
 			textBox1.Enabled = button1.Enabled = askC.Enabled = ActionBox.Enabled = vis;
+			logo.Enabled = swStatusbar.Enabled = !vis;
 		}
 
 		private void loadSVG ()

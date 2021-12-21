@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme", "Yuki Theme\Yu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme Plugin", "Yuki Theme Plugin\Yuki Theme Plugin.csproj", "{36B36D1A-9A45-4015-822F-B50FEE67E63F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.CLI", "Yuki Theme.CLI\Yuki Theme.CLI.csproj", "{96B479D5-984F-41D2-B41A-5A3B685AB29E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

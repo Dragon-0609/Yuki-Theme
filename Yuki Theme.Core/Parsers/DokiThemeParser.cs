@@ -14,11 +14,13 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public class DokiThemeParser : AbstractParser
 	{
-		private bool   dark  = true;
-		private string curd  = "";
-		private string fname = "";
+		private bool   dark   = true;
+		private string curd   = "";
+		private string fname  = "";
 		private string ofname = "";
-		private string getImage => Path.Combine (curd, fname);
+		private string getWallpaper => Path.Combine (curd, fname);
+		private string getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		public Func <string, string, bool> exist;
 		
 		public override void populateList (string path)
 		{
@@ -26,8 +28,13 @@ namespace Yuki_Theme.Core.Parsers
 			JObject json = JObject.Parse (File.ReadAllText (path));
 			fname = json ["stickers"] ["default"].ToString();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
+			
 			flname = ofname;
-			outname = $"Themes/{ofname.Replace (": ", "__").Replace (":", "")}.yukitheme";
+			outname = Path.Combine (CLI.currentPath, "Themes",
+			                        $"{ofname.Replace (": ", "__").Replace (":", "")}.yukitheme");
+			if (!MainParser.checkAvailableAndAsk (outname, ask, exist))
+				throw new InvalidDataException ("The theme is exist...canceling...");
+			overwrite = File.Exists (outname);
 			dark = bool.Parse (json ["dark"].ToString ());
 			
 			foreach (JProperty cl in json ["colors"])
@@ -261,6 +268,11 @@ namespace Yuki_Theme.Core.Parsers
 					res = "NekoPara: ";
 				}
 					break;
+				case "Azur Lane" :
+				{
+					res = "AzurLane: ";
+				}
+					break;
 			}
 
 			return res;
@@ -481,43 +493,86 @@ namespace Yuki_Theme.Core.Parsers
 			var doc = new XmlDocument ();
 			doc.Load (outname);
 
-			Image img = Image.FromFile (getImage);
-			
+			Tuple <bool, Image> wallp = getImage (getWallpaper);
+
+			Tuple <bool, Image> stick = getImage (getSticker);
+
 			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
 			bool hadSavedImage = false;
-			foreach (XmlNode childNode in node.ChildNodes)
-				if (childNode.Attributes != null &&
-				    !string.Equals (childNode.Name, "Delimiters", StringComparison.Ordinal))
+
+			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+			XmlNodeList comms = nod.SelectNodes ("//comment()");
+			if (comms.Count >= 3)
+			{
+				Dictionary <string, bool> comments = new Dictionary <string, bool> ()
 				{
-					var nms = childNode.Name;
-					if (childNode.Name == "Span" || childNode.Name == "KeyWords")
-						nms = childNode.Attributes ["name"].Value;
-					if (nms == "BackgroundImage")
-						hadSavedImage = true;
+					{"name", false}, {"align", false}, {"opacity", false}, {"sopacity", false},
+					{"hasImage", false}, {"hasSticker", false}
+				};
+
+				Dictionary <string, string> commentValues = new Dictionary <string, string> ()
+				{
+					{"name", "name:" + ofname}, {"align", "align:" + ((int) Alignment.Center).ToString ()},
+					{"opacity", "opacity:" + (10).ToString ()},
+					{"sopacity", "sopacity:" + (100).ToString ()},
+					{"hasImage", "hasImage:" + wallp.Item1.ToString ()},
+					{"hasSticker", "hasSticker:" + stick.Item1.ToString ()}
+				};
+				foreach (XmlComment comm in comms)
+				{
+					if (comm.Value.StartsWith ("align"))
+					{
+						comm.Value = commentValues ["align"];
+						comments ["align"] = true;
+					} else if (comm.Value.StartsWith ("opacity"))
+					{
+						comm.Value = commentValues ["opacity"];
+						comments ["opacity"] = true;
+					} else if (comm.Value.StartsWith ("sopacity"))
+					{
+						comm.Value = commentValues ["sopacity"];
+						comments ["sopacity"] = true;
+					} else if (comm.Value.StartsWith ("name"))
+					{
+						comm.Value = commentValues ["name"];
+						comments ["name"] = true;
+					} else if (comm.Value.StartsWith ("hasImage"))
+					{
+						comm.Value = commentValues ["hasImage"];
+						comments ["hasImage"] = true;
+					} else if (comm.Value.StartsWith ("hasSticker"))
+					{
+						comm.Value = commentValues ["hasSticker"];
+						comments ["hasSticker"] = true;
+					}
 				}
 
-			if (!hadSavedImage)
+				foreach (KeyValuePair <string, bool> comment in comments)
+				{
+					if (!comment.Value)
+					{
+						node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
+					}
+				}
+			} else
 			{
-				XmlNode image = doc.CreateNode (XmlNodeType.Element, "BackgroundImage", null);
-				XmlAttribute attr = doc.CreateAttribute ("align");
-				attr.Value = ((int) Alignment.Center).ToString ();
-				image.Attributes.SetNamedItem (attr);
-				XmlAttribute attr2 = doc.CreateAttribute ("opacity");
-				attr2.Value = "15";
-				image.Attributes.SetNamedItem (attr2);
-				var def = node.SelectSingleNode ("Default");
-				node = node.InsertAfter (image, def);
+				node.AppendChild (doc.CreateComment ("name:" + ofname));
+				node.AppendChild (doc.CreateComment ("align:" + ((int) Alignment.Center).ToString ()));
+				node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
+				node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
+				node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
+				node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 			}
 
-			if(outname.Contains ("__"))
-			{
-				node = doc.SelectSingleNode ("/SyntaxDefinition");
-				XmlAttribute attr = doc.CreateAttribute ("names");
-				attr.Value = ofname;
-				node.Attributes.SetNamedItem (attr);
-			}
-			
-			Helper.zip (outname, doc.OuterXml, img);
+			Helper.zip (outname, doc.OuterXml, wallp.Item2, stick.Item2);
+		}
+
+		private Tuple <bool, Image> getImage (string path)
+		{
+			if (File.Exists (path))
+				return new Tuple <bool, Image> (true, Image.FromFile (path));
+			else
+				return new Tuple <bool, Image> (false, null);
 		}
 	}
 }
