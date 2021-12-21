@@ -48,6 +48,7 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel10 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel11 = new System.Windows.Forms.LinkLabel ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel12 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
@@ -101,7 +102,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button1.Size = new System.Drawing.Size (58, 29);
 			this.button1.TabIndex = 5;
 			this.button1.Text = "Back";
-			this.button1.UseVisualStyleBackColor = true;
+			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler (this.button1_Click);
 			// 
 			// linkLabel1
@@ -265,6 +266,7 @@ namespace Yuki_Theme.Core.Forms
 			// panel1
 			// 
 			this.panel1.AutoScroll = true;
+			this.panel1.Controls.Add (this.linkLabel14);
 			this.panel1.Controls.Add (this.linkLabel13);
 			this.panel1.Controls.Add (this.linkLabel12);
 			this.panel1.Controls.Add (this.linkLabel2);
@@ -279,6 +281,20 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size (215, 210);
 			this.panel1.TabIndex = 19;
+			// 
+			// linkLabel14
+			// 
+			this.linkLabel14.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel14.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.Location = new System.Drawing.Point (7, 300);
+			this.linkLabel14.Name = "linkLabel14";
+			this.linkLabel14.Size = new System.Drawing.Size (187, 27);
+			this.linkLabel14.TabIndex = 21;
+			this.linkLabel14.TabStop = true;
+			this.linkLabel14.Text = "CommonMark.NET";
+			this.linkLabel14.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel14_LinkClicked);
 			// 
 			// linkLabel13
 			// 
@@ -333,6 +349,8 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel linkLabel14;
 
 		private System.Windows.Forms.LinkLabel linkLabel13;
 

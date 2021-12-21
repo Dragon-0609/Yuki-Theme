@@ -176,6 +176,7 @@ namespace Yuki_Theme.Core.Forms
 			textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
 			notHeight =  Helper.mode == ProductMode.Program ? 50 : 88;
 			InitializeComponent ();
+			list_1.ItemHeight = list_1.Font.Height + 2;
 			// Set Actions
 			CLI.AskChoice = AskChoice;
 			CLI.SaveInExport = SaveInExport;
@@ -222,7 +223,6 @@ namespace Yuki_Theme.Core.Forms
 
 				isUpdated ();
 
-				
 			} else
 			{
 				throw new ApplicationException ("Error on loading the scheme file");
@@ -237,7 +237,8 @@ namespace Yuki_Theme.Core.Forms
 			int inst = ke.GetValue ("install") != null ? 1 : 0;
 			if (inst == 1)
 			{
-				ShowNotification ("Update Complete", "The program has been successfully updated");
+
+				new ChangelogForm ().Show (this);
 				ke.DeleteValue ("install");
 			}
 		}
@@ -617,7 +618,10 @@ namespace Yuki_Theme.Core.Forms
 			if (setform == null)
 				setform = new SettingsForm (this);
 			if(Helper.mode == ProductMode.Program)
+			{
 				setform.Path = pascalPath;
+				setform.setVisible (true);
+			}
 			else
 			{
 				setform.setVisible (false);
@@ -855,8 +859,15 @@ namespace Yuki_Theme.Core.Forms
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
-				MainParser.Parse (fd.FileName, this);
+				MainParser.Parse (fd.FileName, this, true, true, ErrorExport, AskChoiceParser);
 			}
+		}
+
+		private bool AskChoiceParser (string content, string title)
+		{
+			return MessageBox.Show (content,
+			                        title,
+			                        MessageBoxButtons.YesNo) == DialogResult.Yes;
 		}
 
 		public void showDownloader ()
@@ -926,6 +937,10 @@ namespace Yuki_Theme.Core.Forms
 			if (df != null)
 				df.Dispose ();
 			database.SaveLocation (DesktopLocation);
+			CLI.ifHasImage = null;
+			CLI.ifDoesntHave = null;
+			CLI.ifHasSticker = null;
+			CLI.ifDoesntHaveSticker = null;
 			this.Dispose (true);
 		}
 
@@ -1236,12 +1251,12 @@ namespace Yuki_Theme.Core.Forms
 				string [] fls = Directory.GetFiles (co.FileName, "*.json");
 				foreach (string fl in fls)
 				{
-					MainParser.Parse (fl, this, false, false);
+					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
 				}
 				fls = Directory.GetFiles (co.FileName, "*.icls");
 				foreach (string fl in fls)
 				{
-					MainParser.Parse (fl, this, false, false);
+					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
 				}
 
 				schemes.SelectedIndex = schemes.Items.Count - 1;

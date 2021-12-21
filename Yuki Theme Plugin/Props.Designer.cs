@@ -53,6 +53,7 @@ namespace Yuki_Theme_Plugin
 			this.listBox1.Size = new System.Drawing.Size (196, 385);
 			this.listBox1.TabIndex = 1;
 			this.listBox1.SelectedIndexChanged += new System.EventHandler (this.listBox1_SelectedIndexChanged);
+			this.listBox1.KeyUp += new System.Windows.Forms.KeyEventHandler (this.listBox1_KeyUp);
 			// 
 			// Props
 			// 

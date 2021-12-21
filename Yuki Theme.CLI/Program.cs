@@ -369,7 +369,7 @@ namespace Yuki_Theme.CLI
 					   if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
 					   {
 						   LoadCLI ();
-						   Core.CLI.import (o.Path);
+						   Core.CLI.import (o.Path, AskToDelete);
 					   }
 					   else
 						   showerror = true;

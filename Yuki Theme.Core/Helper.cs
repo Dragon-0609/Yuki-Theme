@@ -400,15 +400,20 @@ namespace Yuki_Theme.Core
 		{
 			im.BackgroundImage?.Dispose ();
 
+			im.BackgroundImage = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+		}
+		
+		public static Image renderSVG (Size im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		{
 			if (customColor)
 				svg.Color = new SvgColourServer (clr);
 			else
 				svg.Color = new SvgColourServer (fgColor);
 			
 			if(!custom)
-				im.BackgroundImage = svg.Draw (im.Width, im.Height);
+				return svg.Draw (im.Width, im.Height);
 			else
-				im.BackgroundImage = svg.Draw (cSize.Width, cSize.Height);
+				return svg.Draw (cSize.Width, cSize.Height);
 		}
 
 		public static Image setOpacity (Image image, float opacity)

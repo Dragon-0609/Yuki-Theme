@@ -1,4 +1,5 @@
 ﻿ColorSlider.dll
+CommonMark.dll
 Cyotek.Windows.Forms.ColorPicker.dll
 FastColoredTextBox.dll
 Fizzler.dll

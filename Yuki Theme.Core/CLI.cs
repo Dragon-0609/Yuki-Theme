@@ -59,6 +59,10 @@ namespace Yuki_Theme.Core
 		public static Action                      ifDoesntHave        = null;
 		public static Action <Image>              ifHasSticker        = null;
 		public static Action                      ifDoesntHaveSticker = null;
+		public static Action <Image>              ifHasImage2          = null;
+		public static Action                      ifDoesntHave2        = null;
+		public static Action <Image>              ifHasSticker2        = null;
+		public static Action                      ifDoesntHaveSticker2 = null;
 		public static Action <string, string>     onRename;
 
 		#endregion
@@ -309,9 +313,9 @@ namespace Yuki_Theme.Core
 		/// Import theme
 		/// </summary>
 		/// <param name="path">Theme from</param>
-		public static void import (string path)
+		public static void import (string path, Func<string, string, bool> exist)
 		{
-			MainParser.Parse (path);
+			MainParser.Parse (path, null, true, true, showError, exist);
 		}
 
 		/// <summary>
@@ -409,10 +413,16 @@ namespace Yuki_Theme.Core
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
+						if (ifHasImage2 != null)
+						{
+							ifHasImage2 ((Image) iag.Item2);
+						}
 					} else
 					{
 						if (ifDoesntHave != null)
 							ifDoesntHave ();
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
 					}
 
 					iag = null;
@@ -424,10 +434,16 @@ namespace Yuki_Theme.Core
 						{
 							ifHasSticker ((Image) iag.Item2);
 						}
+						if (ifHasSticker2 != null)
+						{
+							ifHasSticker2 ((Image) iag.Item2);
+						}
 					} else
 					{
 						if (ifDoesntHaveSticker != null)
 							ifDoesntHaveSticker ();
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
 					}
 				} else
 				{
@@ -436,6 +452,12 @@ namespace Yuki_Theme.Core
 
 					if (ifDoesntHaveSticker != null)
 						ifDoesntHaveSticker ();
+					
+					if (ifDoesntHave2 != null)
+						ifDoesntHave2 ();
+
+					if (ifDoesntHaveSticker2 != null)
+						ifDoesntHaveSticker2 ();
 					doc.Load (a.GetManifestResourceStream (gp));
 				}
 			} else
@@ -453,10 +475,18 @@ namespace Yuki_Theme.Core
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
+						
+						if (ifHasImage2 != null)
+						{
+							ifHasImage2 ((Image) iag.Item2);
+						}
 					} else
 					{
 						if (ifDoesntHave != null)
 							ifDoesntHave ();
+						
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
 					}
 
 					iag = Helper.getSticker (getPath);
@@ -471,6 +501,9 @@ namespace Yuki_Theme.Core
 					{
 						if (ifDoesntHaveSticker != null)
 							ifDoesntHaveSticker ();
+						
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
 					}
 				} else
 				{
@@ -478,6 +511,11 @@ namespace Yuki_Theme.Core
 						ifDoesntHave ();
 					if (ifDoesntHaveSticker != null)
 						ifDoesntHaveSticker ();
+					
+					if (ifDoesntHave2 != null)
+						ifDoesntHave2 ();
+					if (ifDoesntHaveSticker2 != null)
+						ifDoesntHaveSticker2 ();
 					try
 					{
 						doc.Load (getPath);

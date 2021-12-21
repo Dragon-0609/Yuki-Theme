@@ -12,15 +12,29 @@ namespace Yuki_Theme.Core.Parsers
 	{
 		public Dictionary <string, Dictionary <string, string>> attributes;
 
-		public string outname = "";
-		public string flname = "";
+		public string outname   = "";
+		public string flname    = "";
+		public bool   ask       = false;
+		public bool   overwrite = false;
 
-		public void Parse (string path, string st, string patsh, MForm form, bool overwrite =false, bool select = true)
+		public Action <string, string> defaultTheme;
+
+		public void Parse (string path, string st, string patsh, MForm form, bool ak = false, bool rewrite =false, bool select = true)
 		{
 			attributes = new Dictionary <string, Dictionary <string, string>> ();
 			outname = patsh;
 			flname = st;
-			populateList (path);
+			ask = ak;
+			overwrite = rewrite;
+			try
+			{
+				populateList (path);
+			} catch (InvalidDataException e)
+			{
+				defaultTheme (e.Message, "Error");
+				return;
+			}
+			
 			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
 			Console.WriteLine (outname);

@@ -25,8 +25,8 @@ namespace Yuki_Theme.Core.Forms
 		public const int BETA = 14;
 		public const int LOGIN = 15;
 		
-		public const double current_version = 3.0;
-		public const string current_version_add = "";
+		public const double current_version = 4.0;
+		public const string current_version_add = "beta";
 		public static string next_version = "";
 
 		private MForm form;
@@ -225,6 +225,7 @@ namespace Yuki_Theme.Core.Forms
 		public void setVisible (bool vis)
 		{
 			textBox1.Enabled = button1.Enabled = askC.Enabled = ActionBox.Enabled = vis;
+			logo.Enabled = swStatusbar.Enabled = !vis;
 		}
 
 		private void loadSVG ()

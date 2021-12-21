@@ -36,6 +36,10 @@
         <Reference Include="ColorSlider, Version=1.0.0.4, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\ColorSlider.dll</HintPath>
         </Reference>
+        <Reference Include="CommonMark, Version=0.1.0.0, Culture=neutral, PublicKeyToken=001ef8810438905d">
+          <HintPath>..\packages\CommonMark.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221">
           <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
           <Private>True</Private>
@@ -148,6 +152,12 @@
         <Compile Include="Forms\AboutForm.Designer.cs">
           <DependentUpon>AboutForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Forms\ChangelogForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\ChangelogForm.Designer.cs">
+          <DependentUpon>ChangelogForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Forms\ColorPicker.cs" />
         <Compile Include="Forms\ColorPicker.Designer.cs" />
         <Compile Include="Forms\DownloadForm.cs">
@@ -223,6 +233,9 @@
         <EmbeddedResource Include="Forms\AboutForm.resx">
           <DependentUpon>AboutForm.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="Forms\ChangelogForm.resx">
+          <DependentUpon>ChangelogForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Forms\ColorPicker.resx" />
         <EmbeddedResource Include="Forms\DownloadForm.resx">
           <DependentUpon>DownloadForm.cs</DependentUpon>
@@ -275,6 +288,9 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
+      <EmbeddedResource Include="..\changelog\CHANGELOG.md">
+        <Link>Resources\CHANGELOG.md</Link>
+      </EmbeddedResource>
       <Content Include="license.txt" />
       <EmbeddedResource Include="Themes\BlendS__Maika.yukitheme" />
       <EmbeddedResource Include="Themes\BunnySenpai__Mai Dark.yukitheme" />
@@ -348,6 +364,10 @@
       <EmbeddedResource Include="Resources\SVG\dash-square.svg" />
       <EmbeddedResource Include="Resources\SVG\gear.svg" />
       <EmbeddedResource Include="Resources\SVG\save.svg" />
+      <EmbeddedResource Include="Resources\CHANGELOG.html" />
+      <EmbeddedResource Include="Themes\AzurLane__Essex.yukitheme" />
+      <EmbeddedResource Include="Themes\NekoPara__Christmas Chocola.yukitheme" />
+      <EmbeddedResource Include="Themes\QQ__Nakano Yotsuba.yukitheme" />
       <Content Include="Windows Logo.png" />
       <EmbeddedResource Include="Database\files.txt" />
       <EmbeddedResource Include="Resources\arrow_clockwise.png" />

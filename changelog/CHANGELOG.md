@@ -1,18 +1,47 @@
 ﻿### Changelog
 
-## 3.0 (beta)
+## 4.0
+
+Added to `Plugin`:
+1. CLI version
+2. Improved UI of the IDE
+3. Theme switcher
+
+Added to both:
+1. Modern Color Picker
+2. Changelog after update
+
+Fixed:
+1. Crashing on applying themes many times
+2. Doki Theme Parser
+
+## 3.0
+
 Added to `Plugin`:
 1. Stickers!
-2. Name in status bar
+2. Name in the status bar
 3. Fixed some small issues
+4. Autosave on Apply the theme
+5. Don't show logo on start
+6. Quiet Mode
+
+Added to both:
+1. Save the last position
+2. Viewer and Editor mode
+3. Ability to update to beta version
+4. Ability to rename the theme
+
+Fixed:  #6, #7
 
 ## 2.0
+
 Added `Plugin` version. In plugin version you can:
 - [x] Set Background image
 - [x] Change colors of some UI parts
 - [x] Easily select theme at runtime
 
 ## 1.0
+
 Project started on 3rd November 2021.
 Release on 11st November
 Initial version of `Yuki Theme`. Includes `Program` version. Can:
