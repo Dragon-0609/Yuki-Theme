@@ -379,7 +379,6 @@
       <EmbeddedResource Include="Resources\plus_square.png" />
       <EmbeddedResource Include="Resources\right.png" />
       <EmbeddedResource Include="Resources\save.png" />
-      <EmbeddedResource Include="Resources\SVG\box-arrow-down.svg" />
       <EmbeddedResource Include="Resources\SVG\list-task.svg" />
       <EmbeddedResource Include="Resources\SVG\plus-square.svg" />
       <EmbeddedResource Include="Resources\SVG\sliders.svg" />
