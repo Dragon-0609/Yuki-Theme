@@ -150,8 +150,6 @@ namespace Yuki_Theme.Core.Forms
 
 		private System.Windows.Forms.Button rename_btn;
 
-		private System.Windows.Forms.Button button1;
-
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 
 		public System.Windows.Forms.ListView scheme;

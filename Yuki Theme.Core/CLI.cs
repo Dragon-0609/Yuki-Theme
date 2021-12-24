@@ -147,17 +147,28 @@ namespace Yuki_Theme.Core
 				File.Delete (patsh);
 			}
 
-			if (DefaultThemes.isDefault (copyFrom))
-				CopyFromMemory (syt, patsh);
-			else
-				File.Copy (Path.Combine (currentPath, $"Themes/{syt}.yukitheme"), patsh);
+			if(!DefaultThemes.isDefault (name))
+			{
+				if (DefaultThemes.isDefault (copyFrom))
+					CopyFromMemory (syt, patsh);
+				else
+					File.Copy (Path.Combine (currentPath, $"Themes/{syt}.yukitheme"), patsh);
 
 
-			WriteName (patsh, name);
-			if (Helper.mode == ProductMode.CLI)
-				if (showSuccess != null)
-					showSuccess ("The theme has been duplicated!", "Done");
-			return exist;
+				WriteName (patsh, name);
+				if (Helper.mode == ProductMode.CLI)
+					if (showSuccess != null)
+						showSuccess ("The theme has been duplicated!", "Done");
+
+				return exist;
+			} else
+			{
+				if (showError != null)
+					showError ("You musn't choose default theme's name. Choose another name!",
+					           "Default theme's name");
+
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -199,15 +210,15 @@ namespace Yuki_Theme.Core
 		}
 
 		/// <summary>
-		/// Save current theme
+		/// Save current theme (currentFile string)
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void save (Image img2 = null, Image img3 = null)
+		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
 			if (!isDefault ())
-				saveList (img2, img3);
+				saveList (img2, img3, wantToKeep);
 		}
 
 		/// <summary>
@@ -217,15 +228,15 @@ namespace Yuki_Theme.Core
 		/// <param name="img3">Sticker</param>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
-		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null)
+		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
 			if (!isDefault () && Helper.mode != ProductMode.Plugin)
 			{
 				if (SaveInExport ("Do you want to save current scheme?", "Save"))
-					save (img2, img3);
+					save (img2, img3, wantToKeep);
 			} else if (!isDefault ())
 			{
-				save (img2, img3);
+				save (img2, img3, wantToKeep);
 			}
 
 			if (pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
@@ -333,13 +344,21 @@ namespace Yuki_Theme.Core
 					string tt = Helper.ConvertNameToPath (to);
 					if (!File.Exists (Path.Combine (currentPath, "Themes", $"{tt}.yukitheme")))
 					{
-						string tp = Path.Combine (currentPath, "Themes", $"{tt}.yukitheme");
-						File.Move (Path.Combine (currentPath, "Themes", $"{frm}.yukitheme"),
-						           tp);
-						WriteName (tp, to);
+						if(!DefaultThemes.isDefault (to))
+						{
+							string tp = Path.Combine (currentPath, "Themes", $"{tt}.yukitheme");
+							File.Move (Path.Combine (currentPath, "Themes", $"{frm}.yukitheme"),
+							           tp);
+							WriteName (tp, to);
 
-						if (onRename != null)
-							onRename (from, to);
+							if (onRename != null)
+								onRename (from, to);
+						} else
+						{
+							if (showError != null)
+								showError ("You musn't choose default theme's name. Choose another name!",
+								           "Default theme's name");
+						}
 					} else
 					{
 						if (showError != null)
@@ -906,7 +925,7 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		private static void saveList (Image img2 = null, Image img3 = null)
+		private static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			if (!isDefault ())
 			{
@@ -1060,14 +1079,14 @@ namespace Yuki_Theme.Core
 					node.AppendChild (doc.CreateComment ("hasSticker:" + sticker.Item1));
 				}
 
-				if (!iszip && img2 == null && img3 == null)
+				if (!iszip && img2 == null && img3 == null && !wantToKeep)
 					doc.Save (getPath);
 				else
 				{
 					string txml = doc.OuterXml;
 					if (iszip)
 					{
-						Helper.updateZip (getPath, txml, img2, false, img3);
+						Helper.updateZip (getPath, txml, img2, wantToKeep, img3, wantToKeep);
 					} else
 					{
 						Helper.zip (getPath, txml, img2, img3);

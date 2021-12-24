@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -8,12 +9,14 @@ using CommandLine;
 using CommandLine.Text;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Parsers;
+using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.CLI
 {
 	class MainClass
 	{
 		private static bool quit = false;
+		private static bool loop = false;
 		
 		#region Other Methods
 
@@ -68,67 +71,6 @@ namespace Yuki_Theme.CLI
 		private static void ShowInvertSuccess (string content, string title)
 		{
 			ShowSuccess (title, content);
-		}
-
-		private static Image LoadImage ()
-		{
-			Image res = null;
-			if(Core.CLI.isDefault ())
-			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
-				if (content.Item1)
-				{
-					Tuple <bool, Image> iag = Helper.getImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
-					if (iag.Item1)
-					{
-						res = iag.Item2;
-					}
-
-
-				}
-			} else
-			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
-				if (contents.Item1)
-				{
-					Tuple <bool, Image> iag = Helper.getImage (Core.CLI.getPath);
-					if (iag.Item1)
-					{
-						res = iag.Item2;
-					}
-				}
-			}
-
-			return res;
-		}
-
-		private static Image LoadSticker ()
-		{
-			Image res = null;
-			if(Core.CLI.isDefault ())
-			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
-				if (content.Item1)
-				{
-					Tuple <bool, Image> iag = Helper.getStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
-					if (iag.Item1)
-					{
-						res = iag.Item2;
-					}
-				}
-			} else
-			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
-				if (contents.Item1)
-				{
-					Tuple <bool, Image> iag = Helper.getSticker (Core.CLI.getPath);
-					if (iag.Item1)
-					{
-						res = iag.Item2;
-					}
-				}
-			}
-			return res;
 		}
 
 		private static bool Contains (string st)
@@ -191,11 +133,66 @@ namespace Yuki_Theme.CLI
 		{
 			return st == null || st.Length == 0;
 		}
-
-		private static bool TryToParseMode (string st, out bool ret)
+		
+		private static Image LoadImage ()
 		{
-			ret = false;
-			return false;
+			Image res = null;
+			if(Core.CLI.isDefault ())
+			{
+				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				if (content.Item1)
+				{
+					Tuple <bool, Image> iag = Helper.getImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					if (iag.Item1)
+					{
+						res = iag.Item2;
+					}
+
+
+				}
+			} else
+			{
+				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				if (contents.Item1)
+				{
+					Tuple <bool, Image> iag = Helper.getImage (Core.CLI.getPath);
+					if (iag.Item1)
+					{
+						res = iag.Item2;
+					}
+				}
+			}
+
+			return res;
+		}
+
+		private static Image LoadSticker ()
+		{
+			Image res = null;
+			if(Core.CLI.isDefault ())
+			{
+				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				if (content.Item1)
+				{
+					Tuple <bool, Image> iag = Helper.getStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					if (iag.Item1)
+					{
+						res = iag.Item2;
+					}
+				}
+			} else
+			{
+				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				if (contents.Item1)
+				{
+					Tuple <bool, Image> iag = Helper.getSticker (Core.CLI.getPath);
+					if (iag.Item1)
+					{
+						res = iag.Item2;
+					}
+				}
+			}
+			return res;
 		}
 		
 		#endregion
@@ -203,7 +200,7 @@ namespace Yuki_Theme.CLI
 		/// <summary>
 		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
 		/// </summary>
-		public static void LoadCLI ()
+		public static void LoadCLI (bool refreshSchemes)
 		{
 			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
 			{
@@ -215,6 +212,10 @@ namespace Yuki_Theme.CLI
 				Core.CLI.onRename = ShowInvertSuccess;
 				Core.CLI.SaveInExport = AskToDelete;
 				Core.CLI.connectAndGet ();
+				Core.CLI.settingMode = 0;
+				Core.CLI.load_schemes ();
+			} else if (refreshSchemes)
+			{
 				Core.CLI.load_schemes ();
 			}
 		}
@@ -269,24 +270,44 @@ namespace Yuki_Theme.CLI
 				Parse (parser, args);
 			} else
 			{
-				ShowError ("Loop mode is activated. To exit write 'QUIT'.\n".ToUpper ());
+				loop = true;
+				ShowLoopMessage ();
 				while (!quit)
 				{
 					Console.Write ("yuki >");
 					string command = Console.ReadLine ();
 					if (command.ToLower ().Contains ("quit")) break;
-					Regex argReg = new Regex (@"\w+|""[\w\s]*""");
+					/*Regex argReg = new Regex (@"\w+|""[\w\s]*""");
 					string [] cmds = new string[argReg.Matches (command).Count];
 					int i = 0;
 					foreach (var enumer in argReg.Matches (command))
 					{
 						cmds [i] = (string) enumer.ToString ();
 						i++;
-					}
-
-					Parse (parser, cmds);
+					}*/
+					Parse (parser, ParseArguments (command));
 				}
 			}
+		}
+
+		private static void ShowLoopMessage ()
+		{
+			if(loop)
+				ShowError ("Loop mode is activated. To exit write 'QUIT'.\n".ToUpper ());
+		}
+		
+		static string[] ParseArguments(string commandLine)
+		{
+			char[] parmChars = commandLine.ToCharArray();
+			bool inQuote = false;
+			for (int index = 0; index < parmChars.Length; index++)
+			{
+				if (parmChars[index] == '"')
+					inQuote = !inQuote;
+				if (!inQuote && parmChars[index] == ' ')
+					parmChars[index] = '\n';
+			}
+			return (new string(parmChars)).Split('\n');
 		}
 
 		/// <summary>
@@ -297,9 +318,8 @@ namespace Yuki_Theme.CLI
 		private static void Parse (Parser parser, string[] args)
 		{
 			var res = parser
-				.ParseArguments <CopyCommand, ListCommand, ExportCommand, ImportCommand, DeleteCommand,
-					RenameCommand,
-					SettingsCommand> (args);
+				.ParseArguments <CopyCommand, ListCommand, ClearCommand, ExportCommand, ImportCommand, DeleteCommand,
+					RenameCommand, SettingsCommand, EditCommand> (args);
 
 			res.WithParsed <CopyCommand> (o =>
 			   {
@@ -310,7 +330,7 @@ namespace Yuki_Theme.CLI
 				   {
 					   if (fr != to)
 					   {
-						   LoadCLI ();
+						   LoadCLI (true);
 						   Core.CLI.add (fr, to);
 					   } else
 					   {
@@ -322,29 +342,28 @@ namespace Yuki_Theme.CLI
 				   }
 			   }).WithParsed <ListCommand> (o =>
 			   {
-				   LoadCLI ();
+				   LoadCLI (true);
 				   Console.WriteLine ("Theme list:");
 				   foreach (string scheme in Core.CLI.schemes)
 				   {
 					   Console.WriteLine (scheme);
 				   }
+			   }).WithParsed <ClearCommand> (o =>
+			   {
+				   Console.Clear ();
+				   ShowLoopMessage ();
 			   }).WithParsed <ExportCommand> (o =>
 			   {
 				   bool showerror = false;
 				   if(o.Name !=null)
 				   {
 					   o.Name = ConvertToText (o.Name);
-					   LoadCLI ();
+					   LoadCLI (true);
 					   if (Contains (o.Name))
 					   {
 						   SetFile (o.Name);
-						   Image img = LoadImage ();
-						   Image stick = LoadSticker ();
 
-						   Core.CLI.export (img, stick);
-						   img = null;
-						   stick = null;
-						   GC.Collect ();
+						   Core.CLI.export (null, null, null, null, true);
 					   } else
 					   {
 						   ShowError (
@@ -368,7 +387,7 @@ namespace Yuki_Theme.CLI
 				   {
 					   if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
 					   {
-						   LoadCLI ();
+						   LoadCLI (true);
 						   Core.CLI.import (o.Path, AskToDelete);
 					   }
 					   else
@@ -389,7 +408,7 @@ namespace Yuki_Theme.CLI
 				   bool showerror = false;
 				   if (o.Name != null)
 				   {
-					   LoadCLI ();
+					   LoadCLI (true);
 					   o.Name = ConvertToText (o.Name);
 					   if (Contains (o.Name))
 						   Core.CLI.remove (o.Name, AskToDelete, null, AfterDelete);
@@ -410,10 +429,9 @@ namespace Yuki_Theme.CLI
 				   }
 			   }).WithParsed <RenameCommand> (o =>
 			   {
-				   LoadCLI ();
+				   LoadCLI (true);
 				   string fr = ConvertToText (o.Names.ElementAt (0));
 				   string to = ConvertToText (o.Names.ElementAt (1));
-
 				   if (fr.Length > 0 && to.Length > 0)
 				   {
 					   if (fr != to)
@@ -429,7 +447,7 @@ namespace Yuki_Theme.CLI
 				   }
 			   }).WithParsed <SettingsCommand> (o =>
 			   {
-				   LoadCLI ();
+				   LoadCLI (true);
 				   bool changed = false;
 				   if (!isNull (o.Path))
 				   {
@@ -527,6 +545,139 @@ namespace Yuki_Theme.CLI
 				   {
 					   ShowError ("Settings aren't saved!", "Not saved");
 				   }
+			   }).WithParsed <EditCommand> (o =>
+			   {
+				   bool showerror = false;
+				   if(o.Name !=null)
+				   {
+					   o.Name = ConvertToText (o.Name);
+					   LoadCLI (true);
+					   if (Contains (o.Name))
+					   {
+						   SetFile (o.Name);
+						   Core.CLI.restore ();
+						   if (o.Definition != null)
+						   {
+							   bool color = false;
+							   bool error = false;
+							   string err_txt = "";
+							   try
+							   {
+								   color = isColor (o.Definition);
+							   } catch (ArgumentException e)
+							   {
+								   error = true;
+								   err_txt = e.Message;
+							   }
+
+							   if (!error)
+							   {
+								   if (color)
+								   {
+									   bool bg = false;
+									   bool txt = false;
+									   Color bgcolor = Color.Empty;
+									   Color txtcolor = Color.Empty;
+									   
+									   if (o.Background != null)
+									   {
+										   bgcolor = ColorTranslator.FromHtml (o.Background);
+										   bg = true;
+									   }
+
+									   if (o.Text != null)
+									   {
+										   txtcolor = ColorTranslator.FromHtml (o.Text);
+										   txt = true;
+									   }
+
+									   if (bg || txt)
+									   {
+										   o.Definition = Populater.getNormalizedName (o.Definition);
+										   if (Core.CLI.localAttributes.ContainsKey (o.Definition))
+										   {
+											   var dic = Core.CLI.localAttributes [o.Definition];
+											   if (dic.ContainsKey ("color") && txt)
+												   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
+											   if (dic.ContainsKey ("bgcolor") && bg)
+												   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
+											   foreach (KeyValuePair <string, string> keyValuePair in dic)
+											   {
+												   GiveMessage (keyValuePair.Value, keyValuePair.Key);
+											   }
+										   }
+
+										   var sttr = Populater.getDependencies (o.Definition);
+										   if (sttr != null)
+											   foreach (var sr in sttr)
+											   {
+												   var dic = Core.CLI.localAttributes [sr];
+												   if (dic.ContainsKey ("color") && txt)
+													   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
+												   if (dic.ContainsKey ("bgcolor") && bg)
+													   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
+											   }
+
+										   Core.CLI.save (null, null, true);
+									   } else
+									   {
+										   ShowError (
+											   "You must set at least one parameter. Acceptable parameters: '-b' and '-t' ");
+									   }
+								   } else
+								   {
+									   if (!File.Exists (o.Path))
+									   {
+										   ShowError ("The file isn't exist!");
+										   return;
+									   }
+
+									   bool img = false;
+									   bool stick = false;
+									   Image image = null;
+									   Image sticker = null;
+									   if (o.Definition.ToLower () == "image")
+									   {
+										   image = Image.FromFile (o.Path);
+										   sticker = LoadSticker ();
+										   img = true;
+									   } else
+									   {
+										   sticker = Image.FromFile (o.Path);
+										   image = LoadImage ();
+										   stick = true;
+									   }
+
+									   if (img || stick)
+									   {
+										   Core.CLI.save (image, sticker, false);
+									   } else
+									   {
+										   ShowError ("Strange error raised!");
+									   }
+								   }
+							   } else
+							   {
+								   ShowError (err_txt);
+							   }
+						   }
+					   } else
+					   {
+						   ShowError (
+							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
+					   }
+				   }
+				   else
+				   {
+					   showerror = true;
+				   }
+
+				   if (showerror)
+				   {
+					   ShowError (
+						   $"Can't edit '{o.Name}'.");
+				   }
+				   
 			   })
 			   .WithNotParsed (errors =>
 			   {
@@ -564,5 +715,39 @@ namespace Yuki_Theme.CLI
 				   }
 			   });
 		}
+	
+		private static bool isColor(string definition)
+		{
+			definition = definition.ToLower ();
+			switch (definition)
+			{
+				case "default" :
+				case "linenumber" :
+				case "foldline" :
+				case "foldmarker" :
+				case "selectedfoldline" :
+				case "digit" :
+				case "comment" :
+				case "string" :
+				case "keyword" :
+				case "beginend" :
+				case "punctuation" :
+				case "operator" :
+				case "constant" :
+				{
+					return true;
+				}
+					break;
+
+				case "image" :case "sticker" :
+				{
+					return false;
+				}
+					break;
+			}
+
+			throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
+		}
+
 	}
 }

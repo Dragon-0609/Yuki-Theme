@@ -17,6 +17,11 @@ namespace Yuki_Theme.CLI
 	{
 	}
 
+	[Verb("clear", HelpText = "Clear the CLI")]
+	public class ClearCommand
+	{
+	}
+
 	[Verb("export", HelpText = "Export selected theme\nexport <name>")]
 	public class ExportCommand
 	{
@@ -61,5 +66,50 @@ namespace Yuki_Theme.CLI
 		[Option ('a', "action", Required = false,
 		         HelpText = "Setting mode. There're three options: Delete, Import, Ignore")]
 		public string Action { get; set; }
+	}
+
+	[Verb ("edit", HelpText =
+		       "Edit the theme\nedit <THEME NAME>  [ -d | --definition { Default | LineNumber | FoldLine | FoldMarker | SelectedFoldLine | Digit | Comment | String | KeyWord | BeginEnd | Punctuation | Operator | Constant | Image | Sticker } ] <VALUES>\n" +
+		       "Type \"yuki help edit\" if you need more explanation, how to use the command")]
+	public class EditCommand
+	{
+		[Value( 0, HelpText = "Theme name", MetaName = "Theme")]
+		public string Name {get; set;}
+
+		[Option ('d', "definition", HelpText =
+			         "[ -d | --definition { Default | LineNumber | FoldLine | FoldMarker | SelectedFoldLine | Digit | Comment | String | KeyWord | BeginEnd | Punctuation | Operator | Constant | Image | Sticker } ] <VALUES>:\n\n" +
+			         "For colors:\nBackground:	{ -b | --bg }\nText: 	{ -t | --text }\n\n" +
+			         "If you want to change just text color:\n\n" +
+
+			         "yuki edit Test -d Default -t #DDDDDD\n\n" +
+
+			         "If you want to change just background color:\n\n" +
+
+			         "yuki edit Test -d Default -b #323232\n\n\n" +
+			         "For images:\n\n{ -o | --opacity } [ -a | --align { left | center | right } ] { -p | --path }\nFor example:\n\nyuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\" -a center -o 15",
+		         Required = true)]
+		public string Definition { get; set; }
+
+		[Option ('b', "bg", Required = false,
+		         HelpText = "Opacity of the image.\n\n For example:\n\n yuki edit Test -d Image -o 15")]
+		public string Background { get; set; }
+
+		[Option ('t', "opacity", Required = false,
+		         HelpText = "Opacity of the image.\n\n For example:\n\n yuki edit Test -d Image -o 15")]
+		public string Text { get; set; }
+
+		[Option ('o', "opacity", Required = false,
+		         HelpText = "Opacity of the image.\n\n For example:\n\n yuki edit Test -d Image -o 15")]
+		public string Opacity { get; set; }
+
+		[Option ('a', "align", Required = false,
+		         HelpText = "Alignment of the image.\n\n For example:\n\n yuki edit Test -d Image -a left")]
+		public string Align { get; set; }
+
+		[Option ('p', "path", Required = false,
+		         HelpText =
+			         "Path to the image.\n\n For example:\n\n yuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\"")]
+		public string Path { get; set; }
+
 	}
 }

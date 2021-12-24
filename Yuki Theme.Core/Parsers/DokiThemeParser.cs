@@ -498,7 +498,6 @@ namespace Yuki_Theme.Core.Parsers
 			Tuple <bool, Image> stick = getImage (getSticker);
 
 			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-			bool hadSavedImage = false;
 
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
