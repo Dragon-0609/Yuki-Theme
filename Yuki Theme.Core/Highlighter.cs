@@ -150,9 +150,9 @@ namespace Yuki_Theme.Core
 		{
 			regexes = new Dictionary <string, Regex> ();
 			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'", RegexCompiledOption));
-			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
 			regexes.Add ("linecomment", new Regex (@"//.*$", RegexOptions.Multiline | RegexCompiledOption));
-			regexes.Add ("blockcomment", new Regex (@"({.*?\})|({.*)", RegexOptions.Singleline | RegexCompiledOption));
+			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
+			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft |  RegexCompiledOption));
 			regexes.Add ("blockcomment2", new Regex (@"(\(\*.*?\*\))|(.*\*\))",
 			                                         RegexOptions.Singleline | RegexOptions.RightToLeft |
 			                                         RegexCompiledOption));
@@ -255,7 +255,7 @@ namespace Yuki_Theme.Core
 				InitPascalRegex ();
 			if (regexes.ContainsKey (str.ToLower ()))
 			{
-				if (form.settingMode == 0)
+				if (CLI.settingMode == 0)
 				{
 					string [] srt = Populater.getDependencies (str);
 					if (srt != null)
@@ -265,7 +265,8 @@ namespace Yuki_Theme.Core
 						foreach (string dependency in srt)
 						{
 							// Console.WriteLine(dependency);
-							rgx += $"|{regexes [dependency.ToLower ()]}";
+							if (!Populater.isEnvironmentColor (dependency))
+								rgx += $"|{regexes [dependency.ToLower ()]}";
 						}
 
 						// Console.WriteLine(rgx.ToString());
@@ -292,9 +293,9 @@ namespace Yuki_Theme.Core
 
 		private void PascalSyntaxHighlight (object sender, TextChangedEventArgs e)
 		{
+			sBox.CommentPrefix = "//";
 			sBox.LeftBracket = '(';
 			sBox.RightBracket = ')';
-			sBox.CommentPrefix = "//";
 			//clear style of changed range
 
 			if (styles == null)

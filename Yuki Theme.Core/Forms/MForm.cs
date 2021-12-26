@@ -133,12 +133,18 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.sopacity;
 			set => CLI.sopacity = value;
 		}
+		
+		private int settingMode
+		{
+			get => CLI.settingMode;
+			set => CLI.settingMode = value;
+		}
 
 		#endregion
 
 		public  SelectionForm    selform;
 		private SettingsForm     setform;
-		public  int              settingMode;
+		
 		private ThemeManager     tmanagerform;
 		public  DownloadForm     df;
 		public  NotificationForm nf;
@@ -255,7 +261,7 @@ namespace Yuki_Theme.Core.Forms
 				blocked = true;
 				// Console.WriteLine(list_1.SelectedItem.ToString ());
 				var str = list_1.SelectedItem.ToString ();
-				if (!str.Contains ("Image") && !str.Contains ("Sticker"))
+				if (!str.Contains ("Wallpaper") && !str.Contains ("Sticker"))
 				{
 					if (!colorEditor.Visible)
 					{
@@ -471,7 +477,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			img2 = imgc;
 			oldV = Rectangle.Empty;
-			bgtext = "background.png";
+			bgtext = "wallpaper.png";
 		}
 		public void ifDoesntHave ()
 		{
@@ -625,8 +631,8 @@ namespace Yuki_Theme.Core.Forms
 			else
 			{
 				setform.setVisible (false);
-				
 			}
+			Console.WriteLine(settingMode);
 			setform.bgImage = bgImage;
 			setform.Sticker = swSticker;
 			setform.Logo = swLogo;
@@ -653,6 +659,8 @@ namespace Yuki_Theme.Core.Forms
 				update = setform.checkBox2.Checked;
 				actionChoice = setform.ActionBox.SelectedIndex;
 				settingMode = setform.mode.SelectedIndex;
+				Console.WriteLine(settingMode);
+				Console.WriteLine(setform.mode.SelectedIndex);
 				CLI.saveData ();
 				sBox.Refresh ();
 				LoadSticker ();
@@ -1006,7 +1014,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void convertAlign ()
 		{
-			localAttributes ["BackgroundImage"] ["align"] = ((int) align).ToString ();
+			localAttributes ["Wallpaper"] ["align"] = ((int) align).ToString ();
 		}
 
 		private void updateAlignButton ()
@@ -1068,7 +1076,7 @@ namespace Yuki_Theme.Core.Forms
 				sttext = imagePath.Text;
 			}
 			
-			if (imagePath.Text == "background.png" && imgCurrent == 1)
+			if (imagePath.Text == "wallpaper.png" && imgCurrent == 1)
 			{
 					Tuple <bool, Image> iag = isDefault ()
 						? Helper.getImageFromMemory (gp, Assembly.GetExecutingAssembly ())
@@ -1200,7 +1208,7 @@ namespace Yuki_Theme.Core.Forms
 						numericUpDown1.Value = opacity;
 						blockedNumeric = false;
 						sBox.Refresh ();
-						localAttributes ["BackgroundImage"] ["opacity"] = opacity.ToString ();
+						localAttributes ["Wallpaper"] ["opacity"] = opacity.ToString ();
 
 					}
 				} else if (imgCurrent == 2)

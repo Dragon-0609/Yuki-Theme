@@ -147,17 +147,28 @@ namespace Yuki_Theme.Core
 				File.Delete (patsh);
 			}
 
-			if (DefaultThemes.isDefault (copyFrom))
-				CopyFromMemory (syt, patsh);
-			else
-				File.Copy (Path.Combine (currentPath, $"Themes/{syt}.yukitheme"), patsh);
+			if(!DefaultThemes.isDefault (name))
+			{
+				if (DefaultThemes.isDefault (copyFrom))
+					CopyFromMemory (syt, patsh);
+				else
+					File.Copy (Path.Combine (currentPath, $"Themes/{syt}.yukitheme"), patsh);
 
 
-			WriteName (patsh, name);
-			if (Helper.mode == ProductMode.CLI)
-				if (showSuccess != null)
-					showSuccess ("The theme has been duplicated!", "Done");
-			return exist;
+				WriteName (patsh, name);
+				if (Helper.mode == ProductMode.CLI)
+					if (showSuccess != null)
+						showSuccess ("The theme has been duplicated!", "Done");
+
+				return exist;
+			} else
+			{
+				if (showError != null)
+					showError ("You musn't choose default theme's name. Choose another name!",
+					           "Default theme's name");
+
+				return true;
+			}
 		}
 
 		/// <summary>
@@ -199,15 +210,15 @@ namespace Yuki_Theme.Core
 		}
 
 		/// <summary>
-		/// Save current theme
+		/// Save current theme (currentFile string)
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void save (Image img2 = null, Image img3 = null)
+		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
 			if (!isDefault ())
-				saveList (img2, img3);
+				saveList (img2, img3, wantToKeep);
 		}
 
 		/// <summary>
@@ -217,15 +228,15 @@ namespace Yuki_Theme.Core
 		/// <param name="img3">Sticker</param>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
-		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null)
+		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
 			if (!isDefault () && Helper.mode != ProductMode.Plugin)
 			{
 				if (SaveInExport ("Do you want to save current scheme?", "Save"))
-					save (img2, img3);
+					save (img2, img3, wantToKeep);
 			} else if (!isDefault ())
 			{
-				save (img2, img3);
+				save (img2, img3, wantToKeep);
 			}
 
 			if (pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
@@ -333,13 +344,21 @@ namespace Yuki_Theme.Core
 					string tt = Helper.ConvertNameToPath (to);
 					if (!File.Exists (Path.Combine (currentPath, "Themes", $"{tt}.yukitheme")))
 					{
-						string tp = Path.Combine (currentPath, "Themes", $"{tt}.yukitheme");
-						File.Move (Path.Combine (currentPath, "Themes", $"{frm}.yukitheme"),
-						           tp);
-						WriteName (tp, to);
+						if(!DefaultThemes.isDefault (to))
+						{
+							string tp = Path.Combine (currentPath, "Themes", $"{tt}.yukitheme");
+							File.Move (Path.Combine (currentPath, "Themes", $"{frm}.yukitheme"),
+							           tp);
+							WriteName (tp, to);
 
-						if (onRename != null)
-							onRename (from, to);
+							if (onRename != null)
+								onRename (from, to);
+						} else
+						{
+							if (showError != null)
+								showError ("You musn't choose default theme's name. Choose another name!",
+								           "Default theme's name");
+						}
 					} else
 					{
 						if (showError != null)
@@ -534,6 +553,7 @@ namespace Yuki_Theme.Core
 			PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
 			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0]);
 			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0]);
+			CleanUnnecessaryFields ();
 
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
@@ -555,16 +575,15 @@ namespace Yuki_Theme.Core
 				}
 			}
 
-			localAttributes.Add ("BackgroundImage",
+			localAttributes.Add ("Wallpaper",
 			                     new Dictionary <string, string> () {{"align", al}, {"opacity", op}});
 
 			localAttributes.Add ("Sticker",
 			                     new Dictionary <string, string> () {{"opacity", sop}});
 
-			align = (Alignment) (int.Parse (localAttributes ["BackgroundImage"] ["align"]));
-			opacity = int.Parse (localAttributes ["BackgroundImage"] ["opacity"]);
+			align = (Alignment) (int.Parse (localAttributes ["Wallpaper"] ["align"]));
+			opacity = int.Parse (localAttributes ["Wallpaper"] ["opacity"]);
 			sopacity = int.Parse (localAttributes ["Sticker"] ["opacity"]);
-
 			if (onSelect != null)
 				onSelect ();
 		}
@@ -778,10 +797,10 @@ namespace Yuki_Theme.Core
 					}
 
 					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("BackgroundImage"))
+					    !names.Contains ("Wallpaper"))
 					{
 						names.Remove ("Selection");
-						names.Add ("BackgroundImage");
+						names.Add ("Wallpaper");
 						names.Add ("Selection");
 					}
 
@@ -796,6 +815,22 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Remove unnecessary fields if the setting mode is Light. Else skip.
+		/// </summary>
+		private static void CleanUnnecessaryFields ()
+		{
+			if (settingMode == 0)
+			{
+				string [] nms = new string[names.Count];
+				names.CopyTo (nms);
+				foreach (string name in nms)
+				{
+					if (Populater.isInList (name, names)) names.Remove (name);
+				}
+			}
+		}
+		
 		#endregion
 
 		/// <summary>
@@ -906,7 +941,7 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		private static void saveList (Image img2 = null, Image img3 = null)
+		private static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			if (!isDefault ())
 			{
@@ -934,7 +969,7 @@ namespace Yuki_Theme.Core
 						if (childNode.Name == "Span" || childNode.Name == "KeyWords")
 							nms = childNode.Attributes ["name"].Value;
 						if (!localAttributes.ContainsKey (nms)) continue;
-						if (nms == "BackgroundImage")
+						if (nms == "Wallpaper")
 							hadSavedImage = true;
 						var attrs = localAttributes [nms];
 
@@ -945,7 +980,7 @@ namespace Yuki_Theme.Core
 				if (hadSavedImage)
 				{
 					node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-					node.RemoveChild (node.SelectSingleNode ("BackgroundImage"));
+					node.RemoveChild (node.SelectSingleNode ("Wallpaper"));
 				}
 
 				#endregion
@@ -1060,14 +1095,14 @@ namespace Yuki_Theme.Core
 					node.AppendChild (doc.CreateComment ("hasSticker:" + sticker.Item1));
 				}
 
-				if (!iszip && img2 == null && img3 == null)
+				if (!iszip && img2 == null && img3 == null && !wantToKeep)
 					doc.Save (getPath);
 				else
 				{
 					string txml = doc.OuterXml;
 					if (iszip)
 					{
-						Helper.updateZip (getPath, txml, img2, false, img3);
+						Helper.updateZip (getPath, txml, img2, wantToKeep, img3, wantToKeep);
 					} else
 					{
 						Helper.zip (getPath, txml, img2, img3);
@@ -1081,7 +1116,7 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		private static void convertAlign ()
 		{
-			localAttributes ["BackgroundImage"] ["align"] = ((int) align).ToString ();
+			localAttributes ["Wallpaper"] ["align"] = ((int) align).ToString ();
 		}
 
 		/// <summary>
