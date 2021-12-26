@@ -55,7 +55,7 @@ namespace Yuki_Theme.Core
 			form = fm;
 			sBox = fs;
 			sBox.Clear ();
-			PascalSyntaxHighlight ();
+			sBox.TextChanged += PascalSyntaxHighlight;
 		}
 
 		public void updateColors ()
@@ -142,15 +142,14 @@ namespace Yuki_Theme.Core
 					}
 				}
 			}
-			
-			PascalSyntaxHighlight ();
+
 			sBox.Refresh ();
 		}
 
 		private void InitPascalRegex ()
 		{
 			regexes = new Dictionary <string, Regex> ();
-			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'" , RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexCompiledOption));
+			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'", RegexCompiledOption));
 			regexes.Add ("linecomment", new Regex (@"//.*$", RegexOptions.Multiline | RegexCompiledOption));
 			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
 			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft |  RegexCompiledOption));
@@ -292,7 +291,7 @@ namespace Yuki_Theme.Core
 			LaunchMarker ();
 		}
 
-		private void PascalSyntaxHighlight ()
+		private void PascalSyntaxHighlight (object sender, TextChangedEventArgs e)
 		{
 			sBox.CommentPrefix = "//";
 			sBox.LeftBracket = '(';
@@ -303,24 +302,26 @@ namespace Yuki_Theme.Core
 				InitStyles ();
 			TextStyle [] tstyles = new TextStyle [styles.Count];
 			styles.Values.CopyTo (tstyles, 0);
-			sBox.Range.ClearStyle (tstyles);
+			e.ChangedRange.ClearStyle (tstyles);
 
 			if (regexes == null)
 				InitPascalRegex ();
 
 			foreach (string name in names)
 			{
-				sBox.Range.SetStyle (styles [name], regexes [name]);
+				e.ChangedRange.SetStyle (styles [name], regexes [name]);
 			}
+
 			//clear folding markers
-			sBox.Range.ClearFoldingMarkers ();
-			sBox.Range.SetFoldingMarkers (@"begin\b", @"end\b");
-			sBox.Range.SetFoldingMarkers (@"uses\b", @"end.\b");
+			e.ChangedRange.ClearFoldingMarkers ();
+			e.ChangedRange.SetFoldingMarkers (@"begin\b", @"end\b");
+			e.ChangedRange.SetFoldingMarkers (@"uses\b", @"end.\b");
 		}
 
 		public void InitializeSyntax ()
 		{
 			sBox.Text = Placeholder.place;
+
 			updateColors ();
 		}
 
