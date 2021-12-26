@@ -19,8 +19,9 @@ namespace Yuki_Theme.Core
 			{
 				case "SpaceMarkers" :
 				case "TabMarkers" :
+				case "EOLMarkers" :
 				{
-					res = coll.Contains ("EOLMarkers");
+					res = coll.Contains ("Punctuation");
 				}
 					break;
 				case "LineComment" :
@@ -38,15 +39,38 @@ namespace Yuki_Theme.Core
 				case "JumpProcedures" :
 				case "Modifiers" :
 				case "AccessModifiers" :
+				case "NonReserved1" :
+				case "ExceptionHandlingStatements" :
+				case "ReferenceTypes" :
+				case "DireciveNames" :
+				case "SpecialDireciveNames" :
+				case "DireciveValues" :
 				{
 					res = coll.Contains ("KeyWords");
 				}
 					break;
 
-				case "SpecialDireciveNames" :
-				case "DireciveValues" :
+				case "SelectionStatements" :
+				case "IterationStatements" :
 				{
-					res = coll.Contains ("DireciveNames");
+					res = coll.Contains ("OperatorKeywords");
+				}
+					break;
+			}
+
+			return res;
+		}
+
+		public static bool isEnvironmentColor (string str)
+		{
+			bool res = false;
+			switch (str)
+			{
+				case "SpaceMarkers" :
+				case "TabMarkers" :
+				case "EOLMarkers" :
+				{
+					res = true;
 				}
 					break;
 			}
@@ -59,12 +83,6 @@ namespace Yuki_Theme.Core
 			string [] res = new string [] { };
 			switch (str)
 			{
-				case "EOLMarkers" :
-				{
-					res = new string [] {"SpaceMarkers", "TabMarkers"};
-				}
-					break;
-
 				case "LineBigComment" :
 				{
 					res = new string [] {"LineComment", "BlockComment", "BlockComment2"};
@@ -72,27 +90,25 @@ namespace Yuki_Theme.Core
 					break;
 
 				case "KeyWords" :
-
 				{
 					res = new string []
 					{
 						"ProgramSections", "Async", "RaiseStatement", "JumpStatements", "JumpProcedures", "Modifiers",
-						"AccessModifiers"
+						"AccessModifiers", "NonReserved1", "ExceptionHandlingStatements", "ReferenceTypes",
+						"DireciveNames", "SpecialDireciveNames", "DireciveValues"
 					};
 				}
 					break;
 
-				case "DireciveNames" :
-
+				case "OperatorKeywords" :
 				{
-					res = new string [] {"SpecialDireciveNames", "DireciveValues"};
+					res = new string [] {"SelectionStatements", "IterationStatements"};
 				}
 					break;
 
-				case "Image" :
-
+				case "Punctuation" :
 				{
-					res = new string [] {"BackgroundImage"};
+					res = new string [] {"EOLMarkers", "SpaceMarkers", "TabMarkers"};
 				}
 					break;
 			}
@@ -110,12 +126,27 @@ namespace Yuki_Theme.Core
 					res = "Default";
 				}
 					break;
+				case "selection" :
+				{
+					res = "Selection";
+				}
+					break;
 				case "linenumber" :
 				{
 					res = "LineNumbers";
 				}
 					break;
-				case "foldline" :
+				case "caret" :
+				{
+					res = "CaretMarker";
+				}
+					break;
+				case "vruler" :
+				{
+					res = "VRuler";
+				}
+					break;
+				case "fold" :
 				{
 					res = "FoldLine";
 				}
@@ -125,7 +156,7 @@ namespace Yuki_Theme.Core
 					res = "FoldMarker";
 				}
 					break;
-				case "selectedfoldline" :
+				case "selectedfold" :
 				{
 					res = "SelectedFoldLine";
 				}
@@ -172,12 +203,47 @@ namespace Yuki_Theme.Core
 					break;
 				case "image" :
 				{
-					res = "BackgroundImage";
+					res = "Wallpaper";
 				}
 					break;
 				case "sticker" :
 				{
 					res = "Sticker";
+				}
+					break;
+			}
+
+			return res;
+		}
+
+		public static string getChangedName (string str)
+		{
+			string res = "";
+			switch (str)
+			{
+				case "LineBigComment" :
+				{
+					res = "Comment";
+				}
+					break;
+				case "InternalConstant" :
+				{
+					res = "Constant";
+				}
+					break; /*
+				case "" :
+				{
+					res = "";
+				}
+					break;
+				case "" :
+				{
+					res = "";
+				}
+					break;*/
+				default :
+				{
+					res = str;
 				}
 					break;
 			}

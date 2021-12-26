@@ -333,7 +333,6 @@ namespace Yuki_Theme_Plugin
 			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
 			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
 			
-			InitAdditions ();
 			fm.Controls.Add (stickerControl);
 			LoadSticker ();
 			stickerControl.Enabled = false;
@@ -890,10 +889,12 @@ namespace Yuki_Theme_Plugin
 		private void loadWithWaiting ()
 		{
 			tim3 = new Timer () {Interval = 2200};
-			tim3.Tick += load;	
-			
+			tim3.Tick += load;
+
 			if (CLI.swLogo)
 				showLogo ();
+			else
+				InitAdditions ();
 			tim3.Start ();
 		}
 
@@ -999,7 +1000,10 @@ namespace Yuki_Theme_Plugin
 			((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
 				"Yuki Theme: Initialization finished.\n");
 			if (CLI.swLogo)
+			{
 				hideLogo ();
+				InitAdditions ();
+			}
 		}
 
 		

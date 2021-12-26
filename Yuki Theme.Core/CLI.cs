@@ -553,6 +553,7 @@ namespace Yuki_Theme.Core
 			PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
 			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0]);
 			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0]);
+			CleanUnnecessaryFields ();
 
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
@@ -574,16 +575,15 @@ namespace Yuki_Theme.Core
 				}
 			}
 
-			localAttributes.Add ("BackgroundImage",
+			localAttributes.Add ("Wallpaper",
 			                     new Dictionary <string, string> () {{"align", al}, {"opacity", op}});
 
 			localAttributes.Add ("Sticker",
 			                     new Dictionary <string, string> () {{"opacity", sop}});
 
-			align = (Alignment) (int.Parse (localAttributes ["BackgroundImage"] ["align"]));
-			opacity = int.Parse (localAttributes ["BackgroundImage"] ["opacity"]);
+			align = (Alignment) (int.Parse (localAttributes ["Wallpaper"] ["align"]));
+			opacity = int.Parse (localAttributes ["Wallpaper"] ["opacity"]);
 			sopacity = int.Parse (localAttributes ["Sticker"] ["opacity"]);
-
 			if (onSelect != null)
 				onSelect ();
 		}
@@ -797,10 +797,10 @@ namespace Yuki_Theme.Core
 					}
 
 					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("BackgroundImage"))
+					    !names.Contains ("Wallpaper"))
 					{
 						names.Remove ("Selection");
-						names.Add ("BackgroundImage");
+						names.Add ("Wallpaper");
 						names.Add ("Selection");
 					}
 
@@ -815,6 +815,22 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		/// <summary>
+		/// Remove unnecessary fields if the setting mode is Light. Else skip.
+		/// </summary>
+		private static void CleanUnnecessaryFields ()
+		{
+			if (settingMode == 0)
+			{
+				string [] nms = new string[names.Count];
+				names.CopyTo (nms);
+				foreach (string name in nms)
+				{
+					if (Populater.isInList (name, names)) names.Remove (name);
+				}
+			}
+		}
+		
 		#endregion
 
 		/// <summary>
@@ -953,7 +969,7 @@ namespace Yuki_Theme.Core
 						if (childNode.Name == "Span" || childNode.Name == "KeyWords")
 							nms = childNode.Attributes ["name"].Value;
 						if (!localAttributes.ContainsKey (nms)) continue;
-						if (nms == "BackgroundImage")
+						if (nms == "Wallpaper")
 							hadSavedImage = true;
 						var attrs = localAttributes [nms];
 
@@ -964,7 +980,7 @@ namespace Yuki_Theme.Core
 				if (hadSavedImage)
 				{
 					node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-					node.RemoveChild (node.SelectSingleNode ("BackgroundImage"));
+					node.RemoveChild (node.SelectSingleNode ("Wallpaper"));
 				}
 
 				#endregion
@@ -1100,7 +1116,7 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		private static void convertAlign ()
 		{
-			localAttributes ["BackgroundImage"] ["align"] = ((int) align).ToString ();
+			localAttributes ["Wallpaper"] ["align"] = ((int) align).ToString ();
 		}
 
 		/// <summary>

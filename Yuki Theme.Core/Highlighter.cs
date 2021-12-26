@@ -55,7 +55,7 @@ namespace Yuki_Theme.Core
 			form = fm;
 			sBox = fs;
 			sBox.Clear ();
-			sBox.TextChanged += PascalSyntaxHighlight;
+			PascalSyntaxHighlight ();
 		}
 
 		public void updateColors ()
@@ -142,17 +142,18 @@ namespace Yuki_Theme.Core
 					}
 				}
 			}
-
+			
+			PascalSyntaxHighlight ();
 			sBox.Refresh ();
 		}
 
 		private void InitPascalRegex ()
 		{
 			regexes = new Dictionary <string, Regex> ();
-			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'", RegexCompiledOption));
-			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
+			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'" , RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace | RegexCompiledOption));
 			regexes.Add ("linecomment", new Regex (@"//.*$", RegexOptions.Multiline | RegexCompiledOption));
-			regexes.Add ("blockcomment", new Regex (@"({.*?\})|({.*)", RegexOptions.Singleline | RegexCompiledOption));
+			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
+			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft |  RegexCompiledOption));
 			regexes.Add ("blockcomment2", new Regex (@"(\(\*.*?\*\))|(.*\*\))",
 			                                         RegexOptions.Singleline | RegexOptions.RightToLeft |
 			                                         RegexCompiledOption));
@@ -255,7 +256,7 @@ namespace Yuki_Theme.Core
 				InitPascalRegex ();
 			if (regexes.ContainsKey (str.ToLower ()))
 			{
-				if (form.settingMode == 0)
+				if (CLI.settingMode == 0)
 				{
 					string [] srt = Populater.getDependencies (str);
 					if (srt != null)
@@ -265,7 +266,8 @@ namespace Yuki_Theme.Core
 						foreach (string dependency in srt)
 						{
 							// Console.WriteLine(dependency);
-							rgx += $"|{regexes [dependency.ToLower ()]}";
+							if (!Populater.isEnvironmentColor (dependency))
+								rgx += $"|{regexes [dependency.ToLower ()]}";
 						}
 
 						// Console.WriteLine(rgx.ToString());
@@ -290,37 +292,35 @@ namespace Yuki_Theme.Core
 			LaunchMarker ();
 		}
 
-		private void PascalSyntaxHighlight (object sender, TextChangedEventArgs e)
+		private void PascalSyntaxHighlight ()
 		{
+			sBox.CommentPrefix = "//";
 			sBox.LeftBracket = '(';
 			sBox.RightBracket = ')';
-			sBox.CommentPrefix = "//";
 			//clear style of changed range
 
 			if (styles == null)
 				InitStyles ();
 			TextStyle [] tstyles = new TextStyle [styles.Count];
 			styles.Values.CopyTo (tstyles, 0);
-			e.ChangedRange.ClearStyle (tstyles);
+			sBox.Range.ClearStyle (tstyles);
 
 			if (regexes == null)
 				InitPascalRegex ();
 
 			foreach (string name in names)
 			{
-				e.ChangedRange.SetStyle (styles [name], regexes [name]);
+				sBox.Range.SetStyle (styles [name], regexes [name]);
 			}
-
 			//clear folding markers
-			e.ChangedRange.ClearFoldingMarkers ();
-			e.ChangedRange.SetFoldingMarkers (@"begin\b", @"end\b");
-			e.ChangedRange.SetFoldingMarkers (@"uses\b", @"end.\b");
+			sBox.Range.ClearFoldingMarkers ();
+			sBox.Range.SetFoldingMarkers (@"begin\b", @"end\b");
+			sBox.Range.SetFoldingMarkers (@"uses\b", @"end.\b");
 		}
 
 		public void InitializeSyntax ()
 		{
 			sBox.Text = Placeholder.place;
-
 			updateColors ();
 		}
 

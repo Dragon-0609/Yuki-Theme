@@ -490,7 +490,7 @@ namespace Yuki_Theme.CLI
 							   break;
 
 					   }
-
+					   
 					   if (isValid)
 					   {
 						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? 0 : 1;
