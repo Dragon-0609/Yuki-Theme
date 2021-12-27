@@ -416,7 +416,7 @@ namespace Yuki_Theme.Core
 			if (isDefault ())
 			{
 				var a = GetCore ();
-				Console.WriteLine (currentFile);
+				// Console.WriteLine (currentFile);
 				// doc.Load (a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{currentFile}.yukitheme"));
 
 

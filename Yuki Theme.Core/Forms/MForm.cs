@@ -208,7 +208,7 @@ namespace Yuki_Theme.Core.Forms
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
-			Console.WriteLine (DesktopLocation);
+			// Console.WriteLine (DesktopLocation);
 			
 			if (currentFile != "N|L") // If theme couldn't find
 			{
@@ -501,7 +501,7 @@ namespace Yuki_Theme.Core.Forms
 		public void onSelect ()
 		{
 			list_1.Items.AddRange (CLI.names.ToArray ());
-			Console.WriteLine(list_1.Items.Count);
+			// Console.WriteLine(list_1.Items.Count);
 			list_1.SelectedIndex = 0;
 			onSelectItem (list_1, EventArgs.Empty);
 		}

@@ -71,6 +71,7 @@ namespace Yuki_Theme_Plugin
 		public static Color           clr;
 		public static Color           clrHover;
 		public static Color           bgBorder;
+		public static Color           bgType;
 		public static Brush           bgdefBrush;
 		public static Brush           bgBrush;
 		public static Brush           bgClickBrush;
@@ -242,6 +243,10 @@ namespace Yuki_Theme_Plugin
 			textEditor.Parent.BackColor = bg;
 			textEditor.Controls [1].Paint += CtrlOnPaint;
 			textEditor.Controls [1].Invalidate();
+			
+			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
+			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
+			
 			fm.CurrentCodeFileDocument.BackColor = bg;
 			
 			tim = new Timer () {Interval = 1};
@@ -259,8 +264,10 @@ namespace Yuki_Theme_Plugin
 					}
 
 					// textArea = textEditor.ActiveTextAreaControl.TextArea;
+					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= CaretPositionChangedEventHandler;
 					textEditor = fm.CurrentCodeFileDocument.TextEditor;
 					textArea = textEditor.ActiveTextAreaControl.TextArea;
+					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 					setMargin ();
 					textArea.Paint += PaintBG;
 					textArea.Refresh ();
@@ -631,6 +638,7 @@ namespace Yuki_Theme_Plugin
 			clr = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.2f);
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
+			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);
@@ -1250,6 +1258,20 @@ namespace Yuki_Theme_Plugin
 			prop.root = fm;
 			prop.propertyGrid1.SelectedObject = fm;
 			prop.Show ();
+		}
+		
+		
+		private void CaretOnPositionChanged (object sender, EventArgs e)
+		{
+			ErrorLineBookmarkNew.Remove ();
+		}
+		
+		private void CaretPositionChangedEventHandler (object sender, EventArgs e)
+		{
+			if (!VisualPABCSingleton.MainForm.UserOptions.HighlightOperatorBrackets ||
+			    WorkbenchServiceFactory.DebuggerManager.IsRunning)
+				return;
+			CodeCompletionHighlighter.UpdateMarkers (textEditor.ActiveTextAreaControl.TextArea);
 		}
 	}
 }

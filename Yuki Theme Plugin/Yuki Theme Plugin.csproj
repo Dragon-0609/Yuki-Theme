@@ -80,10 +80,12 @@
         <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xml" />
         <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.7423.21162, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Controls\Bookmarks.cs" />
+        <Compile Include="Controls\CodeCompletionHighlighter.cs" />
         <Compile Include="Controls\CustomList.cs" />
         <Compile Include="Controls\CustomPanel.cs" />
         <Compile Include="Controls\Extender.cs" />

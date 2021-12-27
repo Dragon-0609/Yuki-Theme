@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
@@ -46,6 +47,9 @@ namespace Yuki_Theme_Plugin.Controls
 		private const int _TabGapTop = 0;
 		private const int _TabGapLeft = 0;
 		private const int _TabGapBetween = 10;
+
+		private Tab current = null; 
+		private List <Tab> oldTabs = new List <Tab> ();
 
 		#region Customizable Properties
         private static Font TextFont
@@ -154,6 +158,11 @@ namespace Yuki_Theme_Plugin.Controls
 		private static Brush BrushTabBackground
 		{
 			get	{	return YukiTheme_VisualPascalABCPlugin.bgBrush;	}
+		}
+
+		private static Brush BrushTabPressBackground
+		{
+			get	{	return YukiTheme_VisualPascalABCPlugin.bgClickBrush;	}
 		}
 
 		private static Pen PenTabBorder
@@ -330,7 +339,11 @@ namespace Yuki_Theme_Plugin.Controls
 			IDockContent content = tab.Content;
 
             GraphicsPath path = GetTabOutline(tab, false, true);
-            g.FillPath(BrushTabBackground, path);
+            if (current != null && current == tab)
+	            g.FillPath (BrushTabPressBackground, path);
+            else
+				g.FillPath(BrushTabBackground, path);
+            g.DrawPath(PenTabBorder, path);
 
             // Set no rotate for drawing icon and text
 			Matrix matrixRotate = g.Transform;
@@ -506,6 +519,97 @@ namespace Yuki_Theme_Plugin.Controls
         protected override AutoHideStripBase.Tab CreateTab(IDockContent content)
         {
             return new TabYuki(content);
+        }
+		
+		
+        protected override void OnMouseHover (EventArgs e)
+        {
+	        
+        }
+
+        protected override void OnMouseMove (MouseEventArgs e)
+        {
+	        Point ptMouse = PointToClient (Control.MousePosition);
+	        IDockContent content = HitTest (ptMouse);
+	        if (content == null)
+	        {
+				CleanCurrentTab ();   
+		        return;
+	        }
+
+	        if (DockHelper.IsDockStateAutoHide (content.DockHandler.DockState))
+	        {
+		        foreach (Pane pane in GetPanes (content.DockHandler.DockState))
+		        {
+			        foreach (Tab tab in pane.AutoHideTabs)
+			        {
+				        if (content.DockHandler.TabText == tab.Content.DockHandler.TabText && current != tab)
+				        {
+					        CleanCurrentTab ();
+					        current = tab;
+					        oldTabs.Add (tab);
+					        Invalidate (GetTabRectangle (current));
+					        return;
+				        }
+			        }
+		        }
+
+	        }
+
+	        current = null;
+        }
+
+        protected override void OnMouseDown (MouseEventArgs e)
+        {
+	        if (e.Button != MouseButtons.Left)
+		        return;
+
+	        Point ptMouse = PointToClient(Control.MousePosition);
+	        IDockContent content = HitTest (ptMouse);
+	        if (content == null)
+		        return;
+	        /*foreach (Pane pane in GetPanes(DockState.DockBottomAutoHide))
+	        {
+		        pane.DockPane.Hide ();
+	        }*/
+	        
+	        /*
+	        foreach (DockPane pane in content.DockHandler.Pane.DockWindow.NestedPanes)
+	        {
+		        if(DockHelper.IsDockWindowState (pane.DockState))
+		        {
+			        pane.DockState = DockHelper.ToggleAutoHideState (pane.DockState);
+		        }
+	        }
+
+	        content.DockHandler.Show (content.DockHandler.DockPanel,
+	                                  DockHelper.ToggleAutoHideState (content.DockHandler.Pane.DockState));*/
+	        content.DockHandler.Pane.DockState = DockHelper.ToggleAutoHideState(content.DockHandler.Pane.DockState);
+	        content.DockHandler.Activate();
+        }
+
+        protected override void OnMouseLeave (EventArgs e)
+        {
+	        base.OnMouseLeave (e);
+	        CleanCurrentTab ();
+        }
+
+        private void CleanCurrentTab ()
+        {
+	        for (var index = 0; index < oldTabs.Count; index++)
+	        {
+		        if (current == oldTabs [index])
+			        current = null;
+		        Invalidate (GetTabRectangle (oldTabs [index]));
+		        oldTabs.Remove (oldTabs [index]);
+	        }
+
+	        if(current != null)
+	        {
+		        Tab tb = current;
+		        current = null;
+		        Invalidate (GetTabRectangle (tb));
+	        }
         }
 	}
 }
