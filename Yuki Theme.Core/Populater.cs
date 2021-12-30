@@ -19,7 +19,6 @@ namespace Yuki_Theme.Core
 			{
 				case "SpaceMarkers" :
 				case "TabMarkers" :
-				case "EOLMarkers" :
 				{
 					res = coll.Contains ("Punctuation");
 				}
@@ -108,7 +107,7 @@ namespace Yuki_Theme.Core
 
 				case "Punctuation" :
 				{
-					res = new string [] {"EOLMarkers", "SpaceMarkers", "TabMarkers"};
+					res = new string [] {"SpaceMarkers", "TabMarkers"};
 				}
 					break;
 			}
@@ -118,6 +117,7 @@ namespace Yuki_Theme.Core
 
 		public static string getNormalizedName (string str)
 		{
+			str = str.ToLower ();
 			string res = "";
 			switch (str)
 			{
@@ -211,6 +211,11 @@ namespace Yuki_Theme.Core
 					res = "Sticker";
 				}
 					break;
+				default :
+				{
+					res = str;
+				}
+					break;
 			}
 
 			return res;
@@ -221,26 +226,96 @@ namespace Yuki_Theme.Core
 			string res = "";
 			switch (str)
 			{
+				case "Default" :
+				{
+					res = "Default";
+				}
+					break;
+				case "Selection" :
+				{
+					res = "Selection";
+				}
+					break;
+				case "LineNumbers" :
+				{
+					res = "LineNumber";
+				}
+					break;
+				case "CaretMarker" :
+				{
+					res = "Caret";
+				}
+					break;
+				case "VRuler" :
+				{
+					res = "VRuler";
+				}
+					break;
+				case "FoldLine" :
+				{
+					res = "Fold";
+				}
+					break;
+				case "FoldMarker" :
+				{
+					res = "FoldMarker";
+				}
+					break;
+				case "SelectedFoldLine" :
+				{
+					res = "SelectedFold";
+				}
+					break;
+				case "Digits" :
+				{
+					res = "Digit";
+				}
+					break;
 				case "LineBigComment" :
 				{
 					res = "Comment";
+				}
+					break;
+				case "String" :
+				{
+					res = "String";
+				}
+					break;
+				case "KeyWords" :
+				{
+					res = "Keyword";
+				}
+					break;
+				case "BeginEnd" :
+				{
+					res = "BeginEnd";
+				}
+					break;
+				case "Punctuation" :
+				{
+					res = "Punctuation";
+				}
+					break;
+				case "OperatorKeywords" :
+				{
+					res = "Operator";
 				}
 					break;
 				case "InternalConstant" :
 				{
 					res = "Constant";
 				}
-					break; /*
-				case "" :
+					break;
+				case "Wallpaper" :
 				{
-					res = "";
+					res = "Image";
 				}
 					break;
-				case "" :
+				case "Sticker" :
 				{
-					res = "";
+					res = "Sticker";
 				}
-					break;*/
+					break;
 				default :
 				{
 					res = str;

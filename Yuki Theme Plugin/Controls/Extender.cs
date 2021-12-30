@@ -130,6 +130,20 @@ namespace Yuki_Theme_Plugin.Controls
 
             collection = null;
             collect2 = null;
+			
+			var prop3 = typeof (DockPanel).GetField ("m_autoHideWindow",
+                                                     BindingFlags.NonPublic | BindingFlags.Instance);
+            var m_autohide = prop3.GetValue (dockPanel);
+            var prop4 = m_autohide.GetType ().GetField ("m_flagAnimate", BindingFlags.NonPublic | BindingFlags.Instance);
+            prop4.SetValue (m_autohide, false);
+			
+            foreach (IDockContent content in dockPanel.Contents)
+            {
+                content.DockHandler.DockStateChanged += (sender, args) =>
+                {
+                    prop4.SetValue (m_autohide, false);
+                };
+            }
         }
     }
 }

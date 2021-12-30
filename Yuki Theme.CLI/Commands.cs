@@ -22,6 +22,16 @@ namespace Yuki_Theme.CLI
 	{
 	}
 
+	[Verb("fields", HelpText = "Show main editable fields")]
+	public class FieldsCommand
+	{
+	}
+
+	[Verb("allfields", HelpText = "Show all editable fields")]
+	public class AllFieldsCommand
+	{
+	}
+
 	[Verb("export", HelpText = "Export selected theme\nexport <name>")]
 	public class ExportCommand
 	{

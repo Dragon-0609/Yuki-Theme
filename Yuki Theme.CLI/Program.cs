@@ -318,7 +318,7 @@ namespace Yuki_Theme.CLI
 		private static void Parse (Parser parser, string[] args)
 		{
 			var res = parser
-				.ParseArguments <CopyCommand, ListCommand, ClearCommand, ExportCommand, ImportCommand, DeleteCommand,
+				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand, DeleteCommand,
 					RenameCommand, SettingsCommand, EditCommand> (args);
 
 			res.WithParsed <CopyCommand> (o =>
@@ -352,6 +352,31 @@ namespace Yuki_Theme.CLI
 			   {
 				   Console.Clear ();
 				   ShowLoopMessage ();
+			   }).WithParsed <FieldsCommand> (o =>
+			   {
+				   LoadCLI (true);
+				   SetFile ("Darcula");
+				   Core.CLI.restore ();
+				   Console.WriteLine ($"There're {Core.CLI.names.Count} fields:");
+				   foreach (string name in Core.CLI.names)
+				   {
+					   Console.WriteLine ("\t" + Populater.getChangedName (name));
+				   }
+
+				   SetFile ("N|L"); // Set to the default value
+			   }).WithParsed <AllFieldsCommand> (o =>
+			   {
+				   LoadCLI (true);
+				   Core.CLI.settingMode = 1;
+				   SetFile ("Darcula");
+				   Core.CLI.restore ();
+				   Console.WriteLine ($"There're {Core.CLI.localAttributes.Keys.Count} fields:");
+				   foreach (string name in Core.CLI.localAttributes.Keys)
+				   {
+					   Console.WriteLine ("\t" + name);
+				   }
+
+				   SetFile ("N|L"); // Set to the default value
 			   }).WithParsed <ExportCommand> (o =>
 			   {
 				   bool showerror = false;
@@ -723,9 +748,9 @@ namespace Yuki_Theme.CLI
 			{
 				case "default" :
 				case "linenumber" :
-				case "foldline" :
+				case "fold" :
 				case "foldmarker" :
-				case "selectedfoldline" :
+				case "selectedfold" :
 				case "digit" :
 				case "comment" :
 				case "string" :
@@ -734,12 +759,51 @@ namespace Yuki_Theme.CLI
 				case "punctuation" :
 				case "operator" :
 				case "constant" :
+				case "selection" :
+				case "vruler" :
+				case "invalidlines" :
+				case "caretmarker" :
+				case "linenumbers" :
+				case "foldline" :
+				case "selectedfoldline" :
+				case "eolmarkers" :
+				case "spacemarkers" :
+				case "tabmarkers" :
+				case "digits" :
+				case "linebigcomment" :
+				case "linecomment" :
+				case "blockcomment" :
+				case "blockcomment2" :
+				case "keywords" :
+				case "programsections" :
+				case "special" :
+				case "async" :
+				case "accesskeywords1" :
+				case "nonreserved1" :
+				case "operatorkeywords" :
+				case "selectionstatements" :
+				case "iterationstatements" :
+				case "exceptionhandlingstatements" :
+				case "raisestatement" :
+				case "jumpstatements" :
+				case "jumpprocedures" :
+				case "internalconstant" :
+				case "internaltypes" :
+				case "referencetypes" :
+				case "modifiers" :
+				case "accessmodifiers" :
+				case "errorwords" :
+				case "warningwords" :
+				case "direcivenames" :
+				case "specialdirecivenames" :
+				case "direcivevalues" :
 				{
 					return true;
 				}
 					break;
 
-				case "image" :case "sticker" :
+				case "image" :
+				case "sticker" :
 				{
 					return false;
 				}

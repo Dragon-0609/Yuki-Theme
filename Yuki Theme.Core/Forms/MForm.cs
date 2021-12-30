@@ -176,7 +176,7 @@ namespace Yuki_Theme.Core.Forms
 		private CustomPicture stickerControl;
 
 
-		public MForm (int mode = 0)
+		public MForm (int mode = 0, bool quiet = false)
 		{
 			Helper.mode = (ProductMode) mode; // Write current type
 			textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
@@ -208,7 +208,7 @@ namespace Yuki_Theme.Core.Forms
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
-			Console.WriteLine (DesktopLocation);
+			// Console.WriteLine (DesktopLocation);
 			
 			if (currentFile != "N|L") // If theme couldn't find
 			{
@@ -219,8 +219,8 @@ namespace Yuki_Theme.Core.Forms
 				AddEvents ();
 				
 				sBox.Paint += bgImagePaint;
-				if (update)
-					button7_Click (this, EventArgs.Empty);
+				if (update && !quiet)
+					update_Click (this, EventArgs.Empty);
 				MForm_SizeChanged (this, EventArgs.Empty);
 				if (Helper.mode != ProductMode.Plugin)
 				{
@@ -459,7 +459,7 @@ namespace Yuki_Theme.Core.Forms
 			CLI.save (img2, img3);
 		}
 
-		public void button7_Click (object sender, EventArgs e)
+		public void update_Click (object sender, EventArgs e)
 		{
 			/*if (!isDefault ())
 				saveList ();*/
@@ -501,7 +501,7 @@ namespace Yuki_Theme.Core.Forms
 		public void onSelect ()
 		{
 			list_1.Items.AddRange (CLI.names.ToArray ());
-			Console.WriteLine(list_1.Items.Count);
+			// Console.WriteLine(list_1.Items.Count);
 			list_1.SelectedIndex = 0;
 			onSelectItem (list_1, EventArgs.Empty);
 		}
@@ -639,11 +639,11 @@ namespace Yuki_Theme.Core.Forms
 			setform.Editor = Editor;
 			setform.Beta = Beta;
 			setform.StatusBar = swStatusbar;
-			setform.askC.Checked = askChoice;
-			setform.checkBox2.Checked = update;
-			setform.ActionBox.SelectedIndex = actionChoice;
-			setform.mode.SelectedIndex = settingMode;
-			setform.swStatusbar.Enabled = Helper.mode == ProductMode.Plugin;
+			setform.settingsPanel.askC.Checked = askChoice;
+			setform.settingsPanel.checkBox2.Checked = update;
+			setform.settingsPanel.ActionBox.SelectedIndex = actionChoice;
+			setform.settingsPanel.mode.SelectedIndex = settingMode;
+			setform.settingsPanel.swStatusbar.Enabled = Helper.mode == ProductMode.Plugin;
 			bool oldeditor = Editor;
 			var st = settingMode;
 			if (setform.ShowDialog () == DialogResult.OK)
@@ -655,12 +655,12 @@ namespace Yuki_Theme.Core.Forms
 				Editor = setform.Editor;
 				Beta = setform.Beta;
 				swStatusbar = setform.StatusBar;
-				askChoice = setform.askC.Checked;
-				update = setform.checkBox2.Checked;
-				actionChoice = setform.ActionBox.SelectedIndex;
-				settingMode = setform.mode.SelectedIndex;
+				askChoice = setform.settingsPanel.askC.Checked;
+				update = setform.settingsPanel.checkBox2.Checked;
+				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
+				settingMode = setform.settingsPanel.mode.SelectedIndex;
 				Console.WriteLine(settingMode);
-				Console.WriteLine(setform.mode.SelectedIndex);
+				Console.WriteLine(setform.settingsPanel.mode.SelectedIndex);
 				CLI.saveData ();
 				sBox.Refresh ();
 				LoadSticker ();
@@ -1125,7 +1125,7 @@ namespace Yuki_Theme.Core.Forms
 								    "Image is very big", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
 							    DialogResult.No)
 							{
-								button7_Click (sender, e);
+								restore_Click (sender, e);
 								return;
 							}
 						}

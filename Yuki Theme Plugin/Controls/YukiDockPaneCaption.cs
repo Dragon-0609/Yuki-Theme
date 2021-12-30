@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme_Plugin.Controls.Helper;
@@ -486,6 +487,16 @@ namespace Yuki_Theme_Plugin.Controls
 		private void AutoHide_Click(object sender, EventArgs e)
 		{
 			DockPane.DockState = DockHelper.ToggleAutoHideState(DockPane.DockState);
+			if (DockHelper.IsDockStateAutoHide(DockPane.DockState))
+			{
+				var prop3 = typeof (DockPanel).GetField ("m_autoHideWindow",
+				                                         BindingFlags.NonPublic | BindingFlags.Instance);
+				var m_autohide = prop3.GetValue (DockPane.DockPanel);
+				var prop4 = m_autohide.GetType ().GetField ("m_flagAnimate", BindingFlags.NonPublic | BindingFlags.Instance);
+				prop4.SetValue (m_autohide, false);
+				
+				DockPane.DockPanel.ActiveAutoHideContent = null;
+			}
 		}
 
         private void Options_Click(object sender, EventArgs e)
