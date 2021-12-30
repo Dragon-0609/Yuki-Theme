@@ -109,6 +109,8 @@
             <DependentUpon>Form3.cs</DependentUpon>
         </Compile>
         <Compile Include="MenuRenderer.cs" />
+        <Compile Include="PluginOptionsContent.cs" />
+        <Compile Include="PluginOptionsContent.Designer.cs" />
         <Compile Include="Props.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -123,6 +125,7 @@
         <EmbeddedResource Include="Form3.resx">
           <DependentUpon>Form3.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="PluginOptionsContent.resx" />
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>

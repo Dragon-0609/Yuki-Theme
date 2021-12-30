@@ -139,11 +139,17 @@
         <Compile Include="Controls\CustomPicture.cs" />
         <None Include="Controls\CustomS.cs" />
         <None Include="Controls\CustomSwitch.cs" />
-        <None Include="Controls\CustomTab.cs" />
+        <Compile Include="Controls\CustomTab.cs" />
         <Compile Include="Controls\CustomText.cs" />
         <Compile Include="Controls\FlatNumericUpDown.cs" />
         <Compile Include="Controls\ReItem.cs" />
         <Compile Include="Controls\RJComboBox.cs" />
+        <Compile Include="Controls\SettingsPanel.cs">
+          <SubType>UserControl</SubType>
+        </Compile>
+        <Compile Include="Controls\SettingsPanel.Designer.cs">
+          <DependentUpon>SettingsPanel.cs</DependentUpon>
+        </Compile>
         <Compile Include="Controls\Slider.cs" />
         <Compile Include="Database\DatabaseManager.cs" />
         <Compile Include="Forms\AboutForm.cs">
@@ -229,6 +235,9 @@
         <EmbeddedResource Include="Controls\ColorEditor\ColorPicker\Controls\ColorSliderVertical.resx" />
         <EmbeddedResource Include="Controls\RJComboBox.resx">
           <DependentUpon>RJComboBox.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Controls\SettingsPanel.resx">
+          <DependentUpon>SettingsPanel.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\AboutForm.resx">
           <DependentUpon>AboutForm.cs</DependentUpon>
@@ -379,6 +388,7 @@
       <EmbeddedResource Include="Resources\plus_square.png" />
       <EmbeddedResource Include="Resources\right.png" />
       <EmbeddedResource Include="Resources\save.png" />
+      <EmbeddedResource Include="Resources\SVG\box-arrow-down.svg" />
       <EmbeddedResource Include="Resources\SVG\list-task.svg" />
       <EmbeddedResource Include="Resources\SVG\plus-square.svg" />
       <EmbeddedResource Include="Resources\SVG\sliders.svg" />

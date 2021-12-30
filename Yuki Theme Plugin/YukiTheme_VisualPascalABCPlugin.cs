@@ -14,6 +14,7 @@ using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using Svg;
 using VisualPascalABC;
+using VisualPascalABC.OptionsContent;
 using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
@@ -25,7 +26,7 @@ using Timer = System.Windows.Forms.Timer;
 namespace Yuki_Theme_Plugin
 {
 	
-	internal class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
+	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 	{
 		public string Name => "Yuki Theme";
 
@@ -87,7 +88,7 @@ namespace Yuki_Theme_Plugin
 		private       Timer           tim2;
 		private       Timer           tim3;
 		private       IconBarMargin   margin;
-		private       MForm           mf;
+		public        MForm           mf;
 		private       ListView        cr;
 		private       TextBox         con;
 		private       PictureBox      logoBox;
@@ -342,9 +343,10 @@ namespace Yuki_Theme_Plugin
 			
 			fm.Controls.Add (stickerControl);
 			LoadSticker ();
-			stickerControl.Enabled = false;
+			// stickerControl.Enabled = true;
 			stickerControl.BringToFront ();
 			fm.Resize += FmOnResize;
+			addSettings ();
 		}
 
 		private void stickerControl_MouseDown(object sender, MouseEventArgs e)
@@ -382,7 +384,7 @@ namespace Yuki_Theme_Plugin
 			LoadSticker ();
 		}
 
-		private void LoadSticker ()
+		public void LoadSticker ()
 		{
 			if (sticker != null)
 			{
@@ -898,9 +900,10 @@ namespace Yuki_Theme_Plugin
 		{
 			tim3 = new Timer () {Interval = 2200};
 			tim3.Tick += load;
-
 			if (CLI.swLogo)
+			{
 				showLogo ();
+			}
 			else
 				InitAdditions ();
 			tim3.Start ();
@@ -1012,6 +1015,7 @@ namespace Yuki_Theme_Plugin
 				hideLogo ();
 				InitAdditions ();
 			}
+			tim3.Stop ();
 		}
 
 		
@@ -1044,9 +1048,8 @@ namespace Yuki_Theme_Plugin
 		{
 			fm.Controls.Remove (logoBox);
 			logoBox.Dispose ();
-			tim3.Stop ();
 		}
-		
+
 		private void CtrlOnPaint (object sender, PaintEventArgs e)
 		{
 			e.Graphics.FillRectangle (new SolidBrush (bgdef), e.ClipRectangle);
@@ -1272,6 +1275,13 @@ namespace Yuki_Theme_Plugin
 			    WorkbenchServiceFactory.DebuggerManager.IsRunning)
 				return;
 			CodeCompletionHighlighter.UpdateMarkers (textEditor.ActiveTextAreaControl.TextArea);
+		}
+
+		private void addSettings ()
+		{
+			var getopt = fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
+			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
+			options.AddContent (new PluginOptionsContent (this));
 		}
 	}
 }

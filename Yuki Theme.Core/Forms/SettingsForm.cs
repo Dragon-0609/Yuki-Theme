@@ -33,87 +33,53 @@ namespace Yuki_Theme.Core.Forms
 
 		public string Path
 		{
-			get => textBox1.Text;
-			set => textBox1.Text = value;
+			get => settingsPanel.textBox1.Text;
+			set => settingsPanel.textBox1.Text = value;
 		}
 
 		public bool bgImage
 		{
-			get => backImage.Checked;
-			set => backImage.Checked = value;
+			get => settingsPanel.backImage.Checked;
+			set => settingsPanel.backImage.Checked = value;
 		}
 
 		public bool Sticker
 		{
-			get => swsticker.Checked;
-			set => swsticker.Checked = value;
+			get => settingsPanel.swsticker.Checked;
+			set => settingsPanel.swsticker.Checked = value;
 		}
 
 		public bool StatusBar
 		{
-			get => swStatusbar.Checked;
-			set => swStatusbar.Checked = value;
+			get => settingsPanel.swStatusbar.Checked;
+			set => settingsPanel.swStatusbar.Checked = value;
 		}
 		
 		public bool Logo
 		{
-			get => logo.Checked;
-			set => logo.Checked = value;
+			get => settingsPanel.logo.Checked;
+			set => settingsPanel.logo.Checked = value;
 		}
 		
 		public bool Editor
 		{
-			get => editor.Checked;
-			set => editor.Checked = value;
+			get => settingsPanel.editor.Checked;
+			set => settingsPanel.editor.Checked = value;
 		}
 		
 		public bool Beta
 		{
-			get => checkBox1.Checked;
-			set => checkBox1.Checked = value;
+			get => settingsPanel.checkBox1.Checked;
+			set => settingsPanel.checkBox1.Checked = value;
 		}
 		
-		public SettingsForm ( MForm mf)
+		public SettingsForm (MForm mf)
 		{
 			InitializeComponent ();
 			form = mf;
 			this.StartPosition = FormStartPosition.CenterParent;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
-			ActionBox.Items.AddRange (new string[]{"Delete", "Import and Delete", "Ignore"});
-			mode.Items.AddRange (new string[]{"Light", "Advanced"});
-			loadSVG ();
-		}
-
-		private void button1_Click (object sender, EventArgs e)
-		{
-			CommonOpenFileDialog co = new CommonOpenFileDialog ();
-			co.IsFolderPicker = true;
-			co.Multiselect = false;
-			co.Title = "Select Path to the PascalABC.NET directory";
-			selectFolder (co);
-		}
-
-		private void selectFolder (CommonOpenFileDialog co)
-		{
-			CommonFileDialogResult res = co.ShowDialog ();
-			if (res == CommonFileDialogResult.Ok)
-			{
-				if (Directory.Exists (co.FileName))
-				{
-					if (Directory.Exists (System.IO.Path.Combine (co.FileName, "Highlighting")))
-					{
-						textBox1.Text = co.FileName;
-					} else
-					{
-						co.Title = "It isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory";
-						selectFolder (co);
-					}
-				} else
-				{
-					throw new FileLoadException ("Directory isn't exist");
-				}
-			}
 		}
 
 		private void button2_Click (object sender, EventArgs e)
@@ -125,65 +91,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			DialogResult = DialogResult.Cancel;
 		}
-
-		private void checkBox2_CheckedChanged (object sender, EventArgs e)
-		{
-			ActionBox.Enabled = !askC.Checked;
-		}
-
-		private void button4_Click (object sender, EventArgs e)
-		{
-			AboutForm about = new AboutForm ();
-			about.ShowDialog ();
-		}
-
-		private void button5_Click (object sender, EventArgs e)
-		{
-			form.button7_Click (sender, e);
-		}
-
-		public void updateStats ()
-		{
-			label5.Text = next_version;
-		}
-
-		private void button6_Click (object sender, EventArgs e)
-		{
-			OpenFileDialog of = new OpenFileDialog ();
-			of.DefaultExt = "zip";
-			of.Filter = "Yuki Theme(*.zip)|*.zip";
-			of.Multiselect = false;
-			if (of.ShowDialog () == DialogResult.OK)
-			{
-				bool has = ZipHasFile("Yuki Theme.Core.dll", of.FileName);
-				if(has)
-				{
-					has = ZipHasFile ("Newtonsoft.Json.dll", of.FileName);
-					if(has)
-					{
-						has = ZipHasFile ("FastColoredTextBox.dll", of.FileName);
-						if (has)
-						{
-							File.Copy (of.FileName, System.IO.Path.Combine (
-								           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-								           "Yuki Theme",
-								           "yuki_theme.zip"),true);
-							if (form.df == null)
-								form.df = new DownloadForm (form);
-							form.df.InstallManually ();
-						}
-					}
-				}
-
-				if (!has)
-				{
-					MessageBox.Show ("The zip isn't Yuki Theme. Please, go to github and download from there",
-					                 "The wrong zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-			
-		}
-
+		
 		private bool ZipHasFile (string fileFullName, string zipFullPath)
 		{
 			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
@@ -203,35 +111,55 @@ namespace Yuki_Theme.Core.Forms
 
 		private void SettingsForm_Shown (object sender, EventArgs e)
 		{
-			BackColor = button1.BackColor = button2.BackColor = button3.BackColor = button4.BackColor =
-				button5.BackColor = button6.BackColor = 
-				ActionBox.ListBackColor = ActionBox.BackColor = mode.ListBackColor = mode.BackColor = textBox1.BackColor = Helper.bgColor;
-				
-			ForeColor = button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
-				button3.FlatAppearance.BorderColor = button4.FlatAppearance.BorderColor =
-					button5.FlatAppearance.BorderColor = button6.FlatAppearance.BorderColor =
-						ActionBox.ForeColor = ActionBox.ListTextColor = 
-							mode.ForeColor = mode.ListTextColor = textBox1.ForeColor = Helper.fgColor;
-						
-			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
-				button3.FlatAppearance.MouseOverBackColor = button4.FlatAppearance.MouseOverBackColor =
-					button5.FlatAppearance.MouseOverBackColor =
-						button6.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			BackColor = settingsPanel.button1.BackColor = button2.BackColor = button3.BackColor =
+				settingsPanel.button4.BackColor = settingsPanel.button5.BackColor = settingsPanel.button6.BackColor =
+					settingsPanel.ActionBox.ListBackColor = settingsPanel.ActionBox.BackColor =
+						settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor =
+							settingsPanel.textBox1.BackColor = settingsPanel.add_program.BackColor =
+								settingsPanel.add_plugin.BackColor = settingsPanel.tabPage1.BackColor =
+									settingsPanel.BackColor = Helper.bgColor;
 
-			ActionBox.BorderColor = ActionBox.IconColor = 
-			mode.BorderColor = mode.IconColor = textBox1.BorderColor = Helper.bgBorder;
+			ForeColor = settingsPanel.button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
+				button3.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
+					settingsPanel.button5.FlatAppearance.BorderColor =
+						settingsPanel.button6.FlatAppearance.BorderColor =
+							settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor =
+								settingsPanel.mode.ForeColor = settingsPanel.mode.ListTextColor =
+									settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
+										settingsPanel.add_program.ForeColor =
+											settingsPanel.add_plugin.ForeColor =
+												settingsPanel.tabPage1.ForeColor = Helper.fgColor;
+
+			settingsPanel.button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
+				button3.FlatAppearance.MouseOverBackColor = settingsPanel.button4.FlatAppearance.MouseOverBackColor =
+					settingsPanel.button5.FlatAppearance.MouseOverBackColor =
+						settingsPanel.button6.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+
+			settingsPanel.ActionBox.BorderColor = settingsPanel.ActionBox.IconColor =
+				settingsPanel.mode.BorderColor =
+					settingsPanel.mode.IconColor = settingsPanel.textBox1.BorderColor = Helper.bgBorder;
+
+			settingsPanel.tabs.bg = new SolidBrush (Helper.bgColor);
+			settingsPanel.tabs.bgClick = new SolidBrush (Helper.bgClick);
+			bool isProgram = Helper.mode == ProductMode.Program;
+			if (isProgram)
+			{
+				if (settingsPanel.tabs.TabPages.Contains (settingsPanel.add_plugin))
+					settingsPanel.tabs.TabPages.Remove (settingsPanel.add_plugin);
+				if (!settingsPanel.tabs.TabPages.Contains (settingsPanel.add_program))
+					settingsPanel.tabs.TabPages.Add (settingsPanel.add_program);
+			} else
+			{
+				if (settingsPanel.tabs.TabPages.Contains (settingsPanel.add_program))
+					settingsPanel.tabs.TabPages.Remove (settingsPanel.add_program);
+				if (!settingsPanel.tabs.TabPages.Contains (settingsPanel.add_plugin))
+					settingsPanel.tabs.TabPages.Add (settingsPanel.add_plugin);
+			}
 		}
 
 		public void setVisible (bool vis)
 		{
-			textBox1.Enabled = button1.Enabled = askC.Enabled = ActionBox.Enabled = vis;
-			logo.Enabled = swStatusbar.Enabled = !vis;
-		}
-
-		private void loadSVG ()
-		{
-			var a = Assembly.GetExecutingAssembly ();
-			Helper.renderSVG (button1, Helper.loadsvg ("three-dots", a), true, new Size (16,16));
+			settingsPanel.setVisible (vis);
 		}
 		
 	}
