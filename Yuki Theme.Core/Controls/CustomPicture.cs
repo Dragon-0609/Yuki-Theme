@@ -14,8 +14,8 @@ namespace Yuki_Theme.Core.Controls
 		public CustomPicture () : base ()
 		{
 			margin = new Point (10, 20);
-			MouseDown += On_MouseDown;
-			MouseMove += On_MouseMove;
+			// MouseDown += On_MouseDown;
+			// MouseMove += On_MouseMove;
 			typeof (PictureBox).InvokeMember ("DoubleBuffered", BindingFlags.SetProperty
 			                                                  | BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                  this, new object [] {true});

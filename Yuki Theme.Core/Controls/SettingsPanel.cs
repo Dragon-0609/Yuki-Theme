@@ -12,6 +12,11 @@ namespace Yuki_Theme.Core.Controls
 	public partial class SettingsPanel : UserControl
 	{
 		public MForm mf;
+		public Color bg;
+		public Color fg;
+		public Color key;
+		public Color click;
+		public bool  isFromPascal = false;
 
 		public SettingsPanel ()
 		{
@@ -59,7 +64,8 @@ namespace Yuki_Theme.Core.Controls
 
 		private void button4_Click (object sender, EventArgs e)
 		{
-			AboutForm about = new AboutForm ();
+			AboutForm about = new AboutForm (this);
+			about.isFromPascal = isFromPascal;
 			about.ShowDialog ();
 		}
 
