@@ -2,12 +2,16 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Controls;
 
 namespace Yuki_Theme.Core.Forms
 {
 	public partial class AboutForm : Form
 	{
-		public AboutForm ()
+		public  bool          isFromPascal = false;
+		private SettingsPanel sp;
+		
+		public AboutForm (SettingsPanel s)
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
@@ -16,6 +20,7 @@ namespace Yuki_Theme.Core.Forms
 			System.ComponentModel.ComponentResourceManager resources =
 				new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			sp = s;
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -55,20 +60,39 @@ namespace Yuki_Theme.Core.Forms
 
 		private void AboutForm_Shown (object sender, EventArgs e)
 		{
-			button1.BackColor = panel1.BackColor = BackColor = Helper.bgColor;
+			Color bg = Color.Empty;
+			Color fg = Color.Empty;
+			Color key = Color.Empty;
+			Color click = Color.Empty;
+
+			if (!isFromPascal)
+			{
+				bg = Helper.bgColor;
+				fg = Helper.fgColor;
+				key = Helper.fgKeyword;
+				click = Helper.bgClick;
+			} else
+			{
+				bg = sp.bg;
+				fg = sp.fg;
+				key = sp.key;
+				click = sp.click;
+			}
+			
+			button1.BackColor = panel1.BackColor = BackColor = bg;
 			
 			button1.ForeColor = linkLabel1.LinkColor = linkLabel2.LinkColor = linkLabel3.LinkColor =
 				linkLabel4.LinkColor = linkLabel5.LinkColor = linkLabel6.LinkColor = linkLabel7.LinkColor = 
 				linkLabel8.LinkColor = linkLabel9.LinkColor = linkLabel10.LinkColor = linkLabel11.LinkColor = 
-					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = ForeColor = Helper.fgColor;
+					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = ForeColor = fg;
 				
 			linkLabel1.ActiveLinkColor = linkLabel2.ActiveLinkColor = linkLabel3.ActiveLinkColor =
 				linkLabel4.ActiveLinkColor = linkLabel5.ActiveLinkColor = linkLabel6.ActiveLinkColor = 
 				linkLabel7.ActiveLinkColor = linkLabel8.ActiveLinkColor = linkLabel9.ActiveLinkColor = 
 				linkLabel10.ActiveLinkColor = linkLabel11.ActiveLinkColor = linkLabel12.ActiveLinkColor = 
-					linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor = Helper.fgKeyword;
+					linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor = key;
 				
-			button1.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			button1.FlatAppearance.MouseOverBackColor = click;
 		}
 
 		private void linkLabel7_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)

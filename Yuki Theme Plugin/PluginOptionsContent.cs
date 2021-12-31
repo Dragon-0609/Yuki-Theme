@@ -17,6 +17,7 @@ namespace Yuki_Theme_Plugin
         {
             InitializeComponent();
             plugin = plug;
+            settingsPanel.isFromPascal = true; // To recognize
         }
 
         private bool alreadyShown;
@@ -94,9 +95,10 @@ namespace Yuki_Theme_Plugin
 		                {
 			                plugin.mf.Dispose ();
 		                }
+
 		                plugin.mf = null;
 		                settingsPanel.mf = null;
-		                
+
 		                settingsPanel.backImage.Checked = CLI.bgImage;
 		                settingsPanel.swsticker.Checked = CLI.swSticker;
 		                settingsPanel.logo.Checked = CLI.swLogo;
@@ -109,7 +111,12 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.mode.SelectedIndex = CLI.settingMode;
 		                oldeditor = CLI.Editor;
 		                st = CLI.settingMode;
-		                
+						// Change colors for About Form
+		                settingsPanel.bg = YukiTheme_VisualPascalABCPlugin.bg;
+		                settingsPanel.fg = YukiTheme_VisualPascalABCPlugin.clr;
+		                settingsPanel.key = YukiTheme_VisualPascalABCPlugin.clr;
+		                settingsPanel.click = YukiTheme_VisualPascalABCPlugin.bgClick;
+
 		                alreadyShown = true;
 	                }
 
