@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Yuki_Theme.Core.Controls
@@ -12,6 +14,11 @@ namespace Yuki_Theme.Core.Controls
 		public CustomPicture () : base ()
 		{
 			margin = new Point (10, 20);
+			MouseDown += On_MouseDown;
+			MouseMove += On_MouseMove;
+			typeof (PictureBox).InvokeMember ("DoubleBuffered", BindingFlags.SetProperty
+			                                                  | BindingFlags.Instance | BindingFlags.NonPublic, null,
+			                                  this, new object [] {true});
 		}
 		
 		public Image img
@@ -54,5 +61,44 @@ namespace Yuki_Theme.Core.Controls
 
 			return new Region(graphicsPath);
 		}
+		
+		private Point MouseDownLocation;
+
+		private Point prevMouseDownLocation;
+
+
+		private void On_MouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				MouseDownLocation = e.Location;
+				prevMouseDownLocation = e.Location;
+			}
+		}
+
+		private void On_MouseMove(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				if (
+					(Right <= Parent.ClientSize.Width - margin.X || prevMouseDownLocation.X - e.X >= 0) &&
+					(Left >= margin.X || prevMouseDownLocation.X - e.X <= 0)
+				)
+				{
+					Left = e.X + Left - MouseDownLocation.X;
+					prevMouseDownLocation.X = e.Location.X;
+				}
+
+				if (
+					(Bottom <= Parent.ClientSize.Height - margin.Y || prevMouseDownLocation.Y - e.Y >= 0) &&
+					(Top >= margin.Y || prevMouseDownLocation.Y - e.Y <= 0)
+					)
+				{
+					Top = e.Y + Top - MouseDownLocation.Y;
+					prevMouseDownLocation.Y = e.Location.Y;
+				}
+			}
+		}
+
 	}
 }
