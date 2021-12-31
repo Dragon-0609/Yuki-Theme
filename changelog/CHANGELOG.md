@@ -6,6 +6,7 @@ Added to `Plugin`:
 1. CLI version
 2. Improved UI of the IDE
 3. Theme switcher
+4. `Yuki Theme` Settings to the Settings Form of PascalABC.NET
 
 Added to both:
 1. Modern Color Picker
@@ -14,6 +15,10 @@ Added to both:
 Fixed:
 1. Crashing on applying themes many times
 2. Doki Theme Parser
+3. [(BUG) Crash after selecting theme #13](https://github.com/Dragon-0609/Yuki-Theme/issues/13)
+
+Edited:
+1. Changed places of Settings.
 
 ## 3.0
 
