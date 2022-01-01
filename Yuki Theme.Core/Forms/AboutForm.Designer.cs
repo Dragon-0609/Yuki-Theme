@@ -51,6 +51,7 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel12 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel15 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.panel1.SuspendLayout ();
 			this.SuspendLayout ();
@@ -266,6 +267,7 @@ namespace Yuki_Theme.Core.Forms
 			// panel1
 			// 
 			this.panel1.AutoScroll = true;
+			this.panel1.Controls.Add (this.linkLabel15);
 			this.panel1.Controls.Add (this.linkLabel14);
 			this.panel1.Controls.Add (this.linkLabel13);
 			this.panel1.Controls.Add (this.linkLabel12);
@@ -324,6 +326,20 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel12.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel12.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel12_LinkClicked);
 			// 
+			// linkLabel15
+			// 
+			this.linkLabel15.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel15.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel15.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel15.Location = new System.Drawing.Point (7, 327);
+			this.linkLabel15.Name = "linkLabel15";
+			this.linkLabel15.Size = new System.Drawing.Size (187, 27);
+			this.linkLabel15.TabIndex = 22;
+			this.linkLabel15.TabStop = true;
+			this.linkLabel15.Text = "JetBrains Icons";
+			this.linkLabel15.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel15.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel15_LinkClicked);
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -349,6 +365,8 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel linkLabel15;
 
 		private System.Windows.Forms.LinkLabel linkLabel14;
 

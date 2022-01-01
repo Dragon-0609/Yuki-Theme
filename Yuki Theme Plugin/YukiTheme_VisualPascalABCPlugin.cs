@@ -110,10 +110,11 @@ namespace Yuki_Theme_Plugin
 		private Image             tmpImage1;
 		private Image             tmpImage2;
 		
-		private bool  isMoving              = false;         // true while dragging the image
-		private Point movingPicturePosition = new Point(80, 20);   // the position of the moving image
-		private Point offset;   // mouse position inside the moving image while dragging
-		private int   selectionindex;
+		private bool        isMoving              = false;         // true while dragging the image
+		private Point       movingPicturePosition = new Point(80, 20);   // the position of the moving image
+		private Point       offset;   // mouse position inside the moving image while dragging
+		private int         selectionindex;
+		private IconManager manager;
 		
 		private bool bgImage => CLI.bgImage;
 		
@@ -313,6 +314,7 @@ namespace Yuki_Theme_Plugin
 			menu.Renderer = renderer;
 			context.Renderer = renderer;
 			context2.Renderer = renderer;
+			manager = new IconManager (tools, menu);
 			
 			UpdateColors ();
 			
@@ -604,9 +606,12 @@ namespace Yuki_Theme_Plugin
 			
 			if (menu_settings != null)
 			{
+				string add = "";
+				bool isDark = Helper.isDark (bg);
+				add = isDark ? "" : "_dark";
 				menu_settings.Image = Helper.renderSVG (menu_settings.Size, Helper.loadsvg (
-					                                        "gearPlain", Assembly.GetExecutingAssembly (),
-					                                        "Yuki_Theme_Plugin.Resources"),
+					                                        "gearPlain"+add, Assembly.GetExecutingAssembly (),
+					                                        "Yuki_Theme_Plugin.Resources.icons"),
 				                                        false, Size.Empty,
 				                                        true, clr);
 				menu_settings.BackColor = bgdef;
@@ -626,6 +631,7 @@ namespace Yuki_Theme_Plugin
 
 			cr.Refresh ();
 			setTim2 ();
+			manager.UpdateColors ();
 		}
 
 		private void LoadColors ()
@@ -937,12 +943,16 @@ namespace Yuki_Theme_Plugin
 			
 			if (menu_settings != null) // If we could find...
 			{
+				string add = "";
+				bool isDark = Helper.isDark (bg);
+				add = isDark ? "" : "_dark";
+
 				menu_settings.Text = "Show Settings";
 				menu_settings.ShortcutKeys = Keys.Alt | Keys.S;
 				menu_settings.ShortcutKeyDisplayString = "Alt + S";
 				menu_settings.Image = Helper.renderSVG (menu_settings.Size, Helper.loadsvg (
-					                                        "gearPlain", Assembly.GetExecutingAssembly (),
-					                                        "Yuki_Theme_Plugin.Resources"), false, Size.Empty,
+					                                        "gearPlain"+add, Assembly.GetExecutingAssembly (),
+					                                        "Yuki_Theme_Plugin.Resources.icons"), false, Size.Empty,
 				                                        true, clr);
 				menu_settings.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 				ToolStrip ow = menu_settings.Owner;
