@@ -108,6 +108,7 @@
         <Compile Include="Form3.Designer.cs">
             <DependentUpon>Form3.cs</DependentUpon>
         </Compile>
+        <Compile Include="IconManager.cs" />
         <Compile Include="MenuRenderer.cs" />
         <Compile Include="PluginOptionsContent.cs" />
         <Compile Include="PluginOptionsContent.Designer.cs" />
@@ -154,6 +155,7 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Resources\favorite.svg" />
+      <EmbeddedResource Include="Resources\icons\projectTab_dark.svg" />
       <EmbeddedResource Include="Resources\quiet.svg" />
       <EmbeddedResource Include="Resources\gearPlain.svg" />
       <EmbeddedResource Include="Resources\layoutPreview.svg" />
@@ -187,6 +189,79 @@
       <Content Include="Controls\Resources\DockPane_OptionOverflow.bmp" />
       <Content Include="Controls\Resources\Thumbs.db" />
       <EmbeddedResource Include="Resources\refresh.svg" />
+      <EmbeddedResource Include="Resources\icons\addFile.svg" />
+      <EmbeddedResource Include="Resources\icons\addFile_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\compile.svg" />
+      <EmbeddedResource Include="Resources\icons\console.svg" />
+      <EmbeddedResource Include="Resources\icons\console_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\copy.svg" />
+      <EmbeddedResource Include="Resources\icons\copy_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\cwmPermissionEdit.svg" />
+      <EmbeddedResource Include="Resources\icons\execute.svg" />
+      <EmbeddedResource Include="Resources\icons\forceRefresh.svg" />
+      <EmbeddedResource Include="Resources\icons\intentionBulb.svg" />
+      <EmbeddedResource Include="Resources\icons\intentionBulb_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\magicResolve.svg" />
+      <EmbeddedResource Include="Resources\icons\magicResolve_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-cut.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-cut_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-open.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-open_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-paste.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-paste_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-saveall.svg" />
+      <EmbeddedResource Include="Resources\icons\menu-saveall_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\redo.svg" />
+      <EmbeddedResource Include="Resources\icons\redo_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\runAll.svg" />
+      <EmbeddedResource Include="Resources\icons\stepOut.svg" />
+      <EmbeddedResource Include="Resources\icons\stepOut_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\suspend.svg" />
+      <EmbeddedResource Include="Resources\icons\traceInto.svg" />
+      <EmbeddedResource Include="Resources\icons\traceInto_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\undo.svg" />
+      <EmbeddedResource Include="Resources\icons\undo_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\startDebugger.svg" />
+      <EmbeddedResource Include="Resources\icons\restartDebugger.svg" />
+      <EmbeddedResource Include="Resources\icons\restartDebugger_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\traceOver.svg" />
+      <EmbeddedResource Include="Resources\icons\traceOver_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\back.svg" />
+      <EmbeddedResource Include="Resources\icons\back_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\forward.svg" />
+      <EmbeddedResource Include="Resources\icons\forward_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\print.svg" />
+      <EmbeddedResource Include="Resources\icons\print_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\projectTab.svg" />
+      <EmbeddedResource Include="Resources\icons\close.svg" />
+      <EmbeddedResource Include="Resources\icons\close_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\find.svg" />
+      <EmbeddedResource Include="Resources\icons\findForward.svg" />
+      <EmbeddedResource Include="Resources\icons\findForward_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\find_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\replace.svg" />
+      <EmbeddedResource Include="Resources\icons\replace_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\moveToBottomLeft.svg" />
+      <EmbeddedResource Include="Resources\icons\moveToBottomLeft_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\notificationError.svg" />
+      <EmbeddedResource Include="Resources\icons\toolWindowMessages.svg" />
+      <EmbeddedResource Include="Resources\icons\toolWindowMessages_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\dynamicUsages.svg" />
+      <EmbeddedResource Include="Resources\icons\dynamicUsages_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\showHiddens.svg" />
+      <EmbeddedResource Include="Resources\icons\showHiddens_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\MoveTo2.svg" />
+      <EmbeddedResource Include="Resources\icons\MoveTo2_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\gearPlain.svg" />
+      <EmbeddedResource Include="Resources\icons\gearPlain_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\showReadAccess.svg" />
+      <EmbeddedResource Include="Resources\icons\showReadAccess_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\showWriteAccess.svg" />
+      <EmbeddedResource Include="Resources\icons\showWriteAccess_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\externalTools.svg" />
+      <EmbeddedResource Include="Resources\icons\externalTools_dark.svg" />
+      <EmbeddedResource Include="Resources\icons\help.svg" />
+      <EmbeddedResource Include="Resources\icons\help_dark.svg" />
       <Content Include="Resources\YukiTheme.gif" />
     </ItemGroup>
     <ItemGroup>

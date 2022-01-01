@@ -25,7 +25,7 @@ namespace Yuki_Theme.Core.Forms
 		public const int BETA = 14;
 		public const int LOGIN = 15;
 		
-		public const double current_version = 4.0;
+		public const double current_version = 5.0;
 		public const string current_version_add = "beta";
 		public static string next_version = "";
 

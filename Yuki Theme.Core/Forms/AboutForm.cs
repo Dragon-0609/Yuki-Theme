@@ -84,13 +84,14 @@ namespace Yuki_Theme.Core.Forms
 			button1.ForeColor = linkLabel1.LinkColor = linkLabel2.LinkColor = linkLabel3.LinkColor =
 				linkLabel4.LinkColor = linkLabel5.LinkColor = linkLabel6.LinkColor = linkLabel7.LinkColor = 
 				linkLabel8.LinkColor = linkLabel9.LinkColor = linkLabel10.LinkColor = linkLabel11.LinkColor = 
-					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = ForeColor = fg;
+					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = 
+						linkLabel15.LinkColor = ForeColor = fg;
 				
 			linkLabel1.ActiveLinkColor = linkLabel2.ActiveLinkColor = linkLabel3.ActiveLinkColor =
 				linkLabel4.ActiveLinkColor = linkLabel5.ActiveLinkColor = linkLabel6.ActiveLinkColor = 
 				linkLabel7.ActiveLinkColor = linkLabel8.ActiveLinkColor = linkLabel9.ActiveLinkColor = 
 				linkLabel10.ActiveLinkColor = linkLabel11.ActiveLinkColor = linkLabel12.ActiveLinkColor = 
-					linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor = key;
+					linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor = linkLabel15.ActiveLinkColor = key;
 				
 			button1.FlatAppearance.MouseOverBackColor = click;
 		}
@@ -133,6 +134,11 @@ namespace Yuki_Theme.Core.Forms
 		private void linkLabel14_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start ("https://github.com/Knagis/CommonMark.NET");
+		}
+
+		private void linkLabel15_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start ("https://jetbrains.design/intellij/resources/icons_list/");
 		}
 	}
 }

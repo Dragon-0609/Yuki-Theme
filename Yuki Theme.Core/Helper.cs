@@ -402,6 +402,20 @@ namespace Yuki_Theme.Core
 
 			im.BackgroundImage = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
 		}
+
+		public static void renderSVG (ToolStripButton im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		{
+			im.Image?.Dispose ();
+
+			im.Image = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+		}
+
+		public static void renderSVG (ToolStripMenuItem im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		{
+			im.Image?.Dispose ();
+
+			im.Image = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+		}
 		
 		public static Image renderSVG (Size im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
 		{
