@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -30,6 +31,11 @@ namespace Yuki_Theme.Core
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;
 
 		public static ProductMode mode;
+
+		private static Size Standart32 = new Size (32, 32);
+		
+		[DllImport("user32.dll", CharSet = CharSet.Auto)]
+		extern static bool DestroyIcon(IntPtr handle);
 		
 		public static Rectangle getSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
@@ -408,6 +414,16 @@ namespace Yuki_Theme.Core
 			im.Image?.Dispose ();
 
 			im.Image = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+		}
+
+		public static void renderSVG (Form im, SvgDocument svg, bool custom = false, Size cSize = default,
+		                              bool customColor = false, Color clr = default)
+		{
+			// im.Icon?.Dispose ();
+			IntPtr ptr = ((Bitmap) renderSVG (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
+
+			im.Icon = Icon.FromHandle (ptr);
+			// DestroyIcon (ptr);
 		}
 
 		public static void renderSVG (ToolStripMenuItem im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)

@@ -1,7 +1,9 @@
 ﻿using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using Svg;
 using VisualPascalABC;
+using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 
 namespace Yuki_Theme_Plugin
@@ -10,12 +12,14 @@ namespace Yuki_Theme_Plugin
 	{
 		private       ToolStrip tools;
 		private       MenuStrip menu;
+		private       Form1 fm;
 		private const string    IconFolder = "Yuki_Theme_Plugin.Resources.icons";
 
-		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip)
+		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, Form1 form)
 		{
 			tools = toolStrip;
 			menu = menuStrip;
+			fm = form;
 			Init ();
 		}
 
@@ -47,6 +51,12 @@ namespace Yuki_Theme_Plugin
 					}
 				}
 			}
+			
+			foreach (IDockContent content in fm.BottomPane.Contents)
+			{
+				// MessageBox.Show (content.DockHandler.Form.Name);
+				content.DockHandler.Form.AccessibleDescription = GetIconName (content.DockHandler.Form.Name);
+			}
 		}
 
 		public void UpdateColors ()
@@ -72,6 +82,14 @@ namespace Yuki_Theme_Plugin
 							UpdateIcon ((ToolStripMenuItem) item);
 					}	
 				}
+			}
+			
+			
+			foreach (IDockContent content in fm.BottomPane.Contents)
+			{
+				if (content.DockHandler.Form.AccessibleDescription != null &&
+				    content.DockHandler.Form.AccessibleDescription.Length > 2)
+					UpdateIcon (content.DockHandler.Form);
 			}
 		}
 
@@ -223,6 +241,7 @@ namespace Yuki_Theme_Plugin
 
 				case "tsOutputWindow" :
 				case "tsShowOutputWindow" :
+				case "OutputWindowForm" :
 				{
 					res = "console";
 				}
@@ -280,6 +299,7 @@ namespace Yuki_Theme_Plugin
 
 				case "miReplace" :
 				case "tsShowFindSymbolsResultWindow" :
+				case "FindSymbolsResultWindowForm" :
 				{
 					res = "replace";
 				}
@@ -292,30 +312,35 @@ namespace Yuki_Theme_Plugin
 					break;
 
 				case "tsShowErrorsListWindow" :
+				case "ErrorsListWindowForm" :
 				{
 					res = "notificationError";
 				}
 					break;
 
 				case "tsShowCompilerConsoleWindow" :
+				case "CompilerConsoleWindowForm" :
 				{
 					res = "toolWindowMessages";
 				}
 					break;
 
 				case "tsShowDebugVariablesListWindow" :
+				case "DebugVariablesListWindowForm" :
 				{
 					res = "dynamicUsages";
 				}
 					break;
 
 				case "tsShowDebugWatchListWindow" :
+				case "DebugWatchListWindowForm" :
 				{
 					res = "showHiddens";
 				}
 					break;
 
 				case "tsDisassembly" :
+				case "DisassemblyWindow" :
 				{
 					res = "MoveTo2";
 				}
@@ -385,6 +410,21 @@ namespace Yuki_Theme_Plugin
 		}
 
 		private void UpdateIcon (ToolStripMenuItem btn)
+		{
+			string add = "";
+			if (hasDark (btn.AccessibleDescription))
+			{
+				bool isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
+				add = isDark ? "" : "_dark";
+			}
+
+			var a = Assembly.GetExecutingAssembly ();
+			// MessageBox.Show (btn.Name);
+			Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + add, a, IconFolder),
+			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+		}
+
+		private void UpdateIcon (Form btn)
 		{
 			string add = "";
 			if (hasDark (btn.AccessibleDescription))

@@ -96,19 +96,19 @@ namespace Yuki_Theme_Plugin
 		private       Image           sticker;
 		private       CustomPicture   stickerControl;
 
-		private ToolStripMenuItem menu_settings;
-		private ToolStripMenuItem quiet;
-		private ToolStripMenuItem stick;
-		private ToolStripMenuItem backimage;
-		private ToolStripMenuItem switchTheme;
-		private Image             quietImage;
-		private Image             wallpaperImage;
-		private Image             switchImage;
-		private Size              defaultSize;
-		private Panel             panel_bg;
-		private CustomList        lst;
-		private Image             tmpImage1;
-		private Image             tmpImage2;
+		private ToolStripMenuItem      menu_settings;
+		private ToolStripMenuItem      quiet;
+		private ToolStripMenuItem      stick;
+		private ToolStripMenuItem      backimage;
+		private ToolStripMenuItem      switchTheme;
+		private Image                  quietImage;
+		private Image                  wallpaperImage;
+		private Image                  switchImage;
+		private Size                   defaultSize;
+		private Panel                  panel_bg;
+		private CustomList             lst;
+		private Image                  tmpImage1;
+		private Image                  tmpImage2;
 		
 		private bool        isMoving              = false;         // true while dragging the image
 		private Point       movingPicturePosition = new Point(80, 20);   // the position of the moving image
@@ -245,7 +245,8 @@ namespace Yuki_Theme_Plugin
 			textEditor.Parent.BackColor = bg;
 			textEditor.Controls [1].Paint += CtrlOnPaint;
 			textEditor.Controls [1].Invalidate();
-			
+
+
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 			
@@ -314,7 +315,7 @@ namespace Yuki_Theme_Plugin
 			menu.Renderer = renderer;
 			context.Renderer = renderer;
 			context2.Renderer = renderer;
-			manager = new IconManager (tools, menu);
+			manager = new IconManager (tools, menu, fm);
 			
 			UpdateColors ();
 			
@@ -533,9 +534,27 @@ namespace Yuki_Theme_Plugin
 		private void PaintBG (object sender, PaintEventArgs e)
 		{
 			if(margin != null)
-					e.Graphics.FillRectangle (new SolidBrush (bgdef), margin.DrawingPosition.X,
-					                          margin.DrawingPosition.Y,
-					                          margin.DrawingPosition.Width, margin.DrawingPosition.Height);
+			{
+				e.Graphics.FillRectangle (new SolidBrush (bgdef), margin.DrawingPosition.X,
+				                          margin.DrawingPosition.Y,
+				                          margin.DrawingPosition.Width, margin.DrawingPosition.Height);
+				var inside =
+					typeof (IconBarMargin).GetMethod ("IsLineInsideRegion",
+					                                  BindingFlags.Static | BindingFlags.NonPublic);
+				// paint icons
+				foreach (Bookmark mark in textArea.Document.BookmarkManager.Marks) {
+					int lineNumber = textArea.Document.GetVisibleLine(mark.LineNumber);
+					int lineHeight = textArea.TextView.FontHeight;
+					int yPos = (int)(lineNumber * lineHeight) - textArea.VirtualTop.Y;
+					if ((bool) inside.Invoke(null,new object[] {yPos, yPos + lineHeight, margin.DrawingPosition.Y, margin.DrawingPosition.Height})) {
+						if (lineNumber == textArea.Document.GetVisibleLine(mark.LineNumber - 1)) {
+							// marker is inside folded region, do not draw it
+							continue;
+						}
+						mark.Draw(margin, e.Graphics, new Point(0, yPos));
+					}
+				}
+			}
 
 			if(img != null && bgImage)
 			{
@@ -799,61 +818,65 @@ namespace Yuki_Theme_Plugin
 
 		private void SwitchTheme (object sender, EventArgs e)
 		{
-			if(mf == null || mf.IsDisposed)
+			if(!fm.Controls.ContainsKey ("Custom Panel Switcher"))
 			{
-				panel_bg = new CustomPanel ();
+				if (mf == null || mf.IsDisposed)
+				{
+					panel_bg = new CustomPanel ();
+					panel_bg.Name = "Custom Panel Switcher";
 
-				Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
+					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
 
-				Label lbl = new Label ();
-				lbl.BackColor = bg;
-				lbl.ForeColor = clr;
-				lbl.Font = fnt;
-				lbl.Text = "Themes";
-				lbl.TextAlign = ContentAlignment.MiddleCenter;
-				lbl.Size = new Size (200, 25);
+					Label lbl = new Label ();
+					lbl.BackColor = bg;
+					lbl.ForeColor = clr;
+					lbl.Font = fnt;
+					lbl.Text = "Themes";
+					lbl.TextAlign = ContentAlignment.MiddleCenter;
+					lbl.Size = new Size (200, 25);
 
-				lst = new CustomList ();
-				lst.BackColor = bgdef;
-				lst.ForeColor = clr;
-				lst.BorderStyle = BorderStyle.None;
-				lst.Items.AddRange (CLI.schemes.ToArray ());
-				lst.BorderStyle = BorderStyle.None;
-				lst.Font = fnt; 
-				lst.ItemHeight = lst.Font.Height;
-				lst.Size = new Size (200, 300);
-				lst.MouseMove += Lst_MouseHover;
-				
-				
-				panel_bg.Location = Point.Empty;
-				panel_bg.Size = fm.ClientSize;
-				lst.DrawMode = DrawMode.OwnerDrawFixed;
-				lst.DrawItem += list_1_DrawItem;
-				int x = (panel_bg.Width / 2) - (lst.Width / 2);
-				int y = (panel_bg.Height / 2) - (lst.Height / 2);
+					lst = new CustomList ();
+					lst.BackColor = bgdef;
+					lst.ForeColor = clr;
+					lst.BorderStyle = BorderStyle.None;
+					lst.Items.AddRange (CLI.schemes.ToArray ());
+					lst.BorderStyle = BorderStyle.None;
+					lst.Font = fnt;
+					lst.ItemHeight = lst.Font.Height;
+					lst.Size = new Size (200, 300);
+					lst.MouseMove += Lst_MouseHover;
 
-				lbl.Location = new Point (x, y - 13);
-				lst.Location = new Point (x,y + 12);
-				
-				if (lst.Items.Contains (Helper.CurrentTheme))
-					lst.SelectedItem = Helper.CurrentTheme;
-				else
-					lst.SelectedIndex = 0;
-				lst.SelectedIndexChanged += LstOnSelectedIndexChanged;
-				lst.AccessibleName = lst.SelectedItem.ToString ();	
-				panel_bg.Click += CloseOnClick;
 
-				panel_bg.Controls.Add (lst);
-				panel_bg.Controls.Add (lbl);
+					panel_bg.Location = Point.Empty;
+					panel_bg.Size = fm.ClientSize;
+					lst.DrawMode = DrawMode.OwnerDrawFixed;
+					lst.DrawItem += list_1_DrawItem;
+					int x = (panel_bg.Width / 2) - (lst.Width / 2);
+					int y = (panel_bg.Height / 2) - (lst.Height / 2);
 
-				setBorder (lst, lbl);
-				
-				fm.Controls.Add (panel_bg);
-				panel_bg.BringToFront ();
-				panel_bg.Focus ();
-			} else
-			{
-				MessageBox.Show ("Please, close Yuki Theme window to activate 'Switch theme'");
+					lbl.Location = new Point (x, y - 13);
+					lst.Location = new Point (x, y + 12);
+
+					if (lst.Items.Contains (Helper.CurrentTheme))
+						lst.SelectedItem = Helper.CurrentTheme;
+					else
+						lst.SelectedIndex = 0;
+					lst.SelectedIndexChanged += LstOnSelectedIndexChanged;
+					lst.AccessibleName = lst.SelectedItem.ToString ();
+					panel_bg.Click += CloseOnClick;
+
+					panel_bg.Controls.Add (lst);
+					panel_bg.Controls.Add (lbl);
+
+					setBorder (lst, lbl);
+
+					fm.Controls.Add (panel_bg);
+					panel_bg.BringToFront ();
+					panel_bg.Focus ();
+				} else
+				{
+					MessageBox.Show ("Please, close Yuki Theme window to activate 'Switch theme'");
+				}
 			}
 		}
 
@@ -1293,5 +1316,6 @@ namespace Yuki_Theme_Plugin
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
 			options.AddContent (new PluginOptionsContent (this));
 		}
+
 	}
 }
