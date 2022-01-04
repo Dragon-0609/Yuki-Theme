@@ -53,10 +53,19 @@ namespace Yuki_Theme.Core.Controls
 			this.add_plugin = new System.Windows.Forms.TabPage ();
 			this.logo = new System.Windows.Forms.CheckBox ();
 			this.swStatusbar = new System.Windows.Forms.CheckBox ();
+			this.add_toolbar = new System.Windows.Forms.TabPage ();
+			this.button2 = new System.Windows.Forms.Button ();
+			this.toolBarVisible = new System.Windows.Forms.CheckBox ();
+			this.toolBarVisibleLabel = new System.Windows.Forms.Label ();
+			this.toolBarIconLabel = new System.Windows.Forms.Label ();
+			this.toolBarImage = new System.Windows.Forms.PictureBox ();
+			this.toolBarList = new System.Windows.Forms.ListBox ();
 			this.tabs.SuspendLayout ();
 			this.tabPage1.SuspendLayout ();
 			this.add_program.SuspendLayout ();
 			this.add_plugin.SuspendLayout ();
+			this.add_toolbar.SuspendLayout ();
+			((System.ComponentModel.ISupportInitialize) (this.toolBarImage)).BeginInit ();
 			this.SuspendLayout ();
 			// 
 			// tabs
@@ -64,6 +73,7 @@ namespace Yuki_Theme.Core.Controls
 			this.tabs.Controls.Add (this.tabPage1);
 			this.tabs.Controls.Add (this.add_program);
 			this.tabs.Controls.Add (this.add_plugin);
+			this.tabs.Controls.Add (this.add_toolbar);
 			this.tabs.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
 			this.tabs.Font = new System.Drawing.Font ("Book Antiqua", 10F);
 			this.tabs.Location = new System.Drawing.Point (0, 0);
@@ -336,6 +346,85 @@ namespace Yuki_Theme.Core.Controls
 			this.swStatusbar.Text = "Name in StatusBar";
 			this.swStatusbar.UseVisualStyleBackColor = true;
 			// 
+			// add_toolbar
+			// 
+			this.add_toolbar.Controls.Add (this.button2);
+			this.add_toolbar.Controls.Add (this.toolBarVisible);
+			this.add_toolbar.Controls.Add (this.toolBarVisibleLabel);
+			this.add_toolbar.Controls.Add (this.toolBarIconLabel);
+			this.add_toolbar.Controls.Add (this.toolBarImage);
+			this.add_toolbar.Controls.Add (this.toolBarList);
+			this.add_toolbar.Location = new System.Drawing.Point (4, 25);
+			this.add_toolbar.Name = "add_toolbar";
+			this.add_toolbar.Size = new System.Drawing.Size (397, 224);
+			this.add_toolbar.TabIndex = 3;
+			this.add_toolbar.Text = "ToolBar";
+			this.add_toolbar.UseVisualStyleBackColor = true;
+			// 
+			// button2
+			// 
+			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.button2.Location = new System.Drawing.Point (157, 182);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size (72, 32);
+			this.button2.TabIndex = 5;
+			this.button2.Text = "Reset";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler (this.button2_Click);
+			// 
+			// toolBarVisible
+			// 
+			this.toolBarVisible.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.toolBarVisible.Location = new System.Drawing.Point (253, 68);
+			this.toolBarVisible.Name = "toolBarVisible";
+			this.toolBarVisible.Size = new System.Drawing.Size (32, 28);
+			this.toolBarVisible.TabIndex = 4;
+			this.toolBarVisible.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.toolBarVisible.UseVisualStyleBackColor = true;
+			this.toolBarVisible.CheckedChanged += new System.EventHandler (this.toolBarVisible_CheckedChanged);
+			// 
+			// toolBarVisibleLabel
+			// 
+			this.toolBarVisibleLabel.AutoSize = true;
+			this.toolBarVisibleLabel.Location = new System.Drawing.Point (157, 67);
+			this.toolBarVisibleLabel.Name = "toolBarVisibleLabel";
+			this.toolBarVisibleLabel.Size = new System.Drawing.Size (55, 18);
+			this.toolBarVisibleLabel.TabIndex = 3;
+			this.toolBarVisibleLabel.Text = "Visible:";
+			// 
+			// toolBarIconLabel
+			// 
+			this.toolBarIconLabel.AutoSize = true;
+			this.toolBarIconLabel.Location = new System.Drawing.Point (157, 10);
+			this.toolBarIconLabel.Name = "toolBarIconLabel";
+			this.toolBarIconLabel.Size = new System.Drawing.Size (39, 18);
+			this.toolBarIconLabel.TabIndex = 2;
+			this.toolBarIconLabel.Text = "Icon:";
+			// 
+			// toolBarImage
+			// 
+			this.toolBarImage.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.toolBarImage.Location = new System.Drawing.Point (253, 10);
+			this.toolBarImage.Name = "toolBarImage";
+			this.toolBarImage.Size = new System.Drawing.Size (32, 32);
+			this.toolBarImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+			this.toolBarImage.TabIndex = 1;
+			this.toolBarImage.TabStop = false;
+			// 
+			// toolBarList
+			// 
+			this.toolBarList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.toolBarList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+			this.toolBarList.FormattingEnabled = true;
+			this.toolBarList.ItemHeight = 17;
+			this.toolBarList.Location = new System.Drawing.Point (5, 10);
+			this.toolBarList.Name = "toolBarList";
+			this.toolBarList.Size = new System.Drawing.Size (142, 204);
+			this.toolBarList.TabIndex = 0;
+			this.toolBarList.DrawItem += new System.Windows.Forms.DrawItemEventHandler (this.list_1_DrawItem);
+			this.toolBarList.SelectedIndexChanged += new System.EventHandler (this.toolBarList_SelectedIndexChanged);
+			this.toolBarList.MouseMove += new System.Windows.Forms.MouseEventHandler (this.Lst_MouseHover);
+			// 
 			// SettingsPanel
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (96F, 96F);
@@ -350,8 +439,25 @@ namespace Yuki_Theme.Core.Controls
 			this.add_program.ResumeLayout (false);
 			this.add_program.PerformLayout ();
 			this.add_plugin.ResumeLayout (false);
+			this.add_toolbar.ResumeLayout (false);
+			this.add_toolbar.PerformLayout ();
+			((System.ComponentModel.ISupportInitialize) (this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.Button button2;
+
+		public System.Windows.Forms.CheckBox toolBarVisible;
+
+		public System.Windows.Forms.Label toolBarVisibleLabel;
+
+		public System.Windows.Forms.Label toolBarIconLabel;
+
+		public System.Windows.Forms.PictureBox toolBarImage;
+
+		public System.Windows.Forms.ListBox toolBarList;
+
+		public System.Windows.Forms.TabPage add_toolbar;
 
 		public Yuki_Theme.Core.Controls.CustomTab   tabs;
 		public System.Windows.Forms.TabPage         tabPage1;

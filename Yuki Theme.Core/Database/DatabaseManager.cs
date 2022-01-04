@@ -58,6 +58,13 @@ namespace Yuki_Theme.Core.Database
          
          return dictionary;
       }
+
+      public string ReadData (int key, string defaultValue = "")
+      {
+         RegistryKey kes = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme");
+         return kes.GetValue (key.ToString (), defaultValue).ToString ();
+      }
+      
       public void UpdateData (Dictionary<int, string> dictionary)
       {
          RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);

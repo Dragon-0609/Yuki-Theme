@@ -10,20 +10,21 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		public const int PASCALPATH = 1;
-		public const int ACTIVE = 2;
-		public const int ASKCHOICE = 4;
-		public const int CHOICEINDEX = 5;
-		public const int SETTINGMODE = 6;
-		public const int AUTOUPDATE = 7;
-		public const int BGIMAGE = 8;
-		public const int STICKER = 9;
-		public const int STATUSBAR = 10;
-		public const int LOGO = 11;
-		public const int LOCATION = 12;
-		public const int EDITOR = 13;
-		public const int BETA = 14;
-		public const int LOGIN = 15;
+		public const int PASCALPATH        = 1;
+		public const int ACTIVE            = 2;
+		public const int ASKCHOICE         = 4;
+		public const int CHOICEINDEX       = 5;
+		public const int SETTINGMODE       = 6;
+		public const int AUTOUPDATE        = 7;
+		public const int BGIMAGE           = 8;
+		public const int STICKER           = 9;
+		public const int STATUSBAR         = 10;
+		public const int LOGO              = 11;
+		public const int LOCATION          = 12;
+		public const int EDITOR            = 13;
+		public const int BETA              = 14;
+		public const int LOGIN             = 15;
+		public const int ToolBarCamouflage = 16;
 		
 		public const double current_version = 5.0;
 		public const string current_version_add = "beta";
@@ -117,7 +118,7 @@ namespace Yuki_Theme.Core.Forms
 						settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor =
 							settingsPanel.textBox1.BackColor = settingsPanel.add_program.BackColor =
 								settingsPanel.add_plugin.BackColor = settingsPanel.tabPage1.BackColor =
-									settingsPanel.BackColor = Helper.bgColor;
+									settingsPanel.BackColor = settingsPanel.add_toolbar.BackColor = Helper.bgColor;
 
 			ForeColor = settingsPanel.button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
 				button3.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
@@ -126,8 +127,8 @@ namespace Yuki_Theme.Core.Forms
 							settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor =
 								settingsPanel.mode.ForeColor = settingsPanel.mode.ListTextColor =
 									settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
-										settingsPanel.add_program.ForeColor =
-											settingsPanel.add_plugin.ForeColor =
+										settingsPanel.add_program.ForeColor = settingsPanel.add_plugin.ForeColor =
+											settingsPanel.add_toolbar.ForeColor =
 												settingsPanel.tabPage1.ForeColor = Helper.fgColor;
 
 			settingsPanel.button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
@@ -142,19 +143,7 @@ namespace Yuki_Theme.Core.Forms
 			settingsPanel.tabs.bg = new SolidBrush (Helper.bgColor);
 			settingsPanel.tabs.bgClick = new SolidBrush (Helper.bgClick);
 			bool isProgram = Helper.mode == ProductMode.Program;
-			if (isProgram)
-			{
-				if (settingsPanel.tabs.TabPages.Contains (settingsPanel.add_plugin))
-					settingsPanel.tabs.TabPages.Remove (settingsPanel.add_plugin);
-				if (!settingsPanel.tabs.TabPages.Contains (settingsPanel.add_program))
-					settingsPanel.tabs.TabPages.Add (settingsPanel.add_program);
-			} else
-			{
-				if (settingsPanel.tabs.TabPages.Contains (settingsPanel.add_program))
-					settingsPanel.tabs.TabPages.Remove (settingsPanel.add_program);
-				if (!settingsPanel.tabs.TabPages.Contains (settingsPanel.add_plugin))
-					settingsPanel.tabs.TabPages.Add (settingsPanel.add_plugin);
-			}
+			settingsPanel.HideTabPage (isProgram, false);
 		}
 
 		public void setVisible (bool vis)

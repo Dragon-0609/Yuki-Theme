@@ -110,11 +110,12 @@ namespace Yuki_Theme_Plugin
 		private Image                  tmpImage1;
 		private Image                  tmpImage2;
 		
-		private bool        isMoving              = false;         // true while dragging the image
-		private Point       movingPicturePosition = new Point(80, 20);   // the position of the moving image
-		private Point       offset;   // mouse position inside the moving image while dragging
-		private int         selectionindex;
-		private IconManager manager;
+		private       bool              isMoving              = false;         // true while dragging the image
+		private       Point             movingPicturePosition = new Point(80, 20);   // the position of the moving image
+		private       Point             offset;   // mouse position inside the moving image while dragging
+		private       int               selectionindex;
+		private       IconManager       manager;
+		public static ToolBarCamouflage camouflage;
 		
 		private bool bgImage => CLI.bgImage;
 		
@@ -316,6 +317,7 @@ namespace Yuki_Theme_Plugin
 			context.Renderer = renderer;
 			context2.Renderer = renderer;
 			manager = new IconManager (tools, menu, fm);
+			camouflage = new ToolBarCamouflage (tools);
 			
 			UpdateColors ();
 			

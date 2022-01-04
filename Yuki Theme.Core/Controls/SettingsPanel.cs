@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
@@ -11,19 +12,56 @@ namespace Yuki_Theme.Core.Controls
 {
 	public partial class SettingsPanel : UserControl
 	{
-		public MForm mf;
-		public Color bg;
-		public Color fg;
-		public Color key;
-		public Color click;
-		public bool  isFromPascal = false;
+		public  MForm                mf;
+		public  Color                bg;
+		public  Color                bg2;
+		public  Color                fg;
+		public  Brush                fgBrush;
+		public  Color                key;
+		public  Color                click;
+		public  bool                 isFromPascal = false;
+		private int                  selectionindex;
+		public  bool                 lockCheckbox = false;
+		public  bool                 lockList     = false;
+		public  List <ToolStripItem> items;
+		public  List <string>        itemsToHide;
+		
+		public  Action <List <ToolStripItem>, List <string>> onChange;
 
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
 			ActionBox.Items.AddRange (new string [] {"Delete", "Import and Delete", "Ignore"});
 			mode.Items.AddRange (new string [] {"Light", "Advanced"});
+			toolBarList.ItemHeight = Font.Height + 2;
 			loadSVG ();
+		}
+
+		public void HideTabPage (bool isProgram, bool needToolBarPage)
+		{
+			if (isProgram)
+			{
+				if (tabs.TabPages.Contains (add_plugin))
+					tabs.TabPages.Remove (add_plugin);
+				if (!tabs.TabPages.Contains (add_program))
+					tabs.TabPages.Add (add_program);
+			} else
+			{
+				if (tabs.TabPages.Contains (add_program))
+					tabs.TabPages.Remove (add_program);
+				if (!tabs.TabPages.Contains (add_plugin))
+					tabs.TabPages.Add (add_plugin);
+			}
+
+			if (needToolBarPage)
+			{
+				if (!tabs.TabPages.Contains (add_toolbar))
+					tabs.TabPages.Add (add_toolbar);
+			} else
+			{
+				if (tabs.TabPages.Contains (add_toolbar))
+					tabs.TabPages.Remove (add_toolbar);
+			}
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -142,6 +180,136 @@ namespace Yuki_Theme.Core.Controls
 		{
 			var a = Assembly.GetExecutingAssembly ();
 			Helper.renderSVG (button1, Helper.loadsvg ("three-dots", a), true, new Size (16,16));
+		}
+		
+		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
+		{
+			if (e.Index < 0) return;
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
+				                           e.Index, e.State ^ DrawItemState.Selected,
+				                           e.ForeColor, bg2);
+			} else if (e.Index == selectionindex)
+			{
+				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
+				                           e.Index, e.State,
+				                           e.ForeColor, click);
+			}
+
+			e.DrawBackground ();
+			e.Graphics.DrawString (((ListBox) sender).Items [e.Index].ToString (), e.Font, fgBrush, e.Bounds);
+
+			e.DrawFocusRectangle ();
+		}
+
+		private void Lst_MouseHover (object sender, MouseEventArgs e)
+		{
+			if (!lockList)
+			{
+				int index = toolBarList.IndexFromPoint (e.Location);
+				if (index < 0) return;
+				//Do any action with the item
+				if (selectionindex != index)
+				{
+					int oldindex = selectionindex;
+					selectionindex = index;
+					toolBarList.Invalidate (toolBarList.GetItemRectangle (oldindex));
+					toolBarList.Invalidate (toolBarList.GetItemRectangle (index));
+				}
+			}
+		}
+
+		private void toolBarList_SelectedIndexChanged (object sender, EventArgs e)
+		{
+			if(!lockList)
+			{
+				if (toolBarList.SelectedIndex >= 0)
+				{
+					if (items != null && itemsToHide != null)
+					{
+						string nm = (string) toolBarList.SelectedItem;
+						ToolStripItem item = getByText (nm);
+
+						if (item != null)
+						{
+							toolBarImage.Image = item.Image;
+							lockCheckbox = true;
+							toolBarVisible.Checked = !itemsToHide.Contains (item.Name);
+							lockCheckbox = false;
+						}
+					}
+				}
+			}
+		}
+
+		private ToolStripItem getByText (string nm)
+		{
+			ToolStripItem item = null;
+			foreach (ToolStripItem toolStripItem in items)
+			{
+				if (toolStripItem.ToolTipText == nm)
+				{
+					item = toolStripItem;
+				}
+			}
+
+			return item;
+		}
+
+		private void toolBarVisible_CheckedChanged (object sender, EventArgs e)
+		{
+			if (!lockCheckbox)
+			{
+				if (toolBarList.SelectedIndex >= 0)
+				{
+					string nm = (string) toolBarList.SelectedItem;
+					ToolStripItem item = getByText (nm);
+
+					if (toolBarVisible.Checked)
+					{
+						if (itemsToHide.Contains (item.Name))
+						{
+							itemsToHide.Remove (item.Name);
+						}
+					} else
+					{
+						if (!itemsToHide.Contains (item.Name))
+						{
+							itemsToHide.Add (item.Name);
+						}
+					}
+
+					if (onChange != null)
+					{
+						onChange (items, itemsToHide);
+					}
+				}
+			}
+		}
+
+		public void PopulateList (List <ToolStripItem> pitems, List <string> pitemsToHide)
+		{
+			items = pitems;
+			itemsToHide = pitemsToHide;
+
+			toolBarList.Items.Clear ();
+
+			for (var i = 0; i < items.Count; i++)
+			{
+				if (items [i].ToolTipText != null)
+					toolBarList.Items.Add (items [i].ToolTipText);
+			}
+
+		}
+
+		private void button2_Click (object sender, EventArgs e)
+		{
+			itemsToHide.Clear ();
+			if (onChange != null)
+			{
+				onChange (items, itemsToHide);
+			}
 		}
 	}
 }

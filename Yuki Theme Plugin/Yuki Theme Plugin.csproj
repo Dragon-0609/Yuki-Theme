@@ -118,6 +118,7 @@
         <Compile Include="Props.Designer.cs">
           <DependentUpon>Props.cs</DependentUpon>
         </Compile>
+        <Compile Include="ToolBarCamouflage.cs" />
         <Compile Include="ToolRenderer.cs" />
         <Compile Include="YukiTheme_VisualPascalABCPlugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
