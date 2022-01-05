@@ -96,6 +96,7 @@
         <Compile Include="Controls\InertButtonBase.cs" />
         <Compile Include="Controls\Resources.Designer.cs" />
         <Compile Include="Controls\Strings.Designer.cs" />
+        <Compile Include="Controls\ToolItemGroup.cs" />
         <Compile Include="Controls\YukiAutoHideStrip.cs" />
         <Compile Include="Controls\YukiDockPaneCaption.cs" />
         <Compile Include="Controls\Win32\Enums.cs" />

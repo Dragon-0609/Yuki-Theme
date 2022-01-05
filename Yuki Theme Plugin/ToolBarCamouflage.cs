@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme_Plugin.Controls;
 
 namespace Yuki_Theme_Plugin
 {
@@ -9,13 +11,15 @@ namespace Yuki_Theme_Plugin
 	{
 		private ToolStrip            tools;
 		public  List <ToolStripItem> items;
-		public  List <string> itemsToHide;
+		public  List <ToolItemGroup> groups;
+		public  List <string>        itemsToHide;
 		private DatabaseManager      database;
 		
 		public ToolBarCamouflage (ToolStrip toolStrip)
 		{
 			tools = toolStrip;
 			items = new List <ToolStripItem> ();
+			groups = new List <ToolItemGroup> ();
 			itemsToHide = new List <string> ();
 			database = new DatabaseManager ();
 			Init ();
@@ -23,13 +27,36 @@ namespace Yuki_Theme_Plugin
 
 		public void Init ()
 		{
+			ToolItemGroup prev = null;
+			ToolItemGroup current = new ToolItemGroup ();
+
 			for (var i = 0; i < tools.Items.Count; i++)
 			{
+				if (current.separator != null)
+				{
+					prev = current;
+					current = new ToolItemGroup ();
+					current.prev = prev;
+					groups.Add (prev);
+				}
+
 				if (tools.Items [i].ToolTipText != null && tools.Items [i].Visible &&
 				    tools.Items [i].AccessibleDescription != null && tools.Items [i].AccessibleDescription.Length > 1)
+				{
 					items.Add (tools.Items [i]);
+					current.items.Add (tools.Items [i]);
+				}
+
+				if (tools.Items [i] is ToolStripSeparator)
+				{
+					if (current.separator == null && !current.IsEmpty ())
+						current.separator = (ToolStripSeparator) tools.Items [i];
+				}
 			}
 
+			if (!current.IsEmpty ())
+				groups.Add (current);
+			groups [groups.Count - 1].isLast = true;
 			PopulateList ();
 			StartToHide ();
 		}
@@ -43,16 +70,46 @@ namespace Yuki_Theme_Plugin
 					item.Visible = true;
 				}
 
+				foreach (ToolItemGroup itemGroup in groups)
+				{
+					if(itemGroup.separator != null && !itemGroup.isLast)
+						itemGroup.separator.Visible = true;
+				}
+
 				foreach (string s in itemsToHide)
 				{
 					// MessageBox.Show ("TRY HIDE: " + s);
 					if (s != null && s.Length > 1)
 					{
-						ToolStripItem [] res = tools.Items.Find (s, false);
+						foreach (ToolItemGroup itemGroup in groups)
+						{
+							if (itemGroup.HasItem (s))
+							{
+								ToolStripItem res = itemGroup.GetItem (s);
+								res.Visible = false;
+							}
+						}
+						/*ToolStripItem [] res = tools.Items.Find (s, false);
 						if (res != null && res.Length > 0)
 						{
 							res [0].Visible = false;
 							// MessageBox.Show ("HIDED: " + s);
+						}*/
+					}
+				}
+
+				foreach (ToolItemGroup itemGroup in groups)
+				{
+					if (itemGroup.isAllHidden ())
+					{
+						if (itemGroup.isLast)
+						{
+							if (itemGroup.prev.separator != null)
+								itemGroup.prev.separator.Visible = false;
+						} else
+						{
+							if (itemGroup.separator != null)
+								itemGroup.separator.Visible = false;
 						}
 					}
 				}
