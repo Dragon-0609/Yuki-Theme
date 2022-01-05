@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en" manifest="cache.manifest">
+<head>
+	<title>Main | Yuki Theme</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Dragon-LV">
+	<meta name="description" content="This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: Darcula, Monokai and etc.">
+	<link rel="canonical" href="https://dragon-0609.github.io/Yuki-Theme/">
+	<meta name="keywords" content="Yuki Theme, Yuki Theme Pascal, Yuki Theme Паскал, pascal, syntax color, синтактические цвета, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github, Паскал, Паскаль, изменить цвета, цвета, colors, change colors, doki theme, theme, jetbrains, изменить интерфейс">
+	<link rel="icon" href="img/favicon.ico">
+	
+	<meta content="FxEnWgWZE2D3IGHxYVxfY0f84XktxbltcBCB0KUMRlE" name="google-site-verification"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+	<link href="css/theme.css" rel="stylesheet">
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVF89FNN39"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'G-JVF89FNN39');
+	</script>
+</head>
+<body class="bg-dark text-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	<a class="h3 font-weight-bold text-light" href="index.html">Yuki Theme</a>
+	<button class="navbar-toggler" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+			data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<div class="d-flex ml-auto">
+			<div class="nav-link mx-2 disabled" id="header_lang">
+
+				<span class="content content_en">Language:</span> <span class="content content_ru">Язык:</span>
+
+			</div>
+			<div class="btn btn-outline-info mx-2" id="lang_en" onclick="chooseLang('en')">
+				<span class="content content_en">English</span> <span class="content content_ru">Английский</span>
+			</div>
+			<div class="btn btn-outline-info mx-2" id="lang_ru" onclick="chooseLang('ru')">
+				<span></span>
+				<span class="content content_en">Russian</span> <span class="content content_ru">Русский</span>
+
+			</div>
+		</div>
+
+		<a class="btn btn-outline-danger ml-4" href="usage.html" id="header_usage">
+			<span class="content content_en">How to install</span> <span class="content content_ru">Как установить</span>
+		</a>
+
+		<a class="btn btn-outline-warning ml-4" href="about.html" id="header_about">
+			<span class="content content_en">About project</span> <span class="content content_ru">О проекте</span>
+		</a>
+
+	</div>
+</nav>
+<div class="container">
+	<div class="content content_en">
+		<div class="h4 text-center">Description</div>
+		<p>This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular
+			color
+			schemes like: <code>Darcula</code>, <code>Monokai</code> and etc.</p>
+		<p>Also, it includes <code>Doki Theme</code>, with over 50 themes, I think you will find the best girl.</p>
+
+		<p>Or, you can make your own color scheme by clicking <code>plus</code> button. Also, you can import your color scheme from any
+			JetBrains IDE,
+			by
+			clicking <code>Import</code>.</p>
+
+		<div class="row">
+			<div class="col-6">
+				<p>Before</p>
+				<div>
+					<img src="img/screen.png" class="img-fluid" alt="Before">
+				</div>
+			</div>
+			<div class="col-6">
+				<p>After</p>
+				<div>
+					<img src="img/screen1.png" class="img-fluid" alt="After">
+				</div>
+			</div>
+		</div>
+		<div class="h3 mt-5 mb-3">Installation</div>
+
+		<div class="my-3"><a href="usage.html">How to install</a></div>
+
+		<p> There're 2 types of <code>Yuki Theme</code>. <code>Program (.exe)</code> and <code>Plugin (.dll)</code>.
+			I recommend you to use <code>Plugin</code> version, but if there is something that crashes PascalABC.NET, you can use <code>Program</code>
+			version.</p>
+
+
+		<p>If you want to use <code>Plugin</code>:</p>
+
+		<p>
+			Download the <a href="https://github.com/Dragon-0609/Yuki-Theme/releases/latest">latest release</a> of plugin and extract it in
+			<code>PascalABC.NET</code> directory.
+		</p>
+
+		<p>If you want to use <code>Program</code>:</p>
+
+		<p>Download the <a href="https://github.com/Dragon-0609/Yuki-Theme/releases/latest">latest release</a> of program and extract the
+			zip
+			file to
+			anywhere, after that open <code>Yuki Theme.exe</code>.
+		</p>
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3">What is difference between <code>Program</code> and <code>Plugin</code>?</div>
+		Well, both of them are <code>Yuki Theme</code>. The difference is in integration of them with PascalABC.NET IDE.
+
+		<p>
+			If you use program version, you can change color syntax of the IDE, but it has limitations:
+		</p>
+
+		<label class="d-block mx-5 mt-3"><input class="form-check-input" disabled type="checkbox" value="option3"> Can set background image</label>
+		<label class="d-block mx-5 "><input class="form-check-input" disabled type="checkbox" value="option3"> Can change color of some UI
+			parts</label>
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> You
+			have to restart PascalABC.NET to change theme</label>
+
+
+		<p><code>Plugin</code> version:</p>
+
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Can set
+			background image</label>
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Can
+			change color of some UI parts</label>
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Easily
+			change theme at runtime</label>
+
+		<div class="row">
+			<div class="col-6">
+				<p>Without plugin:</p>
+				<div>
+					<img src="img/without.png" class="img-fluid" alt="Without plugin">
+				</div>
+			</div>
+			<div class="col-6">
+				<p>With plugin:</p>
+				<div>
+					<img src="img/with.png" class="img-fluid" alt="With plugin">
+				</div>
+			</div>
+		</div>
+
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3">Documentation</div>
+		<div class="row my-3">
+			<div class="list-group col-md-6 ml-3">
+				<a class="list-group-item bg-dark-transparent text-light" href="#configuration">Configuration</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#default-themes">Default Themes</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#doki-theme">Doki Theme</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#custom-themes">Custom Themes</a>
+			</div>
+		</div>
+		<div class="h4 mt-5 mb-3" id="configuration">Configuration</div>
+
+		<p>You can access the settings menu by clicking <code>Settings</code> button. Here's some fields, that you can set:</p>
+		<div class="row my-3">
+			<div class="list-group col-md-6 ml-3">
+				<a class="list-group-item bg-dark-transparent text-light" href="#path-to-pascalabcnet">Path to PascalABC.NET</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#active-scheme">Active Scheme</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#remember-active-scheme">Remember Active Scheme</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#ask-if-there-are-other-themes-in-pascalabc-directory">Ask
+					if there are other themes in PascalABC directory</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#do-action-if-there-are-other-themes">Do action, if there
+					are other themes</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#setting-mode">Setting Mode</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#check-update">Check Update</a>
+			</div>
+		</div>
+		<div class="h5 mt-5 mb-3" id="path-to-pascalabcnet">
+			Path to PascalABC.NET (You don't need it in <code>plugin</code> version):
+		</div>
+		<p>It's necessary to export the scheme to the IDE.</p>
+
+		<div class="h5 mt-5 mb-3" id="active-scheme">
+			Active Scheme
+		</div>
+		<p>
+			It will be shown in next program opening.
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="remember-active-scheme">
+			Remember Active Scheme
+		</div>
+
+		<p>
+			It sets current scheme to active scheme, so it will be shown in next program opening
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="ask-if-there-are-other-themes-in-pascalabc-directory">
+			Ask if there are other themes in PascalABC directory (You don't need it in <code>plugin</code> version)
+		</div>
+
+		<p>
+			It asks on exporting scheme to the IDE, if there are other themes in <code>Highlighting</code> directory inside
+			<code>PascalABC.NET</code> directory
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="do-action-if-there-are-other-themes">
+			Do action if there are other themes (You don't need it in <code>plugin</code> version)
+		</div>
+		<p>If you uncheck <code>Ask if there are other themes in PascalABC directory</code>, the selected action will be done. There're 3
+			actions:</p>
+		<div class="row my-3">
+			<ul class="list-group col-md-6 ml-3">
+				<li class="list-group-item bg-dark-transparent text-light">Delete (old scheme)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Import and Delete (old scheme)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Ignore (old scheme)</li>
+			</ul>
+		</div>
+
+		<div class="h5 mt-5 mb-3" id="setting-mode">
+			Setting Mode
+		</div>
+		<p>
+			This checkbox is for custom coloring. It has 2 values: <code>Light</code> and <code>Advanced</code>.
+		</p>
+		<p>
+			<code>Light</code> is the easiest way to change colors. It shows only main syntax colors and applies to duplicate colors by
+			itself.
+			There're 4 types of comment colors. In <code>Light</code> mode it's shown as 1 color.
+		</p>
+		<p>
+			<code>Advanced</code> shows all colors. Also, there're duplicate colors. For example: there're 4 colors for Comments and etc.
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="check-update">
+			Check Update
+		</div>
+		<p>If the checkbox is checked, the programm will check updates in every program run. If there's update, the program will notify
+			you.</p>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="default-themes">Default Themes</div>
+		<div class="row my-3">
+			<ul class="list-group col-md-6 ml-3">
+				<li class="list-group-item bg-dark-transparent text-light">Darcula (from JetBrains IDEA)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Dracula</li>
+				<li class="list-group-item bg-dark-transparent text-light">Github Dark</li>
+				<li class="list-group-item bg-dark-transparent text-light">Github Light</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monokai Dark</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monokai Light</li>
+				<li class="list-group-item bg-dark-transparent text-light">Nightshade</li>
+				<li class="list-group-item bg-dark-transparent text-light">Oblivion</li>
+				<li class="list-group-item bg-dark-transparent text-light">Shades of Purple</li>
+			</ul>
+		</div>
+
+		<div>
+			<img src="img/screen2.png" class="img-fluid" alt="Themes">
+		</div>
+		<hr>
+
+		<div class="h3 mt-5 mb-3" id="doki-theme">Doki Theme</div>
+
+		<p>
+			You can choose themes from various, Anime, Manga, or Visual Novels from
+			<a href="https://github.com/doki-theme/doki-theme-jetbrains"><code>Doki Theme</code></a>:
+		</p>
+
+		<div class="row my-3">
+			<ul class="list-group col-md-6 ml-3">
+				<li class="list-group-item bg-dark-transparent text-light">Blend S</li>
+				<li class="list-group-item bg-dark-transparent text-light">Daily Life with a Monster Girl</li>
+				<li class="list-group-item bg-dark-transparent text-light">DanganRonpa</li>
+				<li class="list-group-item bg-dark-transparent text-light">Doki-Doki Literature Club</li>
+				<li class="list-group-item bg-dark-transparent text-light">Don't Toy With Me, Miss Nagatoro</li>
+				<li class="list-group-item bg-dark-transparent text-light">Darling in the FranXX</li>
+				<li class="list-group-item bg-dark-transparent text-light">Fate/Type-Moon</li>
+				<li class="list-group-item bg-dark-transparent text-light">Future Diary</li>
+				<li class="list-group-item bg-dark-transparent text-light">Gate</li>
+				<li class="list-group-item bg-dark-transparent text-light">High School DxD</li>
+				<li class="list-group-item bg-dark-transparent text-light">Jahy-sama Will Not Be Discouraged!</li>
+				<li class="list-group-item bg-dark-transparent text-light">Kakegurui</li>
+				<li class="list-group-item bg-dark-transparent text-light">Kill La Kill</li>
+				<li class="list-group-item bg-dark-transparent text-light">KonoSuba</li>
+				<li class="list-group-item bg-dark-transparent text-light">Love Live!</li>
+				<li class="list-group-item bg-dark-transparent text-light">Lucky Star</li>
+				<li class="list-group-item bg-dark-transparent text-light">Miss Kobayashi's Dragon Maid</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monogatari</li>
+				<li class="list-group-item bg-dark-transparent text-light">NekoPara</li>
+				<li class="list-group-item bg-dark-transparent text-light">Neon Genesis Evangelion</li>
+				<li class="list-group-item bg-dark-transparent text-light">OreGairu</li>
+				<li class="list-group-item bg-dark-transparent text-light">Quintessential Quintuplets</li>
+				<li class="list-group-item bg-dark-transparent text-light">Re:Zero</li>
+				<li class="list-group-item bg-dark-transparent text-light">Steins Gate</li>
+				<li class="list-group-item bg-dark-transparent text-light">Sword Art Online</li>
+				<li class="list-group-item bg-dark-transparent text-light">Yuru Camp</li>
+			</ul>
+		</div>
+
+		<div>
+			<img src="img/screen3.png" class="img-fluid" alt="Themes">
+		</div>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="custom-themes">Custom Themes</div>
+		<p>
+			You can create your own theme by pressing <code>Add</code> button. In there you can choose Name of the theme and default scheme
+			for
+			copy.
+		</p>
+		<p>
+			After that, you can change colors and background image of the theme.</p>
+		<p>
+			Also, you can import your favourite color scheme from any JetBrains IDE. Click to <code>Import</code> button and select the file
+			of
+			the scheme.
+		</p>
+
+		<div>
+			<img src="img/screen4.png" class="img-fluid" alt="Themes">
+		</div>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="attributions">Attributions</div>
+		<p><span class="font-weight-bold">Was inspired by</span> <a class="text-warning"
+																	href="https://github.com/doki-theme/doki-theme-jetbrains">Doki Theme</a>
+		</p> <br>
+		<p><span class="font-weight-bold">Project uses</span>
+			<a class="text-success" href="https://github.com/PavelTorgashov/FastColoredTextBox">Fast Colored Text Box</a>,
+			<a class="text-success" href="https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker">Cyotek ColorPicker</a>,
+			<a class="text-success" href="https://github.com/JamesNK/Newtonsoft.Json">Newtonsoft.Json</a>,
+			<a class="text-success" href="https://github.com/RJCodeAdvance/Custom-ComboBox">RJ ComboBox</a>,
+			<a class="text-success" href="https://github.com/svg-net/SVG">SVG.NET</a>,
+			<a class="text-success" href="https://icons.getbootstrap.com/">Bootstrap Icons</a>,
+			<a class="text-success" href="https://github.com/fabricelacharme/ColorSlider">Color Slider</a>,
+			<a class="text-success" href="https://www.nuget.org/packages/WindowsAPICodePack">WindowsAPICodePack</a>,
+			<a class="text-success" href="https://github.com/r-aghaei/FlatNumericUpDownExample">FlatNumericUpDown</a>.
+		</p>
+
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3" id="contributions">Contributions?</div>
+
+		<p>You probably have good ideas, so feel free to submit your feedback as
+			<a href="https://github.com/Dragon-0609/Yuki-Theme/issues/new">an issue</a>. I'll read your feedback, so don't be shy!
+		</p>
+
+		<p>Help make this plugin better!</p>
+
+
+		<hr>
+
+		<div align="center">
+			<img src="img/yuki128_2.png"/>
+		</div>
+
+	</div>
+	<div class="content content_ru">
+
+		<div class="h4 text-center">Описание</div>
+		<p>Это программа для людей, которые хотят изменить PascalABC.NET IDE. С помощью этой программы вы можете выбрать любую встроенную
+			популярную тему, как: <code>Darcula</code>, <code>Monokai</code> и др.</p>
+		<p>А ещё, программа включает в себя <code>Doki Theme</code>, с более чем 50 тем, думаю вы найдёте лучшую девушку.</p>
+
+		<p>Или вы можете создать свою тему кликая <code>плюс</code> кнопку. Также, вы можете импортировать свою световую схему из любой IDE
+			от
+			JetBrains, кликая <code>Импорт</code>.</p>
+
+		<div class="row">
+			<div class="col-6">
+				<p>До</p>
+				<div>
+					<img src="img/screen.png" class="img-fluid" alt="Before">
+				</div>
+			</div>
+			<div class="col-6">
+				<p>После</p>
+				<div>
+					<img src="img/screen1.png" class="img-fluid" alt="After">
+				</div>
+			</div>
+		</div>
+		<div class="h3 mt-5 mb-3">Установка</div>
+
+		<div class="my-3"><a href="usage.html">Как установить</a></div>
+
+		<p> Тут есть 2 типа <code>Yuki Theme</code>. <code>Программа (.exe)</code> и <code>Плагин (.dll)</code>.
+			Я рекомендую вам использовать версию <code>Плагин</code>, но если по какой-то причине ломается PascalABC.NET, то вы можете
+			использовать версию <code>Программа</code>.</p>
+
+		<p>Если вы хотите использовать <code>Плагин</code>:</p>
+
+		<p>Скачайте <a href="https://github.com/Dragon-0609/Yuki-Theme/releases/latest">последную версию</a>
+			плагина и распокуйте в папку с <code>PascalABC.NET</code>.
+		</p>
+
+		<p> Если вы хотите использовать <code>Программу</code>: </p>
+
+		<p>
+			Скачайте <a href="https://github.com/Dragon-0609/Yuki-Theme/releases/latest">последную версию</a> программы и распокуйте её в
+			любом
+			месте, после чего откройте <code>Yuki Theme.exe</code>.
+		</p>
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3">В чём различие между <code>Программой</code> и <code>Плагином</code>?</div>
+		<p>Чтож, они обе <code>Yuki Theme</code>. Но отличие в их интеграции с PascalABC.NET IDE.</p>
+
+		<p>
+			Если вы используете версию программы вы можете изменить цвета редактора, но он имеет лимиты:
+		</p>
+
+		<label class="d-block mx-5 mt-3">
+			<input class="form-check-input" disabled type="checkbox" value="option3"> Может изменить фоновое изображение
+		</label>
+		<label class="d-block mx-5 ">
+			<input class="form-check-input" disabled type="checkbox" value="option3"> Может менять цвета в некоторых частах интерфейса
+		</label>
+		<label class="d-block mx-5 mb-3">
+			<input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Тебе придётся запустить
+			PascalABC.NET заново, чтобы применить тему.
+		</label>
+
+
+		<p>версия <code>Плагина</code>:</p>
+
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Может
+			изменить фоновое изображение</label>
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Может
+			менять цвета в некоторых частах интерфейса</label>
+		<label class="d-block mx-5 mb-3"><input class="form-check-input" checked="checked" disabled type="checkbox" value="option3"> Может с
+			лёгкостю применять тему.</label>
+
+		<div class="row">
+			<div class="col-6">
+				<p>Без плагина:</p>
+				<div>
+					<img src="img/without.png" class="img-fluid" alt="Without plugin">
+				</div>
+			</div>
+			<div class="col-6">
+				<p>С плагином:</p>
+				<div>
+					<img src="img/with.png" class="img-fluid" alt="With plugin">
+				</div>
+			</div>
+		</div>
+
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3">Документация</div>
+		<div class="row my-3">
+			<div class="list-group col-md-6 ml-3">
+				<a class="list-group-item bg-dark-transparent text-light" href="#настройки">Настройки</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#встроенные-темы">Встроенные Темы</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#r_doki-theme">Doki Theme</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#пользовательские-темы">Пользовательские Темы</a>
+			</div>
+		</div>
+		<div class="h4 mt-5 mb-3" id="настройки">Настройки</div>
+
+		<p>Вы можете зайти в настройки кликая по <code>Настройки</code> (Шестерёнка) кнопку. Тут есть некоторые поля, которые вы можете
+			изменить:</p>
+
+
+		<div class="row my-3">
+			<div class="list-group col-md-6 ml-3">
+				<a class="list-group-item bg-dark-transparent text-light" href="#путь-до-pascalabcnet">Путь до PascalABC.NET</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#активная-тема">Активная Тема</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#запомнить-активную-тему">Запомнить Активную Тему</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#спросить-если-в-папке-pascalabc-есть-другие-темы">Спросить
+					если в папке PascalABC есть другие темы</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#действие-если-есть-другие-темы">Действие, если есть другие
+					темы</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#режим-настройки">Режим настройки</a>
+				<a class="list-group-item bg-dark-transparent text-light" href="#проверить-обновления">Проверить обновления</a>
+			</div>
+		</div>
+
+		<div class="h5 mt-5 mb-3" id="путь-до-pascalabcnet">
+			Путь до PascalABC.NET (Вам не нужно в версии <code>Плагина</code>)
+		</div>
+		<p>
+			Это необходимо для экспорта темы в IDE.
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="активная-тема">
+			Активная Тема
+		</div>
+		<p>
+			Тема будет выбрана при следующем запуске.
+		</p>
+		<div class="h5 mt-5 mb-3" id="запомнить-активную-тему">
+			Запомнить Активную Тему
+		</div>
+		<p>
+			Оно запоминает текущую тему, так что тема будет выбрана при следующем запуске.
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="спросить-если-в-папке-pascalabc-есть-другие-темы">
+			Спросить если в папке PascalABC есть другие темы (Вам не нужно в версии <code>Плагина</code>)
+		</div>
+		<p>
+			Оно спросит вас при экспорте, если в папке <code>Highlighting</code> в <code>PascalABC.NET</code> есть другие темы.
+		</p>
+
+
+		<div class="h5 mt-5 mb-3" id="действие-если-есть-другие-темы">
+			Действие, если есть другие темы (Вам не нужно в версии <code>Плагина</code>)
+		</div>
+		<p>
+			Если вы отключите <code>Спросить если в папке PascalABC есть другие темы</code>, то выбранное дейстие будет исполнено. Тут есть
+			3
+			действий:
+		</p>
+		<div class="row my-3">
+			<ul class="list-group col-md-6 ml-3">
+				<li class="list-group-item bg-dark-transparent text-light">Удалить (старую тему)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Импортировать и Удалить (старую тему)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Игнорировать (старую тему)</li>
+			</ul>
+		</div>
+
+		<div class="h5 mt-5 mb-3" id="режим-настройки">
+			Режим настройки
+		</div>
+		<p>
+			Это для пользовательской темы. Тут есть 2 значения: <code>Легкий</code> и <code>Полный</code>.
+		</p>
+		<p>
+			<code>Легкий</code> это самый легкий путь для изменения цветов. Оно показывает только основные цвета синтаксиса и применяет
+			копиям
+			цветов сам.
+			Тут есть 4 типа цветов для комментариев. В режиме <code>Легкий</code>, оно показывается как 1 цвет.
+		</p>
+		<p>
+			<code>Полный</code> показывает все цвета. Также тут есть копии цветов. Например: Тут есть 4 типа цветов для комментариев и др.
+		</p>
+
+		<div class="h5 mt-5 mb-3" id="проверить-обновления">
+			Проверить обновления
+		</div>
+		<p>
+			Если выбрано, то программа сама проверит обновление при каждом запуске. Если есть обновление, оно уведомить вас.
+		</p>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="встроенные-темы">Встроенные Темы</div>
+		<div class="row my-3">
+			<ul class="list-group col-md-6 ml-3">
+				<li class="list-group-item bg-dark-transparent text-light">Darcula (from JetBrains IDEA)</li>
+				<li class="list-group-item bg-dark-transparent text-light">Dracula</li>
+				<li class="list-group-item bg-dark-transparent text-light">Github Dark</li>
+				<li class="list-group-item bg-dark-transparent text-light">Github Light</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monokai Dark</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monokai Light</li>
+				<li class="list-group-item bg-dark-transparent text-light">Nightshade</li>
+				<li class="list-group-item bg-dark-transparent text-light">Oblivion</li>
+				<li class="list-group-item bg-dark-transparent text-light">Shades of Purple</li>
+			</ul>
+		</div>
+
+		<div>
+			<img src="img/screen2.png" class="img-fluid" alt="Темы">
+		</div>
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3" id="r_doki-theme">Doki Theme</div>
+
+		<p>
+			Вы можете выбрать темы из различных аниме, манги или визуальных новелл от
+			<a href="https://github.com/doki-theme/doki-theme-jetbrains"><code>Doki Theme</code></a>:
+		</p>
+
+		<div class="row my-3 no-gutters">
+			<ul class="list-group col-md-6">
+				<li class="list-group-item bg-dark-transparent text-light pb-4">на Русском</li>
+				<li class="list-group-item bg-dark-transparent text-light">Садистская смесь</li>
+				<li class="list-group-item bg-dark-transparent text-light">Повседневная жизнь с девушкой-монстром</li>
+				<li class="list-group-item bg-dark-transparent text-light">Школа отчаяния</li>
+				<li class="list-group-item bg-dark-transparent text-light">&nbsp;</li>
+				<li class="list-group-item bg-dark-transparent text-light">Не издевайся, Нагаторо</li>
+				<li class="list-group-item bg-dark-transparent text-light">Милый во Франксе</li>
+				<li class="list-group-item bg-dark-transparent text-light">Судьба/Type-Moon</li>
+				<li class="list-group-item bg-dark-transparent text-light">Дневник будущего</li>
+				<li class="list-group-item bg-dark-transparent text-light">Врата: Там бьются наши воины</li>
+				<li class="list-group-item bg-dark-transparent text-light">Демоны старшей школы</li>
+				<li class="list-group-item bg-dark-transparent text-light">Джахи не будет отчаиваться!</li>
+				<li class="list-group-item bg-dark-transparent text-light">Безумный азарт</li>
+				<li class="list-group-item bg-dark-transparent text-light">Убей или умри</li>
+				<li class="list-group-item bg-dark-transparent text-light">Богиня благословляет этот прекрасный мир</li>
+				<li class="list-group-item bg-dark-transparent text-light">Живая любовь! Проект «Школьный идол»</li>
+				<li class="list-group-item bg-dark-transparent text-light">Счастливая звезда</li>
+				<li class="list-group-item bg-dark-transparent text-light">Кобаяши и её горничная-дракон</li>
+				<li class="list-group-item bg-dark-transparent text-light">Истории</li>
+				<li class="list-group-item bg-dark-transparent text-light">Кошачий рай</li>
+				<li class="list-group-item bg-dark-transparent text-light">Евангелион</li>
+				<li class="list-group-item bg-dark-transparent text-light">Как и ожидал, моя школьная романтическая жизнь не удалась</li>
+				<li class="list-group-item bg-dark-transparent text-light">Пять невест</li>
+				<li class="list-group-item bg-dark-transparent text-light">Жизнь в другом мире с нуля</li>
+				<li class="list-group-item bg-dark-transparent text-light">Врата Штейна</li>
+				<li class="list-group-item bg-dark-transparent text-light">Мастера Меча Онлайн</li>
+				<li class="list-group-item bg-dark-transparent text-light">Лагерь на свежем воздухе</li>
+			</ul>
+			<ul class="list-group col-md-6">
+				<li class="list-group-item bg-dark-transparent text-light pb-4">на Английском</li>
+				<li class="list-group-item bg-dark-transparent text-light">Blend S</li>
+				<li class="list-group-item bg-dark-transparent text-light">Daily Life with a Monster Girl</li>
+				<li class="list-group-item bg-dark-transparent text-light">DanganRonpa</li>
+				<li class="list-group-item bg-dark-transparent text-light">Doki-Doki Literature Club</li>
+				<li class="list-group-item bg-dark-transparent text-light">Don't Toy With Me, Miss Nagatoro</li>
+				<li class="list-group-item bg-dark-transparent text-light">Darling in the FranXX</li>
+				<li class="list-group-item bg-dark-transparent text-light">Fate/Type-Moon</li>
+				<li class="list-group-item bg-dark-transparent text-light">Future Diary</li>
+				<li class="list-group-item bg-dark-transparent text-light">Gate</li>
+				<li class="list-group-item bg-dark-transparent text-light">High School DxD</li>
+				<li class="list-group-item bg-dark-transparent text-light">Jahy-sama Will Not Be Discouraged!</li>
+				<li class="list-group-item bg-dark-transparent text-light">Kakegurui</li>
+				<li class="list-group-item bg-dark-transparent text-light">Kill La Kill</li>
+				<li class="list-group-item bg-dark-transparent text-light">KonoSuba</li>
+				<li class="list-group-item bg-dark-transparent text-light">Love Live!</li>
+				<li class="list-group-item bg-dark-transparent text-light">Lucky Star</li>
+				<li class="list-group-item bg-dark-transparent text-light">Miss Kobayashi's Dragon Maid</li>
+				<li class="list-group-item bg-dark-transparent text-light">Monogatari</li>
+				<li class="list-group-item bg-dark-transparent text-light">NekoPara</li>
+				<li class="list-group-item bg-dark-transparent text-light">Neon Genesis Evangelion</li>
+				<li class="list-group-item bg-dark-transparent text-light">OreGairu</li>
+				<li class="list-group-item bg-dark-transparent text-light">Quintessential Quintuplets</li>
+				<li class="list-group-item bg-dark-transparent text-light">Re:Zero</li>
+				<li class="list-group-item bg-dark-transparent text-light">Steins Gate</li>
+				<li class="list-group-item bg-dark-transparent text-light">Sword Art Online</li>
+				<li class="list-group-item bg-dark-transparent text-light">Yuru Camp</li>
+			</ul>
+		</div>
+
+		<div>
+			<img src="img/screen3.png" class="img-fluid" alt="Темы">
+		</div>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="пользовательские-темы">Пользовательские Темы</div>
+		<p>
+			Вы можете создать свою тему кликая по кнопке <code>Добавить</code>. Тут вы можете выбрать имя и тему для копирования.
+		</p>
+		<p>
+			После этого вы можете изменить цвета и фоновое изобрание темы.
+		</p>
+		<p>
+			А ещё вы можете импортировать любимую тему из IDE от JetBrains. Нажмите кнопку <code>Import</code> и выберите файл темы.
+		</p>
+
+		<div>
+			<img src="img/screen4.png" class="img-fluid" alt="Темы">
+		</div>
+
+		<hr>
+
+		<div class="h4 mt-5 mb-3" id="аттрибуты">Аттрибуты</div>
+		<p><span class="font-weight-bold">Был вдохновлён</span> <a class="text-warning"
+																   href="https://github.com/doki-theme/doki-theme-jetbrains">Doki Theme</a>
+		</p> <br>
+		<p><span class="font-weight-bold">Проект использует</span>
+			<a class="text-success" href="https://github.com/PavelTorgashov/FastColoredTextBox">Fast Colored Text Box</a>,
+			<a class="text-success" href="https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker">Cyotek ColorPicker</a>,
+			<a class="text-success" href="https://github.com/JamesNK/Newtonsoft.Json">Newtonsoft.Json</a>,
+			<a class="text-success" href="https://github.com/RJCodeAdvance/Custom-ComboBox">RJ ComboBox</a>,
+			<a class="text-success" href="https://github.com/svg-net/SVG">SVG.NET</a>,
+			<a class="text-success" href="https://icons.getbootstrap.com/">Bootstrap Icons</a>,
+			<a class="text-success" href="https://github.com/fabricelacharme/ColorSlider">Color Slider</a>,
+			<a class="text-success" href="https://www.nuget.org/packages/WindowsAPICodePack">WindowsAPICodePack</a>,
+			<a class="text-success" href="https://github.com/r-aghaei/FlatNumericUpDownExample">FlatNumericUpDown</a>.
+		</p>
+
+
+		<hr>
+
+		<div class="h3 mt-5 mb-3" id="cотрудничество">Сотрудничество?</div>
+
+		<p>
+			У вас наверняка есть хорошые идеи, поэтому чувствуйте себя свободным и отправьте мне отзыв как
+			<a href="https://github.com/Dragon-0609/Yuki-Theme/issues/new">проблема</a>. Я прочту ваш отзыв, так что не стесняйтесь!
+		</p>
+
+		<p>Помогите сделать плагин лучше!</p>
+
+
+		<hr>
+
+		<div align="center">
+			<img src="img/yuki128_2.png"/>
+		</div>
+
+	</div>
+
+	<div class="d-flex justify-content-center mt-4 mb-2">
+		<a class="text-primary mx-3" href="https://github.com/Dragon-0609/Yuki-Theme/">
+
+			<span class="content content_en">Go to source</span> <span class="content content_ru">Перейти к исходнику</span>
+
+		</a>
+		<div class="mx-3">
+
+			<span class="content content_en">Developed by:</span> <span class="content content_ru">Разработчик: </span>
+			<a href="https://github.com/Dragon-0609">Dragon-LV</a></div>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+<script src="js/language.js"></script>
+</body>
+</html>
