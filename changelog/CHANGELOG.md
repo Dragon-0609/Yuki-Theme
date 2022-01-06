@@ -5,7 +5,7 @@ Added to `Plugin`:
 1. Change icons of the IDE
 
 Added to both:
-1. Install Tracks via Google Analytics
+1. Track installs via Google Analytics
 
 Fixed:
 [[BUG] Bookmarks aren't shown](https://github.com/Dragon-0609/Yuki-Theme/issues/19)
