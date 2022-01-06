@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
@@ -501,4 +504,35 @@ namespace Yuki_Theme.Core
 		}
 	}
 
+	public static class GoogleAnalyticsHelper {
+		private static readonly string endpoint         = "https://www.google-analytics.com/collect";
+		private static readonly string googleVersion    = "1";
+		private static readonly string googleTrackingId = "UA-213918512-2";
+		private static readonly string googleClientId   = "555";
+
+		/// <summary>
+		/// By this method I'll track installs. I won't abuse. I'll track just installs and that's all. You may ask: why?
+		/// Well, I'll switch to passive development on 1st April of 2022. By this I mean I'll work on the project rarely.
+		/// After passing some months or years, I'll be back. In that moment I'll be glad to know that many people use the app. 
+		/// </summary>
+		/// <returns></returns>
+		public static async Task<HttpResponseMessage> TrackEvent()
+		{
+			using (var httpClient = new HttpClient())
+			{
+				var postData = new List<KeyValuePair<string, string>>()
+				{
+					new KeyValuePair<string, string>("v", googleVersion),
+					new KeyValuePair<string, string>("tid", googleTrackingId),
+					new KeyValuePair<string, string>("cid", googleClientId),
+					new KeyValuePair<string, string>("t", "pageview"),
+					new KeyValuePair<string, string>("dp", "%2Fusages.html"),
+				};
+				
+				return await httpClient.PostAsync(endpoint, new FormUrlEncodedContent(postData)).ConfigureAwait(false);
+			}
+		}
+	
+	}
+	
 }

@@ -34,6 +34,7 @@ namespace Yuki_Theme.Core.Database
             ke.SetValue (SettingsForm.LOGO.ToString(), "true");
             ke.SetValue (SettingsForm.EDITOR.ToString(), "false");
             ke.SetValue (SettingsForm.BETA.ToString(), "true");
+            ke.SetValue (SettingsForm.LOGIN.ToString(), "false");
          }
       }
       
@@ -55,6 +56,7 @@ namespace Yuki_Theme.Core.Database
          dictionary.Add (SettingsForm.LOGO,key.GetValue (SettingsForm.LOGO.ToString(), "true").ToString ());
          dictionary.Add (SettingsForm.EDITOR,key.GetValue (SettingsForm.EDITOR.ToString(), "false").ToString ());
          dictionary.Add (SettingsForm.BETA,key.GetValue (SettingsForm.BETA.ToString(), "true").ToString ());
+         dictionary.Add (SettingsForm.LOGIN,key.GetValue (SettingsForm.LOGIN.ToString(), "false").ToString ());
          
          return dictionary;
       }

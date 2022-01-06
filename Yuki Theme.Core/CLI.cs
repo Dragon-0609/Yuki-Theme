@@ -33,6 +33,7 @@ namespace Yuki_Theme.Core
 		public static bool      swLogo;
 		public static bool      Editor;
 		public static bool      Beta;
+		public static bool      Logged;
 		public static int       settingMode;
 		public static string    currentFile  = "N|L";
 		public static string    currentoFile = "N|L";
@@ -893,6 +894,7 @@ namespace Yuki_Theme.Core
 			swLogo = bool.Parse (data [SettingsForm.LOGO]);
 			Editor = bool.Parse (data [SettingsForm.EDITOR]);
 			Beta = bool.Parse (data [SettingsForm.BETA]);
+			Logged = bool.Parse (data [SettingsForm.LOGIN]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;

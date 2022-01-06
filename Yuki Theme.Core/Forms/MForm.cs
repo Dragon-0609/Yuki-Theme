@@ -104,6 +104,12 @@ namespace Yuki_Theme.Core.Forms
 			set => CLI.Beta = value;
 		}
 		
+		private bool Logged
+		{
+			get => CLI.Logged;
+			set => CLI.Logged = value;
+		}
+		
 		private bool swStatusbar
 		{
 			get => CLI.swStatusbar;
@@ -174,7 +180,7 @@ namespace Yuki_Theme.Core.Forms
 		private int           notHeight     = 0;
 		private int           imgCurrent    = 0;
 		private CustomPicture stickerControl;
-
+		private Timer         tmr;
 
 		public MForm (int mode = 0, bool quiet = false)
 		{
@@ -228,7 +234,10 @@ namespace Yuki_Theme.Core.Forms
 				}
 
 				isUpdated ();
-
+				tmr = new Timer ();
+				tmr.Interval = 100;
+				tmr.Tick += trackInstall;
+				tmr.Start ();
 			} else
 			{
 				throw new ApplicationException ("Error on loading the scheme file");
@@ -364,7 +373,7 @@ namespace Yuki_Theme.Core.Forms
 			else
 				stickerControl.margin = new Point (10, 0);
 			Controls.Add (stickerControl);
-			stickerControl.Enabled = false;
+			// stickerControl.Enabled = false;
 			stickerControl.BringToFront ();
 		}
 		
@@ -1320,6 +1329,28 @@ namespace Yuki_Theme.Core.Forms
 			MForm_SizeChanged (this, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// The app will track install via Google Analytics. This is necessary for me to be kept inspired. I'll switch to passive development on 1st April of 2022, but it doesn't mean that I'll close project. The installs are necessary to make me inspired for continue the development. 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void trackInstall (object sender, EventArgs e)
+		{
+			tmr.Stop ();
+			if(!Logged)
+			{
+				var result = GoogleAnalyticsHelper.TrackEvent ().Result;
+				if (!result.IsSuccessStatusCode)
+				{
+					// Maybe internet isn't available
+				} else
+				{
+					database.UpdateData (SettingsForm.LOGIN, "true");
+					Logged = true;
+				}
+			}
+		}
+		
 	}
 	
 

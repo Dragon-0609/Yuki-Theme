@@ -19,7 +19,8 @@ namespace Yuki_Theme.Core
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			ke.SetValue ("mode", ((int) Helper.mode).ToString ());
-
+			// Set false to track install again
+			ke.SetValue (SettingsForm.LOGIN.ToString (), "false");
 			var a = Assembly.GetExecutingAssembly ();
 			using (Stream str = (a.GetManifestResourceStream ($"Yuki_Theme.Core.Database.files.txt")))
 			{
