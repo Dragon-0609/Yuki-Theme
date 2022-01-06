@@ -25,8 +25,9 @@ namespace Yuki_Theme.Core.Controls
 		public  bool                 lockList     = false;
 		public  List <ToolStripItem> items;
 		public  List <string>        itemsToHide;
+		public  List <string>        itemsToRight;
 		
-		public  Action <List <ToolStripItem>, List <string>> onChange;
+		public  Action <List <ToolStripItem>, List <string>, List <string>> onChange;
 
 		public SettingsPanel ()
 		{
@@ -236,6 +237,7 @@ namespace Yuki_Theme.Core.Controls
 							toolBarImage.Image = item.Image;
 							lockCheckbox = true;
 							toolBarVisible.Checked = !itemsToHide.Contains (item.Name);
+							toolBarPosition.Checked = itemsToRight.Contains (item.Name);
 							lockCheckbox = false;
 						}
 					}
@@ -282,16 +284,17 @@ namespace Yuki_Theme.Core.Controls
 
 					if (onChange != null)
 					{
-						onChange (items, itemsToHide);
+						onChange (items, itemsToHide, itemsToRight);
 					}
 				}
 			}
 		}
 
-		public void PopulateList (List <ToolStripItem> pitems, List <string> pitemsToHide)
+		public void PopulateList (List <ToolStripItem> pitems, List <string> pitemsToHide, List <string> pitemsToRight)
 		{
 			items = pitems;
 			itemsToHide = pitemsToHide;
+			itemsToRight = pitemsToRight;
 
 			toolBarList.Items.Clear ();
 
@@ -308,7 +311,38 @@ namespace Yuki_Theme.Core.Controls
 			itemsToHide.Clear ();
 			if (onChange != null)
 			{
-				onChange (items, itemsToHide);
+				onChange (items, itemsToHide, itemsToRight);
+			}
+		}
+
+		private void toolBarPosition_CheckedChanged (object sender, EventArgs e)
+		{
+			if (!lockCheckbox)
+			{
+				if (toolBarList.SelectedIndex >= 0)
+				{
+					string nm = (string) toolBarList.SelectedItem;
+					ToolStripItem item = getByText (nm);
+
+					if (toolBarPosition.Checked)
+					{
+						if (!itemsToRight.Contains (item.Name))
+						{
+							itemsToRight.Add (item.Name);
+						}
+					} else
+					{
+						if (itemsToRight.Contains (item.Name))
+						{
+							itemsToRight.Remove (item.Name);
+						}
+					}
+
+					if (onChange != null)
+					{
+						onChange (items, itemsToHide, itemsToRight);
+					}
+				}
 			}
 		}
 	}

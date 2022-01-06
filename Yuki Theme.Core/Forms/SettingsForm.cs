@@ -10,21 +10,23 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		public const int PASCALPATH        = 1;
-		public const int ACTIVE            = 2;
-		public const int ASKCHOICE         = 4;
-		public const int CHOICEINDEX       = 5;
-		public const int SETTINGMODE       = 6;
-		public const int AUTOUPDATE        = 7;
-		public const int BGIMAGE           = 8;
-		public const int STICKER           = 9;
-		public const int STATUSBAR         = 10;
-		public const int LOGO              = 11;
-		public const int LOCATION          = 12;
-		public const int EDITOR            = 13;
-		public const int BETA              = 14;
-		public const int LOGIN             = 15;
-		public const int ToolBarCamouflage = 16;
+		public const int PASCALPATH          = 1;
+		public const int ACTIVE              = 2;
+		public const int ASKCHOICE           = 4;
+		public const int CHOICEINDEX         = 5;
+		public const int SETTINGMODE         = 6;
+		public const int AUTOUPDATE          = 7;
+		public const int BGIMAGE             = 8;
+		public const int STICKER             = 9;
+		public const int STATUSBAR           = 10;
+		public const int LOGO                = 11;
+		public const int LOCATION            = 12;
+		public const int EDITOR              = 13;
+		public const int BETA                = 14;
+		public const int LOGIN               = 15;
+		public const int CAMOUFLAGEHIDDEN    = 16;
+		public const int STICKERPOSITION     = 17;
+		public const int CAMOUFLAGEPOSITIONS = 18;
 		
 		public const double current_version = 5.0;
 		public const string current_version_add = "beta";

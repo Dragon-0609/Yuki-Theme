@@ -115,10 +115,13 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.toolBarImage.Image = null;
 		                settingsPanel.lockCheckbox = true;
 		                settingsPanel.toolBarVisible.Checked = false;
+		                settingsPanel.toolBarPosition.Checked = false;
 		                settingsPanel.lockCheckbox = false;
 
 		                settingsPanel.PopulateList (YukiTheme_VisualPascalABCPlugin.camouflage.items,
-		                                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide);
+		                                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide,
+		                                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight);
+		                
 		                settingsPanel.onChange = YukiTheme_VisualPascalABCPlugin.camouflage.Update;
 		                
 		                alreadyShown = true;
@@ -127,6 +130,7 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.toolBarImage.Image = null;
 		                settingsPanel.lockCheckbox = true;
 		                settingsPanel.toolBarVisible.Checked = false;
+		                settingsPanel.toolBarPosition.Checked = false;
 		                settingsPanel.lockCheckbox = false;
 		                settingsPanel.toolBarList.SelectedIndex = -1;
 	                }

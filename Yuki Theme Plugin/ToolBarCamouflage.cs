@@ -13,6 +13,7 @@ namespace Yuki_Theme_Plugin
 		public  List <ToolStripItem> items;
 		public  List <ToolItemGroup> groups;
 		public  List <string>        itemsToHide;
+		public  List <string>        itemsToRight;
 		private DatabaseManager      database;
 		
 		public ToolBarCamouflage (ToolStrip toolStrip)
@@ -21,6 +22,7 @@ namespace Yuki_Theme_Plugin
 			items = new List <ToolStripItem> ();
 			groups = new List <ToolItemGroup> ();
 			itemsToHide = new List <string> ();
+			itemsToRight = new List <string> ();
 			database = new DatabaseManager ();
 			Init ();
 		}
@@ -68,6 +70,7 @@ namespace Yuki_Theme_Plugin
 				foreach (ToolStripItem item in items)
 				{
 					item.Visible = true;
+					item.Alignment = ToolStripItemAlignment.Left;
 				}
 
 				foreach (ToolItemGroup itemGroup in groups)
@@ -78,7 +81,6 @@ namespace Yuki_Theme_Plugin
 
 				foreach (string s in itemsToHide)
 				{
-					// MessageBox.Show ("TRY HIDE: " + s);
 					if (s != null && s.Length > 1)
 					{
 						foreach (ToolItemGroup itemGroup in groups)
@@ -89,12 +91,6 @@ namespace Yuki_Theme_Plugin
 								res.Visible = false;
 							}
 						}
-						/*ToolStripItem [] res = tools.Items.Find (s, false);
-						if (res != null && res.Length > 0)
-						{
-							res [0].Visible = false;
-							// MessageBox.Show ("HIDED: " + s);
-						}*/
 					}
 				}
 
@@ -113,13 +109,36 @@ namespace Yuki_Theme_Plugin
 						}
 					}
 				}
+
+				foreach (string s in itemsToRight)
+				{
+					if (s != null && s.Length > 1)
+					{
+						foreach (ToolItemGroup itemGroup in groups)
+						{
+							if (itemGroup.HasItem (s))
+							{
+								ToolStripItem res = itemGroup.GetItem (s);
+								res.Alignment = ToolStripItemAlignment.Right;
+							}
+						}
+					}
+				}
 			}
 		}
 
 		private void PopulateList ()
 		{
-			string data = database.ReadData (SettingsForm.ToolBarCamouflage, "");
+			string data = database.ReadData (SettingsForm.CAMOUFLAGEHIDDEN, "");
 
+			PopulateLists (data, ref itemsToHide);
+
+			data = database.ReadData (SettingsForm.CAMOUFLAGEPOSITIONS, "");
+			PopulateLists (data, ref itemsToRight);
+		}
+
+		private void PopulateLists (string data, ref List<string> target)
+		{
 			if (data != "")
 			{
 				if (data.Contains ("|"))
@@ -128,12 +147,12 @@ namespace Yuki_Theme_Plugin
 					foreach (string s in cc)
 					{
 						if (s != null && s.Length > 1)
-							itemsToHide.Add (s);
+							target.Add (s);
 					}
 				} else
 				{
 					if (data != null && data.Length > 1)
-						itemsToHide.Add (data);
+						target.Add (data);
 				}
 			}
 		}
@@ -143,21 +162,35 @@ namespace Yuki_Theme_Plugin
 			string output = "";
 			if (itemsToHide.Count > 0)
 			{
-				foreach (string s in itemsToHide)
-				{
-					output += $"{s}|";
-				}
-
-				output = output.Substring (0, output.Length - 1);
+				output = CollectString(itemsToHide);
+			}
+			database.UpdateData (SettingsForm.CAMOUFLAGEHIDDEN, output);
+			output = "";
+			if (itemsToRight.Count > 0)
+			{
+				output = CollectString(itemsToRight);
 			}
 
-			database.UpdateData (SettingsForm.ToolBarCamouflage, output);
+			database.UpdateData (SettingsForm.CAMOUFLAGEPOSITIONS, output);
 		}
 
-		public void Update (List <ToolStripItem> Uitems, List <string> UitemsToHide)
+		private string CollectString (List<string> list)
+		{
+			string outp = "";
+			foreach (string s in list)
+			{
+				outp += $"{s}|";
+			}
+
+			outp = outp.Substring (0, outp.Length - 1);
+			return outp;
+		}
+
+		public void Update (List <ToolStripItem> Uitems, List <string> UitemsToHide, List <string> UitemsToRight)
 		{
 			items = Uitems;
 			itemsToHide = UitemsToHide;
+			itemsToRight = UitemsToRight;
 			SaveData ();
 			StartToHide ();
 		}

@@ -54,6 +54,8 @@ namespace Yuki_Theme.Core.Controls
 			this.logo = new System.Windows.Forms.CheckBox ();
 			this.swStatusbar = new System.Windows.Forms.CheckBox ();
 			this.add_toolbar = new System.Windows.Forms.TabPage ();
+			this.toolBarPosition = new System.Windows.Forms.CheckBox ();
+			this.toolBarPositionLabel = new System.Windows.Forms.Label ();
 			this.button2 = new System.Windows.Forms.Button ();
 			this.toolBarVisible = new System.Windows.Forms.CheckBox ();
 			this.toolBarVisibleLabel = new System.Windows.Forms.Label ();
@@ -348,6 +350,8 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// add_toolbar
 			// 
+			this.add_toolbar.Controls.Add (this.toolBarPosition);
+			this.add_toolbar.Controls.Add (this.toolBarPositionLabel);
 			this.add_toolbar.Controls.Add (this.button2);
 			this.add_toolbar.Controls.Add (this.toolBarVisible);
 			this.add_toolbar.Controls.Add (this.toolBarVisibleLabel);
@@ -360,6 +364,26 @@ namespace Yuki_Theme.Core.Controls
 			this.add_toolbar.TabIndex = 3;
 			this.add_toolbar.Text = "ToolBar";
 			this.add_toolbar.UseVisualStyleBackColor = true;
+			// 
+			// toolBarPosition
+			// 
+			this.toolBarPosition.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.toolBarPosition.Location = new System.Drawing.Point (253, 114);
+			this.toolBarPosition.Name = "toolBarPosition";
+			this.toolBarPosition.Size = new System.Drawing.Size (32, 28);
+			this.toolBarPosition.TabIndex = 7;
+			this.toolBarPosition.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.toolBarPosition.UseVisualStyleBackColor = true;
+			this.toolBarPosition.CheckedChanged += new System.EventHandler (this.toolBarPosition_CheckedChanged);
+			// 
+			// toolBarPositionLabel
+			// 
+			this.toolBarPositionLabel.AutoSize = true;
+			this.toolBarPositionLabel.Location = new System.Drawing.Point (157, 113);
+			this.toolBarPositionLabel.Name = "toolBarPositionLabel";
+			this.toolBarPositionLabel.Size = new System.Drawing.Size (46, 18);
+			this.toolBarPositionLabel.TabIndex = 6;
+			this.toolBarPositionLabel.Text = "Right:";
 			// 
 			// button2
 			// 
@@ -444,6 +468,9 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize) (this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.CheckBox toolBarPosition;
+		public System.Windows.Forms.Label    toolBarPositionLabel;
 
 		public System.Windows.Forms.Button button2;
 
