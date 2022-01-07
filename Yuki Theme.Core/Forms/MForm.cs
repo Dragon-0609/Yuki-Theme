@@ -225,8 +225,8 @@ namespace Yuki_Theme.Core.Forms
 				AddEvents ();
 				
 				sBox.Paint += bgImagePaint;
-				if (update && !quiet)
-					update_Click (this, EventArgs.Empty);
+				// if (update && !quiet)
+					// update_Click (this, EventArgs.Empty);
 				MForm_SizeChanged (this, EventArgs.Empty);
 				if (Helper.mode != ProductMode.Plugin)
 				{
@@ -366,12 +366,13 @@ namespace Yuki_Theme.Core.Forms
 
 		private void initSticker ()
 		{
-			stickerControl = new CustomPicture ();
+			stickerControl = new CustomPicture (this);
 			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			if (Helper.mode == ProductMode.Plugin)
 				stickerControl.margin = new Point (10, bottomPanel.Size.Height);
 			else
 				stickerControl.margin = new Point (10, 0);
+			stickerControl.Enabled = CLI.positioning;
 			Controls.Add (stickerControl);
 			// stickerControl.Enabled = false;
 			stickerControl.BringToFront ();
@@ -641,18 +642,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				setform.setVisible (false);
 			}
-			Console.WriteLine(settingMode);
-			setform.bgImage = bgImage;
-			setform.Sticker = swSticker;
-			setform.Logo = swLogo;
-			setform.Editor = Editor;
-			setform.Beta = Beta;
-			setform.StatusBar = swStatusbar;
-			setform.settingsPanel.askC.Checked = askChoice;
-			setform.settingsPanel.checkBox2.Checked = update;
-			setform.settingsPanel.ActionBox.SelectedIndex = actionChoice;
-			setform.settingsPanel.mode.SelectedIndex = settingMode;
-			setform.settingsPanel.swStatusbar.Enabled = Helper.mode == ProductMode.Plugin;
+			
 			bool oldeditor = Editor;
 			var st = settingMode;
 			if (setform.ShowDialog () == DialogResult.OK)
@@ -668,10 +658,11 @@ namespace Yuki_Theme.Core.Forms
 				update = setform.settingsPanel.checkBox2.Checked;
 				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
 				settingMode = setform.settingsPanel.mode.SelectedIndex;
-				Console.WriteLine(settingMode);
-				Console.WriteLine(setform.settingsPanel.mode.SelectedIndex);
+				CLI.positioning = setform.settingsPanel.checkBox3.Checked;
+				CLI.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
 				CLI.saveData ();
 				sBox.Refresh ();
+				stickerControl.Enabled = CLI.positioning;
 				LoadSticker ();
 				if (oldeditor != Editor) // Check if the Editor is changed
 					checkEditor ();

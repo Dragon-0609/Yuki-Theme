@@ -34,7 +34,23 @@ namespace Yuki_Theme.Core.Controls
 			InitializeComponent ();
 			ActionBox.Items.AddRange (new string [] {"Delete", "Import and Delete", "Ignore"});
 			mode.Items.AddRange (new string [] {"Light", "Advanced"});
-			toolBarList.ItemHeight = Font.Height + 2;
+			foreach (string name in Enum.GetNames (typeof (RelativeUnit)))
+			{
+				unit.Items.Add (name);
+			}
+			toolBarList.ItemHeight = Font.Height + 3;
+			backImage.Checked = CLI.bgImage;
+			swsticker.Checked = CLI.swSticker;
+			logo.Checked = CLI.swLogo;
+			editor.Checked = CLI.Editor;
+			checkBox1.Checked = CLI.Beta;
+			swStatusbar.Checked = CLI.swStatusbar;
+			askC.Checked = CLI.askChoice;
+			checkBox2.Checked = CLI.update;
+			ActionBox.SelectedIndex = CLI.actionChoice;
+			mode.SelectedIndex = CLI.settingMode;
+			unit.SelectedIndex = (int) CLI.unit;
+			unit.Enabled = CLI.positioning;
 			loadSVG ();
 		}
 
@@ -344,6 +360,11 @@ namespace Yuki_Theme.Core.Controls
 					}
 				}
 			}
+		}
+
+		private void checkBox3_CheckedChanged (object sender, EventArgs e)
+		{
+			unit.Enabled = checkBox3.Checked;
 		}
 	}
 }

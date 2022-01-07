@@ -55,7 +55,8 @@ namespace Yuki_Theme_Plugin
 	                {
 		                settingsPanel.button1.BackColor = settingsPanel.button4.BackColor = settingsPanel.button5.BackColor =
 			                settingsPanel.button6.BackColor = settingsPanel.ActionBox.ListBackColor = settingsPanel.ActionBox.BackColor =
-				                settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor = settingsPanel.textBox1.BackColor =
+				                settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor = 
+					                settingsPanel.unit.ListBackColor = settingsPanel.unit.BackColor = settingsPanel.textBox1.BackColor =
 					                settingsPanel.add_program.BackColor = settingsPanel.add_plugin.BackColor =
 						                settingsPanel.add_toolbar.BackColor = settingsPanel.tabPage1.BackColor = settingsPanel.BackColor =
 							                settingsPanel.toolBarList.BackColor =
@@ -65,7 +66,8 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.button1.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
 			                settingsPanel.button5.FlatAppearance.BorderColor = settingsPanel.button6.FlatAppearance.BorderColor =
 				                settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor = settingsPanel.mode.ForeColor =
-					                settingsPanel.mode.ListTextColor = settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
+					                settingsPanel.mode.ListTextColor = settingsPanel.unit.ForeColor = settingsPanel.unit.ListTextColor = 
+						                settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
 						                settingsPanel.add_program.ForeColor = settingsPanel.add_plugin.ForeColor =
 							                settingsPanel.add_toolbar.ForeColor = settingsPanel.tabPage1.ForeColor =
 								                settingsPanel.toolBarList.ForeColor = settingsPanel.button2.ForeColor =
@@ -77,8 +79,9 @@ namespace Yuki_Theme_Plugin
 					                settingsPanel.button2.FlatAppearance.MouseOverBackColor = YukiTheme_VisualPascalABCPlugin.bgClick;
 
 		                settingsPanel.ActionBox.BorderColor = settingsPanel.ActionBox.IconColor = settingsPanel.mode.BorderColor =
-			                settingsPanel.mode.IconColor = settingsPanel.textBox1.BorderColor =
-				                settingsPanel.button2.FlatAppearance.BorderColor = YukiTheme_VisualPascalABCPlugin.bgBorder;
+			                settingsPanel.mode.IconColor = settingsPanel.unit.BorderColor = settingsPanel.unit.IconColor =
+				                settingsPanel.textBox1.BorderColor =
+					                settingsPanel.button2.FlatAppearance.BorderColor = YukiTheme_VisualPascalABCPlugin.bgBorder;
 
 		                settingsPanel.tabs.bg = YukiTheme_VisualPascalABCPlugin.bgBrush;
 		                settingsPanel.tabs.bgClick = YukiTheme_VisualPascalABCPlugin.bgClickBrush;
@@ -91,17 +94,6 @@ namespace Yuki_Theme_Plugin
 
 		                plugin.mf = null;
 		                settingsPanel.mf = null;
-
-		                settingsPanel.backImage.Checked = CLI.bgImage;
-		                settingsPanel.swsticker.Checked = CLI.swSticker;
-		                settingsPanel.logo.Checked = CLI.swLogo;
-		                settingsPanel.editor.Checked = CLI.Editor;
-		                settingsPanel.checkBox1.Checked = CLI.Beta;
-		                settingsPanel.swStatusbar.Checked = CLI.swStatusbar;
-		                settingsPanel.askC.Checked = CLI.askChoice;
-		                settingsPanel.checkBox2.Checked = CLI.update;
-		                settingsPanel.ActionBox.SelectedIndex = CLI.actionChoice;
-		                settingsPanel.mode.SelectedIndex = CLI.settingMode;
 		                oldeditor = CLI.Editor;
 		                st = CLI.settingMode;
 						// Change colors for About Form
@@ -147,6 +139,9 @@ namespace Yuki_Theme_Plugin
 	                CLI.update = settingsPanel.checkBox2.Checked;
 	                CLI.actionChoice = settingsPanel.ActionBox.SelectedIndex;
 	                CLI.settingMode = settingsPanel.mode.SelectedIndex;
+	                CLI.positioning = settingsPanel.checkBox3.Checked;
+	                CLI.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
+	                plugin.stickerControl.Enabled = CLI.positioning;
 	                CLI.saveData ();
 	                plugin.LoadSticker ();
 	                if (settingsPanel.mf != null && !settingsPanel.mf.IsDisposed)

@@ -23,26 +23,28 @@ namespace Yuki_Theme.Core
 		public static List <string>   schemes  = new List <string> ();
 		public static DatabaseManager database = new DatabaseManager ();
 
-		public static int       actionChoice;
-		public static bool      askChoice;
-		public static bool      update;
-		public static string    pascalPath = "empty";
-		public static bool      bgImage;
-		public static bool      swSticker;
-		public static bool      swStatusbar;
-		public static bool      swLogo;
-		public static bool      Editor;
-		public static bool      Beta;
-		public static bool      Logged;
-		public static int       settingMode;
-		public static string    currentFile  = "N|L";
-		public static string    currentoFile = "N|L";
-		public static string    selectedItem = "empty";
-		public static string    imagePath    = "";
-		public static string    currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
-		public static Alignment align        = Alignment.Left;
-		public static int       opacity      = 10;
-		public static int       sopacity     = 100;
+		public static int          actionChoice;
+		public static bool         askChoice;
+		public static bool         update;
+		public static string       pascalPath = "empty";
+		public static bool         bgImage;
+		public static bool         swSticker;
+		public static bool         swStatusbar;
+		public static bool         swLogo;
+		public static bool         Editor;
+		public static bool         Beta;
+		public static bool         Logged;
+		public static bool         positioning;
+		public static int          settingMode;
+		public static string       currentFile  = "N|L";
+		public static string       currentoFile = "N|L";
+		public static string       selectedItem = "empty";
+		public static string       imagePath    = "";
+		public static string       currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+		public static Alignment    align        = Alignment.Left;
+		public static RelativeUnit unit         = RelativeUnit.Pixel;
+		public static int          opacity      = 10;
+		public static int          sopacity     = 100;
 
 		public static Dictionary <string, Dictionary <string, string>> localAttributes =
 			new Dictionary <string, Dictionary <string, string>> ();
@@ -647,6 +649,8 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.LOGO, swLogo.ToString ());
 			dict.Add (SettingsForm.EDITOR, Editor.ToString ());
 			dict.Add (SettingsForm.BETA, Beta.ToString ());
+			dict.Add (SettingsForm.STICKERPOSITION, Beta.ToString ());
+			dict.Add (SettingsForm.ALLOWPOSITIONING, Beta.ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
@@ -895,6 +899,7 @@ namespace Yuki_Theme.Core
 			Editor = bool.Parse (data [SettingsForm.EDITOR]);
 			Beta = bool.Parse (data [SettingsForm.BETA]);
 			Logged = bool.Parse (data [SettingsForm.LOGIN]);
+			positioning = bool.Parse (data [SettingsForm.ALLOWPOSITIONING]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
@@ -902,6 +907,8 @@ namespace Yuki_Theme.Core
 			actionChoice = os;
 			int.TryParse (data [SettingsForm.SETTINGMODE], out os);
 			settingMode = os;
+			int.TryParse (data [SettingsForm.STICKERPOSITIONUNIT], out os);
+			unit = (RelativeUnit) os;
 		}
 
 		/// <summary>

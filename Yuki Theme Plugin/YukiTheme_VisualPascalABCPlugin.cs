@@ -94,7 +94,7 @@ namespace Yuki_Theme_Plugin
 		private       PictureBox      logoBox;
 		private       ToolStripButton currentTheme;
 		private       Image           sticker;
-		private       CustomPicture   stickerControl;
+		public        CustomPicture   stickerControl;
 
 		private ToolStripMenuItem      menu_settings;
 		private ToolStripMenuItem      quiet;
@@ -337,11 +337,11 @@ namespace Yuki_Theme_Plugin
 			currentTheme.Margin = Padding.Empty;
 			statusBar.Items.Add (currentTheme);
 			RefreshStatusBar ();
-			
-			stickerControl = new CustomPicture ();
+
+			stickerControl = new CustomPicture (fm);
 			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			stickerControl.margin = new Point (10, statusBar.Size.Height);
-			
+			stickerControl.Enabled = CLI.positioning;
 			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
 			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
 			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);

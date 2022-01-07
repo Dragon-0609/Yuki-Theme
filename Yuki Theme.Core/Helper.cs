@@ -28,12 +28,19 @@ namespace Yuki_Theme.Core
 		Plugin  = 1,
 		CLI  = 2
 	}
+
+	public enum RelativeUnit : int
+	{
+		Pixel = 0,
+		Percent = 1
+	}
 	
 	public static class Helper
 	{
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;
 
-		public static ProductMode mode;
+		public static ProductMode  mode;
+		public static RelativeUnit unit;
 
 		private static Size Standart32 = new Size (32, 32);
 		
