@@ -179,7 +179,7 @@ namespace Yuki_Theme.Core.Forms
 		private int           textBoxHeight = 0;
 		private int           notHeight     = 0;
 		private int           imgCurrent    = 0;
-		private CustomPicture stickerControl;
+		public  CustomPicture stickerControl;
 		private Timer         tmr;
 
 		public MForm (int mode = 0, bool quiet = false)
@@ -225,8 +225,8 @@ namespace Yuki_Theme.Core.Forms
 				AddEvents ();
 				
 				sBox.Paint += bgImagePaint;
-				// if (update && !quiet)
-					// update_Click (this, EventArgs.Empty);
+				if (update && !quiet)
+					update_Click (this, EventArgs.Empty);
 				MForm_SizeChanged (this, EventArgs.Empty);
 				if (Helper.mode != ProductMode.Plugin)
 				{
@@ -373,6 +373,10 @@ namespace Yuki_Theme.Core.Forms
 			else
 				stickerControl.margin = new Point (10, 0);
 			stickerControl.Enabled = CLI.positioning;
+			CustomPanel pnl = new CustomPanel {Visible = false, Name = "LayerGrids", mode = 1};
+			stickerControl.pnl = pnl;
+			pnl.pict = stickerControl;
+			Controls.Add (pnl);
 			Controls.Add (stickerControl);
 			// stickerControl.Enabled = false;
 			stickerControl.BringToFront ();

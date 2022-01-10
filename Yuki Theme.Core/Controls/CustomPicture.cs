@@ -16,13 +16,14 @@ namespace Yuki_Theme.Core.Controls
 		private AnchorStyles    align;
 		private RelativeUnit    unit => CLI.unit;
 		private DatabaseManager database;
-		private int             width;
-		private int             width3;
-		private int             width32;
-		private int             height;
-		private int             height3;
-		private int             height32;
-		private int             height2;
+		public  CustomPanel     pnl;
+		public  int             width;
+		public  int             width3;
+		public  int             width32;
+		public  int             height;
+		public  int             height3;
+		public  int             height32;
+		public  int             height2;
 		private float           unitx;
 		private float           unity;
 		private Form            tmp_form;
@@ -38,6 +39,7 @@ namespace Yuki_Theme.Core.Controls
 			ReadData ();
 			MouseDown += On_MouseDown;
 			MouseMove += On_MouseMove;
+			MouseUp += On_MouseUp;
 			typeof (PictureBox).InvokeMember ("DoubleBuffered", BindingFlags.SetProperty
 			                                                  | BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                  this, new object [] {true});
@@ -81,11 +83,12 @@ namespace Yuki_Theme.Core.Controls
 
 		public void UpdateLocation ()
 		{
-			if(unit == RelativeUnit.Percent)
+			if (unit == RelativeUnit.Percent)
 			{
 				unitx = Parent.ClientSize.Width / 100f;
 				unity = Parent.ClientSize.Height / 100f;
 			}
+
 			int x = CalculateX ();
 			int y = CalculateY ();
 			Location = new Point (x, y);
@@ -99,7 +102,8 @@ namespace Yuki_Theme.Core.Controls
 				x = (int) (margin.X + relativePosition.X * (unit == RelativeUnit.Percent ? unitx : 1));
 			} else if (align.HasFlag (AnchorStyles.Right))
 			{
-				x = (int) (Parent.ClientSize.Width - Size.Width - margin.X - relativePosition.X * (unit == RelativeUnit.Percent ? unitx : 1));
+				x = (int) (Parent.ClientSize.Width - Size.Width - margin.X -
+				           relativePosition.X * (unit == RelativeUnit.Percent ? unitx : 1));
 			} else
 			{
 				x = (int) (width - (Size.Width / 2) - (margin.X / 2) - relativePosition.X * (unit == RelativeUnit.Percent ? unitx : 1));
@@ -116,7 +120,8 @@ namespace Yuki_Theme.Core.Controls
 				y = (int) (margin.Y + relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
 			} else if (align.HasFlag (AnchorStyles.Right))
 			{
-				y = (int) (Parent.ClientSize.Height - Size.Height - margin.Y - relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
+				y = (int) (Parent.ClientSize.Height - Size.Height - margin.Y -
+				           relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
 			} else
 			{
 				y = (int) (height - (Size.Height / 2) - (margin.Y / 2) - relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
@@ -162,11 +167,14 @@ namespace Yuki_Theme.Core.Controls
 				height3 = Parent.ClientSize.Height / 3;
 				height32 = height3 * 2;
 				height2 = Height / 2;
-				if(unit == RelativeUnit.Percent)
+				if (unit == RelativeUnit.Percent)
 				{
 					unitx = Parent.ClientSize.Width / 100f;
 					unity = Parent.ClientSize.Height / 100f;
 				}
+
+				pnl.Prepare ();
+				// pnl.Visible = true;
 			}
 		}
 
@@ -174,42 +182,27 @@ namespace Yuki_Theme.Core.Controls
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				AnchorStyles styles = AnchorStyles.None;
 				bool chn = false;
+				int left = Left;
+				int top = Top;
 				if (
 					(Right <= Parent.ClientSize.Width - margin.X || prevMouseDownLocation.X - e.X >= 0) &&
 					(Left >= margin.X || prevMouseDownLocation.X - e.X <= 0)
 				)
 				{
-					int left = e.X + Left - MouseDownLocation.X;
+					left = e.X + Left - MouseDownLocation.X;
 
 					if (left + Width > Parent.ClientSize.Width - margin.X)
 					{
-						Left = Parent.ClientSize.Width - margin.X - this.Width;
+						left = Parent.ClientSize.Width - margin.X - this.Width;
 					} else if (left < margin.X)
 					{
-						Left = margin.X;
+						left = margin.X;
 					} else
 					{
-						Left = left;
 					}
 
 					prevMouseDownLocation.X = e.Location.X;
-					if (Right < width3) // X - Left
-					{
-						styles = AnchorStyles.Left;
-					} else
-					{
-						// X > Left -> Center || Right
-						if (Left > width32) // Right
-						{
-							styles = AnchorStyles.Right;
-						} else // Center
-						{
-							styles = AnchorStyles.None;
-						}
-					}
-					relativePosition.X = GetRelatedX ();
 					chn = true;
 				}
 
@@ -218,47 +211,72 @@ namespace Yuki_Theme.Core.Controls
 					(Top >= margin.Y || prevMouseDownLocation.Y - e.Y <= 0)
 				)
 				{
-					int top = e.Y + Top - MouseDownLocation.Y;
+					top = e.Y + Top - MouseDownLocation.Y;
 
 					if (top + Height > Parent.ClientSize.Height - margin.Y) // Bottom
 					{
-						Top = Parent.ClientSize.Height - margin.Y - Height;
+						top = Parent.ClientSize.Height - margin.Y - Height;
 					} else if (top < margin.Y) // Top
 					{
-						Top = margin.Y;
+						top = margin.Y;
 					} else // Center
 					{
-						Top = top;
 					}
 
 					prevMouseDownLocation.Y = e.Location.Y;
-
-					if (Top + height2 < height3) // Y - Top
-					{
-						styles |= AnchorStyles.Top;
-						// Console.WriteLine ($"T: {styles}");
-					} else
-					{
-						// Y > Top -> Center || Bottom
-						if (Top + height2 > height32) // Bottom
-						{
-							styles |= AnchorStyles.Bottom;
-							// Console.WriteLine ($"B: {styles}");
-						} else // Center
-						{
-							styles |= AnchorStyles.None;
-							// Console.WriteLine ($"C: {styles}");
-						}
-					}
-					relativePosition.Y = GetRelatedY ();
 					chn = true;
 				}
-				if(chn)
+
+				Location = new Point (left, top);
+				// if (chn)
+					// pnl.Invalidate();
+			}
+		}
+
+		private void On_MouseUp (object sender, MouseEventArgs e)
+		{
+			pnl.Visible = false;
+
+			AnchorStyles styles = AnchorStyles.None;
+
+			if (Right < width3) // X - Left
+			{
+				styles = AnchorStyles.Left;
+			} else
+			{
+				// X > Left -> Center || Right
+				if (Left > width32) // Right
 				{
-					SetAlign (styles);
-					SaveData ();
+					styles = AnchorStyles.Right;
+				} else // Center
+				{
+					styles = AnchorStyles.None;
 				}
 			}
+
+			if (Top + height2 < height3) // Y - Top
+			{
+				styles |= AnchorStyles.Top;
+				// Console.WriteLine ($"T: {styles}");
+			} else
+			{
+				// Y > Top -> Center || Bottom
+				if (Top + height2 > height32) // Bottom
+				{
+					styles |= AnchorStyles.Bottom;
+					// Console.WriteLine ($"B: {styles}");
+				} else // Center
+				{
+					styles |= AnchorStyles.None;
+					// Console.WriteLine ($"C: {styles}");
+				}
+			}
+
+			relativePosition.X = GetRelatedX (styles);
+			relativePosition.Y = GetRelatedY (styles);
+
+			SetAlign (styles);
+			SaveData ();
 		}
 
 		private void SetAlign (AnchorStyles style)
@@ -271,13 +289,13 @@ namespace Yuki_Theme.Core.Controls
 			}
 		}
 
-		private float GetRelatedX ()
+		private float GetRelatedX (AnchorStyles style)
 		{
 			float res = 0;
-			if (align.HasFlag (AnchorStyles.Left))
+			if (style.HasFlag (AnchorStyles.Left))
 			{
 				res = (Left - margin.X) / (unit == RelativeUnit.Percent ? unitx : 1);
-			} else if (align.HasFlag (AnchorStyles.Right))
+			} else if (style.HasFlag (AnchorStyles.Right))
 			{
 				res = (Parent.ClientSize.Width - margin.X - Right) / (unit == RelativeUnit.Percent ? unitx : 1);
 			} else
@@ -288,13 +306,13 @@ namespace Yuki_Theme.Core.Controls
 			return res;
 		}
 
-		private float GetRelatedY ()
+		private float GetRelatedY (AnchorStyles style)
 		{
 			float res = 0;
-			if (align.HasFlag (AnchorStyles.Top))
+			if (style.HasFlag (AnchorStyles.Top))
 			{
 				res = (Top - margin.Y) / (unit == RelativeUnit.Percent ? unity : 1);
-			} else if (align.HasFlag (AnchorStyles.Bottom))
+			} else if (style.HasFlag (AnchorStyles.Bottom))
 			{
 				res = (Parent.ClientSize.Height - margin.Y - Bottom) / (unit == RelativeUnit.Percent ? unity : 1);
 			} else
@@ -312,7 +330,7 @@ namespace Yuki_Theme.Core.Controls
 			return s;
 		}
 
-		private void ReadData ()
+		public void ReadData ()
 		{
 			string data = database.ReadData (SettingsForm.STICKERPOSITION, "");
 			if (data != "")

@@ -345,8 +345,11 @@ namespace Yuki_Theme_Plugin
 			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
 			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
 			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
-			
+			CustomPanel pnl = new CustomPanel {Visible = false, Name = "LayerGrids", mode = 1};
+			pnl.pict = stickerControl;
+			fm.Controls.Add (pnl);
 			fm.Controls.Add (stickerControl);
+			stickerControl.pnl = pnl;
 			LoadSticker ();
 			// stickerControl.Enabled = true;
 			stickerControl.BringToFront ();

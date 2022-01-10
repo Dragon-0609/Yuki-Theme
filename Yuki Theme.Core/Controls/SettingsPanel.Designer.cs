@@ -34,6 +34,8 @@ namespace Yuki_Theme.Core.Controls
 			this.tabs = new Yuki_Theme.Core.Controls.CustomTab ();
 			this.tabPage1 = new System.Windows.Forms.TabPage ();
 			this.tbpanel = new System.Windows.Forms.Panel ();
+			this.reset_margin = new System.Windows.Forms.Button ();
+			this.roundLabel1 = new Yuki_Theme.Core.Controls.RoundLabel ();
 			this.unit = new CustomControls.RJControls.RJComboBox ();
 			this.label2 = new System.Windows.Forms.Label ();
 			this.checkBox3 = new System.Windows.Forms.CheckBox ();
@@ -103,6 +105,8 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// tbpanel
 			// 
+			this.tbpanel.Controls.Add (this.reset_margin);
+			this.tbpanel.Controls.Add (this.roundLabel1);
 			this.tbpanel.Controls.Add (this.unit);
 			this.tbpanel.Controls.Add (this.label2);
 			this.tbpanel.Controls.Add (this.checkBox3);
@@ -121,6 +125,31 @@ namespace Yuki_Theme.Core.Controls
 			this.tbpanel.Name = "tbpanel";
 			this.tbpanel.Size = new System.Drawing.Size (397, 224);
 			this.tbpanel.TabIndex = 0;
+			// 
+			// reset_margin
+			// 
+			this.reset_margin.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.reset_margin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.reset_margin.Location = new System.Drawing.Point (328, 38);
+			this.reset_margin.Name = "reset_margin";
+			this.reset_margin.Size = new System.Drawing.Size (54, 30);
+			this.reset_margin.TabIndex = 35;
+			this.reset_margin.Text = "Reset";
+			this.reset_margin.UseVisualStyleBackColor = true;
+			this.reset_margin.Click += new System.EventHandler (this.reset_margin_Click);
+			// 
+			// roundLabel1
+			// 
+			this.roundLabel1._BackColor = System.Drawing.Color.Black;
+			this.roundLabel1.Font = new System.Drawing.Font ("Book Antiqua", 8F);
+			this.roundLabel1.ForeColor = System.Drawing.Color.WhiteSmoke;
+			this.roundLabel1.Location = new System.Drawing.Point (265, 34);
+			this.roundLabel1.Name = "roundLabel1";
+			this.roundLabel1.Radius = 10;
+			this.roundLabel1.Size = new System.Drawing.Size (45, 18);
+			this.roundLabel1.TabIndex = 34;
+			this.roundLabel1.Text = "Beta";
+			this.roundLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// unit
 			// 
@@ -156,9 +185,9 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox3
 			// 
-			this.checkBox3.Location = new System.Drawing.Point (215, 43);
+			this.checkBox3.Location = new System.Drawing.Point (140, 43);
 			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size (167, 29);
+			this.checkBox3.Size = new System.Drawing.Size (150, 29);
 			this.checkBox3.TabIndex = 31;
 			this.checkBox3.Text = "Enable Positioning";
 			this.checkBox3.UseVisualStyleBackColor = true;
@@ -187,7 +216,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.swsticker.Location = new System.Drawing.Point (15, 43);
 			this.swsticker.Name = "swsticker";
-			this.swsticker.Size = new System.Drawing.Size (167, 29);
+			this.swsticker.Size = new System.Drawing.Size (119, 29);
 			this.swsticker.TabIndex = 26;
 			this.swsticker.Text = "Show Sticker";
 			this.swsticker.UseVisualStyleBackColor = true;
@@ -523,6 +552,10 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize) (this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.Button reset_margin;
+
+		public Yuki_Theme.Core.Controls.RoundLabel roundLabel1;
 
 		public System.Windows.Forms.CheckBox        checkBox3;
 		public System.Windows.Forms.Label           label2;

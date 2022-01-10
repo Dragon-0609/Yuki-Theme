@@ -136,6 +136,7 @@
         <Compile Include="Controls\CustomButton.cs" />
         <None Include="Controls\CustomPB.cs" />
         <None Include="Controls\CustomL.cs" />
+        <Compile Include="Controls\CustomPanel.cs" />
         <Compile Include="Controls\CustomPicture.cs" />
         <None Include="Controls\CustomS.cs" />
         <None Include="Controls\CustomSwitch.cs" />
@@ -144,6 +145,7 @@
         <Compile Include="Controls\FlatNumericUpDown.cs" />
         <Compile Include="Controls\ReItem.cs" />
         <Compile Include="Controls\RJComboBox.cs" />
+        <Compile Include="Controls\RoundLabel.cs" />
         <Compile Include="Controls\SettingsPanel.cs">
           <SubType>UserControl</SubType>
         </Compile>

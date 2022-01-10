@@ -87,7 +87,6 @@
         <Compile Include="Controls\Bookmarks.cs" />
         <Compile Include="Controls\CodeCompletionHighlighter.cs" />
         <Compile Include="Controls\CustomList.cs" />
-        <Compile Include="Controls\CustomPanel.cs" />
         <Compile Include="Controls\Extender.cs" />
         <Compile Include="Controls\Helpers\DockHelper.cs" />
         <Compile Include="Controls\Helpers\DrawHelper.cs" />

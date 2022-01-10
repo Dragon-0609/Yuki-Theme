@@ -649,8 +649,8 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.LOGO, swLogo.ToString ());
 			dict.Add (SettingsForm.EDITOR, Editor.ToString ());
 			dict.Add (SettingsForm.BETA, Beta.ToString ());
-			dict.Add (SettingsForm.STICKERPOSITION, Beta.ToString ());
-			dict.Add (SettingsForm.ALLOWPOSITIONING, Beta.ToString ());
+			dict.Add (SettingsForm.ALLOWPOSITIONING, positioning.ToString ());
+			dict.Add (SettingsForm.STICKERPOSITIONUNIT, ((int) unit).ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
