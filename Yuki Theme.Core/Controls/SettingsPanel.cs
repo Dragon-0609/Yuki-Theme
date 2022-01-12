@@ -54,7 +54,9 @@ namespace Yuki_Theme.Core.Controls
 			ActionBox.SelectedIndex = CLI.actionChoice;
 			mode.SelectedIndex = CLI.settingMode;
 			unit.SelectedIndex = (int) CLI.unit;
-			unit.Enabled = CLI.positioning;
+			checkBox3.Checked = CLI.positioning;
+			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
+			checkBox4.Checked = CLI.showGrids;
 			loadSVG ();
 		}
 
@@ -366,6 +368,8 @@ namespace Yuki_Theme.Core.Controls
 		private void checkBox3_CheckedChanged (object sender, EventArgs e)
 		{
 			unit.Enabled = checkBox3.Checked;
+			checkBox4.Enabled = checkBox3.Checked;
+			reset_margin.Enabled = checkBox3.Checked;
 		}
 
 		private void reset_margin_Click (object sender, EventArgs e)
@@ -375,12 +379,18 @@ namespace Yuki_Theme.Core.Controls
 			{
 				try
 				{
-					stickerToUpdate[i].ReadData ();
+					stickerToUpdate [i].ReadData ();
 					stickerToUpdate [i].UpdateLocation ();
 				} catch
 				{
 				}
 			}
+
+		}
+
+		private void swsticker_CheckedChanged (object sender, EventArgs e)
+		{
+			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = reset_margin.Enabled = checkBox3.Enabled = swsticker.Checked;
 		}
 	}
 }

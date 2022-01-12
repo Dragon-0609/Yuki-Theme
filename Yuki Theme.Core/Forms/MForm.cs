@@ -225,8 +225,8 @@ namespace Yuki_Theme.Core.Forms
 				AddEvents ();
 				
 				sBox.Paint += bgImagePaint;
-				if (update && !quiet)
-					update_Click (this, EventArgs.Empty);
+				// if (update && !quiet)
+					// update_Click (this, EventArgs.Empty);
 				MForm_SizeChanged (this, EventArgs.Empty);
 				if (Helper.mode != ProductMode.Plugin)
 				{
@@ -664,6 +664,7 @@ namespace Yuki_Theme.Core.Forms
 				settingMode = setform.settingsPanel.mode.SelectedIndex;
 				CLI.positioning = setform.settingsPanel.checkBox3.Checked;
 				CLI.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
+				CLI.showGrids = setform.settingsPanel.checkBox4.Checked;
 				CLI.saveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = CLI.positioning;

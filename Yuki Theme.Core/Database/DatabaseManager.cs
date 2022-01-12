@@ -36,6 +36,7 @@ namespace Yuki_Theme.Core.Database
 				ke.SetValue (SettingsForm.LOGIN.ToString (), "false");
 				ke.SetValue (SettingsForm.STICKERPOSITIONUNIT.ToString (), "1");
 				ke.SetValue (SettingsForm.ALLOWPOSITIONING.ToString (), "false");
+				ke.SetValue (SettingsForm.SHOWGRIDS.ToString (), "false");
 			}
 		}
 
@@ -60,6 +61,7 @@ namespace Yuki_Theme.Core.Database
 			dictionary.Add (SettingsForm.LOGIN, key.GetValue (SettingsForm.LOGIN.ToString (), "false").ToString ());
 			dictionary.Add (SettingsForm.STICKERPOSITIONUNIT, key.GetValue (SettingsForm.STICKERPOSITIONUNIT.ToString (), "1").ToString ());
 			dictionary.Add (SettingsForm.ALLOWPOSITIONING, key.GetValue (SettingsForm.ALLOWPOSITIONING.ToString (), "false").ToString ());
+			dictionary.Add (SettingsForm.SHOWGRIDS, key.GetValue (SettingsForm.SHOWGRIDS.ToString (), "false").ToString ());
 
 			return dictionary;
 		}

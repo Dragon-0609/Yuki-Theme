@@ -23,7 +23,6 @@ namespace Yuki_Theme.Core.Controls
 		public  int             height;
 		public  int             height3;
 		public  int             height32;
-		public  int             height2;
 		private float           unitx;
 		private float           unity;
 		private Form            tmp_form;
@@ -53,6 +52,8 @@ namespace Yuki_Theme.Core.Controls
 
 		private void OnResize (object sender, EventArgs e)
 		{
+			width = Parent.ClientSize.Width / 2;
+			height = Parent.ClientSize.Height / 2;
 			UpdateLocation ();
 		}
 
@@ -71,7 +72,6 @@ namespace Yuki_Theme.Core.Controls
 					height = Parent.ClientSize.Height / 2;
 					height3 = Parent.ClientSize.Height / 3;
 					height32 = height3 * 2;
-					height2 = Height / 2;
 					UpdateLocation ();
 					Region = CreateRegion ((Bitmap) Image);
 				} else
@@ -118,7 +118,7 @@ namespace Yuki_Theme.Core.Controls
 			if (align.HasFlag (AnchorStyles.Top))
 			{
 				y = (int) (margin.Y + relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
-			} else if (align.HasFlag (AnchorStyles.Right))
+			} else if (align.HasFlag (AnchorStyles.Bottom))
 			{
 				y = (int) (Parent.ClientSize.Height - Size.Height - margin.Y -
 				           relativePosition.Y * (unit == RelativeUnit.Percent ? unity : 1));
@@ -166,14 +166,14 @@ namespace Yuki_Theme.Core.Controls
 				height = Parent.ClientSize.Height / 2;
 				height3 = Parent.ClientSize.Height / 3;
 				height32 = height3 * 2;
-				height2 = Height / 2;
 				if (unit == RelativeUnit.Percent)
 				{
 					unitx = Parent.ClientSize.Width / 100f;
 					unity = Parent.ClientSize.Height / 100f;
 				}
-
-				pnl.Prepare ();
+				
+				if(CLI.showGrids)
+					pnl.Prepare ();
 				// pnl.Visible = true;
 			}
 		}
@@ -182,7 +182,6 @@ namespace Yuki_Theme.Core.Controls
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				bool chn = false;
 				int left = Left;
 				int top = Top;
 				if (
@@ -198,12 +197,9 @@ namespace Yuki_Theme.Core.Controls
 					} else if (left < margin.X)
 					{
 						left = margin.X;
-					} else
-					{
-					}
+					} // Center
 
 					prevMouseDownLocation.X = e.Location.X;
-					chn = true;
 				}
 
 				if (
@@ -219,62 +215,63 @@ namespace Yuki_Theme.Core.Controls
 					} else if (top < margin.Y) // Top
 					{
 						top = margin.Y;
-					} else // Center
-					{
-					}
+					} // Center
 
 					prevMouseDownLocation.Y = e.Location.Y;
-					chn = true;
 				}
 
 				Location = new Point (left, top);
-				// if (chn)
-					// pnl.Invalidate();
 			}
 		}
 
 		private void On_MouseUp (object sender, MouseEventArgs e)
 		{
-			pnl.Visible = false;
-
+			if(CLI.showGrids)
+				pnl.Visible = false;
+			Point nl = Parent.PointToClient (Cursor.Position);
 			AnchorStyles styles = AnchorStyles.None;
-
-			if (Right < width3) // X - Left
+			// Console.WriteLine(nl.ToString ());
+			if (nl.X < width3) // X - Left
 			{
 				styles = AnchorStyles.Left;
+				// Console.WriteLine("Left");
 			} else
 			{
 				// X > Left -> Center || Right
-				if (Left > width32) // Right
+				if (nl.X > width32) // Right
 				{
 					styles = AnchorStyles.Right;
+					// Console.WriteLine("Right");
 				} else // Center
 				{
 					styles = AnchorStyles.None;
+					// Console.WriteLine("Center");
 				}
 			}
-
-			if (Top + height2 < height3) // Y - Top
+			if (nl.Y < height3) // Y - Top
 			{
 				styles |= AnchorStyles.Top;
 				// Console.WriteLine ($"T: {styles}");
+				// Console.WriteLine("Top");
 			} else
 			{
 				// Y > Top -> Center || Bottom
-				if (Top + height2 > height32) // Bottom
+				if (nl.Y > height32) // Bottom
 				{
 					styles |= AnchorStyles.Bottom;
 					// Console.WriteLine ($"B: {styles}");
+					// Console.WriteLine("Bottom");
 				} else // Center
 				{
 					styles |= AnchorStyles.None;
 					// Console.WriteLine ($"C: {styles}");
+					// Console.WriteLine("Center");
+					
 				}
 			}
 
 			relativePosition.X = GetRelatedX (styles);
 			relativePosition.Y = GetRelatedY (styles);
-
 			SetAlign (styles);
 			SaveData ();
 		}

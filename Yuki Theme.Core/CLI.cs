@@ -43,8 +43,9 @@ namespace Yuki_Theme.Core
 		public static string       currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
 		public static Alignment    align        = Alignment.Left;
 		public static RelativeUnit unit         = RelativeUnit.Pixel;
-		public static int          opacity      = 10;
-		public static int          sopacity     = 100;
+		public static bool         showGrids;
+		public static int          opacity  = 10;
+		public static int          sopacity = 100;
 
 		public static Dictionary <string, Dictionary <string, string>> localAttributes =
 			new Dictionary <string, Dictionary <string, string>> ();
@@ -650,6 +651,7 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.EDITOR, Editor.ToString ());
 			dict.Add (SettingsForm.BETA, Beta.ToString ());
 			dict.Add (SettingsForm.ALLOWPOSITIONING, positioning.ToString ());
+			dict.Add (SettingsForm.SHOWGRIDS, showGrids.ToString ());
 			dict.Add (SettingsForm.STICKERPOSITIONUNIT, ((int) unit).ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
@@ -900,6 +902,7 @@ namespace Yuki_Theme.Core
 			Beta = bool.Parse (data [SettingsForm.BETA]);
 			Logged = bool.Parse (data [SettingsForm.LOGIN]);
 			positioning = bool.Parse (data [SettingsForm.ALLOWPOSITIONING]);
+			showGrids = bool.Parse (data [SettingsForm.SHOWGRIDS]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;

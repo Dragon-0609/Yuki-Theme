@@ -66,12 +66,12 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.button1.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
 			                settingsPanel.button5.FlatAppearance.BorderColor = settingsPanel.button6.FlatAppearance.BorderColor =
 				                settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor = settingsPanel.mode.ForeColor =
-					                settingsPanel.mode.ListTextColor = settingsPanel.unit.ForeColor = settingsPanel.unit.ListTextColor = 
+					                settingsPanel.mode.ListTextColor = settingsPanel.unit.ForeColor = settingsPanel.unit.ListTextColor =
 						                settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
-						                settingsPanel.add_program.ForeColor = settingsPanel.add_plugin.ForeColor =
-							                settingsPanel.add_toolbar.ForeColor = settingsPanel.tabPage1.ForeColor =
-								                settingsPanel.toolBarList.ForeColor = settingsPanel.button2.ForeColor =
-									                YukiTheme_VisualPascalABCPlugin.clr;
+							                settingsPanel.add_program.ForeColor = settingsPanel.add_plugin.ForeColor =
+								                settingsPanel.add_toolbar.ForeColor = settingsPanel.tabPage1.ForeColor =
+									                settingsPanel.toolBarList.ForeColor = settingsPanel.button2.ForeColor =
+										                settingsPanel.groupBox1.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 
 		                settingsPanel.button1.FlatAppearance.MouseOverBackColor = settingsPanel.button4.FlatAppearance.MouseOverBackColor =
 			                settingsPanel.button5.FlatAppearance.MouseOverBackColor =
@@ -109,7 +109,7 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.toolBarVisible.Checked = false;
 		                settingsPanel.toolBarPosition.Checked = false;
 		                settingsPanel.lockCheckbox = false;
-
+		                settingsPanel.stickerToUpdate.Add (plugin.stickerControl);
 		                settingsPanel.PopulateList (YukiTheme_VisualPascalABCPlugin.camouflage.items,
 		                                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide,
 		                                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight);
@@ -141,6 +141,7 @@ namespace Yuki_Theme_Plugin
 	                CLI.settingMode = settingsPanel.mode.SelectedIndex;
 	                CLI.positioning = settingsPanel.checkBox3.Checked;
 	                CLI.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
+	                CLI.showGrids = settingsPanel.checkBox4.Checked;
 	                plugin.stickerControl.Enabled = CLI.positioning;
 	                CLI.saveData ();
 	                plugin.LoadSticker ();

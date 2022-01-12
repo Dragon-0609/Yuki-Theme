@@ -17,12 +17,12 @@ namespace CustomControls.RJControls
     public class RJComboBox : UserControl
     {
         //Fields
-        private Color backColor = Color.WhiteSmoke;
-        private Color iconColor = Color.MediumSlateBlue;
+        private Color backColor     = Color.WhiteSmoke;
+        private Color iconColor     = Color.MediumSlateBlue;
         private Color listBackColor = Color.FromArgb(230, 228, 245);
         private Color listTextColor = Color.DimGray;
-        private Color borderColor = Color.MediumSlateBlue;
-        private int borderSize = 1;
+        private Color borderColor   = Color.MediumSlateBlue;
+        private int   borderSize    = 1;
 
         //Items
         private ComboBox cmbList;
@@ -75,8 +75,8 @@ namespace CustomControls.RJControls
             this.Controls.Add(lblText);//2
             this.Controls.Add(btnIcon);//1
             this.Controls.Add(cmbList);//0
-            this.MinimumSize = new Size(200, 30);
-            this.Size = new Size(200, 30);
+            this.MinimumSize = new Size(100, 30);
+            this.Size = new Size(100, 30);
             this.ForeColor = Color.DimGray;
             this.Padding = new Padding(borderSize);//Border Size
             this.Font = new Font(this.Font.Name, 10F);
