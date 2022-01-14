@@ -17,15 +17,23 @@ namespace Yuki_Theme.Core.Controls
 		protected override CreateParams CreateParams 
 		{            
 			get {
-				CreateParams cp =  base.CreateParams;
-				cp.ExStyle |= 0x00000020; // WS_EX_TRANSPARENT
-				return cp;
+				if (mode == 1)
+				{
+					CreateParams cp = base.CreateParams;
+					cp.ExStyle |= 0x00000020; // WS_EX_TRANSPARENT
+					return cp;
+				} else
+				{
+					return base.CreateParams;
+				}
 			}
 		}
 
-		public CustomPanel ()
+		public CustomPanel (int md)
 		{
-			SetStyle(ControlStyles.Opaque, true);
+			mode = md;
+			if(md ==1)
+				SetStyle(ControlStyles.Opaque, true);
 		}
 		
 		public void Prepare ()
