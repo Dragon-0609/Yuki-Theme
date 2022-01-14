@@ -30,6 +30,8 @@ namespace Yuki_Theme.Core.Forms
 		public const int STICKERPOSITIONUNIT = 19;
 		public const int ALLOWPOSITIONING    = 20;
 		public const int SHOWGRIDS           = 21;
+		public const int USECUSTOMSTICKER    = 22;
+		public const int CUSTOMSTICKER       = 23;
 
 		public const double current_version = 5.0;
 		public const string current_version_add = "beta";

@@ -96,19 +96,21 @@ namespace Yuki_Theme_Plugin
 		private       Image           sticker;
 		public        CustomPicture   stickerControl;
 
-		private ToolStripMenuItem      menu_settings;
-		private ToolStripMenuItem      quiet;
-		private ToolStripMenuItem      stick;
-		private ToolStripMenuItem      backimage;
-		private ToolStripMenuItem      switchTheme;
-		private Image                  quietImage;
-		private Image                  wallpaperImage;
-		private Image                  switchImage;
-		private Size                   defaultSize;
-		private Panel                  panel_bg;
-		private CustomList             lst;
-		private Image                  tmpImage1;
-		private Image                  tmpImage2;
+		private ToolStripMenuItem menu_settings;
+		private ToolStripMenuItem quiet;
+		private ToolStripMenuItem stick;
+		private ToolStripMenuItem backimage;
+		private ToolStripMenuItem switchTheme;
+		private ToolStripMenuItem enablePositioning;
+		private Image             quietImage;
+		private Image             positioningImage;
+		private Image             wallpaperImage;
+		private Image             switchImage;
+		private Size              defaultSize;
+		private Panel             panel_bg;
+		private CustomList        lst;
+		private Image             tmpImage1;
+		private Image             tmpImage2;
 		
 		private       bool              isMoving              = false;         // true while dragging the image
 		private       Point             movingPicturePosition = new Point(80, 20);   // the position of the moving image
@@ -345,7 +347,7 @@ namespace Yuki_Theme_Plugin
 			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
 			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
 			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
-			CustomPanel pnl = new CustomPanel {Visible = false, Name = "LayerGrids", mode = 1};
+			CustomPanel pnl = new CustomPanel(1) {Visible = false, Name = "LayerGrids"};
 			pnl.pict = stickerControl;
 			fm.Controls.Add (pnl);
 			fm.Controls.Add (stickerControl);
@@ -401,24 +403,30 @@ namespace Yuki_Theme_Plugin
 			};
 			if (CLI.swSticker)
 			{
-				string pth = Path.Combine (CLI.pascalPath, "Highlighting", "sticker.png");
-				if (File.Exists (pth))
+				if (CLI.useCustomSticker && File.Exists (CLI.customSticker))
 				{
-					Image stckr = Image.FromFile (pth);
-
-
-					if (CLI.sopacity != 100)
+					sticker = Image.FromFile (CLI.customSticker);
+				}else
+				{
+					string pth = Path.Combine (CLI.pascalPath, "Highlighting", "sticker.png");
+					if (File.Exists (pth))
 					{
-						sticker = Helper.setOpacity (stckr, CLI.sopacity);
-						stckr.Dispose ();
+						Image stckr = Image.FromFile (pth);
+
+
+						if (CLI.sopacity != 100)
+						{
+							sticker = Helper.setOpacity (stckr, CLI.sopacity);
+							stckr.Dispose ();
+						} else
+							sticker = stckr;
+
+						stickerControl.Visible = true;
+					} else
+					{
+						sticker = null;
+						stickerControl.Visible = false;
 					}
-					else
-						sticker = stckr;
-					stickerControl.Visible = true;
-				} else
-				{
-					sticker = null;
-					stickerControl.Visible = false;
 				}
 			} else
 			{
@@ -644,6 +652,17 @@ namespace Yuki_Theme_Plugin
 			if (stick != null) stick.BackColor = bgdef;
 			if (backimage != null) backimage.BackColor = bgdef;
 			if (switchTheme != null) switchTheme.BackColor = bgdef;
+			if (enablePositioning != null)
+			{
+				enablePositioning.BackColor = bgdef;
+				bool isDark = Helper.isDark (bg);
+				string add = isDark ? "" : "_dark";
+				enablePositioning.Image = Helper.renderSVG (enablePositioning.Size,
+				                                            Helper.loadsvg ("export" + add, Assembly.GetExecutingAssembly (),
+				                                                            "Yuki_Theme_Plugin.Resources.icons"), false, Size.Empty, false,
+				                                            Color.Black);
+
+			}
 
 			try
 			{
@@ -827,7 +846,7 @@ namespace Yuki_Theme_Plugin
 			{
 				if (mf == null || mf.IsDisposed)
 				{
-					panel_bg = new CustomPanel ();
+					panel_bg = new CustomPanel (0);
 					panel_bg.Name = "Custom Panel Switcher";
 
 					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
@@ -877,12 +896,19 @@ namespace Yuki_Theme_Plugin
 
 					fm.Controls.Add (panel_bg);
 					panel_bg.BringToFront ();
-					panel_bg.Focus ();
+					lst.Focus ();
 				} else
 				{
 					MessageBox.Show ("Please, close Yuki Theme window to activate 'Switch theme'");
 				}
 			}
+		}
+		
+		private void stickersPositioning (object sender, EventArgs e)
+		{
+			CLI.positioning = !CLI.positioning;
+			stickerControl.Enabled = CLI.positioning;
+			updatestickersPositioningImage ();
 		}
 
 		private void ToggleSticker (object sender, EventArgs e)
@@ -899,6 +925,16 @@ namespace Yuki_Theme_Plugin
 				quiet.Image = tg
 					? updateBgofImage (quietImage)
 					: quietImage;
+			}
+		}
+		
+		private void updatestickersPositioningImage ()
+		{
+			if (enablePositioning != null)
+			{
+				enablePositioning.Image = CLI.positioning
+					? updateBgofImage (positioningImage)
+					: positioningImage;
 			}
 		}
 
@@ -1000,14 +1036,14 @@ namespace Yuki_Theme_Plugin
 					                               "Yuki_Theme_Plugin.Resources"));
 				quiet.Image = quietImage;
 
-				stick = new ToolStripMenuItem ("Toggle Stickers",
+				stick = new ToolStripMenuItem ("Enable Stickers",
 				                               CLI.swSticker
 					                               ? updateBgofImage (currentTheme.Image)
 					                               : currentTheme.Image, ToggleSticker);
 				stick.BackColor = menu_settings.BackColor;
 				stick.ForeColor = menu_settings.ForeColor;
 
-				backimage = new ToolStripMenuItem ("Toggle Wallpaper",
+				backimage = new ToolStripMenuItem ("Enable Wallpaper",
 				                                   null, ToggleWallpaper);
 				backimage.Image = CLI.bgImage
 					? updateBgofImage (wallpaperImage)
@@ -1023,8 +1059,21 @@ namespace Yuki_Theme_Plugin
 				switchTheme.BackColor = menu_settings.BackColor;
 				switchTheme.ForeColor = menu_settings.ForeColor;
 
+				enablePositioning = new ToolStripMenuItem ("Enable Stickers Positioning",
+				                                           null, stickersPositioning);
+				
+				enablePositioning.BackColor = menu_settings.BackColor;
+				enablePositioning.ForeColor = menu_settings.ForeColor;
+				positioningImage = Helper.renderSVG (enablePositioning.Size, Helper.loadsvg (
+					                                     "export" + add, Assembly.GetExecutingAssembly (),
+					                                     "Yuki_Theme_Plugin.Resources.icons"));
+				enablePositioning.Image = CLI.positioning
+					? updateBgofImage (positioningImage)
+					: positioningImage;
+
 				main.DropDownItems.Add (stick);
 				main.DropDownItems.Add (backimage);
+				main.DropDownItems.Add (enablePositioning);
 				main.DropDownItems.Add (quiet);
 				main.DropDownItems.Add (switchTheme);
 				main.DropDownItems.Add (menu_settings);

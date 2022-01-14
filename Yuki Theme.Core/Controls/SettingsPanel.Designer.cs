@@ -36,6 +36,8 @@ namespace Yuki_Theme.Core.Controls
 			this.tbpanel = new System.Windows.Forms.Panel ();
 			this.panel1 = new System.Windows.Forms.Panel ();
 			this.groupBox1 = new System.Windows.Forms.GroupBox ();
+			this.cstm_sticker = new System.Windows.Forms.Button ();
+			this.use_cstm_sticker = new System.Windows.Forms.CheckBox ();
 			this.checkBox4 = new System.Windows.Forms.CheckBox ();
 			this.roundLabel1 = new Yuki_Theme.Core.Controls.RoundLabel ();
 			this.swsticker = new System.Windows.Forms.CheckBox ();
@@ -139,6 +141,8 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add (this.cstm_sticker);
+			this.groupBox1.Controls.Add (this.use_cstm_sticker);
 			this.groupBox1.Controls.Add (this.checkBox4);
 			this.groupBox1.Controls.Add (this.roundLabel1);
 			this.groupBox1.Controls.Add (this.swsticker);
@@ -148,15 +152,35 @@ namespace Yuki_Theme.Core.Controls
 			this.groupBox1.Controls.Add (this.unit);
 			this.groupBox1.Location = new System.Drawing.Point (3, 35);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size (374, 142);
+			this.groupBox1.Size = new System.Drawing.Size (374, 170);
 			this.groupBox1.TabIndex = 36;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Sticker";
 			// 
+			// cstm_sticker
+			// 
+			this.cstm_sticker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.cstm_sticker.Location = new System.Drawing.Point (9, 50);
+			this.cstm_sticker.Name = "cstm_sticker";
+			this.cstm_sticker.Size = new System.Drawing.Size (116, 30);
+			this.cstm_sticker.TabIndex = 38;
+			this.cstm_sticker.Text = "Choose Image";
+			this.cstm_sticker.UseVisualStyleBackColor = true;
+			this.cstm_sticker.Click += new System.EventHandler (this.cstm_sticker_Click);
+			// 
+			// use_cstm_sticker
+			// 
+			this.use_cstm_sticker.Location = new System.Drawing.Point (196, 51);
+			this.use_cstm_sticker.Name = "use_cstm_sticker";
+			this.use_cstm_sticker.Size = new System.Drawing.Size (166, 20);
+			this.use_cstm_sticker.TabIndex = 37;
+			this.use_cstm_sticker.Text = "Use Custom Sticker";
+			this.use_cstm_sticker.UseVisualStyleBackColor = true;
+			// 
 			// checkBox4
 			// 
 			this.checkBox4.AutoSize = true;
-			this.checkBox4.Location = new System.Drawing.Point (12, 88);
+			this.checkBox4.Location = new System.Drawing.Point (8, 135);
 			this.checkBox4.Name = "checkBox4";
 			this.checkBox4.Size = new System.Drawing.Size (102, 22);
 			this.checkBox4.TabIndex = 36;
@@ -168,7 +192,7 @@ namespace Yuki_Theme.Core.Controls
 			this.roundLabel1._BackColor = System.Drawing.Color.Black;
 			this.roundLabel1.Font = new System.Drawing.Font ("Book Antiqua", 8F);
 			this.roundLabel1.ForeColor = System.Drawing.Color.WhiteSmoke;
-			this.roundLabel1.Location = new System.Drawing.Point (135, 36);
+			this.roundLabel1.Location = new System.Drawing.Point (131, 83);
 			this.roundLabel1.Name = "roundLabel1";
 			this.roundLabel1.Radius = 10;
 			this.roundLabel1.Size = new System.Drawing.Size (45, 18);
@@ -189,7 +213,7 @@ namespace Yuki_Theme.Core.Controls
 			// checkBox3
 			// 
 			this.checkBox3.AutoSize = true;
-			this.checkBox3.Location = new System.Drawing.Point (12, 49);
+			this.checkBox3.Location = new System.Drawing.Point (8, 96);
 			this.checkBox3.Name = "checkBox3";
 			this.checkBox3.Size = new System.Drawing.Size (145, 22);
 			this.checkBox3.TabIndex = 31;
@@ -200,9 +224,9 @@ namespace Yuki_Theme.Core.Controls
 			// reset_margin
 			// 
 			this.reset_margin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.reset_margin.Location = new System.Drawing.Point (200, 44);
+			this.reset_margin.Location = new System.Drawing.Point (196, 91);
 			this.reset_margin.Name = "reset_margin";
-			this.reset_margin.Size = new System.Drawing.Size (172, 30);
+			this.reset_margin.Size = new System.Drawing.Size (162, 30);
 			this.reset_margin.TabIndex = 35;
 			this.reset_margin.Text = "Reset Sticker Margins";
 			this.reset_margin.UseVisualStyleBackColor = true;
@@ -211,7 +235,7 @@ namespace Yuki_Theme.Core.Controls
 			// label2
 			// 
 			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label2.Location = new System.Drawing.Point (121, 83);
+			this.label2.Location = new System.Drawing.Point (117, 130);
 			this.label2.Margin = new System.Windows.Forms.Padding (4, 0, 4, 0);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size (111, 31);
@@ -230,7 +254,7 @@ namespace Yuki_Theme.Core.Controls
 			this.unit.IconColor = System.Drawing.Color.MediumSlateBlue;
 			this.unit.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
 			this.unit.ListTextColor = System.Drawing.Color.DimGray;
-			this.unit.Location = new System.Drawing.Point (242, 84);
+			this.unit.Location = new System.Drawing.Point (238, 131);
 			this.unit.MinimumSize = new System.Drawing.Size (120, 30);
 			this.unit.Name = "unit";
 			this.unit.Padding = new System.Windows.Forms.Padding (1);
@@ -251,7 +275,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.button4.AutoSize = true;
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button4.Location = new System.Drawing.Point (306, 270);
+			this.button4.Location = new System.Drawing.Point (306, 300);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size (71, 30);
 			this.button4.TabIndex = 17;
@@ -261,7 +285,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox1
 			// 
-			this.checkBox1.Location = new System.Drawing.Point (12, 270);
+			this.checkBox1.Location = new System.Drawing.Point (12, 300);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size (127, 29);
 			this.checkBox1.TabIndex = 30;
@@ -272,7 +296,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.button5.AutoSize = true;
 			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button5.Location = new System.Drawing.Point (306, 234);
+			this.button5.Location = new System.Drawing.Point (306, 255);
 			this.button5.Name = "button5";
 			this.button5.Size = new System.Drawing.Size (71, 30);
 			this.button5.TabIndex = 19;
@@ -284,7 +308,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.button6.AutoSize = true;
 			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button6.Location = new System.Drawing.Point (170, 234);
+			this.button6.Location = new System.Drawing.Point (170, 255);
 			this.button6.Name = "button6";
 			this.button6.Size = new System.Drawing.Size (130, 30);
 			this.button6.TabIndex = 21;
@@ -303,7 +327,7 @@ namespace Yuki_Theme.Core.Controls
 			this.mode.IconColor = System.Drawing.Color.MediumSlateBlue;
 			this.mode.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
 			this.mode.ListTextColor = System.Drawing.Color.DimGray;
-			this.mode.Location = new System.Drawing.Point (170, 190);
+			this.mode.Location = new System.Drawing.Point (170, 211);
 			this.mode.MinimumSize = new System.Drawing.Size (100, 30);
 			this.mode.Name = "mode";
 			this.mode.Padding = new System.Windows.Forms.Padding (1);
@@ -313,7 +337,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox2
 			// 
-			this.checkBox2.Location = new System.Drawing.Point (12, 236);
+			this.checkBox2.Location = new System.Drawing.Point (12, 257);
 			this.checkBox2.Name = "checkBox2";
 			this.checkBox2.Size = new System.Drawing.Size (127, 29);
 			this.checkBox2.TabIndex = 18;
@@ -323,7 +347,7 @@ namespace Yuki_Theme.Core.Controls
 			// label4
 			// 
 			this.label4.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.label4.Location = new System.Drawing.Point (12, 190);
+			this.label4.Location = new System.Drawing.Point (12, 211);
 			this.label4.Margin = new System.Windows.Forms.Padding (4, 0, 4, 0);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size (160, 31);
@@ -586,6 +610,11 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize) (this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.CheckBox use_cstm_sticker;
+		public System.Windows.Forms.Button   cstm_sticker;
+
+		public System.Windows.Forms.CheckBox checkBox5;
 
 		public System.Windows.Forms.CheckBox checkBox4;
 

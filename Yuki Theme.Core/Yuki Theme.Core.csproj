@@ -186,6 +186,12 @@
         <Compile Include="Forms\NotificationForm.Designer.cs">
           <DependentUpon>NotificationForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Forms\PathForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\PathForm.Designer.cs">
+          <DependentUpon>PathForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Forms\QuestionForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -256,6 +262,9 @@
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\NotificationForm.resx">
           <DependentUpon>NotificationForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Forms\PathForm.resx">
+          <DependentUpon>PathForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\QuestionForm.resx">
           <DependentUpon>QuestionForm.cs</DependentUpon>

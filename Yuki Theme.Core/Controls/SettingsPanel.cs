@@ -20,6 +20,7 @@ namespace Yuki_Theme.Core.Controls
 		public  Brush                fgBrush;
 		public  Color                key;
 		public  Color                click;
+		public  Color                border;
 		public  bool                 isFromPascal = false;
 		private int                  selectionindex;
 		public  bool                 lockCheckbox = false;
@@ -28,6 +29,7 @@ namespace Yuki_Theme.Core.Controls
 		public  List <string>        itemsToHide;
 		public  List <string>        itemsToRight;
 		public  List <CustomPicture> stickerToUpdate;
+		public  string               customSticker;
 
 		public Action <List <ToolStripItem>, List <string>, List <string>> onChange;
 
@@ -57,6 +59,8 @@ namespace Yuki_Theme.Core.Controls
 			checkBox3.Checked = CLI.positioning;
 			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
 			checkBox4.Checked = CLI.showGrids;
+			use_cstm_sticker.Checked = CLI.useCustomSticker;
+			customSticker = CLI.customSticker;
 			loadSVG ();
 		}
 
@@ -391,6 +395,17 @@ namespace Yuki_Theme.Core.Controls
 		private void swsticker_CheckedChanged (object sender, EventArgs e)
 		{
 			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = reset_margin.Enabled = checkBox3.Enabled = swsticker.Checked;
+		}
+
+		private void cstm_sticker_Click (object sender, EventArgs e)
+		{
+			PathForm pf = new PathForm (this);
+			pf.path.Text = customSticker;
+			pf.isFromPascal = isFromPascal;
+			if (pf.ShowDialog () == DialogResult.OK)
+			{
+				customSticker = pf.path.Text;
+			}
 		}
 	}
 }

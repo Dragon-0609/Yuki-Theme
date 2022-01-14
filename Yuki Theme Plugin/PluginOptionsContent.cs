@@ -103,6 +103,7 @@ namespace Yuki_Theme_Plugin
 		                settingsPanel.fgBrush = YukiTheme_VisualPascalABCPlugin.clrBrush;
 		                settingsPanel.key = YukiTheme_VisualPascalABCPlugin.clr;
 		                Helper.bgClick = settingsPanel.click = YukiTheme_VisualPascalABCPlugin.bgClick;
+		                settingsPanel.border = YukiTheme_VisualPascalABCPlugin.bgBorder;
 		                
 		                settingsPanel.toolBarImage.Image = null;
 		                settingsPanel.lockCheckbox = true;
@@ -142,6 +143,8 @@ namespace Yuki_Theme_Plugin
 	                CLI.positioning = settingsPanel.checkBox3.Checked;
 	                CLI.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
 	                CLI.showGrids = settingsPanel.checkBox4.Checked;
+	                CLI.useCustomSticker = settingsPanel.use_cstm_sticker.Checked;
+	                CLI.customSticker = settingsPanel.customSticker;
 	                plugin.stickerControl.Enabled = CLI.positioning;
 	                CLI.saveData ();
 	                plugin.LoadSticker ();
