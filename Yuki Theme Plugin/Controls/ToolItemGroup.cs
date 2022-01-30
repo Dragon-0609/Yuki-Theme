@@ -70,5 +70,16 @@ namespace Yuki_Theme_Plugin.Controls
 
 			return b;
 		}
+
+		public bool isAllRight ()
+		{
+			bool b = true;
+			foreach (ToolStripItem item in items)
+			{
+				b = b && item.Alignment == ToolStripItemAlignment.Right;
+			}
+
+			return b;
+		}
 	}
 }

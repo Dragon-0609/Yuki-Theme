@@ -521,8 +521,9 @@ namespace Yuki_Theme.Core.Controls
 			this.toolBarPositionLabel.AutoSize = true;
 			this.toolBarPositionLabel.Location = new System.Drawing.Point (157, 113);
 			this.toolBarPositionLabel.Name = "toolBarPositionLabel";
-			this.toolBarPositionLabel.Size = new System.Drawing.Size (0, 18);
+			this.toolBarPositionLabel.Size = new System.Drawing.Size (84, 18);
 			this.toolBarPositionLabel.TabIndex = 6;
+			this.toolBarPositionLabel.Text = "From Right:";
 			// 
 			// button2
 			// 
@@ -551,8 +552,9 @@ namespace Yuki_Theme.Core.Controls
 			this.toolBarVisibleLabel.AutoSize = true;
 			this.toolBarVisibleLabel.Location = new System.Drawing.Point (157, 67);
 			this.toolBarVisibleLabel.Name = "toolBarVisibleLabel";
-			this.toolBarVisibleLabel.Size = new System.Drawing.Size (0, 18);
+			this.toolBarVisibleLabel.Size = new System.Drawing.Size (55, 18);
 			this.toolBarVisibleLabel.TabIndex = 3;
+			this.toolBarVisibleLabel.Text = "Visible:";
 			// 
 			// toolBarIconLabel
 			// 

@@ -332,6 +332,7 @@ namespace Yuki_Theme.Core.Controls
 		private void button2_Click (object sender, EventArgs e)
 		{
 			itemsToHide.Clear ();
+			itemsToRight.Clear ();
 			if (onChange != null)
 			{
 				onChange (items, itemsToHide, itemsToRight);
