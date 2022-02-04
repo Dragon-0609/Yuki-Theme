@@ -32,10 +32,14 @@ namespace Yuki_Theme.Core.Forms
 		public const int SHOWGRIDS           = 21;
 		public const int USECUSTOMSTICKER    = 22;
 		public const int CUSTOMSTICKER       = 23;
+		public const int LICENSE             = 24;
+		public const int GOOGLEANALYTICS     = 25;
+		public const int DONTTRACK           = 26;
 
-		public const double current_version = 5.0;
-		public const string current_version_add = "beta";
-		public static string next_version = "";
+
+		public const  double current_version     = 5.0;
+		public const  string current_version_add = "beta-2";
+		public static string next_version        = "";
 
 		private MForm form;
 
@@ -62,25 +66,25 @@ namespace Yuki_Theme.Core.Forms
 			get => settingsPanel.swStatusbar.Checked;
 			set => settingsPanel.swStatusbar.Checked = value;
 		}
-		
+
 		public bool Logo
 		{
 			get => settingsPanel.logo.Checked;
 			set => settingsPanel.logo.Checked = value;
 		}
-		
+
 		public bool Editor
 		{
 			get => settingsPanel.editor.Checked;
 			set => settingsPanel.editor.Checked = value;
 		}
-		
+
 		public bool Beta
 		{
 			get => settingsPanel.checkBox1.Checked;
 			set => settingsPanel.checkBox1.Checked = value;
 		}
-		
+
 		public SettingsForm (MForm mf)
 		{
 			InitializeComponent ();
@@ -88,6 +92,7 @@ namespace Yuki_Theme.Core.Forms
 			this.StartPosition = FormStartPosition.CenterParent;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			settingsPanel.mf = mf;
 		}
 
 		private void button2_Click (object sender, EventArgs e)
@@ -99,7 +104,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			DialogResult = DialogResult.Cancel;
 		}
-		
+
 		private bool ZipHasFile (string fileFullName, string zipFullPath)
 		{
 			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
@@ -111,7 +116,6 @@ namespace Yuki_Theme.Core.Forms
 						return true;
 					}
 				}
-				
 			}
 
 			return false;
@@ -157,6 +161,5 @@ namespace Yuki_Theme.Core.Forms
 		{
 			settingsPanel.setVisible (vis);
 		}
-		
 	}
 }

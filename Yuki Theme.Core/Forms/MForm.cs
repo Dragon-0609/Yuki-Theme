@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -14,6 +15,7 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Properties;
 using CommonDialog = System.Windows.Forms.CommonDialog;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
@@ -394,10 +396,10 @@ namespace Yuki_Theme.Core.Forms
 
 		private void LoadSticker ()
 		{
-			if(swSticker)
+			if (swSticker)
 			{
-				Console.WriteLine(customSticker);
-				Console.WriteLine(File.Exists (customSticker));
+				// Console.WriteLine (customSticker);
+				// Console.WriteLine (File.Exists (customSticker));
 				if (useCustomSticker && File.Exists (customSticker))
 				{
 					img4 = Image.FromFile (customSticker);
@@ -416,9 +418,11 @@ namespace Yuki_Theme.Core.Forms
 						stickerControl.Visible = false;
 					}
 				}
+				stickerControl.img = img4;
+			} else
+			{
+				stickerControl.Visible = false;
 			}
-
-			stickerControl.img = img4;
 		}
 
 		private void colorButton_Click (object sender, EventArgs e)
@@ -1194,15 +1198,18 @@ namespace Yuki_Theme.Core.Forms
 		private void loadSVG ()
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			Helper.renderSVG (save_button, Helper.loadsvg ("save", a));
-			Helper.renderSVG (restore_button, Helper.loadsvg ("arrow-clockwise", a));
-			Helper.renderSVG (export_button, Helper.loadsvg ("upload", a));
-			Helper.renderSVG (import_button, Helper.loadsvg ("download", a));
-			Helper.renderSVG (settings_button, Helper.loadsvg ("gear", a));
-			Helper.renderSVG (add_button, Helper.loadsvg ("plus-square", a));
-			Helper.renderSVG (manage_button, Helper.loadsvg ("list-task", a));
-			Helper.renderSVG (import_directory, Helper.loadsvg ("box-arrow-down", a));
-			Helper.renderSVG (button11, Helper.loadsvg ("three-dots", a), true, new Size (16, 16));
+
+			string add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+			
+			Helper.renderSVG (save_button, Helper.loadsvg ("menu-saveall" + add, a));
+			Helper.renderSVG (restore_button, Helper.loadsvg ("refresh" + add, a));
+			Helper.renderSVG (export_button, Helper.loadsvg ("export" + add, a));
+			Helper.renderSVG (import_button, Helper.loadsvg ("import" + add, a));
+			Helper.renderSVG (settings_button, Helper.loadsvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
+			Helper.renderSVG (add_button, Helper.loadsvg ("add" + add, a));
+			Helper.renderSVG (manage_button, Helper.loadsvg ("listFiles" + add, a));
+			Helper.renderSVG (import_directory, Helper.loadsvg ("traceInto" + add, a));
+			Helper.renderSVG (button11, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16));
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
@@ -1355,19 +1362,72 @@ namespace Yuki_Theme.Core.Forms
 		private void trackInstall (object sender, EventArgs e)
 		{
 			tmr.Stop ();
-			if (!Logged)
+			showLicense (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
+			showGoogleAnalytics (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
+			TrackInstall ();
+		}
+
+
+		public static void showLicense (Color bg, Color fg, Color bgClick, Form parent)
+		{
+			Console.WriteLine(CLI.license);
+			if (!CLI.license)
 			{
-				var result = GoogleAnalyticsHelper.TrackEvent ().Result;
+				MessageForm msgf = new MessageForm ();
+				msgf.setColors (bg, fg, bgClick);
+				Assembly a = Assembly.GetExecutingAssembly ();
+				Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.LICENSE");
+				string description = "";
+				using (StreamReader reader = new StreamReader (stm))
+				{
+					description = reader.ReadToEnd ();
+				}
+
+				msgf.Text = "LICENSE";
+				msgf.setMessage ("JetBrains.Icons License", description, "Accept");
+				msgf.ShowDialog (parent);
+				CLI.license = true;
+				CLI.database.UpdateData (SettingsForm.LICENSE, "true");
+			}
+		}
+
+
+		public static void showGoogleAnalytics (Color bg, Color fg, Color bgClick, Form parent)
+		{
+			if (!CLI.googleAnalytics && !CLI.dontTrack)
+			{
+				QuestionForm_2 qf = new QuestionForm_2 ();
+				qf.setColors (bg, fg, bgClick);
+				
+				if (qf.ShowDialog (parent) == DialogResult.Yes)
+				{
+					CLI.googleAnalytics = true;
+					CLI.database.UpdateData (SettingsForm.GOOGLEANALYTICS, "true");
+				} else
+				{
+					CLI.dontTrack = true;
+					CLI.database.UpdateData (SettingsForm.DONTTRACK, "true");
+				}
+			}
+		}
+
+		public static void TrackInstall ()
+		{
+			if (!CLI.Logged && !CLI.dontTrack)
+			{
+				HttpResponseMessage result = GoogleAnalyticsHelper.TrackEvent ().Result;
 				if (!result.IsSuccessStatusCode)
 				{
 					// Maybe internet isn't available
 				} else
 				{
-					database.UpdateData (SettingsForm.LOGIN, "true");
-					Logged = true;
+					CLI.database.UpdateData (SettingsForm.LOGIN, "true");
+					CLI.Logged = true;
 				}
 			}
 		}
+
+		
 	}
 
 

@@ -112,9 +112,6 @@ namespace Yuki_Theme_Plugin
 		private Image             tmpImage1;
 		private Image             tmpImage2;
 		
-		private       bool              isMoving              = false;         // true while dragging the image
-		private       Point             movingPicturePosition = new Point(80, 20);   // the position of the moving image
-		private       Point             offset;   // mouse position inside the moving image while dragging
 		private       int               selectionindex;
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
@@ -358,34 +355,6 @@ namespace Yuki_Theme_Plugin
 			fm.Resize += FmOnResize;
 			addSettings ();
 		}
-
-		private void stickerControl_MouseDown(object sender, MouseEventArgs e)
-		{
-			var r = new Rectangle (Point.Empty, sticker.Size);
-			if (r.Contains(e.Location))
-			{
-				isMoving = true;
-				offset = new Point(movingPicturePosition.X - e.X, movingPicturePosition.Y - e.Y);
-			}
-		}
-
-		private void stickerControl_MouseMove(object sender, MouseEventArgs e)
-		{
-			if (isMoving)
-			{
-				movingPicturePosition = e.Location;
-				movingPicturePosition.Offset(offset);
-			}
-		}
-
-		private void stickerControl_MouseUp(object sender, MouseEventArgs e)
-		{
-			isMoving = false;
-			// MessageBox.Show ($"Before: {stickerControl.Location}, After: {movingPicturePosition}, offset: {offset}");
-			
-			stickerControl.Location = movingPicturePosition;
-		}
-
 		private void ReloadSticker ()
 		{
 			enbld = 0;
@@ -428,14 +397,13 @@ namespace Yuki_Theme_Plugin
 						stickerControl.Visible = false;
 					}
 				}
+
+				stickerControl.img = sticker;
 			} else
 			{
 				sticker = null;
 				stickerControl.Visible = false;
 			}
-
-			stickerControl.img = sticker;
-			movingPicturePosition = stickerControl.Location;
 		}
 
 		private void RefreshStatusBar ()
@@ -1103,6 +1071,9 @@ namespace Yuki_Theme_Plugin
 				InitAdditions ();
 			}
 			tim3.Stop ();
+			MForm.showLicense (bg, clr, bgClick, fm);
+			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
+			MForm.TrackInstall ();
 		}
 
 		
@@ -1370,6 +1341,6 @@ namespace Yuki_Theme_Plugin
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
 			options.AddContent (new PluginOptionsContent (this));
 		}
-
+		
 	}
 }

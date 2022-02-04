@@ -136,7 +136,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void button5_Click (object sender, EventArgs e)
 		{
-			if (mf == null) mf = new MForm ((int) ProductMode.Plugin, true);
+			if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
 			if (!mf.Visible) mf.Show ();
 			mf.update_Click (sender, e);
 		}
@@ -162,7 +162,7 @@ namespace Yuki_Theme.Core.Controls
 								           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
 								           "Yuki Theme",
 								           "yuki_theme.zip"), true);
-							if (mf == null) mf = new MForm ((int) ProductMode.Plugin, true);
+							if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
 							if (!mf.Visible) mf.Show ();
 							if (mf.df == null)
 								mf.df = new DownloadForm (mf);
@@ -204,7 +204,20 @@ namespace Yuki_Theme.Core.Controls
 		public void loadSVG ()
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			Helper.renderSVG (button1, Helper.loadsvg ("three-dots", a), true, new Size (16, 16));
+			string add = "";
+			Color fr = Color.White;
+			if (isFromPascal)
+			{
+				add = Helper.isDark (bg) ? "" : "_dark";
+				fr = fg;
+			}
+			else
+			{
+				add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+				fr = Helper.fgColor;
+			}
+
+			Helper.renderSVG (button1, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)

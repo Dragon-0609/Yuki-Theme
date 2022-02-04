@@ -70,9 +70,7 @@ namespace Yuki_Theme.Core.Forms
 			// remove
 			// 
 			this.remove.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.remove.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.dash_square;
 			this.remove.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.remove.Enabled = false;
 			this.remove.FlatAppearance.BorderSize = 0;
 			this.remove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.remove.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
@@ -86,7 +84,6 @@ namespace Yuki_Theme.Core.Forms
 			// add
 			// 
 			this.add.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.add.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.plus_square;
 			this.add.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.add.FlatAppearance.BorderSize = 0;
 			this.add.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -116,7 +113,6 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.rename_btn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.rename_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.rename_btn.Enabled = false;
 			this.rename_btn.FlatAppearance.BorderSize = 0;
 			this.rename_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.rename_btn.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));

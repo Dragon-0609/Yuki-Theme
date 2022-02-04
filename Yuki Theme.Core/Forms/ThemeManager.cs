@@ -118,8 +118,7 @@ namespace Yuki_Theme.Core.Forms
 		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			remove.Enabled = rename_btn.Enabled = false;
-			remove.BackColor = rename_btn.BackColor  = Helper.bgBorder;
+			remove.Visible = rename_btn.Visible = false;
 			if (scheme.SelectedItems.Count > 0)
 			{
 				if (!(scheme.SelectedItems [0] is ReItem)) return;
@@ -135,8 +134,7 @@ namespace Yuki_Theme.Core.Forms
 				                          && !re.rgroupItem.Name.Equals (
 					                             "doki theme", StringComparison.OrdinalIgnoreCase))
 				{
-					remove.Enabled = rename_btn.Enabled = true;
-					remove.BackColor = rename_btn.BackColor = cbg;
+					remove.Visible = rename_btn.Visible = true;
 				}
 			}
 		}
@@ -156,8 +154,7 @@ namespace Yuki_Theme.Core.Forms
 			fgsp = new SolidBrush (Helper.fgKeyword);
 			cbgclick = Helper.bgClick;
 			loadSVG();
-			remove.Enabled = rename_btn.Enabled = false;
-			remove.BackColor = rename_btn.BackColor = Helper.bgBorder;
+			remove.Visible = rename_btn.Visible = false;
 		}
 
 		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
@@ -216,9 +213,10 @@ namespace Yuki_Theme.Core.Forms
 		
 		private void loadSVG(){
 			var a = Assembly.GetExecutingAssembly ();
-        	Helper.renderSVG (add, Helper.loadsvg ("plus-square", a));
-            Helper.renderSVG (remove, Helper.loadsvg ("dash-square", a));
-            Helper.renderSVG (rename_btn, Helper.loadsvg ("edit", a));
+			string adda = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+        	Helper.renderSVG (add, Helper.loadsvg ("add" + adda, a));
+            Helper.renderSVG (remove, Helper.loadsvg ("remove" + adda, a));
+            Helper.renderSVG (rename_btn, Helper.loadsvg ("edit" + adda, a));
 		}
 
 		private Size MeasureString (string candidate, Font fnt)
