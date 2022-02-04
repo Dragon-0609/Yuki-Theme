@@ -266,6 +266,7 @@
 			this.pleft.BackgroundImage = global::Yuki_Theme.Core.Properties.Resources.left;
 			this.pleft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.pleft.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.pleft.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.pleft.Location = new System.Drawing.Point (11, 1);
 			this.pleft.Name = "pleft";
 			this.pleft.Size = new System.Drawing.Size (54, 32);
@@ -465,7 +466,7 @@
 			this.add_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.add_button.Location = new System.Drawing.Point (3, 0);
 			this.add_button.Name = "add_button";
-			this.add_button.Size = new System.Drawing.Size (28, 28);
+			this.add_button.Size = new System.Drawing.Size (20, 20);
 			this.add_button.TabIndex = 10;
 			this.add_button.UseVisualStyleBackColor = false;
 			this.add_button.Click += new System.EventHandler (this.button3_Click);
@@ -479,7 +480,7 @@
 			this.manage_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.manage_button.Location = new System.Drawing.Point (42, 0);
 			this.manage_button.Name = "manage_button";
-			this.manage_button.Size = new System.Drawing.Size (28, 28);
+			this.manage_button.Size = new System.Drawing.Size (20, 20);
 			this.manage_button.TabIndex = 12;
 			this.manage_button.UseVisualStyleBackColor = false;
 			this.manage_button.Click += new System.EventHandler (this.button5_Click);
@@ -494,7 +495,7 @@
 			this.save_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.save_button.Location = new System.Drawing.Point (76, 0);
 			this.save_button.Name = "save_button";
-			this.save_button.Size = new System.Drawing.Size (28, 28);
+			this.save_button.Size = new System.Drawing.Size (20, 20);
 			this.save_button.TabIndex = 5;
 			this.save_button.UseVisualStyleBackColor = false;
 			this.save_button.Click += new System.EventHandler (this.save_Click);
@@ -508,7 +509,7 @@
 			this.restore_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.restore_button.Location = new System.Drawing.Point (110, 0);
 			this.restore_button.Name = "restore_button";
-			this.restore_button.Size = new System.Drawing.Size (28, 28);
+			this.restore_button.Size = new System.Drawing.Size (20, 20);
 			this.restore_button.TabIndex = 6;
 			this.restore_button.UseVisualStyleBackColor = false;
 			this.restore_button.Click += new System.EventHandler (this.restore_Click);
@@ -523,7 +524,7 @@
 			this.import_directory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.import_directory.Location = new System.Drawing.Point (453, 10);
 			this.import_directory.Name = "import_directory";
-			this.import_directory.Size = new System.Drawing.Size (28, 28);
+			this.import_directory.Size = new System.Drawing.Size (20, 20);
 			this.import_directory.TabIndex = 17;
 			this.import_directory.UseVisualStyleBackColor = false;
 			this.import_directory.Click += new System.EventHandler (this.import_directory_Click);
@@ -558,7 +559,7 @@
 			this.import_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.import_button.Location = new System.Drawing.Point (419, 10);
 			this.import_button.Name = "import_button";
-			this.import_button.Size = new System.Drawing.Size (28, 28);
+			this.import_button.Size = new System.Drawing.Size (20, 20);
 			this.import_button.TabIndex = 14;
 			this.import_button.UseVisualStyleBackColor = false;
 			this.import_button.Click += new System.EventHandler (this.import_Click);
@@ -573,7 +574,7 @@
 			this.export_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.export_button.Location = new System.Drawing.Point (385, 10);
 			this.export_button.Name = "export_button";
-			this.export_button.Size = new System.Drawing.Size (28, 28);
+			this.export_button.Size = new System.Drawing.Size (20, 20);
 			this.export_button.TabIndex = 13;
 			this.export_button.UseVisualStyleBackColor = false;
 			this.export_button.Click += new System.EventHandler (this.export);
@@ -587,7 +588,7 @@
 			this.settings_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.settings_button.Location = new System.Drawing.Point (485, 10);
 			this.settings_button.Name = "settings_button";
-			this.settings_button.Size = new System.Drawing.Size (28, 28);
+			this.settings_button.Size = new System.Drawing.Size (20, 20);
 			this.settings_button.TabIndex = 11;
 			this.settings_button.UseVisualStyleBackColor = false;
 			this.settings_button.Click += new System.EventHandler (this.settings_Click);

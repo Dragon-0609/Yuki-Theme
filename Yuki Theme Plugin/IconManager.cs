@@ -1,101 +1,127 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using Svg;
 using VisualPascalABC;
-using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 
 namespace Yuki_Theme_Plugin
 {
-	class IconManager
+	internal class IconManager
 	{
-		private       ToolStrip tools;
-		private       MenuStrip menu;
-		private       Form1 fm;
-		private const string    IconFolder = "Yuki_Theme_Plugin.Resources.icons";
+		private const    string    IconFolder = "Yuki_Theme_Plugin.Resources.icons";
+		private readonly Form1     fm;
+		private readonly MenuStrip menu;
+		private readonly ToolStrip tools;
+		private          bool      internalchanges;
 
 		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, Form1 form)
 		{
 			tools = toolStrip;
 			menu = menuStrip;
 			fm = form;
+			// tools.RightToLeft = RightToLeft.Yes;
 			Init ();
 		}
 
 		public void Init ()
 		{
 			foreach (var control in tools.Items)
-			{
 				if (control is ToolStripButton)
 				{
-					ToolStripButton btn = (ToolStripButton) control;
+					var btn = (ToolStripButton) control;
 					btn.AccessibleDescription = GetIconName (btn.Name);
 					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					{
 						btn.ImageTransparentColor = Color.Transparent;
+						btn.EnabledChanged += BtnOnEnabledChanged;
+					}
 				}
-			}
-			
+
 			foreach (ToolStripMenuItem control in menu.Items)
 			{
 				foreach (var item in control.DropDownItems)
-				{
 					if (item is ToolStripMenuItem)
 					{
-						ToolStripMenuItem btn = (ToolStripMenuItem) item;
+						var btn = (ToolStripMenuItem) item;
 						btn.AccessibleDescription = GetIconName (btn.Name);
 						if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+						{
 							btn.ImageTransparentColor = Color.Transparent;
-						else
-							removeIcon (btn);
+							btn.EnabledChanged += MenuOnEnabledChanged;
+						} else
+							RemoveIcon (btn);
 					}
-				}
 			}
-			
-			foreach (IDockContent content in fm.BottomPane.Contents)
-			{
+
+			foreach (var content in fm.BottomPane.Contents)
 				// MessageBox.Show (content.DockHandler.Form.Name);
 				content.DockHandler.Form.AccessibleDescription = GetIconName (content.DockHandler.Form.Name);
+		}
+
+		private void BtnOnEnabledChanged (object sender, EventArgs e)
+		{
+			if (sender is ToolStripButton)
+			{
+				ToolStripButton btn = (ToolStripButton) sender;
+				Tuple <bool, string> rest = GetState (btn);
+
+				if (rest.Item1 || internalchanges)
+				{
+					var a = Assembly.GetExecutingAssembly ();
+					Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+				}
+			}
+		}
+
+		private void MenuOnEnabledChanged (object sender, EventArgs e)
+		{
+			if (sender is ToolStripMenuItem)
+			{
+				ToolStripMenuItem btn = (ToolStripMenuItem) sender;
+				Tuple <bool, string> rest = GetState (btn);
+
+
+				if (rest.Item1 || internalchanges)
+				{
+					var a = Assembly.GetExecutingAssembly ();
+					// MessageBox.Show (btn.Name);
+					Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+				}
 			}
 		}
 
 		public void UpdateColors ()
 		{
+			internalchanges = true;
 			foreach (var control in tools.Items)
-			{
 				if (control is ToolStripButton)
-				{
 					if (((ToolStripButton) control).AccessibleDescription != null &&
 					    ((ToolStripButton) control).AccessibleDescription.Length > 2)
-						UpdateIcon ((ToolStripButton) control);
-				}
-			}
-			
+						BtnOnEnabledChanged (control, EventArgs.Empty);
+
 			foreach (ToolStripMenuItem control in menu.Items)
 			{
 				foreach (var item in control.DropDownItems)
-				{
 					if (item is ToolStripMenuItem)
-					{
 						if (((ToolStripMenuItem) item).AccessibleDescription != null &&
 						    ((ToolStripMenuItem) item).AccessibleDescription.Length > 2)
-							UpdateIcon ((ToolStripMenuItem) item);
-					}	
-				}
+							MenuOnEnabledChanged (item, EventArgs.Empty);
 			}
-			
-			
-			foreach (IDockContent content in fm.BottomPane.Contents)
-			{
+
+
+			foreach (var content in fm.BottomPane.Contents)
 				if (content.DockHandler.Form.AccessibleDescription != null &&
 				    content.DockHandler.Form.AccessibleDescription.Length > 2)
 					UpdateIcon (content.DockHandler.Form);
-			}
+			internalchanges = false;
 		}
 
 		private string GetIconName (string str)
 		{
-			string res = "";
+			var res = "";
 
 			switch (str)
 			{
@@ -375,61 +401,30 @@ namespace Yuki_Theme_Plugin
 					res = "help";
 				}
 					break;
-				
-					/*
-				case "" :
-				{
-					res = "";
-				}
-					break;
-					*/
+
+				/*
+			case "" :
+			{
+				res = "";
+			}
+				break;
+				*/
 				default :
 				{
 					res = "";
 				}
 					break;
-
 			}
 
 			return res;
 		}
 
-		private void UpdateIcon (ToolStripButton btn)
-		{
-			string add = "";
-			if (hasDark (btn.AccessibleDescription))
-			{
-				bool isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
-				add = isDark ? "" : "_dark";
-			}
-
-			var a = Assembly.GetExecutingAssembly ();
-			// MessageBox.Show (btn.Name);
-			Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + add, a, IconFolder),
-			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
-		}
-
-		private void UpdateIcon (ToolStripMenuItem btn)
-		{
-			string add = "";
-			if (hasDark (btn.AccessibleDescription))
-			{
-				bool isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
-				add = isDark ? "" : "_dark";
-			}
-
-			var a = Assembly.GetExecutingAssembly ();
-			// MessageBox.Show (btn.Name);
-			Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + add, a, IconFolder),
-			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
-		}
-
 		private void UpdateIcon (Form btn)
 		{
-			string add = "";
+			var add = "";
 			if (hasDark (btn.AccessibleDescription))
 			{
-				bool isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
+				var isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
 				add = isDark ? "" : "_dark";
 			}
 
@@ -441,7 +436,7 @@ namespace Yuki_Theme_Plugin
 
 		private bool hasDark (string str)
 		{
-			bool s = false;
+			var s = false;
 			switch (str)
 			{
 				case "menu-cut" :
@@ -485,7 +480,7 @@ namespace Yuki_Theme_Plugin
 			return s;
 		}
 
-		private void removeIcon (ToolStripMenuItem mi)
+		private void RemoveIcon (ToolStripMenuItem mi)
 		{
 			if (needToDelete (mi.Name))
 			{
@@ -496,7 +491,7 @@ namespace Yuki_Theme_Plugin
 
 		private bool needToDelete (string str)
 		{
-			bool res = false;
+			var res = false;
 			switch (str)
 			{
 				case "miExit" :
@@ -508,6 +503,52 @@ namespace Yuki_Theme_Plugin
 
 			return res;
 		}
-		
+
+		/// <summary>
+		/// Get additional string for its state
+		/// </summary>
+		/// <param name="btn">Target</param>
+		/// <returns></returns>
+		private Tuple <bool, string> GetState (ToolStripButton btn)
+		{
+			return GetState (btn.AccessibleDescription, btn.Enabled);
+		}
+
+		/// <summary>
+		/// Get additional string for its state
+		/// </summary>
+		/// <param name="btn">Target</param>
+		/// <returns></returns>
+		private Tuple <bool, string> GetState (ToolStripMenuItem btn)
+		{
+			return GetState (btn.AccessibleDescription, btn.Enabled);
+		}
+
+		/// <summary>
+		/// Get additional string for its state
+		/// </summary>
+		/// <param name="accessibleDescription">Target</param>
+		/// <param name="enabled">IsEnabled</param>
+		/// <returns></returns>
+		private Tuple <bool, string> GetState (string accessibleDescription, bool enabled)
+		{
+			string sad = "";
+			bool asDark = hasDark (accessibleDescription);
+			if (asDark)
+			{
+				bool isDark = enabled;
+
+				if (isDark)
+				{
+					isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
+					sad = isDark ? "" : "_dark";
+				} else
+				{
+					sad = "_disabled"; // Here I show disabled icons.
+				}
+			}
+
+			return new Tuple <bool, string> (asDark, sad);
+		}
 	}
 }

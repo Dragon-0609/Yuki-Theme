@@ -23,25 +23,34 @@ namespace Yuki_Theme.Core
 		public static List <string>   schemes  = new List <string> ();
 		public static DatabaseManager database = new DatabaseManager ();
 
-		public static int       actionChoice;
-		public static bool      askChoice;
-		public static bool      update;
-		public static string    pascalPath = "empty";
-		public static bool      bgImage;
-		public static bool      swSticker;
-		public static bool      swStatusbar;
-		public static bool      swLogo;
-		public static bool      Editor;
-		public static bool      Beta;
-		public static int       settingMode;
-		public static string    currentFile  = "N|L";
-		public static string    currentoFile = "N|L";
-		public static string    selectedItem = "empty";
-		public static string    imagePath    = "";
-		public static string    currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
-		public static Alignment align        = Alignment.Left;
-		public static int       opacity      = 10;
-		public static int       sopacity     = 100;
+		public static int          actionChoice;
+		public static bool         askChoice;
+		public static bool         update;
+		public static string       pascalPath = "empty";
+		public static bool         bgImage;
+		public static bool         swSticker;
+		public static bool         swStatusbar;
+		public static bool         swLogo;
+		public static bool         Editor;
+		public static bool         Beta;
+		public static bool         Logged;
+		public static bool         positioning;
+		public static int          settingMode;
+		public static string       currentFile  = "N|L";
+		public static string       currentoFile = "N|L";
+		public static string       selectedItem = "empty";
+		public static string       imagePath    = "";
+		public static string       currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+		public static Alignment    align        = Alignment.Left;
+		public static RelativeUnit unit         = RelativeUnit.Pixel;
+		public static bool         showGrids;
+		public static bool         useCustomSticker;
+		public static string       customSticker = "";
+		public static bool         license;
+		public static bool         googleAnalytics;
+		public static bool         dontTrack;
+		public static int          opacity  = 10;
+		public static int          sopacity = 100;
 
 		public static Dictionary <string, Dictionary <string, string>> localAttributes =
 			new Dictionary <string, Dictionary <string, string>> ();
@@ -646,6 +655,14 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.LOGO, swLogo.ToString ());
 			dict.Add (SettingsForm.EDITOR, Editor.ToString ());
 			dict.Add (SettingsForm.BETA, Beta.ToString ());
+			dict.Add (SettingsForm.ALLOWPOSITIONING, positioning.ToString ());
+			dict.Add (SettingsForm.SHOWGRIDS, showGrids.ToString ());
+			dict.Add (SettingsForm.STICKERPOSITIONUNIT, ((int) unit).ToString ());
+			dict.Add (SettingsForm.USECUSTOMSTICKER, useCustomSticker.ToString ());
+			dict.Add (SettingsForm.CUSTOMSTICKER, customSticker.ToString ());
+			dict.Add (SettingsForm.LICENSE, license.ToString ());
+			dict.Add (SettingsForm.GOOGLEANALYTICS, googleAnalytics.ToString ());
+			dict.Add (SettingsForm.DONTTRACK, dontTrack.ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
@@ -893,13 +910,26 @@ namespace Yuki_Theme.Core
 			swLogo = bool.Parse (data [SettingsForm.LOGO]);
 			Editor = bool.Parse (data [SettingsForm.EDITOR]);
 			Beta = bool.Parse (data [SettingsForm.BETA]);
+			Logged = bool.Parse (data [SettingsForm.LOGIN]);
+			positioning = bool.Parse (data [SettingsForm.ALLOWPOSITIONING]);
+			showGrids = bool.Parse (data [SettingsForm.SHOWGRIDS]);
+			useCustomSticker = bool.Parse (data [SettingsForm.USECUSTOMSTICKER]);
+			customSticker = data [SettingsForm.CUSTOMSTICKER];
+			
+			license = bool.Parse (data [SettingsForm.LICENSE]);
+			googleAnalytics = bool.Parse (data [SettingsForm.GOOGLEANALYTICS]);
+			dontTrack = bool.Parse (data [SettingsForm.DONTTRACK]);
 
+			Console.WriteLine(license);
+			
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
 			int.TryParse (data [SettingsForm.CHOICEINDEX], out os);
 			actionChoice = os;
 			int.TryParse (data [SettingsForm.SETTINGMODE], out os);
 			settingMode = os;
+			int.TryParse (data [SettingsForm.STICKERPOSITIONUNIT], out os);
+			unit = (RelativeUnit) os;
 		}
 
 		/// <summary>

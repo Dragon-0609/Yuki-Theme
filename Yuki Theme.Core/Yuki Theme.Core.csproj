@@ -136,6 +136,7 @@
         <Compile Include="Controls\CustomButton.cs" />
         <None Include="Controls\CustomPB.cs" />
         <None Include="Controls\CustomL.cs" />
+        <Compile Include="Controls\CustomPanel.cs" />
         <Compile Include="Controls\CustomPicture.cs" />
         <None Include="Controls\CustomS.cs" />
         <None Include="Controls\CustomSwitch.cs" />
@@ -144,6 +145,7 @@
         <Compile Include="Controls\FlatNumericUpDown.cs" />
         <Compile Include="Controls\ReItem.cs" />
         <Compile Include="Controls\RJComboBox.cs" />
+        <Compile Include="Controls\RoundLabel.cs" />
         <Compile Include="Controls\SettingsPanel.cs">
           <SubType>UserControl</SubType>
         </Compile>
@@ -172,6 +174,12 @@
         <Compile Include="Forms\DownloadForm.Designer.cs">
           <DependentUpon>DownloadForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Forms\MessageForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\MessageForm.Designer.cs">
+          <DependentUpon>MessageForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Forms\MForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -184,11 +192,23 @@
         <Compile Include="Forms\NotificationForm.Designer.cs">
           <DependentUpon>NotificationForm.cs</DependentUpon>
         </Compile>
+        <Compile Include="Forms\PathForm.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\PathForm.Designer.cs">
+          <DependentUpon>PathForm.cs</DependentUpon>
+        </Compile>
         <Compile Include="Forms\QuestionForm.cs">
           <SubType>Form</SubType>
         </Compile>
         <Compile Include="Forms\QuestionForm.Designer.cs">
           <DependentUpon>QuestionForm.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Forms\QuestionForm_2.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Forms\QuestionForm_2.Designer.cs">
+          <DependentUpon>QuestionForm_2.cs</DependentUpon>
         </Compile>
         <Compile Include="Forms\RenameForm.cs">
           <SubType>Form</SubType>
@@ -249,14 +269,23 @@
         <EmbeddedResource Include="Forms\DownloadForm.resx">
           <DependentUpon>DownloadForm.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="Forms\MessageForm.resx">
+          <DependentUpon>MessageForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Forms\MForm.resx">
           <DependentUpon>MForm.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\NotificationForm.resx">
           <DependentUpon>NotificationForm.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="Forms\PathForm.resx">
+          <DependentUpon>PathForm.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Forms\QuestionForm.resx">
           <DependentUpon>QuestionForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Forms\QuestionForm_2.resx">
+          <DependentUpon>QuestionForm_2.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Forms\RenameForm.resx">
           <DependentUpon>RenameForm.cs</DependentUpon>
@@ -282,7 +311,6 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <None Include="packages.config" />
         <None Include="Properties\Settings.settings">
             <Generator>SettingsSingleFileGenerator</Generator>
             <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -300,7 +328,9 @@
       <EmbeddedResource Include="..\changelog\CHANGELOG.md">
         <Link>Resources\CHANGELOG.md</Link>
       </EmbeddedResource>
-      <Content Include="license.txt" />
+      <EmbeddedResource Include="Resources\SVG\edit_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\menu-saveall.svg" />
+      <EmbeddedResource Include="Resources\SVG\menu-saveall_dark.svg" />
       <EmbeddedResource Include="Themes\BlendS__Maika.yukitheme" />
       <EmbeddedResource Include="Themes\BunnySenpai__Mai Dark.yukitheme" />
       <EmbeddedResource Include="Themes\BunnySenpai__Mai Light.yukitheme" />
@@ -369,33 +399,34 @@
       <EmbeddedResource Include="Themes\Vocaloid__Hatsune Miku.yukitheme" />
       <EmbeddedResource Include="Themes\YuruCamp__Shima Rin.yukitheme" />
       <EmbeddedResource Include="Resources\SVG\edit.svg" />
-      <EmbeddedResource Include="Resources\SVG\arrow-clockwise.svg" />
-      <EmbeddedResource Include="Resources\SVG\dash-square.svg" />
-      <EmbeddedResource Include="Resources\SVG\gear.svg" />
-      <EmbeddedResource Include="Resources\SVG\save.svg" />
       <EmbeddedResource Include="Resources\CHANGELOG.html" />
       <EmbeddedResource Include="Themes\AzurLane__Essex.yukitheme" />
       <EmbeddedResource Include="Themes\NekoPara__Christmas Chocola.yukitheme" />
       <EmbeddedResource Include="Themes\QQ__Nakano Yotsuba.yukitheme" />
-      <Content Include="Windows Logo.png" />
+      <EmbeddedResource Include="Resources\LICENSE" />
+      <Content Include="Resources\center.png" />
+      <Content Include="Resources\left.png" />
+      <Content Include="Resources\right.png" />
+      <EmbeddedResource Include="Resources\SVG\add.svg" />
+      <EmbeddedResource Include="Resources\SVG\add_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\export.svg" />
+      <EmbeddedResource Include="Resources\SVG\export_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\gearPlain.svg" />
+      <EmbeddedResource Include="Resources\SVG\gearPlain_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\import.svg" />
+      <EmbeddedResource Include="Resources\SVG\import_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\listFiles.svg" />
+      <EmbeddedResource Include="Resources\SVG\listFiles_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\moreHorizontal.svg" />
+      <EmbeddedResource Include="Resources\SVG\moreHorizontal_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\refresh.svg" />
+      <EmbeddedResource Include="Resources\SVG\refresh_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\remove.svg" />
+      <EmbeddedResource Include="Resources\SVG\remove_dark.svg" />
+      <EmbeddedResource Include="Resources\SVG\traceInto.svg" />
+      <EmbeddedResource Include="Resources\SVG\traceInto_dark.svg" />
       <EmbeddedResource Include="Database\files.txt" />
-      <EmbeddedResource Include="Resources\arrow_clockwise.png" />
-      <EmbeddedResource Include="Resources\center.png" />
-      <EmbeddedResource Include="Resources\dash_square.png" />
-      <EmbeddedResource Include="Resources\download.png" />
-      <EmbeddedResource Include="Resources\left.png" />
-      <EmbeddedResource Include="Resources\list_task.png" />
-      <EmbeddedResource Include="Resources\plus_square.png" />
-      <EmbeddedResource Include="Resources\right.png" />
-      <EmbeddedResource Include="Resources\save.png" />
-      <EmbeddedResource Include="Resources\SVG\box-arrow-down.svg" />
-      <EmbeddedResource Include="Resources\SVG\list-task.svg" />
-      <EmbeddedResource Include="Resources\SVG\plus-square.svg" />
-      <EmbeddedResource Include="Resources\SVG\sliders.svg" />
-      <EmbeddedResource Include="Resources\SVG\three-dots.svg" />
       <EmbeddedResource Include="Resources\SVG\upload.svg" />
-      <EmbeddedResource Include="Resources\SVG\download.svg" />
-      <Content Include="Resources\upload.png" />
       <Content Include="Resources\yuki.png" />
       <EmbeddedResource Include="yuki.png" />
       <EmbeddedResource Include="Themes\Darcula.yukitheme" />

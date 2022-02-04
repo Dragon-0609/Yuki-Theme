@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
@@ -14,6 +15,7 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Properties;
 using CommonDialog = System.Windows.Forms.CommonDialog;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
@@ -24,16 +26,16 @@ namespace Yuki_Theme.Core.Forms
 		private readonly ColorPicker col;
 		private readonly Highlighter highlighter;
 
-		private bool            blocked;
-		private bool            blockedNumeric;
-		private bool            unblockedScrool;
-		
+		private bool blocked;
+		private bool blockedNumeric;
+		private bool unblockedScrool;
+
 
 		private DatabaseManager database => CLI.database;
 		private int             lastIndex = 1;
 
 		#region CLI Fields
-		
+
 		private int actionChoice
 		{
 			get { return CLI.actionChoice; }
@@ -51,6 +53,7 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.update;
 			set => CLI.update = value;
 		}
+
 		private string currentFile
 		{
 			get => CLI.currentFile;
@@ -62,6 +65,7 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.currentoFile;
 			set => CLI.currentoFile = value;
 		}
+
 		public Dictionary <string, Dictionary <string, string>> localAttributes
 		{
 			get => CLI.localAttributes;
@@ -79,31 +83,49 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.bgImage;
 			set => CLI.bgImage = value;
 		}
-		
+
 		private bool swSticker
 		{
 			get => CLI.swSticker;
 			set => CLI.swSticker = value;
 		}
-		
+
+		private bool useCustomSticker
+		{
+			get => CLI.useCustomSticker;
+			set => CLI.useCustomSticker = value;
+		}
+
+		private string customSticker
+		{
+			get => CLI.customSticker;
+			set => CLI.customSticker = value;
+		}
+
 		private bool swLogo
 		{
 			get => CLI.swLogo;
 			set => CLI.swLogo = value;
 		}
-		
+
 		private bool Editor
 		{
 			get => CLI.Editor;
 			set => CLI.Editor = value;
 		}
-		
+
 		private bool Beta
 		{
 			get => CLI.Beta;
 			set => CLI.Beta = value;
 		}
-		
+
+		private bool Logged
+		{
+			get => CLI.Logged;
+			set => CLI.Logged = value;
+		}
+
 		private bool swStatusbar
 		{
 			get => CLI.swStatusbar;
@@ -115,7 +137,7 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.selectedItem;
 			set => CLI.selectedItem = value;
 		}
-		
+
 		private Alignment align
 		{
 			get => CLI.align;
@@ -127,13 +149,13 @@ namespace Yuki_Theme.Core.Forms
 			get => CLI.opacity;
 			set => CLI.opacity = value;
 		}
-		
+
 		private int sopacity
 		{
 			get => CLI.sopacity;
 			set => CLI.sopacity = value;
 		}
-		
+
 		private int settingMode
 		{
 			get => CLI.settingMode;
@@ -142,9 +164,9 @@ namespace Yuki_Theme.Core.Forms
 
 		#endregion
 
-		public  SelectionForm    selform;
-		private SettingsForm     setform;
-		
+		public  SelectionForm selform;
+		private SettingsForm  setform;
+
 		private ThemeManager     tmanagerform;
 		public  DownloadForm     df;
 		public  NotificationForm nf;
@@ -173,14 +195,14 @@ namespace Yuki_Theme.Core.Forms
 		private int           textBoxHeight = 0;
 		private int           notHeight     = 0;
 		private int           imgCurrent    = 0;
-		private CustomPicture stickerControl;
-
+		public  CustomPicture stickerControl;
+		private Timer         tmr;
 
 		public MForm (int mode = 0, bool quiet = false)
 		{
-			Helper.mode = (ProductMode) mode; // Write current type
-			textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
-			notHeight =  Helper.mode == ProductMode.Program ? 50 : 88;
+			Helper.mode = (ProductMode) mode;                               // Write current type
+			textBoxHeight = Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
+			notHeight = Helper.mode == ProductMode.Program ? 50 : 88;
 			InitializeComponent ();
 			list_1.ItemHeight = list_1.Font.Height + 2;
 			// Set Actions
@@ -195,21 +217,21 @@ namespace Yuki_Theme.Core.Forms
 			CLI.ifHasSticker = ifHasSticker;
 			CLI.ifDoesntHaveSticker = ifDoesntHaveSticker;
 			Helper.GiveMessage = GiveMessage;
-			
-			if(Helper.mode != ProductMode.Plugin)
+
+			if (Helper.mode != ProductMode.Plugin)
 				CLI.connectAndGet (); // Get Data
 			initSticker ();
-			
+
 			highlighter = new Highlighter (sBox, this);
 			load_schemes ();
-			if(Helper.mode == ProductMode.Plugin)
+			if (Helper.mode == ProductMode.Plugin)
 				initPlugin ();
-			
+
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
 			// Console.WriteLine (DesktopLocation);
-			
+
 			if (currentFile != "N|L") // If theme couldn't find
 			{
 				col = new ColorPicker (this);
@@ -217,7 +239,7 @@ namespace Yuki_Theme.Core.Forms
 				loadSVG ();
 				save_button.Visible = !isDefault ();
 				AddEvents ();
-				
+
 				sBox.Paint += bgImagePaint;
 				if (update && !quiet)
 					update_Click (this, EventArgs.Empty);
@@ -228,7 +250,10 @@ namespace Yuki_Theme.Core.Forms
 				}
 
 				isUpdated ();
-
+				tmr = new Timer ();
+				tmr.Interval = 100;
+				tmr.Tick += trackInstall;
+				tmr.Start ();
 			} else
 			{
 				throw new ApplicationException ("Error on loading the scheme file");
@@ -243,7 +268,6 @@ namespace Yuki_Theme.Core.Forms
 			int inst = ke.GetValue ("install") != null ? 1 : 0;
 			if (inst == 1)
 			{
-
 				new ChangelogForm ().Show (this);
 				ke.DeleteValue ("install");
 			}
@@ -319,8 +343,8 @@ namespace Yuki_Theme.Core.Forms
 					alignpanel.Enabled = false;
 					imgCurrent = 0;
 
-					
-					if(!str.Contains ("Sticker"))
+
+					if (!str.Contains ("Sticker"))
 					{
 						alignpanel.Enabled = true;
 						imgCurrent = 1;
@@ -333,7 +357,7 @@ namespace Yuki_Theme.Core.Forms
 						imgCurrent = 1;
 						unblockedScrool = true;
 						opacity_slider.Value = opacity;
-						
+
 						updateAlignButton ();
 					} else
 					{
@@ -345,46 +369,60 @@ namespace Yuki_Theme.Core.Forms
 						imgCurrent = 2;
 						unblockedScrool = true;
 						opacity_slider.Value = sopacity;
-						
 					}
 
 					imageEditor.Enabled = !isDefault ();
-
-
 				}
 			}
 		}
 
 		private void initSticker ()
 		{
-			stickerControl = new CustomPicture ();
+			stickerControl = new CustomPicture (this);
 			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			if (Helper.mode == ProductMode.Plugin)
 				stickerControl.margin = new Point (10, bottomPanel.Size.Height);
 			else
 				stickerControl.margin = new Point (10, 0);
+			stickerControl.Enabled = CLI.positioning;
+			CustomPanel pnl = new CustomPanel (1) {Visible = false, Name = "LayerGrids"};
+			stickerControl.pnl = pnl;
+			pnl.pict = stickerControl;
+			Controls.Add (pnl);
 			Controls.Add (stickerControl);
-			stickerControl.Enabled = false;
+			// stickerControl.Enabled = false;
 			stickerControl.BringToFront ();
 		}
-		
+
 		private void LoadSticker ()
 		{
-			if (img3 != null && swSticker)
+			if (swSticker)
 			{
-				if (sopacity != 100)
-					img4 = Helper.setOpacity (img3, sopacity);
-				else
-					img4 = img3;
-				stickerControl.Visible = true;
-			}
-			else
+				// Console.WriteLine (customSticker);
+				// Console.WriteLine (File.Exists (customSticker));
+				if (useCustomSticker && File.Exists (customSticker))
+				{
+					img4 = Image.FromFile (customSticker);
+				} else
+				{
+					if (img3 != null)
+					{
+						if (sopacity != 100)
+							img4 = Helper.setOpacity (img3, sopacity);
+						else
+							img4 = img3;
+						stickerControl.Visible = true;
+					} else
+					{
+						img4 = null;
+						stickerControl.Visible = false;
+					}
+				}
+				stickerControl.img = img4;
+			} else
 			{
-				img4 = null;
 				stickerControl.Visible = false;
 			}
-			
-			stickerControl.img = img4;
 		}
 
 		private void colorButton_Click (object sender, EventArgs e)
@@ -447,7 +485,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			return ColorTranslator.ToHtml (clr);
 		}
-		
+
 		private void MForm_SizeChanged (object sender, EventArgs e)
 		{
 			int he = ClientSize.Height - textBoxHeight;
@@ -479,25 +517,27 @@ namespace Yuki_Theme.Core.Forms
 			oldV = Rectangle.Empty;
 			bgtext = "wallpaper.png";
 		}
+
 		public void ifDoesntHave ()
 		{
 			img = null;
 			img2 = null;
 			bgtext = "";
 		}
-		
+
 		public void ifHasSticker (Image imgc)
 		{
 			img3 = imgc;
 			sttext = "sticker.png";
 		}
+
 		public void ifDoesntHaveSticker ()
 		{
 			img3 = null;
 			img4 = null;
 			sttext = "";
 		}
-		
+
 		public void onSelect ()
 		{
 			list_1.Items.AddRange (CLI.names.ToArray ());
@@ -513,7 +553,7 @@ namespace Yuki_Theme.Core.Forms
 				"Theme file is invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			schemes.SelectedIndex = 0;
 		}
-		
+
 		public void GiveMessage (string content)
 		{
 			MessageBox.Show (content);
@@ -537,9 +577,9 @@ namespace Yuki_Theme.Core.Forms
 			opacity_slider_Scroll (
 				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
 			imgCurrent = 0;
-			
-			GC.Collect();
-			GC.WaitForPendingFinalizers();
+
+			GC.Collect ();
+			GC.WaitForPendingFinalizers ();
 		}
 
 		private void check_bold_CheckedChanged (object sender, EventArgs e)
@@ -565,10 +605,9 @@ namespace Yuki_Theme.Core.Forms
 			currentFile = Helper.ConvertNameToPath (currentoFile);
 			save_button.Visible = !isDefault ();
 			restore_Click (sender, e);
-			
+
 			selectedItem = schemes.SelectedItem.ToString ();
 			database.UpdateData (SettingsForm.ACTIVE, selectedItem);
-			
 		}
 
 		public string ifZero ()
@@ -623,27 +662,15 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (setform == null)
 				setform = new SettingsForm (this);
-			if(Helper.mode == ProductMode.Program)
+			if (Helper.mode == ProductMode.Program)
 			{
 				setform.Path = pascalPath;
 				setform.setVisible (true);
-			}
-			else
+			} else
 			{
 				setform.setVisible (false);
 			}
-			Console.WriteLine(settingMode);
-			setform.bgImage = bgImage;
-			setform.Sticker = swSticker;
-			setform.Logo = swLogo;
-			setform.Editor = Editor;
-			setform.Beta = Beta;
-			setform.StatusBar = swStatusbar;
-			setform.settingsPanel.askC.Checked = askChoice;
-			setform.settingsPanel.checkBox2.Checked = update;
-			setform.settingsPanel.ActionBox.SelectedIndex = actionChoice;
-			setform.settingsPanel.mode.SelectedIndex = settingMode;
-			setform.settingsPanel.swStatusbar.Enabled = Helper.mode == ProductMode.Plugin;
+
 			bool oldeditor = Editor;
 			var st = settingMode;
 			if (setform.ShowDialog () == DialogResult.OK)
@@ -659,10 +686,14 @@ namespace Yuki_Theme.Core.Forms
 				update = setform.settingsPanel.checkBox2.Checked;
 				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
 				settingMode = setform.settingsPanel.mode.SelectedIndex;
-				Console.WriteLine(settingMode);
-				Console.WriteLine(setform.settingsPanel.mode.SelectedIndex);
+				CLI.positioning = setform.settingsPanel.checkBox3.Checked;
+				CLI.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
+				CLI.showGrids = setform.settingsPanel.checkBox4.Checked;
+				CLI.useCustomSticker = setform.settingsPanel.use_cstm_sticker.Checked;
+				CLI.customSticker = setform.settingsPanel.customSticker;
 				CLI.saveData ();
 				sBox.Refresh ();
+				stickerControl.Enabled = CLI.positioning;
 				LoadSticker ();
 				if (oldeditor != Editor) // Check if the Editor is changed
 					checkEditor ();
@@ -675,17 +706,17 @@ namespace Yuki_Theme.Core.Forms
 			return MessageBox.Show (content, title,
 			                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 		}
-		
+
 		public void FinishExport (string content, string title)
 		{
 			MessageBox.Show (content, title);
 		}
-		
+
 		public void ErrorExport (string content, string title)
 		{
 			MessageBox.Show (content, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
-		
+
 		public int AskChoice ()
 		{
 			var quform = new QuestionForm ();
@@ -698,19 +729,20 @@ namespace Yuki_Theme.Core.Forms
 					nm = 0;
 				}
 					break;
-				
+
 				case DialogResult.Ignore :
 				{
 					nm = 1;
 				}
 					break;
-				
+
 				case DialogResult.No :
 				{
 					nm = 2;
 				}
 					break;
 			}
+
 			return nm;
 		}
 
@@ -725,7 +757,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (startSettingTheme != null) startSettingTheme ();
 		}
-		
+
 		public void setThemeDelegate ()
 		{
 			if (setTheme != null) setTheme ();
@@ -956,6 +988,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			var op = new OpenFileDialog ();
 			op.DefaultExt = "png";
+			// op.Filter = "PNG (*.png)|*.png|GIF (*.gif)|*.gif";
 			op.Filter = "PNG (*.png)|*.png";
 			op.Multiselect = false;
 			if (op.ShowDialog () == DialogResult.OK)
@@ -1019,10 +1052,10 @@ namespace Yuki_Theme.Core.Forms
 
 		private void updateAlignButton ()
 		{
-				pleft.BackColor = align == Alignment.Left ? bgClicked : bgDefault;
-				pcenter.BackColor = align == Alignment.Center ? bgClicked : bgDefault;
-				pright.BackColor = align == Alignment.Right ? bgClicked : bgDefault;
-				sBox.Refresh ();
+			pleft.BackColor = align == Alignment.Left ? bgClicked : bgDefault;
+			pcenter.BackColor = align == Alignment.Center ? bgClicked : bgDefault;
+			pright.BackColor = align == Alignment.Right ? bgClicked : bgDefault;
+			sBox.Refresh ();
 		}
 
 		public void updateBackgroundColors ()
@@ -1030,8 +1063,8 @@ namespace Yuki_Theme.Core.Forms
 			this.BackColor = list_1.BackColor = save_button.BackColor = restore_button.BackColor =
 				export_button.BackColor = import_button.BackColor = settings_button.BackColor = add_button.BackColor =
 					manage_button.BackColor = import_directory.BackColor = panel1.BackColor = button10.BackColor =
-						button11.BackColor = button7.BackColor = schemes.ListBackColor = schemes.BackColor = 
-						opacity_slider.BackColor = imagePath.BackColor = numericUpDown1.BackColor = bgDefault;
+						button11.BackColor = button7.BackColor = schemes.ListBackColor = schemes.BackColor =
+							opacity_slider.BackColor = imagePath.BackColor = numericUpDown1.BackColor = bgDefault;
 
 			this.ForeColor = label1.ForeColor = list_1.ForeColor = label2.ForeColor = check_bold.ForeColor =
 				check_italic.ForeColor = button10.FlatAppearance.BorderColor = button11.FlatAppearance.BorderColor =
@@ -1048,16 +1081,16 @@ namespace Yuki_Theme.Core.Forms
 										button11.FlatAppearance.MouseOverBackColor =
 											button7.FlatAppearance.MouseOverBackColor =
 												opacity_slider.BarPenColorBottom =
-													opacity_slider.BarPenColorTop = 
-														opacity_slider.BarInnerColor = 
+													opacity_slider.BarPenColorTop =
+														opacity_slider.BarInnerColor =
 															numericUpDown1.ButtonHighlightColor = bgClicked;
 
 			schemes.BorderColor = schemes.IconColor = opacity_slider.ThumbInnerColor = opacity_slider.ThumbPenColor =
-				opacity_slider.ElapsedInnerColor = opacity_slider.ElapsedPenColorBottom = 
+				opacity_slider.ElapsedInnerColor = opacity_slider.ElapsedPenColorBottom =
 					opacity_slider.ElapsedPenColorTop = imagePath.BorderColor = numericUpDown1.BorderColor = bgSpecial;
 
 			opacity_slider.ThumbOuterColor = fgKey;
-			
+
 			if (OnColorUpdate != null)
 				OnColorUpdate (bgDefault, fgDefault, bgClicked);
 			fgbrush = new SolidBrush (fgDefault);
@@ -1071,26 +1104,25 @@ namespace Yuki_Theme.Core.Forms
 			if (imgCurrent == 1)
 			{
 				bgtext = imagePath.Text;
-			}else if (imgCurrent == 2)
+			} else if (imgCurrent == 2)
 			{
 				sttext = imagePath.Text;
 			}
-			
+
 			if (imagePath.Text == "wallpaper.png" && imgCurrent == 1)
 			{
-					Tuple <bool, Image> iag = isDefault ()
-						? Helper.getImageFromMemory (gp, Assembly.GetExecutingAssembly ())
-						: Helper.getImage (getPath);
-					if (iag.Item1)
-					{
-						// img = iag.Item2;
-						img2 = iag.Item2;
-						oldV = Rectangle.Empty;
-					}
+				Tuple <bool, Image> iag = isDefault ()
+					? Helper.getImageFromMemory (gp, Assembly.GetExecutingAssembly ())
+					: Helper.getImage (getPath);
+				if (iag.Item1)
+				{
+					// img = iag.Item2;
+					img2 = iag.Item2;
+					oldV = Rectangle.Empty;
+				}
 
-					unblockedScrool = true;
-					opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
-				
+				unblockedScrool = true;
+				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
 			} else if (imagePath.Text == "sticker.png" && imgCurrent == 2)
 			{
 				Tuple <bool, Image> iag = isDefault ()
@@ -1108,7 +1140,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				if (imagePath.Text.ToLower ().EndsWith (".png"))
 				{
-					if(imgCurrent == 1)
+					if (imgCurrent == 1)
 					{
 						img2 = Image.FromFile (imagePath.Text);
 
@@ -1129,7 +1161,7 @@ namespace Yuki_Theme.Core.Forms
 								return;
 							}
 						}
-						
+
 						unblockedScrool = true;
 						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
 					}
@@ -1140,7 +1172,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			} else if (imagePath.Text.Length < 2)
 			{
-				if(imgCurrent == 1)
+				if (imgCurrent == 1)
 				{
 					img = null;
 					img2 = null;
@@ -1166,15 +1198,18 @@ namespace Yuki_Theme.Core.Forms
 		private void loadSVG ()
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			Helper.renderSVG (save_button, Helper.loadsvg ("save", a));
-			Helper.renderSVG (restore_button, Helper.loadsvg ("arrow-clockwise", a));
-			Helper.renderSVG (export_button, Helper.loadsvg ("upload", a));
-			Helper.renderSVG (import_button, Helper.loadsvg ("download", a));
-			Helper.renderSVG (settings_button, Helper.loadsvg ("gear", a));
-			Helper.renderSVG (add_button, Helper.loadsvg ("plus-square", a));
-			Helper.renderSVG (manage_button, Helper.loadsvg ("list-task", a));
-			Helper.renderSVG (import_directory, Helper.loadsvg ("box-arrow-down", a));
-			Helper.renderSVG (button11, Helper.loadsvg ("three-dots", a), true, new Size (16,16));
+
+			string add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+			
+			Helper.renderSVG (save_button, Helper.loadsvg ("menu-saveall" + add, a));
+			Helper.renderSVG (restore_button, Helper.loadsvg ("refresh" + add, a));
+			Helper.renderSVG (export_button, Helper.loadsvg ("export" + add, a));
+			Helper.renderSVG (import_button, Helper.loadsvg ("import" + add, a));
+			Helper.renderSVG (settings_button, Helper.loadsvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
+			Helper.renderSVG (add_button, Helper.loadsvg ("add" + add, a));
+			Helper.renderSVG (manage_button, Helper.loadsvg ("listFiles" + add, a));
+			Helper.renderSVG (import_directory, Helper.loadsvg ("traceInto" + add, a));
+			Helper.renderSVG (button11, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16));
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
@@ -1197,7 +1232,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (Math.Abs (Convert.ToInt32 (opacity_slider.Value) - opacity) > 3 || unblockedScrool)
 			{
-				if(imgCurrent == 1)
+				if (imgCurrent == 1)
 				{
 					if (img2 != null)
 					{
@@ -1209,7 +1244,6 @@ namespace Yuki_Theme.Core.Forms
 						blockedNumeric = false;
 						sBox.Refresh ();
 						localAttributes ["Wallpaper"] ["opacity"] = opacity.ToString ();
-
 					}
 				} else if (imgCurrent == 2)
 				{
@@ -1222,10 +1256,11 @@ namespace Yuki_Theme.Core.Forms
 						blockedNumeric = false;
 						localAttributes ["Sticker"] ["opacity"] = sopacity.ToString ();
 					}
+
 					LoadSticker ();
 				}
-				
-				if(unblockedScrool)
+
+				if (unblockedScrool)
 					unblockedScrool = false;
 			}
 		}
@@ -1261,6 +1296,7 @@ namespace Yuki_Theme.Core.Forms
 				{
 					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
 				}
+
 				fls = Directory.GetFiles (co.FileName, "*.icls");
 				foreach (string fl in fls)
 				{
@@ -1275,10 +1311,9 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (!blockedNumeric)
 			{
-				
-				if(imgCurrent == 1)
+				if (imgCurrent == 1)
 				{
-					if(img2 != null)
+					if (img2 != null)
 					{
 						opacity = Convert.ToInt32 (numericUpDown1.Value);
 						unblockedScrool = true;
@@ -1289,7 +1324,7 @@ namespace Yuki_Theme.Core.Forms
 					}
 				} else if (imgCurrent == 2)
 				{
-					if(img3 != null)
+					if (img3 != null)
 					{
 						sopacity = Convert.ToInt32 (numericUpDown1.Value);
 						unblockedScrool = true;
@@ -1299,8 +1334,6 @@ namespace Yuki_Theme.Core.Forms
 						// localAttributes ["Sticker"] ["opacity"] = opacity.ToString ();
 					}
 				}
-				
-				
 			}
 		}
 
@@ -1311,17 +1344,92 @@ namespace Yuki_Theme.Core.Forms
 			if (Editor)
 			{
 				panel1.Size = new Size (panel1.Width, 140);
-				textBoxHeight =  Helper.mode == ProductMode.Program ? 140 : 178;
+				textBoxHeight = Helper.mode == ProductMode.Program ? 140 : 178;
 			} else
 			{
 				panel1.Size = new Size (panel1.Width, 51);
-				textBoxHeight =  Helper.mode == ProductMode.Program ? 51 : 89;
+				textBoxHeight = Helper.mode == ProductMode.Program ? 51 : 89;
 			}
+
 			MForm_SizeChanged (this, EventArgs.Empty);
 		}
 
+		/// <summary>
+		/// The app will track install via Google Analytics. This is necessary for me to be kept inspired. I'll switch to passive development on 1st April of 2022, but it doesn't mean that I'll close project. The installs are necessary to make me inspired for continue the development. 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void trackInstall (object sender, EventArgs e)
+		{
+			tmr.Stop ();
+			showLicense (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
+			showGoogleAnalytics (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
+			TrackInstall ();
+		}
+
+
+		public static void showLicense (Color bg, Color fg, Color bgClick, Form parent)
+		{
+			Console.WriteLine(CLI.license);
+			if (!CLI.license)
+			{
+				MessageForm msgf = new MessageForm ();
+				msgf.setColors (bg, fg, bgClick);
+				Assembly a = Assembly.GetExecutingAssembly ();
+				Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.LICENSE");
+				string description = "";
+				using (StreamReader reader = new StreamReader (stm))
+				{
+					description = reader.ReadToEnd ();
+				}
+
+				msgf.Text = "LICENSE";
+				msgf.setMessage ("JetBrains.Icons License", description, "Accept");
+				msgf.ShowDialog (parent);
+				CLI.license = true;
+				CLI.database.UpdateData (SettingsForm.LICENSE, "true");
+			}
+		}
+
+
+		public static void showGoogleAnalytics (Color bg, Color fg, Color bgClick, Form parent)
+		{
+			if (!CLI.googleAnalytics && !CLI.dontTrack)
+			{
+				QuestionForm_2 qf = new QuestionForm_2 ();
+				qf.setColors (bg, fg, bgClick);
+				
+				if (qf.ShowDialog (parent) == DialogResult.Yes)
+				{
+					CLI.googleAnalytics = true;
+					CLI.database.UpdateData (SettingsForm.GOOGLEANALYTICS, "true");
+				} else
+				{
+					CLI.dontTrack = true;
+					CLI.database.UpdateData (SettingsForm.DONTTRACK, "true");
+				}
+			}
+		}
+
+		public static void TrackInstall ()
+		{
+			if (!CLI.Logged && !CLI.dontTrack)
+			{
+				HttpResponseMessage result = GoogleAnalyticsHelper.TrackEvent ().Result;
+				if (!result.IsSuccessStatusCode)
+				{
+					// Maybe internet isn't available
+				} else
+				{
+					CLI.database.UpdateData (SettingsForm.LOGIN, "true");
+					CLI.Logged = true;
+				}
+			}
+		}
+
+		
 	}
-	
+
 
 	public delegate void SetTheme ();
 
