@@ -34,5 +34,7 @@ Global
 		{36B36D1A-9A45-4015-822F-B50FEE67E63F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{96B479D5-984F-41D2-B41A-5A3B685AB29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96B479D5-984F-41D2-B41A-5A3B685AB29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96B479D5-984F-41D2-B41A-5A3B685AB29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96B479D5-984F-41D2-B41A-5A3B685AB29E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

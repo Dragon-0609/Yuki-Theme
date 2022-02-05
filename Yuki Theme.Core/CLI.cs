@@ -919,8 +919,6 @@ namespace Yuki_Theme.Core
 			license = bool.Parse (data [SettingsForm.LICENSE]);
 			googleAnalytics = bool.Parse (data [SettingsForm.GOOGLEANALYTICS]);
 			dontTrack = bool.Parse (data [SettingsForm.DONTTRACK]);
-
-			Console.WriteLine(license);
 			
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
