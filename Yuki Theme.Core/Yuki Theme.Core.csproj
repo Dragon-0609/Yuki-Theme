@@ -296,9 +296,9 @@
         <EmbeddedResource Include="Forms\SettingsForm.resx">
           <DependentUpon>SettingsForm.cs</DependentUpon>
         </EmbeddedResource>
-        <None Include="Forms\TesterForm.resx">
+        <EmbeddedResource Include="Forms\TesterForm.resx">
           <DependentUpon>TesterForm.cs</DependentUpon>
-        </None>
+        </EmbeddedResource>
         <EmbeddedResource Include="Forms\ThemeManager.resx">
           <DependentUpon>ThemeManager.cs</DependentUpon>
         </EmbeddedResource>
@@ -325,6 +325,11 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
+      <EmbeddedResource Include="Themes\Chuunibyou__Takanashi Rikka.yukitheme" />
+      <EmbeddedResource Include="Themes\NekoPara__Christmas Chocola.yukitheme" />
+      <EmbeddedResource Include="Themes\Railgun__Misaka Mikoto.yukitheme" />
+      <EmbeddedResource Include="Themes\ShieldHero__Raphtalia.yukitheme" />
+      <EmbeddedResource Include="Themes\YuruCamp__Nadeshiko.yukitheme" />
       <EmbeddedResource Include="..\changelog\CHANGELOG.md">
         <Link>Resources\CHANGELOG.md</Link>
       </EmbeddedResource>
@@ -401,7 +406,6 @@
       <EmbeddedResource Include="Resources\SVG\edit.svg" />
       <EmbeddedResource Include="Resources\CHANGELOG.html" />
       <EmbeddedResource Include="Themes\AzurLane__Essex.yukitheme" />
-      <EmbeddedResource Include="Themes\NekoPara__Christmas Chocola.yukitheme" />
       <EmbeddedResource Include="Themes\QQ__Nakano Yotsuba.yukitheme" />
       <EmbeddedResource Include="Resources\LICENSE" />
       <Content Include="Resources\center.png" />

@@ -11,6 +11,8 @@ namespace Yuki_Theme.Core.Forms
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
+			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
 		}
 
 		private void button2_Click (object sender, EventArgs e)

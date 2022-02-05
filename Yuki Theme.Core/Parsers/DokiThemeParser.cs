@@ -273,6 +273,21 @@ namespace Yuki_Theme.Core.Parsers
 					res = "AzurLane: ";
 				}
 					break;
+				case "The Rising of Shield Hero" :
+				{
+					res = "ShieldHero: ";
+				}
+					break;
+				case "Toaru Majutsu no Index" :
+				{
+					res = "Railgun: ";
+				}
+					break;
+				case "Chuunibyou" :
+				{
+					res = "Chuunibyou: ";
+				}
+					break;
 			}
 
 			return res;
