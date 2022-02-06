@@ -43,7 +43,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.scheme.AutoArrange = false;
 			this.scheme.Columns.AddRange (new System.Windows.Forms.ColumnHeader [] {this.columnHeader1});
-			this.scheme.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.scheme.Font = new System.Drawing.Font ("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.scheme.FullRowSelect = true;
 			this.scheme.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.scheme.HideSelection = false;
@@ -100,10 +100,10 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.AutoSize = true;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font ("Lucida Fax", 10F);
-			this.button2.Location = new System.Drawing.Point (249, 392);
+			this.button2.Font = new System.Drawing.Font ("Calibri", 10F);
+			this.button2.Location = new System.Drawing.Point (249, 391);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size (71, 28);
+			this.button2.Size = new System.Drawing.Size (71, 29);
 			this.button2.TabIndex = 13;
 			this.button2.Text = "Close";
 			this.button2.UseVisualStyleBackColor = true;

@@ -412,6 +412,7 @@
       <Content Include="Resources\center.png" />
       <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
       <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
       <Content Include="Resources\left.png" />
       <Content Include="Resources\right.png" />
       <EmbeddedResource Include="Resources\SVG\add.svg" />

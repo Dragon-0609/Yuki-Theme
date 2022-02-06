@@ -1366,10 +1366,10 @@ namespace Yuki_Theme.Core.Forms
 			showGoogleAnalytics (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
 			TrackInstall ();
 			// FontManager.SetAllControlsFont (this.Controls);
-			FontManager.SetControlFont (label2, 0);
-			FontManager.SetControlFont (label1, 0);
-			FontManager.SetControlFont (check_bold, 0);
-			FontManager.SetControlFont (check_italic, 0);
+			FontManager.SetControlFont (label2, 1);
+			FontManager.SetControlFont (label1, 1);
+			FontManager.SetControlFont (check_bold, 1);
+			FontManager.SetControlFont (check_italic, 1);
 		}
 
 

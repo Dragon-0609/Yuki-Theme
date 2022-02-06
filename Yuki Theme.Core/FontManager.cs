@@ -18,10 +18,8 @@ namespace Yuki_Theme.Core
 
 		private static bool _initialized = false;
 
-		private static void Initialize ()
+		private static void LoadFont (string resource)
 		{
-			string resource = "Yuki_Theme.Core.Resources.Fonts.SAOUITT-Regular.ttf";
-
 			// receive resource stream
 			Stream fontStream = Assembly.GetExecutingAssembly ().GetManifestResourceStream (resource);
 
@@ -45,7 +43,12 @@ namespace Yuki_Theme.Core
 
 			// free up the unsafe memory
 			Marshal.FreeCoTaskMem (data);
-
+		}
+		
+		private static void Initialize ()
+		{
+			LoadFont("Yuki_Theme.Core.Resources.Fonts.Montserrat-Regular.ttf");
+			LoadFont ("Yuki_Theme.Core.Resources.Fonts.SAOUITT-Regular.ttf");
 			_initialized = true;
 		}
 
@@ -56,19 +59,19 @@ namespace Yuki_Theme.Core
 			return _fonts.Families [which];
 		}
 		
-		public static void SetAllControlsFont(Control.ControlCollection ctrls) {
+		public static void SetAllControlsFont(Control.ControlCollection ctrls, int which) {
 			foreach(Control c in ctrls) {
 				if(c.Controls != null) {
-					SetAllControlsFont(c.Controls);
+					SetAllControlsFont(c.Controls, which);
 				}
 
-				SetControlFont (c, 0);
+				SetControlFont (c, which);
 			}
 		}
 
 		public static void SetControlFont (Control c, int which)
 		{
-			c.Font = new Font (GetFont (0), c.Font.Size);
+			c.Font = new Font (GetFont (which), c.Font.Size);
 		}
 		
 	}

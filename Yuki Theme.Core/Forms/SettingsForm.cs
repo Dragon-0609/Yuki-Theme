@@ -94,6 +94,7 @@ namespace Yuki_Theme.Core.Forms
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
 			settingsPanel.SettingsPanel_Load ();
 			settingsPanel.mf = mf;
+			FontManager.SetAllControlsFont (this.Controls, 0);
 		}
 
 		private void button2_Click (object sender, EventArgs e)
