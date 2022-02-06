@@ -162,7 +162,7 @@ namespace Yuki_Theme.Core.Controls
 			this.cstm_sticker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cstm_sticker.Location = new System.Drawing.Point (9, 50);
 			this.cstm_sticker.Name = "cstm_sticker";
-			this.cstm_sticker.Size = new System.Drawing.Size (116, 30);
+			this.cstm_sticker.Size = new System.Drawing.Size (114, 30);
 			this.cstm_sticker.TabIndex = 38;
 			this.cstm_sticker.Text = "Choose Image";
 			this.cstm_sticker.UseVisualStyleBackColor = true;
@@ -277,7 +277,7 @@ namespace Yuki_Theme.Core.Controls
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button4.Location = new System.Drawing.Point (306, 300);
 			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size (71, 30);
+			this.button4.Size = new System.Drawing.Size (71, 32);
 			this.button4.TabIndex = 17;
 			this.button4.Text = "About";
 			this.button4.UseVisualStyleBackColor = true;
@@ -298,7 +298,7 @@ namespace Yuki_Theme.Core.Controls
 			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button5.Location = new System.Drawing.Point (306, 255);
 			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size (71, 30);
+			this.button5.Size = new System.Drawing.Size (71, 32);
 			this.button5.TabIndex = 19;
 			this.button5.Text = "Check";
 			this.button5.UseVisualStyleBackColor = true;
@@ -308,9 +308,9 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.button6.AutoSize = true;
 			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button6.Location = new System.Drawing.Point (170, 255);
+			this.button6.Location = new System.Drawing.Point (170, 254);
 			this.button6.Name = "button6";
-			this.button6.Size = new System.Drawing.Size (130, 30);
+			this.button6.Size = new System.Drawing.Size (130, 32);
 			this.button6.TabIndex = 21;
 			this.button6.Text = "Update Manually";
 			this.button6.UseVisualStyleBackColor = true;
@@ -406,11 +406,11 @@ namespace Yuki_Theme.Core.Controls
 			// textBox1
 			// 
 			this.textBox1.BorderColor = System.Drawing.Color.Blue;
-			this.textBox1.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.textBox1.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.textBox1.Location = new System.Drawing.Point (15, 36);
 			this.textBox1.Margin = new System.Windows.Forms.Padding (4);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size (306, 24);
+			this.textBox1.Size = new System.Drawing.Size (306, 27);
 			this.textBox1.TabIndex = 1;
 			// 
 			// ActionBox
@@ -437,7 +437,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.button1.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.button1.Location = new System.Drawing.Point (325, 36);
 			this.button1.Margin = new System.Windows.Forms.Padding (0);
 			this.button1.Name = "button1";
@@ -594,6 +594,7 @@ namespace Yuki_Theme.Core.Controls
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
 			this.Controls.Add (this.tabs);
+			this.Font = new System.Drawing.Font ("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.Location = new System.Drawing.Point (15, 15);
 			this.Name = "SettingsPanel";
 			this.Size = new System.Drawing.Size (405, 253);

@@ -21,6 +21,8 @@ namespace Yuki_Theme.Core.Forms
 				new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
 			sp = s;
+
+			FontManager.SetAllControlsFont (this.Controls);
 		}
 
 		private void button1_Click (object sender, EventArgs e)

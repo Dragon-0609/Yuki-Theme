@@ -1,5 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+# SharpDevelop 4.4
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Installer", "Yuki Installer\Yuki Installer.csproj", "{8B2619A4-D9AA-4946-90CA-1815E651E918}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Core", "Yuki Theme.Core\Yuki Theme.Core.csproj", "{C12B1851-E2AE-4A31-95DC-1DAAFCDCB108}"

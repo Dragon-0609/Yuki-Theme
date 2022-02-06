@@ -154,6 +154,7 @@
         </Compile>
         <Compile Include="Controls\Slider.cs" />
         <Compile Include="Database\DatabaseManager.cs" />
+        <Compile Include="FontManager.cs" />
         <Compile Include="Forms\AboutForm.cs">
           <SubType>Form</SubType>
         </Compile>
@@ -409,6 +410,8 @@
       <EmbeddedResource Include="Themes\QQ__Nakano Yotsuba.yukitheme" />
       <EmbeddedResource Include="Resources\LICENSE" />
       <Content Include="Resources\center.png" />
+      <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
       <Content Include="Resources\left.png" />
       <Content Include="Resources\right.png" />
       <EmbeddedResource Include="Resources\SVG\add.svg" />

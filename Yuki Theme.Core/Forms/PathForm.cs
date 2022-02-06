@@ -31,7 +31,9 @@ namespace Yuki_Theme.Core.Forms
 		public void loadSVG ()
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			Helper.renderSVG (other, Helper.loadsvg ("three-dots", a));
+
+			string add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+			Helper.renderSVG (other, Helper.loadsvg ("moreHorizontal" + add, a));
 		}
 		
 		private void PathForm_Shown (object sender, EventArgs e)

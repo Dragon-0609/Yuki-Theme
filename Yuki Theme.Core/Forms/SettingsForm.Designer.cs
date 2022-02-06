@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.AutoSize = true;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Location = new System.Drawing.Point (233, 266);
+			this.button2.Location = new System.Drawing.Point (233, 259);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size (71, 30);
 			this.button2.TabIndex = 4;
@@ -54,7 +54,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button3.AutoSize = true;
 			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button3.Location = new System.Drawing.Point (319, 266);
+			this.button3.Location = new System.Drawing.Point (319, 259);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size (71, 30);
 			this.button3.TabIndex = 5;
@@ -67,7 +67,7 @@ namespace Yuki_Theme.Core.Forms
 			this.settingsPanel.BackColor = System.Drawing.SystemColors.ControlLight;
 			this.settingsPanel.Location = new System.Drawing.Point (0, 0);
 			this.settingsPanel.Name = "settingsPanel";
-			this.settingsPanel.Size = new System.Drawing.Size (405, 253);
+			this.settingsPanel.Size = new System.Drawing.Size (405, 250);
 			this.settingsPanel.TabIndex = 6;
 			// 
 			// SettingsForm
@@ -75,7 +75,7 @@ namespace Yuki_Theme.Core.Forms
 			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-			this.ClientSize = new System.Drawing.Size (405, 308);
+			this.ClientSize = new System.Drawing.Size (405, 301);
 			this.Controls.Add (this.settingsPanel);
 			this.Controls.Add (this.button3);
 			this.Controls.Add (this.button2);

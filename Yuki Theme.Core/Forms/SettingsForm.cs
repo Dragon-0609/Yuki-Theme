@@ -92,6 +92,7 @@ namespace Yuki_Theme.Core.Forms
 			this.StartPosition = FormStartPosition.CenterParent;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			settingsPanel.SettingsPanel_Load ();
 			settingsPanel.mf = mf;
 		}
 
