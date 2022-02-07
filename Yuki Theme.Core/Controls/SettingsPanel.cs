@@ -423,7 +423,15 @@ namespace Yuki_Theme.Core.Controls
 			checkBox4.Checked = CLI.showGrids;
 			use_cstm_sticker.Checked = CLI.useCustomSticker;
 			customSticker = CLI.customSticker;
+			fitWidth.Checked = CLI.autoFitByWidth;
+			fitWidth.Enabled = CLI.bgImage;
+			askSave.Checked = CLI.askToSave;
 			loadSVG ();
+		}
+
+		private void backImage_CheckedChanged (object sender, EventArgs e)
+		{
+			fitWidth.Enabled = backImage.Checked;
 		}
 	}
 }

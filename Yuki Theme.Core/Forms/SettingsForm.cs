@@ -35,6 +35,12 @@ namespace Yuki_Theme.Core.Forms
 		public const int LICENSE             = 24;
 		public const int GOOGLEANALYTICS     = 25;
 		public const int DONTTRACK           = 26;
+		public const int AUTOFITWIDTH        = 27;
+		/// <summary>
+		/// It's useful, when app asks to save, if you change to another theme without saving previous one. But, it also can be annoying.
+		/// I set isEdited in CLI , so it won't ask you each time. It'll ask when a theme is edited, and you're gonna change to another theme.
+		/// </summary>
+		public const int ASKTOSAVE           = 28;
 
 
 		public const  double current_version     = 5.0;

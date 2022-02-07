@@ -49,8 +49,11 @@ namespace Yuki_Theme.Core
 		public static bool         license;
 		public static bool         googleAnalytics;
 		public static bool         dontTrack;
+		public static bool         autoFitByWidth;
+		public static bool         askToSave;
 		public static int          opacity  = 10;
 		public static int          sopacity = 100;
+		public static bool         isEdited = false;
 
 		public static Dictionary <string, Dictionary <string, string>> localAttributes =
 			new Dictionary <string, Dictionary <string, string>> ();
@@ -239,7 +242,7 @@ namespace Yuki_Theme.Core
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
 		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
-			if (!isDefault () && Helper.mode != ProductMode.Plugin)
+			if (!isDefault () && Helper.mode != ProductMode.Plugin && isEdited)
 			{
 				if (SaveInExport ("Do you want to save current scheme?", "Save"))
 					save (img2, img3, wantToKeep);
@@ -405,6 +408,7 @@ namespace Yuki_Theme.Core
 		/// <param name="onSelect">Action, after populating list</param>
 		public static void restore (bool wantClean = true, Action onSelect = null)
 		{
+			isEdited = false;
 			localAttributes.Clear ();
 			names.Clear ();
 			populateList (onSelect);
@@ -663,6 +667,8 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.LICENSE, license.ToString ());
 			dict.Add (SettingsForm.GOOGLEANALYTICS, googleAnalytics.ToString ());
 			dict.Add (SettingsForm.DONTTRACK, dontTrack.ToString ());
+			dict.Add (SettingsForm.AUTOFITWIDTH, autoFitByWidth.ToString ());
+			dict.Add (SettingsForm.ASKTOSAVE, askToSave.ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
@@ -919,6 +925,8 @@ namespace Yuki_Theme.Core
 			license = bool.Parse (data [SettingsForm.LICENSE]);
 			googleAnalytics = bool.Parse (data [SettingsForm.GOOGLEANALYTICS]);
 			dontTrack = bool.Parse (data [SettingsForm.DONTTRACK]);
+			autoFitByWidth = bool.Parse (data [SettingsForm.AUTOFITWIDTH]);
+			askToSave = bool.Parse (data [SettingsForm.ASKTOSAVE]);
 			
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
