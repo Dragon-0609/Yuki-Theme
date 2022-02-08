@@ -42,6 +42,8 @@ namespace Yuki_Theme.Core.Database
 				ke.SetValue (SettingsForm.LICENSE.ToString (), "false");
 				ke.SetValue (SettingsForm.GOOGLEANALYTICS.ToString (), "false");
 				ke.SetValue (SettingsForm.DONTTRACK.ToString (), "false");
+				ke.SetValue (SettingsForm.AUTOFITWIDTH.ToString (), "true");
+				ke.SetValue (SettingsForm.ASKTOSAVE.ToString (), "true");
 			}
 		}
 
@@ -72,6 +74,8 @@ namespace Yuki_Theme.Core.Database
 			dictionary.Add (SettingsForm.LICENSE, key.GetValue (SettingsForm.LICENSE.ToString (), "false").ToString ());
 			dictionary.Add (SettingsForm.GOOGLEANALYTICS, key.GetValue (SettingsForm.GOOGLEANALYTICS.ToString (), "false").ToString ());
 			dictionary.Add (SettingsForm.DONTTRACK, key.GetValue (SettingsForm.DONTTRACK.ToString (), "false").ToString ());
+			dictionary.Add (SettingsForm.AUTOFITWIDTH, key.GetValue (SettingsForm.AUTOFITWIDTH.ToString (), "true").ToString ());
+			dictionary.Add (SettingsForm.ASKTOSAVE, key.GetValue (SettingsForm.ASKTOSAVE.ToString (), "true").ToString ());
 
 			return dictionary;
 		}

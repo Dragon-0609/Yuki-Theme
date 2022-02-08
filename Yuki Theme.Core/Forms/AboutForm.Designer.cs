@@ -46,11 +46,11 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel8 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel10 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel11 = new System.Windows.Forms.LinkLabel ();
-			this.panel1 = new System.Windows.Forms.Panel ();
-			this.linkLabel15 = new System.Windows.Forms.LinkLabel ();
-			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
-			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
+			this.panel1 = new System.Windows.Forms.FlowLayoutPanel ();
 			this.linkLabel12 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
+			this.linkLabel15 = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.panel1.SuspendLayout ();
 			this.SuspendLayout ();
@@ -108,11 +108,12 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel1
 			// 
 			this.linkLabel1.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel1.Font = new System.Drawing.Font ("Book Antiqua", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel1.LinkColor = System.Drawing.Color.Black;
 			this.linkLabel1.Location = new System.Drawing.Point (128, 215);
 			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size (102, 27);
+			this.linkLabel1.Size = new System.Drawing.Size (152, 27);
 			this.linkLabel1.TabIndex = 7;
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "Doki Theme";
@@ -121,6 +122,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label2
 			// 
+			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label2.Location = new System.Drawing.Point (6, 216);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size (116, 26);
@@ -131,18 +133,20 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.label4.Location = new System.Drawing.Point (6, 242);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size (87, 26);
+			this.label4.Size = new System.Drawing.Size (75, 26);
 			this.label4.TabIndex = 9;
 			this.label4.Text = "Used:";
 			// 
 			// linkLabel2
 			// 
 			this.linkLabel2.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel2.AutoSize = true;
 			this.linkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel2.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel2.Location = new System.Drawing.Point (7, 10);
+			this.linkLabel2.Location = new System.Drawing.Point (3, 3);
+			this.linkLabel2.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel2.Name = "linkLabel2";
-			this.linkLabel2.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel2.Size = new System.Drawing.Size (138, 18);
 			this.linkLabel2.TabIndex = 10;
 			this.linkLabel2.TabStop = true;
 			this.linkLabel2.Text = "FastColoredTextBox";
@@ -152,11 +156,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel3
 			// 
 			this.linkLabel3.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel3.AutoSize = true;
 			this.linkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel3.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel3.Location = new System.Drawing.Point (7, 40);
+			this.linkLabel3.Location = new System.Drawing.Point (3, 27);
+			this.linkLabel3.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel3.Name = "linkLabel3";
-			this.linkLabel3.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel3.Size = new System.Drawing.Size (133, 18);
 			this.linkLabel3.TabIndex = 11;
 			this.linkLabel3.TabStop = true;
 			this.linkLabel3.Text = "Cyotek ColorPicker";
@@ -182,11 +188,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel6
 			// 
 			this.linkLabel6.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel6.AutoSize = true;
 			this.linkLabel6.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel6.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel6.Location = new System.Drawing.Point (7, 70);
+			this.linkLabel6.Location = new System.Drawing.Point (3, 51);
+			this.linkLabel6.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel6.Name = "linkLabel6";
-			this.linkLabel6.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel6.Size = new System.Drawing.Size (115, 18);
 			this.linkLabel6.TabIndex = 13;
 			this.linkLabel6.TabStop = true;
 			this.linkLabel6.Text = "Newtonsoft.Json";
@@ -196,11 +204,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel7
 			// 
 			this.linkLabel7.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel7.AutoSize = true;
 			this.linkLabel7.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel7.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel7.Location = new System.Drawing.Point (7, 100);
+			this.linkLabel7.Location = new System.Drawing.Point (3, 75);
+			this.linkLabel7.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel7.Name = "linkLabel7";
-			this.linkLabel7.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel7.Size = new System.Drawing.Size (96, 18);
 			this.linkLabel7.TabIndex = 14;
 			this.linkLabel7.TabStop = true;
 			this.linkLabel7.Text = "RJ ComboBox";
@@ -210,11 +220,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel8
 			// 
 			this.linkLabel8.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel8.AutoSize = true;
 			this.linkLabel8.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel8.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel8.Location = new System.Drawing.Point (7, 130);
+			this.linkLabel8.Location = new System.Drawing.Point (3, 99);
+			this.linkLabel8.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel8.Name = "linkLabel8";
-			this.linkLabel8.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel8.Size = new System.Drawing.Size (70, 18);
 			this.linkLabel8.TabIndex = 15;
 			this.linkLabel8.TabStop = true;
 			this.linkLabel8.Text = "SVG.NET";
@@ -224,11 +236,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel10
 			// 
 			this.linkLabel10.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel10.AutoSize = true;
 			this.linkLabel10.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel10.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel10.Location = new System.Drawing.Point (7, 160);
+			this.linkLabel10.Location = new System.Drawing.Point (3, 123);
+			this.linkLabel10.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel10.Name = "linkLabel10";
-			this.linkLabel10.Size = new System.Drawing.Size (175, 27);
+			this.linkLabel10.Size = new System.Drawing.Size (85, 18);
 			this.linkLabel10.TabIndex = 17;
 			this.linkLabel10.TabStop = true;
 			this.linkLabel10.Text = "Color Slider";
@@ -238,11 +252,13 @@ namespace Yuki_Theme.Core.Forms
 			// linkLabel11
 			// 
 			this.linkLabel11.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel11.AutoSize = true;
 			this.linkLabel11.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel11.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel11.Location = new System.Drawing.Point (3, 190);
+			this.linkLabel11.Location = new System.Drawing.Point (3, 147);
+			this.linkLabel11.Margin = new System.Windows.Forms.Padding (3);
 			this.linkLabel11.Name = "linkLabel11";
-			this.linkLabel11.Size = new System.Drawing.Size (187, 27);
+			this.linkLabel11.Size = new System.Drawing.Size (156, 18);
 			this.linkLabel11.TabIndex = 18;
 			this.linkLabel11.TabStop = true;
 			this.linkLabel11.Text = "WindowsAPICodePack";
@@ -252,77 +268,89 @@ namespace Yuki_Theme.Core.Forms
 			// panel1
 			// 
 			this.panel1.AutoScroll = true;
-			this.panel1.Controls.Add (this.linkLabel15);
-			this.panel1.Controls.Add (this.linkLabel14);
-			this.panel1.Controls.Add (this.linkLabel13);
-			this.panel1.Controls.Add (this.linkLabel12);
 			this.panel1.Controls.Add (this.linkLabel2);
-			this.panel1.Controls.Add (this.linkLabel11);
 			this.panel1.Controls.Add (this.linkLabel3);
-			this.panel1.Controls.Add (this.linkLabel10);
 			this.panel1.Controls.Add (this.linkLabel6);
-			this.panel1.Controls.Add (this.linkLabel8);
 			this.panel1.Controls.Add (this.linkLabel7);
+			this.panel1.Controls.Add (this.linkLabel8);
+			this.panel1.Controls.Add (this.linkLabel10);
+			this.panel1.Controls.Add (this.linkLabel11);
+			this.panel1.Controls.Add (this.linkLabel12);
+			this.panel1.Controls.Add (this.linkLabel13);
+			this.panel1.Controls.Add (this.linkLabel14);
+			this.panel1.Controls.Add (this.linkLabel15);
+			this.panel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+			this.panel1.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.panel1.Location = new System.Drawing.Point (87, 242);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size (215, 210);
 			this.panel1.TabIndex = 19;
+			this.panel1.WrapContents = false;
 			// 
-			// linkLabel15
+			// linkLabel12
 			// 
-			this.linkLabel15.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
-			this.linkLabel15.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-			this.linkLabel15.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel15.Location = new System.Drawing.Point (7, 330);
-			this.linkLabel15.Name = "linkLabel15";
-			this.linkLabel15.Size = new System.Drawing.Size (187, 27);
-			this.linkLabel15.TabIndex = 22;
-			this.linkLabel15.TabStop = true;
-			this.linkLabel15.Text = "JetBrains Icons";
-			this.linkLabel15.VisitedLinkColor = System.Drawing.Color.Black;
-			this.linkLabel15.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel15_LinkClicked);
-			// 
-			// linkLabel14
-			// 
-			this.linkLabel14.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
-			this.linkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-			this.linkLabel14.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel14.Location = new System.Drawing.Point (8, 300);
-			this.linkLabel14.Name = "linkLabel14";
-			this.linkLabel14.Size = new System.Drawing.Size (187, 27);
-			this.linkLabel14.TabIndex = 21;
-			this.linkLabel14.TabStop = true;
-			this.linkLabel14.Text = "CommonMark.NET";
-			this.linkLabel14.VisitedLinkColor = System.Drawing.Color.Black;
-			this.linkLabel14.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel14_LinkClicked);
+			this.linkLabel12.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel12.AutoSize = true;
+			this.linkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel12.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel12.Location = new System.Drawing.Point (3, 171);
+			this.linkLabel12.Margin = new System.Windows.Forms.Padding (3);
+			this.linkLabel12.Name = "linkLabel12";
+			this.linkLabel12.Size = new System.Drawing.Size (145, 18);
+			this.linkLabel12.TabIndex = 19;
+			this.linkLabel12.TabStop = true;
+			this.linkLabel12.Text = "FlatNumericUpDown";
+			this.linkLabel12.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel12.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel12_LinkClicked);
 			// 
 			// linkLabel13
 			// 
 			this.linkLabel13.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel13.AutoSize = true;
 			this.linkLabel13.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
 			this.linkLabel13.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel13.Location = new System.Drawing.Point (7, 250);
+			this.linkLabel13.Location = new System.Drawing.Point (3, 195);
+			this.linkLabel13.Margin = new System.Windows.Forms.Padding (3);
+			this.linkLabel13.MaximumSize = new System.Drawing.Size (190, 0);
 			this.linkLabel13.Name = "linkLabel13";
-			this.linkLabel13.Size = new System.Drawing.Size (175, 43);
+			this.linkLabel13.Size = new System.Drawing.Size (190, 36);
 			this.linkLabel13.TabIndex = 20;
 			this.linkLabel13.TabStop = true;
 			this.linkLabel13.Text = "MechanikaDesign.WinForms.UI.ColorPicker";
 			this.linkLabel13.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel13.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel13_LinkClicked);
 			// 
-			// linkLabel12
+			// linkLabel14
 			// 
-			this.linkLabel12.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
-			this.linkLabel12.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
-			this.linkLabel12.LinkColor = System.Drawing.Color.Black;
-			this.linkLabel12.Location = new System.Drawing.Point (3, 220);
-			this.linkLabel12.Name = "linkLabel12";
-			this.linkLabel12.Size = new System.Drawing.Size (187, 27);
-			this.linkLabel12.TabIndex = 19;
-			this.linkLabel12.TabStop = true;
-			this.linkLabel12.Text = "FlatNumericUpDown";
-			this.linkLabel12.VisitedLinkColor = System.Drawing.Color.Black;
-			this.linkLabel12.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel12_LinkClicked);
+			this.linkLabel14.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel14.AutoSize = true;
+			this.linkLabel14.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel14.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.Location = new System.Drawing.Point (3, 237);
+			this.linkLabel14.Margin = new System.Windows.Forms.Padding (3);
+			this.linkLabel14.Name = "linkLabel14";
+			this.linkLabel14.Size = new System.Drawing.Size (134, 18);
+			this.linkLabel14.TabIndex = 21;
+			this.linkLabel14.TabStop = true;
+			this.linkLabel14.Text = "CommonMark.NET";
+			this.linkLabel14.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel14.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel14_LinkClicked);
+			// 
+			// linkLabel15
+			// 
+			this.linkLabel15.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.linkLabel15.AutoSize = true;
+			this.linkLabel15.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.linkLabel15.LinkColor = System.Drawing.Color.Black;
+			this.linkLabel15.Location = new System.Drawing.Point (3, 261);
+			this.linkLabel15.Margin = new System.Windows.Forms.Padding (3);
+			this.linkLabel15.Name = "linkLabel15";
+			this.linkLabel15.Size = new System.Drawing.Size (102, 18);
+			this.linkLabel15.TabIndex = 22;
+			this.linkLabel15.TabStop = true;
+			this.linkLabel15.Text = "JetBrains Icons";
+			this.linkLabel15.VisitedLinkColor = System.Drawing.Color.Black;
+			this.linkLabel15.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel15_LinkClicked);
 			// 
 			// AboutForm
 			// 
@@ -347,6 +375,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Shown += new System.EventHandler (this.AboutForm_Shown);
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).EndInit ();
 			this.panel1.ResumeLayout (false);
+			this.panel1.PerformLayout ();
 			this.ResumeLayout (false);
 		}
 
@@ -356,8 +385,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private System.Windows.Forms.LinkLabel linkLabel13;
 
-		private System.Windows.Forms.Panel     panel1;
-		private System.Windows.Forms.LinkLabel linkLabel12;
+		private System.Windows.Forms.FlowLayoutPanel panel1;
+		private System.Windows.Forms.LinkLabel       linkLabel12;
 
 		private System.Windows.Forms.LinkLabel linkLabel11;
 

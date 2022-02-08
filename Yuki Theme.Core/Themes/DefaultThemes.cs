@@ -74,8 +74,8 @@ namespace Yuki_Theme.Core.Themes
 					"QQ: Nakano Miku",
 					"QQ: Nakano Nino",
 					"QQ: Nakano Yotsuba",
-					"Re:Zero: Beatrice",
 					"Railgun: Misaka Mikoto",
+					"Re:Zero: Beatrice",
 					"Re:Zero: Echidna",
 					"Re:Zero: Emilia Dark",
 					"Re:Zero: Emilia Light",
@@ -91,8 +91,8 @@ namespace Yuki_Theme.Core.Themes
 					"TypeMoon: Ishtar Light",
 					"TypeMoon: Tohsaka Rin",
 					"Vocaloid: Hatsune Miku",
-					"YuruCamp: Shima Rin",
-					"YuruCamp: Nadeshiko"
+					"YuruCamp: Nadeshiko",
+					"YuruCamp: Shima Rin"
 				};
 			}
 		}
@@ -193,8 +193,8 @@ namespace Yuki_Theme.Core.Themes
 				case "TypeMoon: Ishtar Light" :
 				case "TypeMoon: Tohsaka Rin" :
 				case "Vocaloid: Hatsune Miku" :
-				case "YuruCamp: Shima Rin" :
 				case "YuruCamp: Nadeshiko" :
+				case "YuruCamp: Shima Rin" :
 				{
 					res = "Doki Theme";
 				}

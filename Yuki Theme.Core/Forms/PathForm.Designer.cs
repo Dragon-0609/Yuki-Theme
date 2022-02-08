@@ -44,7 +44,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button1.AutoSize = true;
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.button1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.button1.Location = new System.Drawing.Point (215, 85);
 			this.button1.Margin = new System.Windows.Forms.Padding (5);
 			this.button1.Name = "button1";
@@ -60,7 +60,7 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.AutoSize = true;
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.button2.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.button2.Location = new System.Drawing.Point (305, 85);
 			this.button2.Margin = new System.Windows.Forms.Padding (5);
 			this.button2.Name = "button2";
@@ -72,7 +72,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label1
 			// 
-			this.label1.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label1.Location = new System.Drawing.Point (11, 13);
 			this.label1.Margin = new System.Windows.Forms.Padding (5, 0, 5, 0);
 			this.label1.Name = "label1";
@@ -83,7 +83,7 @@ namespace Yuki_Theme.Core.Forms
 			// path
 			// 
 			this.path.BorderColor = System.Drawing.Color.Blue;
-			this.path.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.path.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.path.Location = new System.Drawing.Point (14, 47);
 			this.path.Margin = new System.Windows.Forms.Padding (5);
 			this.path.MaxLength = 1000;
@@ -107,8 +107,8 @@ namespace Yuki_Theme.Core.Forms
 			// PathForm
 			// 
 			this.AcceptButton = this.button1;
-			this.AutoScaleDimensions = new System.Drawing.SizeF (8F, 17F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleDimensions = new System.Drawing.SizeF (96F, 96F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.CancelButton = this.button2;
 			this.ClientSize = new System.Drawing.Size (400, 130);
 			this.Controls.Add (this.other);
@@ -116,7 +116,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Controls.Add (this.label1);
 			this.Controls.Add (this.button2);
 			this.Controls.Add (this.button1);
-			this.Font = new System.Drawing.Font ("Book Antiqua", 10F);
+			this.Font = new System.Drawing.Font ("Calibri", 10F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Margin = new System.Windows.Forms.Padding (5);
 			this.MaximizeBox = false;
@@ -131,7 +131,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private System.Windows.Forms.Button other;
 
-		public  Yuki_Theme.Core.Controls.CustomText path;
+		public Yuki_Theme.Core.Controls.CustomText path;
 
 		private System.Windows.Forms.Label label1;
 

@@ -153,6 +153,7 @@
           <DependentUpon>SettingsPanel.cs</DependentUpon>
         </Compile>
         <Compile Include="Controls\Slider.cs" />
+        <Compile Include="Controls\StickerPicture.cs" />
         <Compile Include="Database\DatabaseManager.cs" />
         <Compile Include="FontManager.cs" />
         <Compile Include="Forms\AboutForm.cs">
@@ -298,9 +299,9 @@
         <EmbeddedResource Include="Forms\SettingsForm.resx">
           <DependentUpon>SettingsForm.cs</DependentUpon>
         </EmbeddedResource>
-        <EmbeddedResource Include="Forms\TesterForm.resx">
+        <None Include="Forms\TesterForm.resx">
           <DependentUpon>TesterForm.cs</DependentUpon>
-        </EmbeddedResource>
+        </None>
         <EmbeddedResource Include="Forms\ThemeManager.resx">
           <DependentUpon>ThemeManager.cs</DependentUpon>
         </EmbeddedResource>
@@ -413,6 +414,7 @@
       <Content Include="Resources\center.png" />
       <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
       <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
+      <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
       <Content Include="Resources\left.png" />
       <Content Include="Resources\right.png" />
       <EmbeddedResource Include="Resources\SVG\add.svg" />

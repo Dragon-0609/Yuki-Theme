@@ -22,7 +22,12 @@ namespace Yuki_Theme.Core.Forms
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
 			sp = s;
 
-			FontManager.SetAllControlsFont (this.Controls);
+			FontManager.SetAllControlsFont (panel1.Controls, 0);
+			FontManager.SetControlFont (linkLabel4, 1);
+			FontManager.SetControlFont (linkLabel5, 1);
+			FontManager.SetControlFont (label2, 1);
+			FontManager.SetControlFont (linkLabel1, 1);
+			FontManager.SetControlFont (vers, 1);
 		}
 
 		private void button1_Click (object sender, EventArgs e)

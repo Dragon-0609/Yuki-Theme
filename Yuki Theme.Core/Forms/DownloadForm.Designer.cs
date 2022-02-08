@@ -95,7 +95,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Controls.Add (this.button1);
 			this.Controls.Add (this.pr);
 			this.Controls.Add (this.progressBar1);
-			this.Font = new System.Drawing.Font ("Book Antiqua", 12F);
+			this.Font = new System.Drawing.Font ("Calibri", 12F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "DownloadForm";
 			this.Text = "DownloadForm";
