@@ -115,6 +115,9 @@ namespace Yuki_Theme_Plugin
 		private       int               selectionindex;
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
+
+		private DockWindow mainPanel;
+		private int        dockcount = 1;
 		
 		private bool bgImage => CLI.bgImage;
 		
@@ -168,6 +171,15 @@ namespace Yuki_Theme_Plugin
 			textArea = textEditor.ActiveTextAreaControl.TextArea;
 			context = textEditor.ContextMenuStrip;
 			context2 = fm.MainDockPanel.ContextMenuStrip;
+
+			foreach (DockWindow dockWindow in fm.MainDockPanel.DockWindows)
+			{
+				if (dockWindow.DockState == DockState.Document)
+				{
+					mainPanel = dockWindow;
+					break;
+				}
+			}
 			
 			LoadImage ();
 			
@@ -257,7 +269,17 @@ namespace Yuki_Theme_Plugin
 			{
 				if (textEditor != fm.CurrentCodeFileDocument.TextEditor)
 				{
-					textArea.Paint -= PaintBG;
+					if (mainPanel.VisibleNestedPanes.Count > 1)
+					{
+						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
+						{
+							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint -= PaintBG;
+						}
+					}else
+					{
+						textArea.Paint -= PaintBG;
+					}
 					try
 					{
 						textEditor.Controls [1].Paint -= CtrlOnPaint;
@@ -272,14 +294,11 @@ namespace Yuki_Theme_Plugin
 					textArea = textEditor.ActiveTextAreaControl.TextArea;
 					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 					setMargin ();
-					textArea.Paint += PaintBG;
-					textArea.Refresh ();
 					tim.Stop ();
 					textEditor.Parent.BackColor = bg;
 					try
 					{
 						textEditor.Controls [1].Paint += CtrlOnPaint;
-						textEditor.Controls [1].Invalidate ();
 						textEditor.Controls [1].Invalidate ();
 					} catch (ArgumentOutOfRangeException)
 					{
@@ -287,7 +306,24 @@ namespace Yuki_Theme_Plugin
 					}
 
 					fm.CurrentCodeFileDocument.BackColor = bg;
-
+					if (mainPanel.VisibleNestedPanes.Count > 1)
+					{
+						dockcount = mainPanel.VisibleNestedPanes.Count;
+						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
+						{
+							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
+							cfdc.TextEditor.AccessibleDescription = i.ToString();
+							
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint += PaintBG;
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Refresh ();
+						}
+					} else
+					{
+						dockcount = 1;
+						textArea.Paint += PaintBG;
+						textArea.Refresh ();
+					}
+					
 					// MessageBox.Show (fm.CurrentCodeFileDocument.TabIndex.ToString ());
 					try
 					{
@@ -539,17 +575,27 @@ namespace Yuki_Theme_Plugin
 
 			if(img != null && bgImage)
 			{
-				if (oldV.Width != textArea.ClientRectangle.Width || oldV.Height != textArea.ClientRectangle.Height)
+				if (oldV.Width != mainPanel.ClientRectangle.Width || oldV.Height != mainPanel.ClientRectangle.Height)
 				{
-					oldV = Helper.getSizes (img.Size, textArea.ClientRectangle.Width, textArea.ClientRectangle.Height,
+					oldV = Helper.getSizes (img.Size, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height,
 					                        align);
 				}
-
-				e.Graphics.DrawImage (img, oldV);
+				if (dockcount == 1)
+					e.Graphics.DrawImage (img, oldV);
+				else
+				{
+					TextArea area = (TextArea) sender;
+					int iter = 0;
+					int.TryParse (area.MotherTextEditorControl.AccessibleDescription, out iter);
+					Rectangle rect = oldV;
+					rect.X = iter * area.MotherTextEditorControl.ClientSize.Width;
+					Console.WriteLine (rect.Width + " _ " + rect.X + " _ " + iter + " _ " + area.MotherTextEditorControl.Text);
+					e.Graphics.DrawImage (img, rect);
+				}
 			}
 		}
 
-		private Rectangle oldV = Rectangle.Empty;
+		private Rectangle oldV           = Rectangle.Empty;
 
 		private void ReleaseResources ()
 		{
@@ -1340,6 +1386,14 @@ namespace Yuki_Theme_Plugin
 			var getopt = fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
 			options.AddContent (new PluginOptionsContent (this));
+		}
+
+		private void addEventsForEditors ()
+		{
+			foreach (DockPane dockPane in mainPanel.VisibleNestedPanes)
+			{
+				
+			}
 		}
 		
 	}
