@@ -172,6 +172,7 @@ namespace Yuki_Theme_Plugin
 			context = textEditor.ContextMenuStrip;
 			context2 = fm.MainDockPanel.ContextMenuStrip;
 
+			/*
 			foreach (DockWindow dockWindow in fm.MainDockPanel.DockWindows)
 			{
 				if (dockWindow.DockState == DockState.Document)
@@ -180,6 +181,7 @@ namespace Yuki_Theme_Plugin
 					break;
 				}
 			}
+			*/
 			
 			LoadImage ();
 			
@@ -269,7 +271,7 @@ namespace Yuki_Theme_Plugin
 			{
 				if (textEditor != fm.CurrentCodeFileDocument.TextEditor)
 				{
-					if (mainPanel.VisibleNestedPanes.Count > 1)
+					/*if (mainPanel.VisibleNestedPanes.Count > 1)
 					{
 						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
 						{
@@ -277,9 +279,9 @@ namespace Yuki_Theme_Plugin
 							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint -= PaintBG;
 						}
 					}else
-					{
+					{*/
 						textArea.Paint -= PaintBG;
-					}
+					// }
 					try
 					{
 						textEditor.Controls [1].Paint -= CtrlOnPaint;
@@ -306,7 +308,7 @@ namespace Yuki_Theme_Plugin
 					}
 
 					fm.CurrentCodeFileDocument.BackColor = bg;
-					if (mainPanel.VisibleNestedPanes.Count > 1)
+					/*if (mainPanel.VisibleNestedPanes.Count > 1)
 					{
 						dockcount = mainPanel.VisibleNestedPanes.Count;
 						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
@@ -318,11 +320,11 @@ namespace Yuki_Theme_Plugin
 							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Refresh ();
 						}
 					} else
-					{
-						dockcount = 1;
+					{*/
+						// dockcount = 1;
 						textArea.Paint += PaintBG;
 						textArea.Refresh ();
-					}
+					// }
 					
 					// MessageBox.Show (fm.CurrentCodeFileDocument.TabIndex.ToString ());
 					try
@@ -580,9 +582,9 @@ namespace Yuki_Theme_Plugin
 					oldV = Helper.getSizes (img.Size, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height,
 					                        align);
 				}
-				if (dockcount == 1)
+				// if (dockcount == 1)
 					e.Graphics.DrawImage (img, oldV);
-				else
+				/*else
 				{
 					TextArea area = (TextArea) sender;
 					int iter = 0;
@@ -591,7 +593,7 @@ namespace Yuki_Theme_Plugin
 					rect.X = iter * area.MotherTextEditorControl.ClientSize.Width;
 					Console.WriteLine (rect.Width + " _ " + rect.X + " _ " + iter + " _ " + area.MotherTextEditorControl.Text);
 					e.Graphics.DrawImage (img, rect);
-				}
+				}*/
 			}
 		}
 

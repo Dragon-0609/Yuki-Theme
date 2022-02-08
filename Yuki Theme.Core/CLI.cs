@@ -565,7 +565,8 @@ namespace Yuki_Theme.Core
 				// doc.LoadXml ();
 			}
 
-			PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
+			if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1)
+				PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
 			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0]);
 			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0]);
 			CleanUnnecessaryFields ();
@@ -595,7 +596,14 @@ namespace Yuki_Theme.Core
 
 			localAttributes.Add ("Sticker",
 			                     new Dictionary <string, string> () {{"opacity", sop}});
+			string all = "";
+			foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
+			{
+				all += pair.Key + "\n";
+			}
 
+			System.Windows.Forms.Clipboard.SetText (all);
+			
 			align = (Alignment) (int.Parse (localAttributes ["Wallpaper"] ["align"]));
 			opacity = int.Parse (localAttributes ["Wallpaper"] ["opacity"]);
 			sopacity = int.Parse (localAttributes ["Sticker"] ["opacity"]);
