@@ -437,6 +437,12 @@
       <EmbeddedResource Include="Resources\SVG\traceInto_dark.svg" />
       <EmbeddedResource Include="Database\files.txt" />
       <EmbeddedResource Include="Resources\SVG\upload.svg" />
+      <Content Include="Resources\Syntax Templates\Haskell.xshd" />
+      <Content Include="Resources\Syntax Templates\KuMir.xshd" />
+      <Content Include="Resources\Syntax Templates\KuMir00.xshd" />
+      <Content Include="Resources\Syntax Templates\PascalABCNET.xshd" />
+      <Content Include="Resources\Syntax Templates\PythonABC.xshd" />
+      <Content Include="Resources\Syntax Templates\VBNET.xshd" />
       <Content Include="Resources\yuki.png" />
       <EmbeddedResource Include="yuki.png" />
       <EmbeddedResource Include="Themes\Darcula.yukitheme" />

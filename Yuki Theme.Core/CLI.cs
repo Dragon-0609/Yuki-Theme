@@ -63,14 +63,14 @@ namespace Yuki_Theme.Core
 		public static Action <string, string>     showSuccess;
 		public static Action <string, string>     showError;
 		public static Func <int>                  AskChoice;
-		public static Action <string>             hasProblem          = null;
-		public static Action                      onBGIMAGEChange     = null;
-		public static Action                      onSTICKERChange     = null;
-		public static Action                      onSTATUSChange      = null;
-		public static Action <Image>              ifHasImage          = null;
-		public static Action                      ifDoesntHave        = null;
-		public static Action <Image>              ifHasSticker        = null;
-		public static Action                      ifDoesntHaveSticker = null;
+		public static Action <string>             hasProblem           = null;
+		public static Action                      onBGIMAGEChange      = null;
+		public static Action                      onSTICKERChange      = null;
+		public static Action                      onSTATUSChange       = null;
+		public static Action <Image>              ifHasImage           = null;
+		public static Action                      ifDoesntHave         = null;
+		public static Action <Image>              ifHasSticker         = null;
+		public static Action                      ifDoesntHaveSticker  = null;
 		public static Action <Image>              ifHasImage2          = null;
 		public static Action                      ifDoesntHave2        = null;
 		public static Action <Image>              ifHasSticker2        = null;
@@ -159,7 +159,7 @@ namespace Yuki_Theme.Core
 				File.Delete (patsh);
 			}
 
-			if(!DefaultThemes.isDefault (name))
+			if (!DefaultThemes.isDefault (name))
 			{
 				if (DefaultThemes.isDefault (copyFrom))
 					CopyFromMemory (syt, patsh);
@@ -190,7 +190,7 @@ namespace Yuki_Theme.Core
 		/// <param name="askD">Ask to delete</param>
 		/// <param name="afterAsk">Do action after asked</param>
 		/// <param name="afterDelete">Do action after deleted</param>
-		public static void remove (string st, Func <string, string, bool> askD, Func <string, object> afterAsk = null,
+		public static void remove (string                  st, Func <string, string, bool> askD, Func <string, object> afterAsk = null,
 		                           Action <string, object> afterDelete = null)
 		{
 			Helper.CreateThemeDirectory ();
@@ -336,7 +336,7 @@ namespace Yuki_Theme.Core
 		/// Import theme
 		/// </summary>
 		/// <param name="path">Theme from</param>
-		public static void import (string path, Func<string, string, bool> exist)
+		public static void import (string path, Func <string, string, bool> exist)
 		{
 			MainParser.Parse (path, null, true, true, showError, exist);
 		}
@@ -356,7 +356,7 @@ namespace Yuki_Theme.Core
 					string tt = Helper.ConvertNameToPath (to);
 					if (!File.Exists (Path.Combine (currentPath, "Themes", $"{tt}.yukitheme")))
 					{
-						if(!DefaultThemes.isDefault (to))
+						if (!DefaultThemes.isDefault (to))
 						{
 							string tp = Path.Combine (currentPath, "Themes", $"{tt}.yukitheme");
 							File.Move (Path.Combine (currentPath, "Themes", $"{frm}.yukitheme"),
@@ -445,6 +445,7 @@ namespace Yuki_Theme.Core
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
+
 						if (ifHasImage2 != null)
 						{
 							ifHasImage2 ((Image) iag.Item2);
@@ -466,6 +467,7 @@ namespace Yuki_Theme.Core
 						{
 							ifHasSticker ((Image) iag.Item2);
 						}
+
 						if (ifHasSticker2 != null)
 						{
 							ifHasSticker2 ((Image) iag.Item2);
@@ -484,7 +486,7 @@ namespace Yuki_Theme.Core
 
 					if (ifDoesntHaveSticker != null)
 						ifDoesntHaveSticker ();
-					
+
 					if (ifDoesntHave2 != null)
 						ifDoesntHave2 ();
 
@@ -507,7 +509,7 @@ namespace Yuki_Theme.Core
 						{
 							ifHasImage ((Image) iag.Item2);
 						}
-						
+
 						if (ifHasImage2 != null)
 						{
 							ifHasImage2 ((Image) iag.Item2);
@@ -516,7 +518,7 @@ namespace Yuki_Theme.Core
 					{
 						if (ifDoesntHave != null)
 							ifDoesntHave ();
-						
+
 						if (ifDoesntHave2 != null)
 							ifDoesntHave2 ();
 					}
@@ -533,7 +535,7 @@ namespace Yuki_Theme.Core
 					{
 						if (ifDoesntHaveSticker != null)
 							ifDoesntHaveSticker ();
-						
+
 						if (ifDoesntHaveSticker2 != null)
 							ifDoesntHaveSticker2 ();
 					}
@@ -543,7 +545,7 @@ namespace Yuki_Theme.Core
 						ifDoesntHave ();
 					if (ifDoesntHaveSticker != null)
 						ifDoesntHaveSticker ();
-					
+
 					if (ifDoesntHave2 != null)
 						ifDoesntHave2 ();
 					if (ifDoesntHaveSticker2 != null)
@@ -853,7 +855,7 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
-		
+
 		#endregion
 
 		/// <summary>
@@ -921,13 +923,13 @@ namespace Yuki_Theme.Core
 			showGrids = bool.Parse (data [SettingsForm.SHOWGRIDS]);
 			useCustomSticker = bool.Parse (data [SettingsForm.USECUSTOMSTICKER]);
 			customSticker = data [SettingsForm.CUSTOMSTICKER];
-			
+
 			license = bool.Parse (data [SettingsForm.LICENSE]);
 			googleAnalytics = bool.Parse (data [SettingsForm.GOOGLEANALYTICS]);
 			dontTrack = bool.Parse (data [SettingsForm.DONTTRACK]);
 			autoFitByWidth = bool.Parse (data [SettingsForm.AUTOFITWIDTH]);
 			askToSave = bool.Parse (data [SettingsForm.ASKTOSAVE]);
-			
+
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
 			int.TryParse (data [SettingsForm.CHOICEINDEX], out os);
@@ -1146,6 +1148,149 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
+
+		public static void MergeFiles (string path, bool hasImage, bool hasSticker)
+		{
+			var doc = new XmlDocument ();
+			doc.Load (path);
+
+			#region Environment
+
+			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+			bool hadSavedImage = false; // This is check for alpha version of v2.0
+			foreach (XmlNode childNode in node.ChildNodes)
+				if (childNode.Attributes != null &&
+				    !string.Equals (childNode.Name, "Delimiters", StringComparison.Ordinal))
+				{
+					var nms = childNode.Name;
+					if (childNode.Name == "Span" || childNode.Name == "KeyWords")
+						nms = childNode.Attributes ["name"].Value;
+					if (!localAttributes.ContainsKey (nms)) continue;
+					if (nms == "Wallpaper")
+						hadSavedImage = true;
+					var attrs = localAttributes [nms];
+
+					foreach (var att in attrs)
+						childNode.Attributes [att.Key].Value = att.Value;
+				}
+
+			if (hadSavedImage)
+			{
+				node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+				node.RemoveChild (node.SelectSingleNode ("Wallpaper"));
+			}
+
+			#endregion
+
+			#region Digits
+
+			node = doc.SelectSingleNode ("/SyntaxDefinition/Digits");
+			if (node.Attributes != null && !string.Equals (node.Name, "Delimiters", StringComparison.Ordinal))
+			{
+				var nms = node.Name;
+				if (node.Name == "Span" || node.Name == "KeyWords") nms = node.Attributes ["name"].Value;
+				if (localAttributes.ContainsKey (nms))
+				{
+					var attrs = localAttributes [nms];
+
+					foreach (var att in attrs) node.Attributes [att.Key].Value = att.Value;
+				}
+			}
+
+			#endregion
+
+			#region Syntax
+
+			node = doc.SelectSingleNode ("/SyntaxDefinition/RuleSets");
+			foreach (XmlNode xne in node.ChildNodes)
+			{
+				foreach (XmlNode xn in xne.ChildNodes)
+					if (xn.Attributes != null &&
+					    !string.Equals (xn.Name, "Delimiters", StringComparison.Ordinal))
+					{
+						var nms = xn.Name;
+						if (xn.Name == "Span" || xn.Name == "KeyWords")
+							nms = xn.Attributes ["name"].Value;
+						if (!localAttributes.ContainsKey (nms)) continue;
+
+						var attrs = localAttributes [nms];
+
+						foreach (var att in attrs)
+							// Console.WriteLine($"2N: {xn.Attributes["name"].Value}, ATT: {att.Key},");
+							xn.Attributes [att.Key].Value = att.Value;
+					}
+			}
+
+			#endregion
+
+			node = doc.SelectSingleNode ("/SyntaxDefinition");
+
+			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+			XmlNodeList comms = nod.SelectNodes ("//comment()");
+			if (comms.Count >= 3)
+			{
+				Dictionary <string, bool> comments = new Dictionary <string, bool> ()
+				{
+					{"name", false}, {"align", false}, {"opacity", false}, {"sopacity", false},
+					{"hasImage", false}, {"hasSticker", false}
+				};
+
+				Dictionary <string, string> commentValues = new Dictionary <string, string> ()
+				{
+					{"name", "name:" + currentoFile}, {"align", "align:" + ((int) align).ToString ()},
+					{"opacity", "opacity:" + (opacity).ToString ()},
+					{"sopacity", "sopacity:" + (sopacity).ToString ()},
+					{"hasImage", "hasImage:" + hasImage}, {"hasSticker", "hasSticker:" + hasSticker}
+				};
+				foreach (XmlComment comm in comms)
+				{
+					if (comm.Value.StartsWith ("align"))
+					{
+						comm.Value = commentValues ["align"];
+						comments ["align"] = true;
+					} else if (comm.Value.StartsWith ("opacity"))
+					{
+						comm.Value = commentValues ["opacity"];
+						comments ["opacity"] = true;
+					} else if (comm.Value.StartsWith ("sopacity"))
+					{
+						comm.Value = commentValues ["sopacity"];
+						comments ["sopacity"] = true;
+					} else if (comm.Value.StartsWith ("name"))
+					{
+						comm.Value = commentValues ["name"];
+						comments ["name"] = true;
+					} else if (comm.Value.StartsWith ("hasImage"))
+					{
+						comm.Value = commentValues ["hasImage"];
+						comments ["hasImage"] = true;
+					} else if (comm.Value.StartsWith ("hasSticker"))
+					{
+						comm.Value = commentValues ["hasSticker"];
+						comments ["hasSticker"] = true;
+					}
+				}
+
+				foreach (KeyValuePair <string, bool> comment in comments)
+				{
+					if (!comment.Value)
+					{
+						node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
+					}
+				}
+			} else
+			{
+				node.AppendChild (doc.CreateComment ("name:" + currentoFile));
+				node.AppendChild (doc.CreateComment ("align:" + ((int) align).ToString ()));
+				node.AppendChild (doc.CreateComment ("opacity:" + (opacity).ToString ()));
+				node.AppendChild (doc.CreateComment ("sopacity:" + (sopacity).ToString ()));
+				node.AppendChild (doc.CreateComment ("hasImage:" + hasImage));
+				node.AppendChild (doc.CreateComment ("hasSticker:" + hasSticker));
+			}
+
+			doc.Save (path);
+		}
+
 
 		/// <summary>
 		/// Convert align to int and add it to variables
