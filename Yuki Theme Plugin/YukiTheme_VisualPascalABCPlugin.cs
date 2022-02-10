@@ -467,16 +467,25 @@ namespace Yuki_Theme_Plugin
 
 		private void setMargin ()
 		{
+			int currentXPos = 0;
 			foreach (AbstractMargin margins in textArea.LeftMargins)
 			{
 				// MessageBox.Show (margin.Size.ToString());
-
+				Rectangle marginRectangle = new Rectangle(currentXPos , 0, margins.Size.Width, textArea.Height);
+				if (margins.IsVisible || margins is FoldMargin)
+				{
+					currentXPos += margins.DrawingPosition.Width;
+				}
 				if (margins is IconBarMargin)
 				{
 					margin = (IconBarMargin) margins;
 				}else if (margins is FoldMargin)
 				{
 					foldmargin = (FoldMargin) margins;
+					
+					if (marginRectangle != margin.DrawingPosition) { // Be sure that the line has valid rectangle
+						foldmargin.DrawingPosition = marginRectangle;
+					}
 				}
 			}
 		}
