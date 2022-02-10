@@ -203,6 +203,7 @@
 			this.sBox.ReadOnly = true;
 			this.sBox.ReservedCountOfLineNumberChars = 2;
 			this.sBox.SelectionColor = System.Drawing.Color.FromArgb (((int) (((byte) (60)))), ((int) (((byte) (0)))), ((int) (((byte) (0)))), ((int) (((byte) (255)))));
+			this.sBox.SelectionHighlightingForLineBreaksEnabled = false;
 			this.sBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors) (resources.GetObject ("sBox.ServiceColors")));
 			this.sBox.ServiceLinesColor = System.Drawing.Color.Red;
 			this.sBox.ShowFoldingLines = true;

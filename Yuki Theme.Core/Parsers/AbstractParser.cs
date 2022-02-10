@@ -43,7 +43,11 @@ namespace Yuki_Theme.Core.Parsers
 			if (DefaultThemes.isDefault (syt))
 				CLI.CopyFromMemory (syt, outname);
 			else
-				File.Copy (Path.Combine (CLI.currentPath,  "Themes",$"{syt}.yukitheme"), outname, true);
+			{
+				// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
+				if (!CLI.schemes.Contains (flname))
+					File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), outname, true);
+			}
 
 			MergeFiles (outname);
 			finishParsing (path);

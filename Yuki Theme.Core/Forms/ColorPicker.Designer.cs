@@ -382,8 +382,8 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// ColorPicker
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AutoScaleDimensions = new System.Drawing.SizeF (96F, 96F);
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (25)))), ((int) (((byte) (27)))), ((int) (((byte) (35)))));
 			this.ClientSize = new System.Drawing.Size (535, 350);
 			this.Controls.Add (this.OKBTN);

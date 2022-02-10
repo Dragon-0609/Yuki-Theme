@@ -430,8 +430,12 @@ namespace Yuki_Theme.Core.Forms
 			if (!blocked)
 			{
 				col.MainColor = colorButton.BackColor;
-				if (col.ShowDialog (this) == DialogResult.OK) colorButton.BackColor = col.MainColor;
-				updateCurrentItem ();
+				if (col.ShowDialog (this) == DialogResult.OK)
+				{
+					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor; 
+					colorButton.BackColor = col.MainColor;
+					updateCurrentItem ();
+				}
 			}
 		}
 
@@ -442,6 +446,7 @@ namespace Yuki_Theme.Core.Forms
 				col.MainColor = bgButton.BackColor;
 				if (col.ShowDialog (this) == DialogResult.OK)
 				{
+					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor;
 					bgButton.BackColor = col.MainColor;
 					updateCurrentItem ();
 				}
@@ -600,10 +605,16 @@ namespace Yuki_Theme.Core.Forms
 
 		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
 		{
+			if (CLI.isEdited) // Ask to save the changes
+			{
+				if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
+					save_Click (sender, e); // save before restoring
+			}
 			currentoFile = schemes.SelectedItem.ToString ();
 			Console.WriteLine (currentoFile);
 			currentFile = Helper.ConvertNameToPath (currentoFile);
 			save_button.Visible = !isDefault ();
+			
 			restore_Click (sender, e);
 
 			selectedItem = schemes.SelectedItem.ToString ();
@@ -691,6 +702,8 @@ namespace Yuki_Theme.Core.Forms
 				CLI.showGrids = setform.settingsPanel.checkBox4.Checked;
 				CLI.useCustomSticker = setform.settingsPanel.use_cstm_sticker.Checked;
 				CLI.customSticker = setform.settingsPanel.customSticker;
+				CLI.autoFitByWidth = setform.settingsPanel.fitWidth.Checked;
+				CLI.askToSave = setform.settingsPanel.askSave.Checked;
 				CLI.saveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = CLI.positioning;
@@ -1365,6 +1378,11 @@ namespace Yuki_Theme.Core.Forms
 			showLicense (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
 			showGoogleAnalytics (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
 			TrackInstall ();
+			// FontManager.SetAllControlsFont (this.Controls);
+			FontManager.SetControlFont (label2, 1);
+			FontManager.SetControlFont (label1, 1);
+			FontManager.SetControlFont (check_bold, 1);
+			FontManager.SetControlFont (check_italic, 1);
 		}
 
 

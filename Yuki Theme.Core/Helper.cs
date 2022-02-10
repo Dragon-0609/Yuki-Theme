@@ -54,7 +54,30 @@ namespace Yuki_Theme.Core
 			res.Width = (int) (ima.Width * rY);
 			res.Height = (int) (ima.Height * rY);
 			res.X = (mWidth - res.Width) / (int) align;
-
+			
+			// If image's drawing rectangle's width is smaller than mWidth.
+			
+			if (res.Width < mWidth && CLI.autoFitByWidth) 
+				res = getSizesHorizontal (ima, mWidth, mHeight);
+			
+			return res;
+		}
+		/// <summary>
+		/// It's used to fill free space of width. 
+		/// For example, image rectangle is:   1066x600, Area rectangle is: 1400x600. In this case, size will be calculated by width.
+		/// </summary>
+		/// <param name="ima">Image</param>
+		/// <param name="mWidth">Max Width</param>
+		/// <param name="mHeight">Max Height</param>
+		/// <returns>Calculated size according width</returns>
+		public static Rectangle getSizesHorizontal (Size ima, int mWidth, int mHeight)
+		{
+			Rectangle res = new Rectangle ();
+			double rY = (double) mWidth / ima.Width;
+			res.Width = (int) (ima.Width * rY);
+			res.Height = (int) (ima.Height * rY);
+			res.Y = (mHeight - res.Height) / 2;
+			
 			return res;
 		}
 

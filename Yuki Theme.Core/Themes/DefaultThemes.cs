@@ -10,25 +10,89 @@ namespace Yuki_Theme.Core.Themes
 			{
 				return new string []
 				{
-					"Darcula", "Dracula", "Github Dark", "Github Light", "Monokai Dark", "Monokai Light", "Nightshade",
-					"Oblivion", "Shades of Purple", "AzurLane: Essex", "BlendS: Maika", "BunnySenpai: Mai Dark",
-					"BunnySenpai: Mai Light", "DDLC: Monika Dark", "DDLC: Monika Light", "DDLC: Natsuki Dark",
-					"DDLC: Natsuki Light", "DDLC: Sayori Dark", "DDLC: Sayori Light", "DDLC: Yuri Dark",
-					"DDLC: Yuri Light", "DM: Kanna", "DM: Tohru", "DR: Mioda Ibuki Dark", "DR: Mioda Ibuki Light",
-					"DTWMMN: Hayase Nagatoro", "DxD: Rias Crimson", "DxD: Rias Onyx", "EroManga: Sagiri",
-					"EVA: Katsuragi Misato", "EVA: Rei", "Franxx: Zero Two Dark", "Franxx: Zero Two Light",
-					"FutureDiary: Gasai Yuno", "Gate: Rory Mercury", "JahySama: Jahy", "Kakegurui: Jabami Yumeko",
-					"KillLaKill: Ryuko Dark", "KillLaKill: Ryuko Light", "KillLaKill: Satsuki Dark",
-					"KillLaKill: Satsuki Light", "KonoSuba: Aqua", "KonoSuba: Darkness Dark",
-					"KonoSuba: Darkness Light", "KonoSuba: Megumin", "LoveLive: Sonoda Umi", "LS: Konata",
-					"Monogatari: Hanekawa Tsubasa", "MonsterMusume: Miia", "NekoPara: Azuki", "NekoPara: Chocola",
-					"NekoPara: Christmas Chocola", "NekoPara: Cinnamon", "NekoPara: Coconut", "NekoPara: Maple Dark",
-					"NekoPara: Maple Light", "NekoPara: Shigure", "NekoPara: Vanilla", "OreGairu: Yukinoshita Yukino",
-					"OreImo: Kirino", "QQ: Nakano Miku", "QQ: Nakano Nino", "QQ: Nakano Yotsuba", "Re:Zero: Beatrice",
-					"Re:Zero: Echidna", "Re:Zero: Emilia Dark", "Re:Zero: Emilia Light", "Re:Zero: Ram", "Re:Zero: Rem",
-					"SAO: Asuna Dark", "SAO: Asuna Light", "SG: Makise Kurisu", "TypeMoon: Astolfo", "TypeMoon: Gray",
-					"TypeMoon: Ishtar Dark", "TypeMoon: Ishtar Light", "TypeMoon: Tohsaka Rin",
-					"Vocaloid: Hatsune Miku", "YuruCamp: Shima Rin"
+					"Darcula",
+					"Dracula",
+					"Github Dark",
+					"Github Light",
+					"Monokai Dark",
+					"Monokai Light",
+					"Nightshade",
+					"Oblivion",
+					"Shades of Purple",
+					"AzurLane: Essex",
+					"BlendS: Maika",
+					"BunnySenpai: Mai Dark",
+					"BunnySenpai: Mai Light",
+					"Chuunibyou: Takanashi Rikka",
+					"DDLC: Monika Dark",
+					"DDLC: Monika Light",
+					"DDLC: Natsuki Dark",
+					"DDLC: Natsuki Light",
+					"DDLC: Sayori Dark",
+					"DDLC: Sayori Light",
+					"DDLC: Yuri Dark",
+					"DDLC: Yuri Light",
+					"DM: Kanna",
+					"DM: Tohru",
+					"DR: Mioda Ibuki Dark",
+					"DR: Mioda Ibuki Light",
+					"DTWMMN: Hayase Nagatoro",
+					"DxD: Rias Crimson",
+					"DxD: Rias Onyx",
+					"EroManga: Sagiri",
+					"EVA: Katsuragi Misato",
+					"EVA: Rei",
+					"Franxx: Zero Two Dark",
+					"Franxx: Zero Two Light",
+					"FutureDiary: Gasai Yuno",
+					"Gate: Rory Mercury",
+					"JahySama: Jahy",
+					"Kakegurui: Jabami Yumeko",
+					"KillLaKill: Ryuko Dark",
+					"KillLaKill: Ryuko Light",
+					"KillLaKill: Satsuki Dark",
+					"KillLaKill: Satsuki Light",
+					"KonoSuba: Aqua",
+					"KonoSuba: Darkness Dark",
+					"KonoSuba: Darkness Light",
+					"KonoSuba: Megumin",
+					"LoveLive: Sonoda Umi",
+					"LS: Konata",
+					"Monogatari: Hanekawa Tsubasa",
+					"MonsterMusume: Miia",
+					"NekoPara: Azuki",
+					"NekoPara: Chocola",
+					"NekoPara: Christmas Chocola",
+					"NekoPara: Cinnamon",
+					"NekoPara: Coconut",
+					"NekoPara: Maple Dark",
+					"NekoPara: Maple Light",
+					"NekoPara: Shigure",
+					"NekoPara: Vanilla",
+					"OreGairu: Yukinoshita Yukino",
+					"OreImo: Kirino",
+					"QQ: Nakano Miku",
+					"QQ: Nakano Nino",
+					"QQ: Nakano Yotsuba",
+					"Railgun: Misaka Mikoto",
+					"Re:Zero: Beatrice",
+					"Re:Zero: Echidna",
+					"Re:Zero: Emilia Dark",
+					"Re:Zero: Emilia Light",
+					"Re:Zero: Ram",
+					"Re:Zero: Rem",
+					"SAO: Asuna Dark",
+					"SAO: Asuna Light",
+					"SG: Makise Kurisu",
+					"ShieldHero: Raphtalia",
+					"TypeMoon: Astolfo",
+					"TypeMoon: Gray",
+					"TypeMoon: Ishtar Dark",
+					"TypeMoon: Ishtar Light",
+					"TypeMoon: Tohsaka Rin",
+					"Vocaloid: Hatsune Miku",
+					"YuruCamp: Nadeshiko",
+					"YuruCamp: Shima Rin"
 				};
 			}
 		}
@@ -61,6 +125,7 @@ namespace Yuki_Theme.Core.Themes
 				case "BlendS: Maika" :
 				case "BunnySenpai: Mai Dark" :
 				case "BunnySenpai: Mai Light" :
+				case "Chuunibyou: Takanashi Rikka" :
 				case "DDLC: Monika Dark" :
 				case "DDLC: Monika Light" :
 				case "DDLC: Natsuki Dark" :
@@ -111,6 +176,7 @@ namespace Yuki_Theme.Core.Themes
 				case "QQ: Nakano Miku" :
 				case "QQ: Nakano Nino" :
 				case "QQ: Nakano Yotsuba" :
+				case "Railgun: Misaka Mikoto" :
 				case "Re:Zero: Beatrice" :
 				case "Re:Zero: Echidna" :
 				case "Re:Zero: Emilia Dark" :
@@ -120,12 +186,14 @@ namespace Yuki_Theme.Core.Themes
 				case "SAO: Asuna Dark" :
 				case "SAO: Asuna Light" :
 				case "SG: Makise Kurisu" :
+				case "ShieldHero: Raphtalia" :
 				case "TypeMoon: Astolfo" :
 				case "TypeMoon: Gray" :
 				case "TypeMoon: Ishtar Dark" :
 				case "TypeMoon: Ishtar Light" :
 				case "TypeMoon: Tohsaka Rin" :
 				case "Vocaloid: Hatsune Miku" :
+				case "YuruCamp: Nadeshiko" :
 				case "YuruCamp: Shima Rin" :
 				{
 					res = "Doki Theme";

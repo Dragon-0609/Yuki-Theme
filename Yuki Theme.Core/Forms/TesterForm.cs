@@ -8,9 +8,13 @@ namespace Yuki_Theme.Core.Forms
 		public TesterForm ()
 		{
 			InitializeComponent ();
-			tabPage1.BackColor = Color.Gray;
-			tabPage2.BackColor = Color.Red;
-			tabPage3.BackColor = Color.Red;
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (TesterForm));
+			stickerPicture1.Image = ((System.Drawing.Image) (resources.GetObject ("panel1.BackgroundImage")));
+			stickerPicture1.BringToFront ();
+			/*SizeChanged += (sender, e) =>
+			{
+				stickerPicture1.Invalidate();
+			};*/
 		}
 	}
 }

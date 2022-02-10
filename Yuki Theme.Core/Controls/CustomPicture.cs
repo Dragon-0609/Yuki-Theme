@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -134,12 +135,14 @@ namespace Yuki_Theme.Core.Controls
 		{
 			// We're using pixel 0,0 as the "transparent" color.
 			Color mask = maskImage.GetPixel (0, 0);
+			// This is mask for transparent color
+			int TransparentMask = mask.A < 20 ? 20 : mask.A;
 			GraphicsPath graphicsPath = new GraphicsPath ();
 			for (int x = 0; x < maskImage.Width; x++)
 			{
 				for (int y = 0; y < maskImage.Height; y++)
 				{
-					if (!maskImage.GetPixel (x, y).Equals (mask))
+					if (maskImage.GetPixel (x, y).A > TransparentMask)
 					{
 						graphicsPath.AddRectangle (new Rectangle (x, y, 1, 1));
 					}

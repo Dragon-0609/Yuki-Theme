@@ -36,32 +36,6 @@ namespace Yuki_Theme.Core.Controls
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
-			ActionBox.Items.AddRange (new string [] {"Delete", "Import and Delete", "Ignore"});
-			mode.Items.AddRange (new string [] {"Light", "Advanced"});
-			stickerToUpdate = new List <CustomPicture> ();
-			foreach (string name in Enum.GetNames (typeof (RelativeUnit)))
-			{
-				unit.Items.Add (name);
-			}
-
-			toolBarList.ItemHeight = Font.Height + 3;
-			backImage.Checked = CLI.bgImage;
-			swsticker.Checked = CLI.swSticker;
-			logo.Checked = CLI.swLogo;
-			editor.Checked = CLI.Editor;
-			checkBox1.Checked = CLI.Beta;
-			swStatusbar.Checked = CLI.swStatusbar;
-			askC.Checked = CLI.askChoice;
-			checkBox2.Checked = CLI.update;
-			ActionBox.SelectedIndex = CLI.actionChoice;
-			mode.SelectedIndex = CLI.settingMode;
-			unit.SelectedIndex = (int) CLI.unit;
-			checkBox3.Checked = CLI.positioning;
-			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
-			checkBox4.Checked = CLI.showGrids;
-			use_cstm_sticker.Checked = CLI.useCustomSticker;
-			customSticker = CLI.customSticker;
-			loadSVG ();
 		}
 
 		public void HideTabPage (bool isProgram, bool needToolBarPage)
@@ -420,6 +394,44 @@ namespace Yuki_Theme.Core.Controls
 			{
 				customSticker = pf.path.Text;
 			}
+		}
+
+		public void SettingsPanel_Load ()
+		{
+			ActionBox.Items.AddRange (new string [] {"Delete", "Import and Delete", "Ignore"});
+			mode.Items.AddRange (new string [] {"Light", "Advanced"});
+			stickerToUpdate = new List <CustomPicture> ();
+			foreach (string name in Enum.GetNames (typeof (RelativeUnit)))
+			{
+				unit.Items.Add (name);
+			}
+
+			toolBarList.ItemHeight = Font.Height + 3;
+			backImage.Checked = CLI.bgImage;
+			swsticker.Checked = CLI.swSticker;
+			logo.Checked = CLI.swLogo;
+			editor.Checked = CLI.Editor;
+			checkBox1.Checked = CLI.Beta;
+			swStatusbar.Checked = CLI.swStatusbar;
+			askC.Checked = CLI.askChoice;
+			checkBox2.Checked = CLI.update;
+			ActionBox.SelectedIndex = CLI.actionChoice;
+			mode.SelectedIndex = CLI.settingMode;
+			unit.SelectedIndex = (int) CLI.unit;
+			checkBox3.Checked = CLI.positioning;
+			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
+			checkBox4.Checked = CLI.showGrids;
+			use_cstm_sticker.Checked = CLI.useCustomSticker;
+			customSticker = CLI.customSticker;
+			fitWidth.Checked = CLI.autoFitByWidth;
+			fitWidth.Enabled = CLI.bgImage;
+			askSave.Checked = CLI.askToSave;
+			loadSVG ();
+		}
+
+		private void backImage_CheckedChanged (object sender, EventArgs e)
+		{
+			fitWidth.Enabled = backImage.Checked;
 		}
 	}
 }
