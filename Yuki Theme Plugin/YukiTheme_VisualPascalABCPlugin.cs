@@ -544,7 +544,7 @@ namespace Yuki_Theme_Plugin
 
 			if (foldmargin != null)
 			{
-				e.Graphics.DrawLine(BrushRegistry.GetDotPen(bgdef, bgvruler),
+				e.Graphics.DrawLine(BrushRegistry.GetDotPen(bgdef, bgBorder),
 				                    foldmargin.DrawingPosition.X,
 				                    foldmargin.DrawingPosition.Y,
 				                    foldmargin.DrawingPosition.X,
@@ -672,7 +672,9 @@ namespace Yuki_Theme_Plugin
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
-			bgvruler = highlighting.GetColorFor ("VRuler").Color;
+			// Console.WriteLine (highlighting.GetColorFor ("VRuler").ToString ());
+			// bgvruler = highlighting.GetColorFor ("VRuler").Color;
+			// Console.WriteLine (bgvruler);
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);

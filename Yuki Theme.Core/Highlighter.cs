@@ -105,7 +105,7 @@ namespace Yuki_Theme.Core
 							break;
 						case "Selection" :
 						{
-							sBox.SelectionColor = Parse (style.Value ["bgcolor"]);
+							sBox.SelectionColor = Color.FromArgb (100, Parse (style.Value ["bgcolor"]));
 						}
 							break;
 						case "VRuler" :
