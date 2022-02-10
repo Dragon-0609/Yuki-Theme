@@ -4,7 +4,20 @@
 <!-- Updated 2005 by Daniel Grunwald for VB.NET 2.0 -->
 
 <SyntaxDefinition name = "VBNET" extensions = ".vb">
-	
+	<Environment>
+		<Default color="#F5DEDA" bgcolor="#4B364C"/>
+		<Selection bgcolor="#836785"/>
+		<VRuler color="#A1857A"/>
+		<InvalidLines color="Red"/>
+		<CaretMarker color="#BD8ABF"/>
+		<LineNumbers color="#F5DEDA" bgcolor="#4B364C"/>
+		<FoldLine color="#F8F8F2"/>
+		<FoldMarker color="#F8F8F2" bgcolor="#335876"/>
+		<SelectedFoldLine color="#F8F8F2" bgcolor="#FFFFFF"/>
+		<EOLMarkers color="#92BCE3"/>
+		<SpaceMarkers color="LightBlue"/>
+		<TabMarkers color="LightBlue"/>
+	</Environment>
 	<Properties>
 		<Property name="LineComment" value="'"/>
 	</Properties>
@@ -217,15 +230,6 @@
 				<Key word = "SyncLock" />
 				<Key word = "Using" />
 				<Key word = "With" />
-				<Key word = "Do" />
-				<Key word = "While" />
-				<Key word = "Loop" />
-				<Key word = "Wend" />
-				
-				<Key word = "Try" />
-				<Key word = "Catch" />
-				<Key word = "When" />
-				<Key word = "Finally" />
 				
 				<Key word = "If" />
 				<Key word = "Then" />
@@ -233,15 +237,29 @@
 				<Key word = "ElseIf" />
 				<Key word = "EndIf" />
 				
+				<Key word = "Select" />
+				<Key word = "Case" />
+			</KeyWords>
+			
+			<KeyWords name = "IterationStatements" bold="false" italic="false" color="Blue">
+				<Key word = "Do" />
+				<Key word = "While" />
+				<Key word = "Loop" />
+				<Key word = "Wend" />
+				
 				<Key word = "For" />
 				<Key word = "To" />
 				<Key word = "Step" />
 				<Key word = "Each" />
 				<Key word = "In" />
 				<Key word = "Next" />
-				
-				<Key word = "Select" />
-				<Key word = "Case" />
+			</KeyWords>
+
+			<KeyWords name = "Exception" bold="false" italic="false" color="Blue">
+				<Key word = "Try" />
+				<Key word = "Catch" />
+				<Key word = "When" />
+				<Key word = "Finally" />
 			</KeyWords>
 			
 			<KeyWords name = "ContextKeywords" bold="false" italic="false" color="Blue">

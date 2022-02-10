@@ -2,7 +2,20 @@
 <!-- syntaxdefinition for Haskell (c) Tasha 2008 -->
 
 <SyntaxDefinition name = "Haskell" extensions = ".hs">
-	
+	<Environment>
+		<Default color="#F5DEDA" bgcolor="#4B364C"/>
+		<Selection bgcolor="#836785"/>
+		<VRuler color="#A1857A"/>
+		<InvalidLines color="Red"/>
+		<CaretMarker color="#BD8ABF"/>
+		<LineNumbers color="#F5DEDA" bgcolor="#4B364C"/>
+		<FoldLine color="#F8F8F2"/>
+		<FoldMarker color="#F8F8F2" bgcolor="#335876"/>
+		<SelectedFoldLine color="#F8F8F2" bgcolor="#FFFFFF"/>
+		<EOLMarkers color="#92BCE3"/>
+		<SpaceMarkers color="LightBlue"/>
+		<TabMarkers color="LightBlue"/>
+	</Environment>
 	<Properties>
 		<Property name="LineComment" value="--"/>
 	</Properties>

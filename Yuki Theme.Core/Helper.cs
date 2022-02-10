@@ -94,7 +94,7 @@ namespace Yuki_Theme.Core
 		{
 			return getImage (path, "sticker.png");
 		}
-
+		
 		private static Tuple <bool, Image> getImage (string path, string filename)
 		{
 			try
@@ -124,7 +124,44 @@ namespace Yuki_Theme.Core
 				return new Tuple <bool, Image> (false, null);
 			}
 		}
+		
+		public static bool hasImage (string path)
+		{
+			return hasImage (path, "background.png");
+		}
+		
+		public static bool hasSticker (string path)
+		{
+			return hasImage (path, "sticker.png");
+		}
+		
+		private static bool hasImage (string path, string filename)
+		{
+			try
+			{
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				{
+					ZipArchiveEntry imag = zipFile.GetEntry (filename);
+					if (imag != null)
+					{
+						bool b = false;
+						using (imag.Open ())
+						{
+							b = true;
+						}
 
+						return b;
+					} else
+					{
+						return false;
+					}
+
+				}
+			} catch (InvalidDataException)
+			{
+				return false;
+			}
+		}
 
 		public static Tuple <bool, Image> getStickerFromMemory (string path, Assembly a)
 		{
@@ -300,24 +337,27 @@ namespace Yuki_Theme.Core
 			doc.Save (path);
 		}
 
-		public static void extractZip (string source, string destination, bool needImage = false, bool needSticker = false)
+		public static void extractZip (string source, string destination, bool needImage = false, bool needSticker = false, bool needTheme = true)
 		{
 			using (ZipArchive archive = ZipFile.OpenRead(source))
 			{
-				ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
-				entry.ExtractToFile (destination, true);
+				if (needTheme)
+				{
+					ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
+					entry.ExtractToFile (destination, true);
+				}
 				if(needImage)
-					extractFile (archive, entry, "background.png", destination);
+					extractFile (archive, "background.png", destination);
 				if(needSticker)
-					extractFile (archive, entry, "sticker.png", destination);
+					extractFile (archive, "sticker.png", destination);
 			} 
 		}
 
-		private static void extractFile (ZipArchive archive, ZipArchiveEntry entry, string filename, string destination)
+		private static void extractFile (ZipArchive archive, string filename, string destination)
 		{
 			try
 			{
-				entry = archive.GetEntry (filename);
+				ZipArchiveEntry entry = archive.GetEntry (filename);
 				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), filename), true);
 			}
 			catch (Exception ex)            

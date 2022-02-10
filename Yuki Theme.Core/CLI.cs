@@ -308,12 +308,17 @@ namespace Yuki_Theme.Core
 					}
 				}
 
-				if (isDefault ())
-					CopyFromMemory (currentFile, path, true);
+				Tuple <bool, bool> images = null;
+				
+				if (isDefault ()){
+					images = CopyFromMemory (currentFile, path, true);
+				}
 				else
 				{
-					ExportTheme (path);
+					images = ExportTheme (path);
 				}
+
+				PrepareToExport (path, images.Item1, images.Item2);
 
 				if (Helper.mode != ProductMode.Plugin)
 					if (showSuccess != null)
@@ -603,7 +608,7 @@ namespace Yuki_Theme.Core
 			}
 
 			System.Windows.Forms.Clipboard.SetText (all);
-			
+
 			align = (Alignment) (int.Parse (localAttributes ["Wallpaper"] ["align"]));
 			opacity = int.Parse (localAttributes ["Wallpaper"] ["opacity"]);
 			sopacity = int.Parse (localAttributes ["Sticker"] ["opacity"]);
@@ -617,7 +622,7 @@ namespace Yuki_Theme.Core
 		/// <param name="file">Copy from (theme name)</param>
 		/// <param name="path">Copy to path</param>
 		/// <param name="extract">Do you want to extract background image and sticker?</param>
-		public static void CopyFromMemory (string file, string path, bool extract = false)
+		public static Tuple <bool,bool> CopyFromMemory (string file, string path, bool extract = false)
 		{
 			var a = GetCore ();
 			if (file.Contains (":"))
@@ -641,14 +646,16 @@ namespace Yuki_Theme.Core
 					Tuple <bool, Image> img = Helper.getImage (nxp);
 					Tuple <bool, Image> sticker = Helper.getSticker (nxp);
 
-					Helper.extractZip (nxp, path, img.Item1, sticker.Item1);
-
+					Helper.extractZip (nxp, path, img.Item1, sticker.Item1, false);
 					File.Delete (nxp);
+					return new Tuple <bool, bool> (img.Item1, sticker.Item1);
 				} else
 				{
 					File.Move (nxp, path);
 				}
 			}
+
+			return new Tuple <bool, bool> (false, false);
 		}
 
 		/// <summary>
@@ -1157,7 +1164,48 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void MergeFiles (string path, bool hasImage, bool hasSticker)
+		public static void PrepareToExport (string path, bool hasImage, bool hasSticker)
+		{
+			/*foreach (KeyValuePair <string, string []> pair in ShadowNames.PascalFields)
+			{
+				Console.WriteLine (pair.Key);
+			}*/
+			string dir = Path.GetDirectoryName (path);
+			foreach (SyntaxType syntax in (SyntaxType []) Enum.GetValues (typeof (SyntaxType)))
+			{
+				string npath = Path.Combine (dir, $"{currentFile}_{syntax}.xshd");
+				var a = GetCore ();
+				var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
+				using (var fs = new FileStream (npath, FileMode.Create))
+				{
+					stream.Seek (0, SeekOrigin.Begin);
+					stream.CopyTo (fs);
+				}
+
+				Dictionary <string, Dictionary <string, string>> localDic = new Dictionary <string, Dictionary <string, string>> ();
+				List <string> shadowNames = new List <string> (); // This is necessary not to repeat fields
+				foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
+				{
+					string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
+					if (shadowName != null && !shadowNames.Contains (shadowName))
+					{
+						string [] realName = ShadowNames.GetRealName (shadowName, syntax);
+						if (realName != null)
+						{
+							foreach (string st in realName)
+							{
+								localDic.Add (st, pair.Value);
+							}
+						}
+						shadowNames.Add (shadowName);
+					}
+				}
+
+				MergeFiles (npath, hasImage, hasSticker, localDic);
+			}
+		}
+
+		public static void MergeFiles (string path, bool hasImage, bool hasSticker, Dictionary <string, Dictionary <string, string>> local)
 		{
 			var doc = new XmlDocument ();
 			doc.Load (path);
@@ -1173,10 +1221,10 @@ namespace Yuki_Theme.Core
 					var nms = childNode.Name;
 					if (childNode.Name == "Span" || childNode.Name == "KeyWords")
 						nms = childNode.Attributes ["name"].Value;
-					if (!localAttributes.ContainsKey (nms)) continue;
+					if (!local.ContainsKey (nms)) continue;
 					if (nms == "Wallpaper")
 						hadSavedImage = true;
-					var attrs = localAttributes [nms];
+					var attrs = local [nms];
 
 					foreach (var att in attrs)
 						childNode.Attributes [att.Key].Value = att.Value;
@@ -1197,9 +1245,9 @@ namespace Yuki_Theme.Core
 			{
 				var nms = node.Name;
 				if (node.Name == "Span" || node.Name == "KeyWords") nms = node.Attributes ["name"].Value;
-				if (localAttributes.ContainsKey (nms))
+				if (local.ContainsKey (nms))
 				{
-					var attrs = localAttributes [nms];
+					var attrs = local [nms];
 
 					foreach (var att in attrs) node.Attributes [att.Key].Value = att.Value;
 				}
@@ -1219,9 +1267,9 @@ namespace Yuki_Theme.Core
 						var nms = xn.Name;
 						if (xn.Name == "Span" || xn.Name == "KeyWords")
 							nms = xn.Attributes ["name"].Value;
-						if (!localAttributes.ContainsKey (nms)) continue;
+						if (!local.ContainsKey (nms)) continue;
 
-						var attrs = localAttributes [nms];
+						var attrs = local [nms];
 
 						foreach (var att in attrs)
 							// Console.WriteLine($"2N: {xn.Attributes["name"].Value}, ATT: {att.Key},");
@@ -1338,13 +1386,15 @@ namespace Yuki_Theme.Core
 		/// Export theme to the path (pascal directory)
 		/// </summary>
 		/// <param name="path">Path</param>
-		private static void ExportTheme (string path)
+		private static Tuple <bool,bool> ExportTheme (string path)
 		{
 			string source = getPath;
 			bool iszip = Helper.isZip (source);
 			if (!iszip)
 			{
-				File.Copy (source, path, true);
+				// File.Copy (source, path, true);
+
+				return new Tuple <bool, bool> (false, false);
 			} else
 			{
 				CleanDestination ();
@@ -1352,7 +1402,9 @@ namespace Yuki_Theme.Core
 				Tuple <bool, Image> img = Helper.getImage (source);
 				Tuple <bool, Image> sticker = Helper.getSticker (source);
 
-				Helper.extractZip (source, path, img.Item1, sticker.Item1);
+				Helper.extractZip (source, path, img.Item1, sticker.Item1, false);
+				
+				return new Tuple <bool, bool> (img.Item1, sticker.Item1);
 			}
 		}
 
@@ -1393,5 +1445,6 @@ namespace Yuki_Theme.Core
 		{
 			return DefaultThemes.isDefault (currentoFile);
 		}
+		
 	}
 }
