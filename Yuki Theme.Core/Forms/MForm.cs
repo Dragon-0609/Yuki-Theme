@@ -605,15 +605,16 @@ namespace Yuki_Theme.Core.Forms
 
 		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
 		{
-			currentoFile = schemes.SelectedItem.ToString ();
-			Console.WriteLine (currentoFile);
-			currentFile = Helper.ConvertNameToPath (currentoFile);
-			save_button.Visible = !isDefault ();
 			if (CLI.isEdited) // Ask to save the changes
 			{
 				if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
 					save_Click (sender, e); // save before restoring
 			}
+			currentoFile = schemes.SelectedItem.ToString ();
+			Console.WriteLine (currentoFile);
+			currentFile = Helper.ConvertNameToPath (currentoFile);
+			save_button.Visible = !isDefault ();
+			
 			restore_Click (sender, e);
 
 			selectedItem = schemes.SelectedItem.ToString ();
