@@ -73,6 +73,7 @@ namespace Yuki_Theme_Plugin
 		public static Color           clrHover;
 		public static Color           bgBorder;
 		public static Color           bgType;
+		public static Color           bgvruler;
 		public static Brush           bgdefBrush;
 		public static Brush           bgBrush;
 		public static Brush           bgClickBrush;
@@ -88,6 +89,7 @@ namespace Yuki_Theme_Plugin
 		private       Timer           tim2;
 		private       Timer           tim3;
 		private       IconBarMargin   margin;
+		private       FoldMargin      foldmargin;
 		public        MForm           mf;
 		private       ListView        cr;
 		private       TextBox         con;
@@ -472,6 +474,9 @@ namespace Yuki_Theme_Plugin
 				if (margins is IconBarMargin)
 				{
 					margin = (IconBarMargin) margins;
+				}else if (margins is FoldMargin)
+				{
+					foldmargin = (FoldMargin) margins;
 				}
 			}
 		}
@@ -535,6 +540,15 @@ namespace Yuki_Theme_Plugin
 						mark.Draw(margin, e.Graphics, new Point(0, yPos));
 					}
 				}
+			}
+
+			if (foldmargin != null)
+			{
+				e.Graphics.DrawLine(BrushRegistry.GetDotPen(bgdef, bgvruler),
+				                    foldmargin.DrawingPosition.X,
+				                    foldmargin.DrawingPosition.Y,
+				                    foldmargin.DrawingPosition.X,
+				                    foldmargin.DrawingPosition.Height);
 			}
 
 			if(img != null && bgImage)
@@ -658,6 +672,7 @@ namespace Yuki_Theme_Plugin
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
+			bgvruler = highlighting.GetColorFor ("VRuler").Color;
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);
