@@ -213,10 +213,10 @@ namespace Yuki_Theme.Core.Forms
 		
 		private void loadSVG(){
 			var a = Assembly.GetExecutingAssembly ();
-			string adda = Helper.isDark (Helper.bgColor) ? "" : "_dark";
-        	Helper.renderSVG (add, Helper.loadsvg ("add" + adda, a));
-            Helper.renderSVG (remove, Helper.loadsvg ("remove" + adda, a));
-            Helper.renderSVG (rename_btn, Helper.loadsvg ("edit" + adda, a));
+			string adda = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+        	Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
+            Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
+            Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
 		}
 
 		private Size MeasureString (string candidate, Font fnt)

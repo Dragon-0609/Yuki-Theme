@@ -139,10 +139,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -152,10 +152,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.getPath);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getImage (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.getPath);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -171,10 +171,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -182,10 +182,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.getPath);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getSticker (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.getPath);
 					if (iag.Item1)
 					{
 						res = iag.Item2;

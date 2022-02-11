@@ -423,7 +423,7 @@ namespace Yuki_Theme_Plugin
 
 						if (CLI.sopacity != 100)
 						{
-							sticker = Helper.setOpacity (stckr, CLI.sopacity);
+							sticker = Helper.SetOpacity (stckr, CLI.sopacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -454,7 +454,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (currentTheme.Image != null)
 				currentTheme.Image.Dispose ();
-			SvgDocument svg = Helper.loadsvg ("favorite", Assembly.GetExecutingAssembly (),
+			SvgDocument svg = Helper.LoadSvg ("favorite", Assembly.GetExecutingAssembly (),
 			                                  "Yuki_Theme_Plugin.Resources");
 			svg.Fill = new SvgColourServer (bgBorder);
 			svg.Stroke = new SvgColourServer (bgBorder);
@@ -463,20 +463,20 @@ namespace Yuki_Theme_Plugin
 			if (stick != null)
 				stick.Image = currentTheme.Image;
 
-			if (Helper.CurrentTheme.Contains (":"))
+			if (Helper.currentTheme.Contains (":"))
 			{
-				string [] spl = Helper.CurrentTheme.Split (':');
+				string [] spl = Helper.currentTheme.Split (':');
 				currentTheme.Text = spl [spl.Length - 1];
 				spl = null;
 			} else
-				currentTheme.Text = Helper.CurrentTheme;
+				currentTheme.Text = Helper.currentTheme;
 
 			if(wallpaperImage != null)
 			{
 				wallpaperImage.Dispose ();
 				wallpaperImage = null;
 			}
-			wallpaperImage = Helper.renderSVG (defaultSize, Helper.loadsvg (
+			wallpaperImage = Helper.RenderSvg (defaultSize, Helper.LoadSvg (
 				                                   "layoutPreview", Assembly.GetExecutingAssembly (),
 				                                   "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
 			                                   bgBorder);
@@ -486,7 +486,7 @@ namespace Yuki_Theme_Plugin
 				switchImage = null;
 			}
 			
-			switchImage = Helper.renderSVG (defaultSize, Helper.loadsvg (
+			switchImage = Helper.RenderSvg (defaultSize, Helper.LoadSvg (
 				                                   "refresh", Assembly.GetExecutingAssembly (),
 				                                   "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
 			                                   bgBorder);
@@ -579,7 +579,7 @@ namespace Yuki_Theme_Plugin
 			{
 				if (oldV.Width != mainPanel.ClientRectangle.Width || oldV.Height != mainPanel.ClientRectangle.Height)
 				{
-					oldV = Helper.getSizes (img.Size, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height,
+					oldV = Helper.GetSizes (img.Size, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height,
 					                        align);
 				}
 				// if (dockcount == 1)
@@ -655,9 +655,9 @@ namespace Yuki_Theme_Plugin
 			if (menu_settings != null)
 			{
 				string add = "";
-				bool isDark = Helper.isDark (bg);
+				bool isDark = Helper.IsDark (bg);
 				add = isDark ? "" : "_dark";
-				menu_settings.Image = Helper.renderSVG (menu_settings.Size, Helper.loadsvg (
+				menu_settings.Image = Helper.RenderSvg (menu_settings.Size, Helper.LoadSvg (
 					                                        "gearPlain"+add, Assembly.GetExecutingAssembly (),
 					                                        "Yuki_Theme_Plugin.Resources.icons"),
 				                                        false, Size.Empty,
@@ -671,10 +671,10 @@ namespace Yuki_Theme_Plugin
 			if (enablePositioning != null)
 			{
 				enablePositioning.BackColor = bgdef;
-				bool isDark = Helper.isDark (bg);
+				bool isDark = Helper.IsDark (bg);
 				string add = isDark ? "" : "_dark";
-				enablePositioning.Image = Helper.renderSVG (enablePositioning.Size,
-				                                            Helper.loadsvg ("export" + add, Assembly.GetExecutingAssembly (),
+				enablePositioning.Image = Helper.RenderSvg (enablePositioning.Size,
+				                                            Helper.LoadSvg ("export" + add, Assembly.GetExecutingAssembly (),
 				                                                            "Yuki_Theme_Plugin.Resources.icons"), false, Size.Empty, false,
 				                                            Color.Black);
 
@@ -775,7 +775,7 @@ namespace Yuki_Theme_Plugin
 				}
 				if(opacity != 100)
 				{
-					img = Helper.setOpacity (iamg, opacity);
+					img = Helper.SetOpacity (iamg, opacity);
 					iamg.Dispose ();
 				} else
 				{
@@ -897,8 +897,8 @@ namespace Yuki_Theme_Plugin
 					lbl.Location = new Point (x, y - 13);
 					lst.Location = new Point (x, y + 12);
 
-					if (lst.Items.Contains (Helper.CurrentTheme))
-						lst.SelectedItem = Helper.CurrentTheme;
+					if (lst.Items.Contains (Helper.currentTheme))
+						lst.SelectedItem = Helper.currentTheme;
 					else
 						lst.SelectedIndex = 0;
 					lst.SelectedIndexChanged += LstOnSelectedIndexChanged;
@@ -1024,13 +1024,13 @@ namespace Yuki_Theme_Plugin
 			if (menu_settings != null) // If we could find...
 			{
 				string add = "";
-				bool isDark = Helper.isDark (bg);
+				bool isDark = Helper.IsDark (bg);
 				add = isDark ? "" : "_dark";
 
 				menu_settings.Text = "Show Settings";
 				menu_settings.ShortcutKeys = Keys.Alt | Keys.S;
 				menu_settings.ShortcutKeyDisplayString = "Alt + S";
-				menu_settings.Image = Helper.renderSVG (menu_settings.Size, Helper.loadsvg (
+				menu_settings.Image = Helper.RenderSvg (menu_settings.Size, Helper.LoadSvg (
 					                                        "gearPlain"+add, Assembly.GetExecutingAssembly (),
 					                                        "Yuki_Theme_Plugin.Resources.icons"), false, Size.Empty,
 				                                        true, clr);
@@ -1047,7 +1047,7 @@ namespace Yuki_Theme_Plugin
 				quiet.ShortcutKeyDisplayString = "Alt + A";
 				quiet.BackColor = menu_settings.BackColor;
 				quiet.ForeColor = menu_settings.ForeColor;
-				quietImage = Helper.renderSVG (quiet.Size, Helper.loadsvg (
+				quietImage = Helper.RenderSvg (quiet.Size, Helper.LoadSvg (
 					                               "quiet", Assembly.GetExecutingAssembly (),
 					                               "Yuki_Theme_Plugin.Resources"));
 				quiet.Image = quietImage;
@@ -1080,7 +1080,7 @@ namespace Yuki_Theme_Plugin
 				
 				enablePositioning.BackColor = menu_settings.BackColor;
 				enablePositioning.ForeColor = menu_settings.ForeColor;
-				positioningImage = Helper.renderSVG (enablePositioning.Size, Helper.loadsvg (
+				positioningImage = Helper.RenderSvg (enablePositioning.Size, Helper.LoadSvg (
 					                                     "export" + add, Assembly.GetExecutingAssembly (),
 					                                     "Yuki_Theme_Plugin.Resources.icons"));
 				enablePositioning.Image = CLI.positioning

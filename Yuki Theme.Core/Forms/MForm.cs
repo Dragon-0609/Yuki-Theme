@@ -216,7 +216,7 @@ namespace Yuki_Theme.Core.Forms
 			CLI.ifDoesntHave = ifDoesntHave;
 			CLI.ifHasSticker = ifHasSticker;
 			CLI.ifDoesntHaveSticker = ifDoesntHaveSticker;
-			Helper.GiveMessage = GiveMessage;
+			Helper.giveMessage = GiveMessage;
 
 			if (Helper.mode != ProductMode.Plugin)
 				CLI.connectAndGet (); // Get Data
@@ -408,7 +408,7 @@ namespace Yuki_Theme.Core.Forms
 					if (img3 != null)
 					{
 						if (sopacity != 100)
-							img4 = Helper.setOpacity (img3, sopacity);
+							img4 = Helper.SetOpacity (img3, sopacity);
 						else
 							img4 = img3;
 						stickerControl.Visible = true;
@@ -1049,7 +1049,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				if (oldV.Width != sBox.ClientRectangle.Width || oldV.Height != sBox.ClientRectangle.Height)
 				{
-					oldV = Helper.getSizes (img.Size, sBox.ClientRectangle.Width, sBox.ClientRectangle.Height,
+					oldV = Helper.GetSizes (img.Size, sBox.ClientRectangle.Width, sBox.ClientRectangle.Height,
 					                        align);
 				}
 
@@ -1124,8 +1124,8 @@ namespace Yuki_Theme.Core.Forms
 			if (imagePath.Text == "wallpaper.png" && imgCurrent == 1)
 			{
 				Tuple <bool, Image> iag = isDefault ()
-					? Helper.getImageFromMemory (gp, Assembly.GetExecutingAssembly ())
-					: Helper.getImage (getPath);
+					? Helper.GetImageFromMemory (gp, Assembly.GetExecutingAssembly ())
+					: Helper.GetImage (getPath);
 				if (iag.Item1)
 				{
 					// img = iag.Item2;
@@ -1138,8 +1138,8 @@ namespace Yuki_Theme.Core.Forms
 			} else if (imagePath.Text == "sticker.png" && imgCurrent == 2)
 			{
 				Tuple <bool, Image> iag = isDefault ()
-					? Helper.getStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
-					: Helper.getSticker (getPath);
+					? Helper.GetStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
+					: Helper.GetSticker (getPath);
 				if (iag.Item1)
 				{
 					// img = iag.Item2;
@@ -1211,17 +1211,17 @@ namespace Yuki_Theme.Core.Forms
 		{
 			var a = Assembly.GetExecutingAssembly ();
 
-			string add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
 			
-			Helper.renderSVG (save_button, Helper.loadsvg ("menu-saveall" + add, a));
-			Helper.renderSVG (restore_button, Helper.loadsvg ("refresh" + add, a));
-			Helper.renderSVG (export_button, Helper.loadsvg ("export" + add, a));
-			Helper.renderSVG (import_button, Helper.loadsvg ("import" + add, a));
-			Helper.renderSVG (settings_button, Helper.loadsvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
-			Helper.renderSVG (add_button, Helper.loadsvg ("add" + add, a));
-			Helper.renderSVG (manage_button, Helper.loadsvg ("listFiles" + add, a));
-			Helper.renderSVG (import_directory, Helper.loadsvg ("traceInto" + add, a));
-			Helper.renderSVG (button11, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16));
+			Helper.RenderSvg (save_button, Helper.LoadSvg ("menu-saveall" + add, a));
+			Helper.RenderSvg (restore_button, Helper.LoadSvg ("refresh" + add, a));
+			Helper.RenderSvg (export_button, Helper.LoadSvg ("export" + add, a));
+			Helper.RenderSvg (import_button, Helper.LoadSvg ("import" + add, a));
+			Helper.RenderSvg (settings_button, Helper.LoadSvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
+			Helper.RenderSvg (add_button, Helper.LoadSvg ("add" + add, a));
+			Helper.RenderSvg (manage_button, Helper.LoadSvg ("listFiles" + add, a));
+			Helper.RenderSvg (import_directory, Helper.LoadSvg ("traceInto" + add, a));
+			Helper.RenderSvg (button11, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16));
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
@@ -1250,7 +1250,7 @@ namespace Yuki_Theme.Core.Forms
 					{
 						if (!unblockedScrool)
 							opacity = Convert.ToInt32 (opacity_slider.Value);
-						img = Helper.setOpacity (img2, opacity);
+						img = Helper.SetOpacity (img2, opacity);
 						blockedNumeric = true;
 						numericUpDown1.Value = opacity;
 						blockedNumeric = false;

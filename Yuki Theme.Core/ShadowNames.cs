@@ -11,6 +11,7 @@ namespace Yuki_Theme.Core
 
 	public static class ShadowNames
 	{
+		
 		public static string [] names = new []
 		{
 			"Default Text",
@@ -364,34 +365,40 @@ namespace Yuki_Theme.Core
 			string res = null;
 			if (oldSaved)
 			{
-				res = PascalFields_Reverted [real];
-			}
-			else
+				if (PascalFields_Reverted.ContainsKey (real))
+					res = PascalFields_Reverted [real];
+			} else
 			{
 				switch (type)
 				{
 					case SyntaxType.Pascal :
-						res = PascalFields_Reverted [real];
+						if (PascalFields_Reverted.ContainsKey (real))
+							res = PascalFields_Reverted [real];
 						break;
 					case SyntaxType.CSharp :
-						res = CSharpFields_Reverted [real];
+						if (CSharpFields_Reverted.ContainsKey (real))
+							res = CSharpFields_Reverted [real];
 						break;
 					case SyntaxType.Haskell :
-						res = HaskellFields_Reverted [real];
+						if (HaskellFields_Reverted.ContainsKey (real))
+							res = HaskellFields_Reverted [real];
 						break;
 					case SyntaxType.KuMir :
-						res = KuMirFields_Reverted [real];
+						if (KuMirFields_Reverted.ContainsKey (real))
+							res = KuMirFields_Reverted [real];
 						break;
 					case SyntaxType.KuMir00 :
-						res = KuMir00Fields_Reverted [real];
+						if (KuMir00Fields_Reverted.ContainsKey (real))
+							res = KuMir00Fields_Reverted [real];
 						break;
 					case SyntaxType.Python :
-						res = PythonFields_Reverted [real];
+						if (PythonFields_Reverted.ContainsKey (real))
+							res = PythonFields_Reverted [real];
 						break;
 					case SyntaxType.VBNET :
-						res = VBNETFields_Reverted [real];
+						if (VBNETFields_Reverted.ContainsKey (real))
+							res = VBNETFields_Reverted [real];
 						break;
-
 				}
 			}
 

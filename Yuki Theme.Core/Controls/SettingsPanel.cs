@@ -182,16 +182,16 @@ namespace Yuki_Theme.Core.Controls
 			Color fr = Color.White;
 			if (isFromPascal)
 			{
-				add = Helper.isDark (bg) ? "" : "_dark";
+				add = Helper.IsDark (bg) ? "" : "_dark";
 				fr = fg;
 			}
 			else
 			{
-				add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+				add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
 				fr = Helper.fgColor;
 			}
 
-			Helper.renderSVG (button1, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
+			Helper.RenderSvg (button1, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)

@@ -6,8 +6,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
@@ -15,26 +13,26 @@ using Svg;
 
 namespace Yuki_Theme.Core
 {
-	public enum Alignment:int
+	public enum Alignment : int
 	{
 		Left   = 1000,
 		Center = 2,
 		Right  = 1
 	}
 
-	public enum ProductMode:int
+	public enum ProductMode : int
 	{
 		Program = 0,
 		Plugin  = 1,
-		CLI  = 2
+		CLI     = 2
 	}
 
 	public enum RelativeUnit : int
 	{
-		Pixel = 0,
+		Pixel   = 0,
 		Percent = 1
 	}
-	
+
 	public static class Helper
 	{
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;
@@ -43,25 +41,23 @@ namespace Yuki_Theme.Core
 		public static RelativeUnit unit;
 
 		private static Size Standart32 = new Size (32, 32);
-		
-		[DllImport("user32.dll", CharSet = CharSet.Auto)]
-		extern static bool DestroyIcon(IntPtr handle);
-		
-		public static Rectangle getSizes (Size ima, int mWidth, int mHeight, Alignment align)
+
+		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
 			Rectangle res = new Rectangle ();
 			double rY = (double) mHeight / ima.Height;
 			res.Width = (int) (ima.Width * rY);
 			res.Height = (int) (ima.Height * rY);
 			res.X = (mWidth - res.Width) / (int) align;
-			
+
 			// If image's drawing rectangle's width is smaller than mWidth.
-			
-			if (res.Width < mWidth && CLI.autoFitByWidth) 
-				res = getSizesHorizontal (ima, mWidth, mHeight);
-			
+
+			if (res.Width < mWidth && CLI.autoFitByWidth)
+				res = GetSizesHorizontal (ima, mWidth, mHeight);
+
 			return res;
 		}
+
 		/// <summary>
 		/// It's used to fill free space of width. 
 		/// For example, image rectangle is:   1066x600, Area rectangle is: 1400x600. In this case, size will be calculated by width.
@@ -70,32 +66,40 @@ namespace Yuki_Theme.Core
 		/// <param name="mWidth">Max Width</param>
 		/// <param name="mHeight">Max Height</param>
 		/// <returns>Calculated size according width</returns>
-		public static Rectangle getSizesHorizontal (Size ima, int mWidth, int mHeight)
+		private static Rectangle GetSizesHorizontal (Size ima, int mWidth, int mHeight)
 		{
 			Rectangle res = new Rectangle ();
 			double rY = (double) mWidth / ima.Width;
 			res.Width = (int) (ima.Width * rY);
 			res.Height = (int) (ima.Height * rY);
 			res.Y = (mHeight - res.Height) / 2;
-			
+
 			return res;
 		}
 
-		public static string CurrentTheme;
+		public static string currentTheme;
 
-		public static Action <string> GiveMessage;
+		public static Action <string> giveMessage;
 
-		public static Tuple <bool, Image> getImage (string path)
-		{
-			return getImage (path, "background.png");
-		}
+		private const string THEME_NAME_OLD = "theme.xshd";
+		private const string THEME_NAME_NEW = "theme.json";
+		private const string WALLPAPER_NAME = "background.png";
+		private const string STICKER_NAME   = "sticker.png";
+		public const string FILE_EXTENSTION_OLD   = ".yukitheme";
+		public const string FILE_EXTENSTION_NEW   = ".yuki";
 		
-		public static Tuple <bool, Image> getSticker (string path)
-		{
-			return getImage (path, "sticker.png");
-		}
 		
-		private static Tuple <bool, Image> getImage (string path, string filename)
+		public static Tuple <bool, Image> GetImage (string path)
+		{
+			return GetImage (path, WALLPAPER_NAME);
+		}
+
+		public static Tuple <bool, Image> GetSticker (string path)
+		{
+			return GetImage (path, STICKER_NAME);
+		}
+
+		private static Tuple <bool, Image> GetImage (string path, string filename)
 		{
 			try
 			{
@@ -117,63 +121,24 @@ namespace Yuki_Theme.Core
 					{
 						return new Tuple <bool, Image> (false, null);
 					}
-
 				}
 			} catch (InvalidDataException)
 			{
 				return new Tuple <bool, Image> (false, null);
 			}
 		}
-		
-		public static bool hasImage (string path)
-		{
-			return hasImage (path, "background.png");
-		}
-		
-		public static bool hasSticker (string path)
-		{
-			return hasImage (path, "sticker.png");
-		}
-		
-		private static bool hasImage (string path, string filename)
-		{
-			try
-			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
-				{
-					ZipArchiveEntry imag = zipFile.GetEntry (filename);
-					if (imag != null)
-					{
-						bool b = false;
-						using (imag.Open ())
-						{
-							b = true;
-						}
 
-						return b;
-					} else
-					{
-						return false;
-					}
-
-				}
-			} catch (InvalidDataException)
-			{
-				return false;
-			}
+		public static Tuple <bool, Image> GetStickerFromMemory (string path, Assembly a)
+		{
+			return GetImageFromMemory (path, STICKER_NAME, a);
 		}
 
-		public static Tuple <bool, Image> getStickerFromMemory (string path, Assembly a)
+		public static Tuple <bool, Image> GetImageFromMemory (string path, Assembly a)
 		{
-			return getImageFromMemory (path, "sticker.png", a);
+			return GetImageFromMemory (path, WALLPAPER_NAME, a);
 		}
 
-		public static Tuple <bool, Image> getImageFromMemory (string path, Assembly a)
-		{
-			return getImageFromMemory (path, "background.png", a);
-		}
-		
-		public static Tuple <bool, Image> getImageFromMemory (string path, string filename, Assembly a)
+		public static Tuple <bool, Image> GetImageFromMemory (string path, string filename, Assembly a)
 		{
 			try
 			{
@@ -195,7 +160,6 @@ namespace Yuki_Theme.Core
 					{
 						return new Tuple <bool, Image> (false, null);
 					}
-
 				}
 			} catch (InvalidDataException)
 			{
@@ -204,27 +168,45 @@ namespace Yuki_Theme.Core
 		}
 
 
-		public static Tuple <bool, string> getTheme (string path)
+		public static Tuple <bool, string> GetTheme (string path)
+		{
+			using (ZipArchive zipFile = ZipFile.OpenRead (path))
+			{
+				if (path.EndsWith (FILE_EXTENSTION_OLD))
+					return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+				else
+					return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+			}
+		}
+
+		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
+		{
+			using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+			{
+				if (path.EndsWith (FILE_EXTENSTION_OLD))
+					return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+				else
+					return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+			}
+		}
+
+		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
 		{
 			try
 			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				var theme = zipFile.GetEntry (themefile);
+				if (theme != null)
 				{
-					var theme = zipFile.GetEntry ("theme.xshd");
-					if (theme != null)
+					string content = "";
+					using (StreamReader reader = new StreamReader (theme.Open ()))
 					{
-						string content = "";
-						using (StreamReader reader = new StreamReader (theme.Open ()))
-						{
-							content = reader.ReadToEnd ();
-						}
-
-						return new Tuple <bool, string> (true, content);
-					} else
-					{
-						return new Tuple <bool, string> (false, "");
+						content = reader.ReadToEnd ();
 					}
 
+					return new Tuple <bool, string> (true, content);
+				} else
+				{
+					return new Tuple <bool, string> (false, "");
 				}
 			} catch (InvalidDataException)
 			{
@@ -232,77 +214,59 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static Tuple <bool, string> getThemeFromMemory (string path, Assembly a)
+		public static bool IsZip (string path)
 		{
-			try
+			using (ZipArchive zipFile = ZipFile.OpenRead (path))
 			{
-				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
-				{
-					var theme = zipFile.GetEntry ("theme.xshd");
-					if (theme != null)
-					{
-						string content = "";
-						using (StreamReader reader = new StreamReader (theme.Open ()))
-						{
-							content = reader.ReadToEnd ();
-						}
-
-						return new Tuple <bool, string> (true, content);
-					} else
-					{
-						return new Tuple <bool, string> (false, "");
-					}
-
-				}
-			} catch (InvalidDataException)
-			{
-				return new Tuple <bool, string> (false, "");
+				if (path.EndsWith (FILE_EXTENSTION_OLD))
+					return IsZip (zipFile, THEME_NAME_OLD);
+				else
+					return IsZip (zipFile, THEME_NAME_NEW);
 			}
 		}
-		
-		public static bool isZip (string path)
+
+		public static bool IsZip (Stream stream)
 		{
-			try
+			using (var zipFile = new ZipArchive (stream, ZipArchiveMode.Read))
 			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
-				{
-					var theme = zipFile.GetEntry ("theme.xshd");
-					return true;
-				}
-			} catch (InvalidDataException)
-			{
-				return false;
+				bool res = IsZip (zipFile, THEME_NAME_OLD);
+				if (!res)
+					res = IsZip (zipFile, THEME_NAME_NEW);
+				return res;
 			}
 		}
-		
-		public static bool isZip (Stream stream)
+
+		private static bool IsZip (ZipArchive zipFile, string themefile)
 		{
 			try
 			{
-				using (var zipFile = new ZipArchive(stream, ZipArchiveMode.Read))
-				{
-					var theme = zipFile.GetEntry ("theme.xshd");
-					return true;
-				}
+				var theme = zipFile.GetEntry (themefile);
+				return true;
 			} catch (InvalidDataException)
 			{
 				return false;
 			}
 		}
 
-		public static void updateZip (string path, string content, Image img, bool wantToKeep = false, Image sticker = null, bool wantToKeepSticker = false)
+		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
+		                              bool   wantToKeepSticker = false)
 		{
-			if (!wantToKeep && !wantToKeepSticker && img == null && sticker == null)
+			if (!wantToKeepImage && !wantToKeepSticker && img == null && sticker == null)
 			{
-				saveToFile (path, content);
+				SaveToFile (path, content);
 			} else
 			{
 				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
-					ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
+					string themeName = GetThemeSaveName ();
+					ZipArchiveEntry entry = archive.GetEntry (themeName);
 
 					entry?.Delete ();
-					entry = archive.CreateEntry ("theme.xshd", CompressionLevel.Optimal);
+					// To be sure that there's no old theme file
+					entry = archive.GetEntry (THEME_NAME_OLD);
+					entry?.Delete ();
+					
+					entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
 					using (StreamWriter writer = new StreamWriter (entry.Open ()))
@@ -310,93 +274,97 @@ namespace Yuki_Theme.Core
 						writer.Write (content);
 					}
 
-					if (!wantToKeep)
+					if (!wantToKeepImage)
 					{
-						entry = archive.GetEntry ("background.png");
+						entry = archive.GetEntry (WALLPAPER_NAME);
 
 						entry?.Delete ();
-						AddImageToZip (archive, img, "background.png");
+						AddImageToZip (archive, img, WALLPAPER_NAME);
 					}
 
 					if (!wantToKeepSticker)
 					{
-						entry = archive.GetEntry ("sticker.png");
+						entry = archive.GetEntry (STICKER_NAME);
 
 						entry?.Delete ();
-						AddImageToZip (archive, sticker, "sticker.png");
+						AddImageToZip (archive, sticker, STICKER_NAME);
 					}
 				}
 			}
 		}
 
-		private static void saveToFile (string path, string content)
+		private static void SaveToFile (string path, string content)
 		{
 			if (File.Exists (path)) File.Delete (path);
+			if (CLI.saveAsOld)
+				SaveToFileOld (path, content);
+			else
+				SaveToFileNew (path, content);
+		}
+
+		private static void SaveToFileOld (string path, string content)
+		{
 			XmlDocument doc = new XmlDocument ();
 			doc.LoadXml (content);
 			doc.Save (path);
 		}
 
-		public static void extractZip (string source, string destination, bool needImage = false, bool needSticker = false, bool needTheme = true)
+		private static void SaveToFileNew (string path, string content)
 		{
-			using (ZipArchive archive = ZipFile.OpenRead(source))
+			File.WriteAllText (path, content);
+		}
+
+		public static void ExtractZip (string source, string destination, bool needImage = false, bool needSticker = false,
+		                               bool   needTheme = true)
+		{
+			using (ZipArchive archive = ZipFile.OpenRead (source))
 			{
 				if (needTheme)
 				{
-					ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
+					ZipArchiveEntry entry = archive.GetEntry (THEME_NAME_OLD);
+					if (entry == null)
+						entry = archive.GetEntry (THEME_NAME_NEW);
 					entry.ExtractToFile (destination, true);
 				}
-				if(needImage)
-					extractFile (archive, "background.png", destination);
-				if(needSticker)
-					extractFile (archive, "sticker.png", destination);
-			} 
+
+				if (needImage)
+					ExtractFile (archive, WALLPAPER_NAME, destination);
+				if (needSticker)
+					ExtractFile (archive, STICKER_NAME, destination);
+			}
 		}
 
-		private static void extractFile (ZipArchive archive, string filename, string destination)
+		private static void ExtractFile (ZipArchive archive, string filename, string destination)
 		{
 			try
 			{
 				ZipArchiveEntry entry = archive.GetEntry (filename);
 				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), filename), true);
-			}
-			catch (Exception ex)            
-			{                
+			} catch (Exception ex)
+			{
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
-					if (GiveMessage != null)
-						GiveMessage ($"There's no { filename }");
+					if (giveMessage != null)
+						giveMessage ($"There's no {filename}");
 				} else
 				{
 					throw;
 				}
 			}
 		}
-		
-		public static void extractZip (Stream stream, string destination)
-		{
-			using (var archive = new ZipArchive(stream, ZipArchiveMode.Read))
-			{
-				ZipArchiveEntry entry = archive.GetEntry ("theme.xshd");
-				entry.ExtractToFile (destination, true);
-				entry = archive.GetEntry ("background.png");
-				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), "background.png"), true);
-			} 
-		}
 
-		public static void zip (string path, string content, Image img, Image sticker = null)
+		public static void Zip (string path, string content, Image img, Image sticker = null)
 		{
 			if (img == null && sticker == null)
 			{
-				saveToFile (path, content);
+				SaveToFile (path, content);
 			} else
 			{
 				using (var fileStream = new FileStream (path, FileMode.Create))
 				{
 					using (var archive = new ZipArchive (fileStream, ZipArchiveMode.Create))
 					{
-
-						ZipArchiveEntry entry = archive.CreateEntry ("theme.xshd", CompressionLevel.Optimal);
+						ZipArchiveEntry entry = archive.CreateEntry (GetThemeSaveName (), CompressionLevel.Optimal);
 
 
 						using (StreamWriter writer = new StreamWriter (entry.Open ()))
@@ -404,8 +372,8 @@ namespace Yuki_Theme.Core
 							writer.Write (content);
 						}
 
-						AddImageToZip (archive, img, "background.png");
-						AddImageToZip (archive, sticker, "sticker.png");
+						AddImageToZip (archive, img, WALLPAPER_NAME);
+						AddImageToZip (archive, sticker, STICKER_NAME);
 					}
 				}
 			}
@@ -413,7 +381,7 @@ namespace Yuki_Theme.Core
 
 		private static void AddImageToZip (ZipArchive archive, Image img, string filename)
 		{
-			if(img != null)
+			if (img != null)
 			{
 				var file = archive.CreateEntry (filename, CompressionLevel.Optimal);
 				using (var stream = new MemoryStream ())
@@ -428,12 +396,12 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
-		
-		public static Color ChangeColorBrightness(Color color, float correctionFactor)
+
+		public static Color ChangeColorBrightness (Color color, float correctionFactor)
 		{
-			float red = (float)color.R;
-			float green = (float)color.G;
-			float blue = (float)color.B;
+			float red = (float) color.R;
+			float green = (float) color.G;
+			float blue = (float) color.B;
 
 			if (correctionFactor < 0)
 			{
@@ -441,19 +409,27 @@ namespace Yuki_Theme.Core
 				red *= correctionFactor;
 				green *= correctionFactor;
 				blue *= correctionFactor;
-			}
-			else
+			} else
 			{
 				red = (255 - red) * correctionFactor + red;
 				green = (255 - green) * correctionFactor + green;
 				blue = (255 - blue) * correctionFactor + blue;
 			}
 
-			return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
+			return Color.FromArgb (color.A, (int) red, (int) green, (int) blue);
 		}
 
+		public static string GetThemeSaveName ()
+		{
+			return "theme." + GetSaveFormat ();
+		}
 
-		public static bool isDark (Color clr)
+		public static string GetSaveFormat ()
+		{
+			return CLI.saveAsOld ? "xshd" : "json";
+		}
+
+		public static bool IsDark (Color clr)
 		{
 			bool dark = ((clr.R + clr.G + clr.B) / 3 < 127);
 			return dark;
@@ -461,13 +437,13 @@ namespace Yuki_Theme.Core
 
 		public static Color DarkerOrLighter (Color clr, float percent = 0)
 		{
-			if (isDark (clr))
+			if (IsDark (clr))
 				return Helper.ChangeColorBrightness (clr, percent);
 			else
 				return Helper.ChangeColorBrightness (clr, -percent);
 		}
-		
-		public static SvgDocument loadsvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
+
+		public static SvgDocument LoadSvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
 		{
 			var doc = new XmlDocument ();
 			doc.Load (a.GetManifestResourceStream ($"{customName}.{name}.svg"));
@@ -475,51 +451,55 @@ namespace Yuki_Theme.Core
 			return svg;
 		}
 
-		public static void renderSVG (Control im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		public static void RenderSvg (Control im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false,
+		                              Color   clr = default)
 		{
 			im.BackgroundImage?.Dispose ();
 
-			im.BackgroundImage = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+			im.BackgroundImage = RenderSvg (im.Size, svg, custom, cSize, customColor, clr);
 		}
 
-		public static void renderSVG (ToolStripButton im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		public static void RenderSvg (ToolStripButton im,                  SvgDocument svg, bool custom = false, Size cSize = default,
+		                              bool            customColor = false, Color       clr = default)
 		{
 			im.Image?.Dispose ();
 
-			im.Image = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+			im.Image = RenderSvg (im.Size, svg, custom, cSize, customColor, clr);
 		}
 
-		public static void renderSVG (Form im, SvgDocument svg, bool custom = false, Size cSize = default,
-		                              bool customColor = false, Color clr = default)
+		public static void RenderSvg (Form im,                  SvgDocument svg, bool custom = false, Size cSize = default,
+		                              bool customColor = false, Color       clr = default)
 		{
 			// im.Icon?.Dispose ();
-			IntPtr ptr = ((Bitmap) renderSVG (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
+			IntPtr ptr = ((Bitmap) RenderSvg (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
 
 			im.Icon = Icon.FromHandle (ptr);
 			// DestroyIcon (ptr);
 		}
 
-		public static void renderSVG (ToolStripMenuItem im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+		public static void RenderSvg (ToolStripMenuItem im,                  SvgDocument svg, bool custom = false, Size cSize = default,
+		                              bool              customColor = false, Color       clr = default)
 		{
 			im.Image?.Dispose ();
 
-			im.Image = renderSVG (im.Size, svg, custom, cSize, customColor, clr);
+			im.Image = RenderSvg (im.Size, svg, custom, cSize, customColor, clr);
 		}
-		
-		public static Image renderSVG (Size im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false, Color clr = default)
+
+		public static Image RenderSvg (Size  im, SvgDocument svg, bool custom = false, Size cSize = default, bool customColor = false,
+		                               Color clr = default)
 		{
 			if (customColor)
 				svg.Color = new SvgColourServer (clr);
 			else
 				svg.Color = new SvgColourServer (fgColor);
-			
-			if(!custom)
+
+			if (!custom)
 				return svg.Draw (im.Width, im.Height);
 			else
 				return svg.Draw (cSize.Width, cSize.Height);
 		}
 
-		public static Image setOpacity (Image image, float opacity)
+		public static Image SetOpacity (Image image, float opacity)
 		{
 			Bitmap bmp = new Bitmap (image.Width, image.Height);
 			opacity = opacity == 0 ? opacity : opacity / 100f;
@@ -550,8 +530,8 @@ namespace Yuki_Theme.Core
 					if (CLI.schemes.Contains (sp))
 					{
 						// Console.WriteLine(nod.Attributes ["name"].Value);
-						CurrentTheme = sp;
-						CLI.selectedItem = CurrentTheme;
+						currentTheme = sp;
+						CLI.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -559,9 +539,9 @@ namespace Yuki_Theme.Core
 			}
 
 			if (!sett)
-				CurrentTheme = "unknown";
+				currentTheme = "unknown";
 		}
-		
+
 		public static string ConvertNameToPath (string name)
 		{
 			return name.Replace (": ", "__").Replace (":", "");
@@ -574,7 +554,8 @@ namespace Yuki_Theme.Core
 		}
 	}
 
-	public static class GoogleAnalyticsHelper {
+	public static class GoogleAnalyticsHelper
+	{
 		private static readonly string endpoint         = "https://www.google-analytics.com/collect";
 		private static readonly string googleVersion    = "1";
 		private static readonly string googleTrackingId = "UA-213918512-2";
@@ -586,23 +567,21 @@ namespace Yuki_Theme.Core
 		/// After passing some months or years, I'll be back. In that moment I'll be glad to know that many people use the app. 
 		/// </summary>
 		/// <returns></returns>
-		public static async Task<HttpResponseMessage> TrackEvent()
+		public static async Task <HttpResponseMessage> TrackEvent ()
 		{
-			using (var httpClient = new HttpClient())
+			using (var httpClient = new HttpClient ())
 			{
-				var postData = new List<KeyValuePair<string, string>>()
+				var postData = new List <KeyValuePair <string, string>> ()
 				{
-					new KeyValuePair<string, string>("v", googleVersion),
-					new KeyValuePair<string, string>("tid", googleTrackingId),
-					new KeyValuePair<string, string>("cid", googleClientId),
-					new KeyValuePair<string, string>("t", "pageview"),
-					new KeyValuePair<string, string>("dp", "%2Fusages.html"),
+					new KeyValuePair <string, string> ("v", googleVersion),
+					new KeyValuePair <string, string> ("tid", googleTrackingId),
+					new KeyValuePair <string, string> ("cid", googleClientId),
+					new KeyValuePair <string, string> ("t", "pageview"),
+					new KeyValuePair <string, string> ("dp", "%2Fusages.html"),
 				};
-				
-				return await httpClient.PostAsync(endpoint, new FormUrlEncodedContent(postData)).ConfigureAwait(false);
+
+				return await httpClient.PostAsync (endpoint, new FormUrlEncodedContent (postData)).ConfigureAwait (false);
 			}
 		}
-	
 	}
-	
 }
