@@ -367,6 +367,8 @@ namespace Yuki_Theme.Core
 			{
 				if (PascalFields_Reverted.ContainsKey (real))
 					res = PascalFields_Reverted [real];
+				else
+					res = real;
 			} else
 			{
 				switch (type)
@@ -420,7 +422,7 @@ namespace Yuki_Theme.Core
 			{"Selected Fold's Line", new [] {"SelectedFoldLine"}}
 		};
 
-		private static Dictionary <string, string []> PascalFields = new Dictionary <string, string []>
+		public static Dictionary <string, string []> PascalFields_raw = new Dictionary <string, string []>
 		{
 			{"Number", new [] {"Digits"}},
 			{"Comment", new [] {"LineBigComment", "LineComment", "BlockComment", "BlockComment2"}},
@@ -439,7 +441,9 @@ namespace Yuki_Theme.Core
 			{"Modifiers", new [] {"Modifiers", "AccessModifiers"}},
 			{"Constants", new [] {"InternalConstant"}},
 			{"DireciveNames", new [] {"ErrorWords", "WarningWords", "DireciveNames", "SpecialDireciveNames", "DireciveValues"}},
-		}.Merge (EnvironmentFields);
+		};
+
+		public static Dictionary <string, string []> PascalFields = MergeD (PascalFields_raw, EnvironmentFields);
 
 		private static Dictionary <string, string []> CSharpFields = new Dictionary <string, string []>
 		{
@@ -778,6 +782,21 @@ namespace Yuki_Theme.Core
 			{"PreProcessor", "DireciveNames"},
 		}.Merge (EnvironmentFields_Reverted);
 
+		public static Dictionary <TKey, TValue> MergeD <TKey, TValue> (Dictionary <TKey, TValue> me, Dictionary <TKey, TValue> merge)
+		{
+			Dictionary <TKey, TValue> newDict = new Dictionary <TKey, TValue> ();
+			foreach (var item in me)
+			{
+				newDict [item.Key] = item.Value;
+			}
+			foreach (var item in merge)
+			{
+				newDict [item.Key] = item.Value;
+			}
+
+			return newDict;
+		}
+		
 		public static Dictionary <TKey, TValue> Merge <TKey, TValue> (this Dictionary <TKey, TValue> me, Dictionary <TKey, TValue> merge)
 		{
 			foreach (var item in merge)

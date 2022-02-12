@@ -156,7 +156,7 @@ namespace Yuki_Theme.Core.Forms
 			set => CLI.sopacity = value;
 		}
 
-		private int settingMode
+		private SettingMode settingMode
 		{
 			get => CLI.settingMode;
 			set => CLI.settingMode = value;
@@ -465,7 +465,7 @@ namespace Yuki_Theme.Core.Forms
 				dic ["bold"] = check_bold.Checked.ToString ().ToLower ();
 			if (dic.ContainsKey ("italic"))
 				dic ["italic"] = check_italic.Checked.ToString ().ToLower ();
-			if (settingMode == 0)
+			if (settingMode == SettingMode.Light)
 			{
 				var sttr = Populater.getDependencies (str);
 				if (sttr != null)
@@ -605,19 +605,22 @@ namespace Yuki_Theme.Core.Forms
 
 		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
 		{
-			currentoFile = schemes.SelectedItem.ToString ();
-			Console.WriteLine (currentoFile);
-			currentFile = Helper.ConvertNameToPath (currentoFile);
-			save_button.Visible = !isDefault ();
-			if (CLI.isEdited) // Ask to save the changes
+			bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
+			
+			if (cnd)
 			{
-				if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
-					save_Click (sender, e); // save before restoring
-			}
-			restore_Click (sender, e);
+				save_button.Visible = !isDefault ();
+				if (CLI.isEdited) // Ask to save the changes
+				{
+					if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
+						save_Click (sender, e); // save before restoring
+				}
 
-			selectedItem = schemes.SelectedItem.ToString ();
-			database.UpdateData (SettingsForm.ACTIVE, selectedItem);
+				restore_Click (sender, e);
+
+				selectedItem = schemes.SelectedItem.ToString ();
+				database.UpdateData (SettingsForm.ACTIVE, selectedItem);
+			}
 		}
 
 		public string ifZero ()
@@ -695,7 +698,7 @@ namespace Yuki_Theme.Core.Forms
 				askChoice = setform.settingsPanel.askC.Checked;
 				update = setform.settingsPanel.checkBox2.Checked;
 				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
-				settingMode = setform.settingsPanel.mode.SelectedIndex;
+				settingMode = (SettingMode) setform.settingsPanel.mode.SelectedIndex;
 				CLI.positioning = setform.settingsPanel.checkBox3.Checked;
 				CLI.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
 				CLI.showGrids = setform.settingsPanel.checkBox4.Checked;

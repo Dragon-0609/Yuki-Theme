@@ -255,7 +255,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="ShadowNames.cs" />
         <Compile Include="ThemeField.cs" />
-        <Compile Include="ThemeFormat.cs" />
+        <Compile Include="Theme.cs" />
         <Compile Include="Themes\DefaultThemes.cs" />
         <EmbeddedResource Include="Controls\ColorEditor\ColorPicker\Controls\ColorSliderVertical.resx" />
         <EmbeddedResource Include="Controls\RJComboBox.resx">

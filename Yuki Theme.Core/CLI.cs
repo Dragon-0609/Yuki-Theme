@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Database;
@@ -16,10 +17,11 @@ namespace Yuki_Theme.Core
 {
 	public static class CLI
 	{
-		public static string getPath    => Path.Combine (currentPath, "Themes", $"{currentFile}.yukitheme");
-		public static string getPathNew => Path.Combine (currentPath, "Themes", $"{currentFile}.{Helper.GetSaveFormat ()}");
-		public static string gp         => $"Yuki_Theme.Core.Themes.{currentFile}.yukitheme";
-		public static string gpNew         => $"Yuki_Theme.Core.Themes.{currentFile}.{Helper.GetSaveFormat ()}";
+		public static string getPath    => Path.Combine (currentPath, "Themes", $"{currentFile}{Helper.FILE_EXTENSTION_OLD}");
+		public static string getPathNew => Path.Combine (currentPath, "Themes", $"{currentFile}{Helper.FILE_EXTENSTION_NEW}");
+		public static string getPathDynamic => Path.Combine (currentPath, "Themes", $"{currentFile}{currentFileExtension}");
+		public static string gp         => $"Yuki_Theme.Core.Themes.{currentFile}{Helper.FILE_EXTENSTION_OLD}";
+		public static string gpNew      => $"Yuki_Theme.Core.Themes.{currentFile}{Helper.FILE_EXTENSTION_NEW}";
 
 		#region Public Fields
 
@@ -39,15 +41,15 @@ namespace Yuki_Theme.Core
 		public static bool         Beta;
 		public static bool         Logged;
 		public static bool         positioning;
-		public static int          settingMode;
-		public static string       currentFile  = "N|L";
-		public static string       currentoFile = "N|L";
+		public static SettingMode  settingMode;
+		public static string       currentFile          = "N|L";
+		public static string       currentoFile         = "N|L";
 		public static string       currentFileExtension = "N|L";
-		public static string       selectedItem = "empty";
-		public static string       imagePath    = "";
-		public static string       currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
-		public static Alignment    align        = Alignment.Left;
-		public static RelativeUnit unit         = RelativeUnit.Pixel;
+		public static string       selectedItem         = "empty";
+		public static string       imagePath            = "";
+		public static string       currentPath          = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+		public static Alignment    align                = Alignment.Left;
+		public static RelativeUnit unit                 = RelativeUnit.Pixel;
 		public static bool         showGrids;
 		public static bool         useCustomSticker;
 		public static string       customSticker = "";
@@ -100,26 +102,10 @@ namespace Yuki_Theme.Core
 			schemes.AddRange (DefaultThemes.def);
 			Helper.CreateThemeDirectory ();
 			if (Directory.Exists (Path.Combine (currentPath, "Themes")))
-				foreach (var file in Directory.GetFiles (Path.Combine (currentPath, "Themes/"), "*.yukitheme"))
-				{
-					var pts = Path.GetFileNameWithoutExtension (file);
-					if (!DefaultThemes.isDefault (pts))
-					{
-						if (pts.Contains ("__"))
-						{
-							string stee = Path.Combine (currentPath, "Themes", $"{pts}.yukitheme");
-							string sp = GetNameOfTheme (stee);
-							if (!DefaultThemes.isDefault (sp))
-							{
-								// Console.WriteLine(nod.Attributes ["name"].Value);
-								schemes.Add (sp);
-							}
-						} else
-						{
-							schemes.Add (pts);
-						}
-					}
-				}
+			{
+				LoadSchemesByExtension (Helper.FILE_EXTENSTION_OLD);
+				LoadSchemesByExtension (Helper.FILE_EXTENSTION_NEW);
+			}
 
 			if (schemes.Count == 0)
 			{
@@ -129,7 +115,7 @@ namespace Yuki_Theme.Core
 					if (sm != null)
 					{
 						currentFile = Path.GetFileNameWithoutExtension (sm);
-						currentFileExtension = Path.GetExtension (sm);
+						currentFileExtension = "." + Path.GetExtension (sm);
 						currentoFile = currentFile;
 						File.Copy (sm, getPath);
 						schemes.Add (currentFile);
@@ -149,7 +135,7 @@ namespace Yuki_Theme.Core
 			string syt = Helper.ConvertNameToPath (copyFrom);
 			string sto = Helper.ConvertNameToPath (name);
 			string patsh = Path.Combine (currentPath,
-			                             $"Themes/{sto}.yukitheme");
+			                             $"Themes/{sto}" + (saveAsOld ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW));
 			Helper.CreateThemeDirectory ();
 
 			bool exist = false;
@@ -169,13 +155,34 @@ namespace Yuki_Theme.Core
 
 			if (!DefaultThemes.isDefault (name))
 			{
+				string pth = "";
 				if (DefaultThemes.isDefault (copyFrom))
-					CopyFromMemory (syt, patsh);
-				else
-					File.Copy (Path.Combine (currentPath, $"Themes/{syt}.yukitheme"), patsh);
+				{
+					pth = GetThemeFormatFromMemory (syt);
+					if (pth == null)
+					{
+						if (showError != null)
+							showError ("Couldn't find theme in memory! Try to choose another theme",
+							           "Can't find theme in memory");
 
+						return true;
+					}
+					
+					if (saveAsOld || IsOldTheme (pth))
+						CopyFromMemory (syt, patsh);
+				} else
+				{
+					pth = Path.Combine (currentPath, $"Themes/{syt}{Helper.FILE_EXTENSTION_OLD}");
+					if (!File.Exists (pth))
+						pth = Path.Combine (currentPath, $"Themes/{syt}{Helper.FILE_EXTENSTION_NEW}");
+					// Here I check if it's new theme. If it's new theme and we want to save as old, then don't copy the file. Because it'll be overrided later
+					if (saveAsOld || IsOldTheme (pth))  
+						File.Copy (pth, patsh);
+				}
 
-				WriteName (patsh, name);
+				bool done = ReGenerateTheme (patsh, pth, name, copyFrom);
+				if (!done)
+					WriteName (patsh, name);
 				if (Helper.mode == ProductMode.CLI)
 					if (showSuccess != null)
 						showSuccess ("The theme has been duplicated!", "Done");
@@ -445,6 +452,7 @@ namespace Yuki_Theme.Core
 			{
 				populateListNew ();
 			}
+
 			if (onSelect != null)
 				onSelect ();
 		}
@@ -455,33 +463,13 @@ namespace Yuki_Theme.Core
 		private static void populateListOld ()
 		{
 			var doc = new XmlDocument ();
-			loadThemeToPopulateOld (ref doc);
+			loadThemeToPopulateOld (ref doc, gp, getPath, false);
 
-			if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1)
-				PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
-			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0]);
-			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0]);
-			CleanUnnecessaryFields ();
-
-			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
-			XmlNodeList comms = nod.SelectNodes ("//comment()");
-			string al = ((int) Alignment.Center).ToString ();
-			string op = "15";
-			string sop = "100";
-
-			foreach (XmlComment comm in comms)
-			{
-				if (comm.Value.StartsWith ("align"))
-				{
-					al = comm.Value.Substring (6);
-				} else if (comm.Value.StartsWith ("opacity"))
-				{
-					op = comm.Value.Substring (8);
-				} else if (comm.Value.StartsWith ("sopacity"))
-				{
-					sop = comm.Value.Substring (9);
-				}
-			}
+			PopulateDictionaryFromDocOld (doc, ref localAttributes, ref names);
+			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+			string al = additionalInfo ["align"];
+			string op = additionalInfo ["opacity"];
+			string sop = additionalInfo ["stickerOpacity"];
 
 			localAttributes.Add ("Wallpaper",
 			                     new Dictionary <string, string> () {{"align", al}, {"opacity", op}});
@@ -504,327 +492,386 @@ namespace Yuki_Theme.Core
 
 		private static void populateListNew ()
 		{
-			string json = loadThemeToPopulateNew ();
+			string json = loadThemeToPopulateNew (gpNew, getPathNew, true);
 
-			ThemeFormat theme = JsonConvert.DeserializeObject <ThemeFormat> (json);
-
-			foreach (KeyValuePair <string, ThemeField> field in theme.Fields)
-			{
-				Dictionary <string, string> attrs = field.Value.ConvertToDictionary ();
-				if (!names.Contains (field.Key))
-				{
-					if (settingMode == 1)
-					{
-						names.Add (field.Key);
-						localAttributes.Add (field.Key, attrs);
-					} else if (!localAttributes.ContainsKey (field.Key))
-					{
-						localAttributes.Add (field.Key, attrs);
-						if (!Populater.isInList (field.Key, names)) names.Add (field.Key);
-					}
-
-					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("Wallpaper"))
-					{
-						names.Remove ("Selection");
-						names.Add ("Wallpaper");
-						names.Add ("Selection");
-					}
-
-					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("Sticker"))
-					{
-						names.Remove ("Selection");
-						names.Add ("Sticker");
-						names.Add ("Selection");
-					}
-				}
-			}
-
-			localAttributes.Add ("Wallpaper",
-			                     new Dictionary <string, string> () {{"align", theme.WallpaperAlign.ToString()}, {"opacity", theme.WallpaperOpacity.ToString()}});
-
-			localAttributes.Add ("Sticker",
-			                     new Dictionary <string, string> () {{"opacity", theme.StickerOpacity.ToString()}});
-
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			PopulateDictionaryFromThemeNew (theme, ref localAttributes, ref names);
+			
 			align = (Alignment) theme.WallpaperAlign;
 			opacity = theme.WallpaperOpacity;
 			sopacity = theme.StickerOpacity;
 		}
 
-		private static void loadThemeToPopulateOld (ref XmlDocument doc)
+		private static void PopulateDictionaryFromThemeNew (Theme theme, ref Dictionary <string, Dictionary <string, string>> attributes, ref List<string> namesExtended)
 		{
+			foreach (KeyValuePair <string, ThemeField> field in theme.Fields)
+			{
+				if (!namesExtended.Contains (field.Key))
+				{
+					Dictionary <string, string> attrs = field.Value.ConvertToDictionary ();
+					namesExtended.Add (field.Key);
+					attributes.Add (field.Key, attrs);
+
+					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
+					    !namesExtended.Contains ("Wallpaper"))
+					{
+						namesExtended.Remove ("Selection");
+						namesExtended.Add ("Wallpaper");
+						namesExtended.Add ("Selection");
+					}
+
+					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
+					    !namesExtended.Contains ("Sticker"))
+					{
+						namesExtended.Remove ("Selection");
+						namesExtended.Add ("Sticker");
+						namesExtended.Add ("Selection");
+					}
+				}
+			}
+			attributes.Add ("Wallpaper",
+			                new Dictionary <string, string> ()
+				                {{"align", theme.WallpaperAlign.ToString ()}, {"opacity", theme.WallpaperOpacity.ToString ()}});
+
+			attributes.Add ("Sticker",
+			                new Dictionary <string, string> () {{"opacity", theme.StickerOpacity.ToString ()}});
+		}
+		
+		private static Tuple <bool, bool> loadThemeToPopulateOld (ref XmlDocument doc, string pathForMemory, string pathForFile,
+		                                                          bool            needToReturn)
+		{
+			bool hasImage = false;
+			bool hasSticker = false;
 			if (isDefault ())
 			{
 				var a = GetCore ();
 
 
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (gp, a);
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (gp, a);
-					if (iag.Item1)
+					Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathForMemory, a);
+					if (!needToReturn)
 					{
-						// img = iag.Item2;
-						if (ifHasImage != null)
+						if (iag.Item1)
 						{
-							ifHasImage ((Image) iag.Item2);
-						}
+							// img = iag.Item2;
+							if (ifHasImage != null)
+							{
+								ifHasImage ((Image) iag.Item2);
+							}
 
-						if (ifHasImage2 != null)
+							if (ifHasImage2 != null)
+							{
+								ifHasImage2 ((Image) iag.Item2);
+							}
+						} else
 						{
-							ifHasImage2 ((Image) iag.Item2);
+							if (ifDoesntHave != null)
+								ifDoesntHave ();
+							if (ifDoesntHave2 != null)
+								ifDoesntHave2 ();
 						}
 					} else
 					{
-						if (ifDoesntHave != null)
-							ifDoesntHave ();
-						if (ifDoesntHave2 != null)
-							ifDoesntHave2 ();
+						hasImage = iag.Item1;
 					}
 
 					iag = null;
-					iag = Helper.GetStickerFromMemory (gp, a);
-					if (iag.Item1)
+					iag = Helper.GetStickerFromMemory (pathForMemory, a);
+					if (!needToReturn)
 					{
-						// img = iag.Item2;
-						if (ifHasSticker != null)
+						if (iag.Item1)
 						{
-							ifHasSticker ((Image) iag.Item2);
-						}
+							// img = iag.Item2;
+							if (ifHasSticker != null)
+							{
+								ifHasSticker ((Image) iag.Item2);
+							}
 
-						if (ifHasSticker2 != null)
+							if (ifHasSticker2 != null)
+							{
+								ifHasSticker2 ((Image) iag.Item2);
+							}
+						} else
 						{
-							ifHasSticker2 ((Image) iag.Item2);
+							if (ifDoesntHaveSticker != null)
+								ifDoesntHaveSticker ();
+							if (ifDoesntHaveSticker2 != null)
+								ifDoesntHaveSticker2 ();
 						}
 					} else
 					{
-						if (ifDoesntHaveSticker != null)
-							ifDoesntHaveSticker ();
-						if (ifDoesntHaveSticker2 != null)
-							ifDoesntHaveSticker2 ();
+						hasSticker = iag.Item1;
 					}
 				} else
 				{
-					if (ifDoesntHave != null)
-						ifDoesntHave ();
+					if (!needToReturn)
+					{
+						if (ifDoesntHave != null)
+							ifDoesntHave ();
 
-					if (ifDoesntHaveSticker != null)
-						ifDoesntHaveSticker ();
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
 
-					if (ifDoesntHave2 != null)
-						ifDoesntHave2 ();
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
 
-					if (ifDoesntHaveSticker2 != null)
-						ifDoesntHaveSticker2 ();
-					doc.Load (a.GetManifestResourceStream (gp));
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
+					}
+
+					doc.Load (a.GetManifestResourceStream (pathForMemory));
 				}
 			} else
 			{
 				imagePath = "";
-				Tuple <bool, string> content = Helper.GetTheme (getPath);
+				Tuple <bool, string> content = Helper.GetTheme (pathForFile);
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
-					Tuple <bool, Image> iag = Helper.GetImage (getPath);
-					if (iag.Item1)
+					Tuple <bool, Image> iag = Helper.GetImage (pathForFile);
+					if (!needToReturn)
 					{
-						// img = iag.Item2;
-						if (ifHasImage != null)
+						if (iag.Item1)
 						{
-							ifHasImage ((Image) iag.Item2);
-						}
+							// img = iag.Item2;
+							if (ifHasImage != null)
+							{
+								ifHasImage ((Image) iag.Item2);
+							}
 
-						if (ifHasImage2 != null)
+							if (ifHasImage2 != null)
+							{
+								ifHasImage2 ((Image) iag.Item2);
+							}
+						} else
 						{
-							ifHasImage2 ((Image) iag.Item2);
+							if (ifDoesntHave != null)
+								ifDoesntHave ();
+
+							if (ifDoesntHave2 != null)
+								ifDoesntHave2 ();
 						}
 					} else
 					{
-						if (ifDoesntHave != null)
-							ifDoesntHave ();
-
-						if (ifDoesntHave2 != null)
-							ifDoesntHave2 ();
+						hasImage = iag.Item1;
 					}
 
-					iag = Helper.GetSticker (getPath);
-					if (iag.Item1)
+					iag = Helper.GetSticker (pathForFile);
+					if (!needToReturn)
 					{
-						// img = iag.Item2;
-						if (ifHasSticker != null)
+						if (iag.Item1)
 						{
-							ifHasSticker ((Image) iag.Item2);
+							// img = iag.Item2;
+							if (ifHasSticker != null)
+							{
+								ifHasSticker ((Image) iag.Item2);
+							}
+						} else
+						{
+							if (ifDoesntHaveSticker != null)
+								ifDoesntHaveSticker ();
+
+							if (ifDoesntHaveSticker2 != null)
+								ifDoesntHaveSticker2 ();
 						}
 					} else
 					{
-						if (ifDoesntHaveSticker != null)
-							ifDoesntHaveSticker ();
-
-						if (ifDoesntHaveSticker2 != null)
-							ifDoesntHaveSticker2 ();
+						hasSticker = iag.Item1;
 					}
 				} else
 				{
-					if (ifDoesntHave != null)
-						ifDoesntHave ();
-					if (ifDoesntHaveSticker != null)
-						ifDoesntHaveSticker ();
+					if (!needToReturn)
+					{
+						if (ifDoesntHave != null)
+							ifDoesntHave ();
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
 
-					if (ifDoesntHave2 != null)
-						ifDoesntHave2 ();
-					if (ifDoesntHaveSticker2 != null)
-						ifDoesntHaveSticker2 ();
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
+					}
+
 					try
 					{
-						doc.Load (getPath);
+						doc.Load (pathForFile);
 					} catch (System.Xml.XmlException)
 					{
 						if (hasProblem != null)
 							hasProblem (
 								"There's problem in your theme file. Sorry, but I can't open it. The default scheme will be selected");
 
-						return;
+						return null;
 					}
 				}
-				// doc.LoadXml ();
 			}
+
+			return new Tuple <bool, bool> (hasImage, hasSticker);
 		}
 
-		private static string loadThemeToPopulateNew ()
+		private static string loadThemeToPopulateNew (string pathToMemory, string pathToFile, bool needToGetImages)
 		{
 			string json = "";
 			if (isDefault ())
 			{
 				var a = GetCore ();
-
-
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (gpNew, a);
+				
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, a);
 				if (content.Item1)
 				{
 					json = content.Item2;
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (gpNew, a);
-					if (iag.Item1)
+					if (needToGetImages)
 					{
-						// img = iag.Item2;
-						if (ifHasImage != null)
+						Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, a);
+
+						if (iag.Item1)
 						{
-							ifHasImage ((Image) iag.Item2);
+							// img = iag.Item2;
+							if (ifHasImage != null)
+							{
+								ifHasImage ((Image) iag.Item2);
+							}
+
+							if (ifHasImage2 != null)
+							{
+								ifHasImage2 ((Image) iag.Item2);
+							}
+						} else
+						{
+							if (ifDoesntHave != null)
+								ifDoesntHave ();
+							if (ifDoesntHave2 != null)
+								ifDoesntHave2 ();
 						}
 
-						if (ifHasImage2 != null)
+						iag = null;
+						iag = Helper.GetStickerFromMemory (pathToMemory, a);
+						if (iag.Item1)
 						{
-							ifHasImage2 ((Image) iag.Item2);
-						}
-					} else
-					{
-						if (ifDoesntHave != null)
-							ifDoesntHave ();
-						if (ifDoesntHave2 != null)
-							ifDoesntHave2 ();
-					}
+							// img = iag.Item2;
+							if (ifHasSticker != null)
+							{
+								ifHasSticker ((Image) iag.Item2);
+							}
 
-					iag = null;
-					iag = Helper.GetStickerFromMemory (gpNew, a);
-					if (iag.Item1)
-					{
-						// img = iag.Item2;
-						if (ifHasSticker != null)
+							if (ifHasSticker2 != null)
+							{
+								ifHasSticker2 ((Image) iag.Item2);
+							}
+						} else
 						{
-							ifHasSticker ((Image) iag.Item2);
+							if (ifDoesntHaveSticker != null)
+								ifDoesntHaveSticker ();
+							if (ifDoesntHaveSticker2 != null)
+								ifDoesntHaveSticker2 ();
 						}
-
-						if (ifHasSticker2 != null)
-						{
-							ifHasSticker2 ((Image) iag.Item2);
-						}
-					} else
-					{
-						if (ifDoesntHaveSticker != null)
-							ifDoesntHaveSticker ();
-						if (ifDoesntHaveSticker2 != null)
-							ifDoesntHaveSticker2 ();
 					}
 				} else
 				{
-					if (ifDoesntHave != null)
-						ifDoesntHave ();
+					if (needToGetImages)
+					{
+						if (ifDoesntHave != null)
+							ifDoesntHave ();
 
-					if (ifDoesntHaveSticker != null)
-						ifDoesntHaveSticker ();
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
 
-					if (ifDoesntHave2 != null)
-						ifDoesntHave2 ();
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
 
-					if (ifDoesntHaveSticker2 != null)
-						ifDoesntHaveSticker2 ();
-					StreamReader reader = new StreamReader(a.GetManifestResourceStream (gpNew));
-					json = reader.ReadToEnd();
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
+					}
+					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
+					json = reader.ReadToEnd ();
 				}
 			} else
 			{
 				imagePath = "";
-				Tuple <bool, string> content = Helper.GetTheme (getPathNew);
+				Tuple <bool, string> content = Helper.GetTheme (pathToFile);
 				if (content.Item1)
 				{
 					json = content.Item2;
-					Tuple <bool, Image> iag = Helper.GetImage (getPathNew);
-					if (iag.Item1)
+					if (needToGetImages)
 					{
-						// img = iag.Item2;
-						if (ifHasImage != null)
+						Tuple <bool, Image> iag = Helper.GetImage (pathToFile);
+						if (iag.Item1)
 						{
-							ifHasImage ((Image) iag.Item2);
+							// img = iag.Item2;
+							if (ifHasImage != null)
+							{
+								ifHasImage ((Image) iag.Item2);
+							}
+
+							if (ifHasImage2 != null)
+							{
+								ifHasImage2 ((Image) iag.Item2);
+							}
+						} else
+						{
+							if (ifDoesntHave != null)
+								ifDoesntHave ();
+
+							if (ifDoesntHave2 != null)
+								ifDoesntHave2 ();
 						}
 
-						if (ifHasImage2 != null)
+						iag = Helper.GetSticker (pathToFile);
+						if (iag.Item1)
 						{
-							ifHasImage2 ((Image) iag.Item2);
-						}
-					} else
-					{
-						if (ifDoesntHave != null)
-							ifDoesntHave ();
-
-						if (ifDoesntHave2 != null)
-							ifDoesntHave2 ();
-					}
-
-					iag = Helper.GetSticker (getPathNew);
-					if (iag.Item1)
-					{
-						// img = iag.Item2;
-						if (ifHasSticker != null)
+							// img = iag.Item2;
+							if (ifHasSticker != null)
+							{
+								ifHasSticker ((Image) iag.Item2);
+							}
+						} else
 						{
-							ifHasSticker ((Image) iag.Item2);
-						}
-					} else
-					{
-						if (ifDoesntHaveSticker != null)
-							ifDoesntHaveSticker ();
+							if (ifDoesntHaveSticker != null)
+								ifDoesntHaveSticker ();
 
-						if (ifDoesntHaveSticker2 != null)
-							ifDoesntHaveSticker2 ();
+							if (ifDoesntHaveSticker2 != null)
+								ifDoesntHaveSticker2 ();
+						}
 					}
 				} else
 				{
-					if (ifDoesntHave != null)
-						ifDoesntHave ();
-					if (ifDoesntHaveSticker != null)
-						ifDoesntHaveSticker ();
+					if (needToGetImages)
+					{
+						if (ifDoesntHave != null)
+							ifDoesntHave ();
+						if (ifDoesntHaveSticker != null)
+							ifDoesntHaveSticker ();
 
-					if (ifDoesntHave2 != null)
-						ifDoesntHave2 ();
-					if (ifDoesntHaveSticker2 != null)
-						ifDoesntHaveSticker2 ();
-					json = File.ReadAllText (getPathNew);
+						if (ifDoesntHave2 != null)
+							ifDoesntHave2 ();
+						if (ifDoesntHaveSticker2 != null)
+							ifDoesntHaveSticker2 ();
+					}
+					json = File.ReadAllText (pathToFile);
 				}
 			}
 
 			return json;
 		}
-		
+
+		private static Stream GetStreamFromMemory (string file)
+		{
+			var a = GetCore ();
+			if (file.Contains (":"))
+			{
+				file = file.Replace (": ", "__").Replace (":", "");
+			}
+
+			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_OLD);
+			if (stream == null)
+				stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_NEW);
+			return stream;
+		}
+
 		/// <summary>
 		/// Copy theme from memory. It's used to copy default themes.
 		/// </summary>
@@ -833,13 +880,7 @@ namespace Yuki_Theme.Core
 		/// <param name="extract">Do you want to extract background image and sticker?</param>
 		public static Tuple <bool, bool> CopyFromMemory (string file, string path, bool extract = false)
 		{
-			var a = GetCore ();
-			if (file.Contains (":"))
-			{
-				file = file.Replace (": ", "__").Replace (":", "");
-			}
-
-			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}.yukitheme");
+			Stream stream = GetStreamFromMemory (file);
 			string nxp = extract ? path + "A" : path;
 			using (var fs = new FileStream (nxp, FileMode.Create))
 			{
@@ -864,6 +905,7 @@ namespace Yuki_Theme.Core
 				}
 			}
 
+			stream.Dispose ();
 			return new Tuple <bool, bool> (false, false);
 		}
 
@@ -877,7 +919,7 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.ACTIVE, selectedItem);
 			dict.Add (SettingsForm.ASKCHOICE, askChoice.ToString ());
 			dict.Add (SettingsForm.CHOICEINDEX, actionChoice.ToString ());
-			dict.Add (SettingsForm.SETTINGMODE, settingMode.ToString ());
+			dict.Add (SettingsForm.SETTINGMODE, ((int)settingMode).ToString ());
 			dict.Add (SettingsForm.AUTOUPDATE, update.ToString ());
 			dict.Add (SettingsForm.BGIMAGE, bgImage.ToString ());
 			dict.Add (SettingsForm.STICKER, swSticker.ToString ());
@@ -895,6 +937,7 @@ namespace Yuki_Theme.Core
 			dict.Add (SettingsForm.DONTTRACK, dontTrack.ToString ());
 			dict.Add (SettingsForm.AUTOFITWIDTH, autoFitByWidth.ToString ());
 			dict.Add (SettingsForm.ASKTOSAVE, askToSave.ToString ());
+			dict.Add (SettingsForm.SAVEASOLD, saveAsOld.ToString ());
 			database.UpdateData (dict);
 			if (onBGIMAGEChange != null) onBGIMAGEChange ();
 			if (onSTICKERChange != null) onSTICKERChange ();
@@ -908,6 +951,17 @@ namespace Yuki_Theme.Core
 		/// <param name="path">Full path to theme</param>
 		/// <param name="name">New name of the theme</param>
 		public static void WriteName (string path, string name)
+		{
+			if (IsOldTheme (path))
+			{
+				WriteNameOld (path, name);
+			} else
+			{
+				WriteNameNew (path, name);
+			}
+		}
+
+		private static void WriteNameOld (string path, string name)
 		{
 			var doc = new XmlDocument ();
 			bool iszip = false;
@@ -957,6 +1011,67 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		private static void WriteNameNew (string path, string name)
+		{
+			string json = "";
+
+			Tuple <bool, string> content = Helper.GetTheme (path);
+			bool iszip = content.Item1;
+
+			if (content.Item1)
+				json = content.Item2;
+			else
+				json = File.ReadAllText (path);
+			Console.WriteLine (json);
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			theme.Name = name;
+			json = JsonConvert.SerializeObject (theme, Formatting.Indented);
+
+
+			if (!iszip)
+				File.WriteAllText (getPathNew, json);
+			else
+			{
+				Helper.UpdateZip (path, json, null, true, null, true);
+			}
+		}
+
+		public static bool SelectTheme (string name)
+		{
+			currentoFile = name;
+			currentFile = Helper.ConvertNameToPath (currentoFile);
+			if (DefaultThemes.isDefault (currentoFile))
+			{
+				Console.WriteLine (gp);
+				Console.WriteLine (gpNew);
+				Assembly assembly = GetCore ();
+				if (assembly.GetManifestResourceStream (gp) != null)
+					currentFileExtension = Helper.FILE_EXTENSTION_OLD;
+				else if (assembly.GetManifestResourceStream (gpNew) != null)
+					currentFileExtension = Helper.FILE_EXTENSTION_NEW;
+				else
+				{
+					showError ("The file isn't exist", "File isn't exist");
+					return false;
+				}
+			} else
+			{
+				Console.WriteLine (getPath);
+				Console.WriteLine (getPathNew);
+				if (File.Exists (getPath))
+					currentFileExtension = Helper.FILE_EXTENSTION_OLD;
+				else if (File.Exists (getPathNew))
+					currentFileExtension = Helper.FILE_EXTENSTION_NEW;
+				else
+				{
+					showError ("The file isn't exist", "File isn't exist");
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		#endregion
 
 		#region XML
@@ -965,25 +1080,28 @@ namespace Yuki_Theme.Core
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		private static void PopulateByXMLNodeParent (XmlNode node)
+		private static void PopulateByXMLNodeParent (XmlNode node, ref Dictionary <string, Dictionary <string, string>> attributes,
+		                                             ref List <string> namesExtra)
 		{
-			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNode (xne);
+			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNode (xne, ref attributes, ref namesExtra);
 		}
 
 		/// <summary>
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		private static void PopulateByXMLNode (XmlNode node)
+		private static void PopulateByXMLNode (XmlNode           node, ref Dictionary <string, Dictionary <string, string>> attributes,
+		                                       ref List <string> namesExtra)
 		{
-			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingular (xn);
+			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingular (xn, ref attributes, ref namesExtra);
 		}
 
 		/// <summary>
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		private static void PopulateByXMLNodeSingular (XmlNode node)
+		private static void PopulateByXMLNodeSingular (XmlNode node, ref Dictionary <string, Dictionary <string, string>> attributes,
+		                                               ref List <string> namesExtra)
 		{
 			// Console.WriteLine("TEST");
 			var attrs = new Dictionary <string, string> ();
@@ -1007,7 +1125,7 @@ namespace Yuki_Theme.Core
 						}
 					}
 
-					if (Highlighter.isInNames (nm))
+					if (Highlighter.isInNames (nm, true))
 					{
 						var dsfbold = "null";
 						var dsfitalic = "null";
@@ -1031,34 +1149,34 @@ namespace Yuki_Theme.Core
 							$"InNames: {nm}|{att.Name}, bold: {attrs ["bold"]}|{dsfbold}, italic: {attrs ["italic"]}|{dsfitalic}");*/
 					}
 				}
-
-				if (!names.Contains (nm))
+				string shadowName = settingMode == SettingMode.Light ? ShadowNames.GetShadowName (nm, SyntaxType.Pascal) : nm;
+				if (!namesExtra.Contains (shadowName))
 				{
-					if (settingMode == 1)
+					if (settingMode == SettingMode.Advanced)
 					{
-						names.Add (nm);
-						localAttributes.Add (nm, attrs);
-					} else if (!localAttributes.ContainsKey (nm))
+						namesExtra.Add (shadowName);
+						attributes.Add (shadowName, attrs);
+					} else if (!attributes.ContainsKey (shadowName))
 					{
-						// Console.WriteLine ( $"InList: {nm}|{localAttributes.ContainsKey (nm)}");		
-						localAttributes.Add (nm, attrs);
-						if (!Populater.isInList (nm, names)) names.Add (nm);
+						// Console.WriteLine ( $"InList: {nm}|{attributes.ContainsKey (nm)}");		
+						attributes.Add (shadowName, attrs);
+						if (!Populater.isInList (shadowName, namesExtra)) namesExtra.Add (shadowName);
 					}
 
-					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("Wallpaper"))
+					if (shadowName.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
+					    !namesExtra.Contains ("Wallpaper"))
 					{
-						names.Remove ("Selection");
-						names.Add ("Wallpaper");
-						names.Add ("Selection");
+						namesExtra.Remove ("Selection");
+						namesExtra.Add ("Wallpaper");
+						namesExtra.Add ("Selection");
 					}
 
-					if (nm.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !names.Contains ("Sticker"))
+					if (shadowName.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
+					    !namesExtra.Contains ("Sticker"))
 					{
-						names.Remove ("Selection");
-						names.Add ("Sticker");
-						names.Add ("Selection");
+						namesExtra.Remove ("Selection");
+						namesExtra.Add ("Sticker");
+						namesExtra.Add ("Selection");
 					}
 				}
 			}
@@ -1067,15 +1185,15 @@ namespace Yuki_Theme.Core
 		/// <summary>
 		/// Remove unnecessary fields if the setting mode is Light. Else skip.
 		/// </summary>
-		private static void CleanUnnecessaryFields ()
+		private static void CleanUnnecessaryFields (ref List <string> namesExtra)
 		{
-			if (settingMode == 0)
+			if (settingMode == SettingMode.Light)
 			{
-				string [] nms = new string[names.Count];
-				names.CopyTo (nms);
+				string [] nms = new string[namesExtra.Count];
+				namesExtra.CopyTo (nms);
 				foreach (string name in nms)
 				{
-					if (Populater.isInList (name, names)) names.Remove (name);
+					if (Populater.isInList (name, namesExtra)) namesExtra.Remove (name);
 				}
 			}
 		}
@@ -1153,13 +1271,14 @@ namespace Yuki_Theme.Core
 			dontTrack = bool.Parse (data [SettingsForm.DONTTRACK]);
 			autoFitByWidth = bool.Parse (data [SettingsForm.AUTOFITWIDTH]);
 			askToSave = bool.Parse (data [SettingsForm.ASKTOSAVE]);
+			saveAsOld = bool.Parse (data [SettingsForm.SAVEASOLD]);
 
 			selectedItem = data [SettingsForm.ACTIVE];
 			var os = 0;
 			int.TryParse (data [SettingsForm.CHOICEINDEX], out os);
 			actionChoice = os;
 			int.TryParse (data [SettingsForm.SETTINGMODE], out os);
-			settingMode = os;
+			settingMode = (SettingMode) os;
 			int.TryParse (data [SettingsForm.STICKERPOSITIONUNIT], out os);
 			unit = (RelativeUnit) os;
 		}
@@ -1170,6 +1289,14 @@ namespace Yuki_Theme.Core
 		/// <param name="path">Path to the theme</param>
 		/// <returns>Name of the theme</returns>
 		public static string GetNameOfTheme (string path)
+		{
+			if (IsOldTheme (path))
+				return GetNameOfThemeOld (path);
+			else
+				return GetNameOfThemeNew (path);
+		}
+
+		private static string GetNameOfThemeOld (string path)
 		{
 			XmlDocument docu = new XmlDocument ();
 
@@ -1197,7 +1324,16 @@ namespace Yuki_Theme.Core
 
 			return nm;
 		}
-
+		
+		private static string GetNameOfThemeNew (string path)
+		{
+			string nm = "";
+			string json = loadThemeToPopulateNew (path, path, false);
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			nm = theme.Name;
+			return nm;
+		}
+		
 		/// <summary>
 		/// Save current theme
 		/// </summary>
@@ -1224,14 +1360,15 @@ namespace Yuki_Theme.Core
 		{
 			var doc = new XmlDocument ();
 			bool iszip = false;
-			Tuple <bool, string> content = Helper.GetTheme (getPath);
+			string themePath = File.Exists (getPath) ? getPath : File.Exists (getPathNew) ? getPathNew : null;
+			Tuple <bool, string> content = Helper.GetTheme (themePath);
 			if (content.Item1)
 			{
 				doc.LoadXml (content.Item2);
 				iszip = true;
 			} else
 			{
-				doc.Load (getPath);
+				doc.Load (themePath);
 			}
 
 			#region Environment
@@ -1369,16 +1506,16 @@ namespace Yuki_Theme.Core
 			}
 
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
-				doc.Save (getPath);
+				doc.Save (themePath);
 			else
 			{
 				string txml = doc.OuterXml;
 				if (iszip)
 				{
-					Helper.UpdateZip (getPath, txml, img2, wantToKeep, img3, wantToKeep);
+					Helper.UpdateZip (themePath, txml, img2, wantToKeep, img3, wantToKeep);
 				} else
 				{
-					Helper.Zip (getPath, txml, img2, img3);
+					Helper.Zip (themePath, txml, img2, img3);
 				}
 			}
 		}
@@ -1390,12 +1527,12 @@ namespace Yuki_Theme.Core
 		/// <param name="img3">Sticker</param>
 		private static void saveListNew (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			ThemeFormat theme = PrepareToSave (img2, img3);
+			Theme theme = PrepareToSave (img2, img3);
 
 			string json = JsonConvert.SerializeObject (theme, Formatting.Indented);
 			bool iszip = Helper.IsZip (getPathNew);
-			
-			
+
+
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
 				File.WriteAllText (getPathNew, json);
 			else
@@ -1433,6 +1570,7 @@ namespace Yuki_Theme.Core
 				foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
 				{
 					string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
+					Console.WriteLine (pair.Key + " | " + shadowName);
 					if (shadowName != null && !shadowNames.Contains (shadowName))
 					{
 						string [] realName = ShadowNames.GetRealName (shadowName, syntax);
@@ -1635,7 +1773,7 @@ namespace Yuki_Theme.Core
 		/// <param name="path">Path</param>
 		private static Tuple <bool, bool> ExportTheme (string path)
 		{
-			string source = getPath;
+			string source = getPathDynamic;
 			bool iszip = Helper.IsZip (source);
 			if (!iszip)
 			{
@@ -1693,9 +1831,9 @@ namespace Yuki_Theme.Core
 			return DefaultThemes.isDefault (currentoFile);
 		}
 
-		private static ThemeFormat PrepareToSave (Image img2, Image img3)
+		private static Theme PrepareToSave (Image img2, Image img3)
 		{
-			ThemeFormat theme = new ThemeFormat ();
+			Theme theme = new Theme ();
 			theme.Name = currentoFile;
 			theme.Group = groupName;
 			theme.Version = Convert.ToInt32 (SettingsForm.current_version);
@@ -1704,20 +1842,195 @@ namespace Yuki_Theme.Core
 			theme.WallpaperOpacity = opacity;
 			theme.StickerOpacity = sopacity;
 			theme.WallpaperAlign = (int) align;
+			theme.Fields = GetFieldsFromDictionary (localAttributes);
+			return theme;
+		}
+
+
+		private static string GetThemeFormatFromMemory (string file)
+		{
+			var a = GetCore ();
+			if (file.Contains (":"))
+			{
+				file = file.Replace (": ", "__").Replace (":", "");
+			}
+
+			string format = $"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_OLD;
+			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_OLD);
+			if (stream == null)
+			{
+				stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_NEW);
+				format = stream != null ? $"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_NEW : null;
+			}
+
+			stream?.Dispose ();
+			return format;
+		}
+
+		/// <summary>
+		/// Re Generate Theme to convert from old theme to new, or vice versa.
+		/// </summary>
+		/// <param name="path">Destination path</param>
+		/// <param name="oldPath">Old path, that was copied from. It also can be path to the memory</param>
+		/// <param name="name">New Name</param>
+		/// <param name="oldName">Old Name</param>
+		/// <returns>If it's done, it will return true</returns>
+		private static bool ReGenerateTheme (string path, string oldPath, string name, string oldName)
+		{
+			if ((IsOldTheme (path) && IsOldTheme (oldPath)) || (!IsOldTheme (path) && !IsOldTheme (oldPath)))
+				return false;
+			if (!IsOldTheme (oldPath) && saveAsOld)
+				ReGenerateFromNew (path, oldPath, name, oldName);
+			else
+				ReGenerateFromOld (path, oldPath, name, oldName);
+			return true;
+		}
+
+		private static void ReGenerateFromOld (string path, string oldPath, string name, string oldName)
+		{
+			var doc = new XmlDocument ();
+			Tuple <bool, bool> ned = loadThemeToPopulateOld (ref doc, oldPath, oldPath, true);
+			Dictionary <string, Dictionary <string, string>> attributeDictionary = new Dictionary <string, Dictionary <string, string>> ();
+			List <string> namesList = new List <string> ();
+
+			PopulateDictionaryFromDocOld (doc, ref attributeDictionary, ref namesList);
+
+			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+			string al = additionalInfo ["align"];
+			string op = additionalInfo ["opacity"];
+			string sop = additionalInfo ["stickerOpacity"];
+
+			Theme theme = new Theme ();
+			theme.Name = name;
+			theme.Group = "";
+			theme.Version = Convert.ToInt32 (SettingsForm.current_version);
+			theme.HasWallpaper = ned.Item1;
+			theme.HasSticker = ned.Item2;
+			theme.WallpaperOpacity = int.Parse (op);
+			theme.StickerOpacity = int.Parse (sop);
+			theme.WallpaperAlign = int.Parse (al);
+			theme.Fields = GetFieldsFromDictionary (attributeDictionary);
+			string json = JsonConvert.SerializeObject (theme, Formatting.Indented);
+			bool iszip = false;
+
+			if (DefaultThemes.isDefault (oldName))
+			{
+				Stream stream = GetStreamFromMemory (oldName);
+				iszip = Helper.IsZip (stream);
+				stream.Dispose ();
+			} else
+			{
+				iszip = Helper.IsZip (oldPath);
+			}
+
+			if (!iszip)
+				File.WriteAllText (path, json);
+			else
+			{
+				Helper.UpdateZip (path, json, null, true, null, true);
+			}
+		}
+
+		private static void ReGenerateFromNew (string path, string oldPath, string name, string oldName)
+		{
+			string json = loadThemeToPopulateNew (oldPath, oldPath, false);
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			theme.Name = name;
+			theme.Group = "";
+			Dictionary <string, Dictionary <string, string>> attribs = new Dictionary <string, Dictionary <string, string>> ();
+			List <string> additionalList = new List <string> ();
+			PopulateDictionaryFromThemeNew (theme, ref attribs, ref additionalList);
+			var a = GetCore ();
+			var stream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
+			using (var fs = new FileStream (path, FileMode.Create))
+			{
+				stream.Seek (0, SeekOrigin.Begin);
+				stream.CopyTo (fs);
+			}
+
+			MergeFiles (path, theme.HasWallpaper, theme.HasSticker, attribs);
+		}
+
+		private static bool IsOldTheme (string path)
+		{
+			return path.ToLower ().EndsWith (Helper.FILE_EXTENSTION_OLD);
+		}
+
+		private static void PopulateDictionaryFromDocOld (XmlDocument doc, ref Dictionary <string, Dictionary <string, string>> attributes,
+		                                                  ref List <string> namesExtra)
+		{
+			if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1)
+				PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0], ref attributes, ref namesExtra);
+			PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0], ref attributes, ref namesExtra);
+			PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0], ref attributes, ref namesExtra);
+			CleanUnnecessaryFields (ref namesExtra);
+		}
+
+		private static Dictionary <string, string> GetAdditionalInfoFromDoc (XmlDocument doc)
+		{
+			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+			XmlNodeList comms = nod.SelectNodes ("//comment()");
+			Dictionary <string, string> dictionary = new Dictionary <string, string> ();
+			dictionary.Add ("align", ((int) Alignment.Center).ToString ());
+			dictionary.Add ("opacity", "15");
+			dictionary.Add ("stickerOpacity", "100");
+			foreach (XmlComment comm in comms)
+			{
+				if (comm.Value.StartsWith ("align"))
+				{
+					dictionary ["align"] = comm.Value.Substring (6);
+				} else if (comm.Value.StartsWith ("opacity"))
+				{
+					dictionary ["opacity"] = comm.Value.Substring (8);
+				} else if (comm.Value.StartsWith ("sopacity"))
+				{
+					dictionary ["stickerOpacity"] = comm.Value.Substring (9);
+				}
+			}
+
+			return dictionary;
+		}
+
+		private static Dictionary <string, ThemeField> GetFieldsFromDictionary (Dictionary <string, Dictionary <string, string>> attributes)
+		{
 			Dictionary <string, ThemeField> fields = new Dictionary <string, ThemeField> ();
-			foreach (KeyValuePair <string, Dictionary <string, string>> attribute in localAttributes)
+			foreach (KeyValuePair <string, Dictionary <string, string>> attribute in attributes)
 			{
 				if (attribute.Key != "Wallpaper" && attribute.Key != "Sticker")
 				{
 					ThemeField field = ThemeField.GetFieldFromDictionary (attribute.Value);
 					string shadowName = ShadowNames.GetShadowName (attribute.Key, SyntaxType.Pascal); // Convert to Shadow Name
 					if (shadowName == null) shadowName = attribute.Key;
-					fields.Add (shadowName, field);
+					if (!fields.ContainsKey (shadowName))
+						fields.Add (shadowName, field);
 				}
 			}
 
-			theme.Fields = fields;
-			return theme;
+			return fields;
+		}
+
+		private static void LoadSchemesByExtension (string extension)
+		{
+			foreach (var file in Directory.GetFiles (Path.Combine (currentPath, "Themes/"), "*"+extension))
+			{
+				var pts = Path.GetFileNameWithoutExtension (file);
+				if (!DefaultThemes.isDefault (pts))
+				{
+					if (pts.Contains ("__"))
+					{
+						string stee = Path.Combine (currentPath, "Themes", $"{pts}{extension}");
+						string sp = GetNameOfTheme (stee);
+						if (!DefaultThemes.isDefault (sp))
+						{
+							// Console.WriteLine(nod.Attributes ["name"].Value);
+							schemes.Add (sp);
+						}
+					} else
+					{
+						schemes.Add (pts);
+					}
+				}
+			}
 		}
 	}
 }

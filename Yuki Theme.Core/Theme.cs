@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Yuki_Theme.Core
 {
-	public class ThemeFormat
+	public class Theme
 	{
 		[JsonProperty("name")]
 		public string Name { get; set; }

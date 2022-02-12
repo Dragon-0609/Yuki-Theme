@@ -79,40 +79,10 @@ namespace Yuki_Theme.Core
 
 		public static string [] getDependencies (string str)
 		{
-			string [] res = new string [] { };
-			switch (str)
-			{
-				case "LineBigComment" :
-				{
-					res = new string [] {"LineComment", "BlockComment", "BlockComment2"};
-				}
-					break;
-
-				case "KeyWords" :
-				{
-					res = new string []
-					{
-						"ProgramSections", "Async", "RaiseStatement", "JumpStatements", "JumpProcedures", "Modifiers",
-						"AccessModifiers", "NonReserved1", "ExceptionHandlingStatements", "ReferenceTypes",
-						"DireciveNames", "SpecialDireciveNames", "DireciveValues"
-					};
-				}
-					break;
-
-				case "OperatorKeywords" :
-				{
-					res = new string [] {"SelectionStatements", "IterationStatements"};
-				}
-					break;
-
-				case "Punctuation" :
-				{
-					res = new string [] {"SpaceMarkers", "TabMarkers"};
-				}
-					break;
-			}
-
-			return res;
+			if (ShadowNames.PascalFields.ContainsKey (str))
+				return ShadowNames.PascalFields [str];
+			else
+				return null;
 		}
 
 		public static string getNormalizedName (string str)
@@ -123,7 +93,7 @@ namespace Yuki_Theme.Core
 			{
 				case "default" :
 				{
-					res = "Default";
+					res = "Default Text";
 				}
 					break;
 				case "selection" :
@@ -133,42 +103,42 @@ namespace Yuki_Theme.Core
 					break;
 				case "linenumber" :
 				{
-					res = "LineNumbers";
+					res = "Line Number";
 				}
 					break;
 				case "caret" :
 				{
-					res = "CaretMarker";
+					res = "Caret";
 				}
 					break;
 				case "vruler" :
 				{
-					res = "VRuler";
+					res = "Vertical Ruler";
 				}
 					break;
 				case "fold" :
 				{
-					res = "FoldLine";
+					res = "Fold's Line";
 				}
 					break;
 				case "foldmarker" :
 				{
-					res = "FoldMarker";
+					res = "Fold's Rectangle";
 				}
 					break;
 				case "selectedfold" :
 				{
-					res = "SelectedFoldLine";
+					res = "Selected Fold's Line";
 				}
 					break;
 				case "digit" :
 				{
-					res = "Digits";
+					res = "Number";
 				}
 					break;
 				case "comment" :
 				{
-					res = "LineBigComment";
+					res = "Comment";
 				}
 					break;
 				case "string" :
@@ -178,12 +148,12 @@ namespace Yuki_Theme.Core
 					break;
 				case "keyword" :
 				{
-					res = "KeyWords";
+					res = "Keyword";
 				}
 					break;
 				case "beginend" :
 				{
-					res = "BeginEnd";
+					res = "Begin, End";
 				}
 					break;
 				case "punctuation" :
@@ -193,12 +163,12 @@ namespace Yuki_Theme.Core
 					break;
 				case "operator" :
 				{
-					res = "OperatorKeywords";
+					res = "Keyword";
 				}
 					break;
 				case "constant" :
 				{
-					res = "InternalConstant";
+					res = "Constants";
 				}
 					break;
 				case "image" :

@@ -416,7 +416,7 @@ namespace Yuki_Theme.Core.Controls
 			askC.Checked = CLI.askChoice;
 			checkBox2.Checked = CLI.update;
 			ActionBox.SelectedIndex = CLI.actionChoice;
-			mode.SelectedIndex = CLI.settingMode;
+			mode.SelectedIndex = (int) CLI.settingMode;
 			unit.SelectedIndex = (int) CLI.unit;
 			checkBox3.Checked = CLI.positioning;
 			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;

@@ -42,7 +42,6 @@ namespace Yuki_Theme_Plugin
 		}
 
 		private bool oldeditor = false;
-		private int  st        = -1;
 
 		public void Action (OptionsContentAction action)
 		{
@@ -94,7 +93,6 @@ namespace Yuki_Theme_Plugin
 						plugin.mf = null;
 						settingsPanel.mf = null;
 						oldeditor = CLI.Editor;
-						st = CLI.settingMode;
 						// Change colors for About Form
 						settingsPanel.bg = YukiTheme_VisualPascalABCPlugin.bg;
 						settingsPanel.bg2 = YukiTheme_VisualPascalABCPlugin.bgClick2;
@@ -138,7 +136,7 @@ namespace Yuki_Theme_Plugin
 					CLI.askChoice = settingsPanel.askC.Checked;
 					CLI.update = settingsPanel.checkBox2.Checked;
 					CLI.actionChoice = settingsPanel.ActionBox.SelectedIndex;
-					CLI.settingMode = settingsPanel.mode.SelectedIndex;
+					CLI.settingMode = (SettingMode) settingsPanel.mode.SelectedIndex;
 					CLI.positioning = settingsPanel.checkBox3.Checked;
 					CLI.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
 					CLI.showGrids = settingsPanel.checkBox4.Checked;

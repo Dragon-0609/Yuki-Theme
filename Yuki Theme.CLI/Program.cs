@@ -212,7 +212,7 @@ namespace Yuki_Theme.CLI
 				Core.CLI.onRename = ShowInvertSuccess;
 				Core.CLI.SaveInExport = AskToDelete;
 				Core.CLI.connectAndGet ();
-				Core.CLI.settingMode = 0;
+				Core.CLI.settingMode = SettingMode.Light;
 				Core.CLI.load_schemes ();
 			} else if (refreshSchemes)
 			{
@@ -367,7 +367,7 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <AllFieldsCommand> (o =>
 			   {
 				   LoadCLI (true);
-				   Core.CLI.settingMode = 1;
+				   Core.CLI.settingMode = SettingMode.Advanced;
 				   SetFile ("Darcula");
 				   Core.CLI.restore ();
 				   Console.WriteLine ($"There're {Core.CLI.localAttributes.Keys.Count} fields:");
@@ -518,7 +518,7 @@ namespace Yuki_Theme.CLI
 					   
 					   if (isValid)
 					   {
-						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? 0 : 1;
+						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
 						   changed = true;
 					   } else
 					   {
@@ -554,7 +554,7 @@ namespace Yuki_Theme.CLI
 
 					   if (isValid)
 					   {
-						   Core.CLI.settingMode = act;
+						   Core.CLI.actionChoice = act;
 						   changed = true;
 					   } else
 					   {

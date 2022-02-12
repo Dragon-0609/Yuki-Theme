@@ -61,10 +61,10 @@ namespace Yuki_Theme.Core
 				dictionary.Add ("color", Foreground);
 			
 			if (Bold != null)
-				dictionary.Add ("bold", Bold.ToString());
+				dictionary.Add ("bold", Bold.ToString().ToLower());
 			
 			if (Italic != null)
-				dictionary.Add ("italic", Italic.ToString());
+				dictionary.Add ("italic", Italic.ToString().ToLower());
 			
 			return dictionary;
 		}

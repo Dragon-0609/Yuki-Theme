@@ -44,6 +44,7 @@ namespace Yuki_Theme.Core.Database
 				ke.SetValue (SettingsForm.DONTTRACK.ToString (), "false");
 				ke.SetValue (SettingsForm.AUTOFITWIDTH.ToString (), "true");
 				ke.SetValue (SettingsForm.ASKTOSAVE.ToString (), "true");
+				ke.SetValue (SettingsForm.SAVEASOLD.ToString (), "false");
 			}
 		}
 
@@ -76,6 +77,7 @@ namespace Yuki_Theme.Core.Database
 			dictionary.Add (SettingsForm.DONTTRACK, key.GetValue (SettingsForm.DONTTRACK.ToString (), "false").ToString ());
 			dictionary.Add (SettingsForm.AUTOFITWIDTH, key.GetValue (SettingsForm.AUTOFITWIDTH.ToString (), "true").ToString ());
 			dictionary.Add (SettingsForm.ASKTOSAVE, key.GetValue (SettingsForm.ASKTOSAVE.ToString (), "true").ToString ());
+			dictionary.Add (SettingsForm.SAVEASOLD, key.GetValue (SettingsForm.SAVEASOLD.ToString (), "false").ToString ());
 
 			return dictionary;
 		}

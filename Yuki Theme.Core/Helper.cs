@@ -33,6 +33,12 @@ namespace Yuki_Theme.Core
 		Percent = 1
 	}
 
+	public enum SettingMode : int
+	{
+		Light = 0,
+		Advanced = 1
+	}
+	
 	public static class Helper
 	{
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;
@@ -87,6 +93,7 @@ namespace Yuki_Theme.Core
 		private const string STICKER_NAME   = "sticker.png";
 		public const string FILE_EXTENSTION_OLD   = ".yukitheme";
 		public const string FILE_EXTENSTION_NEW   = ".yuki";
+		public const string PASCALTEMPLATE   = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
 		
 		
 		public static Tuple <bool, Image> GetImage (string path)
@@ -170,30 +177,40 @@ namespace Yuki_Theme.Core
 
 		public static Tuple <bool, string> GetTheme (string path)
 		{
-			using (ZipArchive zipFile = ZipFile.OpenRead (path))
+			try
 			{
-				if (path.EndsWith (FILE_EXTENSTION_OLD))
-					return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-				else
-					return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				{
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
+						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					else
+						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+				}
+			} catch (InvalidDataException)
+			{
+				return new Tuple <bool, string> (false, "");
 			}
 		}
 
 		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
 		{
-			using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+			try
 			{
-				if (path.EndsWith (FILE_EXTENSTION_OLD))
-					return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-				else
-					return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+				{
+					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
+						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					else
+						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+				}
+			} catch (InvalidDataException)
+			{
+				return new Tuple <bool, string> (false, "");
 			}
 		}
 
 		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
 		{
-			try
-			{
 				var theme = zipFile.GetEntry (themefile);
 				if (theme != null)
 				{
@@ -208,44 +225,47 @@ namespace Yuki_Theme.Core
 				{
 					return new Tuple <bool, string> (false, "");
 				}
-			} catch (InvalidDataException)
-			{
-				return new Tuple <bool, string> (false, "");
-			}
 		}
 
 		public static bool IsZip (string path)
 		{
-			using (ZipArchive zipFile = ZipFile.OpenRead (path))
+			try
 			{
-				if (path.EndsWith (FILE_EXTENSTION_OLD))
-					return IsZip (zipFile, THEME_NAME_OLD);
-				else
-					return IsZip (zipFile, THEME_NAME_NEW);
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				{
+					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
+						return IsZip (zipFile, THEME_NAME_OLD);
+					else
+						return IsZip (zipFile, THEME_NAME_NEW);
+				}
+			} catch (InvalidDataException)
+			{
+				return false;
 			}
 		}
 
 		public static bool IsZip (Stream stream)
 		{
-			using (var zipFile = new ZipArchive (stream, ZipArchiveMode.Read))
+			try
 			{
-				bool res = IsZip (zipFile, THEME_NAME_OLD);
-				if (!res)
-					res = IsZip (zipFile, THEME_NAME_NEW);
-				return res;
+				using (var zipFile = new ZipArchive (stream, ZipArchiveMode.Read))
+				{
+					bool res = IsZip (zipFile, THEME_NAME_OLD);
+					if (!res)
+						res = IsZip (zipFile, THEME_NAME_NEW);
+					return res;
+				}
+			} catch (InvalidDataException)
+			{
+				return false;
 			}
 		}
 
 		private static bool IsZip (ZipArchive zipFile, string themefile)
 		{
-			try
-			{
 				var theme = zipFile.GetEntry (themefile);
 				return true;
-			} catch (InvalidDataException)
-			{
-				return false;
-			}
+			
 		}
 
 		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
