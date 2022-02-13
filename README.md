@@ -322,14 +322,14 @@ Help make this plugin better!
 
 Вы можете зайти в настройки кликая по `Настройки` (Шестерёнка) кнопку. Тут есть некоторые поля, которые вы можете изменить:
 
-- [Path to PascalABC.NET](#path-to-pascalabcnet)
-- [Ask if there are other themes in PascalABC directory](#ask-if-there-are-other-themes-in-pascalabc-directory)
-- [Do action, if there are other themes](#do-action-if-there-are-other-themes)
-- [Setting Mode](#setting-mode)
-- [Check Update](#check-update)
-- [Show Background Image](#show-background-image)
-- [Sticker](#sticker)
-- [Ask to save](#ask-to-save)
+- [Path to PascalABC.NET](#path-to-pascalabcnet-1)
+- [Ask if there are other themes in PascalABC directory](#ask-if-there-are-other-themes-in-pascalabc-directory-1)
+- [Do action, if there are other themes](#do-action-if-there-are-other-themes-1)
+- [Setting Mode](#setting-mode-1)
+- [Check Update](#check-update-1)
+- [Show Background Image](#show-background-image-1)
+- [Sticker](#sticker-1)
+- [Ask to save](#ask-to-save-1)
 
 #### Path to PascalABC.NET
 (Вам не нужно в версии `Плагина`):
