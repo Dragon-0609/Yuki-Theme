@@ -104,7 +104,6 @@ namespace Yuki_Theme.Core
 							string sp = GetNameOfTheme (stee);
 							if (!DefaultThemes.isDefault (sp))
 							{
-								// Console.WriteLine(nod.Attributes ["name"].Value);
 								schemes.Add (sp);
 							}
 						} else
@@ -269,7 +268,6 @@ namespace Yuki_Theme.Core
 					{
 						File.Delete (files [0]);
 					}
-					// Console.WriteLine ($"FILES: {files.Length}, OR: {files [0]} | MS: {path}");
 
 					var result = 2;
 					if (Helper.mode != ProductMode.Plugin && Helper.mode != ProductMode.CLI)
@@ -429,8 +427,6 @@ namespace Yuki_Theme.Core
 			if (isDefault ())
 			{
 				var a = GetCore ();
-				// Console.WriteLine (currentFile);
-				// doc.Load (a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{currentFile}.yukitheme"));
 
 
 				Tuple <bool, string> content = Helper.getThemeFromMemory (gp, a);
@@ -440,7 +436,6 @@ namespace Yuki_Theme.Core
 					Tuple <bool, Image> iag = Helper.getImageFromMemory (gp, a);
 					if (iag.Item1)
 					{
-						// img = iag.Item2;
 						if (ifHasImage != null)
 						{
 							ifHasImage ((Image) iag.Item2);
@@ -461,7 +456,6 @@ namespace Yuki_Theme.Core
 					iag = Helper.getStickerFromMemory (gp, a);
 					if (iag.Item1)
 					{
-						// img = iag.Item2;
 						if (ifHasSticker != null)
 						{
 							ifHasSticker ((Image) iag.Item2);
@@ -502,7 +496,6 @@ namespace Yuki_Theme.Core
 					Tuple <bool, Image> iag = Helper.getImage (getPath);
 					if (iag.Item1)
 					{
-						// img = iag.Item2;
 						if (ifHasImage != null)
 						{
 							ifHasImage ((Image) iag.Item2);
@@ -524,7 +517,6 @@ namespace Yuki_Theme.Core
 					iag = Helper.getSticker (getPath);
 					if (iag.Item1)
 					{
-						// img = iag.Item2;
 						if (ifHasSticker != null)
 						{
 							ifHasSticker ((Image) iag.Item2);
@@ -560,7 +552,6 @@ namespace Yuki_Theme.Core
 						return;
 					}
 				}
-				// doc.LoadXml ();
 			}
 
 			PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0]);
@@ -759,7 +750,6 @@ namespace Yuki_Theme.Core
 		/// <param name="node"></param>
 		private static void PopulateByXMLNodeSingular (XmlNode node)
 		{
-			// Console.WriteLine("TEST");
 			var attrs = new Dictionary <string, string> ();
 			if (node.Attributes != null && !string.Equals (node.Name, "Delimiters", StringComparison.Ordinal))
 			{
@@ -770,7 +760,6 @@ namespace Yuki_Theme.Core
 				{
 					if (att.Name == "color" || att.Name == "bgcolor")
 					{
-						// Console.WriteLine($"{nm}: {att.Name}");
 						if (node.Name == "SelectedFoldLine")
 						{
 							if (att.Name == "color")
@@ -813,8 +802,7 @@ namespace Yuki_Theme.Core
 						names.Add (nm);
 						localAttributes.Add (nm, attrs);
 					} else if (!localAttributes.ContainsKey (nm))
-					{
-						// Console.WriteLine ( $"InList: {nm}|{localAttributes.ContainsKey (nm)}");		
+					{		
 						localAttributes.Add (nm, attrs);
 						if (!Populater.isInList (nm, names)) names.Add (nm);
 					}
@@ -1055,7 +1043,6 @@ namespace Yuki_Theme.Core
 							var attrs = localAttributes [nms];
 
 							foreach (var att in attrs)
-								// Console.WriteLine($"2N: {xn.Attributes["name"].Value}, ATT: {att.Key},");
 								xn.Attributes [att.Key].Value = att.Value;
 						}
 				}
