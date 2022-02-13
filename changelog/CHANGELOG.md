@@ -3,9 +3,27 @@
 ## 5.0
 Added to `Plugin`:
 1. Change icons of the IDE
+2. ToolBar Camouflage
+3. Show Left Border even if `Разрешить сворачивание кода` is disabled [#23](https://github.com/Dragon-0609/Yuki-Theme/issues/23)
 
 Added to both:
-1. Track installs via Google Analytics
+1. Google Analytics Installs Tracker
+2. Changed icons of UI to JetBrains Icons.
+3. Sticker Positioning: [#22](https://github.com/Dragon-0609/Yuki-Theme/pull/22)
+4. Custom Sticker
+5. Font of SAO and another cool font
+6. Ask to save when editing a theme
+7. Improve sticker transparent
+8. 4 new Themes:
+    * Raphtalia
+    * Nadeshiko
+    * Rikka Takanashi
+    * Mikoto Misaka
+
+
+Fixed:
+#19 
+
 
 Fixed:
 [[BUG] Bookmarks aren't shown](https://github.com/Dragon-0609/Yuki-Theme/issues/19)
