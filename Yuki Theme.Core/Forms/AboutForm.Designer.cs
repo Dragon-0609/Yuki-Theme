@@ -181,7 +181,7 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel5.Size = new System.Drawing.Size (204, 27);
 			this.linkLabel5.TabIndex = 12;
 			this.linkLabel5.TabStop = true;
-			this.linkLabel5.Text = "Made by: Dragon-LV";
+			this.linkLabel5.Text = "Developer: Dragon-LV";
 			this.linkLabel5.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel5.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel5_LinkClicked);
 			// 
