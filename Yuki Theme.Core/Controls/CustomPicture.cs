@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Database;
@@ -44,6 +42,7 @@ namespace Yuki_Theme.Core.Controls
 			                                                  | BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                  this, new object [] {true});
 			ParentChanged += OnParentChanged;
+			
 		}
 
 		private void OnParentChanged (object sender, EventArgs e)
@@ -74,7 +73,7 @@ namespace Yuki_Theme.Core.Controls
 					height3 = Parent.ClientSize.Height / 3;
 					height32 = height3 * 2;
 					UpdateLocation ();
-					Region = CreateRegion ((Bitmap) Image);
+					CreateRegion ();
 				} else
 				{
 					Region = null;
@@ -131,8 +130,9 @@ namespace Yuki_Theme.Core.Controls
 			return y;
 		}
 
-		private Region CreateRegion (Bitmap maskImage)
+		private void CreateRegion ()
 		{
+			Bitmap maskImage = (Bitmap) Image;
 			// We're using pixel 0,0 as the "transparent" color.
 			Color mask = maskImage.GetPixel (0, 0);
 			// This is mask for transparent color
@@ -149,7 +149,7 @@ namespace Yuki_Theme.Core.Controls
 				}
 			}
 
-			return new Region (graphicsPath);
+			Region = new Region (graphicsPath);
 		}
 
 		private Point MouseDownLocation;

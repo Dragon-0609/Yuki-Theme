@@ -208,28 +208,12 @@ namespace Yuki_Theme_Plugin
 
 			ErrorsListWindowForm erw = (ErrorsListWindowForm) workbench.ErrorsListWindow;
 			cr = (ListView) erw.Controls.Find ("lvErrorsList", false) [0];
-			// cr.GridLines = false;
 			cr.OwnerDraw = true;
 			cr.DrawColumnHeader += errorListHeaderDrawer;
 			cr.DrawItem += (sender, e) =>
 			{
-				/*e.Graphics.DrawRectangle (clrPen, e.Bounds);
-				e.Item.ImageList.Draw (e.Graphics, Point.Empty, e.Item.ImageIndex);
-				StringFormat format = new StringFormat ();
-				format.Trimming = StringTrimming.Character;
-				e.Graphics.DrawString (e.Item.Text, e.Item.Font, clrBrush, e.Bounds, format);*/
 				e.DrawDefault = true;
-			};/*
-			cr.DrawSubItem += (sender, e) =>
-			{
-				e.Graphics.DrawRectangle (clrPen, e.Bounds);
-				e.Item.ImageList.Draw (e.Graphics, Point.Empty, e.Item.ImageIndex);
-				
-				StringFormat format = new StringFormat ();
-				format.Trimming = StringTrimming.Character;
-				e.Graphics.DrawString (e.SubItem.Text, e.SubItem.Font, clrBrush, e.Bounds, format);
-				e.DrawDefault = false;
-			};*/
+			};
 			
 			foreach (Control o in output_panel1.Controls)
 			{
@@ -267,8 +251,7 @@ namespace Yuki_Theme_Plugin
 					{
 
 					}
-
-					// textArea = textEditor.ActiveTextAreaControl.TextArea;
+					
 					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= CaretPositionChangedEventHandler;
 					textEditor = fm.CurrentCodeFileDocument.TextEditor;
 					textArea = textEditor.ActiveTextAreaControl.TextArea;
@@ -290,7 +273,6 @@ namespace Yuki_Theme_Plugin
 
 					fm.CurrentCodeFileDocument.BackColor = bg;
 
-					// MessageBox.Show (fm.CurrentCodeFileDocument.TabIndex.ToString ());
 					try
 					{
 						if (output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex] is RichTextBox)
@@ -332,8 +314,7 @@ namespace Yuki_Theme_Plugin
 			currentTheme = new ToolStripButton ();
 			currentTheme.Alignment = ToolStripItemAlignment.Right;
 			loadSVG ();
-
-			// statusBar.Items.Add (logo);
+			
 			currentTheme.Padding = new Padding (2, 0, 2, 0);
 			currentTheme.Margin = Padding.Empty;
 			statusBar.Items.Add (currentTheme);
@@ -343,16 +324,12 @@ namespace Yuki_Theme_Plugin
 			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			stickerControl.margin = new Point (10, statusBar.Size.Height);
 			stickerControl.Enabled = CLI.positioning;
-			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
-			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
-			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
 			CustomPanel pnl = new CustomPanel(1) {Visible = false, Name = "LayerGrids"};
 			pnl.pict = stickerControl;
 			fm.Controls.Add (pnl);
 			fm.Controls.Add (stickerControl);
 			stickerControl.pnl = pnl;
 			LoadSticker ();
-			// stickerControl.Enabled = true;
 			stickerControl.BringToFront ();
 			fm.Resize += FmOnResize;
 			addSettings ();
@@ -462,21 +439,28 @@ namespace Yuki_Theme_Plugin
 			e.Graphics.FillRectangle (bgBrush, e.Bounds);
 
 			e.Graphics.DrawString (e.Header.Text, e.Font, clrBrush, e.Bounds);
-			// e.DrawText ();
 		}
 
 		private void setMargin ()
 		{
+			int currentXPos = 0;
 			foreach (AbstractMargin margins in textArea.LeftMargins)
 			{
-				// MessageBox.Show (margin.Size.ToString());
-
+				Rectangle marginRectangle = new Rectangle(currentXPos , 0, margins.Size.Width, textArea.Height);
+				if (margins.IsVisible || margins is FoldMargin)
+				{
+					currentXPos += margins.DrawingPosition.Width;
+				}
 				if (margins is IconBarMargin)
 				{
 					margin = (IconBarMargin) margins;
 				}else if (margins is FoldMargin)
 				{
 					foldmargin = (FoldMargin) margins;
+					
+					if (marginRectangle != margin.DrawingPosition) { // Be sure that the line has valid rectangle
+						foldmargin.DrawingPosition = marginRectangle;
+					}
 				}
 			}
 		}
@@ -672,9 +656,6 @@ namespace Yuki_Theme_Plugin
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
-			// Console.WriteLine (highlighting.GetColorFor ("VRuler").ToString ());
-			// bgvruler = highlighting.GetColorFor ("VRuler").Color;
-			// Console.WriteLine (bgvruler);
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);
@@ -774,9 +755,6 @@ namespace Yuki_Theme_Plugin
 		
 		private void InitCore ()
 		{
-			// if (MessageBox.Show ("The program needs restart", "Restart", MessageBoxButtons.OKCancel) ==
-			    // DialogResult.OK)
-			    // IHighlightingStrategy tmphighligh = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
 			    ReloadLayout ();
 			    if (mf == null || mf.IsDisposed)
 			    {
