@@ -46,7 +46,7 @@ namespace Yuki_Theme.Core.Forms
 
 
 		public const  double current_version     = 5.0;
-		public const  string current_version_add = "beta-2";
+		public const  string current_version_add = "";
 		public static string next_version        = "";
 
 		private MForm form;

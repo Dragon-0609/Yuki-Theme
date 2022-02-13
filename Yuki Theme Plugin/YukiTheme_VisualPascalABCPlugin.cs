@@ -73,6 +73,7 @@ namespace Yuki_Theme_Plugin
 		public static Color           clrHover;
 		public static Color           bgBorder;
 		public static Color           bgType;
+		public static Color           bgvruler;
 		public static Brush           bgdefBrush;
 		public static Brush           bgBrush;
 		public static Brush           bgClickBrush;
@@ -88,6 +89,7 @@ namespace Yuki_Theme_Plugin
 		private       Timer           tim2;
 		private       Timer           tim3;
 		private       IconBarMargin   margin;
+		private       FoldMargin      foldmargin;
 		public        MForm           mf;
 		private       ListView        cr;
 		private       TextBox         con;
@@ -503,13 +505,25 @@ namespace Yuki_Theme_Plugin
 
 		private void setMargin ()
 		{
+			int currentXPos = 0;
 			foreach (AbstractMargin margins in textArea.LeftMargins)
 			{
 				// MessageBox.Show (margin.Size.ToString());
-
+				Rectangle marginRectangle = new Rectangle(currentXPos , 0, margins.Size.Width, textArea.Height);
+				if (margins.IsVisible || margins is FoldMargin)
+				{
+					currentXPos += margins.DrawingPosition.Width;
+				}
 				if (margins is IconBarMargin)
 				{
 					margin = (IconBarMargin) margins;
+				}else if (margins is FoldMargin)
+				{
+					foldmargin = (FoldMargin) margins;
+					
+					if (marginRectangle != margin.DrawingPosition) { // Be sure that the line has valid rectangle
+						foldmargin.DrawingPosition = marginRectangle;
+					}
 				}
 			}
 		}
@@ -573,6 +587,15 @@ namespace Yuki_Theme_Plugin
 						mark.Draw(margin, e.Graphics, new Point(0, yPos));
 					}
 				}
+			}
+
+			if (foldmargin != null)
+			{
+				e.Graphics.DrawLine(BrushRegistry.GetDotPen(bgdef, bgBorder),
+				                    foldmargin.DrawingPosition.X,
+				                    foldmargin.DrawingPosition.Y,
+				                    foldmargin.DrawingPosition.X,
+				                    foldmargin.DrawingPosition.Height);
 			}
 
 			if(img != null && bgImage)
@@ -706,6 +729,9 @@ namespace Yuki_Theme_Plugin
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
+			// Console.WriteLine (highlighting.GetColorFor ("VRuler").ToString ());
+			// bgvruler = highlighting.GetColorFor ("VRuler").Color;
+			// Console.WriteLine (bgvruler);
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);

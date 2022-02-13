@@ -442,6 +442,7 @@ namespace Yuki_Theme_Plugin
 				case "menu-cut" :
 				case "menu-saveall" :
 				case "menu-paste" :
+				case "copy" :
 				case "addFile" :
 				case "undo" :
 				case "redo" :
