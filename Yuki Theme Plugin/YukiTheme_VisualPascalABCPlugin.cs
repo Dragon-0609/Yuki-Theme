@@ -75,6 +75,7 @@ namespace Yuki_Theme_Plugin
 		public static Color           bgType;
 		public static Color           bgvruler;
 		public static Brush           bgdefBrush;
+		public static Brush           bglineBrush;
 		public static Brush           bgBrush;
 		public static Brush           bgClickBrush;
 		public static Brush           bgClick3Brush;
@@ -505,7 +506,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if(margin != null)
 			{
-				e.Graphics.FillRectangle (new SolidBrush (bgdef), margin.DrawingPosition.X,
+				e.Graphics.FillRectangle (bglineBrush, margin.DrawingPosition.X,
 				                          margin.DrawingPosition.Y,
 				                          margin.DrawingPosition.Width, margin.DrawingPosition.Height);
 				var inside =
@@ -659,6 +660,9 @@ namespace Yuki_Theme_Plugin
 
 			if(bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);
+			
+			if(bglineBrush != null) bglineBrush.Dispose ();
+			bglineBrush = new SolidBrush (highlighting.GetColorFor ("LineNumbers").BackgroundColor);
 			
 			if(bgBrush != null) bgBrush.Dispose ();
 			bgBrush = new SolidBrush (bg);
