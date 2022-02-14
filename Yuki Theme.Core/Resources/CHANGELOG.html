@@ -7,11 +7,29 @@
         body {
             background-color: __bg__;
             color: __clr__;
-            padding-bottom: 30px;
+            font-family: sans-serif;
         }
+
+        a {
+            color: __clr__;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: __clr_click__;
+        }
+
     </style>
 </head>
 <body>
-__content__
+<div id="content">
+    __content__    
+</div>
+
+
+<div class="expand">
+    <a href="javascript:void(0)" onclick="window.external.Expand();" id="expander_button">Expand</a>
+</div>
 </body>
 </html>

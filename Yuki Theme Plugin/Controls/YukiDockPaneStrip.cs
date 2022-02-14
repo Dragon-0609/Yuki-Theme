@@ -715,7 +715,7 @@ namespace Yuki_Theme_Plugin.Controls
 			foreach (Tab tab in Tabs)
 			{
 				PropertyInfo tbw = tab.GetType ()
-				                      .GetProperty ("TabWidth", BindingFlags.Public | BindingFlags.Instance);
+				                      .GetProperty ("MaxWidth", BindingFlags.Public | BindingFlags.Instance);
 				tbw.SetValue (tab, GetMaxTabWidth (Tabs.IndexOf (tab)));
 
 				PropertyInfo tbf = tab.GetType ()

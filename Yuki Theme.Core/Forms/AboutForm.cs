@@ -28,6 +28,8 @@ namespace Yuki_Theme.Core.Forms
 			FontManager.SetControlFont (label2, 1);
 			FontManager.SetControlFont (linkLabel1, 1);
 			FontManager.SetControlFont (vers, 1);
+			FontManager.SetControlFont (changelog_link, 1);
+			FontManager.SetControlFont (label4, 1);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -92,13 +94,14 @@ namespace Yuki_Theme.Core.Forms
 				linkLabel4.LinkColor = linkLabel5.LinkColor = linkLabel6.LinkColor = linkLabel7.LinkColor = 
 				linkLabel8.LinkColor = linkLabel10.LinkColor = linkLabel11.LinkColor = 
 					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = 
-						linkLabel15.LinkColor = ForeColor = fg;
-				
+						linkLabel15.LinkColor = changelog_link.LinkColor = ForeColor = fg;
+
 			linkLabel1.ActiveLinkColor = linkLabel2.ActiveLinkColor = linkLabel3.ActiveLinkColor =
-				linkLabel4.ActiveLinkColor = linkLabel5.ActiveLinkColor = linkLabel6.ActiveLinkColor = 
-				linkLabel7.ActiveLinkColor = linkLabel8.ActiveLinkColor = 
-				linkLabel10.ActiveLinkColor = linkLabel11.ActiveLinkColor = linkLabel12.ActiveLinkColor = 
-					linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor = linkLabel15.ActiveLinkColor = key;
+				linkLabel4.ActiveLinkColor = linkLabel5.ActiveLinkColor = linkLabel6.ActiveLinkColor =
+					linkLabel7.ActiveLinkColor = linkLabel8.ActiveLinkColor =
+						linkLabel10.ActiveLinkColor = linkLabel11.ActiveLinkColor = linkLabel12.ActiveLinkColor =
+							linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor =
+								linkLabel15.ActiveLinkColor = changelog_link.ActiveLinkColor = key;
 				
 			button1.FlatAppearance.MouseOverBackColor = click;
 		}
@@ -141,6 +144,11 @@ namespace Yuki_Theme.Core.Forms
 		private void linkLabel15_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
 		{
 			Process.Start ("https://jetbrains.design/intellij/resources/icons_list/");
+		}
+
+		private void changelog_link_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			new ChangelogForm ().Show (this);
 		}
 	}
 }
