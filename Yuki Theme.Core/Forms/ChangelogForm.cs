@@ -2,16 +2,20 @@
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Yuki_Theme.Core.Forms
 {
+	[ComVisible(true)]
 	public partial class ChangelogForm : Form
 	{
+		private bool expanded = false;
+		
 		public ChangelogForm ()
 		{
 			InitializeComponent ();
-
+			
 			Assembly a = Assembly.GetExecutingAssembly ();
 
 			Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.CHANGELOG.md");
@@ -30,13 +34,16 @@ namespace Yuki_Theme.Core.Forms
 			{
 				html = reader.ReadToEnd ();
 			}
-
+			stm.Dispose ();
 			html = html.Replace ("__bg__", ColorTranslator.ToHtml (Helper.bgColor));
 			html = html.Replace ("__clr__", ColorTranslator.ToHtml (Helper.fgColor));
+			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (Helper.fgHover));
 			string str = CommonMark.CommonMarkConverter.Convert (md);
 
 			html = html.Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
+			webBrowser1.ScrollBarsEnabled = true;
+			this.webBrowser1.ObjectForScripting = this;
 		}
 
 		private void ChangelogForm_Shown (object sender, EventArgs e)
@@ -55,8 +62,50 @@ namespace Yuki_Theme.Core.Forms
 
 		private void webBrowser1_DocumentCompleted (object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
-			webBrowser1.Height = webBrowser1.Document.Body.ClientRectangle.Height;
+			webBrowser1.Height = webBrowser1.Document.Body.ClientRectangle.Height + 35;
 			ClientSize = new Size (ClientSize.Width, webBrowser1.Height + 29);
 		}
+
+		public void Expand ()
+		{
+			expanded = !expanded;
+			string ntxt = "";
+			if (expanded)
+			{
+				ntxt = "Collapse";
+			} else
+			{
+				ntxt = "Expand";
+			}
+			
+			Assembly a = Assembly.GetExecutingAssembly ();
+
+			Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.CHANGELOG.md");
+			string mdd = "";
+			using (StreamReader reader = new StreamReader (stm))
+			{
+				mdd = reader.ReadToEnd ();
+			}
+
+			mdd = mdd.Split (new [] {"###"}, StringSplitOptions.None) [1];
+			if (!expanded)
+				mdd = mdd.Split (new [] {"##"}, StringSplitOptions.None) [1];
+			mdd = CommonMark.CommonMarkConverter.Convert (mdd);
+			stm.Dispose ();
+			// Load SVG
+			this.webBrowser1.Document.GetElementById ("content").InnerHtml = mdd;
+			this.webBrowser1.Document.GetElementById ("expander_button").InnerHtml = ntxt;
+			if (!expanded)
+			{
+				webBrowser1.Height = webBrowser1.Document.Body.ClientRectangle.Height + 35;
+				ClientSize = new Size (ClientSize.Width, webBrowser1.Height + 29);
+			} else
+			{
+				webBrowser1.Height = 400;
+				ClientSize = new Size (ClientSize.Width, 429);
+			}
+			
+		}
+		
 	}
 }

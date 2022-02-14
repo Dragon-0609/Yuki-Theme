@@ -1,6 +1,13 @@
 ﻿### Changelog
 
+## 5.1
+
+Fixed:
+1. Tab 'локальные переменные' and 'просмотр переменных' aren't shown properly [#28](https://github.com/Dragon-0609/Yuki-Theme/issues/28)
+
+
 ## 5.0
+
 Added to `Plugin`:
 1. Change icons of the IDE
 2. ToolBar Camouflage

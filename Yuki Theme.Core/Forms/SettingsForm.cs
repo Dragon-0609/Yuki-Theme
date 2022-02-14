@@ -43,7 +43,7 @@ namespace Yuki_Theme.Core.Forms
 		public const int ASKTOSAVE           = 28;
 
 
-		public const  double current_version     = 5.0;
+		public const  double current_version     = 5.1;
 		public const  string current_version_add = "";
 		public static string next_version        = "";
 
