@@ -244,6 +244,8 @@
         </Compile>
         <Compile Include="Helper.cs" />
         <Compile Include="Highlighter.cs" />
+        <Compile Include="NewThemeFormat.cs" />
+        <Compile Include="OldThemeFormat.cs" />
         <Compile Include="Parsers\AbstractParser.cs" />
         <Compile Include="Parsers\DokiThemeParser.cs" />
         <Compile Include="Parsers\JetBrainsParser.cs" />
@@ -446,6 +448,7 @@
       <EmbeddedResource Include="Resources\Syntax Templates\Pascal.xshd" />
       <EmbeddedResource Include="Resources\Syntax Templates\Python.xshd" />
       <EmbeddedResource Include="Resources\Syntax Templates\VBNET.xshd" />
+      <EmbeddedResource Include="Resources\SVG\cwmPermissionEdit.svg" />
       <Content Include="Resources\yuki.png" />
       <EmbeddedResource Include="yuki.png" />
       <EmbeddedResource Include="Themes\Darcula.yukitheme" />

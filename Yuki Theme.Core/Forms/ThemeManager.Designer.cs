@@ -37,6 +37,7 @@ namespace Yuki_Theme.Core.Forms
 			this.add = new System.Windows.Forms.Button ();
 			this.button2 = new System.Windows.Forms.Button ();
 			this.rename_btn = new System.Windows.Forms.Button ();
+			this.regenerate = new System.Windows.Forms.Button ();
 			this.SuspendLayout ();
 			// 
 			// scheme
@@ -123,11 +124,26 @@ namespace Yuki_Theme.Core.Forms
 			this.rename_btn.UseVisualStyleBackColor = false;
 			this.rename_btn.Click += new System.EventHandler (this.rename_btn_Click);
 			// 
+			// regenerate
+			// 
+			this.regenerate.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.regenerate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.regenerate.FlatAppearance.BorderSize = 0;
+			this.regenerate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.regenerate.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.regenerate.Location = new System.Drawing.Point (111, 396);
+			this.regenerate.Name = "regenerate";
+			this.regenerate.Size = new System.Drawing.Size (24, 24);
+			this.regenerate.TabIndex = 15;
+			this.regenerate.UseVisualStyleBackColor = false;
+			this.regenerate.Click += new System.EventHandler (this.regenerate_Click);
+			// 
 			// ThemeManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size (334, 431);
+			this.Controls.Add (this.regenerate);
 			this.Controls.Add (this.rename_btn);
 			this.Controls.Add (this.button2);
 			this.Controls.Add (this.add);
@@ -143,6 +159,8 @@ namespace Yuki_Theme.Core.Forms
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		private System.Windows.Forms.Button regenerate;
 
 		private System.Windows.Forms.Button rename_btn;
 

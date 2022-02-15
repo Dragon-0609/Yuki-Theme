@@ -118,7 +118,7 @@ namespace Yuki_Theme.Core.Forms
 		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
 		{
 			var a = Assembly.GetExecutingAssembly ();
-			remove.Visible = rename_btn.Visible = false;
+			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
 			if (scheme.SelectedItems.Count > 0)
 			{
 				if (!(scheme.SelectedItems [0] is ReItem)) return;
@@ -134,7 +134,7 @@ namespace Yuki_Theme.Core.Forms
 				                          && !re.rgroupItem.Name.Equals (
 					                             "doki theme", StringComparison.OrdinalIgnoreCase))
 				{
-					remove.Visible = rename_btn.Visible = true;
+					remove.Visible = rename_btn.Visible = regenerate.Visible = true;
 				}
 			}
 		}
@@ -143,18 +143,18 @@ namespace Yuki_Theme.Core.Forms
 		{
 			add.BackColor = scheme.BackColor = BackColor = button2.BackColor = cbg = Helper.bgColor;
 			
-			add.ForeColor = remove.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
+			add.ForeColor = remove.ForeColor = regenerate.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
 
-			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor =
-				rename_btn.FlatAppearance.MouseOverBackColor =
-					button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor = 
+				regenerate.FlatAppearance.MouseOverBackColor =
+					rename_btn.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 				
 			bg = new SolidBrush (BackColor);
 			fg = new SolidBrush (ForeColor);
 			fgsp = new SolidBrush (Helper.fgKeyword);
 			cbgclick = Helper.bgClick;
 			loadSVG();
-			remove.Visible = rename_btn.Visible = false;
+			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
 		}
 
 		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
@@ -217,6 +217,7 @@ namespace Yuki_Theme.Core.Forms
         	Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
             Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
             Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
+            Helper.RenderSvg (regenerate, Helper.LoadSvg ("cwmPermissionEdit", a), false, Size.Empty, true, Helper.fgKeyword);
 		}
 
 		private Size MeasureString (string candidate, Font fnt)
@@ -259,6 +260,32 @@ namespace Yuki_Theme.Core.Forms
 
 				rf.Dispose ();
 			}
+		}
+
+		private void regenerate_Click (object sender, EventArgs e)
+		{
+			string name = ((ReItem) scheme.SelectedItems [0]).Name;
+			string namep = Helper.ConvertNameToPath (name);
+			string pth = "";
+			string pth2 = "";
+			string npath = "";
+			string format = "";
+			if (File.Exists (Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}")))
+			{
+				pth = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}");
+				npath = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_NEW}");
+				format = "new";
+			} else
+			{
+				pth = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_NEW}");
+				npath = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}");
+				format = "old";
+			}
+
+			CLI.CopyTheme (name, namep, npath, out pth2, false);
+			CLI.ReGenerateTheme (npath, pth, name, name, true);
+			File.Delete (pth);
+			MessageBox.Show ($"{name} has been regenerated to {format} format", "Regeneration compeleted");
 		}
 	}
 }

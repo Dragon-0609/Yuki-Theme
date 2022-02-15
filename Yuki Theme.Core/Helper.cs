@@ -263,8 +263,8 @@ namespace Yuki_Theme.Core
 
 		private static bool IsZip (ZipArchive zipFile, string themefile)
 		{
-				var theme = zipFile.GetEntry (themefile);
-				return true;
+			var theme = zipFile.GetEntry (themefile);
+			return true;
 			
 		}
 

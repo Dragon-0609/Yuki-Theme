@@ -32,4 +32,11 @@ namespace Yuki_Theme.Core
 		[JsonProperty("fields")]
 		public Dictionary <string, ThemeField> Fields { get; set; }
 	}
+	
+	public static class ThemeFunctions {
+		public static bool IsZip (this Theme theme)
+		{
+			return theme.HasWallpaper || theme.HasWallpaper;
+		}
+	}
 }
