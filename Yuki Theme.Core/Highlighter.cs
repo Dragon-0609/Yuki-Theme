@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core
 
 		private MForm form;
 
-		private Dictionary <string, Dictionary <string, string>> localAttributes => form.localAttributes;
+		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
 
 		private Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
@@ -64,7 +64,7 @@ namespace Yuki_Theme.Core
 			if (styles == null)
 				InitStyles ();
 			bool isLight = CLI.settingMode == SettingMode.Light;
-			foreach (KeyValuePair <string, Dictionary <string, string>> style in localAttributes)
+			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
 			{
 				if (isInNames (style.Key))
 				{
@@ -75,22 +75,21 @@ namespace Yuki_Theme.Core
 					foreach (string ki in key)
 					{
 						string kilow = ki.ToLower ();
-						
-						if (style.Value.ContainsKey ("color"))
-							styles [kilow].ForeBrush = new SolidBrush (Parse (style.Value ["color"]));
 
-						if (style.Value.ContainsKey ("bgcolor"))
-							styles [kilow].BackgroundBrush = new SolidBrush (Parse (style.Value ["bgcolor"]));
+						if (style.Value.Foreground != null)
+							styles [kilow].ForeBrush = new SolidBrush (Parse (style.Value.Foreground));
 
-						if (style.Value.ContainsKey ("bold"))
+						if (style.Value.Background != null)
+							styles [kilow].BackgroundBrush = new SolidBrush (Parse (style.Value.Background));
+
+						if (style.Value.Bold != null)
 						{
-							// Console.WriteLine($"YS {key}");
 							styles [kilow].FontStyle = collectFontStyle (style.Value);
 						}
 					
 						if (kilow == "keywords" || kilow == "keyword")
 						{
-							Helper.fgKeyword = Parse (style.Value ["color"]);
+							Helper.fgKeyword = Parse (style.Value.Foreground);
 						}
 					}
 					
@@ -104,8 +103,8 @@ namespace Yuki_Theme.Core
 						case "Default" :
 						case "Default Text" :
 						{
-							sBox.BackColor = Parse (style.Value ["bgcolor"]);
-							sBox.ForeColor = Parse (style.Value ["color"]);
+							sBox.BackColor = Parse (style.Value.Background);
+							sBox.ForeColor = Parse (style.Value.Foreground);
 							Helper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
 							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
 							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
@@ -117,43 +116,43 @@ namespace Yuki_Theme.Core
 							break;
 						case "Selection" :
 						{
-							sBox.SelectionColor = Color.FromArgb (100, Parse (style.Value ["bgcolor"]));
+							sBox.SelectionColor = Color.FromArgb (100, Parse (style.Value.Background));
 						}
 							break;
 						case "VRuler" :
 						case "Vertical Ruler" :
 						{
-							sBox.ServiceLinesColor = Parse (style.Value ["color"]);
+							sBox.ServiceLinesColor = Parse (style.Value.Foreground);
 						}
 							break;
 						case "CaretMarker" :
 						case "Caret" :
 						{
-							sBox.CaretColor = Parse (style.Value ["color"]);
+							sBox.CaretColor = Parse (style.Value.Foreground);
 							Helper.bgBorder = sBox.CaretColor;
 						}
 							break;
 						case "LineNumbers" :
 						case "Line Number" :
 						{
-							sBox.LineNumberColor = Parse (style.Value ["color"]);
-							sBox.IndentBackColor = Parse (style.Value ["bgcolor"]);
-							sBox.PaddingBackColor = Parse (style.Value ["bgcolor"]);
+							sBox.LineNumberColor = Parse (style.Value.Foreground);
+							sBox.IndentBackColor = Parse (style.Value.Background);
+							sBox.PaddingBackColor = Parse (style.Value.Background);
 						}
 							break;
 						case "FoldMarker" :
 						case "Fold's Rectangle" :
 						{
-							sBox.ServiceColors.CollapseMarkerForeColor = Parse (style.Value ["color"]);
-							sBox.ServiceColors.ExpandMarkerForeColor = Parse (style.Value ["color"]);
-							sBox.ServiceColors.CollapseMarkerBackColor = Parse (style.Value ["bgcolor"]);
-							sBox.ServiceColors.ExpandMarkerBackColor = Parse (style.Value ["bgcolor"]);
+							sBox.ServiceColors.CollapseMarkerForeColor = Parse (style.Value.Foreground);
+							sBox.ServiceColors.ExpandMarkerForeColor = Parse (style.Value.Foreground);
+							sBox.ServiceColors.CollapseMarkerBackColor = Parse (style.Value.Background);
+							sBox.ServiceColors.ExpandMarkerBackColor = Parse (style.Value.Background);
 						}
 							break;
 						case "SelectedFoldLine" :
 						case "Selected Fold's Line" :
 						{
-							sBox.ServiceColors.SelectedMarkerBorderColor = Parse (style.Value ["color"]);
+							sBox.ServiceColors.SelectedMarkerBorderColor = Parse (style.Value.Foreground);
 						}
 							break;
 					}
@@ -385,11 +384,11 @@ namespace Yuki_Theme.Core
 				return font;
 		}
 
-		private FontStyle collectFontStyle (Dictionary <string, string> val)
+		private FontStyle collectFontStyle (ThemeField val)
 		{
 			FontStyle font = FontStyle.Regular;
-			font = addFontStyle (font, FontStyle.Bold, bool.Parse (val ["bold"]));
-			font = addFontStyle (font, FontStyle.Italic, bool.Parse (val ["italic"]));
+			font = addFontStyle (font, FontStyle.Bold, (bool) val.Bold);
+			font = addFontStyle (font, FontStyle.Italic, (bool) val.Italic);
 			return font;
 		}
 	}

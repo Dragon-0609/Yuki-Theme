@@ -173,7 +173,7 @@ namespace Yuki_Theme_Plugin
 			textArea = textEditor.ActiveTextAreaControl.TextArea;
 			context = textEditor.ContextMenuStrip;
 			context2 = fm.MainDockPanel.ContextMenuStrip;
-
+			context2.Items.Add ("Open in Explorer", null, OpenInExplorer);
 			/*
 			foreach (DockWindow dockWindow in fm.MainDockPanel.DockWindows)
 			{
@@ -395,6 +395,14 @@ namespace Yuki_Theme_Plugin
 			fm.Resize += FmOnResize;
 			addSettings ();
 		}
+
+		private void OpenInExplorer (object sender, EventArgs e)
+		{
+			//MessageBox.Show (fm.CurrentCodeFileDocument.FileName);
+			if ( File.Exists(fm.CurrentCodeFileDocument.FileName))
+				System.Diagnostics.Process.Start("explorer.exe", string.Format("/select, \"{0}\"", fm.CurrentCodeFileDocument.FileName));
+		}
+
 		private void ReloadSticker ()
 		{
 			enbld = 0;
@@ -600,23 +608,12 @@ namespace Yuki_Theme_Plugin
 
 			if(img != null && bgImage)
 			{
-				if (oldV.Width != mainPanel.ClientRectangle.Width || oldV.Height != mainPanel.ClientRectangle.Height)
+				if (oldV.Width != textEditor.ClientRectangle.Width || oldV.Height != textEditor.ClientRectangle.Height)
 				{
-					oldV = Helper.GetSizes (img.Size, mainPanel.ClientRectangle.Width, mainPanel.ClientRectangle.Height,
+					oldV = Helper.GetSizes (img.Size, textEditor.ClientRectangle.Width, textEditor.ClientRectangle.Height,
 					                        align);
 				}
-				// if (dockcount == 1)
-					e.Graphics.DrawImage (img, oldV);
-				/*else
-				{
-					TextArea area = (TextArea) sender;
-					int iter = 0;
-					int.TryParse (area.MotherTextEditorControl.AccessibleDescription, out iter);
-					Rectangle rect = oldV;
-					rect.X = iter * area.MotherTextEditorControl.ClientSize.Width;
-					Console.WriteLine (rect.Width + " _ " + rect.X + " _ " + iter + " _ " + area.MotherTextEditorControl.Text);
-					e.Graphics.DrawImage (img, rect);
-				}*/
+				e.Graphics.DrawImage (img, oldV);
 			}
 		}
 
@@ -768,7 +765,7 @@ namespace Yuki_Theme_Plugin
 			if (File.Exists (pth))
 			{
 				Image iamg = Image.FromFile (pth);
-
+				Console.WriteLine("Image loaded");
 				align = Alignment.Center;
 				opacity = 10;
 
@@ -802,11 +799,12 @@ namespace Yuki_Theme_Plugin
 				if(opacity != 100)
 				{
 					img = Helper.SetOpacity (iamg, opacity);
-					iamg.Dispose ();
+					// iamg.Dispose ();
 				} else
 				{
 					img = iamg;
 				}
+				Console.WriteLine("Image set");
 			} else
 			{
 				img = null;
@@ -1314,6 +1312,7 @@ namespace Yuki_Theme_Plugin
 		private void ifHsImage (Image img)
 		{
 			tmpImage1 = img;
+			
 		}
 
 		private void ifHsSticker (Image img)
@@ -1337,8 +1336,7 @@ namespace Yuki_Theme_Plugin
 			{
 				if(lst.SelectedItem.ToString () != lst.AccessibleName)
 				{
-					CLI.currentoFile = lst.SelectedItem.ToString ();
-					CLI.currentFile = Helper.ConvertNameToPath (CLI.currentoFile);
+					bool cnd = CLI.SelectTheme (lst.SelectedItem.ToString ());
 					CLI.selectedItem = CLI.currentoFile;
 					CLI.ifHasImage2 = ifHsImage;
 					CLI.ifHasSticker2 = ifHsSticker;

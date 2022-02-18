@@ -28,21 +28,6 @@ namespace Yuki_Theme.Core
 			return fields;
 		}
 
-		public static Theme PrepareToSave (Image img2, Image img3)
-		{
-			Theme theme = new Theme ();
-			theme.Name = CLI.currentoFile;
-			theme.Group = CLI.groupName;
-			theme.Version = Convert.ToInt32 (SettingsForm.current_version);
-			theme.HasWallpaper = img2 != null;
-			theme.HasSticker = img3 != null;
-			theme.WallpaperOpacity = CLI.opacity;
-			theme.StickerOpacity = CLI.sopacity;
-			theme.WallpaperAlign = (int) CLI.align;
-			theme.Fields = GetFieldsFromDictionary (CLI.localAttributes);
-			return theme;
-		}
-
 		/// <summary>
 		/// Save current theme in new format. It is mainly used in new versions of Yuki Theme. Smaller than version 6 won't be able to open the format
 		/// </summary>
@@ -50,9 +35,7 @@ namespace Yuki_Theme.Core
 		/// <param name="img3">Sticker</param>
 		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			Theme theme = PrepareToSave (img2, img3);
-
-			string json = JsonConvert.SerializeObject (theme, Formatting.Indented);
+			string json = JsonConvert.SerializeObject (CLI.currentTheme, Formatting.Indented);
 			bool iszip = Helper.IsZip (CLI.getPathNew);
 
 
@@ -290,14 +273,14 @@ namespace Yuki_Theme.Core
 
 		public static void populateList ()
 		{
-			string json = loadThemeToPopulate (CLI.gpNew, CLI.getPathNew, true, CLI.isDefault ());
+			bool isDef = CLI.isDefault ();
+			string json = loadThemeToPopulate (CLI.gpNew, CLI.getPathNew, true, isDef);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
-			PopulateDictionaryFromTheme (theme, ref CLI.localAttributes, ref CLI.names);
-			
-			CLI.align = (Alignment) theme.WallpaperAlign;
-			CLI.opacity = theme.WallpaperOpacity;
-			CLI.sopacity = theme.StickerOpacity;
+			theme.isDefault = isDef;
+			theme.path = isDef ? CLI.gpNew : CLI.getPathNew;
+			CLI.names.AddRange (theme.Fields.Keys);
+			CLI.currentTheme = theme;
 		}
 	
 	}

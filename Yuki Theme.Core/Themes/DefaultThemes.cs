@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -100,6 +101,14 @@ namespace Yuki_Theme.Core.Themes
 		public static bool isDefault (string str)
 		{
 			return def.Contains (str);
+		}
+
+		public static void addDefaultThemes (ref Dictionary <string, bool> themes)
+		{
+			foreach (string themeName in def)
+			{
+				themes.Add (themeName, true);
+			}
 		}
 
 		public static string getCategory (string st)

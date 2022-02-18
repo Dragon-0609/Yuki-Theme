@@ -66,10 +66,10 @@ namespace Yuki_Theme.Core.Forms
 			set => CLI.currentoFile = value;
 		}
 
-		public Dictionary <string, Dictionary <string, string>> localAttributes
+		public Dictionary <string, ThemeField> localAttributes
 		{
-			get => CLI.localAttributes;
-			set => CLI.localAttributes = value;
+			get => CLI.currentTheme.Fields;
+			set => CLI.currentTheme.Fields = value;
 		}
 
 		private string pascalPath
@@ -141,19 +141,7 @@ namespace Yuki_Theme.Core.Forms
 		private Alignment align
 		{
 			get => CLI.align;
-			set => CLI.align = value;
-		}
-
-		private int opacity
-		{
-			get => CLI.opacity;
-			set => CLI.opacity = value;
-		}
-
-		private int sopacity
-		{
-			get => CLI.sopacity;
-			set => CLI.sopacity = value;
+			set => CLI.currentTheme.WallpaperAlign = (int)value;
 		}
 
 		private SettingMode settingMode
@@ -194,7 +182,7 @@ namespace Yuki_Theme.Core.Forms
 		public  Brush         fgbrush;
 		private int           textBoxHeight = 0;
 		private int           notHeight     = 0;
-		private int           imgCurrent    = 0;
+		private ImageType    imgCurrent    = ImageType.None;
 		public  CustomPicture stickerControl;
 		private Timer         tmr;
 
@@ -299,35 +287,24 @@ namespace Yuki_Theme.Core.Forms
 						check_italic.Enabled = true;
 					}
 
-					var dic = localAttributes [str];
-					foreach (var item in dic)
-						switch (item.Key)
-						{
-							case "color" :
-							{
-								colorButton.BackColor = ColorTranslator.FromHtml (item.Value);
-								colorButton.Visible = true;
-							}
-								break;
-							case "bgcolor" :
-							{
-								bgButton.BackColor = ColorTranslator.FromHtml (item.Value);
-								bgButton.Visible = true;
-							}
-								break;
-							case "bold" :
-							{
-								// check_bold.Enabled = true;
-								check_bold.Checked = bool.Parse (item.Value + "");
-							}
-								break;
-							case "italic" :
-							{
-								// check_italic.Enabled = true;
-								check_italic.Checked = bool.Parse (item.Value + "");
-							}
-								break;
-						}
+					ThemeField dic = localAttributes [str];
+					if (dic.Foreground != null)
+					{
+						colorButton.BackColor = ColorTranslator.FromHtml (dic.Foreground);
+						colorButton.Visible = true;
+					}
+
+					if (dic.Background != null)
+					{
+						bgButton.BackColor = ColorTranslator.FromHtml (dic.Background);
+						bgButton.Visible = true;
+					}
+					if (dic.Bold != null){
+						check_bold.Checked = (bool) dic.Bold;
+					}
+					if (dic.Italic != null){
+						check_italic.Checked = (bool) dic.Italic;
+					}
 
 					blocked = false;
 					highlighter.activateColors (str);
@@ -339,36 +316,32 @@ namespace Yuki_Theme.Core.Forms
 						imageEditor.Visible = true;
 					}
 
-					imgCurrent = 2;
 					alignpanel.Enabled = false;
-					imgCurrent = 0;
+					imgCurrent = ImageType.None;
 
 
 					if (!str.Contains ("Sticker"))
 					{
 						alignpanel.Enabled = true;
-						imgCurrent = 1;
-						align = (Alignment) (int.Parse (localAttributes [str] ["align"]));
+						imgCurrent = ImageType.Wallpaper;
+						align = (Alignment) CLI.currentTheme.WallpaperAlign;
 						imagePath.Text = bgtext;
-						opacity = int.Parse (localAttributes [str] ["opacity"]);
 						blockedNumeric = true;
-						numericUpDown1.Value = opacity;
+						numericUpDown1.Value = CLI.currentTheme.WallpaperOpacity;
 						blockedNumeric = false;
-						imgCurrent = 1;
 						unblockedScrool = true;
-						opacity_slider.Value = opacity;
+						opacity_slider.Value = CLI.currentTheme.WallpaperOpacity;
 
 						updateAlignButton ();
 					} else
 					{
 						imagePath.Text = sttext;
-						sopacity = int.Parse (localAttributes [str] ["opacity"]);
 						blockedNumeric = true;
-						numericUpDown1.Value = sopacity;
+						numericUpDown1.Value = CLI.currentTheme.StickerOpacity;
 						blockedNumeric = false;
-						imgCurrent = 2;
+						imgCurrent = ImageType.Sticker;
 						unblockedScrool = true;
-						opacity_slider.Value = sopacity;
+						opacity_slider.Value = CLI.currentTheme.StickerOpacity;
 					}
 
 					imageEditor.Enabled = !isDefault ();
@@ -407,8 +380,8 @@ namespace Yuki_Theme.Core.Forms
 				{
 					if (img3 != null)
 					{
-						if (sopacity != 100)
-							img4 = Helper.SetOpacity (img3, sopacity);
+						if (CLI.currentTheme.StickerOpacity != 100)
+							img4 = Helper.SetOpacity (img3, CLI.currentTheme.StickerOpacity);
 						else
 							img4 = img3;
 						stickerControl.Visible = true;
@@ -456,15 +429,8 @@ namespace Yuki_Theme.Core.Forms
 		private void updateCurrentItem ()
 		{
 			var str = list_1.SelectedItem.ToString ();
-			var dic = localAttributes [str];
-			if (dic.ContainsKey ("color"))
-				dic ["color"] = Translate (colorButton.BackColor);
-			if (dic.ContainsKey ("bgcolor"))
-				dic ["bgcolor"] = Translate (bgButton.BackColor);
-			if (dic.ContainsKey ("bold"))
-				dic ["bold"] = check_bold.Checked.ToString ().ToLower ();
-			if (dic.ContainsKey ("italic"))
-				dic ["italic"] = check_italic.Checked.ToString ().ToLower ();
+			ThemeField dic = localAttributes [str];
+			SetField (ref dic);
 			if (settingMode == SettingMode.Light)
 			{
 				var sttr = Populater.getDependencies (str);
@@ -472,18 +438,23 @@ namespace Yuki_Theme.Core.Forms
 					foreach (var sr in sttr)
 					{
 						dic = localAttributes [sr];
-						if (dic.ContainsKey ("color"))
-							dic ["color"] = Translate (colorButton.BackColor);
-						if (dic.ContainsKey ("bgcolor"))
-							dic ["bgcolor"] = Translate (bgButton.BackColor);
-						if (dic.ContainsKey ("bold"))
-							dic ["bold"] = check_bold.Checked.ToString ().ToLower ();
-						if (dic.ContainsKey ("italic"))
-							dic ["italic"] = check_italic.Checked.ToString ().ToLower ();
+						SetField (ref dic);
 					}
 			}
 
 			highlighter.updateColors ();
+		}
+
+		private void SetField (ref ThemeField dic)
+		{
+			if (dic.Foreground != null)
+				dic.Foreground = Translate (colorButton.BackColor);
+			if (dic.Background != null)
+				dic.Background = Translate (bgButton.BackColor);
+			if (dic.Bold != null)
+				dic.Bold = check_bold.Checked;
+			if (dic.Italic != null)
+				dic.Italic = check_italic.Checked;
 		}
 
 		private string Translate (Color clr)
@@ -574,14 +545,14 @@ namespace Yuki_Theme.Core.Forms
 			updateBackgroundColors ();
 			unblockedScrool = true;
 
-			imgCurrent = 1;
+			imgCurrent = ImageType.Wallpaper;
 			opacity_slider_Scroll (
-				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
-			imgCurrent = 2;
+				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.WallpaperOpacity));
+			imgCurrent = ImageType.Sticker;
 			unblockedScrool = true;
 			opacity_slider_Scroll (
-				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
-			imgCurrent = 0;
+				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
+			imgCurrent = ImageType.None;
 
 			GC.Collect ();
 			GC.WaitForPendingFinalizers ();
@@ -667,6 +638,7 @@ namespace Yuki_Theme.Core.Forms
 				{
 					schemes.Items.Add (toname);
 					schemes.SelectedItem = toname;
+					CLI.isDefaultTheme.Add (toname, false);
 				}
 			}
 		}
@@ -1018,9 +990,7 @@ namespace Yuki_Theme.Core.Forms
 			if (align != Alignment.Left)
 			{
 				align = Alignment.Left;
-				convertAlign ();
 			}
-
 			updateAlignButton ();
 		}
 
@@ -1029,9 +999,7 @@ namespace Yuki_Theme.Core.Forms
 			if (align != Alignment.Center)
 			{
 				align = Alignment.Center;
-				convertAlign ();
 			}
-
 			updateAlignButton ();
 		}
 
@@ -1040,9 +1008,7 @@ namespace Yuki_Theme.Core.Forms
 			if (align != Alignment.Right)
 			{
 				align = Alignment.Right;
-				convertAlign ();
 			}
-
 			updateAlignButton ();
 		}
 
@@ -1058,11 +1024,6 @@ namespace Yuki_Theme.Core.Forms
 
 				e.Graphics.DrawImage (img, oldV);
 			}
-		}
-
-		private void convertAlign ()
-		{
-			localAttributes ["Wallpaper"] ["align"] = ((int) align).ToString ();
 		}
 
 		private void updateAlignButton ()
@@ -1116,15 +1077,15 @@ namespace Yuki_Theme.Core.Forms
 
 		private void Apply_Click (object sender, EventArgs e)
 		{
-			if (imgCurrent == 1)
+			if (imgCurrent == ImageType.Wallpaper)
 			{
 				bgtext = imagePath.Text;
-			} else if (imgCurrent == 2)
+			} else if (imgCurrent == ImageType.Sticker)
 			{
 				sttext = imagePath.Text;
 			}
 
-			if (imagePath.Text == "wallpaper.png" && imgCurrent == 1)
+			if (imagePath.Text == "wallpaper.png" && imgCurrent == ImageType.Wallpaper)
 			{
 				Tuple <bool, Image> iag = isDefault ()
 					? Helper.GetImageFromMemory (gp, Assembly.GetExecutingAssembly ())
@@ -1137,8 +1098,8 @@ namespace Yuki_Theme.Core.Forms
 				}
 
 				unblockedScrool = true;
-				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
-			} else if (imagePath.Text == "sticker.png" && imgCurrent == 2)
+				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.WallpaperOpacity));
+			} else if (imagePath.Text == "sticker.png" && imgCurrent == ImageType.Sticker)
 			{
 				Tuple <bool, Image> iag = isDefault ()
 					? Helper.GetStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
@@ -1150,18 +1111,18 @@ namespace Yuki_Theme.Core.Forms
 				}
 
 				unblockedScrool = true;
-				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
+				opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
 			} else if (File.Exists (imagePath.Text))
 			{
 				if (imagePath.Text.ToLower ().EndsWith (".png"))
 				{
-					if (imgCurrent == 1)
+					if (imgCurrent == ImageType.Wallpaper)
 					{
 						img2 = Image.FromFile (imagePath.Text);
 
 						unblockedScrool = true;
-						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, opacity));
-					} else if (imgCurrent == 2)
+						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.WallpaperOpacity));
+					} else if (imgCurrent == ImageType.Sticker)
 					{
 						img3 = Image.FromFile (imagePath.Text);
 
@@ -1178,7 +1139,7 @@ namespace Yuki_Theme.Core.Forms
 						}
 
 						unblockedScrool = true;
-						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, sopacity));
+						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
 					}
 				} else
 				{
@@ -1187,12 +1148,12 @@ namespace Yuki_Theme.Core.Forms
 				}
 			} else if (imagePath.Text.Length < 2)
 			{
-				if (imgCurrent == 1)
+				if (imgCurrent == ImageType.Wallpaper)
 				{
 					img = null;
 					img2 = null;
 					sBox.Refresh ();
-				} else if (imgCurrent == 2)
+				} else if (imgCurrent == ImageType.Sticker)
 				{
 					img3 = null;
 					LoadSticker ();
@@ -1245,31 +1206,30 @@ namespace Yuki_Theme.Core.Forms
 
 		private void opacity_slider_Scroll (object sender, ScrollEventArgs e)
 		{
-			if (Math.Abs (Convert.ToInt32 (opacity_slider.Value) - opacity) > 3 || unblockedScrool)
+			int opac = imgCurrent == ImageType.Wallpaper ? CLI.currentTheme.WallpaperOpacity : CLI.currentTheme.StickerOpacity;
+			if (Math.Abs (Convert.ToInt32 (opacity_slider.Value) - opac) > 3 || unblockedScrool)
 			{
-				if (imgCurrent == 1)
+				if (imgCurrent == ImageType.Wallpaper)
 				{
 					if (img2 != null)
 					{
 						if (!unblockedScrool)
-							opacity = Convert.ToInt32 (opacity_slider.Value);
-						img = Helper.SetOpacity (img2, opacity);
+							CLI.currentTheme.WallpaperOpacity = Convert.ToInt32 (opacity_slider.Value);
+						img = Helper.SetOpacity (img2, CLI.currentTheme.WallpaperOpacity);
 						blockedNumeric = true;
-						numericUpDown1.Value = opacity;
+						numericUpDown1.Value = CLI.currentTheme.WallpaperOpacity;
 						blockedNumeric = false;
 						sBox.Refresh ();
-						localAttributes ["Wallpaper"] ["opacity"] = opacity.ToString ();
 					}
-				} else if (imgCurrent == 2)
+				} else if (imgCurrent == ImageType.Sticker)
 				{
 					if (img3 != null)
 					{
 						if (!unblockedScrool)
-							sopacity = Convert.ToInt32 (opacity_slider.Value);
+							CLI.currentTheme.StickerOpacity = Convert.ToInt32 (opacity_slider.Value);
 						blockedNumeric = true;
-						numericUpDown1.Value = sopacity;
+						numericUpDown1.Value = CLI.currentTheme.StickerOpacity;
 						blockedNumeric = false;
-						localAttributes ["Sticker"] ["opacity"] = sopacity.ToString ();
 					}
 
 					LoadSticker ();
@@ -1326,22 +1286,22 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (!blockedNumeric)
 			{
-				if (imgCurrent == 1)
+				if (imgCurrent == ImageType.Wallpaper)
 				{
 					if (img2 != null)
 					{
-						opacity = Convert.ToInt32 (numericUpDown1.Value);
+						CLI.currentTheme.WallpaperOpacity = Convert.ToInt32 (numericUpDown1.Value);
 						unblockedScrool = true;
 						opacity_slider.Value = numericUpDown1.Value;
 						// img = Helper.setOpacity (img2, opacity);
 						// sBox.Refresh ();
 						// localAttributes ["BackgroundImage"] ["opacity"] = opacity.ToString ();
 					}
-				} else if (imgCurrent == 2)
+				} else if (imgCurrent == ImageType.Sticker)
 				{
 					if (img3 != null)
 					{
-						sopacity = Convert.ToInt32 (numericUpDown1.Value);
+						CLI.currentTheme.StickerOpacity = Convert.ToInt32 (numericUpDown1.Value);
 						unblockedScrool = true;
 						opacity_slider.Value = numericUpDown1.Value;
 						// img = Helper.setOpacity (img2, opacity);

@@ -16,7 +16,7 @@ namespace Yuki_Theme.Core
 
 		[JsonProperty ("italic", Required = Required.AllowNull)]
 		public bool? Italic { get; set; }
-
+		
 		public static ThemeField GetFieldFromDictionary (Dictionary <string, string> field)
 		{
 			ThemeField themeField = new ThemeField {Bold = null, Italic = null};
@@ -68,5 +68,26 @@ namespace Yuki_Theme.Core
 			
 			return dictionary;
 		}
+
+		public void SetAttributeByName (string name, string value)
+		{
+			if (name == "color")
+				Foreground = value;
+			else
+				Background = value;
+		}
+
+		public Dictionary <string, string> GetAttributes ()
+		{
+			Dictionary <string, string> dictionay = new Dictionary <string, string> ();
+
+			if(Background!= null) dictionay.Add ("bgcolor", Background);
+			if(Foreground!= null) dictionay.Add ("color", Foreground);
+			if(Bold!= null) dictionay.Add ("bold", Bold.ToString().ToLower());
+			if(Italic!= null) dictionay.Add ("italic", Italic.ToString().ToLower());
+			
+			return dictionay;
+		}
+		
 	}
 }

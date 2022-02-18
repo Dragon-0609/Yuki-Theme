@@ -31,6 +31,18 @@ namespace Yuki_Theme.Core
 
 		[JsonProperty("fields")]
 		public Dictionary <string, ThemeField> Fields { get; set; }
+
+		[JsonIgnore]
+		public bool isDefault;
+		
+		[JsonIgnore]
+		public string path;
+
+		[JsonIgnore]
+		public Alignment align => (Alignment) WallpaperAlign;
+
+
+
 	}
 	
 	public static class ThemeFunctions {
@@ -38,5 +50,15 @@ namespace Yuki_Theme.Core
 		{
 			return theme.HasWallpaper || theme.HasWallpaper;
 		}
+
+		public static Theme LoadDefault ()
+		{
+			Theme theme = new Theme ();
+			theme.WallpaperAlign = 1;
+			theme.StickerOpacity = 100;
+			theme.WallpaperOpacity = 15;
+			return theme;
+		}
+
 	}
 }

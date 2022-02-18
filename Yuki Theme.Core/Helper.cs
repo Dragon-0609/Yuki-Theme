@@ -13,32 +13,6 @@ using Svg;
 
 namespace Yuki_Theme.Core
 {
-	public enum Alignment : int
-	{
-		Left   = 1000,
-		Center = 2,
-		Right  = 1
-	}
-
-	public enum ProductMode : int
-	{
-		Program = 0,
-		Plugin  = 1,
-		CLI     = 2
-	}
-
-	public enum RelativeUnit : int
-	{
-		Pixel   = 0,
-		Percent = 1
-	}
-
-	public enum SettingMode : int
-	{
-		Light = 0,
-		Advanced = 1
-	}
-	
 	public static class Helper
 	{
 		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword;

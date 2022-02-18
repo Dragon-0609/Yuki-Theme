@@ -370,8 +370,8 @@ namespace Yuki_Theme.CLI
 				   Core.CLI.settingMode = SettingMode.Advanced;
 				   SetFile ("Darcula");
 				   Core.CLI.restore ();
-				   Console.WriteLine ($"There're {Core.CLI.localAttributes.Keys.Count} fields:");
-				   foreach (string name in Core.CLI.localAttributes.Keys)
+				   Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
+				   foreach (string name in Core.CLI.currentTheme.Fields.Keys)
 				   {
 					   Console.WriteLine ("\t" + name);
 				   }
@@ -619,14 +619,11 @@ namespace Yuki_Theme.CLI
 									   if (bg || txt)
 									   {
 										   o.Definition = Populater.getNormalizedName (o.Definition);
-										   if (Core.CLI.localAttributes.ContainsKey (o.Definition))
+										   if (Core.CLI.currentTheme.Fields.ContainsKey (o.Definition))
 										   {
-											   var dic = Core.CLI.localAttributes [o.Definition];
-											   if (dic.ContainsKey ("color") && txt)
-												   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
-											   if (dic.ContainsKey ("bgcolor") && bg)
-												   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
-											   foreach (KeyValuePair <string, string> keyValuePair in dic)
+											   ThemeField dic = Core.CLI.currentTheme.Fields [o.Definition];
+											   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
+											   foreach (KeyValuePair <string, string> keyValuePair in dic.GetAttributes ())
 											   {
 												   GiveMessage (keyValuePair.Value, keyValuePair.Key);
 											   }
@@ -636,11 +633,8 @@ namespace Yuki_Theme.CLI
 										   if (sttr != null)
 											   foreach (var sr in sttr)
 											   {
-												   var dic = Core.CLI.localAttributes [sr];
-												   if (dic.ContainsKey ("color") && txt)
-													   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
-												   if (dic.ContainsKey ("bgcolor") && bg)
-													   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
+												   ThemeField dic = Core.CLI.currentTheme.Fields [sr];
+												   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
 											   }
 
 										   Core.CLI.save (null, null, true);
@@ -740,7 +734,15 @@ namespace Yuki_Theme.CLI
 				   }
 			   });
 		}
-	
+
+		private static void SetColorsToField (ref ThemeField dic, bool txt, Color txtcolor, bool bg, Color bgcolor)
+		{
+			if (dic.Foreground != null && txt)
+				dic.Foreground = ColorTranslator.ToHtml (txtcolor);
+			if (dic.Background != null && bg)
+				dic.Background = ColorTranslator.ToHtml (bgcolor);
+		}
+
 		private static bool isColor(string definition)
 		{
 			definition = definition.ToLower ();
