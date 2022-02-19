@@ -15,8 +15,6 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
-using Yuki_Theme.Properties;
-using CommonDialog = System.Windows.Forms.CommonDialog;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace Yuki_Theme.Core.Forms
@@ -31,39 +29,39 @@ namespace Yuki_Theme.Core.Forms
 		private bool unblockedScrool;
 
 
-		private DatabaseManager database => CLI.database;
+		private DatabaseManager database => Settings.database;
 		private int             lastIndex = 1;
 
 		#region CLI Fields
 
 		private int actionChoice
 		{
-			get { return CLI.actionChoice; }
-			set { CLI.actionChoice = value; }
+			get { return Settings.actionChoice; }
+			set { Settings.actionChoice = value; }
 		}
 
 		private bool askChoice
 		{
-			get => CLI.askChoice;
-			set => CLI.askChoice = value;
+			get => Settings.askChoice;
+			set => Settings.askChoice = value;
 		}
 
 		private bool update
 		{
-			get => CLI.update;
-			set => CLI.update = value;
+			get => Settings.update;
+			set => Settings.update = value;
 		}
 
 		private string currentFile
 		{
-			get => CLI.currentFile;
-			set => CLI.currentFile = value;
+			get => CLI.nameToLoad;
+			set => CLI.nameToLoad = value;
 		}
 
 		private string currentoFile
 		{
-			get => CLI.currentoFile;
-			set => CLI.currentoFile = value;
+			get => CLI.pathToLoad;
+			set => CLI.pathToLoad = value;
 		}
 
 		public Dictionary <string, ThemeField> localAttributes
@@ -74,62 +72,62 @@ namespace Yuki_Theme.Core.Forms
 
 		private string pascalPath
 		{
-			get => CLI.pascalPath;
-			set => CLI.pascalPath = value;
+			get => Settings.pascalPath;
+			set => Settings.pascalPath = value;
 		}
 
 		private bool bgImage
 		{
-			get => CLI.bgImage;
-			set => CLI.bgImage = value;
+			get => Settings.bgImage;
+			set => Settings.bgImage = value;
 		}
 
 		private bool swSticker
 		{
-			get => CLI.swSticker;
-			set => CLI.swSticker = value;
+			get => Settings.swSticker;
+			set => Settings.swSticker = value;
 		}
 
 		private bool useCustomSticker
 		{
-			get => CLI.useCustomSticker;
-			set => CLI.useCustomSticker = value;
+			get => Settings.useCustomSticker;
+			set => Settings.useCustomSticker = value;
 		}
 
 		private string customSticker
 		{
-			get => CLI.customSticker;
-			set => CLI.customSticker = value;
+			get => Settings.customSticker;
+			set => Settings.customSticker = value;
 		}
 
 		private bool swLogo
 		{
-			get => CLI.swLogo;
-			set => CLI.swLogo = value;
+			get => Settings.swLogo;
+			set => Settings.swLogo = value;
 		}
 
 		private bool Editor
 		{
-			get => CLI.Editor;
-			set => CLI.Editor = value;
+			get => Settings.Editor;
+			set => Settings.Editor = value;
 		}
 
 		private bool Beta
 		{
-			get => CLI.Beta;
-			set => CLI.Beta = value;
+			get => Settings.Beta;
+			set => Settings.Beta = value;
 		}
 
 		private bool Logged
 		{
-			get => CLI.Logged;
-			set => CLI.Logged = value;
+			get => Settings.Logged;
+			set => Settings.Logged = value;
 		}
 
 		private bool swStatusbar
 		{
-			get => CLI.swStatusbar;
-			set => CLI.swStatusbar = value;
+			get => Settings.swStatusbar;
+			set => Settings.swStatusbar = value;
 		}
 
 		public string selectedItem
@@ -140,14 +138,14 @@ namespace Yuki_Theme.Core.Forms
 
 		private Alignment align
 		{
-			get => CLI.align;
+			get => CLI.currentTheme.align;
 			set => CLI.currentTheme.WallpaperAlign = (int)value;
 		}
 
 		private SettingMode settingMode
 		{
-			get => CLI.settingMode;
-			set => CLI.settingMode = value;
+			get => Settings.settingMode;
+			set => Settings.settingMode = value;
 		}
 
 		#endregion
@@ -207,7 +205,7 @@ namespace Yuki_Theme.Core.Forms
 			Helper.giveMessage = GiveMessage;
 
 			if (Helper.mode != ProductMode.Plugin)
-				CLI.connectAndGet (); // Get Data
+				Settings.connectAndGet (); // Get Data
 			initSticker ();
 
 			highlighter = new Highlighter (sBox, this);
@@ -218,7 +216,6 @@ namespace Yuki_Theme.Core.Forms
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
-			// Console.WriteLine (DesktopLocation);
 
 			if (currentFile != "N|L") // If theme couldn't find
 			{
@@ -265,8 +262,8 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (lastIndex != list_1.SelectedIndex)
 			{
-				colorButton.Visible = false;
-				bgButton.Visible = false;
+				colorButton.Visible = label1.Visible = false;
+				bgButton.Visible = label2.Visible = false;
 				check_bold.Enabled = false;
 				check_italic.Enabled = false;
 				lastIndex = list_1.SelectedIndex;
@@ -291,13 +288,13 @@ namespace Yuki_Theme.Core.Forms
 					if (dic.Foreground != null)
 					{
 						colorButton.BackColor = ColorTranslator.FromHtml (dic.Foreground);
-						colorButton.Visible = true;
+						colorButton.Visible = label1.Visible = true;
 					}
 
 					if (dic.Background != null)
 					{
 						bgButton.BackColor = ColorTranslator.FromHtml (dic.Background);
-						bgButton.Visible = true;
+						bgButton.Visible = label2.Visible = true;
 					}
 					if (dic.Bold != null){
 						check_bold.Checked = (bool) dic.Bold;
@@ -357,7 +354,7 @@ namespace Yuki_Theme.Core.Forms
 				stickerControl.margin = new Point (10, bottomPanel.Size.Height);
 			else
 				stickerControl.margin = new Point (10, 0);
-			stickerControl.Enabled = CLI.positioning;
+			stickerControl.Enabled = Settings.positioning;
 			CustomPanel pnl = new CustomPanel (1) {Visible = false, Name = "LayerGrids"};
 			stickerControl.pnl = pnl;
 			pnl.pict = stickerControl;
@@ -590,7 +587,7 @@ namespace Yuki_Theme.Core.Forms
 				restore_Click (sender, e);
 
 				selectedItem = schemes.SelectedItem.ToString ();
-				database.UpdateData (SettingsForm.ACTIVE, selectedItem);
+				database.UpdateData (Settings.ACTIVE, selectedItem);
 			}
 		}
 
@@ -636,9 +633,10 @@ namespace Yuki_Theme.Core.Forms
 				string toname = selform.textBox1.Text;
 				if (!CLI.add (syt, toname))
 				{
+					CLI.isDefaultTheme.Add (toname, false);
+					CLI.oldThemeList.Add (toname, CLI.oldThemeList [syt]);
 					schemes.Items.Add (toname);
 					schemes.SelectedItem = toname;
-					CLI.isDefaultTheme.Add (toname, false);
 				}
 			}
 		}
@@ -671,16 +669,16 @@ namespace Yuki_Theme.Core.Forms
 				update = setform.settingsPanel.checkBox2.Checked;
 				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
 				settingMode = (SettingMode) setform.settingsPanel.mode.SelectedIndex;
-				CLI.positioning = setform.settingsPanel.checkBox3.Checked;
-				CLI.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
-				CLI.showGrids = setform.settingsPanel.checkBox4.Checked;
-				CLI.useCustomSticker = setform.settingsPanel.use_cstm_sticker.Checked;
-				CLI.customSticker = setform.settingsPanel.customSticker;
-				CLI.autoFitByWidth = setform.settingsPanel.fitWidth.Checked;
-				CLI.askToSave = setform.settingsPanel.askSave.Checked;
-				CLI.saveData ();
+				Settings.positioning = setform.settingsPanel.checkBox3.Checked;
+				Settings.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
+				Settings.showGrids = setform.settingsPanel.checkBox4.Checked;
+				Settings.useCustomSticker = setform.settingsPanel.use_cstm_sticker.Checked;
+				Settings.customSticker = setform.settingsPanel.customSticker;
+				Settings.autoFitByWidth = setform.settingsPanel.fitWidth.Checked;
+				Settings.askToSave = setform.settingsPanel.askSave.Checked;
+				Settings.saveData ();
 				sBox.Refresh ();
-				stickerControl.Enabled = CLI.positioning;
+				stickerControl.Enabled = Settings.positioning;
 				LoadSticker ();
 				if (oldeditor != Editor) // Check if the Editor is changed
 					checkEditor ();
@@ -772,13 +770,13 @@ namespace Yuki_Theme.Core.Forms
 			foreach (string item in schemes.Items)
 			{
 				ReItem litem;
-				if (DefaultThemes.isDefault (item))
+				if (CLI.isDefaultTheme [item])
 				{
 					ReItem cat = DefaultThemes.getCategory (item) == "Doki Theme" ? doki : defa;
-					litem = new ReItem (item, false, cat);
+					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
 				} else
 				{
-					litem = new ReItem (item, false, custom);
+					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
 				}
 			}
 
@@ -789,7 +787,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public bool isDefault ()
 		{
-			return DefaultThemes.isDefault (currentoFile);
+			return CLI.currentTheme.isDefault;
 		}
 
 		private void AddEvents ()
@@ -1350,8 +1348,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public static void showLicense (Color bg, Color fg, Color bgClick, Form parent)
 		{
-			Console.WriteLine(CLI.license);
-			if (!CLI.license)
+			Console.WriteLine(Settings.license);
+			if (!Settings.license)
 			{
 				MessageForm msgf = new MessageForm ();
 				msgf.setColors (bg, fg, bgClick);
@@ -1366,34 +1364,34 @@ namespace Yuki_Theme.Core.Forms
 				msgf.Text = "LICENSE";
 				msgf.setMessage ("JetBrains.Icons License", description, "Accept");
 				msgf.ShowDialog (parent);
-				CLI.license = true;
-				CLI.database.UpdateData (SettingsForm.LICENSE, "true");
+				Settings.license = true;
+				Settings.database.UpdateData (Settings.LICENSE, "true");
 			}
 		}
 
 
 		public static void showGoogleAnalytics (Color bg, Color fg, Color bgClick, Form parent)
 		{
-			if (!CLI.googleAnalytics && !CLI.dontTrack)
+			if (!Settings.googleAnalytics && !Settings.dontTrack)
 			{
 				QuestionForm_2 qf = new QuestionForm_2 ();
 				qf.setColors (bg, fg, bgClick);
 				
 				if (qf.ShowDialog (parent) == DialogResult.Yes)
 				{
-					CLI.googleAnalytics = true;
-					CLI.database.UpdateData (SettingsForm.GOOGLEANALYTICS, "true");
+					Settings.googleAnalytics = true;
+					Settings.database.UpdateData (Settings.GOOGLEANALYTICS, "true");
 				} else
 				{
-					CLI.dontTrack = true;
-					CLI.database.UpdateData (SettingsForm.DONTTRACK, "true");
+					Settings.dontTrack = true;
+					Settings.database.UpdateData (Settings.DONTTRACK, "true");
 				}
 			}
 		}
 
 		public static void TrackInstall ()
 		{
-			if (!CLI.Logged && !CLI.dontTrack)
+			if (!Settings.Logged && !Settings.dontTrack)
 			{
 				HttpResponseMessage result = GoogleAnalyticsHelper.TrackEvent ().Result;
 				if (!result.IsSuccessStatusCode)
@@ -1401,8 +1399,8 @@ namespace Yuki_Theme.Core.Forms
 					// Maybe internet isn't available
 				} else
 				{
-					CLI.database.UpdateData (SettingsForm.LOGIN, "true");
-					CLI.Logged = true;
+					Settings.database.UpdateData (Settings.LOGIN, "true");
+					Settings.Logged = true;
 				}
 			}
 		}

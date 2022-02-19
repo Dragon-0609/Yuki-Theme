@@ -50,8 +50,8 @@ namespace Yuki_Theme.CLI
 
 			if (isPath)
 			{
-				Core.CLI.pascalPath = pth;
-				Core.CLI.saveData ();
+				Settings.pascalPath = pth;
+				Core.Settings.saveData ();
 			}
 		}
 		
@@ -139,10 +139,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetImageFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -152,10 +152,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -171,10 +171,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -182,10 +182,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -211,8 +211,8 @@ namespace Yuki_Theme.CLI
 				Core.CLI.showError = ShowError;
 				Core.CLI.onRename = ShowInvertSuccess;
 				Core.CLI.SaveInExport = AskToDelete;
-				Core.CLI.connectAndGet ();
-				Core.CLI.settingMode = SettingMode.Light;
+				Core.Settings.connectAndGet ();
+				Settings.settingMode = SettingMode.Light;
 				Core.CLI.load_schemes ();
 			} else if (refreshSchemes)
 			{
@@ -226,8 +226,7 @@ namespace Yuki_Theme.CLI
 		/// <param name="theme">Theme name</param>
 		public static void SetFile (string theme)
 		{
-			Core.CLI.currentoFile = theme;
-			Core.CLI.currentFile = Helper.ConvertNameToPath (theme);
+			Core.CLI.SelectTheme (theme);
 		}
 
 		/// <summary>
@@ -367,7 +366,7 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <AllFieldsCommand> (o =>
 			   {
 				   LoadCLI (true);
-				   Core.CLI.settingMode = SettingMode.Advanced;
+				   Settings.settingMode = SettingMode.Advanced;
 				   SetFile ("Darcula");
 				   Core.CLI.restore ();
 				   Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
@@ -478,7 +477,7 @@ namespace Yuki_Theme.CLI
 				   {
 					   if (Directory.Exists (System.IO.Path.Combine (o.Path, "Highlighting")))
 					   {
-						   Core.CLI.pascalPath = o.Path;
+						   Settings.pascalPath = o.Path;
 						   changed = true;
 					   } else
 					   {
@@ -491,7 +490,7 @@ namespace Yuki_Theme.CLI
 					   bool resa = false;
 					   if (bool.TryParse (o.Quiet, out resa))
 					   {
-						   Core.CLI.askChoice = resa;
+						   Settings.askChoice = resa;
 						   changed = true;
 					   } else
 					   {
@@ -518,7 +517,7 @@ namespace Yuki_Theme.CLI
 					   
 					   if (isValid)
 					   {
-						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
+						   Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
 						   changed = true;
 					   } else
 					   {
@@ -554,7 +553,7 @@ namespace Yuki_Theme.CLI
 
 					   if (isValid)
 					   {
-						   Core.CLI.actionChoice = act;
+						   Settings.actionChoice = act;
 						   changed = true;
 					   } else
 					   {
@@ -564,7 +563,7 @@ namespace Yuki_Theme.CLI
 
 				   if (changed)
 				   {
-					   Core.CLI.saveData ();
+					   Core.Settings.saveData ();
 					   ShowSuccess ("Settings are saved!", "Saved");
 				   } else
 				   {

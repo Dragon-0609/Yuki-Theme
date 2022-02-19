@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public async void CheckUpdate ()
 		{
-			var url = CLI.Beta
+			var url = Settings.Beta
 				? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
 				: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
 			try
@@ -48,14 +48,14 @@ namespace Yuki_Theme.Core.Forms
 					if (response != null)
 					{
 						var json = await response.Content.ReadAsStringAsync ();
-						if (CLI.Beta) // If can get beta, parse latest release (even pre-release)
+						if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
 							json = "{\n\""+ json.Split (new [] {"{\n    \"","\"\n  },"}, StringSplitOptions.None) [1] + "\"\n}";
 						
 						Console.WriteLine (json);
 						var jresponse = JObject.Parse (json);
 						string tg = jresponse ["tag_name"].ToString ();
 						Console.WriteLine (tg);
-						if (CLI.Beta)
+						if (Settings.Beta)
 						{
 							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/" + tg;
 						} else

@@ -22,6 +22,9 @@ namespace Yuki_Theme.Core
 
 		private static Size Standart32 = new Size (32, 32);
 
+		public static string DefaultThemesBegin = "Yuki_Theme.Core.Themes.";
+		public static string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
+
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
 			Rectangle res = new Rectangle ();
@@ -32,7 +35,7 @@ namespace Yuki_Theme.Core
 
 			// If image's drawing rectangle's width is smaller than mWidth.
 
-			if (res.Width < mWidth && CLI.autoFitByWidth)
+			if (res.Width < mWidth && Settings.autoFitByWidth)
 				res = GetSizesHorizontal (ima, mWidth, mHeight);
 
 			return res;
@@ -201,6 +204,32 @@ namespace Yuki_Theme.Core
 				}
 		}
 
+		public static ThemeFormat GetThemeFormat (bool isDefault, string path)
+		{
+			if (isDefault)
+			{
+				Assembly assembly = CLI.GetCore ();
+				if (assembly.GetManifestResourceStream ($"{DefaultThemesBegin}{path}{FILE_EXTENSTION_OLD}") != null)
+					return ThemeFormat.Old;
+				else if (assembly.GetManifestResourceStream ($"{DefaultThemesBegin}{path}{FILE_EXTENSTION_NEW}") != null)
+					return ThemeFormat.New;
+				else
+				{
+					return ThemeFormat.Null;
+				}
+			} else
+			{
+				if (File.Exists (Path.Combine (CustomThemesBegin, path + FILE_EXTENSTION_OLD)))
+					return ThemeFormat.Old;
+				else if (File.Exists (Path.Combine (CustomThemesBegin, path + FILE_EXTENSTION_NEW)))
+					return ThemeFormat.New;
+				else
+				{
+					return ThemeFormat.Null;
+				}
+			}
+		}
+
 		public static bool IsZip (string path)
 		{
 			try
@@ -243,7 +272,7 @@ namespace Yuki_Theme.Core
 		}
 
 		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
-		                              bool   wantToKeepSticker = false)
+		                              bool   wantToKeepSticker = false, string themeName = "")
 		{
 			if (!wantToKeepImage && !wantToKeepSticker && img == null && sticker == null)
 			{
@@ -252,7 +281,7 @@ namespace Yuki_Theme.Core
 			{
 				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
-					string themeName = GetThemeSaveName ();
+					if (themeName.Length == 0) themeName = GetThemeSaveName ();
 					ZipArchiveEntry entry = archive.GetEntry (themeName);
 
 					entry?.Delete ();
@@ -290,7 +319,7 @@ namespace Yuki_Theme.Core
 		private static void SaveToFile (string path, string content)
 		{
 			if (File.Exists (path)) File.Delete (path);
-			if (CLI.saveAsOld)
+			if (Settings.saveAsOld)
 				SaveToFileOld (path, content);
 			else
 				SaveToFileNew (path, content);
@@ -347,7 +376,7 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void Zip (string path, string content, Image img, Image sticker = null)
+		public static void Zip (string path, string content, Image img, Image sticker = null, string themeName = "")
 		{
 			if (img == null && sticker == null)
 			{
@@ -358,7 +387,8 @@ namespace Yuki_Theme.Core
 				{
 					using (var archive = new ZipArchive (fileStream, ZipArchiveMode.Create))
 					{
-						ZipArchiveEntry entry = archive.CreateEntry (GetThemeSaveName (), CompressionLevel.Optimal);
+						if (themeName.Length == 0) themeName = GetThemeSaveName ();
+						ZipArchiveEntry entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
 						using (StreamWriter writer = new StreamWriter (entry.Open ()))
@@ -420,7 +450,7 @@ namespace Yuki_Theme.Core
 
 		public static string GetSaveFormat ()
 		{
-			return CLI.saveAsOld ? "xshd" : "json";
+			return Settings.saveAsOld ? "xshd" : "json";
 		}
 
 		public static bool IsDark (Color clr)
@@ -514,7 +544,7 @@ namespace Yuki_Theme.Core
 		public static void LoadCurrent ()
 		{
 			CLI.load_schemes ();
-			string [] files = Directory.GetFiles (Path.Combine (CLI.pascalPath, "Highlighting"), "*.xshd");
+			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{

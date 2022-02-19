@@ -32,4 +32,12 @@
 		Wallpaper = 1,
 		Sticker = 2
 	}
+
+	public enum ThemeFormat
+	{
+		Old,
+		New,
+		Null
+	}
+	
 }

@@ -10,6 +10,17 @@ namespace Yuki_Theme.Core.Controls
 		public  bool          isGroup = false;
 		private ReItem        rgroupIt;
 		public  List <ReItem> childs = new List <ReItem> ();
+		public  bool          isOld;
+
+		public ReItem (string nm, bool isG = false) : base ()
+		{
+			Name = nm;
+			Text = isG ? nm : $"       {nm}";
+			isGroup = isG;
+			Font = null;
+			rgroupItem = null;
+			isOld = false;
+		}
 
 		public ReItem (string nm, bool isG = false, ReItem rgroup = null) : base ()
 		{
@@ -18,6 +29,17 @@ namespace Yuki_Theme.Core.Controls
 			isGroup = isG;
 			Font = null;
 			rgroupItem = rgroup;
+			isOld = false;
+		}
+
+		public ReItem (string nm, bool isG = false, bool isO = false, ReItem rgroup = null) : base ()
+		{
+			Name = nm;
+			Text = isG ? nm : $"       {nm}";
+			isGroup = isG;
+			Font = null;
+			rgroupItem = rgroup;
+			isOld = isO;
 		}
 
 		public ReItem rgroupItem

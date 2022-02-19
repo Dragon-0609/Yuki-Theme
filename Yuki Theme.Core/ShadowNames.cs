@@ -41,6 +41,12 @@ namespace Yuki_Theme.Core
 			"Constants",
 			"DireciveNames"
 		};
+		
+		public static string [] imageNames = new []
+		{
+			"Wallpaper",
+			"Sticker",
+		};
 
 		public static string [] GetFields (SyntaxType type)
 		{

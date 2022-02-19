@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.Parsers
 			
 			flname = ofname;
 			outname = Path.Combine (CLI.currentPath, "Themes",
-			                        $"{ofname.Replace (": ", "__").Replace (":", "")}.yukitheme");
+			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
 			if (!MainParser.checkAvailableAndAsk (outname, ask, exist))
 				throw new InvalidDataException ("The theme is exist...canceling...");
 			overwrite = File.Exists (outname);

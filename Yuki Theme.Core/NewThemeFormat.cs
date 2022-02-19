@@ -36,19 +36,19 @@ namespace Yuki_Theme.Core
 		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			string json = JsonConvert.SerializeObject (CLI.currentTheme, Formatting.Indented);
-			bool iszip = Helper.IsZip (CLI.getPathNew);
+			bool iszip = Helper.IsZip (CLI.pathToFileNew);
 
 
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
-				File.WriteAllText (CLI.getPathNew, json);
+				File.WriteAllText (CLI.pathToFileNew, json);
 			else
 			{
 				if (iszip)
 				{
-					Helper.UpdateZip (CLI.getPathNew, json, img2, wantToKeep, img3, wantToKeep);
+					Helper.UpdateZip (CLI.pathToFileNew, json, img2, wantToKeep, img3, wantToKeep);
 				} else
 				{
-					Helper.Zip (CLI.getPathNew, json, img2, img3);
+					Helper.Zip (CLI.pathToFileNew, json, img2, img3);
 				}
 			}
 		}
@@ -131,7 +131,6 @@ namespace Yuki_Theme.Core
 				}
 			} else
 			{
-				CLI.imagePath = "";
 				Tuple <bool, string> content = Helper.GetTheme (pathToFile);
 				if (content.Item1)
 				{
@@ -230,7 +229,7 @@ namespace Yuki_Theme.Core
 
 
 			if (!iszip)
-				File.WriteAllText (CLI.getPathNew, json);
+				File.WriteAllText (CLI.pathToFileNew, json);
 			else
 			{
 				Helper.UpdateZip (path, json, null, true, null, true);
@@ -273,13 +272,16 @@ namespace Yuki_Theme.Core
 
 		public static void populateList ()
 		{
-			bool isDef = CLI.isDefault ();
-			string json = loadThemeToPopulate (CLI.gpNew, CLI.getPathNew, true, isDef);
+			Console.WriteLine(CLI.nameToLoad);
+			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
+			string json = loadThemeToPopulate (CLI.pathToMemoryNew, CLI.pathToFileNew, true, isDef);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
-			theme.path = isDef ? CLI.gpNew : CLI.getPathNew;
+			theme.fullPath = isDef ? CLI.pathToMemoryNew : CLI.pathToFileNew;
+			theme.path = CLI.pathToLoad;
 			CLI.names.AddRange (theme.Fields.Keys);
+			CLI.names.InsertRange (1, ShadowNames.imageNames);
 			CLI.currentTheme = theme;
 		}
 	

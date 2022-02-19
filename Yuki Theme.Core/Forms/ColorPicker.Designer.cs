@@ -62,12 +62,12 @@ namespace Yuki_Theme.Core.Forms
 			this.CNBTN = new System.Windows.Forms.Button ();
 			this.tabControlMain.SuspendLayout ();
 			this.tabColorBox.SuspendLayout ();
-			((System.ComponentModel.ISupportInitialize) (this.numLuminance)).BeginInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numSaturation)).BeginInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numHue)).BeginInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numBlue)).BeginInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numGreen)).BeginInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numRed)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numLuminance)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numSaturation)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numHue)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numBlue)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numGreen)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numRed)).BeginInit ();
 			this.tabHexagon.SuspendLayout ();
 			this.tabWheel.SuspendLayout ();
 			this.SuspendLayout ();
@@ -75,7 +75,7 @@ namespace Yuki_Theme.Core.Forms
 			// labelCurrent
 			// 
 			this.labelCurrent.AutoSize = true;
-			this.labelCurrent.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (186)))), ((int) (((byte) (208)))));
+			this.labelCurrent.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(186)))), ((int)(((byte)(208)))));
 			this.labelCurrent.Location = new System.Drawing.Point (448, 22);
 			this.labelCurrent.Name = "labelCurrent";
 			this.labelCurrent.Size = new System.Drawing.Size (41, 13);
@@ -93,7 +93,7 @@ namespace Yuki_Theme.Core.Forms
 			// labelHex
 			// 
 			this.labelHex.AutoSize = true;
-			this.labelHex.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (186)))), ((int) (((byte) (208)))));
+			this.labelHex.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(186)))), ((int)(((byte)(208)))));
 			this.labelHex.Location = new System.Drawing.Point (448, 98);
 			this.labelHex.Name = "labelHex";
 			this.labelHex.Size = new System.Drawing.Size (26, 13);
@@ -142,7 +142,7 @@ namespace Yuki_Theme.Core.Forms
 			this.tabColorBox.Controls.Add (this.radioRed);
 			this.tabColorBox.Controls.Add (this.colorSlider);
 			this.tabColorBox.Controls.Add (this.colorBox2D);
-			this.tabColorBox.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (184)))), ((int) (((byte) (195)))));
+			this.tabColorBox.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(184)))), ((int)(((byte)(195)))));
 			this.tabColorBox.Location = new System.Drawing.Point (4, 22);
 			this.tabColorBox.Name = "tabColorBox";
 			this.tabColorBox.Padding = new System.Windows.Forms.Padding (3);
@@ -166,7 +166,7 @@ namespace Yuki_Theme.Core.Forms
 			this.numLuminance.Name = "numLuminance";
 			this.numLuminance.Size = new System.Drawing.Size (54, 20);
 			this.numLuminance.TabIndex = 13;
-			this.numLuminance.Value = new decimal (new int [] {100, 0, 0, 0});
+			this.numLuminance.Value = new decimal (new int [] { 100, 0, 0, 0 });
 			this.numLuminance.ValueChanged += new System.EventHandler (this.numLuminance_ValueChanged);
 			// 
 			// radioLuminance
@@ -187,7 +187,7 @@ namespace Yuki_Theme.Core.Forms
 			this.numSaturation.Name = "numSaturation";
 			this.numSaturation.Size = new System.Drawing.Size (54, 20);
 			this.numSaturation.TabIndex = 11;
-			this.numSaturation.Value = new decimal (new int [] {100, 0, 0, 0});
+			this.numSaturation.Value = new decimal (new int [] { 100, 0, 0, 0 });
 			this.numSaturation.ValueChanged += new System.EventHandler (this.numSaturation_ValueChanged);
 			// 
 			// radioSaturation
@@ -205,7 +205,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.numHue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numHue.Location = new System.Drawing.Point (349, 113);
-			this.numHue.Maximum = new decimal (new int [] {359, 0, 0, 0});
+			this.numHue.Maximum = new decimal (new int [] { 359, 0, 0, 0 });
 			this.numHue.Name = "numHue";
 			this.numHue.Size = new System.Drawing.Size (54, 20);
 			this.numHue.TabIndex = 9;
@@ -228,7 +228,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.numBlue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numBlue.Location = new System.Drawing.Point (349, 69);
-			this.numBlue.Maximum = new decimal (new int [] {255, 0, 0, 0});
+			this.numBlue.Maximum = new decimal (new int [] { 255, 0, 0, 0 });
 			this.numBlue.Name = "numBlue";
 			this.numBlue.Size = new System.Drawing.Size (54, 20);
 			this.numBlue.TabIndex = 7;
@@ -249,7 +249,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.numGreen.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numGreen.Location = new System.Drawing.Point (349, 43);
-			this.numGreen.Maximum = new decimal (new int [] {255, 0, 0, 0});
+			this.numGreen.Maximum = new decimal (new int [] { 255, 0, 0, 0 });
 			this.numGreen.Name = "numGreen";
 			this.numGreen.Size = new System.Drawing.Size (54, 20);
 			this.numGreen.TabIndex = 5;
@@ -270,11 +270,11 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.numRed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.numRed.Location = new System.Drawing.Point (349, 17);
-			this.numRed.Maximum = new decimal (new int [] {255, 0, 0, 0});
+			this.numRed.Maximum = new decimal (new int [] { 255, 0, 0, 0 });
 			this.numRed.Name = "numRed";
 			this.numRed.Size = new System.Drawing.Size (54, 20);
 			this.numRed.TabIndex = 3;
-			this.numRed.Value = new decimal (new int [] {255, 0, 0, 0});
+			this.numRed.Value = new decimal (new int [] { 255, 0, 0, 0 });
 			this.numRed.ValueChanged += new System.EventHandler (this.numRed_ValueChanged);
 			// 
 			// radioRed
@@ -291,7 +291,7 @@ namespace Yuki_Theme.Core.Forms
 			// colorSlider
 			// 
 			this.colorSlider.ColorMode = MechanikaDesign.WinForms.UI.ColorPicker.ColorModes.Hue;
-			this.colorSlider.ColorRGB = System.Drawing.Color.FromArgb (((int) (((byte) (255)))), ((int) (((byte) (0)))), ((int) (((byte) (0)))));
+			this.colorSlider.ColorRGB = System.Drawing.Color.FromArgb (((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			this.colorSlider.Location = new System.Drawing.Point (259, 8);
 			this.colorSlider.Name = "colorSlider";
 			this.colorSlider.NubColor = System.Drawing.Color.White;
@@ -312,7 +312,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// tabHexagon
 			// 
-			this.tabHexagon.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (34)))), ((int) (((byte) (37)))), ((int) (((byte) (50)))));
+			this.tabHexagon.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(34)))), ((int)(((byte)(37)))), ((int)(((byte)(50)))));
 			this.tabHexagon.Controls.Add (this.colorHexagon);
 			this.tabHexagon.Location = new System.Drawing.Point (4, 22);
 			this.tabHexagon.Name = "tabHexagon";
@@ -332,7 +332,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// tabWheel
 			// 
-			this.tabWheel.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (34)))), ((int) (((byte) (37)))), ((int) (((byte) (50)))));
+			this.tabWheel.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(34)))), ((int)(((byte)(37)))), ((int)(((byte)(50)))));
 			this.tabWheel.Controls.Add (this.colorWheel);
 			this.tabWheel.Location = new System.Drawing.Point (4, 22);
 			this.tabWheel.Name = "tabWheel";
@@ -344,7 +344,7 @@ namespace Yuki_Theme.Core.Forms
 			// colorWheel
 			// 
 			this.colorWheel.Alpha = 1D;
-			this.colorWheel.Color = System.Drawing.Color.FromArgb (((int) (((byte) (255)))), ((int) (((byte) (255)))), ((int) (((byte) (255)))));
+			this.colorWheel.Color = System.Drawing.Color.FromArgb (((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.colorWheel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.colorWheel.Location = new System.Drawing.Point (3, 3);
 			this.colorWheel.Name = "colorWheel";
@@ -354,10 +354,10 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// OKBTN
 			// 
-			this.OKBTN.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (18)))), ((int) (((byte) (19)))), ((int) (((byte) (22)))));
+			this.OKBTN.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(22)))));
 			this.OKBTN.FlatAppearance.BorderSize = 0;
 			this.OKBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.OKBTN.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (186)))), ((int) (((byte) (208)))));
+			this.OKBTN.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(186)))), ((int)(((byte)(208)))));
 			this.OKBTN.Location = new System.Drawing.Point (455, 280);
 			this.OKBTN.Name = "OKBTN";
 			this.OKBTN.Size = new System.Drawing.Size (60, 20);
@@ -368,10 +368,10 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// CNBTN
 			// 
-			this.CNBTN.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (18)))), ((int) (((byte) (19)))), ((int) (((byte) (22)))));
+			this.CNBTN.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(18)))), ((int)(((byte)(19)))), ((int)(((byte)(22)))));
 			this.CNBTN.FlatAppearance.BorderSize = 0;
 			this.CNBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.CNBTN.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (186)))), ((int) (((byte) (208)))));
+			this.CNBTN.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(186)))), ((int)(((byte)(208)))));
 			this.CNBTN.Location = new System.Drawing.Point (455, 306);
 			this.CNBTN.Name = "CNBTN";
 			this.CNBTN.Size = new System.Drawing.Size (60, 20);
@@ -384,7 +384,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF (96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (25)))), ((int) (((byte) (27)))), ((int) (((byte) (35)))));
+			this.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(25)))), ((int)(((byte)(27)))), ((int)(((byte)(35)))));
 			this.ClientSize = new System.Drawing.Size (535, 350);
 			this.Controls.Add (this.OKBTN);
 			this.Controls.Add (this.CNBTN);
@@ -393,7 +393,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Controls.Add (this.labelHex);
 			this.Controls.Add (this.labelCurrentColor);
 			this.Controls.Add (this.labelCurrent);
-			this.ForeColor = System.Drawing.Color.FromArgb (((int) (((byte) (180)))), ((int) (((byte) (184)))), ((int) (((byte) (195)))));
+			this.ForeColor = System.Drawing.Color.FromArgb (((int)(((byte)(180)))), ((int)(((byte)(184)))), ((int)(((byte)(195)))));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.Name = "ColorPicker";
@@ -403,12 +403,12 @@ namespace Yuki_Theme.Core.Forms
 			this.tabControlMain.ResumeLayout (false);
 			this.tabColorBox.ResumeLayout (false);
 			this.tabColorBox.PerformLayout ();
-			((System.ComponentModel.ISupportInitialize) (this.numLuminance)).EndInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numSaturation)).EndInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numHue)).EndInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numBlue)).EndInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numGreen)).EndInit ();
-			((System.ComponentModel.ISupportInitialize) (this.numRed)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numLuminance)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numSaturation)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numHue)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numBlue)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numGreen)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numRed)).EndInit ();
 			this.tabHexagon.ResumeLayout (false);
 			this.tabWheel.ResumeLayout (false);
 			this.ResumeLayout (false);

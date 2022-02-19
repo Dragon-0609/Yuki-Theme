@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -108,6 +109,16 @@ namespace Yuki_Theme.Core.Themes
 			foreach (string themeName in def)
 			{
 				themes.Add (themeName, true);
+			}
+		}
+
+		public static void addOldNewThemeDifference (ref Dictionary <string, bool> list)
+		{
+			Assembly assembly = Assembly.GetExecutingAssembly ();
+			foreach (string theme in def)
+			{
+				ThemeFormat extension = Helper.GetThemeFormat (true, Helper.ConvertNameToPath (theme));
+				list.Add (theme, extension == ThemeFormat.Old);
 			}
 		}
 

@@ -37,11 +37,14 @@ namespace Yuki_Theme.Core
 		
 		[JsonIgnore]
 		public string path;
+		
+		[JsonIgnore]
+		public string fullPath;
 
 		[JsonIgnore]
 		public Alignment align => (Alignment) WallpaperAlign;
 
-
+		
 
 	}
 	

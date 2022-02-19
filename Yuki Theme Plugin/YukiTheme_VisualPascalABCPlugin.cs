@@ -121,7 +121,7 @@ namespace Yuki_Theme_Plugin
 		private DockWindow mainPanel;
 		private int        dockcount = 1;
 		
-		private bool bgImage => CLI.bgImage;
+		private bool bgImage => Settings.bgImage;
 		
 		bool tg = false; // is toggle activated
 		int enbld = 0; // Is enabled bg image and (or) sticker
@@ -151,12 +151,12 @@ namespace Yuki_Theme_Plugin
 
 			fm = (Form1) workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
-			CLI.connectAndGet ();
+			Settings.connectAndGet ();
 
 			enbld = 0;
-			enbld += CLI.bgImage ? 1 : 0;
-			enbld += CLI.swSticker ? 2 : 0;
-			nminst = CLI.swStatusbar ? 1 : 0;
+			enbld += Settings.bgImage ? 1 : 0;
+			enbld += Settings.swSticker ? 2 : 0;
+			nminst = Settings.swStatusbar ? 1 : 0;
 
 			loadWithWaiting ();
 			Initialize ();
@@ -380,7 +380,7 @@ namespace Yuki_Theme_Plugin
 			stickerControl = new CustomPicture (fm);
 			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
 			stickerControl.margin = new Point (10, statusBar.Size.Height);
-			stickerControl.Enabled = CLI.positioning;
+			stickerControl.Enabled = Settings.positioning;
 			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
 			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
 			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
@@ -406,8 +406,8 @@ namespace Yuki_Theme_Plugin
 		private void ReloadSticker ()
 		{
 			enbld = 0;
-			enbld += CLI.bgImage ? 1 : 0;
-			enbld += CLI.swSticker ? 2 : 0;
+			enbld += Settings.bgImage ? 1 : 0;
+			enbld += Settings.swSticker ? 2 : 0;
 			LoadSticker ();
 		}
 
@@ -418,22 +418,22 @@ namespace Yuki_Theme_Plugin
 				sticker.Dispose ();
 				sticker = null;
 			};
-			if (CLI.swSticker)
+			if (Settings.swSticker)
 			{
-				if (CLI.useCustomSticker && File.Exists (CLI.customSticker))
+				if (Settings.useCustomSticker && File.Exists (Settings.customSticker))
 				{
-					sticker = Image.FromFile (CLI.customSticker);
+					sticker = Image.FromFile (Settings.customSticker);
 				}else
 				{
-					string pth = Path.Combine (CLI.pascalPath, "Highlighting", "sticker.png");
+					string pth = Path.Combine (Settings.pascalPath, "Highlighting", "sticker.png");
 					if (File.Exists (pth))
 					{
 						Image stckr = Image.FromFile (pth);
 
 
-						if (CLI.sopacity != 100)
+						if (CLI.currentTheme.StickerOpacity != 100)
 						{
-							sticker = Helper.SetOpacity (stckr, CLI.sopacity);
+							sticker = Helper.SetOpacity (stckr, CLI.currentTheme.StickerOpacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -456,8 +456,8 @@ namespace Yuki_Theme_Plugin
 
 		private void RefreshStatusBar ()
 		{
-			currentTheme.Visible = CLI.swStatusbar;
-			nminst = CLI.swStatusbar ? 1 : 0;
+			currentTheme.Visible = Settings.swStatusbar;
+			nminst = Settings.swStatusbar ? 1 : 0;
 		}
 
 		private void loadSVG ()
@@ -568,8 +568,8 @@ namespace Yuki_Theme_Plugin
 		{
 			textArea.Refresh ();
 			enbld = 0;
-			enbld += CLI.bgImage ? 1 : 0;
-			enbld += CLI.swSticker ? 2 : 0;
+			enbld += Settings.bgImage ? 1 : 0;
+			enbld += Settings.swSticker ? 2 : 0;
 		}
 		
 		private void PaintBG (object sender, PaintEventArgs e)
@@ -621,6 +621,7 @@ namespace Yuki_Theme_Plugin
 
 		private void ReleaseResources ()
 		{
+			
 			if (img != null)
 			{
 				img.Dispose ();
@@ -760,8 +761,11 @@ namespace Yuki_Theme_Plugin
 
 		private void LoadImage ()
 		{
-			if(img != null) img.Dispose ();
-			string pth = Path.Combine (CLI.pascalPath, "Highlighting","background.png");
+			bool dispI = false;
+			if(img != null) { img.Dispose ();
+				dispI = true;
+			}
+			string pth = Path.Combine (Settings.pascalPath, "Highlighting","background.png");
 			if (File.Exists (pth))
 			{
 				Image iamg = Image.FromFile (pth);
@@ -772,7 +776,7 @@ namespace Yuki_Theme_Plugin
 				XmlDocument doc = new XmlDocument ();
 				IHighlightingStrategy high = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
 
-				var fls = Directory.GetFiles (Path.Combine (CLI.pascalPath, "Highlighting/"), "*.xshd");
+				var fls = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting/"), "*.xshd");
 
 				foreach (string fl in fls)
 				{
@@ -799,7 +803,7 @@ namespace Yuki_Theme_Plugin
 				if(opacity != 100)
 				{
 					img = Helper.SetOpacity (iamg, opacity);
-					// iamg.Dispose ();
+					iamg.Dispose ();
 				} else
 				{
 					img = iamg;
@@ -853,14 +857,14 @@ namespace Yuki_Theme_Plugin
 		{
 			if (!tg)
 			{
-				CLI.bgImage = false;
-				CLI.swSticker = false;
+				Settings.bgImage = false;
+				Settings.swSticker = false;
 				if (nminst == 1)
 					currentTheme.Visible = false;
 			} else
 			{
-				CLI.bgImage = enbld == 1 || enbld == 3;
-				CLI.swSticker = enbld == 2 || enbld == 3;
+				Settings.bgImage = enbld == 1 || enbld == 3;
+				Settings.swSticker = enbld == 2 || enbld == 3;
 				if (nminst == 1)
 					currentTheme.Visible = true;
 			}
@@ -875,7 +879,7 @@ namespace Yuki_Theme_Plugin
 
 		private void ToggleWallpaper (object sender, EventArgs e)
 		{
-			CLI.bgImage = !CLI.bgImage;
+			Settings.bgImage = !Settings.bgImage;
 			textArea.Refresh ();
 			updateWallpaperImage ();
 		}
@@ -946,14 +950,14 @@ namespace Yuki_Theme_Plugin
 		
 		private void stickersPositioning (object sender, EventArgs e)
 		{
-			CLI.positioning = !CLI.positioning;
-			stickerControl.Enabled = CLI.positioning;
+			Settings.positioning = !Settings.positioning;
+			stickerControl.Enabled = Settings.positioning;
 			updatestickersPositioningImage ();
 		}
 
 		private void ToggleSticker (object sender, EventArgs e)
 		{
-			CLI.swSticker = !CLI.swSticker;
+			Settings.swSticker = !Settings.swSticker;
 			LoadSticker ();
 			updateStickerImage ();
 		}
@@ -972,7 +976,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (enablePositioning != null)
 			{
-				enablePositioning.Image = CLI.positioning
+				enablePositioning.Image = Settings.positioning
 					? updateBgofImage (positioningImage)
 					: positioningImage;
 			}
@@ -982,7 +986,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (backimage != null)
 			{
-				backimage.Image = CLI.bgImage
+				backimage.Image = Settings.bgImage
 					? updateBgofImage (wallpaperImage)
 					: wallpaperImage;
 			}
@@ -1000,7 +1004,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (stick != null)
 			{
-				stick.Image = CLI.swSticker
+				stick.Image = Settings.swSticker
 					? updateBgofImage (currentTheme.Image)
 					: currentTheme.Image;
 			}
@@ -1010,7 +1014,7 @@ namespace Yuki_Theme_Plugin
 		{
 			tim3 = new Timer () {Interval = 2200};
 			tim3.Tick += load;
-			if (CLI.swLogo)
+			if (Settings.swLogo)
 			{
 				showLogo ();
 			}
@@ -1077,7 +1081,7 @@ namespace Yuki_Theme_Plugin
 				quiet.Image = quietImage;
 
 				stick = new ToolStripMenuItem ("Enable Stickers",
-				                               CLI.swSticker
+				                               Settings.swSticker
 					                               ? updateBgofImage (currentTheme.Image)
 					                               : currentTheme.Image, ToggleSticker);
 				stick.BackColor = menu_settings.BackColor;
@@ -1085,7 +1089,7 @@ namespace Yuki_Theme_Plugin
 
 				backimage = new ToolStripMenuItem ("Enable Wallpaper",
 				                                   null, ToggleWallpaper);
-				backimage.Image = CLI.bgImage
+				backimage.Image = Settings.bgImage
 					? updateBgofImage (wallpaperImage)
 					: wallpaperImage;
 				
@@ -1107,7 +1111,7 @@ namespace Yuki_Theme_Plugin
 				positioningImage = Helper.RenderSvg (enablePositioning.Size, Helper.LoadSvg (
 					                                     "export" + add, Assembly.GetExecutingAssembly (),
 					                                     "Yuki_Theme_Plugin.Resources.icons"));
-				enablePositioning.Image = CLI.positioning
+				enablePositioning.Image = Settings.positioning
 					? updateBgofImage (positioningImage)
 					: positioningImage;
 
@@ -1137,7 +1141,7 @@ namespace Yuki_Theme_Plugin
 
 			((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
 				"Yuki Theme: Initialization finished.\n");
-			if (CLI.swLogo)
+			if (Settings.swLogo)
 			{
 				hideLogo ();
 				InitAdditions ();
@@ -1337,7 +1341,7 @@ namespace Yuki_Theme_Plugin
 				if(lst.SelectedItem.ToString () != lst.AccessibleName)
 				{
 					bool cnd = CLI.SelectTheme (lst.SelectedItem.ToString ());
-					CLI.selectedItem = CLI.currentoFile;
+					CLI.selectedItem = CLI.nameToLoad;
 					CLI.ifHasImage2 = ifHsImage;
 					CLI.ifHasSticker2 = ifHsSticker;
 					CLI.ifDoesntHave2 = ifDNIMG;

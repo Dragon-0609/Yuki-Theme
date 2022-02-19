@@ -63,7 +63,7 @@ namespace Yuki_Theme.Core
 		{
 			if (styles == null)
 				InitStyles ();
-			bool isLight = CLI.settingMode == SettingMode.Light;
+			bool isLight = Settings.settingMode == SettingMode.Light;
 			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
 			{
 				if (isInNames (style.Key))
@@ -269,9 +269,9 @@ namespace Yuki_Theme.Core
 			currentRegex = null;
 			if (regexes == null)
 				InitPascalRegex ();
-			if (regexes.ContainsKey (str.ToLower ()) || CLI.settingMode == SettingMode.Light)
+			if (regexes.ContainsKey (str.ToLower ()) || Settings.settingMode == SettingMode.Light)
 			{
-				if (CLI.settingMode == SettingMode.Light)
+				if (Settings.settingMode == SettingMode.Light)
 				{
 					string [] srt = Populater.getDependencies (str);
 					if (srt != null)
@@ -363,7 +363,7 @@ namespace Yuki_Theme.Core
 		{
 			if (styles == null)
 				InitStyles ();
-			if (CLI.settingMode == SettingMode.Advanced || forceAdvanced)
+			if (Settings.settingMode == SettingMode.Advanced || forceAdvanced)
 				return styles.ContainsKey (str.ToLower ());
 			else
 			{

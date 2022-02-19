@@ -69,12 +69,12 @@
 			this.settings_button = new System.Windows.Forms.Button ();
 			this.tip = new System.Windows.Forms.ToolTip (this.components);
 			this.bottomPanel.SuspendLayout ();
-			((System.ComponentModel.ISupportInitialize) (this.sBox)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.sBox)).BeginInit ();
 			this.panel1.SuspendLayout ();
 			this.editorp2.SuspendLayout ();
 			this.imageEditor.SuspendLayout ();
 			this.alignpanel.SuspendLayout ();
-			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit ();
 			this.colorEditor.SuspendLayout ();
 			this.editorpanel.SuspendLayout ();
 			this.SuspendLayout ();
@@ -83,7 +83,7 @@
 			// 
 			this.list_1.Dock = System.Windows.Forms.DockStyle.Left;
 			this.list_1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-			this.list_1.Font = new System.Drawing.Font ("Lucida Fax", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+			this.list_1.Font = new System.Drawing.Font ("Lucida Fax", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.list_1.FormattingEnabled = true;
 			this.list_1.ItemHeight = 16;
 			this.list_1.Location = new System.Drawing.Point (0, 0);
@@ -117,7 +117,7 @@
 			// 
 			// label1
 			// 
-			this.label1.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label1.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label1.Location = new System.Drawing.Point (233, 10);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size (55, 35);
@@ -127,7 +127,7 @@
 			// 
 			// label2
 			// 
-			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label2.Location = new System.Drawing.Point (20, 10);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size (145, 35);
@@ -147,7 +147,7 @@
 			// 
 			// select_btn
 			// 
-			this.select_btn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.select_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.select_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.select_btn.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
 			this.select_btn.Location = new System.Drawing.Point (365, 6);
@@ -161,7 +161,7 @@
 			// 
 			// close_btn
 			// 
-			this.close_btn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.close_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.close_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.close_btn.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
 			this.close_btn.Location = new System.Drawing.Point (446, 6);
@@ -177,7 +177,7 @@
 			// 
 			this.sBox.AllowDrop = false;
 			this.sBox.AllowMacroRecording = false;
-			this.sBox.AutoCompleteBracketsList = new char [] {'(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\''};
+			this.sBox.AutoCompleteBracketsList = new char [] { '(', ')', '{', '}', '[', ']', '\"', '\"', '\'', '\'' };
 			this.sBox.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" + "(?<range>:)\\s*(?<range>[^;]+);";
 			this.sBox.AutoScrollMinSize = new System.Drawing.Size (255, 66);
 			this.sBox.BackBrush = null;
@@ -186,7 +186,7 @@
 			this.sBox.CharWidth = 9;
 			this.sBox.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.sBox.DefaultMarkerSize = 8;
-			this.sBox.DisabledColor = System.Drawing.Color.FromArgb (((int) (((byte) (100)))), ((int) (((byte) (180)))), ((int) (((byte) (180)))), ((int) (((byte) (180)))));
+			this.sBox.DisabledColor = System.Drawing.Color.FromArgb (((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
 			this.sBox.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.sBox.FoldingIndicatorColor = System.Drawing.Color.Transparent;
 			this.sBox.Font = new System.Drawing.Font ("Consolas", 12F);
@@ -202,9 +202,9 @@
 			this.sBox.PreferredLineWidth = 70;
 			this.sBox.ReadOnly = true;
 			this.sBox.ReservedCountOfLineNumberChars = 2;
-			this.sBox.SelectionColor = System.Drawing.Color.FromArgb (((int) (((byte) (60)))), ((int) (((byte) (0)))), ((int) (((byte) (0)))), ((int) (((byte) (255)))));
+			this.sBox.SelectionColor = System.Drawing.Color.FromArgb (((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
 			this.sBox.SelectionHighlightingForLineBreaksEnabled = false;
-			this.sBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors) (resources.GetObject ("sBox.ServiceColors")));
+			this.sBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject ("sBox.ServiceColors")));
 			this.sBox.ServiceLinesColor = System.Drawing.Color.Red;
 			this.sBox.ShowFoldingLines = true;
 			this.sBox.Size = new System.Drawing.Size (520, 278);
@@ -322,28 +322,28 @@
 			// 
 			// opacity_slider
 			// 
-			this.opacity_slider.BackColor = System.Drawing.Color.FromArgb (((int) (((byte) (70)))), ((int) (((byte) (77)))), ((int) (((byte) (95)))));
+			this.opacity_slider.BackColor = System.Drawing.Color.FromArgb (((int)(((byte)(70)))), ((int)(((byte)(77)))), ((int)(((byte)(95)))));
 			this.opacity_slider.BarPenColorBottom = System.Drawing.Color.Black;
-			this.opacity_slider.BarPenColorTop = System.Drawing.Color.FromArgb (((int) (((byte) (55)))), ((int) (((byte) (60)))), ((int) (((byte) (74)))));
+			this.opacity_slider.BarPenColorTop = System.Drawing.Color.FromArgb (((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
 			this.opacity_slider.BorderRoundRectSize = new System.Drawing.Size (18, 18);
 			this.opacity_slider.ElapsedInnerColor = System.Drawing.Color.Gray;
 			this.opacity_slider.ElapsedPenColorBottom = System.Drawing.Color.Silver;
 			this.opacity_slider.ElapsedPenColorTop = System.Drawing.Color.Gray;
 			this.opacity_slider.Font = new System.Drawing.Font ("Microsoft Sans Serif", 6F);
 			this.opacity_slider.ForeColor = System.Drawing.Color.White;
-			this.opacity_slider.LargeChange = new decimal (new int [] {5, 0, 0, 0});
+			this.opacity_slider.LargeChange = new decimal (new int [] { 5, 0, 0, 0 });
 			this.opacity_slider.Location = new System.Drawing.Point (275, 45);
-			this.opacity_slider.Maximum = new decimal (new int [] {100, 0, 0, 0});
-			this.opacity_slider.Minimum = new decimal (new int [] {0, 0, 0, 0});
+			this.opacity_slider.Maximum = new decimal (new int [] { 100, 0, 0, 0 });
+			this.opacity_slider.Minimum = new decimal (new int [] { 0, 0, 0, 0 });
 			this.opacity_slider.MouseWheelBarPartitions = 20;
 			this.opacity_slider.Name = "opacity_slider";
 			this.opacity_slider.Padding = 10;
-			this.opacity_slider.ScaleDivisions = new decimal (new int [] {20, 0, 0, 0});
-			this.opacity_slider.ScaleSubDivisions = new decimal (new int [] {5, 0, 0, 0});
+			this.opacity_slider.ScaleDivisions = new decimal (new int [] { 20, 0, 0, 0 });
+			this.opacity_slider.ScaleSubDivisions = new decimal (new int [] { 5, 0, 0, 0 });
 			this.opacity_slider.ShowDivisionsText = false;
 			this.opacity_slider.ShowSmallScale = false;
 			this.opacity_slider.Size = new System.Drawing.Size (217, 23);
-			this.opacity_slider.SmallChange = new decimal (new int [] {1, 0, 0, 0});
+			this.opacity_slider.SmallChange = new decimal (new int [] { 1, 0, 0, 0 });
 			this.opacity_slider.TabIndex = 7;
 			this.opacity_slider.Text = "slider1";
 			this.opacity_slider.ThumbInnerColor = System.Drawing.Color.Red;
@@ -354,7 +354,7 @@
 			this.opacity_slider.TickColor = System.Drawing.Color.White;
 			this.opacity_slider.TickDivide = 0F;
 			this.opacity_slider.TickStyle = System.Windows.Forms.TickStyle.None;
-			this.opacity_slider.Value = new decimal (new int [] {10, 0, 0, 0});
+			this.opacity_slider.Value = new decimal (new int [] { 10, 0, 0, 0 });
 			this.opacity_slider.Scroll += new System.Windows.Forms.ScrollEventHandler (this.opacity_slider_Scroll);
 			// 
 			// button7
@@ -425,7 +425,7 @@
 			// 
 			this.check_italic.FlatAppearance.BorderColor = System.Drawing.Color.Black;
 			this.check_italic.FlatAppearance.BorderSize = 2;
-			this.check_italic.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.check_italic.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.check_italic.Location = new System.Drawing.Point (422, 11);
 			this.check_italic.Name = "check_italic";
 			this.check_italic.Size = new System.Drawing.Size (70, 32);
@@ -438,7 +438,7 @@
 			// 
 			this.check_bold.FlatAppearance.BorderColor = System.Drawing.Color.Black;
 			this.check_bold.FlatAppearance.BorderSize = 2;
-			this.check_bold.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.check_bold.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.check_bold.Location = new System.Drawing.Point (346, 12);
 			this.check_bold.Name = "check_bold";
 			this.check_bold.Size = new System.Drawing.Size (70, 32);
@@ -464,7 +464,7 @@
 			this.add_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.add_button.FlatAppearance.BorderSize = 0;
 			this.add_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.add_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.add_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.add_button.Location = new System.Drawing.Point (3, 0);
 			this.add_button.Name = "add_button";
 			this.add_button.Size = new System.Drawing.Size (20, 20);
@@ -478,7 +478,7 @@
 			this.manage_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.manage_button.FlatAppearance.BorderSize = 0;
 			this.manage_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.manage_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.manage_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.manage_button.Location = new System.Drawing.Point (42, 0);
 			this.manage_button.Name = "manage_button";
 			this.manage_button.Size = new System.Drawing.Size (20, 20);
@@ -492,7 +492,7 @@
 			this.save_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.save_button.FlatAppearance.BorderSize = 0;
 			this.save_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.save_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.save_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.save_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.save_button.Location = new System.Drawing.Point (76, 0);
 			this.save_button.Name = "save_button";
@@ -507,7 +507,7 @@
 			this.restore_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.restore_button.FlatAppearance.BorderSize = 0;
 			this.restore_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.restore_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.restore_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.restore_button.Location = new System.Drawing.Point (110, 0);
 			this.restore_button.Name = "restore_button";
 			this.restore_button.Size = new System.Drawing.Size (20, 20);
@@ -521,7 +521,7 @@
 			this.import_directory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.import_directory.FlatAppearance.BorderSize = 0;
 			this.import_directory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.import_directory.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.import_directory.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.import_directory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.import_directory.Location = new System.Drawing.Point (453, 10);
 			this.import_directory.Name = "import_directory";
@@ -539,7 +539,7 @@
 			this.schemes.Font = new System.Drawing.Font ("Lucida Fax", 10F);
 			this.schemes.ForeColor = System.Drawing.Color.DimGray;
 			this.schemes.IconColor = System.Drawing.Color.Red;
-			this.schemes.ListBackColor = System.Drawing.Color.FromArgb (((int) (((byte) (230)))), ((int) (((byte) (228)))), ((int) (((byte) (245)))));
+			this.schemes.ListBackColor = System.Drawing.Color.FromArgb (((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
 			this.schemes.ListTextColor = System.Drawing.Color.DimGray;
 			this.schemes.Location = new System.Drawing.Point (16, 12);
 			this.schemes.MinimumSize = new System.Drawing.Size (200, 30);
@@ -556,7 +556,7 @@
 			this.import_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.import_button.FlatAppearance.BorderSize = 0;
 			this.import_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.import_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.import_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.import_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.import_button.Location = new System.Drawing.Point (419, 10);
 			this.import_button.Name = "import_button";
@@ -571,7 +571,7 @@
 			this.export_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.export_button.FlatAppearance.BorderSize = 0;
 			this.export_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.export_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.export_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.export_button.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.export_button.Location = new System.Drawing.Point (385, 10);
 			this.export_button.Name = "export_button";
@@ -586,7 +586,7 @@
 			this.settings_button.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.settings_button.FlatAppearance.BorderSize = 0;
 			this.settings_button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.settings_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.settings_button.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.settings_button.Location = new System.Drawing.Point (485, 10);
 			this.settings_button.Name = "settings_button";
 			this.settings_button.Size = new System.Drawing.Size (20, 20);
@@ -605,7 +605,7 @@
 			this.Controls.Add (this.bottomPanel);
 			this.Controls.Add (this.list_1);
 			this.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.Icon = ((System.Drawing.Icon) (resources.GetObject ("$this.Icon")));
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject ("$this.Icon")));
 			this.Location = new System.Drawing.Point (15, 15);
 			this.MaximumSize = new System.Drawing.Size (1920, 1080);
 			this.MinimumSize = new System.Drawing.Size (600, 400);
@@ -616,13 +616,13 @@
 			this.Move += new System.EventHandler (this.MForm_Move);
 			this.Resize += new System.EventHandler (this.panel1_Resize);
 			this.bottomPanel.ResumeLayout (false);
-			((System.ComponentModel.ISupportInitialize) (this.sBox)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.sBox)).EndInit ();
 			this.panel1.ResumeLayout (false);
 			this.editorp2.ResumeLayout (false);
 			this.imageEditor.ResumeLayout (false);
 			this.imageEditor.PerformLayout ();
 			this.alignpanel.ResumeLayout (false);
-			((System.ComponentModel.ISupportInitialize) (this.numericUpDown1)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit ();
 			this.colorEditor.ResumeLayout (false);
 			this.editorpanel.ResumeLayout (false);
 			this.ResumeLayout (false);

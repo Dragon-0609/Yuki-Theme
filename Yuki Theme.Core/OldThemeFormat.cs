@@ -153,9 +153,11 @@ namespace Yuki_Theme.Core
 						}
 					}
 				}
-				string shadowName = ShadowNames.GetShadowName (nm, SyntaxType.Pascal);
+
+				string shadowName = ShadowNames.GetShadowName (nm, SyntaxType.Pascal, true);
 				if (!namesExtra.Contains (shadowName))
 				{
+					Console.WriteLine (nm + " | " + shadowName);
 					if (!theme.Fields.ContainsKey (shadowName))
 					{
 						// Console.WriteLine ( $"InList: {nm}|{attributes.ContainsKey (nm)}");		
@@ -228,7 +230,7 @@ namespace Yuki_Theme.Core
 		{
 			var doc = new XmlDocument ();
 			bool iszip = false;
-			string themePath = File.Exists (CLI.getPath) ? CLI.getPath : File.Exists (CLI.getPathNew) ? CLI.getPathNew : null;
+			string themePath = File.Exists (CLI.pathToFile) ? CLI.pathToFile : File.Exists (CLI.pathToFileNew) ? CLI.pathToFileNew : null;
 			Tuple <bool, string> content = Helper.GetTheme (themePath);
 			if (content.Item1)
 			{
@@ -255,10 +257,10 @@ namespace Yuki_Theme.Core
 				string txml = doc.OuterXml;
 				if (iszip)
 				{
-					Helper.UpdateZip (themePath, txml, img2, wantToKeep, img3, wantToKeep);
+					Helper.UpdateZip (themePath, txml, img2, wantToKeep, img3, wantToKeep, "theme.xshd");
 				} else
 				{
-					Helper.Zip (themePath, txml, img2, img3);
+					Helper.Zip (themePath, txml, img2, img3, "theme.xshd");
 				}
 			}
 		}
@@ -266,7 +268,7 @@ namespace Yuki_Theme.Core
 		public static void PopulateDictionaryFromDoc (XmlDocument       doc, ref Theme theme,
 		                                              ref List <string> namesExtra)
 		{
-			if (CLI.settingMode == SettingMode.Light) // It's for better performance
+			if (Settings.settingMode == SettingMode.Light) // It's for better performance
 			{
 				if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1)
 					PopulateByXMLNodeForLight (doc.SelectNodes ("/SyntaxDefinition/Environment") [0], ref theme, ref namesExtra);
@@ -286,9 +288,9 @@ namespace Yuki_Theme.Core
 			if (isDefault)
 			{
 				var a = CLI.GetCore ();
-
-
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
+				themeToSet.fullPath = pathForMemory;
+				themeToSet.isDefault = true;
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
@@ -364,8 +366,9 @@ namespace Yuki_Theme.Core
 				}
 			} else
 			{
-				CLI.imagePath = "";
 				Tuple <bool, string> content = Helper.GetTheme (pathForFile);
+				themeToSet.isDefault = false;
+				themeToSet.fullPath = pathForFile;
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
@@ -510,7 +513,7 @@ namespace Yuki_Theme.Core
 				}
 			} else
 			{
-				node.AppendChild (doc.CreateComment ("name:" + CLI.currentoFile));
+				node.AppendChild (doc.CreateComment ("name:" + CLI.nameToLoad));
 			}
 
 			if (!iszip)
@@ -528,14 +531,14 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		public static void populateList ()
 		{
-			bool isDef = CLI.isDefaultTheme [CLI.currentoFile];
+			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
 			Theme theme = new Theme ();
 			theme.isDefault = isDef;
-			theme.Name = CLI.currentoFile;
+			theme.Name = CLI.nameToLoad;
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.gp, CLI.getPath, true, isDef, ref theme);
+				loadThemeToPopulate (ref doc, CLI.pathToMemory, CLI.pathToFile, true, isDef, ref theme);
 			} catch
 			{
 				return;
@@ -547,6 +550,7 @@ namespace Yuki_Theme.Core
 			theme.WallpaperAlign = int.Parse (additionalInfo ["align"]);
 			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
 			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
+			theme.path = CLI.pathToLoad;
 			
 			CLI.currentTheme = theme;
 			/*string all = "";

@@ -62,10 +62,10 @@
                 <End>'</End>
             </Span>
 
-            <Span name="InterpolatedString" rule="StringInterpolation" bold="false" italic="false" color="Blue" stopateol="true">
+            <!--<Span name="InterpolatedString" rule="StringInterpolation" bold="false" italic="false" color="Blue" stopateol="true">
                 <Begin>$'</Begin>
                 <End>'</End>
-            </Span>
+            </Span>-->
 
 
 <!--
@@ -73,13 +73,13 @@
                 <Begin></Begin>
                 <End></End>
             </Span>-->
-			<MarkPrevious color="Red" bgcolor="Black">(</MarkPrevious>
+			<!--<MarkPrevious color="Red" bgcolor="Black">(</MarkPrevious>
 
             <KeyWords name="ShortProgram" bold="false" italic="false" color="Green">
                 <Key word="##"/>
                 <Key word="###"/>
-            </KeyWords>
-
+            </KeyWords>-->
+            
             <KeyWords name="KeyWords" bold="true" italic="false" color="Black">
                 <Key word="external"/>
                 <Key word="in"/>

@@ -13,7 +13,7 @@ namespace Yuki_Theme.Core.Controls
 		public  Point           margin;
 		public  PointF          relativePosition;
 		private AnchorStyles    align;
-		private RelativeUnit    unit => CLI.unit;
+		private RelativeUnit    unit => Settings.unit;
 		private DatabaseManager database;
 		public  CustomPanel     pnl;
 		public  int             width;
@@ -175,7 +175,7 @@ namespace Yuki_Theme.Core.Controls
 					unity = Parent.ClientSize.Height / 100f;
 				}
 				
-				if(CLI.showGrids)
+				if(Settings.showGrids)
 					pnl.Prepare ();
 				// pnl.Visible = true;
 			}
@@ -229,7 +229,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void On_MouseUp (object sender, MouseEventArgs e)
 		{
-			if(CLI.showGrids)
+			if(Settings.showGrids)
 				pnl.Visible = false;
 			Point nl = Parent.PointToClient (Cursor.Position);
 			AnchorStyles styles = AnchorStyles.None;
@@ -332,7 +332,7 @@ namespace Yuki_Theme.Core.Controls
 
 		public void ReadData ()
 		{
-			string data = database.ReadData (SettingsForm.STICKERPOSITION, "");
+			string data = database.ReadData (Settings.STICKERPOSITION, "");
 			if (data != "")
 			{
 				try
@@ -369,7 +369,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void SaveData ()
 		{
-			database.UpdateData (SettingsForm.STICKERPOSITION, ConvertLocationToSave ());
+			database.UpdateData (Settings.STICKERPOSITION, ConvertLocationToSave ());
 		}
 	}
 }

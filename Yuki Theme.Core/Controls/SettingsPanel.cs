@@ -366,7 +366,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void reset_margin_Click (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (SettingsForm.STICKERPOSITION);
+			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
 			for (int i = 0; i < stickerToUpdate.Count; i++)
 			{
 				try
@@ -407,25 +407,25 @@ namespace Yuki_Theme.Core.Controls
 			}
 
 			toolBarList.ItemHeight = Font.Height + 3;
-			backImage.Checked = CLI.bgImage;
-			swsticker.Checked = CLI.swSticker;
-			logo.Checked = CLI.swLogo;
-			editor.Checked = CLI.Editor;
-			checkBox1.Checked = CLI.Beta;
-			swStatusbar.Checked = CLI.swStatusbar;
-			askC.Checked = CLI.askChoice;
-			checkBox2.Checked = CLI.update;
-			ActionBox.SelectedIndex = CLI.actionChoice;
-			mode.SelectedIndex = (int) CLI.settingMode;
-			unit.SelectedIndex = (int) CLI.unit;
-			checkBox3.Checked = CLI.positioning;
-			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
-			checkBox4.Checked = CLI.showGrids;
-			use_cstm_sticker.Checked = CLI.useCustomSticker;
-			customSticker = CLI.customSticker;
-			fitWidth.Checked = CLI.autoFitByWidth;
-			fitWidth.Enabled = CLI.bgImage;
-			askSave.Checked = CLI.askToSave;
+			backImage.Checked = Settings.bgImage;
+			swsticker.Checked = Settings.swSticker;
+			logo.Checked = Settings.swLogo;
+			editor.Checked = Settings.Editor;
+			checkBox1.Checked = Settings.Beta;
+			swStatusbar.Checked = Settings.swStatusbar;
+			askC.Checked = Settings.askChoice;
+			checkBox2.Checked = Settings.update;
+			ActionBox.SelectedIndex = Settings.actionChoice;
+			mode.SelectedIndex = (int) Settings.settingMode;
+			unit.SelectedIndex = (int) Settings.unit;
+			checkBox3.Checked = Settings.positioning;
+			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = Settings.positioning && Settings.swSticker;
+			checkBox4.Checked = Settings.showGrids;
+			use_cstm_sticker.Checked = Settings.useCustomSticker;
+			customSticker = Settings.customSticker;
+			fitWidth.Checked = Settings.autoFitByWidth;
+			fitWidth.Enabled = Settings.bgImage;
+			askSave.Checked = Settings.askToSave;
 			loadSVG ();
 		}
 

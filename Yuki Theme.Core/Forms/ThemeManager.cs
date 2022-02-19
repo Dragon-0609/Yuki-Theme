@@ -10,7 +10,7 @@ using System.Windows.Media;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Themes;
 using Brush = System.Drawing.Brush;
-using Brushes = System.Windows.Media.Brushes;
+using Brushes = System.Drawing.Brushes;
 using Color = System.Drawing.Color;
 using FlowDirection = System.Windows.FlowDirection;
 using FontFamily = System.Drawing.FontFamily;
@@ -34,7 +34,7 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			Icon = ((Icon)(resources.GetObject ("$this.Icon")));
 			form = fm;
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
@@ -62,7 +62,7 @@ namespace Yuki_Theme.Core.Forms
 			form.selform.comboBox1.SelectedIndex = 0;
 			if (scheme.SelectedItems.Count > 0 && (scheme.SelectedItems [0] is ReItem))
 			{
-				ReItem re = (ReItem) scheme.SelectedItems [0];
+				ReItem re = (ReItem)scheme.SelectedItems [0];
 				if (!re.isGroup)
 				{
 					form.selform.comboBox1.SelectedItem = re.Name;
@@ -82,7 +82,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			return MessageBox.Show (content, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
 		}
-		
+
 		public object afterAsk (string sel)
 		{
 			ListViewItem sifr = scheme.SelectedItems [0];
@@ -91,12 +91,12 @@ namespace Yuki_Theme.Core.Forms
 				form.schemes.SelectedIndex = 0;
 			}
 
-			return (object) sifr;
+			return (object)sifr;
 		}
-		
+
 		public void afterDelete (string sel, object sifr)
 		{
-			scheme.Items.Remove ((ListViewItem) sifr);
+			scheme.Items.Remove ((ListViewItem)sifr);
 			form.schemes.Items.Remove (sel);
 		}
 
@@ -111,7 +111,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (scheme.SelectedItems.Count > 0)
 			{
-				CLI.remove (scheme.SelectedItems[0].Text.Substring (7), askDelete, afterAsk, afterDelete);
+				CLI.remove (scheme.SelectedItems [0].Text.Substring (7), askDelete, afterAsk, afterDelete);
 			}
 		}
 
@@ -124,11 +124,11 @@ namespace Yuki_Theme.Core.Forms
 				if (!(scheme.SelectedItems [0] is ReItem)) return;
 				if (oldIndex != -1 && oldIndex < scheme.Items.Count)
 				{
-					scheme.Items[oldIndex].BackColor = cbg;					
+					scheme.Items [oldIndex].BackColor = cbg;
 				}
 
 				oldIndex = scheme.SelectedIndices [0];
-				ReItem re = (ReItem) scheme.SelectedItems [0];
+				ReItem re = (ReItem)scheme.SelectedItems [0];
 				re.BackColor = cbgclick;
 				if (re.rgroupItem != null && !re.rgroupItem.Name.Equals ("default", StringComparison.OrdinalIgnoreCase)
 				                          && !re.rgroupItem.Name.Equals (
@@ -142,25 +142,25 @@ namespace Yuki_Theme.Core.Forms
 		private void ThemeManager_Shown (object sender, EventArgs e)
 		{
 			add.BackColor = scheme.BackColor = BackColor = button2.BackColor = cbg = Helper.bgColor;
-			
+
 			add.ForeColor = remove.ForeColor = regenerate.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
 
-			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor = 
+			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor =
 				regenerate.FlatAppearance.MouseOverBackColor =
 					rename_btn.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
-				
+
 			bg = new SolidBrush (BackColor);
 			fg = new SolidBrush (ForeColor);
 			fgsp = new SolidBrush (Helper.fgKeyword);
 			cbgclick = Helper.bgClick;
-			loadSVG();
+			loadSVG ();
 			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
 		}
 
 		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
 		{
 			e.Graphics.FillRectangle (bg, e.Bounds);
-			
+
 			e.Graphics.DrawString (e.Header.Text, e.Font, fg, e.Bounds);
 		}
 
@@ -168,32 +168,42 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (e.Item is ReItem)
 			{
-				ReItem re = (ReItem) e.Item;
+				ReItem re = (ReItem)e.Item;
 				e.Graphics.FillRectangle (re.isGroup ? bg : new SolidBrush (re.BackColor), e.Bounds);
-				
+
 				// TextRenderer.GetIntTextFormatFlags(flags)
-				
+
 				// e.DrawText();
 				Rectangle rec = e.Bounds;
-				if(re.isGroup)
+				if (re.isGroup)
 				{
 					Size sz = MeasureString (re.Text, re.Font);
-					rec= new Rectangle (((e.Bounds.Width-10) / 2)-(sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+					rec = new Rectangle (((e.Bounds.Width - 10) / 2) - (sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+				} else
+				{
+					Brush brush = re.isOld ? Brushes.Maroon : Brushes.Orchid;
+					int thickness = 10;
+					e.Graphics.FillPolygon (
+						brush,
+						new PointF []
+						{
+							new PointF (e.Bounds.X, e.Bounds.Y), new PointF (e.Bounds.X + thickness, e.Bounds.Y),
+							new PointF (e.Bounds.X + thickness, e.Bounds.Y + e.Bounds.Height),
+							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height)
+						});
 				}
+
 				e.Graphics.DrawString (re.Text, re.isGroup ? fcat : fdef, re.isGroup ? fgsp : fg, rec);
-				
-			}else
+			} else
 				e.DrawDefault = true;
 		}
-		
+
 		private void ThemeManager_Load (object sender, EventArgs e)
 		{
-			
 		}
 
 		private void scheme_ItemSelectionChanged (object sender, ListViewItemSelectionChangedEventArgs e)
 		{
-			
 		}
 
 		public void sortItems ()
@@ -210,24 +220,25 @@ namespace Yuki_Theme.Core.Forms
 				scheme.Items.AddRange (reItem.childs.ToArray ());
 			}
 		}
-		
-		private void loadSVG(){
+
+		private void loadSVG ()
+		{
 			var a = Assembly.GetExecutingAssembly ();
 			string adda = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-        	Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
-            Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
-            Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
-            Helper.RenderSvg (regenerate, Helper.LoadSvg ("cwmPermissionEdit", a), false, Size.Empty, true, Helper.fgKeyword);
+			Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
+			Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
+			Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
+			Helper.RenderSvg (regenerate, Helper.LoadSvg ("cwmPermissionEdit", a), false, Size.Empty, true, Helper.fgKeyword);
 		}
 
 		private Size MeasureString (string candidate, Font fnt)
 		{
-
 			var formatted = new FormattedText (
-				candidate, CultureInfo.CurrentCulture, 
+				candidate, CultureInfo.CurrentCulture,
 				FlowDirection.LeftToRight,
-				new Typeface(new System.Windows.Media.FontFamily(fnt.FontFamily.Name), FontStyles.Normal,FontWeights.Normal, FontStretches.Normal),
-				fnt.Size, Brushes.Black, new NumberSubstitution(), TextFormattingMode.Display
+				new Typeface (new System.Windows.Media.FontFamily (fnt.FontFamily.Name), FontStyles.Normal, FontWeights.Normal,
+				              FontStretches.Normal),
+				fnt.Size, System.Windows.Media.Brushes.Black, new NumberSubstitution (), TextFormattingMode.Display
 			);
 
 			return new Size (Convert.ToInt32 (formatted.Width), Convert.ToInt32 (formatted.Height));
@@ -264,7 +275,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void regenerate_Click (object sender, EventArgs e)
 		{
-			string name = ((ReItem) scheme.SelectedItems [0]).Name;
+			string name = ((ReItem)scheme.SelectedItems [0]).Name;
 			string namep = Helper.ConvertNameToPath (name);
 			string pth = "";
 			string pth2 = "";
@@ -285,6 +296,9 @@ namespace Yuki_Theme.Core.Forms
 			CLI.CopyTheme (name, namep, npath, out pth2, false);
 			CLI.ReGenerateTheme (npath, pth, name, name, true);
 			File.Delete (pth);
+			CLI.oldThemeList [name] = !CLI.IsOldTheme (pth);
+			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name]; 
+			scheme.Invalidate();
 			MessageBox.Show ($"{name} has been regenerated to {format} format", "Regeneration compeleted");
 		}
 	}
