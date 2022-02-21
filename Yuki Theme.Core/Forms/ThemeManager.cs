@@ -216,6 +216,7 @@ namespace Yuki_Theme.Core.Forms
 						});
 				}
 
+				rec.Y += (rec.Height - scheme.Font.Height); // To draw in center
 				e.Graphics.DrawString (re.Text, re.isGroup ? fcat : fdef, re.isGroup ? fgsp : fg, rec);
 			} else
 				e.DrawDefault = true;

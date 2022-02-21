@@ -426,6 +426,7 @@ namespace Yuki_Theme.Core.Controls
 			fitWidth.Checked = Settings.autoFitByWidth;
 			fitWidth.Enabled = Settings.bgImage;
 			askSave.Checked = Settings.askToSave;
+			saveOld.Checked = Settings.saveAsOld;
 			loadSVG ();
 		}
 

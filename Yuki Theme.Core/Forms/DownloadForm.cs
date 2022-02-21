@@ -78,7 +78,7 @@ namespace Yuki_Theme.Core.Forms
 						
 						double ver = double.Parse (nv, CultureInfo.InvariantCulture);
 						Console.WriteLine (ver);
-						if (SettingsForm.current_version < ver || (SettingsForm.current_version == ver && SettingsForm.current_version_add.Length != 0 && !hasBeta))
+						if (Settings.current_version < ver || (Settings.current_version == ver && Settings.current_version_add.Length != 0 && !hasBeta))
 						{
 							int md = (int) Helper.mode;
 							size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -95,9 +95,9 @@ namespace Yuki_Theme.Core.Forms
 							form.nf.button3.Visible = true;
 							
 							form.nf.Show (form);
-							lock (SettingsForm.next_version)
+							lock (Settings.next_version)
 							{
-								SettingsForm.next_version = $"{ver} | {size}";								
+								Settings.next_version = $"{ver} | {size}";								
 							}
 							form.changeNotificationLocation ();
 							size = jresponse ["assets"] [md] ["size"].ToString ();

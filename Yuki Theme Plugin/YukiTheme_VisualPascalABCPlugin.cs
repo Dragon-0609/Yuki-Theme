@@ -31,7 +31,7 @@ namespace Yuki_Theme_Plugin
 		public string Name => "Yuki Theme";
 
 		public string Version =>
-			SettingsForm.current_version.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
+			Settings.current_version.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
 
 		public string Copyright => "Dragon-LV";
 		

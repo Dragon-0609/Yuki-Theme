@@ -145,6 +145,7 @@ namespace Yuki_Theme_Plugin
 					plugin.stickerControl.Enabled = Settings.positioning;
 					Settings.autoFitByWidth = settingsPanel.fitWidth.Checked;
 					Settings.askToSave = settingsPanel.askSave.Checked;
+					Settings.saveAsOld = settingsPanel.saveOld.Checked;
 					Settings.saveData ();
 					plugin.LoadSticker ();
 					if (settingsPanel.mf != null && !settingsPanel.mf.IsDisposed)

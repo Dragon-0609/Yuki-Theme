@@ -22,6 +22,12 @@ namespace Yuki_Theme.Core.Parsers
 
 			string pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
 			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yukitheme");
+
+			if (st.EndsWith (".yuki"))
+			{
+				pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
+                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yuki");
+			}
 			
 			if (checkAvailableAndAsk ( pathef, ask, exist))
 			{
@@ -29,6 +35,7 @@ namespace Yuki_Theme.Core.Parsers
 				switch (ext)
 				{
 					case ".yukitheme" :
+					case ".yuki" :
 					{
 						File.Copy (path, pathef, true);
 						form.load_schemes ();

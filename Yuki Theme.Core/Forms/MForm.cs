@@ -560,14 +560,14 @@ namespace Yuki_Theme.Core.Forms
 			
 			if (cnd)
 			{
-				save_button.Visible = !isDefault ();
 				if (CLI.isEdited) // Ask to save the changes
 				{
 					if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
 						save_Click (sender, e); // save before restoring
 				}
-
 				restore_Click (sender, e);
+				
+				save_button.Visible = !isDefault ();
 
 				selectedItem = schemes.SelectedItem.ToString ();
 				database.UpdateData (Settings.ACTIVE, selectedItem);
@@ -656,6 +656,7 @@ namespace Yuki_Theme.Core.Forms
 				Settings.customSticker = setform.settingsPanel.customSticker;
 				Settings.autoFitByWidth = setform.settingsPanel.fitWidth.Checked;
 				Settings.askToSave = setform.settingsPanel.askSave.Checked;
+				Settings.saveAsOld = setform.settingsPanel.saveOld.Checked;
 				Settings.saveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = Settings.positioning;
@@ -860,7 +861,7 @@ namespace Yuki_Theme.Core.Forms
 			fd.Title = "Import";
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
 			fd.Filter =
-				"All Themes(*.icls,*.yukitheme,*.json)|*.icls;*.yukitheme;*.json|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme)|*.yukitheme|Doki Theme(*.json)|*.json";
+				"All Themes(*.icls,*.yukitheme,*.yuki,*.json)|*.icls;*.yukitheme;*.yuki;*.json|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json";
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
@@ -1066,8 +1067,8 @@ namespace Yuki_Theme.Core.Forms
 			if (imagePath.Text == "wallpaper.png" && imgCurrent == ImageType.Wallpaper)
 			{
 				Tuple <bool, Image> iag = isDefault ()
-					? Helper.GetImageFromMemory (gp, Assembly.GetExecutingAssembly ())
-					: Helper.GetImage (getPath);
+					? Helper.GetImageFromMemory (CLI.currentTheme.fullPath, Assembly.GetExecutingAssembly ())
+					: Helper.GetImage (CLI.currentTheme.fullPath);
 				if (iag.Item1)
 				{
 					// img = iag.Item2;
@@ -1080,8 +1081,8 @@ namespace Yuki_Theme.Core.Forms
 			} else if (imagePath.Text == "sticker.png" && imgCurrent == ImageType.Sticker)
 			{
 				Tuple <bool, Image> iag = isDefault ()
-					? Helper.GetStickerFromMemory (gp, Assembly.GetExecutingAssembly ())
-					: Helper.GetSticker (getPath);
+					? Helper.GetStickerFromMemory (CLI.currentTheme.fullPath, Assembly.GetExecutingAssembly ())
+					: Helper.GetSticker (CLI.currentTheme.fullPath);
 				if (iag.Item1)
 				{
 					// img = iag.Item2;

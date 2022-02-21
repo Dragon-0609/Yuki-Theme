@@ -47,6 +47,7 @@ namespace Yuki_Theme.Core.Forms
 			// scheme
 			// 
 			this.scheme.AutoArrange = false;
+			this.scheme.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.scheme.Columns.AddRange (new System.Windows.Forms.ColumnHeader [] { this.columnHeader1 });
 			this.scheme.Font = new System.Drawing.Font ("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.scheme.FullRowSelect = true;
