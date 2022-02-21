@@ -179,9 +179,9 @@ public static class Settings
 		dict.Add (ASKTOSAVE, askToSave.ToString ());
 		dict.Add (SAVEASOLD, saveAsOld.ToString ());
 		database.UpdateData (dict);
-		if (CLI.onBGIMAGEChange != null) CLI.onBGIMAGEChange ();
-		if (CLI.onSTICKERChange != null) CLI.onSTICKERChange ();
-		if (CLI.onSTATUSChange != null) CLI.onSTATUSChange ();
+		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
+		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();
+		if (CLI_Actions.onSTATUSChange != null) CLI_Actions.onSTATUSChange ();
 	}
 
 }

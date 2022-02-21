@@ -205,14 +205,15 @@ namespace Yuki_Theme.CLI
 			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
 			{
 				Helper.mode = ProductMode.CLI;
-				Core.CLI.setPath = AskPath;
-				Core.CLI.showSuccess = ShowSuccess;
-				Core.CLI.showError = ShowError;
-				Core.CLI.showError = ShowError;
-				Core.CLI.onRename = ShowInvertSuccess;
-				Core.CLI.SaveInExport = AskToDelete;
-				Core.Settings.connectAndGet ();
+				CLI_Actions.setPath = AskPath;
+				CLI_Actions.showSuccess = ShowSuccess;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.onRename = ShowInvertSuccess;
+				CLI_Actions.SaveInExport = AskToDelete;
+				Settings.connectAndGet ();
 				Settings.settingMode = SettingMode.Light;
+				Settings.saveAsOld = true;
 				Core.CLI.load_schemes ();
 			} else if (refreshSchemes)
 			{

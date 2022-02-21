@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Yuki_Theme.Core
@@ -88,6 +89,31 @@ namespace Yuki_Theme.Core
 			
 			return dictionay;
 		}
-		
+
+		public static Dictionary <string, ThemeField> GetThemeFieldsWithRealNames (SyntaxType syntax, Theme theme)
+		{
+			Dictionary <string, ThemeField> localDic = new Dictionary <string, ThemeField> ();
+			List <string> shadowNames = new List <string> (); // This is necessary not to repeat fields
+			foreach (KeyValuePair <string, ThemeField> pair in theme.Fields)
+			{
+				string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
+				Console.WriteLine (pair.Key + " | " + shadowName);
+				if (shadowName != null && !shadowNames.Contains (shadowName))
+				{
+					string [] realName = ShadowNames.GetRealName (shadowName, syntax);
+					if (realName != null)
+					{
+						foreach (string st in realName)
+						{
+							localDic.Add (st, pair.Value);
+						}
+					}
+
+					shadowNames.Add (shadowName);
+				}
+			}
+
+			return localDic;
+		}
 	}
 }

@@ -44,7 +44,9 @@ namespace Yuki_Theme.Core
 		[JsonIgnore]
 		public Alignment align => (Alignment) WallpaperAlign;
 
-		
+
+		[JsonIgnore]
+		public bool IsOld => CLI.oldThemeList [Name];
 
 	}
 	

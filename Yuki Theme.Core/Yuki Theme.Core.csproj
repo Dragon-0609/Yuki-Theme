@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="CLI.cs" />
     <None Include="Controls\CustomB.cs" />
+    <Compile Include="CLI_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorModes.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\Controls\ColorBox2D.cs" />

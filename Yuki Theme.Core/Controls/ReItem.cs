@@ -7,6 +7,8 @@ namespace Yuki_Theme.Core.Controls
 {
 	public class ReItem : ListViewItem
 	{
+		public const string THEME_WHITE_SPACE = "       ";
+		
 		public  bool          isGroup = false;
 		private ReItem        rgroupIt;
 		public  List <ReItem> childs = new List <ReItem> ();
@@ -15,7 +17,7 @@ namespace Yuki_Theme.Core.Controls
 		public ReItem (string nm, bool isG = false) : base ()
 		{
 			Name = nm;
-			Text = isG ? nm : $"       {nm}";
+			Text = isG ? nm : THEME_WHITE_SPACE + nm;
 			isGroup = isG;
 			Font = null;
 			rgroupItem = null;
@@ -25,7 +27,7 @@ namespace Yuki_Theme.Core.Controls
 		public ReItem (string nm, bool isG = false, ReItem rgroup = null) : base ()
 		{
 			Name = nm;
-			Text = isG ? nm : $"       {nm}";
+			Text = isG ? nm : THEME_WHITE_SPACE + nm;
 			isGroup = isG;
 			Font = null;
 			rgroupItem = rgroup;
@@ -35,7 +37,7 @@ namespace Yuki_Theme.Core.Controls
 		public ReItem (string nm, bool isG = false, bool isO = false, ReItem rgroup = null) : base ()
 		{
 			Name = nm;
-			Text = isG ? nm : $"       {nm}";
+			Text = isG ? nm : THEME_WHITE_SPACE + nm;
 			isGroup = isG;
 			Font = null;
 			rgroupItem = rgroup;

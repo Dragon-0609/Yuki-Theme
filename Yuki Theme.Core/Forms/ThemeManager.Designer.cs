@@ -98,7 +98,7 @@ namespace Yuki_Theme.Core.Forms
 			this.add.Size = new System.Drawing.Size (24, 24);
 			this.add.TabIndex = 12;
 			this.add.UseVisualStyleBackColor = true;
-			this.add.Click += new System.EventHandler (this.button3_Click);
+			this.add.Click += new System.EventHandler (this.add_Click);
 			// 
 			// button2
 			// 

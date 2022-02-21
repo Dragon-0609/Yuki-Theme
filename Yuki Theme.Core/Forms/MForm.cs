@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
-using FastColoredTextBoxNS;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Svg;
@@ -33,12 +32,6 @@ namespace Yuki_Theme.Core.Forms
 		private int             lastIndex = 1;
 
 		#region CLI Fields
-
-		private int actionChoice
-		{
-			get { return Settings.actionChoice; }
-			set { Settings.actionChoice = value; }
-		}
 
 		private bool askChoice
 		{
@@ -192,16 +185,16 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			list_1.ItemHeight = list_1.Font.Height + 2;
 			// Set Actions
-			CLI.AskChoice = AskChoice;
-			CLI.SaveInExport = SaveInExport;
-			CLI.showSuccess = FinishExport;
-			CLI.showError = ErrorExport;
-			CLI.setPath = setPath;
-			CLI.hasProblem = hasProblem;
-			CLI.ifHasImage = ifHasImage;
-			CLI.ifDoesntHave = ifDoesntHave;
-			CLI.ifHasSticker = ifHasSticker;
-			CLI.ifDoesntHaveSticker = ifDoesntHaveSticker;
+			CLI_Actions.AskChoice = AskChoice;
+			CLI_Actions.SaveInExport = SaveInExport;
+			CLI_Actions.showSuccess = FinishExport;
+			CLI_Actions.showError = ErrorExport;
+			CLI_Actions.setPath = setPath;
+			CLI_Actions.hasProblem = hasProblem;
+			CLI_Actions.ifHasImage = ifHasImage;
+			CLI_Actions.ifDoesntHave = ifDoesntHave;
+			CLI_Actions.ifHasSticker = ifHasSticker;
+			CLI_Actions.ifDoesntHaveSticker = ifDoesntHaveSticker;
 			Helper.giveMessage = GiveMessage;
 
 			if (Helper.mode != ProductMode.Plugin)
@@ -428,16 +421,6 @@ namespace Yuki_Theme.Core.Forms
 			var str = list_1.SelectedItem.ToString ();
 			ThemeField dic = localAttributes [str];
 			SetField (ref dic);
-			if (settingMode == SettingMode.Light)
-			{
-				var sttr = Populater.getDependencies (str);
-				if (sttr != null)
-					foreach (var sr in sttr)
-					{
-						dic = localAttributes [sr];
-						SetField (ref dic);
-					}
-			}
 
 			highlighter.updateColors ();
 		}
@@ -550,7 +533,7 @@ namespace Yuki_Theme.Core.Forms
 			opacity_slider_Scroll (
 				sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
 			imgCurrent = ImageType.None;
-
+			onSelectItem (sender, e);
 			GC.Collect ();
 			GC.WaitForPendingFinalizers ();
 		}
@@ -617,7 +600,7 @@ namespace Yuki_Theme.Core.Forms
 				schemes.SelectedIndex = 0;
 		}
 
-		private void button3_Click (object sender, EventArgs e)
+		private void add_Click (object sender, EventArgs e)
 		{
 			if (selform == null)
 				selform = new SelectionForm ();
@@ -629,12 +612,12 @@ namespace Yuki_Theme.Core.Forms
 
 			if (selform.ShowDialog () == DialogResult.OK)
 			{
-				string syt = selform.comboBox1.SelectedItem.ToString ();
+				string copyFrom = selform.comboBox1.SelectedItem.ToString ();
 				string toname = selform.textBox1.Text;
-				if (!CLI.add (syt, toname))
+				if (!CLI.add (copyFrom, toname))
 				{
 					CLI.isDefaultTheme.Add (toname, false);
-					CLI.oldThemeList.Add (toname, CLI.oldThemeList [syt]);
+					CLI.oldThemeList.Add (toname, CLI.oldThemeList [copyFrom]);
 					schemes.Items.Add (toname);
 					schemes.SelectedItem = toname;
 				}
@@ -667,7 +650,6 @@ namespace Yuki_Theme.Core.Forms
 				swStatusbar = setform.StatusBar;
 				askChoice = setform.settingsPanel.askC.Checked;
 				update = setform.settingsPanel.checkBox2.Checked;
-				actionChoice = setform.settingsPanel.ActionBox.SelectedIndex;
 				settingMode = (SettingMode) setform.settingsPanel.mode.SelectedIndex;
 				Settings.positioning = setform.settingsPanel.checkBox3.Checked;
 				Settings.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
@@ -962,10 +944,10 @@ namespace Yuki_Theme.Core.Forms
 			if (df != null)
 				df.Dispose ();
 			database.SaveLocation (DesktopLocation);
-			CLI.ifHasImage = null;
-			CLI.ifDoesntHave = null;
-			CLI.ifHasSticker = null;
-			CLI.ifDoesntHaveSticker = null;
+			CLI_Actions.ifHasImage = null;
+			CLI_Actions.ifDoesntHave = null;
+			CLI_Actions.ifHasSticker = null;
+			CLI_Actions.ifDoesntHaveSticker = null;
 			this.Dispose (true);
 		}
 
@@ -1413,21 +1395,4 @@ namespace Yuki_Theme.Core.Forms
 
 
 	public delegate void ColorUpdate (Color bg, Color fg, Color bgClick);
-
-	internal class EllipseStyle : Style
-	{
-		public override void Draw (Graphics gr, Point position, Range range)
-		{
-			//get size of rectangle
-			var size = GetSizeOfRange (range);
-			//create rectangle
-			var rect = new Rectangle (position, size);
-			//inflate it
-			rect.Inflate (2, 2);
-			//get rounded rectangle
-			var path = GetRoundedRectangle (rect, 10);
-			//draw rounded rectangle
-			gr.DrawPath (Pens.Red, path);
-		}
-	}
 }

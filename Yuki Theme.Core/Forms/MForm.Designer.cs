@@ -470,7 +470,7 @@
 			this.add_button.Size = new System.Drawing.Size (20, 20);
 			this.add_button.TabIndex = 10;
 			this.add_button.UseVisualStyleBackColor = false;
-			this.add_button.Click += new System.EventHandler (this.button3_Click);
+			this.add_button.Click += new System.EventHandler (this.add_Click);
 			// 
 			// manage_button
 			// 

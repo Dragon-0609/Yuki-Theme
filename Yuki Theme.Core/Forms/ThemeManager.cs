@@ -23,7 +23,7 @@ namespace Yuki_Theme.Core.Forms
 	public partial class ThemeManager : Form
 	{
 		private MForm         form;
-		private Brush         bg,  fg, fgsp;
+		private Brush         bg,  fg, fgsp, borderBrush;
 		private Color         cbg, cbgclick;
 		public  List <ReItem> groups;
 		private int           oldIndex = -1;
@@ -39,7 +39,7 @@ namespace Yuki_Theme.Core.Forms
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
-			CLI.onRename = onRename;
+			CLI_Actions.onRename = onRename;
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
@@ -48,7 +48,7 @@ namespace Yuki_Theme.Core.Forms
 			DialogResult = DialogResult.OK;
 		}
 
-		private void button3_Click (object sender, EventArgs e)
+		private void add_Click (object sender, EventArgs e)
 		{
 			if (form.selform == null)
 				form.selform = new SelectionForm ();
@@ -71,9 +71,17 @@ namespace Yuki_Theme.Core.Forms
 
 			if (form.selform.ShowDialog () == DialogResult.OK)
 			{
-				CLI.add (form.selform.comboBox1.SelectedItem.ToString (), form.selform.textBox1.Text);
-				form.schemes.Items.Add (form.selform.textBox1.Text);
-				form.schemes.SelectedItem = form.selform.textBox1.Text;
+				string from = form.selform.comboBox1.SelectedItem.ToString ();
+				string to = form.selform.textBox1.Text;
+				
+				if (!CLI.add (from, to))
+				{
+					CLI.isDefaultTheme.Add (to, false);
+					CLI.oldThemeList.Add (to, CLI.oldThemeList [from]);
+					form.schemes.Items.Add (to);
+					form.schemes.SelectedItem = to;
+				}
+				
 				DialogResult = DialogResult.OK;
 			}
 		}
@@ -103,8 +111,14 @@ namespace Yuki_Theme.Core.Forms
 		public void onRename (string from, string to)
 		{
 			ListViewItem res = scheme.Items.Find (from, true) [0];
-			res.Text = "       " + to;
+			res.Text = ReItem.THEME_WHITE_SPACE + to;
 			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
+			
+			CLI.oldThemeList.Add (to, CLI.oldThemeList[from]);
+			CLI.isDefaultTheme.Add (to, false);
+			
+			CLI.isDefaultTheme.Remove (from);
+			CLI.oldThemeList.Remove (from);
 		}
 
 		private void remove_Click (object sender, EventArgs e)
@@ -149,9 +163,14 @@ namespace Yuki_Theme.Core.Forms
 				regenerate.FlatAppearance.MouseOverBackColor =
 					rename_btn.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 
+			panel1.BackColor = Helper.bgBorder;
+			panel2.BackColor = Helper.fgKeyword;
+			
 			bg = new SolidBrush (BackColor);
 			fg = new SolidBrush (ForeColor);
 			fgsp = new SolidBrush (Helper.fgKeyword);
+			borderBrush = new SolidBrush (Helper.bgBorder);
+			
 			cbgclick = Helper.bgClick;
 			loadSVG ();
 			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
@@ -181,15 +200,21 @@ namespace Yuki_Theme.Core.Forms
 					rec = new Rectangle (((e.Bounds.Width - 10) / 2) - (sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
 				} else
 				{
-					Brush brush = re.isOld ? Brushes.Maroon : Brushes.Orchid;
+
+					Brush brush = re.isOld ? borderBrush : fgsp;
 					int thickness = 10;
+					int thickness_internal = 2;
 					e.Graphics.FillPolygon (
 						brush,
 						new PointF []
 						{
 							new PointF (e.Bounds.X, e.Bounds.Y), new PointF (e.Bounds.X + thickness, e.Bounds.Y),
 							new PointF (e.Bounds.X + thickness, e.Bounds.Y + e.Bounds.Height),
-							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height)
+							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height),
+							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height - thickness_internal),
+							new PointF (e.Bounds.X + thickness - thickness_internal, e.Bounds.Y + e.Bounds.Height - thickness_internal),
+							new PointF (e.Bounds.X + thickness - thickness_internal, e.Bounds.Y + thickness_internal),
+							new PointF (e.Bounds.X, e.Bounds.Y + thickness_internal),
 						});
 				}
 
@@ -249,7 +274,7 @@ namespace Yuki_Theme.Core.Forms
 			if (scheme.SelectedItems.Count > 0)
 			{
 				RenameForm rf = new RenameForm ();
-				rf.fromTBox.Text = scheme.SelectedItems [0].Text.Substring (7);
+				rf.fromTBox.Text = rf.toTBox.Text = scheme.SelectedItems [0].Text.Substring (7);
 				if (rf.ShowDialog (this) == DialogResult.OK)
 				{
 					if (rf.toTBox.Text.Length > 0)
@@ -299,7 +324,14 @@ namespace Yuki_Theme.Core.Forms
 			CLI.oldThemeList [name] = !CLI.IsOldTheme (pth);
 			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name]; 
 			scheme.Invalidate();
+
+			if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)
+			{
+				CLI.SelectTheme (name);
+			}
+			
 			MessageBox.Show ($"{name} has been regenerated to {format} format", "Regeneration compeleted");
+			
 		}
 	}
 }

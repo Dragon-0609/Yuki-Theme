@@ -36,19 +36,19 @@ namespace Yuki_Theme.Core
 		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			string json = JsonConvert.SerializeObject (CLI.currentTheme, Formatting.Indented);
-			bool iszip = Helper.IsZip (CLI.pathToFileNew);
+			bool iszip = Helper.IsZip (CLI.currentTheme.fullPath);
 
 
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
-				File.WriteAllText (CLI.pathToFileNew, json);
+				File.WriteAllText (CLI.currentTheme.fullPath, json);
 			else
 			{
 				if (iszip)
 				{
-					Helper.UpdateZip (CLI.pathToFileNew, json, img2, wantToKeep, img3, wantToKeep);
+					Helper.UpdateZip (CLI.currentTheme.fullPath, json, img2, wantToKeep, img3, wantToKeep);
 				} else
 				{
-					Helper.Zip (CLI.pathToFileNew, json, img2, img3);
+					Helper.Zip (CLI.currentTheme.fullPath, json, img2, img3);
 				}
 			}
 		}
@@ -71,21 +71,21 @@ namespace Yuki_Theme.Core
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI.ifHasImage != null)
+							if (CLI_Actions.ifHasImage != null)
 							{
-								CLI.ifHasImage (iag.Item2);
+								CLI_Actions.ifHasImage (iag.Item2);
 							}
 
-							if (CLI.ifHasImage2 != null)
+							if (CLI_Actions.ifHasImage2 != null)
 							{
-								CLI.ifHasImage2 (iag.Item2);
+								CLI_Actions.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI.ifDoesntHave != null)
-								CLI.ifDoesntHave ();
-							if (CLI.ifDoesntHave2 != null)
-								CLI.ifDoesntHave2 ();
+							if (CLI_Actions.ifDoesntHave != null)
+								CLI_Actions.ifDoesntHave ();
+							if (CLI_Actions.ifDoesntHave2 != null)
+								CLI_Actions.ifDoesntHave2 ();
 						}
 
 						iag = null;
@@ -93,38 +93,38 @@ namespace Yuki_Theme.Core
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI.ifHasSticker != null)
+							if (CLI_Actions.ifHasSticker != null)
 							{
-								CLI.ifHasSticker (iag.Item2);
+								CLI_Actions.ifHasSticker (iag.Item2);
 							}
 
-							if (CLI.ifHasSticker2 != null)
+							if (CLI_Actions.ifHasSticker2 != null)
 							{
-								CLI.ifHasSticker2 (iag.Item2);
+								CLI_Actions.ifHasSticker2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI.ifDoesntHaveSticker != null)
-								CLI.ifDoesntHaveSticker ();
-							if (CLI.ifDoesntHaveSticker2 != null)
-								CLI.ifDoesntHaveSticker2 ();
+							if (CLI_Actions.ifDoesntHaveSticker != null)
+								CLI_Actions.ifDoesntHaveSticker ();
+							if (CLI_Actions.ifDoesntHaveSticker2 != null)
+								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (CLI.ifDoesntHave != null)
-							CLI.ifDoesntHave ();
+						if (CLI_Actions.ifDoesntHave != null)
+							CLI_Actions.ifDoesntHave ();
 
-						if (CLI.ifDoesntHaveSticker != null)
-							CLI.ifDoesntHaveSticker ();
+						if (CLI_Actions.ifDoesntHaveSticker != null)
+							CLI_Actions.ifDoesntHaveSticker ();
 
-						if (CLI.ifDoesntHave2 != null)
-							CLI.ifDoesntHave2 ();
+						if (CLI_Actions.ifDoesntHave2 != null)
+							CLI_Actions.ifDoesntHave2 ();
 
-						if (CLI.ifDoesntHaveSticker2 != null)
-							CLI.ifDoesntHaveSticker2 ();
+						if (CLI_Actions.ifDoesntHaveSticker2 != null)
+							CLI_Actions.ifDoesntHaveSticker2 ();
 					}
 					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
 					json = reader.ReadToEnd ();
@@ -141,54 +141,54 @@ namespace Yuki_Theme.Core
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI.ifHasImage != null)
+							if (CLI_Actions.ifHasImage != null)
 							{
-								CLI.ifHasImage (iag.Item2);
+								CLI_Actions.ifHasImage (iag.Item2);
 							}
 
-							if (CLI.ifHasImage2 != null)
+							if (CLI_Actions.ifHasImage2 != null)
 							{
-								CLI.ifHasImage2 (iag.Item2);
+								CLI_Actions.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI.ifDoesntHave != null)
-								CLI.ifDoesntHave ();
+							if (CLI_Actions.ifDoesntHave != null)
+								CLI_Actions.ifDoesntHave ();
 
-							if (CLI.ifDoesntHave2 != null)
-								CLI.ifDoesntHave2 ();
+							if (CLI_Actions.ifDoesntHave2 != null)
+								CLI_Actions.ifDoesntHave2 ();
 						}
 
 						iag = Helper.GetSticker (pathToFile);
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI.ifHasSticker != null)
+							if (CLI_Actions.ifHasSticker != null)
 							{
-								CLI.ifHasSticker (iag.Item2);
+								CLI_Actions.ifHasSticker (iag.Item2);
 							}
 						} else
 						{
-							if (CLI.ifDoesntHaveSticker != null)
-								CLI.ifDoesntHaveSticker ();
+							if (CLI_Actions.ifDoesntHaveSticker != null)
+								CLI_Actions.ifDoesntHaveSticker ();
 
-							if (CLI.ifDoesntHaveSticker2 != null)
-								CLI.ifDoesntHaveSticker2 ();
+							if (CLI_Actions.ifDoesntHaveSticker2 != null)
+								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (CLI.ifDoesntHave != null)
-							CLI.ifDoesntHave ();
-						if (CLI.ifDoesntHaveSticker != null)
-							CLI.ifDoesntHaveSticker ();
+						if (CLI_Actions.ifDoesntHave != null)
+							CLI_Actions.ifDoesntHave ();
+						if (CLI_Actions.ifDoesntHaveSticker != null)
+							CLI_Actions.ifDoesntHaveSticker ();
 
-						if (CLI.ifDoesntHave2 != null)
-							CLI.ifDoesntHave2 ();
-						if (CLI.ifDoesntHaveSticker2 != null)
-							CLI.ifDoesntHaveSticker2 ();
+						if (CLI_Actions.ifDoesntHave2 != null)
+							CLI_Actions.ifDoesntHave2 ();
+						if (CLI_Actions.ifDoesntHaveSticker2 != null)
+							CLI_Actions.ifDoesntHaveSticker2 ();
 					}
 					json = File.ReadAllText (pathToFile);
 				}
@@ -236,38 +236,16 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void PopulateDictionaryFromTheme (Theme theme, ref Dictionary <string, Dictionary <string, string>> attributes, ref List <string> namesExtended)
+		public static void PopulateDictionaryFromTheme (Theme theme, ref Dictionary <string, ThemeField> attributes, ref List <string> namesExtended)
 		{
 			foreach (KeyValuePair <string, ThemeField> field in theme.Fields)
 			{
 				if (!namesExtended.Contains (field.Key))
 				{
-					Dictionary <string, string> attrs = field.Value.ConvertToDictionary ();
 					namesExtended.Add (field.Key);
-					attributes.Add (field.Key, attrs);
-
-					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !namesExtended.Contains ("Wallpaper"))
-					{
-						namesExtended.Remove ("Selection");
-						namesExtended.Add ("Wallpaper");
-						namesExtended.Add ("Selection");
-					}
-
-					if (field.Key.Equals ("selection", StringComparison.OrdinalIgnoreCase) &&
-					    !namesExtended.Contains ("Sticker"))
-					{
-						namesExtended.Remove ("Selection");
-						namesExtended.Add ("Sticker");
-						namesExtended.Add ("Selection");
-					}
+					attributes.Add (field.Key, field.Value);
 				}
 			}
-			attributes.Add ("Wallpaper",
-			                new Dictionary <string, string> {{"align", theme.WallpaperAlign.ToString ()}, {"opacity", theme.WallpaperOpacity.ToString ()}});
-
-			attributes.Add ("Sticker",
-			                new Dictionary <string, string> {{"opacity", theme.StickerOpacity.ToString ()}});
 		}
 
 		public static void populateList ()

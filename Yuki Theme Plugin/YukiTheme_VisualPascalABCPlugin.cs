@@ -361,9 +361,9 @@ namespace Yuki_Theme_Plugin
 			UpdateColors ();
 			
 			setTim2 ();
-			CLI.onBGIMAGEChange = RefreshEditor;
-			CLI.onSTICKERChange = ReloadSticker;
-			CLI.onSTATUSChange = RefreshStatusBar;
+			CLI_Actions.onBGIMAGEChange = RefreshEditor;
+			CLI_Actions.onSTICKERChange = ReloadSticker;
+			CLI_Actions.onSTATUSChange = RefreshStatusBar;
 
 			Helper.LoadCurrent ();
 			
@@ -1342,17 +1342,17 @@ namespace Yuki_Theme_Plugin
 				{
 					bool cnd = CLI.SelectTheme (lst.SelectedItem.ToString ());
 					CLI.selectedItem = CLI.nameToLoad;
-					CLI.ifHasImage2 = ifHsImage;
-					CLI.ifHasSticker2 = ifHsSticker;
-					CLI.ifDoesntHave2 = ifDNIMG;
-					CLI.ifDoesntHaveSticker2 = ifDNSTCK;
+					CLI_Actions.ifHasImage2 = ifHsImage;
+					CLI_Actions.ifHasSticker2 = ifHsSticker;
+					CLI_Actions.ifDoesntHave2 = ifDNIMG;
+					CLI_Actions.ifDoesntHaveSticker2 = ifDNSTCK;
 					CLI.restore (false, null);
 					CLI.export (tmpImage1, tmpImage2, ReloadLayout, ReleaseResources);
 
-					CLI.ifHasImage2 = null;
-					CLI.ifHasSticker2 = null;
-					CLI.ifDoesntHave2 = null;
-					CLI.ifDoesntHaveSticker2 = null;
+					CLI_Actions.ifHasImage2 = null;
+					CLI_Actions.ifHasSticker2 = null;
+					CLI_Actions.ifDoesntHave2 = null;
+					CLI_Actions.ifDoesntHaveSticker2 = null;
 				}
 				
 				CloseOnClick (sender, e);

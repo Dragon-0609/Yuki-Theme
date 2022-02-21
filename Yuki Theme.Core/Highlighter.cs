@@ -9,6 +9,23 @@ using TextStyle = FastColoredTextBoxNS.TextStyle;
 
 namespace Yuki_Theme.Core
 {
+	internal class EllipseStyle : Style
+	{
+		public override void Draw (Graphics gr, Point position, Range range)
+		{
+			//get size of rectangle
+			var size = GetSizeOfRange (range);
+			//create rectangle
+			var rect = new Rectangle (position, size);
+			//inflate it
+			rect.Inflate (2, 2);
+			//get rounded rectangle
+			var path = GetRoundedRectangle (rect, 10);
+			//draw rounded rectangle
+			gr.DrawPath (Pens.Red, path);
+		}
+	}
+
 	public class Highlighter
 	{
 		#region FSTB Fields
@@ -21,12 +38,12 @@ namespace Yuki_Theme.Core
 
 		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
 
-		private Dictionary <string, Regex>     regexes;
+		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
 
 		private string [] names =
 		{
-			"string", "linebigcomment", "linecomment", "blockcomment", "blockcomment2", "digits", "beginend",
+			"linebigcomment", "linecomment", "blockcomment", "blockcomment2", "string", "digits", "beginend",
 			"keywords", "programsections", "punctuation", "nonreserved1", "operatorkeywords", "selectionstatements",
 			"iterationstatements", "exceptionhandlingstatements", "raisestatement", "jumpstatements", "jumpprocedures",
 			"internalconstant", "internaltypes", "referencetypes", "modifiers", "accessmodifiers", "accesskeywords1",
@@ -69,7 +86,7 @@ namespace Yuki_Theme.Core
 				if (isInNames (style.Key))
 				{
 					// Console.WriteLine(style.Key);
-					string[] key = new string[] {style.Key.ToLower ()};
+					string [] key = new string [] { style.Key.ToLower () };
 					if (isLight)
 						key = ShadowNames.PascalFields [style.Key];
 					foreach (string ki in key)
@@ -86,13 +103,13 @@ namespace Yuki_Theme.Core
 						{
 							styles [kilow].FontStyle = collectFontStyle (style.Value);
 						}
-					
+
 						if (kilow == "keywords" || kilow == "keyword")
 						{
 							Helper.fgKeyword = Parse (style.Value.Foreground);
 						}
 					}
-					
+
 					// else
 					// Console.WriteLine($"BL {key}");
 				} else
@@ -168,7 +185,7 @@ namespace Yuki_Theme.Core
 			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'", RegexCompiledOption));
 			regexes.Add ("linecomment", new Regex (@"//.*$", RegexOptions.Multiline | RegexCompiledOption));
 			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
-			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft |  RegexCompiledOption));
+			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption));
 			regexes.Add ("blockcomment2", new Regex (@"(\(\*.*?\*\))|(.*\*\))",
 			                                         RegexOptions.Singleline | RegexOptions.RightToLeft |
 			                                         RegexCompiledOption));
@@ -281,7 +298,7 @@ namespace Yuki_Theme.Core
 
 						foreach (string dependency in srt)
 						{
-							if (regexes.ContainsKey (dependency.ToLower()))
+							if (regexes.ContainsKey (dependency.ToLower ()))
 							{
 								if (ik == 0)
 								{
@@ -387,8 +404,8 @@ namespace Yuki_Theme.Core
 		private FontStyle collectFontStyle (ThemeField val)
 		{
 			FontStyle font = FontStyle.Regular;
-			font = addFontStyle (font, FontStyle.Bold, (bool) val.Bold);
-			font = addFontStyle (font, FontStyle.Italic, (bool) val.Italic);
+			font = addFontStyle (font, FontStyle.Bold, (bool)val.Bold);
+			font = addFontStyle (font, FontStyle.Italic, (bool)val.Italic);
 			return font;
 		}
 	}
