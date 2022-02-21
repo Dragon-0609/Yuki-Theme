@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			string syt = CLI.schemes [1];
 			if (DefaultThemes.isDefault (syt))
-				CLI.CopyFromMemory (syt, outname);
+				CLI.CopyFromMemory (syt, outname, outname);
 			else
 			{
 				// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 

@@ -97,7 +97,6 @@ namespace Yuki_Theme.Core
 			foreach (KeyValuePair <string, ThemeField> pair in theme.Fields)
 			{
 				string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
-				Console.WriteLine (pair.Key + " | " + shadowName);
 				if (shadowName != null && !shadowNames.Contains (shadowName))
 				{
 					string [] realName = ShadowNames.GetRealName (shadowName, syntax);

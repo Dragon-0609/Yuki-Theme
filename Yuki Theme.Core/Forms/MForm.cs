@@ -616,8 +616,6 @@ namespace Yuki_Theme.Core.Forms
 				string toname = selform.textBox1.Text;
 				if (!CLI.add (copyFrom, toname))
 				{
-					CLI.isDefaultTheme.Add (toname, false);
-					CLI.oldThemeList.Add (toname, CLI.oldThemeList [copyFrom]);
 					schemes.Items.Add (toname);
 					schemes.SelectedItem = toname;
 				}

@@ -76,8 +76,6 @@ namespace Yuki_Theme.Core.Forms
 				
 				if (!CLI.add (from, to))
 				{
-					CLI.isDefaultTheme.Add (to, false);
-					CLI.oldThemeList.Add (to, CLI.oldThemeList [from]);
 					form.schemes.Items.Add (to);
 					form.schemes.SelectedItem = to;
 				}

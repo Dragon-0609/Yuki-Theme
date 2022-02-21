@@ -118,6 +118,12 @@ namespace Yuki_Theme.Core
 				bool done = ReGenerateTheme (patsh, pth, name, copyFrom, false);
 				if (!done)
 					WriteName (patsh, name);
+				if (!exist)
+				{
+					schemes.Add (name);
+					isDefaultTheme.Add (name, false);
+					oldThemeList.Add (name, CLI.oldThemeList [copyFrom]);
+				}
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)
 						CLI_Actions.showSuccess ("The theme has been duplicated!", "Done");
@@ -147,7 +153,7 @@ namespace Yuki_Theme.Core
 					return true;
 				}
 
-				CopyFromMemory (themeName, destination);
+				CopyFromMemory (themeName, themeName, destination);
 			} else
 			{
 				path = Path.Combine (currentPath, $"Themes/{themeName}{Helper.FILE_EXTENSTION_OLD}");
@@ -216,14 +222,7 @@ namespace Yuki_Theme.Core
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
 		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
-			if (!isDefault () && Helper.mode != ProductMode.Plugin && isEdited)
-			{
-				if (CLI_Actions.SaveInExport ("Do you want to save current scheme?", "Save"))
-					save (img2, img3, wantToKeep);
-			} else if (!isDefault ())
-			{
-				save (img2, img3, wantToKeep);
-			}
+			AskToSaveInExport (img2, img3, wantToKeep);
 
 			if (Settings.pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
 			{
@@ -239,52 +238,53 @@ namespace Yuki_Theme.Core
 				var path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
 				if (files != null && files.Length > 0)
 				{
-					if (files [0] == path)
+				 	string [] unknownThemes = IdentifySyntaxHighlightings (files);
+				    Console.WriteLine ("UNKNOWN: " + unknownThemes.Length);
+					if (unknownThemes.Length == 0)
 					{
-						File.Delete (files [0]);
-					}
-					// Console.WriteLine ($"FILES: {files.Length}, OR: {files [0]} | MS: {path}");
-
-					var result = 2;
-					if (Helper.mode != ProductMode.Plugin && Helper.mode != ProductMode.CLI)
+						DeleteFiles (files);
+					}else
 					{
-						if (Settings.askChoice)
+						var result = 2;
+						if (Helper.mode != ProductMode.Plugin && Helper.mode != ProductMode.CLI)
 						{
-							result = CLI_Actions.AskChoice ();
+							if (Settings.askChoice)
+							{
+								result = CLI_Actions.AskChoice ();
+							} else
+							{
+								switch (Settings.actionChoice)
+								{
+									case 0 :
+									{
+										result = 0;
+									}
+										break;
+									case 1 :
+									{
+										result = 1;
+									}
+										break;
+								}
+							}
 						} else
 						{
-							switch (Settings.actionChoice)
-							{
-								case 0 :
-								{
-									result = 0;
-								}
-									break;
-								case 1 :
-								{
-									result = 1;
-								}
-									break;
-							}
+							result = 0;
 						}
-					} else
-					{
-						result = 0;
-					}
 
-					if (result != 2)
-					{
-						if (result == 1) CopyFiles (files);
-
-						DeleteFiles (files);
-						files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.png");
-						DeleteFiles (files);
+						if (result != 2)
+						{
+							if (result == 1) CopyFiles (unknownThemes);
+							DeleteFiles (unknownThemes);
+						}
 					}
+					files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.png");
+					DeleteFiles (files);
 				}
 
 				if (currentTheme.isDefault)
 				{
-					CopyFromMemory (currentTheme.path, path, true);
+					CopyFromMemory (currentTheme.path, currentTheme.Name, path, true);
 				} else
 				{
 					ExportTheme (path);
@@ -415,7 +415,7 @@ namespace Yuki_Theme.Core
 				onSelect ();
 		}
 
-		private static Stream GetStreamFromMemory (string file)
+		private static Stream GetStreamFromMemory (string file, string name)
 		{
 			var a = GetCore ();
 			if (file.Contains (":"))
@@ -423,7 +423,7 @@ namespace Yuki_Theme.Core
 				file = Helper.ConvertNameToPath(file);
 			}
 
-			string ext = oldThemeList [file] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW;
+			string ext = oldThemeList [name] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW;
 			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + ext);
 			return stream;
 		}
@@ -431,12 +431,13 @@ namespace Yuki_Theme.Core
 		/// <summary>
 		/// Copy theme from memory. It's used to copy default themes.
 		/// </summary>
-		/// <param name="file">Copy from (theme name)</param>
+		/// <param name="file">Copy from (theme name as path)</param>
+		/// <param name="name">Copy from (theme name)</param>
 		/// <param name="path">Copy to path</param>
 		/// <param name="extract">Do you want to extract background image and sticker?</param>
-		public static void CopyFromMemory (string file, string path, bool extract = false)
+		public static void CopyFromMemory (string file, string name, string path, bool extract = false)
 		{
-			Stream stream = GetStreamFromMemory (file);
+			Stream stream = GetStreamFromMemory (file, name);
 			string nxp = extract ? path + "A" : path;
 			using (var fs = new FileStream (nxp, FileMode.Create))
 			{
@@ -520,7 +521,7 @@ namespace Yuki_Theme.Core
 			Console.WriteLine (path);
 			if (IsNewTheme (path))
 				return NewThemeFormat.GetNameOfTheme (path);
-			return OldThemeFormat.GetNameOfThemeOld (path);
+			return OldThemeFormat.GetNameOfTheme (path);
 			
 		}
 
@@ -614,7 +615,7 @@ namespace Yuki_Theme.Core
 		{
 			foreach (var file in files)
 			{
-				var fs = Path.Combine (currentPath, "Themes", Path.GetFileNameWithoutExtension (file) + ".yukitheme");
+				var fs = Path.Combine (currentPath, "Themes", Path.GetFileNameWithoutExtension (file) + Helper.FILE_EXTENSTION_OLD);
 				if (!File.Exists (fs))
 					File.Copy (file, fs);
 			}
@@ -751,7 +752,7 @@ namespace Yuki_Theme.Core
 
 			if (DefaultThemes.isDefault (oldName))
 			{
-				Stream stream = GetStreamFromMemory (oldName);
+				Stream stream = GetStreamFromMemory (oldName, oldName);
 				iszip = Helper.IsZip (stream);
 				stream.Dispose ();
 			} else
@@ -811,7 +812,7 @@ namespace Yuki_Theme.Core
 							has = true;
 						}
 					}
-					if (!has)
+					if (!has && pts.Length > 0)
 					{
 						schemes.Add (pts);
 						isDefaultTheme.Add (pts, false);
@@ -819,6 +820,37 @@ namespace Yuki_Theme.Core
 					}
 				}
 			}
+		}
+
+		private static void AskToSaveInExport (Image img2, Image img3, bool wantToKeep)
+		{
+			if (!isDefault () && Helper.mode != ProductMode.Plugin && isEdited)
+			{
+				if (CLI_Actions.SaveInExport ("Do you want to save current scheme?", "Save"))
+					save (img2, img3, wantToKeep);
+			} else if (!isDefault ())
+			{
+				save (img2, img3, wantToKeep);
+			}
+		}
+		
+
+		private static string [] IdentifySyntaxHighlightings (string[] files)
+		{
+			List<string> unknowThemes = new List <string> (); 
+			foreach (string file in files)
+			{
+				string name = OldThemeFormat.GetNameOfTheme (file);
+				if (name.Length > 0)
+				{
+					if (!schemes.Contains (name))
+					{
+						unknowThemes.Add (file);
+					}
+				}
+			}
+
+			return unknowThemes.ToArray ();
 		}
 	}
 }

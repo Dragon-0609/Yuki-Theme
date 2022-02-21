@@ -157,7 +157,6 @@ namespace Yuki_Theme.Core
 				string shadowName = ShadowNames.GetShadowName (nm, SyntaxType.Pascal, true);
 				if (!namesExtra.Contains (shadowName))
 				{
-					Console.WriteLine (nm + " | " + shadowName);
 					if (!theme.Fields.ContainsKey (shadowName))
 					{
 						// Console.WriteLine ( $"InList: {nm}|{attributes.ContainsKey (nm)}");		
@@ -192,7 +191,7 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-		public static string GetNameOfThemeOld (string path)
+		public static string GetNameOfTheme (string path)
 		{
 			XmlDocument docu = new XmlDocument ();
 
@@ -209,13 +208,19 @@ namespace Yuki_Theme.Core
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
 			string nm = "";
 
-			foreach (XmlComment comm in comms)
-			{
-				if (comm.Value.StartsWith ("name"))
+			if (comms != null)
+				foreach (XmlComment comm in comms)
 				{
-					nm = comm.Value.Substring (5);
-					break;
+					if (comm.Value.StartsWith ("name"))
+					{
+						nm = comm.Value.Substring (5);
+						break;
+					}
 				}
+
+			if (nm == "")
+			{
+				if (nod.Attributes != null) nm = nod.Attributes ["name"].Value;
 			}
 
 			return nm;
