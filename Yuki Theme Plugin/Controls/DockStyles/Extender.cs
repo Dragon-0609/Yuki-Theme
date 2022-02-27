@@ -1,10 +1,9 @@
 using System;
-using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace Yuki_Theme_Plugin.Controls
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
     public class Extender
     {

@@ -14,93 +14,89 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public class DokiThemeParser : AbstractParser
 	{
-		private bool   dark   = true;
-		private string curd   = "";
-		private string fname  = "";
-		private string ofname = "";
-		private string getWallpaper => Path.Combine (curd, fname);
-		private string getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
-		public Func <string, string, bool> exist;
-		
+		private bool                        dark   = true;
+		private string                      curd   = "";
+		private string                      fname  = "";
+		private string                      ofname = "";
+		private string                      getWallpaper => Path.Combine (curd, fname);
+		private string                      getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		public  Func <string, string, bool> exist;
+
 		public override void populateList (string path)
 		{
 			curd = Path.GetDirectoryName (path);
 			JObject json = JObject.Parse (File.ReadAllText (path));
-			fname = json ["stickers"] ["default"].ToString();
+			fname = json ["stickers"] ["default"].ToString ();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
-			
+
 			flname = ofname;
 			outname = Path.Combine (CLI.currentPath, "Themes",
 			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
 			if (!MainParser.checkAvailableAndAsk (outname, ask, exist))
 				throw new InvalidDataException ("The theme is exist...canceling...");
+
 			overwrite = File.Exists (outname);
+			Console.WriteLine ("{0} | Exist: {1}", outname, overwrite);
 			dark = bool.Parse (json ["dark"].ToString ());
-			
+
 			foreach (JProperty cl in json ["colors"])
 			{
 				var name = getName (cl.Name);
-				
-				var attrs = new Dictionary <string, string> ();
+
+				var attrs = new ThemeField ();
 
 				bool fore = canGetForeground (cl.Name);
 				if (fore)
-					attrs.Add ("color", cl.Value.ToString());
+					attrs.Foreground = cl.Value.ToString ();
 				bool back = canGetBackground (cl.Name);
 				if (back)
-					attrs.Add ("bgcolor", cl.Value.ToString());
+					attrs.Background = cl.Value.ToString ();
 
 				Tuple <string, string> defaults = getDefault (cl.Name);
 
 				if (defaults != null)
 				{
-					if(!attrs.ContainsKey (defaults.Item1))
-						attrs.Add (defaults.Item1, defaults.Item2);
+					if (attrs.isAttributeNull (defaults.Item1))
+						attrs.SetAttributeByName (defaults.Item1, defaults.Item2);
 				}
-				if(canBold(cl.Name))
+
+				if (canBold (cl.Name))
 				{
-					attrs.Add ("bold", "false");
-					attrs.Add ("italic", "false");
+					attrs.Bold = false;
+					attrs.Italic = false;
 				}
-				
+
 
 				foreach (var nm in name)
 				{
-					attributes.Add (nm, attrs);
+					theme.Fields.Add (nm, attrs);
 				}
-				if (cl.Name.Equals ("selectionBackground", StringComparison.OrdinalIgnoreCase))
-				{
-					Dictionary <string, string> attrim = new Dictionary <string, string> () {{"align", "1000"}, {"opacity", "10"}};
-					attributes.Remove ("Selection");
-					attributes.Add ("BackgroundImage", attrim);
-					attributes.Add ("Selection", attrs);
-				}
-				
 			}
-			
-			
-			Tuple <string, string> tp = new Tuple <string, string> ("bgcolor", attributes ["Default"] ["bgcolor"]);
-			attributes ["LineNumbers"].Add (tp.Item1, tp.Item2);
-			
-			if(!attributes.ContainsKey ("Digits"))
+
+
+			theme.Fields ["LineNumbers"].Background = theme.Fields ["Default"].Background;
+
+			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
 			addDefaults ("foregroundColorEditor");
-			
-			Dictionary <string, string> df = attributes ["Default"];
-			Dictionary <string, string> dic = new Dictionary <string, string> ();
-			dic.Add ("color", df["color"]);
-			dic.Add ("bgcolor", df["bgcolor"]);
-			attributes.Add ("FoldMarker", dic);
-			attributes.Add ("SelectedFoldLine", dic);
-			dic.Remove ("bgcolor");
-			attributes.Add ("FoldLine", dic);
-			
+			addDefaults ("comments");
+
+			ThemeField df = theme.Fields ["Default"];
+			ThemeField dic = new ThemeField
+			{
+				Foreground = df.Foreground,
+				Background = df.Background
+			};
+			theme.Fields.Add ("FoldMarker", dic);
+			theme.Fields.Add ("SelectedFoldLine", dic);
+			dic.Background = null;
+			theme.Fields.Add ("FoldLine", dic);
+
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 
 		public override void PopulateByXMLNodeTreeType (XmlNode node)
 		{
-			
 		}
 
 		private string ConvertGroup (string st)
@@ -300,19 +296,9 @@ namespace Yuki_Theme.Core.Parsers
 			return attr_value;
 		}
 
-		public override Dictionary <string, string> populateDefaultAttributes (string name)
+		public override ThemeField populateDefaultAttributes (string name)
 		{
-			var att = new Dictionary <string, string> ();
-			switch (name)
-			{
-				case "DEFAULT_COMMA" :
-				{
-					att.Add ("color", "#FFFFFF");
-				}
-					break;
-			}
-
-			return att;
+			return null;
 		}
 
 		public override bool isNecessaryAttribute (string name)
@@ -336,7 +322,8 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "textEditorBackground" : case "selectionBackground" :
+				case "textEditorBackground" :
+				case "selectionBackground" :
 				{
 					res = true;
 				}
@@ -351,10 +338,15 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" : case "constantColor" :
-				case "comments" : case "stringColor" : case "keywordColor" :
-				case "classNameColor" : case "accentColor" : 
+				case "foregroundColorEditor" :
+				case "constantColor" :
+				case "comments" :
+				case "stringColor" :
+				case "keywordColor" :
+				case "classNameColor" :
+				case "accentColor" :
 				case "lineNumberColor" :
+				case "keyColor" :
 				{
 					res = true;
 				}
@@ -371,37 +363,34 @@ namespace Yuki_Theme.Core.Parsers
 
 			foreach (var nm in dds)
 			{
-				if(!attributes.ContainsKey (nm))
-					attributes.Add (nm, new Dictionary <string, string> () {{defs.Item1, defs.Item2}});
-				else if (!attributes [nm].ContainsKey (defs.Item1))
-					attributes [nm].Add (defs.Item1, defs.Item2);
+				if (!theme.Fields.ContainsKey (nm))
+				{
+					ThemeField field = new ThemeField ();
+					field.SetAttributeByName (defs.Item1, defs.Item2);
+					theme.Fields.Add (nm, field);
+				} else if (theme.Fields [nm].isAttributeNull (defs.Item1))
+					theme.Fields [nm].SetAttributeByName (defs.Item1, defs.Item2);
 			}
-
 		}
 
-		private Tuple<string,string> getDefault (string st)
+		private readonly Dictionary <string, string> _defaultForegroundColors = new Dictionary <string, string> ()
+			{ { "constantColor", "#4C94D6" }, { "foregroundColorEditor", "#4D4D4A" }, { "comments", "#6a737d" } };
+
+		private readonly Dictionary <string, string> _defaultDarkForegroundColors = new Dictionary <string, string> ()
+			{ { "constantColor", "#86dbfd" }, { "foregroundColorEditor", "#F8F8F2" }, { "comments", "#6272a4" } };
+
+		private Tuple <string, string> getDefault (string st)
 		{
 			Tuple <string, string> res = null;
-			switch (st)
+			if (_defaultForegroundColors.ContainsKey (st))
 			{
-				case "constantColor" :
+				if (dark)
 				{
-					if (dark)
-						res = new Tuple <string, string> ("color", "#86dbfd");
-					else
-						res = new Tuple <string, string> ("color", "#4C94D6");
-				}
-					break;
-				
-				case "foregroundColorEditor" :
+					res = new Tuple <string, string> ("color", _defaultDarkForegroundColors [st]);
+				} else
 				{
-					if (dark)
-						res = new Tuple <string, string> ("color", "#F8F8F2");
-					else
-						res = new Tuple <string, string> ("color", "#4D4D4A");
+					res = new Tuple <string, string> ("color", _defaultForegroundColors [st]);
 				}
-					break;
-				
 			}
 
 			return res;
@@ -412,9 +401,12 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" : case "constantColor" :
-				case "comments" : case "stringColor" : case "keywordColor" :
-				case "classNameColor" : 
+				case "foregroundColorEditor" :
+				case "constantColor" :
+				case "comments" :
+				case "stringColor" :
+				case "keywordColor" :
+				case "keyColor" :
 				{
 					res = true;
 				}
@@ -423,45 +415,45 @@ namespace Yuki_Theme.Core.Parsers
 
 			return res;
 		}
-		
+
 		public override string [] getName (string st)
 		{
-			string [] res = new string[] { };
+			string [] res = new string [] { };
 			switch (st)
 			{
 				case "textEditorBackground" :
 				{
-					res = new [] {"Default"};
+					res = new [] { "Default" };
 				}
 					break;
-				
+
 				case "foregroundColorEditor" :
 				{
-					res = new [] {"Default", "Punctuation"};
+					res = new [] { "Default", "Punctuation" };
 				}
 					break;
 
 				case "selectionBackground" :
 				{
-					res = new [] {"Selection"};
+					res = new [] { "Selection" };
 				}
 					break;
 
 				case "constantColor" :
 				{
-					res = new [] {"Digits"};
+					res = new [] { "Digits" };
 				}
 					break;
 
 				case "comments" :
 				{
-					res = new [] {"LineBigComment", "LineComment", "BlockComment", "BlockComment2"};
+					res = new [] { "LineBigComment", "LineComment", "BlockComment", "BlockComment2" };
 				}
 					break;
-				
+
 				case "stringColor" :
 				{
-					res = new [] {"String"};
+					res = new [] { "String" };
 				}
 					break;
 
@@ -482,6 +474,15 @@ namespace Yuki_Theme.Core.Parsers
 				{
 					res = new []
 					{
+						"MarkPrevious"
+					};
+				}
+					break;
+
+				case "keyColor" :
+				{
+					res = new []
+					{
 						"BeginEnd"
 					};
 				}
@@ -489,13 +490,13 @@ namespace Yuki_Theme.Core.Parsers
 
 				case "accentColor" :
 				{
-					res = new [] {"CaretMarker"};
+					res = new [] { "CaretMarker" };
 				}
 					break;
 
 				case "lineNumberColor" :
 				{
-					res = new [] {"LineNumbers"};
+					res = new [] { "LineNumbers" };
 				}
 					break;
 			}
@@ -505,80 +506,83 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override void finishParsing (string path)
 		{
-			var doc = new XmlDocument ();
-			doc.Load (outname);
-
-			Tuple <bool, Image> wallp = getImage (getWallpaper);
-
-			Tuple <bool, Image> stick = getImage (getSticker);
-
-			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-
-			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
-			XmlNodeList comms = nod.SelectNodes ("//comment()");
-			if (comms.Count >= 3)
+			if (!overwrite)
 			{
-				Dictionary <string, bool> comments = new Dictionary <string, bool> ()
-				{
-					{"name", false}, {"align", false}, {"opacity", false}, {"sopacity", false},
-					{"hasImage", false}, {"hasSticker", false}
-				};
+				var doc = new XmlDocument ();
+				doc.Load (outname);
 
-				Dictionary <string, string> commentValues = new Dictionary <string, string> ()
+				Tuple <bool, Image> wallp = getImage (getWallpaper);
+
+				Tuple <bool, Image> stick = getImage (getSticker);
+
+				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+
+				XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+				XmlNodeList comms = nod.SelectNodes ("//comment()");
+				if (comms.Count >= 3)
 				{
-					{"name", "name:" + ofname}, {"align", "align:" + ((int) Alignment.Center).ToString ()},
-					{"opacity", "opacity:" + (10).ToString ()},
-					{"sopacity", "sopacity:" + (100).ToString ()},
-					{"hasImage", "hasImage:" + wallp.Item1.ToString ()},
-					{"hasSticker", "hasSticker:" + stick.Item1.ToString ()}
-				};
-				foreach (XmlComment comm in comms)
-				{
-					if (comm.Value.StartsWith ("align"))
+					Dictionary <string, bool> comments = new Dictionary <string, bool> ()
 					{
-						comm.Value = commentValues ["align"];
-						comments ["align"] = true;
-					} else if (comm.Value.StartsWith ("opacity"))
+						{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
+						{ "hasImage", false }, { "hasSticker", false }
+					};
+
+					Dictionary <string, string> commentValues = new Dictionary <string, string> ()
 					{
-						comm.Value = commentValues ["opacity"];
-						comments ["opacity"] = true;
-					} else if (comm.Value.StartsWith ("sopacity"))
+						{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
+						{ "opacity", "opacity:" + (10).ToString () },
+						{ "sopacity", "sopacity:" + (100).ToString () },
+						{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
+						{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
+					};
+					foreach (XmlComment comm in comms)
 					{
-						comm.Value = commentValues ["sopacity"];
-						comments ["sopacity"] = true;
-					} else if (comm.Value.StartsWith ("name"))
-					{
-						comm.Value = commentValues ["name"];
-						comments ["name"] = true;
-					} else if (comm.Value.StartsWith ("hasImage"))
-					{
-						comm.Value = commentValues ["hasImage"];
-						comments ["hasImage"] = true;
-					} else if (comm.Value.StartsWith ("hasSticker"))
-					{
-						comm.Value = commentValues ["hasSticker"];
-						comments ["hasSticker"] = true;
+						if (comm.Value.StartsWith ("align"))
+						{
+							comm.Value = commentValues ["align"];
+							comments ["align"] = true;
+						} else if (comm.Value.StartsWith ("opacity"))
+						{
+							comm.Value = commentValues ["opacity"];
+							comments ["opacity"] = true;
+						} else if (comm.Value.StartsWith ("sopacity"))
+						{
+							comm.Value = commentValues ["sopacity"];
+							comments ["sopacity"] = true;
+						} else if (comm.Value.StartsWith ("name"))
+						{
+							comm.Value = commentValues ["name"];
+							comments ["name"] = true;
+						} else if (comm.Value.StartsWith ("hasImage"))
+						{
+							comm.Value = commentValues ["hasImage"];
+							comments ["hasImage"] = true;
+						} else if (comm.Value.StartsWith ("hasSticker"))
+						{
+							comm.Value = commentValues ["hasSticker"];
+							comments ["hasSticker"] = true;
+						}
 					}
+
+					foreach (KeyValuePair <string, bool> comment in comments)
+					{
+						if (!comment.Value)
+						{
+							node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
+						}
+					}
+				} else
+				{
+					node.AppendChild (doc.CreateComment ("name:" + ofname));
+					node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
+					node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
+					node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
+					node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
+					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				foreach (KeyValuePair <string, bool> comment in comments)
-				{
-					if (!comment.Value)
-					{
-						node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
-					}
-				}
-			} else
-			{
-				node.AppendChild (doc.CreateComment ("name:" + ofname));
-				node.AppendChild (doc.CreateComment ("align:" + ((int) Alignment.Center).ToString ()));
-				node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
-				node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
-				node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
-				node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
+				Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2);
 			}
-
-			Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2);
 		}
 
 		private Tuple <bool, Image> getImage (string path)

@@ -23,7 +23,7 @@ namespace Yuki_Theme.Core.Parsers
 			                             null);
 			PopulateByXMLNodeSingleType ("CaretMarker", doc.SelectSingleNode ("/scheme/colors/option[@name='CARET_COLOR']"), null);
 
-			Dictionary <string, string> df = attributes ["Default"];
+			ThemeField df = theme.Fields ["Default"];
 			/*foreach (KeyValuePair <string, string> rf in df)
 			{
 				Console.WriteLine($"{rf.Key}: {rf.Value}");
@@ -32,7 +32,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			// Console.WriteLine (attributes.Count);
 			PopulateByXMLNodeSingleType ("LineNumbers", doc.SelectSingleNode ("/scheme/colors/option[@name='LINE_NUMBERS_COLOR']"),
-			                             null, new Dictionary <string, string> (){{"bgcolor",df["bgcolor"]}});
+			                             null, new Dictionary <string, string> (){{"bgcolor",df.Background}});
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_NUMBER']"));
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_KEYWORD']"));
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_FUNCTION_DECLARATION']"));
@@ -40,50 +40,46 @@ namespace Yuki_Theme.Core.Parsers
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_BLOCK_COMMENT']"));
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_STRING']"));
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='DEFAULT_COMMA']"));
-			Dictionary <string, string> dic = new Dictionary <string, string> ();
-			dic.Add ("color", df["color"]);
-			dic.Add ("bgcolor", df["bgcolor"]);
-			attributes.Add ("FoldMarker", dic);
-			attributes.Add ("SelectedFoldLine", dic);
-			dic.Remove ("bgcolor");
-			attributes.Add ("FoldLine", dic);
+			ThemeField dic = new ThemeField();
+			dic.Foreground = df.Foreground;
+			dic.Background = df.Background;
+			theme.Fields.Add ("FoldMarker", dic);
+			theme.Fields.Add ("SelectedFoldLine", dic);
+			dic.Background = null;
+			theme.Fields.Add ("FoldLine", dic);
 
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 
 		public override void PopulateByXMLNodeTreeType (XmlNode node)
 		{
-			// Console.WriteLine (node.Name);
-			/*foreach (XmlAttribute att in node.Attributes)
-			{
-				Console.WriteLine ($"{node.Name}, {att.Name}: {att.Value}");				
-			}*/
+			
 			var name = getName (node.Attributes ["name"].Value);
 
-			var attrs = new Dictionary <string, string> ();
+			var attrs = new ThemeField ();
 
 			var child = node.SelectSingleNode ("value/option[@name='FOREGROUND']");
 
-			if (child != null) attrs.Add ("color", "#" + GetValue (child));
+			if (child != null) attrs.Foreground = "#" + GetValue (child);
 
 			child = node.SelectSingleNode ("value/option[@name='BACKGROUND']");
 
-			if (child != null) attrs.Add ("bgcolor", "#" + GetValue (child));
+			if (child != null) attrs.Background = "#" + GetValue (child);
 
 			child = node.SelectSingleNode ("value/option[@name='FONT_TYPE']");
 			
 			if (child != null)
 			{
 				string ds = GetValue (child);
-				attrs.Add ("bold", ds == "1" || ds == "3" ? "true" : "false");
-				attrs.Add ("italic", ds == "2" || ds == "3" ? "true" : "false");
+				attrs.Bold = ds == "1" || ds == "3";
+				attrs.Italic = ds == "2" || ds == "3";
 			}
 
-			if (attrs.Count == 0) attrs = populateDefaultAttributes (name [0]);
+			if (attrs.isNull ()) attrs = populateDefaultAttributes (name [0]);
 
 			foreach (var nm in name)
 			{
-				attributes.Add (nm, attrs);
+				theme.Fields.Add (nm, attrs);
 			}
 
 
@@ -97,14 +93,14 @@ namespace Yuki_Theme.Core.Parsers
 			return attr_value;
 		}
 
-		public override Dictionary <string, string> populateDefaultAttributes (string name)
+		public override ThemeField populateDefaultAttributes (string name)
 		{
-			var att = new Dictionary <string, string> ();
+			var att = new ThemeField ();
 			switch (name)
 			{
 				case "DEFAULT_COMMA" :
 				{
-					att.Add ("color", "#FFFFFF");
+					att.Foreground = "#FFFFFF";
 				}
 					break;
 			}

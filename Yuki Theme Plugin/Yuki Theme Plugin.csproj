@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeCompletion, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\CodeCompletion.dll</HintPath>
+    </Reference>
     <Reference Include="Compiler, Version=3.7.1.2692, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Compiler.dll</HintPath>
     </Reference>
@@ -44,7 +47,13 @@
     <Reference Include="ICSharpCode.TextEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>
+    <Reference Include="Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Localization.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="ParserTools, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ParserTools.dll</HintPath>
+    </Reference>
     <Reference Include="PascalABCNET, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PascalABCNET.exe</HintPath>
     </Reference>
@@ -85,23 +94,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\Bookmarks.cs" />
-    <Compile Include="Controls\CodeCompletionHighlighter.cs" />
-    <Compile Include="Controls\CustomList.cs" />
-    <Compile Include="Controls\Extender.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionAllNames.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionKeyHandler.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionListView.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionWindow.cs" />
+    <Compile Include="Controls\DockStyles\Bookmarks.cs" />
+    <Compile Include="Controls\DockStyles\CodeCompletionHighlighter.cs" />
+    <Compile Include="Controls\DockStyles\CustomList.cs" />
+    <Compile Include="Controls\DockStyles\Extender.cs" />
+    <Compile Include="Controls\DockStyles\InertButtonBase.cs" />
+    <Compile Include="Controls\DockStyles\Resources.Designer.cs" />
+    <Compile Include="Controls\DockStyles\Strings.Designer.cs" />
+    <Compile Include="Controls\DockStyles\ToolItemGroup.cs" />
+    <Compile Include="Controls\DockStyles\YukiAutoHideStrip.cs" />
+    <Compile Include="Controls\DockStyles\YukiDockPaneCaption.cs" />
+    <Compile Include="Controls\DockStyles\YukiDockPaneStrip.cs" />
     <Compile Include="Controls\Helpers\DockHelper.cs" />
     <Compile Include="Controls\Helpers\DrawHelper.cs" />
     <Compile Include="Controls\Helpers\ResourceHelper.cs" />
     <Compile Include="Controls\Helpers\Win32Helper.cs" />
-    <Compile Include="Controls\InertButtonBase.cs" />
-    <Compile Include="Controls\Resources.Designer.cs" />
-    <Compile Include="Controls\Strings.Designer.cs" />
-    <Compile Include="Controls\ToolItemGroup.cs" />
-    <Compile Include="Controls\YukiAutoHideStrip.cs" />
-    <Compile Include="Controls\YukiDockPaneCaption.cs" />
     <Compile Include="Controls\Win32\Enums.cs" />
     <Compile Include="Controls\Win32\NativeMethods.cs" />
-    <Compile Include="Controls\YukiDockPaneStrip.cs" />
     <Compile Include="CustomObjectWrapper.cs" />
     <Compile Include="Form3.cs">
       <SubType>Form</SubType>
@@ -123,8 +136,8 @@
     <Compile Include="ToolRenderer.cs" />
     <Compile Include="YukiTheme_VisualPascalABCPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Controls\Resources.resx" />
-    <EmbeddedResource Include="Controls\Strings.resx" />
+    <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
+    <EmbeddedResource Include="Controls\DockStyles\Strings.resx" />
     <EmbeddedResource Include="Form3.resx">
       <DependentUpon>Form3.cs</DependentUpon>
     </EmbeddedResource>

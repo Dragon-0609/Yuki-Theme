@@ -73,12 +73,14 @@
                 <Begin></Begin>
                 <End></End>
             </Span>-->
-			<!--<MarkPrevious color="Red" bgcolor="Black">(</MarkPrevious>
+			<!--
 
             <KeyWords name="ShortProgram" bold="false" italic="false" color="Green">
                 <Key word="##"/>
                 <Key word="###"/>
             </KeyWords>-->
+            
+            <MarkPrevious color="Red" bold="false" italic="false">(</MarkPrevious>
             
             <KeyWords name="KeyWords" bold="true" italic="false" color="Black">
                 <Key word="external"/>

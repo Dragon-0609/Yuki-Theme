@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#define ACTIVATE_DOKI_THEME
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -6,6 +7,8 @@ namespace Yuki_Theme.Core.Themes
 {
 	public class DefaultThemes
 	{
+
+
 		public static string [] def
 		{
 			get
@@ -21,6 +24,7 @@ namespace Yuki_Theme.Core.Themes
 					"Nightshade",
 					"Oblivion",
 					"Shades of Purple",
+#if ACTIVATE_DOKI_THEME
 					"AzurLane: Essex",
 					"BlendS: Maika",
 					"BunnySenpai: Mai Dark",
@@ -95,6 +99,7 @@ namespace Yuki_Theme.Core.Themes
 					"Vocaloid: Hatsune Miku",
 					"YuruCamp: Nadeshiko",
 					"YuruCamp: Shima Rin"
+#endif
 				};
 			}
 		}
@@ -140,6 +145,7 @@ namespace Yuki_Theme.Core.Themes
 					res = "Default";
 				}
 					break;
+#if ACTIVATE_DOKI_THEME
 
 				case "AzurLane: Essex" :
 				case "BlendS: Maika" :
@@ -219,8 +225,8 @@ namespace Yuki_Theme.Core.Themes
 					res = "Doki Theme";
 				}
 					break;
+#endif
 			}
-
 			return res;
 		}
 	}

@@ -35,6 +35,7 @@ namespace Yuki_Theme.Core.Controls
 			this.tabPage1 = new System.Windows.Forms.TabPage ();
 			this.tbpanel = new System.Windows.Forms.Panel ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.showHelp = new System.Windows.Forms.Button ();
 			this.saveOld = new System.Windows.Forms.CheckBox ();
 			this.askSave = new System.Windows.Forms.CheckBox ();
 			this.label5 = new System.Windows.Forms.Label ();
@@ -130,6 +131,7 @@ namespace Yuki_Theme.Core.Controls
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size (0, 10);
 			this.panel1.AutoScrollMinSize = new System.Drawing.Size (100, 0);
+			this.panel1.Controls.Add (this.showHelp);
 			this.panel1.Controls.Add (this.saveOld);
 			this.panel1.Controls.Add (this.askSave);
 			this.panel1.Controls.Add (this.label5);
@@ -150,6 +152,18 @@ namespace Yuki_Theme.Core.Controls
 			this.panel1.Size = new System.Drawing.Size (397, 224);
 			this.panel1.TabIndex = 36;
 			// 
+			// showHelp
+			// 
+			this.showHelp.AutoSize = true;
+			this.showHelp.FlatAppearance.BorderSize = 0;
+			this.showHelp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.showHelp.Location = new System.Drawing.Point (155, 289);
+			this.showHelp.Name = "showHelp";
+			this.showHelp.Size = new System.Drawing.Size (26, 26);
+			this.showHelp.TabIndex = 41;
+			this.showHelp.UseVisualStyleBackColor = true;
+			this.showHelp.Click += new System.EventHandler (this.showHelp_Click);
+			// 
 			// saveOld
 			// 
 			this.saveOld.Location = new System.Drawing.Point (12, 289);
@@ -161,7 +175,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// askSave
 			// 
-			this.askSave.Location = new System.Drawing.Point (170, 289);
+			this.askSave.Location = new System.Drawing.Point (225, 289);
 			this.askSave.Name = "askSave";
 			this.askSave.Size = new System.Drawing.Size (152, 29);
 			this.askSave.TabIndex = 39;
@@ -671,6 +685,8 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize)(this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.Button showHelp;
 
 		public System.Windows.Forms.CheckBox askSave;
 

@@ -515,7 +515,7 @@ namespace Yuki_Theme.Core.Forms
 			MessageBox.Show (content);
 		}
 
-		private void restore_Click (object sender, EventArgs e)
+		public void restore_Click (object sender, EventArgs e)
 		{
 			list_1.Items.Clear ();
 			CLI.restore (false, onSelect);
@@ -861,7 +861,7 @@ namespace Yuki_Theme.Core.Forms
 			fd.Title = "Import";
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
 			fd.Filter =
-				"All Themes(*.icls,*.yukitheme,*.yuki,*.json)|*.icls;*.yukitheme;*.yuki;*.json|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json";
+				"All Themes(*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
@@ -1245,13 +1245,13 @@ namespace Yuki_Theme.Core.Forms
 				MessageBox.Show (
 					"Hi. You have selected the directory, so you will have to wait until the import is done. Your current theme will be changed" +
 					"on finishing import.");
-				string [] fls = Directory.GetFiles (co.FileName, "*.json");
+				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
 				foreach (string fl in fls)
 				{
 					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
 				}
 
-				fls = Directory.GetFiles (co.FileName, "*.icls");
+				fls = Directory.GetFiles (co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
 				foreach (string fl in fls)
 				{
 					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);

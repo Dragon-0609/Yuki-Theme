@@ -17,10 +17,10 @@ namespace Yuki_Theme.Core
 
 		[JsonProperty ("italic", Required = Required.AllowNull)]
 		public bool? Italic { get; set; }
-		
+
 		public static ThemeField GetFieldFromDictionary (Dictionary <string, string> field)
 		{
-			ThemeField themeField = new ThemeField {Bold = null, Italic = null};
+			ThemeField themeField = new ThemeField { Bold = null, Italic = null };
 			foreach (KeyValuePair <string, string> pair in field)
 			{
 				switch (pair.Key)
@@ -57,16 +57,16 @@ namespace Yuki_Theme.Core
 
 			if (Background != null)
 				dictionary.Add ("bgcolor", Background);
-			
+
 			if (Foreground != null)
 				dictionary.Add ("color", Foreground);
-			
+
 			if (Bold != null)
-				dictionary.Add ("bold", Bold.ToString().ToLower());
-			
+				dictionary.Add ("bold", Bold.ToString ().ToLower ());
+
 			if (Italic != null)
-				dictionary.Add ("italic", Italic.ToString().ToLower());
-			
+				dictionary.Add ("italic", Italic.ToString ().ToLower ());
+
 			return dictionary;
 		}
 
@@ -82,11 +82,11 @@ namespace Yuki_Theme.Core
 		{
 			Dictionary <string, string> dictionay = new Dictionary <string, string> ();
 
-			if(Background!= null) dictionay.Add ("bgcolor", Background);
-			if(Foreground!= null) dictionay.Add ("color", Foreground);
-			if(Bold!= null) dictionay.Add ("bold", Bold.ToString().ToLower());
-			if(Italic!= null) dictionay.Add ("italic", Italic.ToString().ToLower());
-			
+			if (Background != null) dictionay.Add ("bgcolor", Background);
+			if (Foreground != null) dictionay.Add ("color", Foreground);
+			if (Bold != null) dictionay.Add ("bold", Bold.ToString ().ToLower ());
+			if (Italic != null) dictionay.Add ("italic", Italic.ToString ().ToLower ());
+
 			return dictionay;
 		}
 
@@ -97,7 +97,8 @@ namespace Yuki_Theme.Core
 			foreach (KeyValuePair <string, ThemeField> pair in theme.Fields)
 			{
 				string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
-				if (shadowName != null && !shadowNames.Contains (shadowName))
+				Console.WriteLine (shadowName);
+				if (shadowName != null && !shadowNames.Contains (shadowName) && ShadowNames.HasRealName (shadowName, syntax))
 				{
 					string [] realName = ShadowNames.GetRealName (shadowName, syntax);
 					if (realName != null)
@@ -113,6 +114,37 @@ namespace Yuki_Theme.Core
 			}
 
 			return localDic;
+		}
+
+		public bool isAttributeNull (string name)
+		{
+			bool res = false;
+			switch (name)
+			{
+				case "color" :
+				{
+					res = Foreground == null;
+				}
+					break;
+
+				case "bgcolor" :
+				{
+					res = Foreground == null;
+				}
+					break;
+			}
+
+			return res;
+		}
+
+		public bool isNull ()
+		{
+			return Background == null && Foreground == null;
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("Background: {0}, Foreground: {1}, Bold: {2}, Italic: {3}", Background ?? Background, Foreground ?? Foreground, Bold ?? Bold, Italic ?? Italic);
 		}
 	}
 }

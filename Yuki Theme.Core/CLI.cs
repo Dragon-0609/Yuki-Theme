@@ -544,11 +544,8 @@ namespace Yuki_Theme.Core
 
 		public static void PrepareToExport (string path)
 		{
-			/*foreach (KeyValuePair <string, string []> pair in ShadowNames.PascalFields)
-			{
-				Console.WriteLine (pair.Key);
-			}*/
 			string dir = Path.GetDirectoryName (path);
+			// Console.WriteLine(currentTheme.Fields["Method"].ToString ());
 			foreach (SyntaxType syntax in (SyntaxType []) Enum.GetValues (typeof (SyntaxType)))
 			{
 				string npath = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
@@ -561,7 +558,7 @@ namespace Yuki_Theme.Core
 				}
 
 				Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
-
+				Console.WriteLine (syntax.ToString ());
 				MergeFiles (npath, localDic);
 			}
 		}
@@ -737,6 +734,13 @@ namespace Yuki_Theme.Core
 
 			OldThemeFormat.PopulateDictionaryFromDoc (doc, ref theme, ref namesList);
 
+			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
+			if (!theme.Fields.ContainsKey (methdoName))
+			{
+				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "Keywords";
+				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
+			}
+			
 			Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (doc);
 			string al = additionalInfo ["align"];
 			string op = additionalInfo ["opacity"];

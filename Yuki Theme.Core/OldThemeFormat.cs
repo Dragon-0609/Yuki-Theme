@@ -550,11 +550,17 @@ namespace Yuki_Theme.Core
 			}
 			theme.Fields = new Dictionary <string, ThemeField> ();
 			PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
+			
+			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
+			if (!theme.Fields.ContainsKey (methdoName))
+			{
+				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "KeyWords";
+				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
+				CLI.names.Add (methdoName);
+			}
+			
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
-
-			theme.WallpaperAlign = int.Parse (additionalInfo ["align"]);
-			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
-			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
+			theme.SetAdditionalInfo (additionalInfo);
 			theme.path = CLI.pathToLoad;
 			
 			CLI.currentTheme = theme;
@@ -632,7 +638,6 @@ namespace Yuki_Theme.Core
 						var attrs = local [nms].GetAttributes ();
 
 						foreach (var att in attrs)
-							// Console.WriteLine($"2N: {xn.Attributes["name"].Value}, ATT: {att.Key},");
 							xn.Attributes [att.Key].Value = att.Value;
 					}
 			}

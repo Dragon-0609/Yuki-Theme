@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using ICSharpCode.TextEditor;
+using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
 using Svg;
 using VisualPascalABC;
@@ -21,6 +23,9 @@ using Yuki_Theme.Core;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme_Plugin.Controls;
+using Yuki_Theme_Plugin.Controls.CodeCompletion;
+using Yuki_Theme_Plugin.Controls.DockStyles;
+using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Yuki_Theme_Plugin
@@ -76,6 +81,7 @@ namespace Yuki_Theme_Plugin
 		public static Color           bgvruler;
 		public static Brush           bgdefBrush;
 		public static Brush           bgBrush;
+		public static Brush           selectionBrush;
 		public static Brush           bgClickBrush;
 		public static Brush           bgClick3Brush;
 		public static Brush           clrBrush;
@@ -126,6 +132,8 @@ namespace Yuki_Theme_Plugin
 		bool tg = false; // is toggle activated
 		int enbld = 0; // Is enabled bg image and (or) sticker
 		int nminst = 0; // Name in status bar
+		
+		private Hashtable ht;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -184,77 +192,11 @@ namespace Yuki_Theme_Plugin
 				}
 			}
 			*/
-			
+	
+			InjectCodeCompletition ();
 			LoadImage ();
 			
-
-			CompilerConsoleWindowForm cons = (CompilerConsoleWindowForm) workbench.CompilerConsoleWindow;
-			con = (TextBox) cons.Controls.Find ("CompilerConsole", false) [0];
-
-			about = fm.AboutBox1;
-			about.Shown += UpdateAboutForm;
-
-			statusBar = (StatusStrip) fm.Controls.Find ("statusStrip1", false) [0];
-
-			toolsPanel = (Panel) fm.Controls.Find ("toolStripPanel", false) [0];
-
-			tools = (ToolStrip) toolsPanel.Controls.Find ("toolStrip1", false) [0];
-
-			menu = (MenuStrip) fm.Controls.Find ("menuStrip1", false) [0];
-			
-			ToolRenderer toolrenderer = new ToolRenderer ();
-			tools.Renderer = toolrenderer;
-			tools.Paint += ToolStripPanelOnPaint;
-			
-			outputWindow = (Control) workbench.OutputWindow;
-			output_panel2 = (Panel) outputWindow.Controls.Find ("panel2", false) [0];
-			output_panel6 = (Panel) output_panel2.Controls.Find ("panel6", false) [0];
-			output_output = (RichTextBox) output_panel6.Controls.Find ("outputTextBox", false) [0];
-			output_input = (Panel) output_panel2.Controls.Find ("InputPanel", false) [0];
-			output_panel4 = (Panel) output_input.Controls.Find ("panel4", false) [0];
-			output_panel3 = (Panel) output_input.Controls.Find ("panel3", false) [0];
-			output_panel5 = (Panel) output_panel4.Controls.Find ("panel5", false) [0];
-			output_panel1 = (Panel) output_panel4.Controls.Find ("panel1", false) [0];
-			output_text = (TextBox) output_panel5.Controls.Find ("InputTextBox", false) [0];
-			output_text.BorderStyle = BorderStyle.FixedSingle;
-			output_output.BorderStyle = BorderStyle.None;
-			output_input.BorderStyle = BorderStyle.None;
-
-			ErrorsListWindowForm erw = (ErrorsListWindowForm) workbench.ErrorsListWindow;
-			cr = (ListView) erw.Controls.Find ("lvErrorsList", false) [0];
-			// cr.GridLines = false;
-			cr.OwnerDraw = true;
-			cr.DrawColumnHeader += errorListHeaderDrawer;
-			cr.DrawItem += (sender, e) =>
-			{
-				/*e.Graphics.DrawRectangle (clrPen, e.Bounds);
-				e.Item.ImageList.Draw (e.Graphics, Point.Empty, e.Item.ImageIndex);
-				StringFormat format = new StringFormat ();
-				format.Trimming = StringTrimming.Character;
-				e.Graphics.DrawString (e.Item.Text, e.Item.Font, clrBrush, e.Bounds, format);*/
-				e.DrawDefault = true;
-			};/*
-			cr.DrawSubItem += (sender, e) =>
-			{
-				e.Graphics.DrawRectangle (clrPen, e.Bounds);
-				e.Item.ImageList.Draw (e.Graphics, Point.Empty, e.Item.ImageIndex);
-				
-				StringFormat format = new StringFormat ();
-				format.Trimming = StringTrimming.Character;
-				e.Graphics.DrawString (e.SubItem.Text, e.SubItem.Font, clrBrush, e.Bounds, format);
-				e.DrawDefault = false;
-			};*/
-			
-			foreach (Control o in output_panel1.Controls)
-			{
-				if(o is Button)
-				{
-					Button b = (Button) o;
-					b.BackColor = bgdef;
-					b.FlatStyle = FlatStyle.Flat;
-					b.FlatAppearance.BorderColor = bgBorder;
-				}
-			}
+			GetFields ();
 
 			setMargin ();
 			textArea.Paint += PaintBG;
@@ -271,79 +213,7 @@ namespace Yuki_Theme_Plugin
 			tim = new Timer () {Interval = 1};
 			tim.Tick += (sender, r) =>
 			{
-				if (textEditor != fm.CurrentCodeFileDocument.TextEditor)
-				{
-					/*if (mainPanel.VisibleNestedPanes.Count > 1)
-					{
-						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
-						{
-							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
-							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint -= PaintBG;
-						}
-					}else
-					{*/
-						textArea.Paint -= PaintBG;
-					// }
-					try
-					{
-						textEditor.Controls [1].Paint -= CtrlOnPaint;
-					} catch (ArgumentOutOfRangeException)
-					{
-
-					}
-
-					// textArea = textEditor.ActiveTextAreaControl.TextArea;
-					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= CaretPositionChangedEventHandler;
-					textEditor = fm.CurrentCodeFileDocument.TextEditor;
-					textArea = textEditor.ActiveTextAreaControl.TextArea;
-					textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
-					setMargin ();
-					tim.Stop ();
-					textEditor.Parent.BackColor = bg;
-					try
-					{
-						textEditor.Controls [1].Paint += CtrlOnPaint;
-						textEditor.Controls [1].Invalidate ();
-					} catch (ArgumentOutOfRangeException)
-					{
-
-					}
-
-					fm.CurrentCodeFileDocument.BackColor = bg;
-					/*if (mainPanel.VisibleNestedPanes.Count > 1)
-					{
-						dockcount = mainPanel.VisibleNestedPanes.Count;
-						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
-						{
-							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
-							cfdc.TextEditor.AccessibleDescription = i.ToString();
-							
-							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint += PaintBG;
-							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Refresh ();
-						}
-					} else
-					{*/
-						// dockcount = 1;
-						textArea.Paint += PaintBG;
-						textArea.Refresh ();
-					// }
-					
-					// MessageBox.Show (fm.CurrentCodeFileDocument.TabIndex.ToString ());
-					try
-					{
-						if (output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex] is RichTextBox)
-						{
-							((RichTextBox) output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BorderStyle =
-								BorderStyle.None;
-							((RichTextBox) output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BackColor =
-								bgdef;
-						}
-						
-					} catch (ArgumentOutOfRangeException)
-					{
-
-					}
-				}
+				ReSetTextEditor ();
 			};
 			
 			fm.MainDockPanel.ActiveContentChanged += (sender, e) =>
@@ -389,11 +259,171 @@ namespace Yuki_Theme_Plugin
 			fm.Controls.Add (pnl);
 			fm.Controls.Add (stickerControl);
 			stickerControl.pnl = pnl;
-			LoadSticker ();
+			LoadSticker (); 
 			// stickerControl.Enabled = true;
 			stickerControl.BringToFront ();
 			fm.Resize += FmOnResize;
 			addSettings ();
+		}
+
+		private void InjectCodeCompletition ()
+		{
+			var assembly = typeof (Form1).Assembly;
+			Type type = assembly.GetType ("VisualPascalABC.CodeCompletionKeyHandler");
+			ht = (Hashtable)type.GetField ("ht",
+			                               BindingFlags.NonPublic | BindingFlags.Static).GetValue (null);
+			// Console.WriteLine ("Unsubscribing: ");
+			Unsubscribe (ht [textEditor]);
+
+			CodeCompletionKeyHandler h = new CodeCompletionKeyHandler (textEditor);
+			ht [textEditor] = h;
+
+			textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += h.TextAreaKeyEventHandler;
+			textEditor.Disposed += h.CloseCodeCompletionWindow;
+			ChangeEditorShortcutForCompletition ();
+		}
+
+		private void ReSetTextEditor ()
+		{
+			if (textEditor != fm.CurrentCodeFileDocument.TextEditor)
+			{
+				/*if (mainPanel.VisibleNestedPanes.Count > 1)
+					{
+						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
+						{
+							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint -= PaintBG;
+						}
+					}else
+					{*/
+				textArea.Paint -= PaintBG;
+				// }
+				try
+				{
+					textEditor.Controls [1].Paint -= CtrlOnPaint;
+				} catch (ArgumentOutOfRangeException)
+				{
+				}
+
+				// textArea = textEditor.ActiveTextAreaControl.TextArea;
+				textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= CaretPositionChangedEventHandler;
+				textEditor = fm.CurrentCodeFileDocument.TextEditor;
+				textArea = textEditor.ActiveTextAreaControl.TextArea;
+				textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
+				setMargin ();
+				tim.Stop ();
+				textEditor.Parent.BackColor = bg;
+				try
+				{
+					textEditor.Controls [1].Paint += CtrlOnPaint;
+					textEditor.Controls [1].Invalidate ();
+				} catch (ArgumentOutOfRangeException)
+				{
+				}
+
+				fm.CurrentCodeFileDocument.BackColor = bg;
+				/*if (mainPanel.VisibleNestedPanes.Count > 1)
+					{
+						dockcount = mainPanel.VisibleNestedPanes.Count;
+						for (var i = 0; i < mainPanel.VisibleNestedPanes.Count; i++)
+						{
+							CodeFileDocumentControl cfdc = (CodeFileDocumentControl) mainPanel.VisibleNestedPanes[i].DisplayingContents [0];
+							cfdc.TextEditor.AccessibleDescription = i.ToString();
+							
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Paint += PaintBG;
+							cfdc.TextEditor.ActiveTextAreaControl.TextArea.Refresh ();
+						}
+					} else
+					{*/
+				// dockcount = 1;
+				textArea.Paint += PaintBG;
+				textArea.Refresh ();
+				// }
+
+				// MessageBox.Show (fm.CurrentCodeFileDocument.TabIndex.ToString ());
+				try
+				{
+					if (output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex] is RichTextBox)
+					{
+						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BorderStyle =
+							BorderStyle.None;
+						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BackColor =
+							bgdef;
+					}
+				} catch (ArgumentOutOfRangeException)
+				{
+				}
+				
+				if (Unsubscribe (ht [textEditor]))
+				{
+					// Console.WriteLine ("Unsubscribed");
+					CodeCompletionKeyHandler handler = new CodeCompletionKeyHandler (textEditor);
+					ht [textEditor] = handler;
+
+					textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
+					textEditor.Disposed += handler.CloseCodeCompletionWindow;
+					ChangeEditorShortcutForCompletition ();
+				} else
+				{
+					// Console.WriteLine ("Couldn't Unsubscribe");
+				}
+			}
+		}
+
+		private void GetFields ()
+		{
+			CompilerConsoleWindowForm cons = (CompilerConsoleWindowForm)workbench.CompilerConsoleWindow;
+			con = (TextBox)cons.Controls.Find ("CompilerConsole", false) [0];
+
+			about = fm.AboutBox1;
+			about.Shown += UpdateAboutForm;
+
+			statusBar = (StatusStrip)fm.Controls.Find ("statusStrip1", false) [0];
+
+			toolsPanel = (Panel)fm.Controls.Find ("toolStripPanel", false) [0];
+
+			tools = (ToolStrip)toolsPanel.Controls.Find ("toolStrip1", false) [0];
+
+			menu = (MenuStrip)fm.Controls.Find ("menuStrip1", false) [0];
+
+			ToolRenderer toolrenderer = new ToolRenderer ();
+			tools.Renderer = toolrenderer;
+			tools.Paint += ToolStripPanelOnPaint;
+
+			outputWindow = (Control)workbench.OutputWindow;
+			output_panel2 = (Panel)outputWindow.Controls.Find ("panel2", false) [0];
+			output_panel6 = (Panel)output_panel2.Controls.Find ("panel6", false) [0];
+			output_output = (RichTextBox)output_panel6.Controls.Find ("outputTextBox", false) [0];
+			output_input = (Panel)output_panel2.Controls.Find ("InputPanel", false) [0];
+			output_panel4 = (Panel)output_input.Controls.Find ("panel4", false) [0];
+			output_panel3 = (Panel)output_input.Controls.Find ("panel3", false) [0];
+			output_panel5 = (Panel)output_panel4.Controls.Find ("panel5", false) [0];
+			output_panel1 = (Panel)output_panel4.Controls.Find ("panel1", false) [0];
+			output_text = (TextBox)output_panel5.Controls.Find ("InputTextBox", false) [0];
+			output_text.BorderStyle = BorderStyle.FixedSingle;
+			output_output.BorderStyle = BorderStyle.None;
+			output_input.BorderStyle = BorderStyle.None;
+
+			ErrorsListWindowForm erw = (ErrorsListWindowForm)workbench.ErrorsListWindow;
+			cr = (ListView)erw.Controls.Find ("lvErrorsList", false) [0];
+			// cr.GridLines = false;
+			cr.OwnerDraw = true;
+			cr.DrawColumnHeader += errorListHeaderDrawer;
+			cr.DrawItem += (sender, e) =>
+			{
+				e.DrawDefault = true;
+			};
+
+			foreach (Control o in output_panel1.Controls)
+			{
+				if (o is Button)
+				{
+					Button b = (Button)o;
+					b.BackColor = bgdef;
+					b.FlatStyle = FlatStyle.Flat;
+					b.FlatAppearance.BorderColor = bgBorder;
+				}
+			}
 		}
 
 		private void OpenInExplorer (object sender, EventArgs e)
@@ -736,6 +766,9 @@ namespace Yuki_Theme_Plugin
 			
 			if(bgBrush != null) bgBrush.Dispose ();
 			bgBrush = new SolidBrush (bg);
+			
+			if(selectionBrush != null) selectionBrush.Dispose ();
+			selectionBrush = new SolidBrush (highlighting.GetColorFor ("Selection").BackgroundColor);
 			
 			if(bgClickBrush != null) bgClickBrush.Dispose ();
 			bgClickBrush = new SolidBrush (bgClick);
@@ -1426,5 +1459,44 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 		
+		private bool Unsubscribe (object target)
+		{
+			Console.WriteLine (target.GetType ().Name); 
+			MethodInfo handler = target.GetType ().GetMethod ("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
+			if (handler == null)
+			{
+				return false;
+			}
+			EventInfo evt = typeof (TextArea).GetEvent ("KeyEventHandler", BindingFlags.Instance | BindingFlags.Public);
+			MethodInfo remove = evt.GetRemoveMethod (false);
+
+			remove.Invoke (textEditor.ActiveTextAreaControl.TextArea, new object []
+			{
+				Delegate.CreateDelegate (evt.EventHandlerType, target, handler)
+			});
+
+			handler = target.GetType ().GetMethod ("CloseCodeCompletionWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			evt = typeof (TextEditorControl).GetEvent ("Disposed", BindingFlags.Instance | BindingFlags.Public);
+			remove = evt.GetRemoveMethod (false);
+
+			remove.Invoke (textEditor, new object []
+			{
+				Delegate.CreateDelegate (evt.EventHandlerType, target, handler)
+			});
+			return true;
+		}
+		
+		private void ChangeEditorShortcutForCompletition ()
+		{
+			ChangeShortcut (Keys.Space | Keys.Control, new CodeCompletionAllNames ());
+		}
+		private void ChangeShortcut (Keys key, IEditAction val)
+		{
+			var fdactions = textEditor.GetType ()
+			                          .GetField ("editactions", BindingFlags.NonPublic | BindingFlags.Instance);
+			Dictionary <Keys, IEditAction> actions = (Dictionary <Keys, IEditAction>)fdactions.GetValue (textEditor);
+			actions [key] = val;
+		}
 	}
 }

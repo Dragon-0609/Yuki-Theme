@@ -191,6 +191,7 @@ namespace Yuki_Theme.Core.Controls
 				fr = Helper.fgColor;
 			}
 
+			Helper.RenderSvg (showHelp, Helper.LoadSvg ("help", a), false, Size.Empty, true, fr);
 			Helper.RenderSvg (button1, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
 		}
 
@@ -433,6 +434,30 @@ namespace Yuki_Theme.Core.Controls
 		private void backImage_CheckedChanged (object sender, EventArgs e)
 		{
 			fitWidth.Enabled = backImage.Checked;
+		}
+
+		private void showHelp_Click (object sender, EventArgs e)
+		{
+			Color back = Color.White;
+			Color fore = Color.White;
+			Color brdr = Color.White;
+			if (isFromPascal)
+			{
+				back = bg;
+				fore = fg;
+				brdr = border;
+			}
+			else
+			{
+				back = Helper.bgColor;
+				fore = Helper.fgColor;
+				brdr = Helper.bgBorder;
+			}
+			
+			HelperForm hf = new HelperForm ();
+			hf.setMessage ("Old New Formats", SmallDocumentation.Documentation [SmallDocumentation.OLD_NEW_HELP]);
+			hf.setColors (back, fore, brdr);
+			hf.ShowDialog (ParentForm);
 		}
 	}
 }

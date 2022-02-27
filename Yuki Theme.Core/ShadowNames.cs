@@ -29,6 +29,7 @@ namespace Yuki_Theme.Core
 			"Number",
 			"Comment",
 			"String",
+			"Method",
 			"Keyword",
 			"Begin, End",
 			"Special Character",
@@ -109,6 +110,7 @@ namespace Yuki_Theme.Core
 				"BlockComment",
 				"BlockComment2",
 				"String",
+				"MarkPrevious",
 				"KeyWords",
 				"ProgramSections",
 				"BeginEnd",
@@ -152,6 +154,7 @@ namespace Yuki_Theme.Core
 				"String",
 				"MultiLineString",
 				"Char",
+				"MarkPrevious",
 				"Punctuation",
 				"AccessKeywords",
 				"OperatorKeywords",
@@ -358,6 +361,36 @@ namespace Yuki_Theme.Core
 
 			return res;
 		}
+		public static bool HasRealName (string shadow, SyntaxType type)
+		{
+			bool res = false;
+			switch (type)
+			{
+				case SyntaxType.Pascal :
+					res = PascalFields.ContainsKey (shadow);
+					break;
+				case SyntaxType.CSharp :
+					res = CSharpFields.ContainsKey (shadow);
+					break;
+				case SyntaxType.Haskell :
+					res = HaskellFields.ContainsKey (shadow);
+					break;
+				case SyntaxType.KuMir :
+					res = KuMirFields.ContainsKey (shadow);
+					break;
+				case SyntaxType.KuMir00 :
+					res = KuMir00Fields.ContainsKey (shadow);
+					break;
+				case SyntaxType.Python :
+					res = PythonFields.ContainsKey (shadow);
+					break;
+				case SyntaxType.VBNET :
+					res = VBNETFields.ContainsKey (shadow);
+					break;
+			}
+
+			return res;
+		}
 
 		/// <summary>
 		/// Get Shadow Name by the syntax file.
@@ -433,6 +466,7 @@ namespace Yuki_Theme.Core
 			{"Number", new [] {"Digits"}},
 			{"Comment", new [] {"LineBigComment", "LineComment", "BlockComment", "BlockComment2"}},
 			{"String", new [] {"String"}},
+			{"Method", new [] {"MarkPrevious"}},
 			{
 				"Keyword",
 				new [] {"KeyWords", "AccessKeywords1", "OperatorKeywords", "NonReserved1", "JumpStatements", "JumpProcedures", "Async"}
@@ -456,6 +490,7 @@ namespace Yuki_Theme.Core
 			{"Number", new [] {"Digits"}},
 			{"Comment", new [] {"DocLineComment", "LineComment", "LineComment2", "BlockComment"}},
 			{"String", new [] {"String", "MultiLineString", "Char"}},
+			{"Method", new [] {"MarkPrevious"}},
 			{
 				"Keyword",
 				new []
@@ -598,6 +633,7 @@ namespace Yuki_Theme.Core
 			{"LineComment", "Comment"},
 			{"BlockComment", "Comment"},
 			{"BlockComment2", "Comment"},
+			{"MarkPrevious", "Method"},
 			{"String", "String"},
 			{"KeyWords", "Keyword"},
 			{"AccessKeywords1", "Keyword"},
@@ -634,6 +670,7 @@ namespace Yuki_Theme.Core
 			{"LineComment2", "Comment"},
 			{"BlockComment", "Comment"},
 			{"String", "String"},
+			{"MarkPrevious", "Method"},
 			{"MultiLineString", "String"},
 			{"Char", "String"},
 			{"AccessKeywords", "Keyword"},

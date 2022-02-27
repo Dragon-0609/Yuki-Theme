@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Reflection;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
-using System.Reflection;
 
-namespace Yuki_Theme_Plugin
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
     public class CodeCompletionHighlighter
     {

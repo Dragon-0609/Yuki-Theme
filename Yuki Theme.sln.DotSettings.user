@@ -17,6 +17,9 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005CSyntaxVisitors_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005CTreeConverter_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005CWeifenLuo_002EWinFormsUI_002EDocking_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005F3_002E8_002E2_005CCodeCompletion_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005F3_002E8_002E2_005CLocalization_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CProgram_0020Files_0020_0028x86_0029_005CPascalABC_002ENET_005F3_002E8_002E2_005CParserTools_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005Cpackages_005CEntityFramework_002E6_002E4_002E4_005Clib_005Cnet45_005CEntityFramework_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005Cpackages_005CEntityFramework_002E6_002E4_002E4_005Clib_005Cnet45_005CEntityFramework_002ESqlServer_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CScheme_0020Assistant_005CScheme_0020Assistant_005Cbin_005CDebug_005CScheme_005FAssistant_002Eexe/@EntryIndexedValue">True</s:Boolean>
@@ -56,6 +59,7 @@
 	
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_0020Plugin_002FControls_002FDockStyles_002FStrings/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_0020Plugin_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FControls_002FColorEditor_002FColorPicker_002FControls_002FColorSliderVertical/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FControls_002FRJComboBox/@EntryIndexedValue">True</s:Boolean>
@@ -64,6 +68,7 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FChangelogForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FColorPicker/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FDownloadForm/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FHelperForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMessageForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMForm/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FNotificationForm/@EntryIndexedValue">True</s:Boolean>

@@ -20,7 +20,7 @@ var
 
 procedure SaveFile(FileName: string);
 begin
-  //Создаем файловый поток с кодировкой Windows 1251, необходимо для корректного сохранения русских букв
+  //Создаем файловый поток
   var f := new System.IO.StreamWriter(FileName, false, System.Text.Encoding.Default);
   f.Write(TextBox1.Text);
   f.Close;
@@ -28,7 +28,7 @@ end;
 
 procedure OpenFile(FileName: string);
 begin
-  //Создаем файловый поток с кодировкой Windows 1251, необходимо для корректного чтения русских букв
+  //Создаем файловый поток
   var f := new System.IO.StreamReader(FileName, System.Text.Encoding.Default);
   TextBox1.Text := f.ReadToEnd;
   f.Close;

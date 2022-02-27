@@ -47,7 +47,7 @@ namespace Yuki_Theme.Core
 			"keywords", "programsections", "punctuation", "nonreserved1", "operatorkeywords", "selectionstatements",
 			"iterationstatements", "exceptionhandlingstatements", "raisestatement", "jumpstatements", "jumpprocedures",
 			"internalconstant", "internaltypes", "referencetypes", "modifiers", "accessmodifiers", "accesskeywords1",
-			"errorwords", "warningwords", "direcivenames", "specialdirecivenames", "direcivevalues"
+			"errorwords", "warningwords", "direcivenames", "specialdirecivenames", "direcivevalues", "markprevious"
 		};
 
 		private Regex currentRegex;
@@ -192,6 +192,7 @@ namespace Yuki_Theme.Core
 			regexes.Add ("digits", new Regex (@"\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b",
 			                                  RegexCompiledOption));
 			regexes.Add ("beginend", new Regex (@"\b(?i)(begin|end)\b", RegexOptions.Singleline | RegexCompiledOption));
+			regexes.Add ("markprevious", new Regex (@"\w+(?=\()", RegexOptions.Singleline | RegexCompiledOption));
 			regexes.Add ("keywords", new Regex (
 				             @"\b(?i)(external|in|array|sequence|yield|auto|static|template|sealed|partial|const|lock|constructor|destructor|downto|file|loop|function|inherited|procedure|operator|property|record|repeat|set|type|then|to|until|uses|var|event|while|params|with|of|label|implicit|explicit|initialization|finalization|where|match|when)\b",
 				             RegexCompiledOption));
@@ -245,6 +246,7 @@ namespace Yuki_Theme.Core
 			styles.Add ("blockcomment", new TextStyle (Green, null, FontStyle.Regular));
 			styles.Add ("blockcomment2", new TextStyle (Green, null, FontStyle.Regular));
 			styles.Add ("beginend", new TextStyle (Red, null, FontStyle.Bold));
+			styles.Add ("markprevious", new TextStyle (Red, null, FontStyle.Bold));
 			styles.Add ("keywords", new TextStyle (PowderBlue, null, FontStyle.Bold));
 			styles.Add ("programsections", new TextStyle (PowderBlue, null, FontStyle.Bold));
 			styles.Add ("punctuation", new TextStyle (Red, null, FontStyle.Regular));

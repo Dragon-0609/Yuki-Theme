@@ -178,6 +178,12 @@
     <Compile Include="Forms\DownloadForm.Designer.cs">
       <DependentUpon>DownloadForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HelperForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HelperForm.Designer.cs">
+      <DependentUpon>HelperForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MessageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,13 +258,14 @@
     <Compile Include="Parsers\DokiThemeParser.cs" />
     <Compile Include="Parsers\JetBrainsParser.cs" />
     <Compile Include="Parsers\MainParser.cs" />
-    <Compile Include="Parsers\VisualStudioParser.cs" />
+    <None Include="Parsers\VisualStudioParser.cs" />
     <Compile Include="Placeholder.cs" />
     <Compile Include="Populater.cs" />
     <Compile Include="Preparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ShadowNames.cs" />
+    <Compile Include="SmallDocumentation.cs" />
     <Compile Include="ThemeField.cs" />
     <Compile Include="Theme.cs" />
     <Compile Include="Themes\DefaultThemes.cs" />
@@ -278,6 +285,9 @@
     <EmbeddedResource Include="Forms\ColorPicker.resx" />
     <EmbeddedResource Include="Forms\DownloadForm.resx">
       <DependentUpon>DownloadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HelperForm.resx">
+      <DependentUpon>HelperForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
@@ -326,6 +336,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SVG\help.svg" />
     <EmbeddedResource Include="Themes\Chuunibyou__Takanashi Rikka.yukitheme" />
     <EmbeddedResource Include="Themes\NekoPara__Christmas Chocola.yukitheme" />
     <EmbeddedResource Include="Themes\Railgun__Misaka Mikoto.yukitheme" />

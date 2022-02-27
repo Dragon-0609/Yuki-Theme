@@ -65,5 +65,12 @@ namespace Yuki_Theme.Core
 			return theme;
 		}
 
+		public static void SetAdditionalInfo (this Theme theme, Dictionary <string, string> additionalInfo)
+		{
+			theme.WallpaperAlign = int.Parse (additionalInfo ["align"]);
+			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
+			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
+		}
+
 	}
 }
