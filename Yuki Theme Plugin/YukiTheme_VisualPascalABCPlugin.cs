@@ -84,6 +84,7 @@ namespace Yuki_Theme_Plugin
 		public static Brush           selectionBrush;
 		public static Brush           bgClickBrush;
 		public static Brush           bgClick3Brush;
+		public static Brush           typeBrush;
 		public static Brush           clrBrush;
 		public static Brush           bgInactiveBrush;
 		public static Pen             bgPen;
@@ -130,7 +131,7 @@ namespace Yuki_Theme_Plugin
 		private bool bgImage => Settings.bgImage;
 		
 		bool tg = false; // is toggle activated
-		int enbld = 0; // Is enabled bg image and (or) sticker
+		int imagesEnabled = 0; // Is enabled bg image and (or) sticker
 		int nminst = 0; // Name in status bar
 		
 		private Hashtable ht;
@@ -161,9 +162,9 @@ namespace Yuki_Theme_Plugin
 			Helper.mode = ProductMode.Plugin;
 			Settings.connectAndGet ();
 
-			enbld = 0;
-			enbld += Settings.bgImage ? 1 : 0;
-			enbld += Settings.swSticker ? 2 : 0;
+			imagesEnabled = 0;
+			imagesEnabled += Settings.bgImage ? 1 : 0;
+			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nminst = Settings.swStatusbar ? 1 : 0;
 
 			loadWithWaiting ();
@@ -192,8 +193,7 @@ namespace Yuki_Theme_Plugin
 				}
 			}
 			*/
-	
-			InjectCodeCompletition ();
+
 			LoadImage ();
 			
 			GetFields ();
@@ -203,16 +203,17 @@ namespace Yuki_Theme_Plugin
 			textEditor.Parent.BackColor = bg;
 			textEditor.Controls [1].Paint += CtrlOnPaint;
 			textEditor.Controls [1].Invalidate();
-
+			InspectBrackets ();
 
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 			
 			fm.CurrentCodeFileDocument.BackColor = bg;
 			
-			tim = new Timer () {Interval = 1};
+			tim = new Timer () {Interval = 2};
 			tim.Tick += (sender, r) =>
 			{
+				tim.Stop ();
 				ReSetTextEditor ();
 			};
 			
@@ -241,32 +242,32 @@ namespace Yuki_Theme_Plugin
 			currentTheme.Alignment = ToolStripItemAlignment.Right;
 			loadSVG ();
 
-			// statusBar.Items.Add (logo);
 			currentTheme.Padding = new Padding (2, 0, 2, 0);
 			currentTheme.Margin = Padding.Empty;
 			statusBar.Items.Add (currentTheme);
 			RefreshStatusBar ();
 
-			stickerControl = new CustomPicture (fm);
-			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
-			stickerControl.margin = new Point (10, statusBar.Size.Height);
-			stickerControl.Enabled = Settings.positioning;
-			// stickerControl.MouseDown += new MouseEventHandler (stickerControl_MouseDown);
-			// stickerControl.MouseMove += new MouseEventHandler (stickerControl_MouseMove);
-			// stickerControl.MouseUp += new MouseEventHandler (stickerControl_MouseUp);
-			CustomPanel pnl = new CustomPanel(1) {Visible = false, Name = "LayerGrids"};
-			pnl.pict = stickerControl;
-			fm.Controls.Add (pnl);
-			fm.Controls.Add (stickerControl);
-			stickerControl.pnl = pnl;
-			LoadSticker (); 
-			// stickerControl.Enabled = true;
-			stickerControl.BringToFront ();
+			InitializeSticker ();
 			fm.Resize += FmOnResize;
 			addSettings ();
 		}
 
-		private void InjectCodeCompletition ()
+		private void InitializeSticker ()
+		{
+			stickerControl = new CustomPicture (fm);
+			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
+			stickerControl.margin = new Point (10, statusBar.Size.Height);
+			stickerControl.Enabled = Settings.positioning;
+			CustomPanel pnl = new CustomPanel (1) { Visible = false, Name = "LayerGrids" };
+			pnl.pict = stickerControl;
+			fm.Controls.Add (pnl);
+			fm.Controls.Add (stickerControl);
+			stickerControl.pnl = pnl;
+			LoadSticker ();
+			stickerControl.BringToFront ();
+		}
+
+		private void InjectCodeCompletion ()
 		{
 			var assembly = typeof (Form1).Assembly;
 			Type type = assembly.GetType ("VisualPascalABC.CodeCompletionKeyHandler");
@@ -274,7 +275,7 @@ namespace Yuki_Theme_Plugin
 			                               BindingFlags.NonPublic | BindingFlags.Static).GetValue (null);
 			// Console.WriteLine ("Unsubscribing: ");
 			Unsubscribe (ht [textEditor]);
-
+			ht [textEditor] = null;
 			CodeCompletionKeyHandler h = new CodeCompletionKeyHandler (textEditor);
 			ht [textEditor] = h;
 
@@ -297,6 +298,7 @@ namespace Yuki_Theme_Plugin
 					}else
 					{*/
 				textArea.Paint -= PaintBG;
+				StopInspectBrackets ();
 				// }
 				try
 				{
@@ -311,7 +313,7 @@ namespace Yuki_Theme_Plugin
 				textArea = textEditor.ActiveTextAreaControl.TextArea;
 				textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 				setMargin ();
-				tim.Stop ();
+				InspectBrackets ();
 				textEditor.Parent.BackColor = bg;
 				try
 				{
@@ -435,9 +437,9 @@ namespace Yuki_Theme_Plugin
 
 		private void ReloadSticker ()
 		{
-			enbld = 0;
-			enbld += Settings.bgImage ? 1 : 0;
-			enbld += Settings.swSticker ? 2 : 0;
+			imagesEnabled = 0;
+			imagesEnabled += Settings.bgImage ? 1 : 0;
+			imagesEnabled += Settings.swSticker ? 2 : 0;
 			LoadSticker ();
 		}
 
@@ -597,9 +599,9 @@ namespace Yuki_Theme_Plugin
 		private void RefreshEditor ()
 		{
 			textArea.Refresh ();
-			enbld = 0;
-			enbld += Settings.bgImage ? 1 : 0;
-			enbld += Settings.swSticker ? 2 : 0;
+			imagesEnabled = 0;
+			imagesEnabled += Settings.bgImage ? 1 : 0;
+			imagesEnabled += Settings.swSticker ? 2 : 0;
 		}
 		
 		private void PaintBG (object sender, PaintEventArgs e)
@@ -761,34 +763,42 @@ namespace Yuki_Theme_Plugin
 			// bgvruler = highlighting.GetColorFor ("VRuler").Color;
 			// Console.WriteLine (bgvruler);
 
-			if(bgdefBrush != null) bgdefBrush.Dispose ();
+			ResetBrushesAndPens ();
+		}
+
+		private void ResetBrushesAndPens ()
+		{
+			if (bgdefBrush != null) bgdefBrush.Dispose ();
 			bgdefBrush = new SolidBrush (bgdef);
-			
-			if(bgBrush != null) bgBrush.Dispose ();
+
+			if (bgBrush != null) bgBrush.Dispose ();
 			bgBrush = new SolidBrush (bg);
-			
-			if(selectionBrush != null) selectionBrush.Dispose ();
+
+			if (selectionBrush != null) selectionBrush.Dispose ();
 			selectionBrush = new SolidBrush (highlighting.GetColorFor ("Selection").BackgroundColor);
-			
-			if(bgClickBrush != null) bgClickBrush.Dispose ();
+
+			if (bgClickBrush != null) bgClickBrush.Dispose ();
 			bgClickBrush = new SolidBrush (bgClick);
-			
-			if(bgClick3Brush != null) bgClick3Brush.Dispose ();
+
+			if (bgClick3Brush != null) bgClick3Brush.Dispose ();
 			bgClick3Brush = new SolidBrush (bgClick3);
-			
-			if(bgInactiveBrush != null) bgInactiveBrush.Dispose ();
+
+			if (bgInactiveBrush != null) bgInactiveBrush.Dispose ();
 			bgInactiveBrush = new SolidBrush (bgInactive);
-			
-			if(clrBrush != null) clrBrush.Dispose ();
+
+			if (clrBrush != null) clrBrush.Dispose ();
 			clrBrush = new SolidBrush (clr);
-			
-			if(bgPen != null) bgPen.Dispose ();
-			bgPen = new Pen (bgBorder, 1){ Alignment = PenAlignment.Center };
-			
-			if(clrPen != null) clrPen.Dispose ();
+
+			if (typeBrush != null) typeBrush.Dispose ();
+			typeBrush = new SolidBrush (bgType);
+
+			if (bgPen != null) bgPen.Dispose ();
+			bgPen = new Pen (bgBorder, 1) { Alignment = PenAlignment.Center };
+
+			if (clrPen != null) clrPen.Dispose ();
 			clrPen = new Pen (clrHover, 1);
-			
-			if(bgBorderPen != null) bgBorderPen.Dispose ();
+
+			if (bgBorderPen != null) bgBorderPen.Dispose ();
 			bgBorderPen = new Pen (bgBorder, 8);
 		}
 
@@ -896,8 +906,8 @@ namespace Yuki_Theme_Plugin
 					currentTheme.Visible = false;
 			} else
 			{
-				Settings.bgImage = enbld == 1 || enbld == 3;
-				Settings.swSticker = enbld == 2 || enbld == 3;
+				Settings.bgImage = imagesEnabled == 1 || imagesEnabled == 3;
+				Settings.swSticker = imagesEnabled == 2 || imagesEnabled == 3;
 				if (nminst == 1)
 					currentTheme.Visible = true;
 			}
@@ -1061,6 +1071,12 @@ namespace Yuki_Theme_Plugin
 		/// </summary>
 		private void load (object sender, EventArgs e)
 		{
+			tim3.Stop ();
+			if (Settings.swLogo)
+			{
+				hideLogo ();
+				InitAdditions ();
+			}
 			menu_settings = null;
 			foreach (ToolStripItem menuItem in menu.Items)
 			{
@@ -1174,12 +1190,8 @@ namespace Yuki_Theme_Plugin
 
 			((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
 				"Yuki Theme: Initialization finished.\n");
-			if (Settings.swLogo)
-			{
-				hideLogo ();
-				InitAdditions ();
-			}
-			tim3.Stop ();
+			
+			InjectCodeCompletion ();
 			MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
 			MForm.TrackInstall ();
@@ -1498,5 +1510,74 @@ namespace Yuki_Theme_Plugin
 			Dictionary <Keys, IEditAction> actions = (Dictionary <Keys, IEditAction>)fdactions.GetValue (textEditor);
 			actions [key] = val;
 		}
+		
+		void InspectBrackets ()
+		{
+			textArea.Paint += InspectBracketsPaint;
+		}
+
+		void StopInspectBrackets ()
+		{
+			textArea.Paint -= InspectBracketsPaint;
+		}
+
+		private void InspectBracketsPaint (object sender, PaintEventArgs e)
+		{
+			Graphics g = e.Graphics;
+			if (textArea.TextView.Highlight != null && textArea.TextView.Highlight.OpenBrace != null &&
+			    textArea.TextView.Highlight.CloseBrace != null)
+			{
+				int lineNumber = textArea.Caret.Line;
+				LineSegment currentLine    = textArea.Document.GetLineSegment(lineNumber);
+				int currentWordOffset = 0;
+				int startColumn = 0;
+
+				if (textEditor.TextEditorProperties.EnableFolding)
+				{
+					List<FoldMarker> starts = textArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
+					if (starts != null && starts.Count > 0) {
+						FoldMarker firstFolding = (FoldMarker)starts[0];
+						foreach (FoldMarker fm in starts) {
+							if (fm.StartColumn < firstFolding.StartColumn) {
+								firstFolding = fm;
+							}
+						}
+						startColumn     = firstFolding.EndColumn;
+					}
+				}
+
+				MethodInfo draw = typeof (TextView).GetMethod ("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
+				
+				TextWord currentWord;
+				int drawingX = textArea.TextView.DrawingPosition.X - textArea.VirtualTop.X;
+				for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
+				{
+					currentWord = currentLine.Words[wordIdx];
+					
+					if (currentWordOffset < startColumn) {
+						currentWordOffset += currentWord.Length;
+						continue;
+					}
+					if (textArea.TextView.Highlight.OpenBrace.Y == lineNumber && textArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
+					    textArea.TextView.Highlight.CloseBrace.Y == lineNumber && textArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
+					{
+						int xpos = textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
+						int liny = textArea.TextView.DrawingPosition.Top + (lineNumber - textArea.TextView.FirstVisibleLine) * textArea.TextView.FontHeight - textArea.TextView.VisibleLineDrawingRemainder;
+						draw.Invoke (textArea.TextView, new object []
+						{
+							g,
+							currentWord.Word,
+							new Point (xpos, liny),
+							currentWord.GetFont (textArea.TextView.TextEditorProperties.FontContainer),
+							currentWord.Color,
+							typeBrush
+						});
+					}
+					currentWordOffset += currentWord.Length;
+				}
+
+			}
+		}
+		
 	}
 }

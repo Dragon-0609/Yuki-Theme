@@ -50,7 +50,15 @@ namespace Yuki_Theme.Core.Parsers
 					attrs.Foreground = cl.Value.ToString ();
 				bool back = canGetBackground (cl.Name);
 				if (back)
-					attrs.Background = cl.Value.ToString ();
+				{
+					if (needToChange (cl.Name))
+					{
+						ChangedWayOfSetting (cl.Name, cl.Value.ToString (), ref attrs);
+					} else
+					{
+						attrs.Background = cl.Value.ToString ();
+					}
+				}
 
 				Tuple <string, string> defaults = getDefault (cl.Name);
 
@@ -72,25 +80,31 @@ namespace Yuki_Theme.Core.Parsers
 					theme.Fields.Add (nm, attrs);
 				}
 			}
-
+			
+			
 
 			theme.Fields ["LineNumbers"].Background = theme.Fields ["Default"].Background;
-
+			
 			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
 			addDefaults ("foregroundColorEditor");
 			addDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
-			ThemeField dic = new ThemeField
+			
+			// throw new Exception ("ERROR");
+			theme.Fields.Add ("FoldMarker", new ThemeField
 			{
-				Foreground = df.Foreground,
+				Foreground = df.Background,
 				Background = df.Background
-			};
-			theme.Fields.Add ("FoldMarker", dic);
-			theme.Fields.Add ("SelectedFoldLine", dic);
-			dic.Background = null;
-			theme.Fields.Add ("FoldLine", dic);
+			});
+			ThemeField selectedF = theme.Fields ["SelectedFoldLine"].copyField ();
+			selectedF.Background = df.Background;
+			theme.Fields ["SelectedFoldLine"] = selectedF;
+			theme.Fields.Add ("FoldLine", new ThemeField
+			{
+				Foreground = df.Background
+			});
 
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
@@ -324,6 +338,7 @@ namespace Yuki_Theme.Core.Parsers
 			{
 				case "textEditorBackground" :
 				case "selectionBackground" :
+				case "identifierHighlight" :
 				{
 					res = true;
 				}
@@ -331,6 +346,33 @@ namespace Yuki_Theme.Core.Parsers
 			}
 
 			return res;
+		}
+
+		private bool needToChange (string st)
+		{
+			bool res = false;
+			switch (st)
+			{
+				case "identifierHighlight" :
+				{
+					res = true;
+				}
+					break;
+			}
+
+			return res;
+		}
+
+		private void ChangedWayOfSetting (string nameOfField, string color, ref ThemeField field)
+		{
+			switch (nameOfField)
+			{
+				case "identifierHighlight" :
+				{
+					field.Foreground = color;
+				}
+					break;
+			}
 		}
 
 		private bool canGetForeground (string st)
@@ -490,13 +532,19 @@ namespace Yuki_Theme.Core.Parsers
 
 				case "accentColor" :
 				{
-					res = new [] { "CaretMarker" };
+					res = new [] { "CaretMarker", "SelectedFoldLine" };
 				}
 					break;
 
 				case "lineNumberColor" :
 				{
 					res = new [] { "LineNumbers" };
+				}
+					break;
+
+				case "identifierHighlight" :
+				{
+					res = new [] { "EOLMarkers", "SpaceMarkers", "TabMarkers" };
 				}
 					break;
 			}

@@ -41,6 +41,8 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CBinary_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_005Cbin_005CDebug_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=C12B1851_002DE2AE_002D4A31_002D95DC_002D1DAAFCDCB108_002Fd_003AForms_002Ff_003ATesterForm_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=C12B1851_002DE2AE_002D4A31_002D95DC_002D1DAAFCDCB108_002Ff_003AThemeField_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">INFO</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\User\Documents\CSharp\Yuki Theme\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\User\Documents\CSharp\Yuki Theme Github\Yuki-Theme\Yuki Theme.Core\bin\Debug\ColorSlider.dll" /&gt;&#xD;

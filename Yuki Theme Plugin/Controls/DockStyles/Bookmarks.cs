@@ -34,6 +34,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
                 endColumn = line.Length+1;
                 instance = new ErrorLineBookmarkNew(fileName, document, startLine - 1);
                 document.BookmarkManager.AddMark(instance);
+                
                 document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.LinesBetween, startLine - 1, startLine - 1));
                 document.CommitUpdate();
             }

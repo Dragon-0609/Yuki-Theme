@@ -86,7 +86,6 @@ namespace Yuki_Theme.Core
 			if (Foreground != null) dictionay.Add ("color", Foreground);
 			if (Bold != null) dictionay.Add ("bold", Bold.ToString ().ToLower ());
 			if (Italic != null) dictionay.Add ("italic", Italic.ToString ().ToLower ());
-
 			return dictionay;
 		}
 
@@ -144,7 +143,21 @@ namespace Yuki_Theme.Core
 
 		public override string ToString ()
 		{
-			return string.Format ("Background: {0}, Foreground: {1}, Bold: {2}, Italic: {3}", Background ?? Background, Foreground ?? Foreground, Bold ?? Bold, Italic ?? Italic);
+			string bg = Background == null ? "null" : Background;
+			string fg = Foreground == null ? "null" : Foreground;
+			string bd = Bold == null ? "null" : Bold.ToString();
+			string it = Italic == null ? "null" : Italic.ToString();
+			return string.Format ("Background: {0}, Foreground: {1}, Bold: {2}, Italic: {3}", bg, fg, bd, it);
+		}
+
+		public ThemeField copyField ()
+		{
+			ThemeField field = new ThemeField ();
+			field.Background = Background;
+			field.Foreground = Foreground;
+			field.Bold = Bold;
+			field.Italic = Italic;
+			return field;
 		}
 	}
 }
