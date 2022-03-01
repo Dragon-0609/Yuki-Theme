@@ -233,7 +233,7 @@ namespace Yuki_Theme.Core
 				             @"\b(?i)(apptype|resource|reference|version|product|company|copyright|trademark|mainresource|NullBasedStrings|gendoc)\b",
 				             RegexCompiledOption));
 			regexes.Add ("specialdirecivenames", new Regex (@"\b(?i)(savepcu)\b", RegexCompiledOption));
-			regexes.Add ("direcivevalues", new Regex (@"\b(?i)(console|windows|dll|pcu)\b", RegexCompiledOption));
+			regexes.Add ("direcivevalues", new Regex (@"\s(?i)(console|windows|dll|pcu)\b", RegexCompiledOption));
 		}
 
 		public static void InitStyles ()

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -63,6 +64,11 @@ namespace Yuki_Theme.Core.Controls
 		protected override void OnPaintBackground (PaintEventArgs pevent)
 		{
 			
+		}
+
+		public void CallClick ()
+		{
+			OnClick (EventArgs.Empty);
 		}
 
 		protected override void OnPaint (PaintEventArgs e)

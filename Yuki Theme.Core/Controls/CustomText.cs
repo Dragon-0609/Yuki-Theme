@@ -43,5 +43,22 @@ namespace Yuki_Theme.Core.Controls
 				ReleaseDC(this.Handle, dc);
 			}
 		}
+
+		
+		
+		public void CallKeyUp (KeyEventArgs e)
+		{
+			OnKeyUp (e);
+		}
+		
+		public void CallKeyDown (KeyEventArgs e)
+		{
+			OnKeyDown (e);
+		}
+		
+		public void CallKeyPress (KeyPressEventArgs e)
+		{
+			OnKeyPress (e);
+		}
 	}
 }

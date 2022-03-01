@@ -7,8 +7,7 @@ namespace Yuki_Theme.Core.Themes
 {
 	public class DefaultThemes
 	{
-
-
+	
 		public static string [] def = new string []
 		{
 			"Darcula",
