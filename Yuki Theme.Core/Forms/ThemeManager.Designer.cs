@@ -35,13 +35,19 @@ namespace Yuki_Theme.Core.Forms
 			this.columnHeader1 = new System.Windows.Forms.ColumnHeader ();
 			this.remove = new System.Windows.Forms.Button ();
 			this.add = new System.Windows.Forms.Button ();
-			this.button2 = new System.Windows.Forms.Button ();
+			this.closeButton = new System.Windows.Forms.Button ();
 			this.rename_btn = new System.Windows.Forms.Button ();
 			this.regenerate = new System.Windows.Forms.Button ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.mask_1 = new System.Windows.Forms.Panel ();
 			this.panel2 = new System.Windows.Forms.Panel ();
+			this.mask_2 = new System.Windows.Forms.Panel ();
+			this.panel2_2 = new System.Windows.Forms.Panel ();
 			this.label1 = new System.Windows.Forms.Label ();
 			this.label2 = new System.Windows.Forms.Label ();
+			this.panel1.SuspendLayout ();
+			this.panel2.SuspendLayout ();
+			this.mask_2.SuspendLayout ();
 			this.SuspendLayout ();
 			// 
 			// scheme
@@ -101,19 +107,19 @@ namespace Yuki_Theme.Core.Forms
 			this.add.UseVisualStyleBackColor = true;
 			this.add.Click += new System.EventHandler (this.add_Click);
 			// 
-			// button2
+			// closeButton
 			// 
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.AutoSize = true;
-			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font ("Calibri", 10F);
-			this.button2.Location = new System.Drawing.Point (249, 391);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size (71, 29);
-			this.button2.TabIndex = 13;
-			this.button2.Text = "Close";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler (this.button2_Click);
+			this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.closeButton.AutoSize = true;
+			this.closeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.closeButton.Font = new System.Drawing.Font ("Calibri", 10F);
+			this.closeButton.Location = new System.Drawing.Point (249, 391);
+			this.closeButton.Name = "closeButton";
+			this.closeButton.Size = new System.Drawing.Size (71, 29);
+			this.closeButton.TabIndex = 13;
+			this.closeButton.Text = "Close";
+			this.closeButton.UseVisualStyleBackColor = true;
+			this.closeButton.Click += new System.EventHandler (this.close_Click);
 			// 
 			// rename_btn
 			// 
@@ -146,18 +152,45 @@ namespace Yuki_Theme.Core.Forms
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.Maroon;
-			this.panel1.Location = new System.Drawing.Point (153, 382);
+			this.panel1.Controls.Add (this.mask_1);
+			this.panel1.Location = new System.Drawing.Point (152, 382);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size (9, 20);
+			this.panel1.Size = new System.Drawing.Size (10, 20);
 			this.panel1.TabIndex = 16;
+			// 
+			// mask_1
+			// 
+			this.mask_1.BackColor = System.Drawing.SystemColors.Control;
+			this.mask_1.Location = new System.Drawing.Point (0, 2);
+			this.mask_1.Name = "mask_1";
+			this.mask_1.Size = new System.Drawing.Size (8, 16);
+			this.mask_1.TabIndex = 20;
 			// 
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.Color.Orchid;
-			this.panel2.Location = new System.Drawing.Point (153, 407);
+			this.panel2.Controls.Add (this.mask_2);
+			this.panel2.Location = new System.Drawing.Point (152, 407);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size (9, 20);
+			this.panel2.Size = new System.Drawing.Size (10, 20);
 			this.panel2.TabIndex = 17;
+			// 
+			// mask_2
+			// 
+			this.mask_2.BackColor = System.Drawing.SystemColors.Control;
+			this.mask_2.Controls.Add (this.panel2_2);
+			this.mask_2.Location = new System.Drawing.Point (0, 2);
+			this.mask_2.Name = "mask_2";
+			this.mask_2.Size = new System.Drawing.Size (8, 16);
+			this.mask_2.TabIndex = 21;
+			// 
+			// panel2_2
+			// 
+			this.panel2_2.BackColor = System.Drawing.Color.Orchid;
+			this.panel2_2.Location = new System.Drawing.Point (0, 3);
+			this.panel2_2.Name = "panel2_2";
+			this.panel2_2.Size = new System.Drawing.Size (5, 10);
+			this.panel2_2.TabIndex = 22;
 			// 
 			// label1
 			// 
@@ -186,7 +219,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Controls.Add (this.panel1);
 			this.Controls.Add (this.regenerate);
 			this.Controls.Add (this.rename_btn);
-			this.Controls.Add (this.button2);
+			this.Controls.Add (this.closeButton);
 			this.Controls.Add (this.add);
 			this.Controls.Add (this.remove);
 			this.Controls.Add (this.scheme);
@@ -195,11 +228,21 @@ namespace Yuki_Theme.Core.Forms
 			this.MinimizeBox = false;
 			this.Name = "ThemeManager";
 			this.Text = "Scheme Manager";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler (this.ThemeManager_FormClosing);
 			this.Load += new System.EventHandler (this.ThemeManager_Load);
 			this.Shown += new System.EventHandler (this.ThemeManager_Shown);
+			this.panel1.ResumeLayout (false);
+			this.panel2.ResumeLayout (false);
+			this.mask_2.ResumeLayout (false);
 			this.ResumeLayout (false);
 			this.PerformLayout ();
 		}
+
+		private System.Windows.Forms.Panel panel2_2;
+
+		private System.Windows.Forms.Panel mask_2;
+
+		private System.Windows.Forms.Panel mask_1;
 
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Panel panel2;
@@ -214,7 +257,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public System.Windows.Forms.ListView scheme;
 
-		private System.Windows.Forms.Button button2;
+		private System.Windows.Forms.Button closeButton;
 
 		private System.Windows.Forms.Button remove;
 

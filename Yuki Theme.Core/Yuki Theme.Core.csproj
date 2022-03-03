@@ -136,7 +136,6 @@
     <Compile Include="Controls\ColorEditor\ColorPicker\MathExtensions.cs" />
     <Compile Include="Controls\CustomButton.cs" />
     <None Include="Controls\CustomPB.cs" />
-    <None Include="Controls\CustomL.cs" />
     <Compile Include="Controls\CustomPanel.cs" />
     <Compile Include="Controls\CustomPicture.cs" />
     <None Include="Controls\CustomS.cs" />
@@ -454,6 +453,10 @@
     <EmbeddedResource Include="Resources\Syntax Templates\Python.xshd" />
     <EmbeddedResource Include="Resources\Syntax Templates\VBNET.xshd" />
     <EmbeddedResource Include="Resources\SVG\cwmPermissionEdit.svg" />
+    <EmbeddedResource Include="Resources\SVG\findAndShowNextMatches.svg" />
+    <EmbeddedResource Include="Resources\SVG\findAndShowNextMatches_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches.svg" />
+    <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches_dark.svg" />
     <Content Include="Resources\yuki.png" />
     <EmbeddedResource Include="yuki.png" />
     <EmbeddedResource Include="Themes\Darcula.yukitheme" />

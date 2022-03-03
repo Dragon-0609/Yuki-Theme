@@ -216,7 +216,7 @@ namespace Yuki_Theme.Core.Forms
 				highlighter.InitializeSyntax ();
 				loadSVG ();
 				save_button.Visible = !isDefault ();
-				AddEvents ();
+				AddTips ();
 
 				sBox.Paint += bgImagePaint;
 				if (update && !quiet)
@@ -238,107 +238,23 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		private void isUpdated ()
+		
+		#region Initialization
+
+		public void load_schemes ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+			schemes.Items.Clear ();
 
-			int inst = ke.GetValue ("install") != null ? 1 : 0;
-			if (inst == 1)
-			{
-				new ChangelogForm ().Show (this);
-				ke.DeleteValue ("install");
-			}
+			CLI.load_schemes (ifZero);
+
+			schemes.Items.AddRange (CLI.schemes.ToArray ());
+
+			if (schemes.Items.Contains (selectedItem))
+				schemes.SelectedItem = selectedItem;
+			else
+				schemes.SelectedIndex = 0;
 		}
-
-		private void onSelectItem (object sender, EventArgs e)
-		{
-			if (lastIndex != list_1.SelectedIndex)
-			{
-				colorButton.Visible = label1.Visible = false;
-				bgButton.Visible = label2.Visible = false;
-				check_bold.Enabled = false;
-				check_italic.Enabled = false;
-				lastIndex = list_1.SelectedIndex;
-				blocked = true;
-				// Console.WriteLine(list_1.SelectedItem.ToString ());
-				var str = list_1.SelectedItem.ToString ();
-				if (!str.Contains ("Wallpaper") && !str.Contains ("Sticker"))
-				{
-					if (!colorEditor.Visible)
-					{
-						colorEditor.Visible = true;
-						imageEditor.Visible = false;
-					}
-
-					if (Highlighter.isInNames (str) && !isDefault ())
-					{
-						check_bold.Enabled = true;
-						check_italic.Enabled = true;
-					}
-
-					ThemeField dic = localAttributes [str];
-					if (dic.Foreground != null)
-					{
-						colorButton.BackColor = ColorTranslator.FromHtml (dic.Foreground);
-						colorButton.Visible = label1.Visible = true;
-					}
-
-					if (dic.Background != null)
-					{
-						bgButton.BackColor = ColorTranslator.FromHtml (dic.Background);
-						bgButton.Visible = label2.Visible = true;
-					}
-					if (dic.Bold != null){
-						check_bold.Checked = (bool) dic.Bold;
-					}
-					if (dic.Italic != null){
-						check_italic.Checked = (bool) dic.Italic;
-					}
-
-					blocked = false;
-					highlighter.activateColors (str);
-				} else
-				{
-					if (colorEditor.Visible)
-					{
-						colorEditor.Visible = false;
-						imageEditor.Visible = true;
-					}
-
-					alignpanel.Enabled = false;
-					imgCurrent = ImageType.None;
-
-
-					if (!str.Contains ("Sticker"))
-					{
-						alignpanel.Enabled = true;
-						imgCurrent = ImageType.Wallpaper;
-						align = (Alignment) CLI.currentTheme.WallpaperAlign;
-						imagePath.Text = bgtext;
-						blockedNumeric = true;
-						numericUpDown1.Value = CLI.currentTheme.WallpaperOpacity;
-						blockedNumeric = false;
-						unblockedScrool = true;
-						opacity_slider.Value = CLI.currentTheme.WallpaperOpacity;
-
-						updateAlignButton ();
-					} else
-					{
-						imagePath.Text = sttext;
-						blockedNumeric = true;
-						numericUpDown1.Value = CLI.currentTheme.StickerOpacity;
-						blockedNumeric = false;
-						imgCurrent = ImageType.Sticker;
-						unblockedScrool = true;
-						opacity_slider.Value = CLI.currentTheme.StickerOpacity;
-					}
-
-					imageEditor.Enabled = !isDefault ();
-				}
-			}
-		}
-
+		
 		private void initSticker ()
 		{
 			stickerControl = new CustomPicture (this);
@@ -388,84 +304,33 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		private void colorButton_Click (object sender, EventArgs e)
+
+		private void loadSVG ()
 		{
-			if (!blocked)
-			{
-				col.MainColor = colorButton.BackColor;
-				if (col.ShowDialog (this) == DialogResult.OK)
-				{
-					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor; 
-					colorButton.BackColor = col.MainColor;
-					updateCurrentItem ();
-				}
-			}
+			var a = Assembly.GetExecutingAssembly ();
+
+			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			
+			Helper.RenderSvg (save_button, Helper.LoadSvg ("menu-saveall" + add, a));
+			Helper.RenderSvg (restore_button, Helper.LoadSvg ("refresh" + add, a));
+			Helper.RenderSvg (export_button, Helper.LoadSvg ("export" + add, a));
+			Helper.RenderSvg (import_button, Helper.LoadSvg ("import" + add, a));
+			Helper.RenderSvg (settings_button, Helper.LoadSvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
+			Helper.RenderSvg (add_button, Helper.LoadSvg ("add" + add, a));
+			Helper.RenderSvg (manage_button, Helper.LoadSvg ("listFiles" + add, a));
+			Helper.RenderSvg (import_directory, Helper.LoadSvg ("traceInto" + add, a));
+			Helper.RenderSvg (selectImageButton, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16));
 		}
 
-		private void bgButton_Click (object sender, EventArgs e)
+		private void initPlugin ()
 		{
-			if (!blocked)
-			{
-				col.MainColor = bgButton.BackColor;
-				if (col.ShowDialog (this) == DialogResult.OK)
-				{
-					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor;
-					bgButton.BackColor = col.MainColor;
-					updateCurrentItem ();
-				}
-			}
+			export_button.Visible = false;
 		}
 
-		private void updateCurrentItem ()
-		{
-			var str = list_1.SelectedItem.ToString ();
-			ThemeField dic = localAttributes [str];
-			SetField (ref dic);
+		#endregion
 
-			highlighter.updateColors ();
-		}
-
-		private void SetField (ref ThemeField dic)
-		{
-			if (dic.Foreground != null)
-				dic.Foreground = Translate (colorButton.BackColor);
-			if (dic.Background != null)
-				dic.Background = Translate (bgButton.BackColor);
-			if (dic.Bold != null)
-				dic.Bold = check_bold.Checked;
-			if (dic.Italic != null)
-				dic.Italic = check_italic.Checked;
-		}
-
-		private string Translate (Color clr)
-		{
-			return ColorTranslator.ToHtml (clr);
-		}
-
-		private void MForm_SizeChanged (object sender, EventArgs e)
-		{
-			int he = ClientSize.Height - textBoxHeight;
-			sBox.Height = he;
-		}
-
-		private void save_Click (object sender, EventArgs e)
-		{
-			CLI.save (img2, img3);
-		}
-
-		public void update_Click (object sender, EventArgs e)
-		{
-			/*if (!isDefault ())
-				saveList ();*/
-			// showDownloader ();
-			if (df == null)
-				df = new DownloadForm (this);
-			if (nf == null)
-				nf = new NotificationForm ();
-			// Thread th = new Thread (new ThreadStart(df.CheckUpdate));
-			// th.Start();
-			df.CheckUpdate ();
-		}
+		
+		#region Events For Core
 
 		public void ifHasImage (Image imgc)
 		{
@@ -494,14 +359,18 @@ namespace Yuki_Theme.Core.Forms
 			sttext = "";
 		}
 
-		public void onSelect ()
+		public string ifZero ()
 		{
-			list_1.Items.AddRange (CLI.names.ToArray ());
-			// Console.WriteLine(list_1.Items.Count);
-			list_1.SelectedIndex = 0;
-			onSelectItem (list_1, EventArgs.Empty);
+			string res = null;
+			var op = new OpenFileDialog ();
+			op.DefaultExt = "yukitheme";
+			op.Filter = "Yuki Theme(*.yukitheme)|*.yukitheme";
+			op.Multiselect = false;
+			if (op.ShowDialog () == DialogResult.OK)
+				res = op.FileName;
+			return res;
 		}
-
+		
 		public void hasProblem (string content)
 		{
 			MessageBox.Show (
@@ -513,6 +382,126 @@ namespace Yuki_Theme.Core.Forms
 		public void GiveMessage (string content)
 		{
 			MessageBox.Show (content);
+		}
+		
+		public bool SaveInExport (string content, string title)
+		{
+			return MessageBox.Show (content, title,
+			                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+		}
+
+		public void FinishExport (string content, string title)
+		{
+			MessageBox.Show (content, title);
+		}
+
+		public void ErrorExport (string content, string title)
+		{
+			MessageBox.Show (content, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		public int AskChoice ()
+		{
+			var quform = new QuestionForm ();
+			DialogResult res = quform.ShowDialog ();
+			int nm = 0;
+			switch (res)
+			{
+				case DialogResult.Yes :
+				{
+					nm = 0;
+				}
+					break;
+
+				case DialogResult.Ignore :
+				{
+					nm = 1;
+				}
+					break;
+
+				case DialogResult.No :
+				{
+					nm = 2;
+				}
+					break;
+			}
+
+			return nm;
+		}
+		
+		public void setPath (string content, string title)
+		{
+			MessageBox.Show (content, title, MessageBoxButtons.OK,
+			                 MessageBoxIcon.Exclamation);
+			settings_Click (this, EventArgs.Empty);
+		}
+
+		public void startSettingThemeDelegate ()
+		{
+			if (startSettingTheme != null) startSettingTheme ();
+		}
+
+		public void setThemeDelegate ()
+		{
+			if (setTheme != null) setTheme ();
+		}
+
+		#endregion
+
+
+		#region Internal Events
+
+		private void add_Click (object sender, EventArgs e)
+		{
+			if (selform == null)
+				selform = new SelectionForm ();
+			selform.textBox1.Text = "";
+			selform.comboBox1.Items.Clear ();
+			foreach (var item in schemes.Items) selform.comboBox1.Items.Add (item);
+
+			selform.comboBox1.SelectedIndex = 0;
+
+			if (selform.ShowDialog () == DialogResult.OK)
+			{
+				string copyFrom = selform.comboBox1.SelectedItem.ToString ();
+				string toname = selform.textBox1.Text;
+				if (!CLI.add (copyFrom, toname))
+				{
+					schemes.Items.Add (toname);
+					schemes.SelectedItem = toname;
+				}
+			}
+		}
+		
+		private void manage_Click (object sender, EventArgs e)
+		{
+			if (tmanagerform == null || tmanagerform.IsDisposed)
+				tmanagerform = new ThemeManager (this);
+
+			ReItem defa = new ReItem ("Default", true);
+			ReItem doki = new ReItem ("Doki Theme", true);
+			ReItem custom = new ReItem ("Custom", true);
+			tmanagerform.groups.Clear ();
+			tmanagerform.groups.Add (defa);
+			tmanagerform.groups.Add (doki);
+			tmanagerform.groups.Add (custom);
+			
+			foreach (string item in schemes.Items)
+			{
+				ReItem litem;
+				if (CLI.isDefaultTheme [item])
+				{
+					ReItem cat = DefaultThemes.getCategory (item) == "Doki Theme" ? doki : defa;
+					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
+				} else
+				{
+					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
+				}
+
+			}
+			
+			tmanagerform.ResetList ();
+			tmanagerform.ShowDialog ();
 		}
 
 		public void restore_Click (object sender, EventArgs e)
@@ -538,87 +527,50 @@ namespace Yuki_Theme.Core.Forms
 			GC.WaitForPendingFinalizers ();
 		}
 
-		private void check_bold_CheckedChanged (object sender, EventArgs e)
+		private void export (object sender, EventArgs e)
 		{
-			if (!blocked)
-				// Console.WriteLine ("Not blocked");
-				updateCurrentItem ();
-			// else Console.WriteLine ("Blocked");
+			CLI.export (img2, img3, setThemeDelegate, startSettingThemeDelegate);
 		}
 
-		private void check_italic_CheckedChanged (object sender, EventArgs e)
+		private void import_Click (object sender, EventArgs e)
 		{
-			if (!blocked)
-				// Console.WriteLine ("Not blocked");
-				updateCurrentItem ();
-			// else Console.WriteLine ("Blocked");
-		}
-
-		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
-		{
-			bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
-			
-			if (cnd)
+			OpenFileDialog fd = new OpenFileDialog ();
+			// fd.DefaultExt = "icls";
+			fd.Title = "Import";
+			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
+			fd.Filter =
+				"All Themes(*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
+			fd.Multiselect = false;
+			if (fd.ShowDialog () == DialogResult.OK)
 			{
-				if (CLI.isEdited) // Ask to save the changes
-				{
-					if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
-						save_Click (sender, e); // save before restoring
-				}
-				restore_Click (sender, e);
-				
-				save_button.Visible = !isDefault ();
-
-				selectedItem = schemes.SelectedItem.ToString ();
-				database.UpdateData (Settings.ACTIVE, selectedItem);
+				MainParser.Parse (fd.FileName, this, true, true, ErrorExport, AskChoiceParser);
 			}
 		}
 
-		public string ifZero ()
+		private void import_directory_Click (object sender, EventArgs e)
 		{
-			string res = null;
-			var op = new OpenFileDialog ();
-			op.DefaultExt = "yukitheme";
-			op.Filter = "Yuki Theme(*.yukitheme)|*.yukitheme";
-			op.Multiselect = false;
-			if (op.ShowDialog () == DialogResult.OK)
-				res = op.FileName;
-			return res;
-		}
-
-		public void load_schemes ()
-		{
-			schemes.Items.Clear ();
-
-			CLI.load_schemes (ifZero);
-
-			schemes.Items.AddRange (CLI.schemes.ToArray ());
-
-			if (schemes.Items.Contains (selectedItem))
-				schemes.SelectedItem = selectedItem;
-			else
-				schemes.SelectedIndex = 0;
-		}
-
-		private void add_Click (object sender, EventArgs e)
-		{
-			if (selform == null)
-				selform = new SelectionForm ();
-			selform.textBox1.Text = "";
-			selform.comboBox1.Items.Clear ();
-			foreach (var item in schemes.Items) selform.comboBox1.Items.Add (item);
-
-			selform.comboBox1.SelectedIndex = 0;
-
-			if (selform.ShowDialog () == DialogResult.OK)
+			CommonOpenFileDialog co = new CommonOpenFileDialog ();
+			co.IsFolderPicker = true;
+			co.Multiselect = false;
+			CommonFileDialogResult res = co.ShowDialog ();
+			if (res == CommonFileDialogResult.Ok)
 			{
-				string copyFrom = selform.comboBox1.SelectedItem.ToString ();
-				string toname = selform.textBox1.Text;
-				if (!CLI.add (copyFrom, toname))
+				MessageBox.Show (
+					"Hi. You have selected the directory, so you will have to wait until the import is done. Your current theme will be changed" +
+					"on finishing import.");
+				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
+				foreach (string fl in fls)
 				{
-					schemes.Items.Add (toname);
-					schemes.SelectedItem = toname;
+					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
 				}
+
+				fls = Directory.GetFiles (co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
+				foreach (string fl in fls)
+				{
+					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
+				}
+
+				schemes.SelectedIndex = schemes.Items.Count - 1;
 			}
 		}
 
@@ -667,393 +619,123 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		public bool SaveInExport (string content, string title)
+		
+		private void onSelectItem (object sender, EventArgs e)
 		{
-			return MessageBox.Show (content, title,
-			                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-		}
-
-		public void FinishExport (string content, string title)
-		{
-			MessageBox.Show (content, title);
-		}
-
-		public void ErrorExport (string content, string title)
-		{
-			MessageBox.Show (content, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
-		}
-
-		public int AskChoice ()
-		{
-			var quform = new QuestionForm ();
-			DialogResult res = quform.ShowDialog ();
-			int nm = 0;
-			switch (res)
+			if (lastIndex != list_1.SelectedIndex)
 			{
-				case DialogResult.Yes :
+				colorButton.Visible = colorLabel.Visible = false;
+				bgButton.Visible = backgroundColorLabel.Visible = false;
+				check_bold.Enabled = false;
+				check_italic.Enabled = false;
+				lastIndex = list_1.SelectedIndex;
+				blocked = true;
+				// Console.WriteLine(list_1.SelectedItem.ToString ());
+				var str = list_1.SelectedItem.ToString ();
+				if (!str.Contains ("Wallpaper") && !str.Contains ("Sticker"))
 				{
-					nm = 0;
-				}
-					break;
+					if (!colorEditor.Visible)
+					{
+						colorEditor.Visible = true;
+						imageEditor.Visible = false;
+					}
 
-				case DialogResult.Ignore :
-				{
-					nm = 1;
-				}
-					break;
+					if (Highlighter.isInNames (str) && !isDefault ())
+					{
+						check_bold.Enabled = true;
+						check_italic.Enabled = true;
+					}
 
-				case DialogResult.No :
-				{
-					nm = 2;
-				}
-					break;
-			}
+					ThemeField dic = localAttributes [str];
+					if (dic.Foreground != null)
+					{
+						colorButton.BackColor = ColorTranslator.FromHtml (dic.Foreground);
+						colorButton.Visible = colorLabel.Visible = true;
+					}
 
-			return nm;
-		}
+					if (dic.Background != null)
+					{
+						bgButton.BackColor = ColorTranslator.FromHtml (dic.Background);
+						bgButton.Visible = backgroundColorLabel.Visible = true;
+					}
+					if (dic.Bold != null){
+						check_bold.Checked = (bool) dic.Bold;
+					}
+					if (dic.Italic != null){
+						check_italic.Checked = (bool) dic.Italic;
+					}
 
-		public void setPath (string content, string title)
-		{
-			MessageBox.Show (content, title, MessageBoxButtons.OK,
-			                 MessageBoxIcon.Exclamation);
-			settings_Click (this, EventArgs.Empty);
-		}
-
-		public void startSettingThemeDelegate ()
-		{
-			if (startSettingTheme != null) startSettingTheme ();
-		}
-
-		public void setThemeDelegate ()
-		{
-			if (setTheme != null) setTheme ();
-		}
-
-		private void export (object sender, EventArgs e)
-		{
-			CLI.export (img2, img3, setThemeDelegate, startSettingThemeDelegate);
-		}
-
-		private void button5_Click (object sender, EventArgs e)
-		{
-			if (tmanagerform == null)
-				tmanagerform = new ThemeManager (this);
-
-			ReItem defa = new ReItem ("Default", true);
-			ReItem doki = new ReItem ("Doki Theme", true);
-			ReItem custom = new ReItem ("Custom", true);
-			tmanagerform.scheme.Items.Clear ();
-			tmanagerform.groups.Clear ();
-			tmanagerform.groups.Add (defa);
-			tmanagerform.groups.Add (doki);
-			tmanagerform.groups.Add (custom);
-
-			foreach (string item in schemes.Items)
-			{
-				ReItem litem;
-				if (CLI.isDefaultTheme [item])
-				{
-					ReItem cat = DefaultThemes.getCategory (item) == "Doki Theme" ? doki : defa;
-					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
+					blocked = false;
+					highlighter.activateColors (str);
 				} else
 				{
-					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
+					if (colorEditor.Visible)
+					{
+						colorEditor.Visible = false;
+						imageEditor.Visible = true;
+					}
+
+					alignpanel.Enabled = false;
+					imgCurrent = ImageType.None;
+
+
+					if (!str.Contains ("Sticker"))
+					{
+						alignpanel.Enabled = true;
+						imgCurrent = ImageType.Wallpaper;
+						align = (Alignment) CLI.currentTheme.WallpaperAlign;
+						imagePath.Text = bgtext;
+						blockedNumeric = true;
+						opacitySlider.Value = CLI.currentTheme.WallpaperOpacity;
+						blockedNumeric = false;
+						unblockedScrool = true;
+						opacity_slider.Value = CLI.currentTheme.WallpaperOpacity;
+
+						updateAlignButton ();
+					} else
+					{
+						imagePath.Text = sttext;
+						blockedNumeric = true;
+						opacitySlider.Value = CLI.currentTheme.StickerOpacity;
+						blockedNumeric = false;
+						imgCurrent = ImageType.Sticker;
+						unblockedScrool = true;
+						opacity_slider.Value = CLI.currentTheme.StickerOpacity;
+					}
+
+					imageEditor.Enabled = !isDefault ();
 				}
 			}
-
-			tmanagerform.sortItems ();
-
-			tmanagerform.ShowDialog ();
 		}
-
-		public bool isDefault ()
+		
+		private void colorButton_Click (object sender, EventArgs e)
 		{
-			return CLI.currentTheme.isDefault;
-		}
-
-		private void AddEvents ()
-		{
-			save_button.MouseHover += (sender, args) =>
+			if (!blocked)
 			{
-				tip.Show ("Save", save_button);
-			};
-			save_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (save_button);
-			};
-
-			restore_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Restore", restore_button);
-			};
-			restore_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (restore_button);
-			};
-
-			settings_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Settings", settings_button);
-			};
-			settings_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (settings_button);
-			};
-
-			export_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Export", export_button);
-			};
-			export_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (export_button);
-			};
-
-			import_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Import", import_button);
-			};
-			import_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (import_button);
-			};
-
-			add_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Add New Scheme", add_button);
-			};
-			add_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (add_button);
-			};
-
-			manage_button.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Manage Themes", manage_button);
-			};
-			manage_button.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (manage_button);
-			};
-
-			import_directory.MouseHover += (sender, args) =>
-			{
-				tip.Show ("Import Themes", import_directory);
-			};
-			import_directory.MouseLeave += (sender, args) =>
-			{
-				if (tip.Active)
-					tip.Hide (import_directory);
-			};
-		}
-
-		private void import_Click (object sender, EventArgs e)
-		{
-			OpenFileDialog fd = new OpenFileDialog ();
-			// fd.DefaultExt = "icls";
-			fd.Title = "Import";
-			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
-			fd.Filter =
-				"All Themes(*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
-			fd.Multiselect = false;
-			if (fd.ShowDialog () == DialogResult.OK)
-			{
-				MainParser.Parse (fd.FileName, this, true, true, ErrorExport, AskChoiceParser);
-			}
-		}
-
-		private bool AskChoiceParser (string content, string title)
-		{
-			return MessageBox.Show (content,
-			                        title,
-			                        MessageBoxButtons.YesNo) == DialogResult.Yes;
-		}
-
-		public void showDownloader ()
-		{
-			if (df == null || nf.IsDisposed)
-				df = new DownloadForm (this);
-			df.Show (this);
-			changeDownloaderLocation ();
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-			{
-				nf.Visible = false;
-			}
-		}
-
-		private void panel1_Resize (object sender, EventArgs e)
-		{
-			changeDownloaderLocation ();
-			changeNotificationLocation ();
-		}
-
-		public void changeDownloaderLocation ()
-		{
-			if (df != null && !df.IsDisposed && df.Visible)
-			{
-				df.StartPosition = FormStartPosition.Manual;
-				df.Location = new Point (this.Location.X + this.ClientRectangle.Width - 284,
-				                         this.Location.Y + this.ClientRectangle.Height - 73);
-			}
-		}
-
-		public void changeNotificationLocation ()
-		{
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-			{
-				nf.StartPosition = FormStartPosition.Manual;
-				nf.Location = new Point (this.Location.X + this.ClientRectangle.Width - 306,
-				                         this.Location.Y + this.ClientRectangle.Height - notHeight);
-			}
-		}
-
-		private void MForm_Move (object sender, EventArgs e)
-		{
-			changeDownloaderLocation ();
-			changeNotificationLocation ();
-		}
-
-		public void ShowNotification (string title, string content)
-		{
-			if (nf == null || nf.IsDisposed)
-				nf = new NotificationForm ();
-			nf.Visible = false;
-			nf.changeContent (title, content);
-
-
-			nf.Show (this);
-
-			if (df != null && !df.IsDisposed && df.Visible)
-			{
-				df.Visible = false;
-			}
-		}
-
-		private void MForm_FormClosing (object sender, FormClosingEventArgs e)
-		{
-			if (nf != null)
-				nf.Dispose ();
-			if (df != null)
-				df.Dispose ();
-			database.SaveLocation (DesktopLocation);
-			CLI_Actions.ifHasImage = null;
-			CLI_Actions.ifDoesntHave = null;
-			CLI_Actions.ifHasSticker = null;
-			CLI_Actions.ifDoesntHaveSticker = null;
-			this.Dispose (true);
-		}
-
-		private void button11_Click (object sender, EventArgs e)
-		{
-			var op = new OpenFileDialog ();
-			op.DefaultExt = "png";
-			// op.Filter = "PNG (*.png)|*.png|GIF (*.gif)|*.gif";
-			op.Filter = "PNG (*.png)|*.png";
-			op.Multiselect = false;
-			if (op.ShowDialog () == DialogResult.OK)
-			{
-				imagePath.Text = op.FileName;
-				Apply_Click (sender, e);
-			}
-		}
-
-		private void pleft_Click (object sender, EventArgs e)
-		{
-			if (align != Alignment.Left)
-			{
-				align = Alignment.Left;
-			}
-			updateAlignButton ();
-		}
-
-		private void pcenter_Click (object sender, EventArgs e)
-		{
-			if (align != Alignment.Center)
-			{
-				align = Alignment.Center;
-			}
-			updateAlignButton ();
-		}
-
-		private void pright_Click (object sender, EventArgs e)
-		{
-			if (align != Alignment.Right)
-			{
-				align = Alignment.Right;
-			}
-			updateAlignButton ();
-		}
-
-		private void bgImagePaint (object sender, PaintEventArgs e)
-		{
-			if (img != null && bgImage)
-			{
-				if (oldV.Width != sBox.ClientRectangle.Width || oldV.Height != sBox.ClientRectangle.Height)
+				col.MainColor = colorButton.BackColor;
+				if (col.ShowDialog (this) == DialogResult.OK)
 				{
-					oldV = Helper.GetSizes (img.Size, sBox.ClientRectangle.Width, sBox.ClientRectangle.Height,
-					                        align);
+					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor; 
+					colorButton.BackColor = col.MainColor;
+					updateCurrentItem ();
 				}
-
-				e.Graphics.DrawImage (img, oldV);
 			}
 		}
 
-		private void updateAlignButton ()
+		private void bgButton_Click (object sender, EventArgs e)
 		{
-			pleft.BackColor = align == Alignment.Left ? bgClicked : bgDefault;
-			pcenter.BackColor = align == Alignment.Center ? bgClicked : bgDefault;
-			pright.BackColor = align == Alignment.Right ? bgClicked : bgDefault;
-			sBox.Refresh ();
+			if (!blocked)
+			{
+				col.MainColor = bgButton.BackColor;
+				if (col.ShowDialog (this) == DialogResult.OK)
+				{
+					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor;
+					bgButton.BackColor = col.MainColor;
+					updateCurrentItem ();
+				}
+			}
 		}
-
-		public void updateBackgroundColors ()
-		{
-			this.BackColor = list_1.BackColor = save_button.BackColor = restore_button.BackColor =
-				export_button.BackColor = import_button.BackColor = settings_button.BackColor = add_button.BackColor =
-					manage_button.BackColor = import_directory.BackColor = panel1.BackColor = button10.BackColor =
-						button11.BackColor = button7.BackColor = schemes.ListBackColor = schemes.BackColor =
-							opacity_slider.BackColor = imagePath.BackColor = numericUpDown1.BackColor = bgDefault;
-
-			this.ForeColor = label1.ForeColor = list_1.ForeColor = label2.ForeColor = check_bold.ForeColor =
-				check_italic.ForeColor = button10.FlatAppearance.BorderColor = button11.FlatAppearance.BorderColor =
-					button7.FlatAppearance.BorderColor = schemes.ForeColor = schemes.ListTextColor = label3.ForeColor =
-						imagePath.ForeColor = numericUpDown1.ForeColor = fgDefault;
-
-			button10.FlatAppearance.MouseOverBackColor = save_button.FlatAppearance.MouseOverBackColor =
-				export_button.FlatAppearance.MouseOverBackColor = import_button.FlatAppearance.MouseOverBackColor =
-					restore_button.FlatAppearance.MouseOverBackColor =
-						settings_button.FlatAppearance.MouseOverBackColor =
-							add_button.FlatAppearance.MouseOverBackColor =
-								manage_button.FlatAppearance.MouseOverBackColor =
-									import_directory.FlatAppearance.MouseOverBackColor =
-										button11.FlatAppearance.MouseOverBackColor =
-											button7.FlatAppearance.MouseOverBackColor =
-												opacity_slider.BarPenColorBottom =
-													opacity_slider.BarPenColorTop =
-														opacity_slider.BarInnerColor =
-															numericUpDown1.ButtonHighlightColor = bgClicked;
-
-			schemes.BorderColor = schemes.IconColor = opacity_slider.ThumbInnerColor = opacity_slider.ThumbPenColor =
-				opacity_slider.ElapsedInnerColor = opacity_slider.ElapsedPenColorBottom =
-					opacity_slider.ElapsedPenColorTop = imagePath.BorderColor = numericUpDown1.BorderColor = bgSpecial;
-
-			opacity_slider.ThumbOuterColor = fgKey;
-
-			if (OnColorUpdate != null)
-				OnColorUpdate (bgDefault, fgDefault, bgClicked);
-			fgbrush = new SolidBrush (fgDefault);
-			loadSVG ();
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-				nf.NotificationForm_Shown (this, EventArgs.Empty);
-		}
-
+		
 		private void Apply_Click (object sender, EventArgs e)
 		{
 			if (imgCurrent == ImageType.Wallpaper)
@@ -1144,43 +826,101 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		private void button7_Click_1 (object sender, EventArgs e)
+		private void Clear_Click (object sender, EventArgs e)
 		{
 			imagePath.Text = "";
 			Apply_Click (sender, e);
 		}
-
-		private void loadSVG ()
+		
+		public void onSelect ()
 		{
-			var a = Assembly.GetExecutingAssembly ();
-
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			
-			Helper.RenderSvg (save_button, Helper.LoadSvg ("menu-saveall" + add, a));
-			Helper.RenderSvg (restore_button, Helper.LoadSvg ("refresh" + add, a));
-			Helper.RenderSvg (export_button, Helper.LoadSvg ("export" + add, a));
-			Helper.RenderSvg (import_button, Helper.LoadSvg ("import" + add, a));
-			Helper.RenderSvg (settings_button, Helper.LoadSvg ("gearPlain" + add, a), false, Size.Empty, true, Helper.bgBorder);
-			Helper.RenderSvg (add_button, Helper.LoadSvg ("add" + add, a));
-			Helper.RenderSvg (manage_button, Helper.LoadSvg ("listFiles" + add, a));
-			Helper.RenderSvg (import_directory, Helper.LoadSvg ("traceInto" + add, a));
-			Helper.RenderSvg (button11, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16));
+			list_1.Items.AddRange (CLI.names.ToArray ());
+			// Console.WriteLine(list_1.Items.Count);
+			list_1.SelectedIndex = 0;
+			onSelectItem (list_1, EventArgs.Empty);
+		}
+		
+		private void check_bold_CheckedChanged (object sender, EventArgs e)
+		{
+			if (!blocked)
+				// Console.WriteLine ("Not blocked");
+				updateCurrentItem ();
+			// else Console.WriteLine ("Blocked");
 		}
 
-		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
+		private void check_italic_CheckedChanged (object sender, EventArgs e)
 		{
-			if (e.Index < 0) return;
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			if (!blocked)
+				// Console.WriteLine ("Not blocked");
+				updateCurrentItem ();
+			// else Console.WriteLine ("Blocked");
+		}
+
+		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
+		{
+			bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
+			
+			if (cnd)
 			{
-				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
-				                           e.Index, e.State ^ DrawItemState.Selected,
-				                           e.ForeColor, bgClicked);
+				if (CLI.isEdited) // Ask to save the changes
+				{
+					if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
+						save_Click (sender, e); // save before restoring
+				}
+				restore_Click (sender, e);
+				
+				save_button.Visible = !isDefault ();
+
+				selectedItem = schemes.SelectedItem.ToString ();
+				database.UpdateData (Settings.ACTIVE, selectedItem);
 			}
+		}
+		
+		private void panel1_Resize (object sender, EventArgs e)
+		{
+			changeDownloaderLocation ();
+			changeNotificationLocation ();
+		}
 
-			e.DrawBackground ();
-			e.Graphics.DrawString (list_1.Items [e.Index].ToString (), e.Font, fgbrush, e.Bounds);
+		private void selectImage_Click (object sender, EventArgs e)
+		{
+			var op = new OpenFileDialog ();
+			op.DefaultExt = "png";
+			// op.Filter = "PNG (*.png)|*.png|GIF (*.gif)|*.gif";
+			op.Filter = "PNG (*.png)|*.png";
+			op.Multiselect = false;
+			if (op.ShowDialog () == DialogResult.OK)
+			{
+				imagePath.Text = op.FileName;
+				Apply_Click (sender, e);
+			}
+		}
 
-			e.DrawFocusRectangle ();
+		private void pleft_Click (object sender, EventArgs e)
+		{
+			if (align != Alignment.Left)
+			{
+				align = Alignment.Left;
+			}
+			updateAlignButton ();
+		}
+
+		private void pcenter_Click (object sender, EventArgs e)
+		{
+			if (align != Alignment.Center)
+			{
+				align = Alignment.Center;
+			}
+			updateAlignButton ();
+		}
+
+		private void pright_Click (object sender, EventArgs e)
+		{
+			if (align != Alignment.Right)
+			{
+				align = Alignment.Right;
+			}
+			updateAlignButton ();
 		}
 
 		private void opacity_slider_Scroll (object sender, ScrollEventArgs e)
@@ -1196,7 +936,7 @@ namespace Yuki_Theme.Core.Forms
 							CLI.currentTheme.WallpaperOpacity = Convert.ToInt32 (opacity_slider.Value);
 						img = Helper.SetOpacity (img2, CLI.currentTheme.WallpaperOpacity);
 						blockedNumeric = true;
-						numericUpDown1.Value = CLI.currentTheme.WallpaperOpacity;
+						opacitySlider.Value = CLI.currentTheme.WallpaperOpacity;
 						blockedNumeric = false;
 						sBox.Refresh ();
 					}
@@ -1207,7 +947,7 @@ namespace Yuki_Theme.Core.Forms
 						if (!unblockedScrool)
 							CLI.currentTheme.StickerOpacity = Convert.ToInt32 (opacity_slider.Value);
 						blockedNumeric = true;
-						numericUpDown1.Value = CLI.currentTheme.StickerOpacity;
+						opacitySlider.Value = CLI.currentTheme.StickerOpacity;
 						blockedNumeric = false;
 					}
 
@@ -1229,39 +969,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Close ();
 		}
 
-		private void initPlugin ()
-		{
-			export_button.Visible = false;
-		}
-
-		private void import_directory_Click (object sender, EventArgs e)
-		{
-			CommonOpenFileDialog co = new CommonOpenFileDialog ();
-			co.IsFolderPicker = true;
-			co.Multiselect = false;
-			CommonFileDialogResult res = co.ShowDialog ();
-			if (res == CommonFileDialogResult.Ok)
-			{
-				MessageBox.Show (
-					"Hi. You have selected the directory, so you will have to wait until the import is done. Your current theme will be changed" +
-					"on finishing import.");
-				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
-				foreach (string fl in fls)
-				{
-					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
-				}
-
-				fls = Directory.GetFiles (co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
-				foreach (string fl in fls)
-				{
-					MainParser.Parse (fl, this, false, false, ErrorExport, AskChoiceParser);
-				}
-
-				schemes.SelectedIndex = schemes.Items.Count - 1;
-			}
-		}
-
-		private void numericUpDown1_ValueChanged (object sender, EventArgs e)
+		private void opacitySlider_ValueChanged (object sender, EventArgs e)
 		{
 			if (!blockedNumeric)
 			{
@@ -1269,9 +977,9 @@ namespace Yuki_Theme.Core.Forms
 				{
 					if (img2 != null)
 					{
-						CLI.currentTheme.WallpaperOpacity = Convert.ToInt32 (numericUpDown1.Value);
+						CLI.currentTheme.WallpaperOpacity = Convert.ToInt32 (opacitySlider.Value);
 						unblockedScrool = true;
-						opacity_slider.Value = numericUpDown1.Value;
+						opacity_slider.Value = opacitySlider.Value;
 						// img = Helper.setOpacity (img2, opacity);
 						// sBox.Refresh ();
 						// localAttributes ["BackgroundImage"] ["opacity"] = opacity.ToString ();
@@ -1280,9 +988,9 @@ namespace Yuki_Theme.Core.Forms
 				{
 					if (img3 != null)
 					{
-						CLI.currentTheme.StickerOpacity = Convert.ToInt32 (numericUpDown1.Value);
+						CLI.currentTheme.StickerOpacity = Convert.ToInt32 (opacitySlider.Value);
 						unblockedScrool = true;
-						opacity_slider.Value = numericUpDown1.Value;
+						opacity_slider.Value = opacitySlider.Value;
 						// img = Helper.setOpacity (img2, opacity);
 						// sBox.Refresh ();
 						// localAttributes ["Sticker"] ["opacity"] = opacity.ToString ();
@@ -1291,6 +999,220 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
+		private void MForm_FormClosing (object sender, FormClosingEventArgs e)
+		{
+			if (nf != null)
+				nf.Dispose ();
+			if (df != null)
+				df.Dispose ();
+			database.SaveLocation (DesktopLocation);
+			CLI_Actions.ifHasImage = null;
+			CLI_Actions.ifDoesntHave = null;
+			CLI_Actions.ifHasSticker = null;
+			CLI_Actions.ifDoesntHaveSticker = null;
+			this.Dispose (true);
+		}
+
+		private void MForm_Move (object sender, EventArgs e)
+		{
+			changeDownloaderLocation ();
+			changeNotificationLocation ();
+		}
+		
+		private void MForm_SizeChanged (object sender, EventArgs e)
+		{
+			int he = ClientSize.Height - textBoxHeight;
+			sBox.Height = he;
+		}
+
+		private void save_Click (object sender, EventArgs e)
+		{
+			CLI.save (img2, img3);
+		}
+
+		public void update_Click (object sender, EventArgs e)
+		{
+			/*if (!isDefault ())
+				saveList ();*/
+			// showDownloader ();
+			if (df == null)
+				df = new DownloadForm (this);
+			if (nf == null)
+				nf = new NotificationForm ();
+			// Thread th = new Thread (new ThreadStart(df.CheckUpdate));
+			// th.Start();
+			df.CheckUpdate ();
+		}
+		
+		#endregion
+		
+		
+		#region Helper Forms
+
+		public void showDownloader ()
+		{
+			if (df == null || nf.IsDisposed)
+				df = new DownloadForm (this);
+			df.Show (this);
+			changeDownloaderLocation ();
+			if (nf != null && !nf.IsDisposed && nf.Visible)
+			{
+				nf.Visible = false;
+			}
+		}
+
+		public void changeDownloaderLocation ()
+		{
+			if (df != null && !df.IsDisposed && df.Visible)
+			{
+				df.StartPosition = FormStartPosition.Manual;
+				df.Location = new Point (this.Location.X + this.ClientRectangle.Width - 284,
+				                         this.Location.Y + this.ClientRectangle.Height - 73);
+			}
+		}
+
+		public void changeNotificationLocation ()
+		{
+			if (nf != null && !nf.IsDisposed && nf.Visible)
+			{
+				nf.StartPosition = FormStartPosition.Manual;
+				nf.Location = new Point (this.Location.X + this.ClientRectangle.Width - 306,
+				                         this.Location.Y + this.ClientRectangle.Height - notHeight);
+			}
+		}
+
+		public void ShowNotification (string title, string content)
+		{
+			if (nf == null || nf.IsDisposed)
+				nf = new NotificationForm ();
+			nf.Visible = false;
+			nf.changeContent (title, content);
+
+
+			nf.Show (this);
+
+			if (df != null && !df.IsDisposed && df.Visible)
+			{
+				df.Visible = false;
+			}
+		}
+
+		#endregion
+
+
+		#region Updates
+
+		private void updateAlignButton ()
+		{
+			pleft.BackColor = align == Alignment.Left ? bgClicked : bgDefault;
+			pcenter.BackColor = align == Alignment.Center ? bgClicked : bgDefault;
+			pright.BackColor = align == Alignment.Right ? bgClicked : bgDefault;
+			sBox.Refresh ();
+		}
+
+		public void updateBackgroundColors ()
+		{
+			this.BackColor = list_1.BackColor = save_button.BackColor = restore_button.BackColor =
+				export_button.BackColor = import_button.BackColor = settings_button.BackColor = add_button.BackColor =
+					manage_button.BackColor = import_directory.BackColor = panel1.BackColor = applyButton.BackColor =
+						selectImageButton.BackColor = clearButton.BackColor = schemes.ListBackColor = schemes.BackColor =
+							opacity_slider.BackColor = imagePath.BackColor = opacitySlider.BackColor = bgDefault;
+
+			this.ForeColor = colorLabel.ForeColor = list_1.ForeColor = backgroundColorLabel.ForeColor = check_bold.ForeColor =
+				check_italic.ForeColor = applyButton.FlatAppearance.BorderColor = selectImageButton.FlatAppearance.BorderColor =
+					clearButton.FlatAppearance.BorderColor = schemes.ForeColor = schemes.ListTextColor = opacityLabel.ForeColor =
+						imagePath.ForeColor = opacitySlider.ForeColor = fgDefault;
+
+			applyButton.FlatAppearance.MouseOverBackColor = save_button.FlatAppearance.MouseOverBackColor =
+				export_button.FlatAppearance.MouseOverBackColor = import_button.FlatAppearance.MouseOverBackColor =
+					restore_button.FlatAppearance.MouseOverBackColor = settings_button.FlatAppearance.MouseOverBackColor =
+						add_button.FlatAppearance.MouseOverBackColor = manage_button.FlatAppearance.MouseOverBackColor =
+							import_directory.FlatAppearance.MouseOverBackColor = selectImageButton.FlatAppearance.MouseOverBackColor =
+								clearButton.FlatAppearance.MouseOverBackColor = opacity_slider.BarPenColorBottom =
+									opacity_slider.BarPenColorTop =
+										opacity_slider.BarInnerColor = opacitySlider.ButtonHighlightColor = bgClicked;
+
+			schemes.BorderColor = schemes.IconColor = opacity_slider.ThumbInnerColor = opacity_slider.ThumbPenColor =
+				opacity_slider.ElapsedInnerColor = opacity_slider.ElapsedPenColorBottom =
+					opacity_slider.ElapsedPenColorTop = imagePath.BorderColor = opacitySlider.BorderColor = bgSpecial;
+
+			opacity_slider.ThumbOuterColor = fgKey;
+
+			if (OnColorUpdate != null)
+				OnColorUpdate (bgDefault, fgDefault, bgClicked);
+			fgbrush = new SolidBrush (fgDefault);
+			loadSVG ();
+			if (nf != null && !nf.IsDisposed && nf.Visible)
+				nf.NotificationForm_Shown (this, EventArgs.Empty);
+		}
+
+		private void updateCurrentItem ()
+		{
+			var str = list_1.SelectedItem.ToString ();
+			ThemeField dic = localAttributes [str];
+			SetField (ref dic);
+
+			highlighter.updateColors ();
+		}
+		
+		#endregion
+
+		
+		#region Painting
+
+		private void bgImagePaint (object sender, PaintEventArgs e)
+		{
+			if (img != null && bgImage)
+			{
+				if (oldV.Width != sBox.ClientRectangle.Width || oldV.Height != sBox.ClientRectangle.Height)
+				{
+					oldV = Helper.GetSizes (img.Size, sBox.ClientRectangle.Width, sBox.ClientRectangle.Height,
+					                        align);
+				}
+
+				e.Graphics.DrawImage (img, oldV);
+			}
+		}
+		
+		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
+		{
+			if (e.Index < 0) return;
+			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+			{
+				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
+				                           e.Index, e.State ^ DrawItemState.Selected,
+				                           e.ForeColor, bgClicked);
+			}
+
+			e.DrawBackground ();
+			e.Graphics.DrawString (list_1.Items [e.Index].ToString (), e.Font, fgbrush, e.Bounds);
+
+			e.DrawFocusRectangle ();
+		}
+		
+		#endregion
+
+		
+		#region Checkers
+
+		public bool isDefault ()
+		{
+			return CLI.currentTheme.isDefault;
+		}
+
+		private void isUpdated ()
+		{
+			RegistryKey ke =
+				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+			int inst = ke.GetValue ("install") != null ? 1 : 0;
+			if (inst == 1)
+			{
+				new ChangelogForm ().Show (this);
+				ke.DeleteValue ("install");
+			}
+		}
+		
 		private void checkEditor ()
 		{
 			import_directory.Visible = import_button.Visible =
@@ -1307,6 +1229,46 @@ namespace Yuki_Theme.Core.Forms
 
 			MForm_SizeChanged (this, EventArgs.Empty);
 		}
+		
+		#endregion
+
+		
+		#region Helper Methods
+
+		private void AddTips ()
+		{
+			
+			AddTip ( save_button, "Save");
+			AddTip ( restore_button, "Restore");
+			AddTip ( settings_button, "Settings");
+			AddTip ( export_button, "Export");
+			AddTip ( import_button, "Import");
+			AddTip ( add_button, "Add New Scheme");
+			AddTip ( manage_button, "Manage Themes");
+			AddTip (import_directory, "Import Themes");
+			
+		}
+
+		private void AddTip (Control control, string text)
+		{
+			control.MouseHover += (sender, args) =>
+			{
+				tip.Show (text, control);
+			};
+			
+			control.MouseLeave += (sender, args) =>
+			{
+				if (tip.Active)
+					tip.Hide (control);
+			};
+		}
+
+		private bool AskChoiceParser (string content, string title)
+		{
+			return MessageBox.Show (content,
+			                        title,
+			                        MessageBoxButtons.YesNo) == DialogResult.Yes;
+		}
 
 		/// <summary>
 		/// The app will track install via Google Analytics. This is necessary for me to be kept inspired. I'll switch to passive development on 1st April of 2022, but it doesn't mean that I'll close project. The installs are necessary to make me inspired for continue the development. 
@@ -1320,8 +1282,8 @@ namespace Yuki_Theme.Core.Forms
 			showGoogleAnalytics (Helper.bgColor, Helper.fgColor, Helper.bgClick, this);
 			TrackInstall ();
 			// FontManager.SetAllControlsFont (this.Controls);
-			FontManager.SetControlFont (label2, 1);
-			FontManager.SetControlFont (label1, 1);
+			FontManager.SetControlFont (backgroundColorLabel, 1);
+			FontManager.SetControlFont (colorLabel, 1);
 			FontManager.SetControlFont (check_bold, 1);
 			FontManager.SetControlFont (check_italic, 1);
 		}
@@ -1386,6 +1348,25 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
+		private void SetField (ref ThemeField dic)
+		{
+			if (dic.Foreground != null)
+				dic.Foreground = TranslateToHex (colorButton.BackColor);
+			if (dic.Background != null)
+				dic.Background = TranslateToHex (bgButton.BackColor);
+			if (dic.Bold != null)
+				dic.Bold = check_bold.Checked;
+			if (dic.Italic != null)
+				dic.Italic = check_italic.Checked;
+		}
+
+		private string TranslateToHex (Color clr)
+		{
+			return ColorTranslator.ToHtml (clr);
+		}
+		
+
+		#endregion
 		
 	}
 

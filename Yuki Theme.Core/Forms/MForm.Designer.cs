@@ -34,8 +34,8 @@
 			this.list_1 = new System.Windows.Forms.ListBox ();
 			this.colorButton = new System.Windows.Forms.Button ();
 			this.bgButton = new System.Windows.Forms.Button ();
-			this.label1 = new System.Windows.Forms.Label ();
-			this.label2 = new System.Windows.Forms.Label ();
+			this.colorLabel = new System.Windows.Forms.Label ();
+			this.backgroundColorLabel = new System.Windows.Forms.Label ();
 			this.bottomPanel = new System.Windows.Forms.Panel ();
 			this.select_btn = new System.Windows.Forms.Button ();
 			this.close_btn = new System.Windows.Forms.Button ();
@@ -47,12 +47,12 @@
 			this.pleft = new System.Windows.Forms.Button ();
 			this.pcenter = new System.Windows.Forms.Button ();
 			this.pright = new System.Windows.Forms.Button ();
-			this.numericUpDown1 = new Yuki_Theme.Core.Controls.FlatNumericUpDown ();
-			this.label3 = new System.Windows.Forms.Label ();
+			this.opacitySlider = new Yuki_Theme.Core.Controls.FlatNumericUpDown ();
+			this.opacityLabel = new System.Windows.Forms.Label ();
 			this.opacity_slider = new Yuki_Theme.Core.Controls.Slider ();
-			this.button7 = new System.Windows.Forms.Button ();
-			this.button11 = new System.Windows.Forms.Button ();
-			this.button10 = new System.Windows.Forms.Button ();
+			this.clearButton = new System.Windows.Forms.Button ();
+			this.selectImageButton = new System.Windows.Forms.Button ();
+			this.applyButton = new System.Windows.Forms.Button ();
 			this.imagePath = new Yuki_Theme.Core.Controls.CustomText ();
 			this.colorEditor = new System.Windows.Forms.Panel ();
 			this.check_italic = new System.Windows.Forms.CheckBox ();
@@ -74,7 +74,7 @@
 			this.editorp2.SuspendLayout ();
 			this.imageEditor.SuspendLayout ();
 			this.alignpanel.SuspendLayout ();
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit ();
+			((System.ComponentModel.ISupportInitialize)(this.opacitySlider)).BeginInit ();
 			this.colorEditor.SuspendLayout ();
 			this.editorpanel.SuspendLayout ();
 			this.SuspendLayout ();
@@ -115,25 +115,25 @@
 			this.bgButton.UseVisualStyleBackColor = true;
 			this.bgButton.Click += new System.EventHandler (this.bgButton_Click);
 			// 
-			// label1
+			// colorLabel
 			// 
-			this.label1.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label1.Location = new System.Drawing.Point (233, 10);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size (55, 35);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Color";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.colorLabel.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.colorLabel.Location = new System.Drawing.Point (233, 10);
+			this.colorLabel.Name = "colorLabel";
+			this.colorLabel.Size = new System.Drawing.Size (55, 35);
+			this.colorLabel.TabIndex = 3;
+			this.colorLabel.Text = "Color";
+			this.colorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// label2
+			// backgroundColorLabel
 			// 
-			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label2.Location = new System.Drawing.Point (20, 10);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size (145, 35);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Background Color";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.backgroundColorLabel.Font = new System.Drawing.Font ("Book Antiqua", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.backgroundColorLabel.Location = new System.Drawing.Point (20, 10);
+			this.backgroundColorLabel.Name = "backgroundColorLabel";
+			this.backgroundColorLabel.Size = new System.Drawing.Size (145, 35);
+			this.backgroundColorLabel.TabIndex = 4;
+			this.backgroundColorLabel.Text = "Background Color";
+			this.backgroundColorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// bottomPanel
 			// 
@@ -239,12 +239,12 @@
 			// imageEditor
 			// 
 			this.imageEditor.Controls.Add (this.alignpanel);
-			this.imageEditor.Controls.Add (this.numericUpDown1);
-			this.imageEditor.Controls.Add (this.label3);
+			this.imageEditor.Controls.Add (this.opacitySlider);
+			this.imageEditor.Controls.Add (this.opacityLabel);
 			this.imageEditor.Controls.Add (this.opacity_slider);
-			this.imageEditor.Controls.Add (this.button7);
-			this.imageEditor.Controls.Add (this.button11);
-			this.imageEditor.Controls.Add (this.button10);
+			this.imageEditor.Controls.Add (this.clearButton);
+			this.imageEditor.Controls.Add (this.selectImageButton);
+			this.imageEditor.Controls.Add (this.applyButton);
 			this.imageEditor.Controls.Add (this.imagePath);
 			this.imageEditor.Location = new System.Drawing.Point (3, 3);
 			this.imageEditor.Name = "imageEditor";
@@ -299,26 +299,26 @@
 			this.pright.UseVisualStyleBackColor = true;
 			this.pright.Click += new System.EventHandler (this.pright_Click);
 			// 
-			// numericUpDown1
+			// opacitySlider
 			// 
-			this.numericUpDown1.BackColor = System.Drawing.Color.Black;
-			this.numericUpDown1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.numericUpDown1.ForeColor = System.Drawing.Color.Silver;
-			this.numericUpDown1.Location = new System.Drawing.Point (225, 48);
-			this.numericUpDown1.Name = "numericUpDown1";
-			this.numericUpDown1.Size = new System.Drawing.Size (43, 20);
-			this.numericUpDown1.TabIndex = 9;
-			this.numericUpDown1.ValueChanged += new System.EventHandler (this.numericUpDown1_ValueChanged);
+			this.opacitySlider.BackColor = System.Drawing.Color.Black;
+			this.opacitySlider.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.opacitySlider.ForeColor = System.Drawing.Color.Silver;
+			this.opacitySlider.Location = new System.Drawing.Point (225, 48);
+			this.opacitySlider.Name = "opacitySlider";
+			this.opacitySlider.Size = new System.Drawing.Size (43, 20);
+			this.opacitySlider.TabIndex = 9;
+			this.opacitySlider.ValueChanged += new System.EventHandler (this.opacitySlider_ValueChanged);
 			// 
-			// label3
+			// opacityLabel
 			// 
-			this.label3.Font = new System.Drawing.Font ("Microsoft Sans Serif", 10F);
-			this.label3.Location = new System.Drawing.Point (159, 46);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size (68, 21);
-			this.label3.TabIndex = 8;
-			this.label3.Text = "Opacity:";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.opacityLabel.Font = new System.Drawing.Font ("Microsoft Sans Serif", 10F);
+			this.opacityLabel.Location = new System.Drawing.Point (159, 46);
+			this.opacityLabel.Name = "opacityLabel";
+			this.opacityLabel.Size = new System.Drawing.Size (68, 21);
+			this.opacityLabel.TabIndex = 8;
+			this.opacityLabel.Text = "Opacity:";
+			this.opacityLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// opacity_slider
 			// 
@@ -357,46 +357,46 @@
 			this.opacity_slider.Value = new decimal (new int [] { 10, 0, 0, 0 });
 			this.opacity_slider.Scroll += new System.Windows.Forms.ScrollEventHandler (this.opacity_slider_Scroll);
 			// 
-			// button7
+			// clearButton
 			// 
-			this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button7.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.button7.Location = new System.Drawing.Point (89, 45);
-			this.button7.Name = "button7";
-			this.button7.Size = new System.Drawing.Size (67, 23);
-			this.button7.TabIndex = 6;
-			this.button7.Text = "Clear";
-			this.button7.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.button7.UseVisualStyleBackColor = true;
-			this.button7.Click += new System.EventHandler (this.button7_Click_1);
+			this.clearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.clearButton.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
+			this.clearButton.Location = new System.Drawing.Point (89, 45);
+			this.clearButton.Name = "clearButton";
+			this.clearButton.Size = new System.Drawing.Size (67, 23);
+			this.clearButton.TabIndex = 6;
+			this.clearButton.Text = "Clear";
+			this.clearButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.clearButton.UseVisualStyleBackColor = true;
+			this.clearButton.Click += new System.EventHandler (this.Clear_Click);
 			// 
-			// button11
+			// selectImageButton
 			// 
-			this.button11.BackColor = System.Drawing.Color.Chocolate;
-			this.button11.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-			this.button11.FlatAppearance.BorderSize = 0;
-			this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button11.Font = new System.Drawing.Font ("Book Antiqua", 12F);
-			this.button11.Location = new System.Drawing.Point (237, 12);
-			this.button11.Name = "button11";
-			this.button11.Size = new System.Drawing.Size (23, 23);
-			this.button11.TabIndex = 5;
-			this.button11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.button11.UseVisualStyleBackColor = false;
-			this.button11.Click += new System.EventHandler (this.button11_Click);
+			this.selectImageButton.BackColor = System.Drawing.Color.Chocolate;
+			this.selectImageButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.selectImageButton.FlatAppearance.BorderSize = 0;
+			this.selectImageButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.selectImageButton.Font = new System.Drawing.Font ("Book Antiqua", 12F);
+			this.selectImageButton.Location = new System.Drawing.Point (237, 12);
+			this.selectImageButton.Name = "selectImageButton";
+			this.selectImageButton.Size = new System.Drawing.Size (23, 23);
+			this.selectImageButton.TabIndex = 5;
+			this.selectImageButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.selectImageButton.UseVisualStyleBackColor = false;
+			this.selectImageButton.Click += new System.EventHandler (this.selectImage_Click);
 			// 
-			// button10
+			// applyButton
 			// 
-			this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button10.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.button10.Location = new System.Drawing.Point (16, 45);
-			this.button10.Name = "button10";
-			this.button10.Size = new System.Drawing.Size (67, 23);
-			this.button10.TabIndex = 4;
-			this.button10.Text = "Apply";
-			this.button10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			this.button10.UseVisualStyleBackColor = true;
-			this.button10.Click += new System.EventHandler (this.Apply_Click);
+			this.applyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.applyButton.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
+			this.applyButton.Location = new System.Drawing.Point (16, 45);
+			this.applyButton.Name = "applyButton";
+			this.applyButton.Size = new System.Drawing.Size (67, 23);
+			this.applyButton.TabIndex = 4;
+			this.applyButton.Text = "Apply";
+			this.applyButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.applyButton.UseVisualStyleBackColor = true;
+			this.applyButton.Click += new System.EventHandler (this.Apply_Click);
 			// 
 			// imagePath
 			// 
@@ -413,8 +413,8 @@
 			this.colorEditor.Controls.Add (this.check_bold);
 			this.colorEditor.Controls.Add (this.colorButton);
 			this.colorEditor.Controls.Add (this.bgButton);
-			this.colorEditor.Controls.Add (this.label1);
-			this.colorEditor.Controls.Add (this.label2);
+			this.colorEditor.Controls.Add (this.colorLabel);
+			this.colorEditor.Controls.Add (this.backgroundColorLabel);
 			this.colorEditor.Location = new System.Drawing.Point (3, 3);
 			this.colorEditor.Name = "colorEditor";
 			this.colorEditor.Size = new System.Drawing.Size (497, 57);
@@ -484,7 +484,7 @@
 			this.manage_button.Size = new System.Drawing.Size (20, 20);
 			this.manage_button.TabIndex = 12;
 			this.manage_button.UseVisualStyleBackColor = false;
-			this.manage_button.Click += new System.EventHandler (this.button5_Click);
+			this.manage_button.Click += new System.EventHandler (this.manage_Click);
 			// 
 			// save_button
 			// 
@@ -622,7 +622,7 @@
 			this.imageEditor.ResumeLayout (false);
 			this.imageEditor.PerformLayout ();
 			this.alignpanel.ResumeLayout (false);
-			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit ();
+			((System.ComponentModel.ISupportInitialize)(this.opacitySlider)).EndInit ();
 			this.colorEditor.ResumeLayout (false);
 			this.editorpanel.ResumeLayout (false);
 			this.ResumeLayout (false);
@@ -634,7 +634,7 @@
 
 		private System.Windows.Forms.Panel alignpanel;
 
-		private Yuki_Theme.Core.Controls.FlatNumericUpDown numericUpDown1;
+		private Yuki_Theme.Core.Controls.FlatNumericUpDown opacitySlider;
 
 		private System.Windows.Forms.Button import_directory;
 
@@ -643,14 +643,14 @@
 
 		private System.Windows.Forms.Panel bottomPanel;
 
-		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label opacityLabel;
 
 		private Yuki_Theme.Core.Controls.Slider opacity_slider;
 
 		private System.Windows.Forms.Button import_button;
 		private System.Windows.Forms.Button export_button;
 
-		private System.Windows.Forms.Button button7;
+		private System.Windows.Forms.Button clearButton;
 
 		private Yuki_Theme.Core.Controls.CustomText imagePath;
 
@@ -658,8 +658,8 @@
 		private System.Windows.Forms.Button pcenter;
 		private System.Windows.Forms.Button pleft;
 		
-		private System.Windows.Forms.Button button10;
-		private System.Windows.Forms.Button button11;
+		private System.Windows.Forms.Button applyButton;
+		private System.Windows.Forms.Button selectImageButton;
 
 		private System.Windows.Forms.Panel imageEditor;
 
@@ -689,9 +689,9 @@
 
 		private System.Windows.Forms.Button bgButton;
 
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label backgroundColorLabel;
 
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label colorLabel;
 
 		private System.Windows.Forms.ListBox list_1;
 

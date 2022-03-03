@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
@@ -16,6 +17,7 @@ using FlowDirection = System.Windows.FlowDirection;
 using FontFamily = System.Drawing.FontFamily;
 using FontStyle = System.Drawing.FontStyle;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
 namespace Yuki_Theme.Core.Forms
@@ -29,6 +31,8 @@ namespace Yuki_Theme.Core.Forms
 		private int           oldIndex = -1;
 		private Font          fdef, fcat;
 
+		private Image expandImage, collapseImage;
+		
 		public ThemeManager (MForm fm)
 		{
 			InitializeComponent ();
@@ -40,10 +44,48 @@ namespace Yuki_Theme.Core.Forms
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
 			CLI_Actions.onRename = onRename;
+			scheme.MouseClick += CheckFolding;
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
-		private void button2_Click (object sender, EventArgs e)
+		public bool askDelete (string content, string title)
+		{
+			return MessageBox.Show (content, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
+		}
+
+		public object afterAsk (string sel)
+		{
+			ListViewItem sifr = scheme.SelectedItems [0];
+			if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
+			{
+				form.schemes.SelectedIndex = 0;
+			}
+
+			return (object)sifr;
+		}
+
+		public void afterDelete (string sel, object sifr)
+		{
+			scheme.Items.Remove ((ListViewItem)sifr);
+			form.schemes.Items.Remove (sel);
+		}
+
+		public void onRename (string from, string to)
+		{
+			ListViewItem res = scheme.Items.Find (from, true) [0];
+			res.Text = ReItem.THEME_WHITE_SPACE + to;
+			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
+			
+			CLI.oldThemeList.Add (to, CLI.oldThemeList[from]);
+			CLI.isDefaultTheme.Add (to, false);
+			
+			CLI.isDefaultTheme.Remove (from);
+			CLI.oldThemeList.Remove (from);
+		}
+
+		#region Events
+
+		private void close_Click (object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.OK;
 		}
@@ -84,188 +126,12 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		public bool askDelete (string content, string title)
-		{
-			return MessageBox.Show (content, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
-		}
-
-		public object afterAsk (string sel)
-		{
-			ListViewItem sifr = scheme.SelectedItems [0];
-			if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
-			{
-				form.schemes.SelectedIndex = 0;
-			}
-
-			return (object)sifr;
-		}
-
-		public void afterDelete (string sel, object sifr)
-		{
-			scheme.Items.Remove ((ListViewItem)sifr);
-			form.schemes.Items.Remove (sel);
-		}
-
-		public void onRename (string from, string to)
-		{
-			ListViewItem res = scheme.Items.Find (from, true) [0];
-			res.Text = ReItem.THEME_WHITE_SPACE + to;
-			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
-			
-			CLI.oldThemeList.Add (to, CLI.oldThemeList[from]);
-			CLI.isDefaultTheme.Add (to, false);
-			
-			CLI.isDefaultTheme.Remove (from);
-			CLI.oldThemeList.Remove (from);
-		}
-
 		private void remove_Click (object sender, EventArgs e)
 		{
 			if (scheme.SelectedItems.Count > 0)
 			{
 				CLI.remove (scheme.SelectedItems [0].Text.Substring (7), askDelete, afterAsk, afterDelete);
 			}
-		}
-
-		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
-		{
-			var a = Assembly.GetExecutingAssembly ();
-			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
-			if (scheme.SelectedItems.Count > 0)
-			{
-				if (!(scheme.SelectedItems [0] is ReItem)) return;
-				if (oldIndex != -1 && oldIndex < scheme.Items.Count)
-				{
-					scheme.Items [oldIndex].BackColor = cbg;
-				}
-
-				oldIndex = scheme.SelectedIndices [0];
-				ReItem re = (ReItem)scheme.SelectedItems [0];
-				re.BackColor = cbgclick;
-				if (re.rgroupItem != null && !re.rgroupItem.Name.Equals ("default", StringComparison.OrdinalIgnoreCase)
-				                          && !re.rgroupItem.Name.Equals (
-					                             "doki theme", StringComparison.OrdinalIgnoreCase))
-				{
-					remove.Visible = rename_btn.Visible = regenerate.Visible = true;
-				}
-			}
-		}
-
-		private void ThemeManager_Shown (object sender, EventArgs e)
-		{
-			add.BackColor = scheme.BackColor = BackColor = button2.BackColor = cbg = Helper.bgColor;
-
-			add.ForeColor = remove.ForeColor = regenerate.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
-
-			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor =
-				regenerate.FlatAppearance.MouseOverBackColor =
-					rename_btn.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor = Helper.bgClick;
-
-			panel1.BackColor = Helper.bgBorder;
-			panel2.BackColor = Helper.fgKeyword;
-			
-			bg = new SolidBrush (BackColor);
-			fg = new SolidBrush (ForeColor);
-			fgsp = new SolidBrush (Helper.fgKeyword);
-			borderBrush = new SolidBrush (Helper.bgBorder);
-			
-			cbgclick = Helper.bgClick;
-			loadSVG ();
-			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
-		}
-
-		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
-		{
-			e.Graphics.FillRectangle (bg, e.Bounds);
-
-			e.Graphics.DrawString (e.Header.Text, e.Font, fg, e.Bounds);
-		}
-
-		private void scheme_DrawItem (object sender, DrawListViewItemEventArgs e)
-		{
-			if (e.Item is ReItem)
-			{
-				ReItem re = (ReItem)e.Item;
-				e.Graphics.FillRectangle (re.isGroup ? bg : new SolidBrush (re.BackColor), e.Bounds);
-
-				// TextRenderer.GetIntTextFormatFlags(flags)
-
-				// e.DrawText();
-				Rectangle rec = e.Bounds;
-				if (re.isGroup)
-				{
-					Size sz = MeasureString (re.Text, re.Font);
-					rec = new Rectangle (((e.Bounds.Width - 10) / 2) - (sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
-				} else
-				{
-
-					Brush brush = re.isOld ? borderBrush : fgsp;
-					int thickness = 10;
-					int thickness_internal = 2;
-					e.Graphics.FillPolygon (
-						brush,
-						new PointF []
-						{
-							new PointF (e.Bounds.X, e.Bounds.Y), new PointF (e.Bounds.X + thickness, e.Bounds.Y),
-							new PointF (e.Bounds.X + thickness, e.Bounds.Y + e.Bounds.Height),
-							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height),
-							new PointF (e.Bounds.X, e.Bounds.Y + e.Bounds.Height - thickness_internal),
-							new PointF (e.Bounds.X + thickness - thickness_internal, e.Bounds.Y + e.Bounds.Height - thickness_internal),
-							new PointF (e.Bounds.X + thickness - thickness_internal, e.Bounds.Y + thickness_internal),
-							new PointF (e.Bounds.X, e.Bounds.Y + thickness_internal),
-						});
-				}
-
-				rec.Y += (rec.Height - scheme.Font.Height); // To draw in center
-				e.Graphics.DrawString (re.Text, re.isGroup ? fcat : fdef, re.isGroup ? fgsp : fg, rec);
-			} else
-				e.DrawDefault = true;
-		}
-
-		private void ThemeManager_Load (object sender, EventArgs e)
-		{
-		}
-
-		private void scheme_ItemSelectionChanged (object sender, ListViewItemSelectionChangedEventArgs e)
-		{
-		}
-
-		public void sortItems ()
-		{
-			scheme.Items.Clear ();
-			foreach (ReItem item in groups)
-			{
-				item.SortChildren ();
-			}
-
-			foreach (ReItem reItem in groups)
-			{
-				scheme.Items.Add (reItem);
-				scheme.Items.AddRange (reItem.childs.ToArray ());
-			}
-		}
-
-		private void loadSVG ()
-		{
-			var a = Assembly.GetExecutingAssembly ();
-			string adda = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
-			Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
-			Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
-			Helper.RenderSvg (regenerate, Helper.LoadSvg ("cwmPermissionEdit", a), false, Size.Empty, true, Helper.fgKeyword);
-		}
-
-		private Size MeasureString (string candidate, Font fnt)
-		{
-			var formatted = new FormattedText (
-				candidate, CultureInfo.CurrentCulture,
-				FlowDirection.LeftToRight,
-				new Typeface (new System.Windows.Media.FontFamily (fnt.FontFamily.Name), FontStyles.Normal, FontWeights.Normal,
-				              FontStretches.Normal),
-				fnt.Size, System.Windows.Media.Brushes.Black, new NumberSubstitution (), TextFormattingMode.Display
-			);
-
-			return new Size (Convert.ToInt32 (formatted.Width), Convert.ToInt32 (formatted.Height));
 		}
 
 		private void rename_btn_Click (object sender, EventArgs e)
@@ -332,5 +198,221 @@ namespace Yuki_Theme.Core.Forms
 			MessageBox.Show ($"{name} has been regenerated to {format} format", "Regeneration compeleted");
 			
 		}
+		
+		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
+		{
+			var a = Assembly.GetExecutingAssembly ();
+			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
+			if (scheme.SelectedItems.Count > 0)
+			{
+				if (!(scheme.SelectedItems [0] is ReItem)) return;
+				if (oldIndex != -1 && oldIndex < scheme.Items.Count)
+				{
+					scheme.Items [oldIndex].BackColor = cbg;
+				}
+
+				oldIndex = scheme.SelectedIndices [0];
+				ReItem re = (ReItem)scheme.SelectedItems [0];
+				re.BackColor = cbgclick;
+				if (re.ParentGroup != null && !re.ParentGroup.Name.Equals ("default", StringComparison.OrdinalIgnoreCase)
+				                          && !re.ParentGroup.Name.Equals (
+					                             "doki theme", StringComparison.OrdinalIgnoreCase))
+				{
+					remove.Visible = rename_btn.Visible = regenerate.Visible = true;
+				}
+			}
+		}
+
+		private void ThemeManager_Shown (object sender, EventArgs e)
+		{
+			add.BackColor = scheme.BackColor = BackColor = closeButton.BackColor = mask_1.BackColor = mask_2.BackColor = cbg = Helper.bgColor;
+
+			add.ForeColor = remove.ForeColor = regenerate.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
+
+			add.FlatAppearance.MouseOverBackColor = remove.FlatAppearance.MouseOverBackColor =
+				regenerate.FlatAppearance.MouseOverBackColor =
+					rename_btn.FlatAppearance.MouseOverBackColor = closeButton.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+
+			panel1.BackColor = Helper.bgBorder;
+			panel2.BackColor = panel2_2.BackColor = Helper.fgKeyword;
+			
+			bg = new SolidBrush (BackColor);
+			fg = new SolidBrush (ForeColor);
+			fgsp = new SolidBrush (Helper.fgKeyword);
+			borderBrush = new SolidBrush (Helper.bgBorder);
+			
+			cbgclick = Helper.bgClick;
+			loadSVG ();
+			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
+		}
+
+		private void ThemeManager_Load (object sender, EventArgs e)
+		{
+		}
+
+		private void scheme_ItemSelectionChanged (object sender, ListViewItemSelectionChangedEventArgs e)
+		{
+		}
+
+		private void ThemeManager_FormClosing (object sender, FormClosingEventArgs e)
+		{
+			expandImage?.Dispose ();
+			collapseImage?.Dispose ();
+		}
+		
+		#endregion
+
+		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
+		{
+			e.Graphics.FillRectangle (bg, e.Bounds);
+
+			e.Graphics.DrawString (e.Header.Text, e.Font, fg, e.Bounds);
+		}
+
+		private void scheme_DrawItem (object sender, DrawListViewItemEventArgs e)
+		{
+			if (e.Item is ReItem)
+			{
+				ReItem re = (ReItem)e.Item;
+				e.Graphics.FillRectangle (re.isGroup ? bg : new SolidBrush (re.BackColor), e.Bounds);
+				
+				Rectangle rec = e.Bounds;
+				if (re.isGroup)
+				{
+					Size sz = MeasureString (re.Text, re.Font);
+					rec = new Rectangle (((e.Bounds.Width - 10) / 2) - (sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+				} else
+				{
+
+					Brush brush = re.isOld ? borderBrush : fgsp;
+					int thickness = 10;
+					int thickness_internal = 2;
+					e.Graphics.FillPolygon (brush, GetThemeFigure (re.isOld, e.Bounds, thickness, thickness_internal));
+				}
+
+				rec.Y += (rec.Height - scheme.Font.Height); // To draw in center
+				e.Graphics.DrawString (re.Text, re.isGroup ? fcat : fdef, re.isGroup ? fgsp : fg, rec);
+				if (re.isGroup)
+				{
+					Image imgToDraw = null;
+					if (re.isHidden)
+					{
+						imgToDraw = expandImage;
+					} else
+					{
+						imgToDraw = collapseImage;
+					}
+
+					e.Graphics.DrawImage (imgToDraw, new System.Drawing.Point (e.Bounds.Width - (fcat.Height + 7), rec.Y));
+				}
+			} else
+				e.DrawDefault = true;
+		}
+
+		public void ResetList ()
+		{
+			List <ReItem> items = new List <ReItem> ();
+			foreach (ReItem group in groups)
+			{
+				if (!group.isHidden)
+					group.SortChildren ();
+			}
+
+			foreach (ReItem reItem in groups)
+			{
+				items.Add (reItem);
+				if (!reItem.isHidden)
+					items.AddRange (reItem.children.ToArray ());
+			}
+
+			scheme.Items.Clear ();
+			scheme.Items.AddRange (items.ToArray ());
+		}
+
+		private void loadSVG ()
+		{
+			var a = Assembly.GetExecutingAssembly ();
+			string adda = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			Helper.RenderSvg (add, Helper.LoadSvg ("add" + adda, a));
+			Helper.RenderSvg (remove, Helper.LoadSvg ("remove" + adda, a));
+			Helper.RenderSvg (rename_btn, Helper.LoadSvg ("edit" + adda, a));
+			Helper.RenderSvg (regenerate, Helper.LoadSvg ("cwmPermissionEdit", a), false, Size.Empty, true, Helper.fgKeyword);
+
+			Size size = new Size (fcat.Height, fcat.Height);
+			expandImage = Helper.RenderSvg (size, Helper.LoadSvg ("findAndShowNextMatches" + adda, a), false, default, false, default);
+
+			collapseImage = Helper.RenderSvg (size, Helper.LoadSvg ("findAndShowPrevMatches" + adda, a), false, default, false,
+			                                  default);
+
+		}
+
+		private Size MeasureString (string candidate, Font fnt)
+		{
+			var formatted = new FormattedText (
+				candidate, CultureInfo.CurrentCulture,
+				FlowDirection.LeftToRight,
+				new Typeface (new System.Windows.Media.FontFamily (fnt.FontFamily.Name), FontStyles.Normal, FontWeights.Normal,
+				              FontStretches.Normal),
+				fnt.Size, System.Windows.Media.Brushes.Black, new NumberSubstitution (), TextFormattingMode.Display
+			);
+
+			return new Size (Convert.ToInt32 (formatted.Width), Convert.ToInt32 (formatted.Height));
+		}
+
+		private void CheckFolding (object sender, MouseEventArgs e)
+		{
+			if (scheme.SelectedIndices.Count == 1 && scheme.SelectedIndices [0] >= 0 && scheme.SelectedItems[0] is ReItem)
+			{
+				ReItem re = (ReItem) scheme.SelectedItems [0];
+				if (re.isGroup && e.X > scheme.Columns[0].Width - (fcat.Height + 14))
+				{
+					re.isHidden = !re.isHidden;
+					ResetList ();
+					scheme.Invalidate();
+					
+				}
+			}
+		}
+
+		private PointF [] GetThemeFigure (bool isOld, Rectangle Bounds, int thickness, int thickness_internal)
+		{
+			if (isOld)
+				return GetOldThemeFigure (Bounds, thickness, thickness_internal);
+			else
+				return GetNewThemeFigure (Bounds, thickness, thickness_internal);
+		}
+
+		private PointF[] GetOldThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
+		{
+			return new PointF []
+			{
+				new PointF (Bounds.X, Bounds.Y), new PointF (Bounds.X + thickness, Bounds.Y),
+				new PointF (Bounds.X + thickness, Bounds.Y + Bounds.Height),
+				new PointF (Bounds.X, Bounds.Y + Bounds.Height),
+				new PointF (Bounds.X, Bounds.Y + Bounds.Height - thickness_internal),
+				new PointF (Bounds.X + thickness - thickness_internal, Bounds.Y + Bounds.Height - thickness_internal),
+				new PointF (Bounds.X + thickness - thickness_internal, Bounds.Y + thickness_internal),
+				new PointF (Bounds.X, Bounds.Y + thickness_internal),
+			};
+		}
+
+		private PointF[] GetNewThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
+		{
+			return new PointF []
+			{
+				new PointF (Bounds.X, Bounds.Y), new PointF (Bounds.X + thickness, Bounds.Y),
+				new PointF (Bounds.X + thickness, Bounds.Y + Bounds.Height),
+				new PointF (Bounds.X, Bounds.Y + Bounds.Height),
+				new PointF (Bounds.X, Bounds.Y + Bounds.Height - thickness_internal),
+				new PointF (Bounds.X + thickness - thickness_internal, Bounds.Y + Bounds.Height - thickness_internal),
+				new PointF (Bounds.X + thickness - thickness_internal, Bounds.Y + thickness_internal),
+				new PointF (Bounds.X, Bounds.Y + thickness_internal),
+				new PointF (Bounds.X, Bounds.Y + thickness_internal * 3),
+				new PointF (Bounds.X + thickness - thickness_internal * 2.5f, Bounds.Y + thickness_internal * 3),
+				new PointF (Bounds.X + thickness - thickness_internal * 2.5f, Bounds.Y + Bounds.Height - thickness_internal * 3),
+				new PointF (Bounds.X, Bounds.Y + Bounds.Height - thickness_internal * 3),
+			};
+		}
+		
 	}
 }

@@ -22,6 +22,7 @@ using Yuki_Theme.Core.Forms;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
+using CustomList = Yuki_Theme_Plugin.Controls.DockStyles.CustomList;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
 using Timer = System.Windows.Forms.Timer;
 
