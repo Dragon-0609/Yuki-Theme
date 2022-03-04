@@ -6,6 +6,7 @@ Added to `Plugin`:
 1. Change code completion of the IDE.
 2. Highlighting of brackets and other pair words (begin-end and etc.).
 3. Improve Theme Switcher
+4. Context menu of tab: `Open in Explorer`
 
 Added to both:
 1. Old/New Theme format
