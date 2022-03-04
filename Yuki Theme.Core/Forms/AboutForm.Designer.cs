@@ -51,6 +51,7 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel13 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel14 = new System.Windows.Forms.LinkLabel ();
 			this.linkLabel15 = new System.Windows.Forms.LinkLabel ();
+			this.changelog_link = new System.Windows.Forms.LinkLabel ();
 			((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit ();
 			this.panel1.SuspendLayout ();
 			this.SuspendLayout ();
@@ -131,6 +132,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label4
 			// 
+			this.label4.Font = new System.Drawing.Font ("Book Antiqua", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
 			this.label4.Location = new System.Drawing.Point (6, 242);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size (75, 26);
@@ -352,11 +354,28 @@ namespace Yuki_Theme.Core.Forms
 			this.linkLabel15.VisitedLinkColor = System.Drawing.Color.Black;
 			this.linkLabel15.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.linkLabel15_LinkClicked);
 			// 
+			// changelog_link
+			// 
+			this.changelog_link.ActiveLinkColor = System.Drawing.Color.FromArgb (((int) (((byte) (125)))), ((int) (((byte) (125)))), ((int) (((byte) (125)))));
+			this.changelog_link.Font = new System.Drawing.Font ("Book Antiqua", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.changelog_link.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+			this.changelog_link.LinkColor = System.Drawing.Color.Black;
+			this.changelog_link.Location = new System.Drawing.Point (0, 290);
+			this.changelog_link.Margin = new System.Windows.Forms.Padding (3);
+			this.changelog_link.Name = "changelog_link";
+			this.changelog_link.Size = new System.Drawing.Size (81, 31);
+			this.changelog_link.TabIndex = 20;
+			this.changelog_link.TabStop = true;
+			this.changelog_link.Text = "Changelog";
+			this.changelog_link.VisitedLinkColor = System.Drawing.Color.Black;
+			this.changelog_link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler (this.changelog_link_LinkClicked);
+			// 
 			// AboutForm
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size (312, 504);
 			this.ControlBox = false;
+			this.Controls.Add (this.changelog_link);
 			this.Controls.Add (this.panel1);
 			this.Controls.Add (this.linkLabel5);
 			this.Controls.Add (this.label4);
@@ -378,6 +397,8 @@ namespace Yuki_Theme.Core.Forms
 			this.panel1.PerformLayout ();
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.LinkLabel changelog_link;
 
 		private System.Windows.Forms.LinkLabel linkLabel15;
 

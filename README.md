@@ -48,6 +48,7 @@ If you use program version, you can change color syntax of the IDE, but it has l
 - [ ] Can set sticker
 - [ ] Can change color of UI parts
 - [x] You have to restart PascalABC.NET to change theme
+- [ ] Can change icons of the UI
 
 `Plugin` version:
 - [x] Can set background image
@@ -55,6 +56,7 @@ If you use program version, you can change color syntax of the IDE, but it has l
 - [x] Can change color of UI parts
 - [x] Easily change theme at runtime
 - [x] Name in the status bar of Pascal
+- [x] Can change icons of the UI
 
 
 Without plugin:
@@ -75,36 +77,46 @@ With plugin:
 - [Custom Themes](#custom-themes)
 
 ### Features for plugin
-In the 4th version you can easily change theme by using `switch theme`. To use it, press <code>Ctrl + `</code> (below Esc) in Pascal. After that small panel will appear on the center.
+#### Switch theme
+You can easily change theme by using `switch theme`. To use it, press <code>Ctrl + `</code> (below Esc) in Pascal. After that small panel will appear on the center.
 
 Also, you can easily hide background image and sticker by pressing `Alt + A`. To show them, just press `Alt + A` again. To easily enter to `Yuki Theme` window, press `Alt + S`.
 
+#### Icons
+Icons of the IDE are changed to JetBrains' icons. 
+
+#### ToolBar Camouflage
+You can hide or align to right any icon from the toolbar. To do this, open `Сервис -> Настройки`. After that choose `Yuki Theme`. Next press to `Toolbar`. Finally, here you can hide or align any icon.
+
+![photo](./Screenshots/toolbar.png)
 
 ### Configuration
 
 You can access the settings menu by clicking `Settings` button. Here's some fields, that you can set:
 
 - [Path to PascalABC.NET](#path-to-pascalabcnet)
-- [Active Scheme](#active-scheme)
-- [Remember Active Scheme](#remember-active-scheme)
 - [Ask if there are other themes in PascalABC directory](#ask-if-there-are-other-themes-in-pascalabc-directory)
 - [Do action, if there are other themes](#do-action-if-there-are-other-themes)
 - [Setting Mode](#setting-mode)
 - [Check Update](#check-update)
+- [Show Background Image](#show-background-image)
+- [Sticker](#sticker)
+- [Ask to save](#ask-to-save)
 
-#### Path to PascalABC.NET (You don't need it in `plugin` version):
+#### Path to PascalABC.NET 
+(You don't need it in `plugin` version):
+
 It's necessary to export the scheme to the IDE.
 
-#### Active Scheme
-It will be shown in next program opening.
+#### Ask if there are other themes in PascalABC directory
 
-#### Remember Active Scheme
-It sets current scheme to active scheme, so it will be shown in next program opening
+(You don't need it in `plugin` version)
 
-#### Ask if there are other themes in PascalABC directory (You don't need it in `plugin` version)
 It asks on exporting scheme to the IDE, if there are other themes in `Highlighting` directory inside `PascalABC.NET` directory
 
-#### Do action if there are other themes  (You don't need it in `plugin` version)
+#### Do action if there are other themes 
+
+(You don't need it in `plugin` version)
 
 If you uncheck `Ask if there are other themes in PascalABC directory`, the selected action will be done. There're 3 actions:
 - Delete (old scheme)
@@ -116,8 +128,21 @@ This checkbox is for custom coloring. It has 2 values: `Light` and `Advanced`.
 `Light` is the easiest way to change colors. It shows only main syntax colors and applies to duplicate colors by itself. There're 4 types of comment colors. In `Light` mode it's shown as 1 color.
 `Advanced` shows all colors. Also, there're duplicate colors. For example: there're 4 colors for Comments and etc.
 
+
 #### Check Update
 If the checkbox is checked, the programm will check updates in every program run. If there's update, the program will notify you.
+
+#### Show Background Image
+If you don't want to see background image, disable it
+
+#### Sticker
+If you don't want to see sticker, disable `Show Sticker`. 
+
+#### Custom Sticker
+You can set your custom sticker by enabling `Use Custom Sticker` and by choosing `Choose Image`.
+
+#### Ask to save
+If you enable it, the app will ask you to save the theme, if you want to select another theme or export after editing the theme.  
 
 ---
 
@@ -140,6 +165,7 @@ If the checkbox is checked, the programm will check updates in every program run
 
 You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki Theme`](https://github.com/doki-theme/doki-theme-jetbrains):
 
+- A Certain Scientific Railgun
 - Azur Lane
 - Blend S
 - Bunny Senpai
@@ -159,6 +185,7 @@ You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki T
 - KonoSuba
 - Literature Club
 - Love Live!
+- Love, Chunibyo & Other Delusions
 - Lucky Star
 - Miscellaneous
 - Miss Kobayashi's Dragon Maid
@@ -171,6 +198,7 @@ You can choose themes from various, Anime, Manga, or Visual Novels from [`Doki T
 - Re Zero
 - Steins Gate
 - Sword Art Online
+- The Rising Of The Shield Hero
 - Vocaloid
 - Yuru Camp
 
@@ -187,7 +215,7 @@ Also, you can import your favourite color scheme from any JetBrains IDE. Click t
 
 ### Attributions
 Was inspired by [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
-Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET).
+Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET), [JetBrains Icons](https://jetbrains.design/intellij/resources/icons_list/).
 
 
 ---
@@ -244,15 +272,19 @@ Help make this plugin better!
 
 Если вы используете версию программы вы можете изменить цвета редактора, но он имеет лимиты:
 
-- [ ] Может изменить фоновое изображение
+- [ ] Может применять фоновое изображение
+- [ ] Может применять стикер 
 - [ ] Может менять цвета в некоторых частах интерфейса
 - [x] Тебе придётся запустить PascalABC.NET заново, чтобы применить тему.
+- [ ] Может изменить иконки IDE
 
 версия `Плагина`:
-- [x] Может изменить фоновое изображение
+- [x] Может применять фоновое изображение
+- [x] Может применять стикер
 - [x] Может менять цвета в некоторых частах интерфейса
 - [x] Может с лёгкостю применять тему
 - [x] Имя темы в статус баре Паскаль
+- [x] Может изменить иконки IDE
 
 
 
@@ -278,45 +310,65 @@ Help make this plugin better!
 
 А ещё, вы можете без проблем скрыть фоновое изображение и стикер нажимая `Alt + A`. Чтобы показать их, вновь нажмите `Alt + A`. Чтобы с лёгкостью открыть окно `Yuki Theme`, нажмите `Alt + S`.
 
+#### Иконки
+Иконки IDE изменены на иконки от JetBrains.
+
+#### Камуфляж панеля инструментов
+Вы можете спрятать иконки или сместить иконку в правую часть панеля. Для этого откройте `Сервис -> Настройки`. Далее выберите `Yuki Theme`. После нажмите на `Toolbar`. Тут вы сможете спрятать или сместить иконки панеля инструментов.
+
+![photo](./Screenshots/toolbar.png)
+
 ### Настройки
 
 Вы можете зайти в настройки кликая по `Настройки` (Шестерёнка) кнопку. Тут есть некоторые поля, которые вы можете изменить:
 
-- [Путь до PascalABC.NET](#путь-до-pascalabcnet)
-- [Активная Тема](#активная-тема)
-- [Запомнить Активную Тему](#запомнить-активную-тему)
-- [Спросить если в папке PascalABC есть другие темы](#спросить-если-в-папке-pascalabc-есть-другие-темы)
-- [Действие, если есть другие темы](#действие-если-есть-другие-темы)
-- [Режим настройки](#режим-настройки)
-- [Проверить обновления](#проверить-обновления)
+- [Path to PascalABC.NET](#path-to-pascalabcnet)
+- [Ask if there are other themes in PascalABC directory](#ask-if-there-are-other-themes-in-pascalabc-directory)
+- [Do action, if there are other themes](#do-action-if-there-are-other-themes)
+- [Setting Mode](#setting-mode)
+- [Check Update](#check-update)
+- [Show Background Image](#show-background-image)
+- [Sticker](#sticker)
+- [Ask to save](#ask-to-save)
 
-#### Путь до PascalABC.NET (Вам не нужно в версии `Плагина`):
+#### Path to PascalABC.NET
+(Вам не нужно в версии `Плагина`):
+
 Это необходимо для экспорта темы в IDE.
 
-#### Активная Тема
-Тема будет выбрана при следующем запуске.
+#### Ask if there are other themes in PascalABC directory 
+(Вам не нужно в версии `Плагина`)
 
-#### Запомнить Активную Тему
-Оно запоминает текущую тему, так что тема будет выбрана при следующем запуске.
-
-#### Спросить если в папке PascalABC есть другие темы (Вам не нужно в версии `Плагина`)
 Оно спросит вас при экспорте, если в папке `Highlighting` в `PascalABC.NET` есть другие темы.
 
-#### Действие, если есть другие темы  (Вам не нужно в версии `Плагина`)
+#### Do action if there are other themes  
+(Вам не нужно в версии `Плагина`)
 
 Если вы отключите `Спросить если в папке PascalABC есть другие темы`, то выбранное дейстие будет исполнено. Тут есть 3 действий:
 - Удалить (старую тему)
 - Импортировать и Удалить (старую тему)
 - Игнорировать (старую тему)
 
-#### Режим настройки
-Это для пользовательской темы. Тут есть 2 значение: `Легкий` и `Полный`.
+#### Setting Mode
+Это для пользовательской темы. Тут есть 2 значение: `Light` и `Advanced`.
 
-`Легкий` это самый легкий путь для изменения цветов. Оно показывает только основные цвета синтаксиса и применяет копиям цветов сам. Тут есть 4 типа цветов для комментариев. В режиме `Легкий`, оно показывается как 1 цвет.
-`Полный` показывает все цвета. Также тут есть копии цветов. Например: Тут есть 4 типа цветов для комментариев и др.
+`Light` это самый легкий путь для изменения цветов. Оно показывает только основные цвета синтаксиса и применяет копиям цветов сам. Тут есть 4 типа цветов для комментариев. В режиме `Light`, оно показывается как 1 цвет.
+`Advanced` показывает все цвета. Также тут есть копии цветов. Например: Тут есть 4 типа цветов для комментариев и др.
 
-#### Проверить обновления
+#### Check Update
 Если выбрано, то программа сама проверит обновление при каждом запуске. Если есть обновление, оно уведомить вас.
+
+#### Show Background Image
+Если вы не хотите видеть фоновое изображение, отключите этот параметр.
+
+#### Sticker
+Если вы не хотите видеть стикер, отключите `Show Sticker`.
+
+#### Custom Sticker
+Вы можете использовать свой стикер включив `Use Custom Sticker` и выбирая изображение с помощью `Choose Image`.
+
+#### Ask to save
+Если вы включите этот параметр, приложение спросит нужно ли сохранить каждый раз, когда вы попытаетесь выбрать другую тему или при экспорте сразу после изменения темы.
 
 ---
 
@@ -342,6 +394,7 @@ Help make this plugin better!
 
 | на Русском | на Английском |
 |---|---|
+| Некий научный Рейлган | A Certain Scientific Railgun
 | Лазурный путь | Azur Lane |
 | Садистская смесь | Blend S |
 | Этот глупый свин не понимает мечту девочки-зайки | Bunny Senpai |
@@ -360,6 +413,7 @@ Help make this plugin better!
 | Убей или умри  | Kill La Kill  |
 | Богиня благословляет этот прекрасный мир  | KonoSuba  |
 | Живая любовь! Проект «Школьный идол»  | Love Live!  |
+| Чудачества любви не помеха | Love, Chunibyo & Other Delusions
 | Счастливая звезда  | Lucky Star  |
 | Кобаяши и её горничная-дракон  | Miss Kobayashi's Dragon Maid  |
 | Истории  | Monogatari  |
@@ -371,6 +425,7 @@ Help make this plugin better!
 | Жизнь в другом мире с нуля  | Re:Zero  |
 | Врата Штейна  | Steins Gate  |
 | Мастера Меча Онлайн  | Sword Art Online  |
+| Восхождение героя щита | The Rising Of The Shield Hero
 | Вокалоиды  | Vocaloid  |
 | Лагерь на свежем воздухе  | Yuru Camp  |
 
@@ -388,7 +443,7 @@ Help make this plugin better!
 
 ### Аттрибуты
 Был вдохновлён [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
-Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Bootstrap Icons](https://icons.getbootstrap.com/), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET).
+Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET), [JetBrains Icons](https://jetbrains.design/intellij/resources/icons_list/).
 
 
 ---
