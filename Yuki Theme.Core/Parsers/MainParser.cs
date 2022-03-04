@@ -90,7 +90,7 @@ namespace Yuki_Theme.Core.Parsers
 							Image sticker = null;
 							if (isWallpaperExist) wallpaper = Image.FromFile (Path.Combine (directory, "background.png"));
 							if (isStickerExist) sticker = Image.FromFile (Path.Combine (directory, "sticker.png"));
-							Helper.Zip (pathef, content, wallpaper, sticker, "theme.xshd");
+							Helper.Zip (pathef, content, wallpaper, sticker, "theme.xshd", true);
 						} else
 						{
 							File.Copy (path, pathef, true);							

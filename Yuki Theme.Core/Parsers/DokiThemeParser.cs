@@ -629,7 +629,7 @@ namespace Yuki_Theme.Core.Parsers
 					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2);
+				Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 			}
 		}
 

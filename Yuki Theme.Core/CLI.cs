@@ -91,6 +91,11 @@ namespace Yuki_Theme.Core
 		/// <returns></returns>
 		public static bool add (string copyFrom, string name)
 		{
+			if (name.Length < 2)
+			{
+				if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is too short. At least it must be 2", "Too short");
+				return true;
+			}
 			string sto = Helper.ConvertNameToPath (name);
 			string patsh = Path.Combine (currentPath,
 			                             $"Themes/{sto}" + (oldThemeList [copyFrom] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW));
@@ -325,6 +330,10 @@ namespace Yuki_Theme.Core
 		/// <param name="to">To</param>
 		public static void rename (string from, string to)
 		{
+			if (to.Length < 2)
+			{
+				if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is too short. At least it must be 2", "Too short");
+			}
 			if (!isDefaultTheme [from])
 			{
 				string frm = Helper.ConvertNameToPath (from);
@@ -772,7 +781,7 @@ namespace Yuki_Theme.Core
 				File.WriteAllText (path, json);
 			else
 			{
-				Helper.UpdateZip (path, json, null, true, null, true);
+				Helper.UpdateZip (path, json, null, true, null, true, "", false);
 			}
 		}
 

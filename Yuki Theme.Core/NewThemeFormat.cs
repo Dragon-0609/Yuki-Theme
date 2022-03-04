@@ -45,10 +45,10 @@ namespace Yuki_Theme.Core
 			{
 				if (iszip)
 				{
-					Helper.UpdateZip (CLI.currentTheme.fullPath, json, img2, wantToKeep, img3, wantToKeep);
+					Helper.UpdateZip (CLI.currentTheme.fullPath, json, img2, wantToKeep, img3, wantToKeep, "", false);
 				} else
 				{
-					Helper.Zip (CLI.currentTheme.fullPath, json, img2, img3);
+					Helper.Zip (CLI.currentTheme.fullPath, json, img2, img3, "", false);
 				}
 			}
 		}
@@ -232,7 +232,7 @@ namespace Yuki_Theme.Core
 				File.WriteAllText (CLI.pathToFileNew, json);
 			else
 			{
-				Helper.UpdateZip (path, json, null, true, null, true);
+				Helper.UpdateZip (path, json, null, true, null, true, "", false);
 			}
 		}
 

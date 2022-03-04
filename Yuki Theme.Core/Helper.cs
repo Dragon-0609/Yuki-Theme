@@ -272,16 +272,16 @@ namespace Yuki_Theme.Core
 		}
 
 		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
-		                              bool   wantToKeepSticker = false, string themeName = "")
+		                              bool   wantToKeepSticker = false, string themeName = "", bool asOld = true)
 		{
 			if (!wantToKeepImage && !wantToKeepSticker && img == null && sticker == null)
 			{
-				SaveToFile (path, content);
+				SaveToFile (path, content, asOld);
 			} else
 			{
 				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
-					if (themeName.Length == 0) themeName = GetThemeSaveName ();
+					if (themeName.Length == 0) themeName = GetThemeSaveName (asOld);
 					ZipArchiveEntry entry = archive.GetEntry (themeName);
 
 					entry?.Delete ();
@@ -316,10 +316,10 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		private static void SaveToFile (string path, string content)
+		private static void SaveToFile (string path, string content, bool asOld)
 		{
 			if (File.Exists (path)) File.Delete (path);
-			if (Settings.saveAsOld)
+			if (asOld)
 				SaveToFileOld (path, content);
 			else
 				SaveToFileNew (path, content);
@@ -376,18 +376,18 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void Zip (string path, string content, Image img, Image sticker = null, string themeName = "")
+		public static void Zip (string path, string content, Image img, Image sticker = null, string themeName = "", bool asOld = true)
 		{
 			if (img == null && sticker == null)
 			{
-				SaveToFile (path, content);
+				SaveToFile (path, content, asOld);
 			} else
 			{
 				using (var fileStream = new FileStream (path, FileMode.Create))
 				{
 					using (var archive = new ZipArchive (fileStream, ZipArchiveMode.Create))
 					{
-						if (themeName.Length == 0) themeName = GetThemeSaveName ();
+						if (themeName.Length == 0) themeName = GetThemeSaveName (asOld);
 						ZipArchiveEntry entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
@@ -443,14 +443,14 @@ namespace Yuki_Theme.Core
 			return Color.FromArgb (color.A, (int) red, (int) green, (int) blue);
 		}
 
-		public static string GetThemeSaveName ()
+		public static string GetThemeSaveName (bool asOld)
 		{
-			return "theme." + GetSaveFormat ();
+			return "theme." + GetSaveFormat (asOld);
 		}
 
-		public static string GetSaveFormat ()
+		public static string GetSaveFormat (bool asOld)
 		{
-			return Settings.saveAsOld ? "xshd" : "json";
+			return asOld ? "xshd" : "json";
 		}
 
 		public static bool IsDark (Color clr)
