@@ -7,34 +7,59 @@ namespace Yuki_Theme.Core.Controls
 {
 	public class ReItem : ListViewItem
 	{
+		public const string THEME_WHITE_SPACE = "       ";
+		
 		public  bool          isGroup = false;
-		private ReItem        rgroupIt;
-		public  List <ReItem> childs = new List <ReItem> ();
+		private ReItem        parentGroup;
+		public  List <ReItem> children = new List <ReItem> ();
+		public  bool          isOld;
+		public  bool          isHidden = false;
 
-		public ReItem (string nm, bool isG = false, ReItem rgroup = null) : base ()
+		public ReItem (string name, bool IsGroup = false) : base ()
 		{
-			Name = nm;
-			Text = isG ? nm : $"       {nm}";
-			isGroup = isG;
+			Name = name;
+			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
+			isGroup = IsGroup;
 			Font = null;
-			rgroupItem = rgroup;
+			ParentGroup = null;
+			isOld = false;
 		}
 
-		public ReItem rgroupItem
+		public ReItem (string name, bool IsGroup = false, ReItem rgroup = null) : base ()
+		{
+			Name = name;
+			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
+			isGroup = IsGroup;
+			Font = null;
+			ParentGroup = rgroup;
+			isOld = false;
+		}
+
+		public ReItem (string name, bool IsGroup = false, bool IsOld = false, ReItem rgroup = null) : base ()
+		{
+			Name = name;
+			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
+			isGroup = IsGroup;
+			Font = null;
+			ParentGroup = rgroup;
+			isOld = IsOld;
+		}
+
+		public ReItem ParentGroup
 		{
 			get
 			{
-				return rgroupIt;
+				return parentGroup;
 			}
 			set
 			{
-				if (rgroupIt != null)
-					rgroupIt.childs.Remove (this);
-				rgroupIt = null;
+				if (parentGroup != null)
+					parentGroup.children.Remove (this);
+				parentGroup = null;
 				if(value != null)
 				{
-					rgroupIt = value;
-					rgroupIt.childs.Add (this);
+					parentGroup = value;
+					parentGroup.children.Add (this);
 				}
 				
 			}
@@ -42,7 +67,7 @@ namespace Yuki_Theme.Core.Controls
 
 		public void SortChildren ()
 		{
-			childs = childs.OrderBy (i => i.Text).ToList ();
+			children = children.OrderBy (i => i.Name).ToList ();
 		}
 		
 	}

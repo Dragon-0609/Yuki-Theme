@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Yuki_Theme_Plugin.Controls
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
 	public class ToolItemGroup
 	{

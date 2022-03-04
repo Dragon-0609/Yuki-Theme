@@ -182,16 +182,17 @@ namespace Yuki_Theme.Core.Controls
 			Color fr = Color.White;
 			if (isFromPascal)
 			{
-				add = Helper.isDark (bg) ? "" : "_dark";
+				add = Helper.IsDark (bg) ? "" : "_dark";
 				fr = fg;
 			}
 			else
 			{
-				add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
+				add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
 				fr = Helper.fgColor;
 			}
 
-			Helper.renderSVG (button1, Helper.loadsvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
+			Helper.RenderSvg (showHelp, Helper.LoadSvg ("help", a), false, Size.Empty, true, fr);
+			Helper.RenderSvg (button1, Helper.LoadSvg ("moreHorizontal" + add, a), true, new Size (16, 16), true, fr);
 		}
 
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
@@ -366,7 +367,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void reset_margin_Click (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (SettingsForm.STICKERPOSITION);
+			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
 			for (int i = 0; i < stickerToUpdate.Count; i++)
 			{
 				try
@@ -407,31 +408,56 @@ namespace Yuki_Theme.Core.Controls
 			}
 
 			toolBarList.ItemHeight = Font.Height + 3;
-			backImage.Checked = CLI.bgImage;
-			swsticker.Checked = CLI.swSticker;
-			logo.Checked = CLI.swLogo;
-			editor.Checked = CLI.Editor;
-			checkBox1.Checked = CLI.Beta;
-			swStatusbar.Checked = CLI.swStatusbar;
-			askC.Checked = CLI.askChoice;
-			checkBox2.Checked = CLI.update;
-			ActionBox.SelectedIndex = CLI.actionChoice;
-			mode.SelectedIndex = CLI.settingMode;
-			unit.SelectedIndex = (int) CLI.unit;
-			checkBox3.Checked = CLI.positioning;
-			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = CLI.positioning && CLI.swSticker;
-			checkBox4.Checked = CLI.showGrids;
-			use_cstm_sticker.Checked = CLI.useCustomSticker;
-			customSticker = CLI.customSticker;
-			fitWidth.Checked = CLI.autoFitByWidth;
-			fitWidth.Enabled = CLI.bgImage;
-			askSave.Checked = CLI.askToSave;
+			backImage.Checked = Settings.bgImage;
+			swsticker.Checked = Settings.swSticker;
+			logo.Checked = Settings.swLogo;
+			editor.Checked = Settings.Editor;
+			checkBox1.Checked = Settings.Beta;
+			swStatusbar.Checked = Settings.swStatusbar;
+			askC.Checked = Settings.askChoice;
+			checkBox2.Checked = Settings.update;
+			ActionBox.SelectedIndex = Settings.actionChoice;
+			mode.SelectedIndex = (int) Settings.settingMode;
+			unit.SelectedIndex = (int) Settings.unit;
+			checkBox3.Checked = Settings.positioning;
+			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = Settings.positioning && Settings.swSticker;
+			checkBox4.Checked = Settings.showGrids;
+			use_cstm_sticker.Checked = Settings.useCustomSticker;
+			customSticker = Settings.customSticker;
+			fitWidth.Checked = Settings.autoFitByWidth;
+			fitWidth.Enabled = Settings.bgImage;
+			askSave.Checked = Settings.askToSave;
+			saveOld.Checked = Settings.saveAsOld;
 			loadSVG ();
 		}
 
 		private void backImage_CheckedChanged (object sender, EventArgs e)
 		{
 			fitWidth.Enabled = backImage.Checked;
+		}
+
+		private void showHelp_Click (object sender, EventArgs e)
+		{
+			Color back = Color.White;
+			Color fore = Color.White;
+			Color brdr = Color.White;
+			if (isFromPascal)
+			{
+				back = bg;
+				fore = fg;
+				brdr = border;
+			}
+			else
+			{
+				back = Helper.bgColor;
+				fore = Helper.fgColor;
+				brdr = Helper.bgBorder;
+			}
+			
+			HelperForm hf = new HelperForm ();
+			hf.setMessage ("Old New Formats", SmallDocumentation.Documentation [SmallDocumentation.OLD_NEW_HELP]);
+			hf.setColors (back, fore, brdr);
+			hf.ShowDialog (ParentForm);
 		}
 	}
 }

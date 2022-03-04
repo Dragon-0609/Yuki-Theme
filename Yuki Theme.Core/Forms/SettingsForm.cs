@@ -10,43 +10,6 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		public const int PASCALPATH          = 1;
-		public const int ACTIVE              = 2;
-		public const int ASKCHOICE           = 4;
-		public const int CHOICEINDEX         = 5;
-		public const int SETTINGMODE         = 6;
-		public const int AUTOUPDATE          = 7;
-		public const int BGIMAGE             = 8;
-		public const int STICKER             = 9;
-		public const int STATUSBAR           = 10;
-		public const int LOGO                = 11;
-		public const int LOCATION            = 12;
-		public const int EDITOR              = 13;
-		public const int BETA                = 14;
-		public const int LOGIN               = 15;
-		public const int CAMOUFLAGEHIDDEN    = 16;
-		public const int STICKERPOSITION     = 17;
-		public const int CAMOUFLAGEPOSITIONS = 18;
-		public const int STICKERPOSITIONUNIT = 19;
-		public const int ALLOWPOSITIONING    = 20;
-		public const int SHOWGRIDS           = 21;
-		public const int USECUSTOMSTICKER    = 22;
-		public const int CUSTOMSTICKER       = 23;
-		public const int LICENSE             = 24;
-		public const int GOOGLEANALYTICS     = 25;
-		public const int DONTTRACK           = 26;
-		public const int AUTOFITWIDTH        = 27;
-		/// <summary>
-		/// It's useful, when app asks to save, if you change to another theme without saving previous one. But, it also can be annoying.
-		/// I set isEdited in CLI , so it won't ask you each time. It'll ask when a theme is edited, and you're gonna change to another theme.
-		/// </summary>
-		public const int ASKTOSAVE           = 28;
-
-
-		public const  double current_version     = 5.1;
-		public const  string current_version_add = "";
-		public static string next_version        = "";
-
 		private MForm form;
 
 		public string Path

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Forms;
@@ -22,6 +23,12 @@ namespace Yuki_Theme.Core.Parsers
 
 			string pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
 			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yukitheme");
+
+			if (st.EndsWith (".yuki"))
+			{
+				pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
+                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yuki");
+			}
 			
 			if (checkAvailableAndAsk ( pathef, ask, exist))
 			{
@@ -29,6 +36,7 @@ namespace Yuki_Theme.Core.Parsers
 				switch (ext)
 				{
 					case ".yukitheme" :
+					case ".yuki" :
 					{
 						File.Copy (path, pathef, true);
 						form.load_schemes ();
@@ -59,6 +67,37 @@ namespace Yuki_Theme.Core.Parsers
 					}
 						break;
 
+					case ".xshd" :
+					{
+						string directory = Path.GetDirectoryName (path);
+						bool isWallpaperExist = false;
+						bool isStickerExist = false;
+						
+						if (File.Exists (Path.Combine (directory, "background.png")))
+						{
+							isWallpaperExist = true;
+						}
+						
+						if (File.Exists (Path.Combine (directory, "sticker.png")))
+						{
+							isStickerExist = true;
+						}
+						
+						if (isWallpaperExist || isStickerExist)
+						{
+							string content = File.ReadAllText (path);
+							Image wallpaper = null;
+							Image sticker = null;
+							if (isWallpaperExist) wallpaper = Image.FromFile (Path.Combine (directory, "background.png"));
+							if (isStickerExist) sticker = Image.FromFile (Path.Combine (directory, "sticker.png"));
+							Helper.Zip (pathef, content, wallpaper, sticker, "theme.xshd");
+						} else
+						{
+							File.Copy (path, pathef, true);							
+						}
+						form.load_schemes ();
+					}
+						break;
 				}
 			}
 		}

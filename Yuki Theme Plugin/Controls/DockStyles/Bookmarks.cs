@@ -1,19 +1,14 @@
 // Copyright (c) Ivan Bondarev, Stanislav Mikhalkovich (for details please see \doc\copyright.txt)
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 // This is a modified file from SharpDevelop project (Copyright (c) AlphaSierraPapa)
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 
-namespace Yuki_Theme_Plugin
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
     public class ErrorLineBookmarkNew : SDMarkerBookmark
     {
@@ -39,6 +34,7 @@ namespace Yuki_Theme_Plugin
                 endColumn = line.Length+1;
                 instance = new ErrorLineBookmarkNew(fileName, document, startLine - 1);
                 document.BookmarkManager.AddMark(instance);
+                
                 document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.LinesBetween, startLine - 1, startLine - 1));
                 document.CommitUpdate();
             }

@@ -32,8 +32,8 @@ namespace Yuki_Theme.Core.Forms
 		{
 			var a = Assembly.GetExecutingAssembly ();
 
-			string add = Helper.isDark (Helper.bgColor) ? "" : "_dark";
-			Helper.renderSVG (other, Helper.loadsvg ("moreHorizontal" + add, a));
+			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			Helper.RenderSvg (other, Helper.LoadSvg ("moreHorizontal" + add, a));
 		}
 		
 		private void PathForm_Shown (object sender, EventArgs e)

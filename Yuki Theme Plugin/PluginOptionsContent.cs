@@ -17,9 +17,9 @@ namespace Yuki_Theme_Plugin
 		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
 		{
 			InitializeComponent ();
-			settingsPanel.SettingsPanel_Load ();
 			plugin = plug;
 			settingsPanel.isFromPascal = true; // To recognize
+			settingsPanel.SettingsPanel_Load ();
 		}
 
 		private bool alreadyShown;
@@ -42,7 +42,6 @@ namespace Yuki_Theme_Plugin
 		}
 
 		private bool oldeditor = false;
-		private int  st        = -1;
 
 		public void Action (OptionsContentAction action)
 		{
@@ -93,8 +92,7 @@ namespace Yuki_Theme_Plugin
 
 						plugin.mf = null;
 						settingsPanel.mf = null;
-						oldeditor = CLI.Editor;
-						st = CLI.settingMode;
+						oldeditor = Settings.Editor;
 						// Change colors for About Form
 						settingsPanel.bg = YukiTheme_VisualPascalABCPlugin.bg;
 						settingsPanel.bg2 = YukiTheme_VisualPascalABCPlugin.bgClick2;
@@ -129,25 +127,26 @@ namespace Yuki_Theme_Plugin
 
 					break;
 				case OptionsContentAction.Ok :
-					CLI.bgImage = settingsPanel.backImage.Checked;
-					CLI.swSticker = settingsPanel.swsticker.Checked;
-					CLI.swLogo = settingsPanel.logo.Checked;
-					CLI.Editor = settingsPanel.editor.Checked;
-					CLI.Beta = settingsPanel.checkBox1.Checked;
-					CLI.swStatusbar = settingsPanel.swStatusbar.Checked;
-					CLI.askChoice = settingsPanel.askC.Checked;
-					CLI.update = settingsPanel.checkBox2.Checked;
-					CLI.actionChoice = settingsPanel.ActionBox.SelectedIndex;
-					CLI.settingMode = settingsPanel.mode.SelectedIndex;
-					CLI.positioning = settingsPanel.checkBox3.Checked;
-					CLI.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
-					CLI.showGrids = settingsPanel.checkBox4.Checked;
-					CLI.useCustomSticker = settingsPanel.use_cstm_sticker.Checked;
-					CLI.customSticker = settingsPanel.customSticker;
-					plugin.stickerControl.Enabled = CLI.positioning;
-					CLI.autoFitByWidth = settingsPanel.fitWidth.Checked;
-					CLI.askToSave = settingsPanel.askSave.Checked;
-					CLI.saveData ();
+					Settings.bgImage = settingsPanel.backImage.Checked;
+					Settings.swSticker = settingsPanel.swsticker.Checked;
+					Settings.swLogo = settingsPanel.logo.Checked;
+					Settings.Editor = settingsPanel.editor.Checked;
+					Settings.Beta = settingsPanel.checkBox1.Checked;
+					Settings.swStatusbar = settingsPanel.swStatusbar.Checked;
+					Settings.askChoice = settingsPanel.askC.Checked;
+					Settings.update = settingsPanel.checkBox2.Checked;
+					Settings.actionChoice = settingsPanel.ActionBox.SelectedIndex;
+					Settings.settingMode = (SettingMode) settingsPanel.mode.SelectedIndex;
+					Settings.positioning = settingsPanel.checkBox3.Checked;
+					Settings.unit = (RelativeUnit) settingsPanel.unit.SelectedIndex;
+					Settings.showGrids = settingsPanel.checkBox4.Checked;
+					Settings.useCustomSticker = settingsPanel.use_cstm_sticker.Checked;
+					Settings.customSticker = settingsPanel.customSticker;
+					plugin.stickerControl.Enabled = Settings.positioning;
+					Settings.autoFitByWidth = settingsPanel.fitWidth.Checked;
+					Settings.askToSave = settingsPanel.askSave.Checked;
+					Settings.saveAsOld = settingsPanel.saveOld.Checked;
+					Settings.saveData ();
 					plugin.LoadSticker ();
 					if (settingsPanel.mf != null && !settingsPanel.mf.IsDisposed)
 					{

@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public async void CheckUpdate ()
 		{
-			var url = CLI.Beta
+			var url = Settings.Beta
 				? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
 				: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
 			try
@@ -48,14 +48,14 @@ namespace Yuki_Theme.Core.Forms
 					if (response != null)
 					{
 						var json = await response.Content.ReadAsStringAsync ();
-						if (CLI.Beta) // If can get beta, parse latest release (even pre-release)
+						if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
 							json = "{\n\""+ json.Split (new [] {"{\n    \"","\"\n  },"}, StringSplitOptions.None) [1] + "\"\n}";
 						
 						Console.WriteLine (json);
 						var jresponse = JObject.Parse (json);
 						string tg = jresponse ["tag_name"].ToString ();
 						Console.WriteLine (tg);
-						if (CLI.Beta)
+						if (Settings.Beta)
 						{
 							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/" + tg;
 						} else
@@ -78,7 +78,7 @@ namespace Yuki_Theme.Core.Forms
 						
 						double ver = double.Parse (nv, CultureInfo.InvariantCulture);
 						Console.WriteLine (ver);
-						if (SettingsForm.current_version < ver || (SettingsForm.current_version == ver && SettingsForm.current_version_add.Length != 0 && !hasBeta))
+						if (Settings.current_version < ver || (Settings.current_version == ver && Settings.current_version_add.Length != 0 && !hasBeta))
 						{
 							int md = (int) Helper.mode;
 							size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -95,9 +95,9 @@ namespace Yuki_Theme.Core.Forms
 							form.nf.button3.Visible = true;
 							
 							form.nf.Show (form);
-							lock (SettingsForm.next_version)
+							lock (Settings.next_version)
 							{
-								SettingsForm.next_version = $"{ver} | {size}";								
+								Settings.next_version = $"{ver} | {size}";								
 							}
 							form.changeNotificationLocation ();
 							size = jresponse ["assets"] [md] ["size"].ToString ();

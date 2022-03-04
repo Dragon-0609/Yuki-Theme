@@ -50,8 +50,8 @@ namespace Yuki_Theme.CLI
 
 			if (isPath)
 			{
-				Core.CLI.pascalPath = pth;
-				Core.CLI.saveData ();
+				Settings.pascalPath = pth;
+				Core.Settings.saveData ();
 			}
 		}
 		
@@ -139,10 +139,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getImageFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetImageFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -152,10 +152,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getImage (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -171,10 +171,10 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.getThemeFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getStickerFromMemory (Core.CLI.gp, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -182,10 +182,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.getTheme (Core.CLI.getPath);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.getSticker (Core.CLI.getPath);
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -205,14 +205,15 @@ namespace Yuki_Theme.CLI
 			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
 			{
 				Helper.mode = ProductMode.CLI;
-				Core.CLI.setPath = AskPath;
-				Core.CLI.showSuccess = ShowSuccess;
-				Core.CLI.showError = ShowError;
-				Core.CLI.showError = ShowError;
-				Core.CLI.onRename = ShowInvertSuccess;
-				Core.CLI.SaveInExport = AskToDelete;
-				Core.CLI.connectAndGet ();
-				Core.CLI.settingMode = 0;
+				CLI_Actions.setPath = AskPath;
+				CLI_Actions.showSuccess = ShowSuccess;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.onRename = ShowInvertSuccess;
+				CLI_Actions.SaveInExport = AskToDelete;
+				Settings.connectAndGet ();
+				Settings.settingMode = SettingMode.Light;
+				Settings.saveAsOld = true;
 				Core.CLI.load_schemes ();
 			} else if (refreshSchemes)
 			{
@@ -226,8 +227,7 @@ namespace Yuki_Theme.CLI
 		/// <param name="theme">Theme name</param>
 		public static void SetFile (string theme)
 		{
-			Core.CLI.currentoFile = theme;
-			Core.CLI.currentFile = Helper.ConvertNameToPath (theme);
+			Core.CLI.SelectTheme (theme);
 		}
 
 		/// <summary>
@@ -367,11 +367,11 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <AllFieldsCommand> (o =>
 			   {
 				   LoadCLI (true);
-				   Core.CLI.settingMode = 1;
+				   Settings.settingMode = SettingMode.Advanced;
 				   SetFile ("Darcula");
 				   Core.CLI.restore ();
-				   Console.WriteLine ($"There're {Core.CLI.localAttributes.Keys.Count} fields:");
-				   foreach (string name in Core.CLI.localAttributes.Keys)
+				   Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
+				   foreach (string name in Core.CLI.currentTheme.Fields.Keys)
 				   {
 					   Console.WriteLine ("\t" + name);
 				   }
@@ -478,7 +478,7 @@ namespace Yuki_Theme.CLI
 				   {
 					   if (Directory.Exists (System.IO.Path.Combine (o.Path, "Highlighting")))
 					   {
-						   Core.CLI.pascalPath = o.Path;
+						   Settings.pascalPath = o.Path;
 						   changed = true;
 					   } else
 					   {
@@ -491,7 +491,7 @@ namespace Yuki_Theme.CLI
 					   bool resa = false;
 					   if (bool.TryParse (o.Quiet, out resa))
 					   {
-						   Core.CLI.askChoice = resa;
+						   Settings.askChoice = resa;
 						   changed = true;
 					   } else
 					   {
@@ -518,7 +518,7 @@ namespace Yuki_Theme.CLI
 					   
 					   if (isValid)
 					   {
-						   Core.CLI.settingMode = o.Mode.ToLower () == "light" ? 0 : 1;
+						   Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
 						   changed = true;
 					   } else
 					   {
@@ -554,7 +554,7 @@ namespace Yuki_Theme.CLI
 
 					   if (isValid)
 					   {
-						   Core.CLI.settingMode = act;
+						   Settings.actionChoice = act;
 						   changed = true;
 					   } else
 					   {
@@ -564,7 +564,7 @@ namespace Yuki_Theme.CLI
 
 				   if (changed)
 				   {
-					   Core.CLI.saveData ();
+					   Core.Settings.saveData ();
 					   ShowSuccess ("Settings are saved!", "Saved");
 				   } else
 				   {
@@ -619,14 +619,11 @@ namespace Yuki_Theme.CLI
 									   if (bg || txt)
 									   {
 										   o.Definition = Populater.getNormalizedName (o.Definition);
-										   if (Core.CLI.localAttributes.ContainsKey (o.Definition))
+										   if (Core.CLI.currentTheme.Fields.ContainsKey (o.Definition))
 										   {
-											   var dic = Core.CLI.localAttributes [o.Definition];
-											   if (dic.ContainsKey ("color") && txt)
-												   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
-											   if (dic.ContainsKey ("bgcolor") && bg)
-												   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
-											   foreach (KeyValuePair <string, string> keyValuePair in dic)
+											   ThemeField dic = Core.CLI.currentTheme.Fields [o.Definition];
+											   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
+											   foreach (KeyValuePair <string, string> keyValuePair in dic.GetAttributes ())
 											   {
 												   GiveMessage (keyValuePair.Value, keyValuePair.Key);
 											   }
@@ -636,11 +633,8 @@ namespace Yuki_Theme.CLI
 										   if (sttr != null)
 											   foreach (var sr in sttr)
 											   {
-												   var dic = Core.CLI.localAttributes [sr];
-												   if (dic.ContainsKey ("color") && txt)
-													   dic ["color"] = ColorTranslator.ToHtml (txtcolor);
-												   if (dic.ContainsKey ("bgcolor") && bg)
-													   dic ["bgcolor"] = ColorTranslator.ToHtml (bgcolor);
+												   ThemeField dic = Core.CLI.currentTheme.Fields [sr];
+												   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
 											   }
 
 										   Core.CLI.save (null, null, true);
@@ -740,7 +734,15 @@ namespace Yuki_Theme.CLI
 				   }
 			   });
 		}
-	
+
+		private static void SetColorsToField (ref ThemeField dic, bool txt, Color txtcolor, bool bg, Color bgcolor)
+		{
+			if (dic.Foreground != null && txt)
+				dic.Foreground = ColorTranslator.ToHtml (txtcolor);
+			if (dic.Background != null && bg)
+				dic.Background = ColorTranslator.ToHtml (bgcolor);
+		}
+
 		private static bool isColor(string definition)
 		{
 			definition = definition.ToLower ();

@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Drawing.Drawing2D;
-using System.ComponentModel;
 using System.Reflection;
+using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme_Plugin.Controls.Helper;
 
-namespace Yuki_Theme_Plugin.Controls
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
 	internal class YukiAutoHideStrip : AutoHideStripBase
 	{

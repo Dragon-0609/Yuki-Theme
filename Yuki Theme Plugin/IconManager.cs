@@ -9,17 +9,22 @@ namespace Yuki_Theme_Plugin
 {
 	internal class IconManager
 	{
-		private const    string    IconFolder = "Yuki_Theme_Plugin.Resources.icons";
-		private readonly Form1     fm;
-		private readonly MenuStrip menu;
-		private readonly ToolStrip tools;
-		private          bool      internalchanges;
+		private const    string           IconFolder = "Yuki_Theme_Plugin.Resources.icons";
+		private readonly Form1            fm;
+		private readonly MenuStrip        menu;
+		private readonly ToolStrip        tools;
+		private          ContextMenuStrip context;
+		private          ContextMenuStrip context2;
 
-		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, Form1 form)
+		private bool internalchanges;
+
+		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip, ContextMenuStrip contextMenuStrip2, Form1 form)
 		{
 			tools = toolStrip;
 			menu = menuStrip;
 			fm = form;
+			context = contextMenuStrip;
+			context2 = contextMenuStrip2;
 			// tools.RightToLeft = RightToLeft.Yes;
 			Init ();
 		}
@@ -29,7 +34,7 @@ namespace Yuki_Theme_Plugin
 			foreach (var control in tools.Items)
 				if (control is ToolStripButton)
 				{
-					var btn = (ToolStripButton) control;
+					var btn = (ToolStripButton)control;
 					btn.AccessibleDescription = GetIconName (btn.Name);
 					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
 					{
@@ -43,7 +48,7 @@ namespace Yuki_Theme_Plugin
 				foreach (var item in control.DropDownItems)
 					if (item is ToolStripMenuItem)
 					{
-						var btn = (ToolStripMenuItem) item;
+						var btn = (ToolStripMenuItem)item;
 						btn.AccessibleDescription = GetIconName (btn.Name);
 						if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
 						{
@@ -53,7 +58,37 @@ namespace Yuki_Theme_Plugin
 							RemoveIcon (btn);
 					}
 			}
-
+			
+			foreach (ToolStripItem item in context.Items)
+			{
+				if (item is ToolStripMenuItem)
+				{
+					var btn = (ToolStripMenuItem)item;
+					btn.AccessibleDescription = GetIconName (btn.Name);
+					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					{
+						btn.ImageTransparentColor = Color.Transparent;
+						btn.EnabledChanged += MenuOnEnabledChanged;
+					} else
+						RemoveIcon (btn);
+				}
+			}
+			
+			foreach (ToolStripItem item in context2.Items)
+			{
+				if (item is ToolStripMenuItem)
+				{
+					var btn = (ToolStripMenuItem)item;
+					btn.AccessibleDescription = GetIconName (btn.Name);
+					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					{
+						btn.ImageTransparentColor = Color.Transparent;
+						btn.EnabledChanged += MenuOnEnabledChanged;
+					} else
+						RemoveIcon (btn);
+				}
+			}
+			
 			foreach (var content in fm.BottomPane.Contents)
 				// MessageBox.Show (content.DockHandler.Form.Name);
 				content.DockHandler.Form.AccessibleDescription = GetIconName (content.DockHandler.Form.Name);
@@ -63,13 +98,13 @@ namespace Yuki_Theme_Plugin
 		{
 			if (sender is ToolStripButton)
 			{
-				ToolStripButton btn = (ToolStripButton) sender;
+				ToolStripButton btn = (ToolStripButton)sender;
 				Tuple <bool, string> rest = GetState (btn);
 
 				if (rest.Item1 || internalchanges)
 				{
 					var a = Assembly.GetExecutingAssembly ();
-					Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
+					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
 					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
 				}
 			}
@@ -79,7 +114,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (sender is ToolStripMenuItem)
 			{
-				ToolStripMenuItem btn = (ToolStripMenuItem) sender;
+				ToolStripMenuItem btn = (ToolStripMenuItem)sender;
 				Tuple <bool, string> rest = GetState (btn);
 
 
@@ -87,7 +122,7 @@ namespace Yuki_Theme_Plugin
 				{
 					var a = Assembly.GetExecutingAssembly ();
 					// MessageBox.Show (btn.Name);
-					Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
+					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
 					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
 				}
 			}
@@ -98,17 +133,38 @@ namespace Yuki_Theme_Plugin
 			internalchanges = true;
 			foreach (var control in tools.Items)
 				if (control is ToolStripButton)
-					if (((ToolStripButton) control).AccessibleDescription != null &&
-					    ((ToolStripButton) control).AccessibleDescription.Length > 2)
+					if (((ToolStripButton)control).AccessibleDescription != null &&
+					    ((ToolStripButton)control).AccessibleDescription.Length > 2)
 						BtnOnEnabledChanged (control, EventArgs.Empty);
 
 			foreach (ToolStripMenuItem control in menu.Items)
 			{
 				foreach (var item in control.DropDownItems)
 					if (item is ToolStripMenuItem)
-						if (((ToolStripMenuItem) item).AccessibleDescription != null &&
-						    ((ToolStripMenuItem) item).AccessibleDescription.Length > 2)
+						if (((ToolStripMenuItem)item).AccessibleDescription != null &&
+						    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
 							MenuOnEnabledChanged (item, EventArgs.Empty);
+			}
+
+			
+			foreach (ToolStripItem item in context.Items)
+			{
+				if (item is ToolStripMenuItem)
+				{
+					if (((ToolStripMenuItem)item).AccessibleDescription != null &&
+					    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
+						MenuOnEnabledChanged (item, EventArgs.Empty);
+				}
+			}
+			
+			foreach (ToolStripItem item in context2.Items)
+			{
+				if (item is ToolStripMenuItem)
+				{
+					if (((ToolStripMenuItem)item).AccessibleDescription != null &&
+					    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
+						MenuOnEnabledChanged (item, EventArgs.Empty);
+				}
 			}
 
 
@@ -143,6 +199,7 @@ namespace Yuki_Theme_Plugin
 				case "tbSaveAll" :
 				case "miSave" :
 				case "miSaveAll" :
+				case "cmSave" :
 				{
 					res = "menu-saveall";
 				}
@@ -150,6 +207,7 @@ namespace Yuki_Theme_Plugin
 
 				case "tsCut" :
 				case "miCut" :
+				case "cmCut" :
 				{
 					res = "menu-cut";
 				}
@@ -157,6 +215,7 @@ namespace Yuki_Theme_Plugin
 
 				case "tsCopy" :
 				case "miCopy" :
+				case "cmCopy" :
 				{
 					res = "copy";
 				}
@@ -164,6 +223,7 @@ namespace Yuki_Theme_Plugin
 
 				case "tsPaste" :
 				case "miPaste" :
+				case "cmPaste" :
 				{
 					res = "menu-paste";
 				}
@@ -199,6 +259,7 @@ namespace Yuki_Theme_Plugin
 
 				case "StartButton" :
 				case "miRun" :
+				case "cmRun" :
 				{
 					res = "execute";
 				}
@@ -288,6 +349,7 @@ namespace Yuki_Theme_Plugin
 
 				case "tsFormat" :
 				case "mFORMATToolStripMenuItem" :
+				case "cmFormat" :
 				{
 					res = "magicResolve";
 				}
@@ -379,24 +441,28 @@ namespace Yuki_Theme_Plugin
 					break;
 
 				case "tsGotoDefinition" :
+				case "cmGotoDefinition" :
 				{
 					res = "showReadAccess";
 				}
 					break;
 
 				case "tsGotoRealization" :
+				case "cmGotoRealization" :
 				{
 					res = "showWriteAccess";
 				}
 					break;
 
 				case "miGenerateRealization" :
+				case "cmGenerateRealization" :
 				{
 					res = "externalTools";
 				}
 					break;
 
 				case "tsHelp" :
+				case "cmHelp" :
 				{
 					res = "help";
 				}
@@ -424,13 +490,13 @@ namespace Yuki_Theme_Plugin
 			var add = "";
 			if (hasDark (btn.AccessibleDescription))
 			{
-				var isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
+				var isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
 				add = isDark ? "" : "_dark";
 			}
 
 			var a = Assembly.GetExecutingAssembly ();
 			// MessageBox.Show (btn.Name);
-			Helper.renderSVG (btn, Helper.loadsvg (btn.AccessibleDescription + add, a, IconFolder),
+			Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + add, a, IconFolder),
 			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
 		}
 
@@ -490,6 +556,15 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
+		private void RemoveIcon (ToolStripButton mi)
+		{
+			if (needToDelete (mi.Name))
+			{
+				mi.Image?.Dispose ();
+				mi.Image = null;
+			}
+		}
+
 		private bool needToDelete (string str)
 		{
 			var res = false;
@@ -541,7 +616,7 @@ namespace Yuki_Theme_Plugin
 
 				if (isDark)
 				{
-					isDark = Helper.isDark (YukiTheme_VisualPascalABCPlugin.bg);
+					isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
 					sad = isDark ? "" : "_dark";
 				} else
 				{

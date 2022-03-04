@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Yuki_Theme_Plugin.Controls {
+namespace Yuki_Theme_Plugin.Controls.DockStyles {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Yuki_Theme_Plugin.Controls {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Yuki_Theme_Plugin.Controls.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Yuki_Theme_Plugin.Controls.DockStyles.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

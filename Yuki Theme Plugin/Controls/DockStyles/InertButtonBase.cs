@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
-namespace Yuki_Theme_Plugin.Controls
+namespace Yuki_Theme_Plugin.Controls.DockStyles
 {
     internal abstract class InertButtonBase : Control
     {

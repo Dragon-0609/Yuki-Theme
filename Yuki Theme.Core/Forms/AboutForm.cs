@@ -16,7 +16,7 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
-				$"version: {SettingsForm.current_version.ToString ("0.0").Replace (',', '.')} {SettingsForm.current_version_add}";
+				$"version: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
 			System.ComponentModel.ComponentResourceManager resources =
 				new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));

@@ -10,7 +10,9 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public abstract class AbstractParser
 	{
-		public Dictionary <string, Dictionary <string, string>> attributes;
+		// public Dictionary <string, Dictionary <string, string>> attributes;
+
+		public Theme theme;
 
 		public string outname   = "";
 		public string flname    = "";
@@ -21,7 +23,8 @@ namespace Yuki_Theme.Core.Parsers
 
 		public void Parse (string path, string st, string patsh, MForm form, bool ak = false, bool rewrite =false, bool select = true)
 		{
-			attributes = new Dictionary <string, Dictionary <string, string>> ();
+			theme = ThemeFunctions.LoadDefault ();
+			theme.Fields = new Dictionary <string, ThemeField> ();
 			outname = patsh;
 			flname = st;
 			ask = ak;
@@ -39,14 +42,27 @@ namespace Yuki_Theme.Core.Parsers
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
 			Console.WriteLine (outname);
 
-			string syt = CLI.schemes [1];
-			if (DefaultThemes.isDefault (syt))
-				CLI.CopyFromMemory (syt, outname);
-			else
+			if (!overwrite)
 			{
-				// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-				if (!CLI.schemes.Contains (flname))
-					File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), outname, true);
+				string syt = CLI.schemes [1];
+				if (DefaultThemes.isDefault (syt))
+					CLI.CopyFromMemory (syt, outname, outname);
+				else
+				{
+					// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
+					if (!CLI.schemes.Contains (flname))
+						File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), outname, true);
+				}
+			} else
+			{
+				if (outname.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
+				{
+					XmlDocument document = new XmlDocument ();
+					OldThemeFormat.loadThemeToPopulate (ref document, outname, outname, false, false, ref theme);
+					Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
+					theme.Name = OldThemeFormat.GetNameOfTheme (outname);
+					theme.SetAdditionalInfo (additionalInfo);
+				}
 			}
 
 			MergeFiles (outname);
@@ -58,83 +74,25 @@ namespace Yuki_Theme.Core.Parsers
 					form.schemes.Items.Add (flname);
 			}
 			if(select && form != null)
-				form.schemes.SelectedItem = flname;
+			{
+				// If selected theme is not theme that we just parsed
+				if ((string)form.schemes.SelectedItem != flname)
+					form.schemes.SelectedItem = flname;
+				else
+					form.restore_Click (form, EventArgs.Empty); // Reset
+			}
 		}
 
 		public void MergeFiles (string path)
 		{
+			XmlDocument doc = new XmlDocument ();
 			
-				var doc = new XmlDocument ();
-				doc.Load (path);
+			OldThemeFormat.loadThemeToPopulate (ref doc, "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd", path, false, true, ref theme);
+			
+			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
+			OldThemeFormat.MergeCommentsWithFile (theme, doc);
 
-				#region Environment
-
-				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-
-				foreach (XmlNode childNode in node.ChildNodes)
-					if (childNode.Attributes != null &&
-					    !string.Equals (childNode.Name, "Delimiters", StringComparison.Ordinal))
-					{
-						var nms = childNode.Name;
-						if (childNode.Name == "Span" || childNode.Name == "KeyWords")
-							nms = childNode.Attributes ["name"].Value;
-						if (!attributes.ContainsKey (nms)) continue;
-
-						var attrs = attributes [nms];
-
-						foreach (var att in attrs)
-						{
-							// Console.WriteLine ($"N: {childNode.Name}, ATT: {att.Key},");
-							childNode.Attributes [att.Key].Value = att.Value;
-						}
-					}
-
-				#endregion
-
-				#region Digits
-
-				node = doc.SelectSingleNode ("/SyntaxDefinition/Digits");
-				if (node.Attributes != null && !string.Equals (node.Name, "Delimiters", StringComparison.Ordinal))
-				{
-					var nms = node.Name;
-					if (node.Name == "Span" || node.Name == "KeyWords") nms = node.Attributes ["name"].Value;
-					if (attributes.ContainsKey (nms))
-					{
-						var attrs = attributes [nms];
-
-						foreach (var att in attrs) node.Attributes [att.Key].Value = att.Value;
-					}
-				}
-
-				#endregion
-
-				#region Syntax
-
-				node = doc.SelectSingleNode ("/SyntaxDefinition/RuleSets");
-				foreach (XmlNode xne in node.ChildNodes)
-				{
-					foreach (XmlNode xn in xne.ChildNodes)
-						if (xn.Attributes != null &&
-						    !string.Equals (xn.Name, "Delimiters", StringComparison.Ordinal))
-						{
-							var nms = xn.Name;
-							if (xn.Name == "Span" || xn.Name == "KeyWords")
-								nms = xn.Attributes ["name"].Value;
-							if (!attributes.ContainsKey (nms)) continue;
-
-							var attrs = attributes [nms];
-
-							foreach (var att in attrs)
-								// Console.WriteLine($"2N: {xn.Attributes["name"].Value}, ATT: {att.Key},");
-								xn.Attributes [att.Key].Value = att.Value;
-						}
-				}
-
-				;
-
-				#endregion
-
-				doc.Save (path);
+			OldThemeFormat.SaveXML (null, null, true, Helper.IsZip (outname), ref doc, outname);
 		}
 
 		public abstract void populateList (string path);
@@ -144,27 +102,27 @@ namespace Yuki_Theme.Core.Parsers
 		public void PopulateByXMLNodeSingleType (string                      name, XmlNode node, XmlNode node2,
 		                                         Dictionary <string, string> defaultValues = null)
 		{
-			var attrs = new Dictionary <string, string> ();
+			var attrs = new ThemeField ();
 
 			if (node != null)
-				attrs.Add ("color", "#" + GetValue (node));
+				attrs.Foreground  = "#" + GetValue (node);
 
 			if (node2 != null)
-				attrs.Add ("bgcolor", "#" + GetValue (node2));
+				attrs.Background = "#" + GetValue (node2);
 			if (defaultValues != null)
 			{
 				foreach (var value in defaultValues)
 				{
-					attrs.Add (value.Key, value.Value);
+					attrs.SetAttributeByName (value.Key, value.Value);
 				}
 			}
 
-			attributes.Add (name, attrs);
+			theme.Fields.Add (name, attrs);
 		}
 
 		public abstract string GetValue (XmlNode child);
 
-		public abstract Dictionary <string, string> populateDefaultAttributes (string name);
+		public abstract ThemeField populateDefaultAttributes (string name);
 
 		public abstract bool isNecessaryAttribute (string name);
 

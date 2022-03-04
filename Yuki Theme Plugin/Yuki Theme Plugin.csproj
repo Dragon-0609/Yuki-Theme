@@ -1,310 +1,305 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{36B36D1A-9A45-4015-822F-B50FEE67E63F}</ProjectGuid>
-        <OutputType>Library</OutputType>
-        <RootNamespace>Yuki_Theme_Plugin</RootNamespace>
-        <AssemblyName>Yuki Theme Plugin</AssemblyName>
-        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-        <Deterministic>true</Deterministic>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="Compiler, Version=3.7.1.2692, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Compiler.dll</HintPath>
-        </Reference>
-        <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
-          <HintPath>..\packages\Fizzler.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="ICSharpCode.TextEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a">
-          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ICSharpCode.TextEditor.dll</HintPath>
-        </Reference>
-        <Reference Include="mscorlib" />
-        <Reference Include="PascalABCNET, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PascalABCNET.exe</HintPath>
-        </Reference>
-        <Reference Include="PluginsSupport, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PluginsSupport.dll</HintPath>
-        </Reference>
-        <Reference Include="PresentationFramework" />
-        <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
-          <HintPath>..\packages\Svg.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Buffers.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Drawing" />
-        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-          <HintPath>..\packages\System.Memory.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Numerics" />
-        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Numerics.Vectors.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="System.Web" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
-        <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.7423.21162, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Controls\Bookmarks.cs" />
-        <Compile Include="Controls\CodeCompletionHighlighter.cs" />
-        <Compile Include="Controls\CustomList.cs" />
-        <Compile Include="Controls\Extender.cs" />
-        <Compile Include="Controls\Helpers\DockHelper.cs" />
-        <Compile Include="Controls\Helpers\DrawHelper.cs" />
-        <Compile Include="Controls\Helpers\ResourceHelper.cs" />
-        <Compile Include="Controls\Helpers\Win32Helper.cs" />
-        <Compile Include="Controls\InertButtonBase.cs" />
-        <Compile Include="Controls\Resources.Designer.cs" />
-        <Compile Include="Controls\Strings.Designer.cs" />
-        <Compile Include="Controls\ToolItemGroup.cs" />
-        <Compile Include="Controls\YukiAutoHideStrip.cs" />
-        <Compile Include="Controls\YukiDockPaneCaption.cs" />
-        <Compile Include="Controls\Win32\Enums.cs" />
-        <Compile Include="Controls\Win32\NativeMethods.cs" />
-        <Compile Include="Controls\YukiDockPaneStrip.cs" />
-        <Compile Include="CustomObjectWrapper.cs" />
-        <Compile Include="Form3.cs">
-            <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Form3.Designer.cs">
-            <DependentUpon>Form3.cs</DependentUpon>
-        </Compile>
-        <Compile Include="IconManager.cs" />
-        <Compile Include="MenuRenderer.cs" />
-        <Compile Include="PluginOptionsContent.cs" />
-        <Compile Include="PluginOptionsContent.Designer.cs" />
-        <Compile Include="Props.cs">
-          <SubType>Form</SubType>
-        </Compile>
-        <Compile Include="Props.Designer.cs">
-          <DependentUpon>Props.cs</DependentUpon>
-        </Compile>
-        <Compile Include="ToolBarCamouflage.cs" />
-        <Compile Include="ToolRenderer.cs" />
-        <Compile Include="YukiTheme_VisualPascalABCPlugin.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <EmbeddedResource Include="Controls\Resources.resx" />
-        <EmbeddedResource Include="Controls\Strings.resx" />
-        <EmbeddedResource Include="Form3.resx">
-          <DependentUpon>Form3.cs</DependentUpon>
-        </EmbeddedResource>
-        <EmbeddedResource Include="PluginOptionsContent.resx" />
-        <EmbeddedResource Include="Properties\Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-            <SubType>Designer</SubType>
-        </EmbeddedResource>
-        <Compile Include="Properties\Resources.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <EmbeddedResource Include="Props.resx">
-          <DependentUpon>Props.cs</DependentUpon>
-        </EmbeddedResource>
-        <None Include="Properties\Settings.settings">
-            <Generator>SettingsSingleFileGenerator</Generator>
-            <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-        </None>
-        <Compile Include="Properties\Settings.Designer.cs">
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Settings.settings</DependentUpon>
-            <DesignTimeSharedInput>True</DesignTimeSharedInput>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Resources\favorite.svg" />
-      <EmbeddedResource Include="Resources\icons\addFile_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\back_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\close_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\console_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\copy_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\dynamicUsages_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\export_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\externalTools_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\findForward_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\find_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\forward_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\gearPlain_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\help_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\intentionBulb_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\magicResolve_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-cut_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-open_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-paste_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-saveall_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\MoveTo2_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\moveToBottomLeft_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\print_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\projectTab_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\projectTab_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\redo_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\replace_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\restartDebugger_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\showHiddens_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\showReadAccess_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\showWriteAccess_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\stepOut_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\toolWindowMessages_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\traceInto_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\traceOver_disabled.svg" />
-      <EmbeddedResource Include="Resources\icons\undo_disabled.svg" />
-      <EmbeddedResource Include="Resources\quiet.svg" />
-      <EmbeddedResource Include="Resources\gearPlain.svg" />
-      <EmbeddedResource Include="Resources\layoutPreview.svg" />
-      <Content Include="Controls\Resources\Close_32.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
-      <Content Include="Controls\Resources\Dockindicator_PaneDiamond_Fill.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Hotspot.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_HotspotIndex.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Left.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Right.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Top.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelBottom.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelBottom_Active.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelFill.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelFill_Active.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelLeft.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelLeft_Active.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelRight.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelRight_Active.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelTop.bmp" />
-      <Content Include="Controls\Resources\DockIndicator_PanelTop_Active.bmp" />
-      <Content Include="Controls\Resources\DockPane_AutoHide.bmp" />
-      <Content Include="Controls\Resources\DockPane_AutoHide32.bmp" />
-      <Content Include="Controls\Resources\DockPane_Close.bmp" />
-      <Content Include="Controls\Resources\DockPane_Close32.bmp" />
-      <Content Include="Controls\Resources\DockPane_Dock.bmp" />
-      <Content Include="Controls\Resources\DockPane_Dock32.bmp" />
-      <Content Include="Controls\Resources\DockPane_Option.bmp" />
-      <Content Include="Controls\Resources\DockPane_Option32.bmp" />
-      <Content Include="Controls\Resources\DockPane_OptionOverflow.bmp" />
-      <Content Include="Controls\Resources\Thumbs.db" />
-      <EmbeddedResource Include="Resources\refresh.svg" />
-      <EmbeddedResource Include="Resources\icons\addFile.svg" />
-      <EmbeddedResource Include="Resources\icons\addFile_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\compile.svg" />
-      <EmbeddedResource Include="Resources\icons\console.svg" />
-      <EmbeddedResource Include="Resources\icons\console_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\copy.svg" />
-      <EmbeddedResource Include="Resources\icons\copy_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\cwmPermissionEdit.svg" />
-      <EmbeddedResource Include="Resources\icons\execute.svg" />
-      <EmbeddedResource Include="Resources\icons\forceRefresh.svg" />
-      <EmbeddedResource Include="Resources\icons\intentionBulb.svg" />
-      <EmbeddedResource Include="Resources\icons\intentionBulb_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\magicResolve.svg" />
-      <EmbeddedResource Include="Resources\icons\magicResolve_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-cut.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-cut_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-open.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-open_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-paste.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-paste_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-saveall.svg" />
-      <EmbeddedResource Include="Resources\icons\menu-saveall_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\redo.svg" />
-      <EmbeddedResource Include="Resources\icons\redo_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\runAll.svg" />
-      <EmbeddedResource Include="Resources\icons\stepOut.svg" />
-      <EmbeddedResource Include="Resources\icons\stepOut_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\suspend.svg" />
-      <EmbeddedResource Include="Resources\icons\traceInto.svg" />
-      <EmbeddedResource Include="Resources\icons\traceInto_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\undo.svg" />
-      <EmbeddedResource Include="Resources\icons\undo_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\startDebugger.svg" />
-      <EmbeddedResource Include="Resources\icons\restartDebugger.svg" />
-      <EmbeddedResource Include="Resources\icons\restartDebugger_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\traceOver.svg" />
-      <EmbeddedResource Include="Resources\icons\traceOver_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\back.svg" />
-      <EmbeddedResource Include="Resources\icons\back_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\forward.svg" />
-      <EmbeddedResource Include="Resources\icons\forward_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\print.svg" />
-      <EmbeddedResource Include="Resources\icons\print_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\projectTab.svg" />
-      <EmbeddedResource Include="Resources\icons\close.svg" />
-      <EmbeddedResource Include="Resources\icons\close_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\find.svg" />
-      <EmbeddedResource Include="Resources\icons\findForward.svg" />
-      <EmbeddedResource Include="Resources\icons\findForward_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\find_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\replace.svg" />
-      <EmbeddedResource Include="Resources\icons\replace_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\moveToBottomLeft.svg" />
-      <EmbeddedResource Include="Resources\icons\moveToBottomLeft_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\notificationError.svg" />
-      <EmbeddedResource Include="Resources\icons\toolWindowMessages.svg" />
-      <EmbeddedResource Include="Resources\icons\toolWindowMessages_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\dynamicUsages.svg" />
-      <EmbeddedResource Include="Resources\icons\dynamicUsages_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\showHiddens.svg" />
-      <EmbeddedResource Include="Resources\icons\showHiddens_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\MoveTo2.svg" />
-      <EmbeddedResource Include="Resources\icons\MoveTo2_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\gearPlain.svg" />
-      <EmbeddedResource Include="Resources\icons\gearPlain_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\showReadAccess.svg" />
-      <EmbeddedResource Include="Resources\icons\showReadAccess_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\showWriteAccess.svg" />
-      <EmbeddedResource Include="Resources\icons\showWriteAccess_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\externalTools.svg" />
-      <EmbeddedResource Include="Resources\icons\externalTools_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\help.svg" />
-      <EmbeddedResource Include="Resources\icons\help_dark.svg" />
-      <EmbeddedResource Include="Resources\icons\export.svg" />
-      <EmbeddedResource Include="Resources\icons\export_dark.svg" />
-      <Content Include="Resources\YukiTheme.gif" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
-        <Project>{c12b1851-e2ae-4a31-95dc-1daafcdcb108}</Project>
-        <Name>Yuki Theme.Core</Name>
-      </ProjectReference>
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{36B36D1A-9A45-4015-822F-B50FEE67E63F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Yuki_Theme_Plugin</RootNamespace>
+    <AssemblyName>Yuki Theme Plugin</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <LangVersion>9</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CodeCompletion, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\CodeCompletion.dll</HintPath>
+    </Reference>
+    <Reference Include="Compiler, Version=3.7.1.2692, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
+      <HintPath>..\packages\Fizzler.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ICSharpCode.TextEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ICSharpCode.TextEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="ParserTools, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ParserTools.dll</HintPath>
+    </Reference>
+    <Reference Include="PascalABCNET, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PascalABCNET.exe</HintPath>
+    </Reference>
+    <Reference Include="PluginsSupport, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PluginsSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
+      <HintPath>..\packages\Svg.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.7423.21162, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\CodeCompletion\CodeCompletionAllNames.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionKeyHandler.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionListView.cs" />
+    <Compile Include="Controls\CodeCompletion\CodeCompletionWindow.cs" />
+    <Compile Include="Controls\DockStyles\Bookmarks.cs" />
+    <Compile Include="Controls\DockStyles\CodeCompletionHighlighter.cs" />
+    <Compile Include="Controls\DockStyles\CustomList.cs" />
+    <Compile Include="Controls\DockStyles\Extender.cs" />
+    <Compile Include="Controls\DockStyles\InertButtonBase.cs" />
+    <Compile Include="Controls\DockStyles\Resources.Designer.cs" />
+    <Compile Include="Controls\DockStyles\Strings.Designer.cs" />
+    <Compile Include="Controls\DockStyles\ToolItemGroup.cs" />
+    <Compile Include="Controls\DockStyles\YukiAutoHideStrip.cs" />
+    <Compile Include="Controls\DockStyles\YukiDockPaneCaption.cs" />
+    <Compile Include="Controls\DockStyles\YukiDockPaneStrip.cs" />
+    <Compile Include="Controls\Helpers\DockHelper.cs" />
+    <Compile Include="Controls\Helpers\DrawHelper.cs" />
+    <Compile Include="Controls\Helpers\ResourceHelper.cs" />
+    <Compile Include="Controls\Helpers\Win32Helper.cs" />
+    <Compile Include="Controls\Win32\Enums.cs" />
+    <Compile Include="Controls\Win32\NativeMethods.cs" />
+    <Compile Include="IconManager.cs" />
+    <Compile Include="MenuRenderer.cs" />
+    <Compile Include="PluginOptionsContent.cs" />
+    <Compile Include="PluginOptionsContent.Designer.cs" />
+    <Compile Include="Props.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Props.Designer.cs">
+      <DependentUpon>Props.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBarCamouflage.cs" />
+    <Compile Include="ToolRenderer.cs" />
+    <Compile Include="YukiTheme_VisualPascalABCPlugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
+    <EmbeddedResource Include="Controls\DockStyles\Strings.resx" />
+    <EmbeddedResource Include="PluginOptionsContent.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Props.resx">
+      <DependentUpon>Props.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\favorite.svg" />
+    <EmbeddedResource Include="Resources\icons\addFile_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\back_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\close_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\console_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\copy_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\dynamicUsages_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\export_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\externalTools_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\findForward_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\find_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\forward_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\gearPlain_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\help_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\intentionBulb_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\magicResolve_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-cut_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-open_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-paste_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-saveall_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\MoveTo2_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\moveToBottomLeft_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\print_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\projectTab_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\projectTab_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\redo_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\replace_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\restartDebugger_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\showHiddens_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\showReadAccess_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\showWriteAccess_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\stepOut_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\toolWindowMessages_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\traceInto_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\traceOver_disabled.svg" />
+    <EmbeddedResource Include="Resources\icons\undo_disabled.svg" />
+    <EmbeddedResource Include="Resources\quiet.svg" />
+    <EmbeddedResource Include="Resources\gearPlain.svg" />
+    <EmbeddedResource Include="Resources\layoutPreview.svg" />
+    <Content Include="Controls\Resources\Close_32.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
+    <Content Include="Controls\Resources\Dockindicator_PaneDiamond_Fill.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Hotspot.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_HotspotIndex.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Left.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Right.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PaneDiamond_Top.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelBottom.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelBottom_Active.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelFill.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelFill_Active.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelLeft.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelLeft_Active.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelRight.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelRight_Active.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelTop.bmp" />
+    <Content Include="Controls\Resources\DockIndicator_PanelTop_Active.bmp" />
+    <Content Include="Controls\Resources\DockPane_AutoHide.bmp" />
+    <Content Include="Controls\Resources\DockPane_AutoHide32.bmp" />
+    <Content Include="Controls\Resources\DockPane_Close.bmp" />
+    <Content Include="Controls\Resources\DockPane_Close32.bmp" />
+    <Content Include="Controls\Resources\DockPane_Dock.bmp" />
+    <Content Include="Controls\Resources\DockPane_Dock32.bmp" />
+    <Content Include="Controls\Resources\DockPane_Option.bmp" />
+    <Content Include="Controls\Resources\DockPane_Option32.bmp" />
+    <Content Include="Controls\Resources\DockPane_OptionOverflow.bmp" />
+    <Content Include="Controls\Resources\Thumbs.db" />
+    <EmbeddedResource Include="Resources\refresh.svg" />
+    <EmbeddedResource Include="Resources\icons\addFile.svg" />
+    <EmbeddedResource Include="Resources\icons\addFile_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\compile.svg" />
+    <EmbeddedResource Include="Resources\icons\console.svg" />
+    <EmbeddedResource Include="Resources\icons\console_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\copy.svg" />
+    <EmbeddedResource Include="Resources\icons\copy_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\cwmPermissionEdit.svg" />
+    <EmbeddedResource Include="Resources\icons\execute.svg" />
+    <EmbeddedResource Include="Resources\icons\forceRefresh.svg" />
+    <EmbeddedResource Include="Resources\icons\intentionBulb.svg" />
+    <EmbeddedResource Include="Resources\icons\intentionBulb_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\magicResolve.svg" />
+    <EmbeddedResource Include="Resources\icons\magicResolve_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-cut.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-cut_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-open.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-open_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-paste.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-paste_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-saveall.svg" />
+    <EmbeddedResource Include="Resources\icons\menu-saveall_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\redo.svg" />
+    <EmbeddedResource Include="Resources\icons\redo_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\runAll.svg" />
+    <EmbeddedResource Include="Resources\icons\stepOut.svg" />
+    <EmbeddedResource Include="Resources\icons\stepOut_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\suspend.svg" />
+    <EmbeddedResource Include="Resources\icons\traceInto.svg" />
+    <EmbeddedResource Include="Resources\icons\traceInto_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\undo.svg" />
+    <EmbeddedResource Include="Resources\icons\undo_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\startDebugger.svg" />
+    <EmbeddedResource Include="Resources\icons\restartDebugger.svg" />
+    <EmbeddedResource Include="Resources\icons\restartDebugger_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\traceOver.svg" />
+    <EmbeddedResource Include="Resources\icons\traceOver_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\back.svg" />
+    <EmbeddedResource Include="Resources\icons\back_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\forward.svg" />
+    <EmbeddedResource Include="Resources\icons\forward_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\print.svg" />
+    <EmbeddedResource Include="Resources\icons\print_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\projectTab.svg" />
+    <EmbeddedResource Include="Resources\icons\close.svg" />
+    <EmbeddedResource Include="Resources\icons\close_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\find.svg" />
+    <EmbeddedResource Include="Resources\icons\findForward.svg" />
+    <EmbeddedResource Include="Resources\icons\findForward_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\find_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\replace.svg" />
+    <EmbeddedResource Include="Resources\icons\replace_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\moveToBottomLeft.svg" />
+    <EmbeddedResource Include="Resources\icons\moveToBottomLeft_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\notificationError.svg" />
+    <EmbeddedResource Include="Resources\icons\toolWindowMessages.svg" />
+    <EmbeddedResource Include="Resources\icons\toolWindowMessages_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\dynamicUsages.svg" />
+    <EmbeddedResource Include="Resources\icons\dynamicUsages_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\showHiddens.svg" />
+    <EmbeddedResource Include="Resources\icons\showHiddens_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\MoveTo2.svg" />
+    <EmbeddedResource Include="Resources\icons\MoveTo2_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\gearPlain.svg" />
+    <EmbeddedResource Include="Resources\icons\gearPlain_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\showReadAccess.svg" />
+    <EmbeddedResource Include="Resources\icons\showReadAccess_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\showWriteAccess.svg" />
+    <EmbeddedResource Include="Resources\icons\showWriteAccess_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\externalTools.svg" />
+    <EmbeddedResource Include="Resources\icons\externalTools_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\help.svg" />
+    <EmbeddedResource Include="Resources\icons\help_dark.svg" />
+    <EmbeddedResource Include="Resources\icons\export.svg" />
+    <EmbeddedResource Include="Resources\icons\export_dark.svg" />
+    <Content Include="Resources\YukiTheme.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
+      <Project>{c12b1851-e2ae-4a31-95dc-1daafcdcb108}</Project>
+      <Name>Yuki Theme.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
+using Yuki_Theme.Core;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme_Plugin.Controls;
+using Yuki_Theme_Plugin.Controls.DockStyles;
 
 namespace Yuki_Theme_Plugin
 {
@@ -129,11 +131,11 @@ namespace Yuki_Theme_Plugin
 
 		private void PopulateList ()
 		{
-			var data = database.ReadData (SettingsForm.CAMOUFLAGEHIDDEN);
+			var data = database.ReadData (Settings.CAMOUFLAGEHIDDEN);
 
 			PopulateLists (data, ref itemsToHide);
 
-			data = database.ReadData (SettingsForm.CAMOUFLAGEPOSITIONS);
+			data = database.ReadData (Settings.CAMOUFLAGEPOSITIONS);
 			PopulateLists (data, ref itemsToRight);
 		}
 
@@ -159,11 +161,11 @@ namespace Yuki_Theme_Plugin
 		{
 			var output = "";
 			if (itemsToHide.Count > 0) output = CollectString (itemsToHide);
-			database.UpdateData (SettingsForm.CAMOUFLAGEHIDDEN, output);
+			database.UpdateData (Settings.CAMOUFLAGEHIDDEN, output);
 			output = "";
 			if (itemsToRight.Count > 0) output = CollectString (itemsToRight);
 
-			database.UpdateData (SettingsForm.CAMOUFLAGEPOSITIONS, output);
+			database.UpdateData (Settings.CAMOUFLAGEPOSITIONS, output);
 		}
 
 		private string CollectString (List <string> list)
