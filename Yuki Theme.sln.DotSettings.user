@@ -62,6 +62,7 @@
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_0020Plugin_002FControls_002FDockStyles_002FStrings/@EntryIndexedValue">True</s:Boolean>
+	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_0020Plugin_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FControls_002FColorEditor_002FColorPicker_002FControls_002FColorSliderVertical/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FControls_002FRJComboBox/@EntryIndexedValue">True</s:Boolean>

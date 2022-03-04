@@ -115,13 +115,6 @@
     <Compile Include="Controls\Helpers\Win32Helper.cs" />
     <Compile Include="Controls\Win32\Enums.cs" />
     <Compile Include="Controls\Win32\NativeMethods.cs" />
-    <Compile Include="CustomObjectWrapper.cs" />
-    <Compile Include="Form3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form3.Designer.cs">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </Compile>
     <Compile Include="IconManager.cs" />
     <Compile Include="MenuRenderer.cs" />
     <Compile Include="PluginOptionsContent.cs" />
@@ -138,9 +131,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
     <EmbeddedResource Include="Controls\DockStyles\Strings.resx" />
-    <EmbeddedResource Include="Form3.resx">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PluginOptionsContent.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

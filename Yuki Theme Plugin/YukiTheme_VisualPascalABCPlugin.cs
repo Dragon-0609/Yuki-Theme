@@ -1112,7 +1112,7 @@ namespace Yuki_Theme_Plugin
 
 		private void PaintBG (object sender, PaintEventArgs e)
 		{
-			if(margin != null)
+			if (margin != null)
 			{
 				e.Graphics.FillRectangle (new SolidBrush (bgdef), margin.DrawingPosition.X,
 				                          margin.DrawingPosition.Y,
@@ -1121,40 +1121,48 @@ namespace Yuki_Theme_Plugin
 					typeof (IconBarMargin).GetMethod ("IsLineInsideRegion",
 					                                  BindingFlags.Static | BindingFlags.NonPublic);
 				// paint icons
-				foreach (Bookmark mark in textArea.Document.BookmarkManager.Marks) {
-					int lineNumber = textArea.Document.GetVisibleLine(mark.LineNumber);
+				foreach (Bookmark mark in textArea.Document.BookmarkManager.Marks)
+				{
+					int lineNumber = textArea.Document.GetVisibleLine (mark.LineNumber);
 					int lineHeight = textArea.TextView.FontHeight;
 					int yPos = (int)(lineNumber * lineHeight) - textArea.VirtualTop.Y;
-					if ((bool) inside.Invoke(null,new object[] {yPos, yPos + lineHeight, margin.DrawingPosition.Y, margin.DrawingPosition.Height})) {
-						if (lineNumber == textArea.Document.GetVisibleLine(mark.LineNumber - 1)) {
+					if ((bool)inside.Invoke (
+						    null, new object [] { yPos, yPos + lineHeight, margin.DrawingPosition.Y, margin.DrawingPosition.Height }))
+					{
+						if (lineNumber == textArea.Document.GetVisibleLine (mark.LineNumber - 1))
+						{
 							// marker is inside folded region, do not draw it
 							continue;
 						}
-						mark.Draw(margin, e.Graphics, new Point(0, yPos));
+
+						mark.Draw (margin, e.Graphics, new Point (0, yPos));
 					}
 				}
 			}
 
 			if (foldmargin != null)
 			{
-				e.Graphics.DrawLine(BrushRegistry.GetDotPen(bgdef, bgBorder),
-				                    foldmargin.DrawingPosition.X,
-				                    foldmargin.DrawingPosition.Y,
-				                    foldmargin.DrawingPosition.X,
-				                    foldmargin.DrawingPosition.Height);
+				setMarginPosition ();
+				e.Graphics.DrawLine (BrushRegistry.GetDotPen (bgdef, bgBorder),
+				                     foldmargin.DrawingPosition.X,
+				                     foldmargin.DrawingPosition.Y,
+				                     foldmargin.DrawingPosition.X,
+				                     foldmargin.DrawingPosition.Height);
 			}
 
-			if(img != null && bgImage)
+			if (img != null && bgImage)
 			{
-				if (oldSizeOfTextEditor.Width != textEditor.ClientRectangle.Width || oldSizeOfTextEditor.Height != textEditor.ClientRectangle.Height)
+				if (oldSizeOfTextEditor.Width != textEditor.ClientRectangle.Width ||
+				    oldSizeOfTextEditor.Height != textEditor.ClientRectangle.Height)
 				{
 					oldSizeOfTextEditor = Helper.GetSizes (img.Size, textEditor.ClientRectangle.Width, textEditor.ClientRectangle.Height,
-					                        wallpaperAlign);
+					                                       wallpaperAlign);
 				}
+
 				e.Graphics.DrawImage (img, oldSizeOfTextEditor);
 			}
 		}
-		
+
 		private void CtrlOnPaint (object sender, PaintEventArgs e)
 		{
 			e.Graphics.FillRectangle (new SolidBrush (bgdef), e.ClipRectangle);
@@ -1372,29 +1380,43 @@ namespace Yuki_Theme_Plugin
 
 		private void setMargin ()
 		{
-			int currentXPos = 0;
 			foreach (AbstractMargin margins in textArea.LeftMargins)
 			{
-				// MessageBox.Show (margin.Size.ToString());
-				Rectangle marginRectangle = new Rectangle(currentXPos , 0, margins.Size.Width, textArea.Height);
-				if (margins.IsVisible || margins is FoldMargin)
-				{
-					currentXPos += margins.DrawingPosition.Width;
-				}
 				if (margins is IconBarMargin)
 				{
 					margin = (IconBarMargin) margins;
 				}else if (margins is FoldMargin)
 				{
 					foldmargin = (FoldMargin) margins;
-					
-					if (marginRectangle != margin.DrawingPosition) { // Be sure that the line has valid rectangle
-						foldmargin.DrawingPosition = marginRectangle;
-					}
 				}
 			}
 		}
-		
+
+		private void setMarginPosition ()
+		{
+			int currentXPos = 0;
+			foreach (AbstractMargin margins in textArea.LeftMargins)
+			{
+				Rectangle marginRectangle = new Rectangle (currentXPos, 0, margins.Size.Width, textArea.Height);
+				if (margins.IsVisible || margins is FoldMargin)
+				{
+					currentXPos += margins.DrawingPosition.Width;
+				}
+
+				if (margins is FoldMargin)
+				{
+					if (marginRectangle != margin.DrawingPosition)
+					{
+						// Be sure that the line has valid rectangle
+						foldmargin.DrawingPosition = marginRectangle;
+					}
+
+					break;
+				}
+
+			}
+		}
+
 		private void ReleaseResources ()
 		{
 			
