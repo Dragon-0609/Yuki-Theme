@@ -73,14 +73,9 @@ namespace Yuki_Theme.Core.Forms
 		public void onRename (string from, string to)
 		{
 			ListViewItem res = scheme.Items.Find (from, true) [0];
-			res.Text = ReItem.THEME_WHITE_SPACE + to;
-			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
-			
-			CLI.oldThemeList.Add (to, CLI.oldThemeList[from]);
-			CLI.isDefaultTheme.Add (to, false);
-			
-			CLI.isDefaultTheme.Remove (from);
-			CLI.oldThemeList.Remove (from);
+			ReItem reit = (ReItem)res;
+			reit.SetName (to);
+			form.schemes.Invalidate();
 		}
 
 		#region Events
@@ -128,9 +123,10 @@ namespace Yuki_Theme.Core.Forms
 
 		private void remove_Click (object sender, EventArgs e)
 		{
-			if (scheme.SelectedItems.Count > 0)
+			if (scheme.SelectedItems.Count > 0 && scheme.SelectedItems[0] is ReItem)
 			{
-				CLI.remove (scheme.SelectedItems [0].Text.Substring (7), askDelete, afterAsk, afterDelete);
+				ReItem item = (ReItem)scheme.SelectedItems [0];
+				CLI.remove (item.Name, askDelete, afterAsk, afterDelete);
 			}
 		}
 
