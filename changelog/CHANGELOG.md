@@ -11,6 +11,7 @@ Added to both:
 1. Old/New Theme format
 2. Export themes even for other languages: CSharp, Haskell, KuMir, KuMir00, Python, VB.NET
 3. Collapse/Expand to ThemeManager
+4. Identify theme in Highlighting directory better
 
 Fixed: Left Border of text editor isn't shown [#23](https://github.com/Dragon-0609/Yuki-Theme/issues/23)
 
