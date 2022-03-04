@@ -49,8 +49,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private static string ReplaceCheckbox (string md)
 		{
-			md = md.Replace ("- [x]", "<input disabled type='checkbox' checked='checked'>");
-			md = md.Replace ("- [ ]", "<input disabled type='checkbox'>");
+			md = md.Replace ("- [x]", "<br><input disabled type='checkbox' checked='checked'>");
+			md = md.Replace ("- [ ]", "<br><input disabled type='checkbox'>");
 			return md;
 		}
 

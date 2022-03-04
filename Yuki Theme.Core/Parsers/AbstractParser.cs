@@ -69,6 +69,7 @@ namespace Yuki_Theme.Core.Parsers
 			finishParsing (path);
 			if (!overwrite)
 			{
+				CLI.AddThemeToLists (flname, false, true);
 				CLI.names.Add (flname);
 				if (form != null)
 					form.schemes.Items.Add (flname);

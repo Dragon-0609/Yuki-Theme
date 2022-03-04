@@ -17,9 +17,8 @@ namespace Yuki_Theme.Core.Controls
 
 		public ReItem (string name, bool IsGroup = false) : base ()
 		{
-			Name = name;
-			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
 			isGroup = IsGroup;
+			SetName (name);
 			Font = null;
 			ParentGroup = null;
 			isOld = false;
@@ -27,9 +26,8 @@ namespace Yuki_Theme.Core.Controls
 
 		public ReItem (string name, bool IsGroup = false, ReItem rgroup = null) : base ()
 		{
-			Name = name;
-			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
 			isGroup = IsGroup;
+			SetName (name);
 			Font = null;
 			ParentGroup = rgroup;
 			isOld = false;
@@ -37,9 +35,8 @@ namespace Yuki_Theme.Core.Controls
 
 		public ReItem (string name, bool IsGroup = false, bool IsOld = false, ReItem rgroup = null) : base ()
 		{
-			Name = name;
-			Text = IsGroup ? name : THEME_WHITE_SPACE + name;
 			isGroup = IsGroup;
+			SetName (name);
 			Font = null;
 			ParentGroup = rgroup;
 			isOld = IsOld;
@@ -69,6 +66,11 @@ namespace Yuki_Theme.Core.Controls
 		{
 			children = children.OrderBy (i => i.Name).ToList ();
 		}
-		
+
+		public void SetName (string name)
+		{
+			Name = name;
+			Text = isGroup ? name : THEME_WHITE_SPACE + name;
+		}
 	}
 }

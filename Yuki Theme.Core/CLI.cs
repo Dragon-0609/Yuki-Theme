@@ -91,10 +91,9 @@ namespace Yuki_Theme.Core
 		/// <returns></returns>
 		public static bool add (string copyFrom, string name)
 		{
-			string syt = Helper.ConvertNameToPath (copyFrom);
 			string sto = Helper.ConvertNameToPath (name);
 			string patsh = Path.Combine (currentPath,
-			                             $"Themes/{sto}" + (oldThemeList [syt] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW));
+			                             $"Themes/{sto}" + (oldThemeList [copyFrom] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW));
 			Helper.CreateThemeDirectory ();
 
 			bool exist = false;
@@ -114,7 +113,7 @@ namespace Yuki_Theme.Core
 			if (!DefaultThemes.isDefault (name))
 			{
 				string pth = "";
-				if (CopyTheme (copyFrom, syt, patsh, out pth, true)) return true;
+				if (CopyTheme (copyFrom, copyFrom, patsh, out pth, true)) return true;
 				bool done = ReGenerateTheme (patsh, pth, name, copyFrom, false);
 				if (!done)
 					WriteName (patsh, name);
@@ -179,7 +178,8 @@ namespace Yuki_Theme.Core
 			string sft = Helper.ConvertNameToPath (st);
 			if (DefaultThemes.getCategory (st).ToLower () == "custom")
 			{
-				if (File.Exists (Path.Combine (currentPath, "Themes", $"{sft}.yukitheme")))
+				string ext = oldThemeList [st] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW;
+				if (File.Exists (Path.Combine (currentPath, "Themes", $"{sft}{ext}")))
 				{
 					if (askD ($"Do you really want to delete '{st}'?", "Delete"))
 					{
@@ -187,7 +187,7 @@ namespace Yuki_Theme.Core
 						if (afterAsk != null) bn = afterAsk (sft);
 
 						Settings.saveData ();
-						File.Delete (Path.Combine (currentPath, $"Themes/{sft}.yukitheme"));
+						File.Delete (Path.Combine (currentPath, $"Themes/{sft}{ext}"));
 						schemes.Remove (sft);
 						if (afterDelete != null) afterDelete (sft, bn);
 					}
@@ -371,7 +371,11 @@ namespace Yuki_Theme.Core
 						if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is exist! Choose another name", "Name Exist");
 					}
 				}
-				
+
+				AddThemeToLists (to, false, oldThemeList [from]);
+				isDefaultTheme.Remove (from);
+				oldThemeList.Remove (from);
+
 			} else
 			{
 				if (CLI_Actions.showError != null) CLI_Actions.showError ("You mustn't choose default theme. Choose custom theme!", "Default theme");
@@ -837,7 +841,12 @@ namespace Yuki_Theme.Core
 				save (img2, img3, wantToKeep);
 			}
 		}
-		
+
+		public static void AddThemeToLists (string name, bool isDefault, bool isOld)
+		{
+			isDefaultTheme.Add (name, isDefault);
+			oldThemeList.Add (name, isOld);
+		}
 
 		private static string [] IdentifySyntaxHighlightings (string[] files)
 		{
