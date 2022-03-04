@@ -75,6 +75,8 @@ namespace Yuki_Theme.Core.Forms
 			ListViewItem res = scheme.Items.Find (from, true) [0];
 			ReItem reit = (ReItem)res;
 			reit.SetName (to);
+			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
+			scheme.Invalidate();
 			form.schemes.Invalidate();
 		}
 

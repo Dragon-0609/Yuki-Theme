@@ -262,10 +262,10 @@ namespace Yuki_Theme.Core
 				string txml = doc.OuterXml;
 				if (iszip)
 				{
-					Helper.UpdateZip (themePath, txml, img2, wantToKeep, img3, wantToKeep, "theme.xshd");
+					Helper.UpdateZip (themePath, txml, img2, wantToKeep, img3, wantToKeep, "theme.xshd", true);
 				} else
 				{
-					Helper.Zip (themePath, txml, img2, img3, "theme.xshd");
+					Helper.Zip (themePath, txml, img2, img3, "theme.xshd", true);
 				}
 			}
 		}
