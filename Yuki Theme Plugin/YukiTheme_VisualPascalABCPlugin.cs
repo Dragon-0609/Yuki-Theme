@@ -1236,10 +1236,10 @@ namespace Yuki_Theme_Plugin
 		private void CloseOnClick (object sender, EventArgs e)
 		{
 			fm.Controls.Remove (panel_bg);
-			panel_bg.Dispose ();
-			themeList.Dispose ();
+			panel_bg?.Dispose ();
+			themeList?.searchBar.Dispose ();
+			themeList?.Dispose ();
 			panel_bg = null;
-			themeList.UpdateHighlighting (themeList.SelectedIndex);
 			if (tmpImage1 != null)
 			{
 				tmpImage1.Dispose ();

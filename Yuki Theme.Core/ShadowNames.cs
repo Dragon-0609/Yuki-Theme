@@ -52,6 +52,7 @@ namespace Yuki_Theme.Core
 		public static string [] GetFields (SyntaxType type)
 		{
 			string [] res = null;
+			
 			switch (type)
 			{
 				case SyntaxType.Pascal :

@@ -38,12 +38,20 @@ namespace Yuki_Theme.Core.Forms
 			html = html.Replace ("__bg__", ColorTranslator.ToHtml (Helper.bgColor));
 			html = html.Replace ("__clr__", ColorTranslator.ToHtml (Helper.fgColor));
 			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (Helper.fgHover));
+			md = ReplaceCheckbox (md);
 			string str = CommonMark.CommonMarkConverter.Convert (md);
 
 			html = html.Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
 			webBrowser1.ScrollBarsEnabled = true;
 			this.webBrowser1.ObjectForScripting = this;
+		}
+
+		private static string ReplaceCheckbox (string md)
+		{
+			md = md.Replace ("- [x]", "<input disabled type='checkbox' checked='checked'>");
+			md = md.Replace ("- [ ]", "<input disabled type='checkbox'>");
+			return md;
 		}
 
 		private void ChangelogForm_Shown (object sender, EventArgs e)
@@ -90,6 +98,7 @@ namespace Yuki_Theme.Core.Forms
 			mdd = mdd.Split (new [] {"###"}, StringSplitOptions.None) [1];
 			if (!expanded)
 				mdd = mdd.Split (new [] {"##"}, StringSplitOptions.None) [1];
+			mdd = ReplaceCheckbox (mdd);
 			mdd = CommonMark.CommonMarkConverter.Convert (mdd);
 			stm.Dispose ();
 			// Load SVG

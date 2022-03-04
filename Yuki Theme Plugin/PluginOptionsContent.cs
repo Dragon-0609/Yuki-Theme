@@ -17,9 +17,9 @@ namespace Yuki_Theme_Plugin
 		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
 		{
 			InitializeComponent ();
-			settingsPanel.SettingsPanel_Load ();
 			plugin = plug;
 			settingsPanel.isFromPascal = true; // To recognize
+			settingsPanel.SettingsPanel_Load ();
 		}
 
 		private bool alreadyShown;
