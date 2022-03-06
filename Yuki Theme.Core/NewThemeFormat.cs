@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
@@ -53,13 +54,18 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static string loadThemeToPopulate (string pathToMemory, string pathToFile, bool needToGetImages, bool isDefault)
+		public static string loadThemeToPopulate (string pathToFile, bool needToGetImages, bool isDefault, string nameToLoadForMemory,
+		                                          string extension)
 		{
 			string json = "";
 			if (isDefault)
 			{
-				var a = CLI.GetCore ();
-				
+				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
+				IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+				Assembly a = header.Location;
+				string pathToMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
+				// var a = CLI.GetCore ();
+
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, a);
 				if (content.Item1)
 				{
@@ -126,6 +132,7 @@ namespace Yuki_Theme.Core
 						if (CLI_Actions.ifDoesntHaveSticker2 != null)
 							CLI_Actions.ifDoesntHaveSticker2 ();
 					}
+
 					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
 					json = reader.ReadToEnd ();
 				}
@@ -190,6 +197,7 @@ namespace Yuki_Theme.Core
 						if (CLI_Actions.ifDoesntHaveSticker2 != null)
 							CLI_Actions.ifDoesntHaveSticker2 ();
 					}
+
 					json = File.ReadAllText (pathToFile);
 				}
 			}
@@ -202,10 +210,9 @@ namespace Yuki_Theme.Core
 			string nm = "";
 			if (path.Contains ("__"))
 			{
-				
 			}
 
-			string json = loadThemeToPopulate (path, path, false, false);
+			string json = loadThemeToPopulate (path, false, false, "", "");
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			nm = theme.Name;
 			return nm;
@@ -236,7 +243,8 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void PopulateDictionaryFromTheme (Theme theme, ref Dictionary <string, ThemeField> attributes, ref List <string> namesExtended)
+		public static void PopulateDictionaryFromTheme (Theme             theme, ref Dictionary <string, ThemeField> attributes,
+		                                                ref List <string> namesExtended)
 		{
 			foreach (KeyValuePair <string, ThemeField> field in theme.Fields)
 			{
@@ -250,9 +258,9 @@ namespace Yuki_Theme.Core
 
 		public static void populateList ()
 		{
-			Console.WriteLine(CLI.nameToLoad);
+			Console.WriteLine (CLI.nameToLoad);
 			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
-			string json = loadThemeToPopulate (CLI.pathToMemoryNew, CLI.pathToFileNew, true, isDef);
+			string json = loadThemeToPopulate (CLI.pathToFileNew, true, isDef, CLI.nameToLoad, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
@@ -262,6 +270,5 @@ namespace Yuki_Theme.Core
 			CLI.names.InsertRange (1, ShadowNames.imageNames);
 			CLI.currentTheme = theme;
 		}
-	
 	}
 }

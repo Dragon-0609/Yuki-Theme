@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
 
@@ -288,11 +289,31 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc, string pathForMemory, string pathForFile, bool needToDoActions, bool   isDefault, ref Theme themeToSet) 
+		public static void loadThemeToPopulate (ref XmlDocument doc, string pathForFile, bool needToDoActions, bool   isDefault, ref Theme themeToSet, string nameToLoadForMemory, string extension, bool customNameForMemory) 
 		{
 			if (isDefault)
 			{
-				var a = CLI.GetCore ();
+				Assembly a;
+				string pathForMemory = "";
+				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
+				if (customNameForMemory)
+				{
+					a = CLI.GetCore ();
+					pathForMemory = pathForFile;
+				}else
+				{
+					if (DefaultThemes.names.Contains (nameToLoadForMemory))
+					{
+						IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+						a = header.Location;
+						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
+					} else
+					{
+						a = CLI.GetCore ();
+						pathForMemory = $"{DefaultThemesHeader.CoreThemeHeader}.{pathToLoad}{extension}";
+					}
+				}
+
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
 				themeToSet.fullPath = pathForMemory;
 				themeToSet.isDefault = true;
@@ -543,7 +564,7 @@ namespace Yuki_Theme.Core
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToMemory, CLI.pathToFile, true, isDef, ref theme);
+				loadThemeToPopulate (ref doc, CLI.pathToFile, true, isDef, ref theme, CLI.nameToLoad, Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
 				return;

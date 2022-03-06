@@ -21,12 +21,12 @@ namespace Yuki_Theme.Core.Parsers
 				return;
 			}
 
-			string pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
+			string pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
 			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yukitheme");
 
 			if (st.EndsWith (".yuki"))
 			{
-				pathe =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
+				pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
                 pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yuki");
 			}
 			
@@ -46,7 +46,7 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						bool has = checkAvailable (pathef);
 						jetparser = new JetBrainsParser ();
-						jetparser.Parse (path, st, pathe, form, ask, has, select);
+						jetparser.Parse (path, st, pathToSave, form, ask, has, select);
 						
 						jetparser = null;
 						GC.Collect();
@@ -59,7 +59,7 @@ namespace Yuki_Theme.Core.Parsers
 						dokiparser = new DokiThemeParser ();
 						dokiparser.defaultTheme = defaultTheme;
 						dokiparser.exist = exist;
-						dokiparser.Parse (path, st, pathe, form, ask, has, select);
+						dokiparser.Parse (path, st, pathToSave, form, ask, has, select);
 						
 						dokiparser = null;
 						GC.Collect();

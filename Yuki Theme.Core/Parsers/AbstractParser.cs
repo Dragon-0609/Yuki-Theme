@@ -14,18 +14,18 @@ namespace Yuki_Theme.Core.Parsers
 
 		public Theme theme;
 
-		public string outname   = "";
+		public string PathToSave   = "";
 		public string flname    = "";
 		public bool   ask       = false;
 		public bool   overwrite = false;
 
 		public Action <string, string> defaultTheme;
 
-		public void Parse (string path, string st, string patsh, MForm form, bool ak = false, bool rewrite =false, bool select = true)
+		public void Parse (string path, string st, string pathToSave, MForm form, bool ak = false, bool rewrite =false, bool select = true)
 		{
 			theme = ThemeFunctions.LoadDefault ();
 			theme.Fields = new Dictionary <string, ThemeField> ();
-			outname = patsh;
+			PathToSave = pathToSave;
 			flname = st;
 			ask = ak;
 			overwrite = rewrite;
@@ -40,32 +40,32 @@ namespace Yuki_Theme.Core.Parsers
 			
 			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
-			Console.WriteLine (outname);
+			Console.WriteLine (PathToSave);
 
 			if (!overwrite)
 			{
 				string syt = CLI.schemes [1];
 				if (DefaultThemes.isDefault (syt))
-					CLI.CopyFromMemory (syt, outname, outname);
+					CLI.CopyFromMemory (syt, PathToSave, PathToSave);
 				else
 				{
 					// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
 					if (!CLI.schemes.Contains (flname))
-						File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), outname, true);
+						File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
 				}
 			} else
 			{
-				if (outname.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
+				if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
 				{
 					XmlDocument document = new XmlDocument ();
-					OldThemeFormat.loadThemeToPopulate (ref document, outname, outname, false, false, ref theme);
+					OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, flname, Helper.FILE_EXTENSTION_OLD, false);
 					Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
-					theme.Name = OldThemeFormat.GetNameOfTheme (outname);
+					theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
 					theme.SetAdditionalInfo (additionalInfo);
 				}
 			}
 
-			MergeFiles (outname);
+			MergeFiles (PathToSave);
 			finishParsing (path);
 			if (!overwrite)
 			{
@@ -87,13 +87,14 @@ namespace Yuki_Theme.Core.Parsers
 		public void MergeFiles (string path)
 		{
 			XmlDocument doc = new XmlDocument ();
-			
-			OldThemeFormat.loadThemeToPopulate (ref doc, "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd", path, false, true, ref theme);
+
+			OldThemeFormat.loadThemeToPopulate (ref doc, "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd", false, true,
+			                                    ref theme, PathToSave, Helper.FILE_EXTENSTION_OLD, true);
 			
 			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
 			OldThemeFormat.MergeCommentsWithFile (theme, doc);
 
-			OldThemeFormat.SaveXML (null, null, true, Helper.IsZip (outname), ref doc, outname);
+			OldThemeFormat.SaveXML (null, null, true, Helper.IsZip (PathToSave), ref doc, PathToSave);
 		}
 
 		public abstract void populateList (string path);

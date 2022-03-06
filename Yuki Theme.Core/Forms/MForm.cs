@@ -477,21 +477,28 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (tmanagerform == null || tmanagerform.IsDisposed)
 				tmanagerform = new ThemeManager (this);
-
-			ReItem defa = new ReItem ("Default", true);
-			ReItem doki = new ReItem ("Doki Theme", true);
-			ReItem custom = new ReItem ("Custom", true);
+			
 			tmanagerform.groups.Clear ();
-			tmanagerform.groups.Add (defa);
-			tmanagerform.groups.Add (doki);
+
+			Dictionary <string, ReItem> groupItems = new Dictionary <string, ReItem> ();
+
+			foreach (string sc in DefaultThemes.categoriesList)
+			{
+				ReItem defa = new ReItem (sc, true);
+				tmanagerform.groups.Add (defa);
+				groupItems.Add (sc, defa);
+			}
+			
+			ReItem custom = new ReItem ("Custom", true);
 			tmanagerform.groups.Add (custom);
+			groupItems.Add ("Custom", custom);
 			
 			foreach (string item in schemes.Items)
 			{
 				ReItem litem;
 				if (CLI.isDefaultTheme [item])
 				{
-					ReItem cat = DefaultThemes.getCategory (item) == "Doki Theme" ? doki : defa;
+					ReItem cat = groupItems [DefaultThemes.getCategory (item)];
 					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
 				} else
 				{

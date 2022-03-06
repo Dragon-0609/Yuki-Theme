@@ -30,13 +30,13 @@ namespace Yuki_Theme.Core.Parsers
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
 			flname = ofname;
-			outname = Path.Combine (CLI.currentPath, "Themes",
+			PathToSave = Path.Combine (CLI.currentPath, "Themes",
 			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
-			if (!MainParser.checkAvailableAndAsk (outname, ask, exist))
+			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
 				throw new InvalidDataException ("The theme is exist...canceling...");
 
-			overwrite = File.Exists (outname);
-			Console.WriteLine ("{0} | Exist: {1}", outname, overwrite);
+			overwrite = File.Exists (PathToSave);
+			Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
 			dark = bool.Parse (json ["dark"].ToString ());
 
 			foreach (JProperty cl in json ["colors"])
@@ -557,7 +557,7 @@ namespace Yuki_Theme.Core.Parsers
 			if (!overwrite)
 			{
 				var doc = new XmlDocument ();
-				doc.Load (outname);
+				doc.Load (PathToSave);
 
 				Tuple <bool, Image> wallp = getImage (getWallpaper);
 
@@ -629,7 +629,7 @@ namespace Yuki_Theme.Core.Parsers
 					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
+				Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 			}
 		}
 
