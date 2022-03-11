@@ -27,7 +27,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 domain: dragon-0609.github.io
 url: "https://dragon-0609.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 # url: ""
-baseurl: "Yuki-Theme" # the subpath of your site, e.g. /blog
+baseurl: "/Yuki-Theme/" # the subpath of your site, e.g. /blog
 # baseurl: ""
 twitter_username: ''
 github_username:  Dragon-0609
