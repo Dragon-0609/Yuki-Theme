@@ -243,6 +243,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public void load_schemes ()
 		{
+			ResetSchemes();
+			
 			schemes.Items.Clear ();
 
 			CLI.load_schemes (ifZero);
@@ -1372,6 +1374,15 @@ namespace Yuki_Theme.Core.Forms
 			return ColorTranslator.ToHtml (clr);
 		}
 		
+		private void ResetSchemes ()
+		{
+			CLI.schemes.Clear ();
+			DefaultThemes.categories.Clear ();
+			DefaultThemes.headers.Clear ();
+			DefaultThemes.names.Clear ();
+			DefaultThemes.categoriesList.Clear ();
+			DefaultThemes.headersList.Clear ();
+		}
 
 		#endregion
 		

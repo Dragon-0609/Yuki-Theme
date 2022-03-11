@@ -7,6 +7,7 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
@@ -580,6 +581,13 @@ namespace Yuki_Theme.Core
 		{
 			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+		}
+
+		public static T GetRandomElement <T> (List <T> list)
+		{
+			Random random = new Random ();
+			int start2 = random.Next (0, list.Count);
+			return list [start2];
 		}
 	}
 

@@ -39,7 +39,7 @@ namespace Yuki_Theme.Core
 		#endregion
 		
 		public static string selectedItem = "empty";
-		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
 		public static bool   isEdited;
 		public static string groupName = "";
 
@@ -127,7 +127,7 @@ namespace Yuki_Theme.Core
 				{
 					schemes.Add (name);
 					isDefaultTheme.Add (name, false);
-					oldThemeList.Add (name, CLI.oldThemeList [copyFrom]);
+					oldThemeList.Add (name, oldThemeList [copyFrom]);
 				}
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)

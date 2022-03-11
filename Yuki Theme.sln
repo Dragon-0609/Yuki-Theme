@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.CLI", "Yuki Them
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Themes", "Yuki Theme.Themes\Yuki Theme.Themes.csproj", "{902AF0E8-81EE-445C-A1B3-4D8283D88A16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Tests", "Yuki Theme.Tests\Yuki Theme.Tests.csproj", "{98152978-B4E9-4792-89C8-0D51C24D4587}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,9 @@ Global
 		{902AF0E8-81EE-445C-A1B3-4D8283D88A16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{902AF0E8-81EE-445C-A1B3-4D8283D88A16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{902AF0E8-81EE-445C-A1B3-4D8283D88A16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98152978-B4E9-4792-89C8-0D51C24D4587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98152978-B4E9-4792-89C8-0D51C24D4587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98152978-B4E9-4792-89C8-0D51C24D4587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98152978-B4E9-4792-89C8-0D51C24D4587}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -87,7 +87,7 @@ namespace Yuki_Theme.Core.Parsers
 			
 			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
-			addDefaults ("foregroundColorEditor");
+			addDefaults ("foregroundColor");
 			addDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
@@ -380,7 +380,7 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				case "constantColor" :
 				case "comments" :
 				case "stringColor" :
@@ -416,10 +416,10 @@ namespace Yuki_Theme.Core.Parsers
 		}
 
 		private readonly Dictionary <string, string> _defaultForegroundColors = new Dictionary <string, string> ()
-			{ { "constantColor", "#4C94D6" }, { "foregroundColorEditor", "#4D4D4A" }, { "comments", "#6a737d" } };
+			{ { "constantColor", "#4C94D6" }, { "foregroundColor", "#4D4D4A" }, { "comments", "#6a737d" } };
 
 		private readonly Dictionary <string, string> _defaultDarkForegroundColors = new Dictionary <string, string> ()
-			{ { "constantColor", "#86dbfd" }, { "foregroundColorEditor", "#F8F8F2" }, { "comments", "#6272a4" } };
+			{ { "constantColor", "#86dbfd" }, { "foregroundColor", "#F8F8F2" }, { "comments", "#6272a4" } };
 
 		private Tuple <string, string> getDefault (string st)
 		{
@@ -443,7 +443,7 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				case "constantColor" :
 				case "comments" :
 				case "stringColor" :
@@ -469,7 +469,7 @@ namespace Yuki_Theme.Core.Parsers
 				}
 					break;
 
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				{
 					res = new [] { "Default", "Punctuation" };
 				}

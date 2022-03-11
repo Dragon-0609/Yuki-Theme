@@ -33,6 +33,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CMicrosoft_002EWindowsAPICodePack_002EShell_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CMicrosoft_002EWindowsAPICodePack_002EShellExtensions_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CNewtonsoft_002EJson_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005Cnunit_002Eframework_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CSvg_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CSystem_002EBuffers_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CSystem_002EMemory_002Edll/@EntryIndexedValue">True</s:Boolean>
@@ -50,6 +51,9 @@
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\JetBrains\JetBrains Rider 2021.3.3\tools\MSBuild\Current\Bin\MSBuild.exe</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">1114112</s:Int64>
 	<s:Boolean x:Key="/Default/Environment/Hierarchy/EntityFrameworkOptions/IsAlreadyNotifiedAboutEntityFramework/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=787a77ca_002Da47c_002D48df_002D9a38_002D0b1a322b5642/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="InitializationAndLoading" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FForms_002FAboutForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FForms_002FColorPicker/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Scheme_0020Assistant_002FForms_002FMForm/@EntryIndexedValue">True</s:Boolean>
