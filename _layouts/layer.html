@@ -8,18 +8,18 @@
 	<meta name="description" content="This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: Darcula, Monokai and etc.">
 	<meta name="keywords" content="Yuki Theme, Yuki Theme Pascal, pascal, syntax color, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github">
 
-	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/assets/img/favicon.ico" rel="icon">
-	<link href="/assets/css/theme.css" rel="stylesheet">
-	<link href="/assets/css/star.css" rel="stylesheet">
+	<link href="{{ '/assets/css/bootstrap.min.css' | relative_url }}" rel="stylesheet">
+	<link href="{{ '/assets/img/favicon.ico' | relative_url }}" rel="icon">
+	<link href="{{ '/assets/css/theme.css' | relative_url }}" rel="stylesheet">
+	<link href="{{ '/assets/css/star.css' | relative_url }}" rel="stylesheet">
 	<style>
 	a {
 		transition: 0.3s;
 	}
 	</style>
-	<script src="/assets/js/themes.js"></script>
+	<script src="{{ '/assets/js/themes.js' | relative_url }}"></script>
 
-	<script src="/assets/js/localization.js"></script>
+	<script src="{{ '/assets/js/localization.js' | relative_url }}"></script>
 
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVF89FNN39"></script>
 	<script>
@@ -41,8 +41,8 @@
 {{ content }}
 
 <div class="overflow-hidden" id="star_container"></div>
-<script src="/assets/js/jquery-3.6.0.min.js"></script>
-<script src="/assets/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/js/cursorPath.js"></script>
+<script src="{{ '/assets/js/jquery-3.6.0.min.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/bootstrap.bundle.min.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/cursorPath.js' | relative_url }}"></script>
 </body>
 </html>

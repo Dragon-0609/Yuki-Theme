@@ -714,7 +714,7 @@ function loadTheme() {
 			rnd = wallpapers[getfromStorage ("theme", "Re:Zero: Rem")];
 		}
 	}
-	let image = `url('/assets/img/wallpapers/${ rnd.wallpaper }')`;
+	let image = `url('/Yuki-Theme/assets/img/wallpapers/${ rnd.wallpaper }')`;
 	document.body.style.backgroundImage = image;
 	document.body.style.backgroundPosition = rnd.position;
 	let stl = `.bg-theme { 
