@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
+title: Yuki Theme
 email: ""
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
@@ -29,11 +29,11 @@ url: "https://dragon-0609.github.io" # the base hostname & protocol for your sit
 # url: ""
 baseurl: "Yuki-Theme" # the subpath of your site, e.g. /blog
 # baseurl: ""
-twitter_username: jekyllrb
+twitter_username: ''
 github_username:  Dragon-0609
 
 # Build settings
-theme: minima
+#theme: minima
 plugins:
   - jekyll-feed
 
