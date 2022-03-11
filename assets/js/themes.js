@@ -717,6 +717,7 @@ function loadTheme() {
 	let image = `url('/Yuki-Theme/assets/img/wallpapers/${ rnd.wallpaper }')`;
 	document.body.style.backgroundImage = image;
 	document.body.style.backgroundPosition = rnd.position;
+	document.body.style.backgroundAttachment: 'fixed';
 	let stl = `.bg-theme { 
 				background-color: ${ rnd.background } !important; 
 				}
