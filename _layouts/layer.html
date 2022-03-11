@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ page.title }}</title>
+	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+	<meta name="author" content="Dragon-LV">
+	<meta name="description" content="This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: Darcula, Monokai and etc.">
+	<meta name="keywords" content="Yuki Theme, Yuki Theme Pascal, pascal, syntax color, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github">
+
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/assets/img/favicon.ico" rel="icon">
+	<link href="/assets/css/theme.css" rel="stylesheet">
+	<link href="/assets/css/star.css" rel="stylesheet">
+	<style>
+	a {
+		transition: 0.3s;
+	}
+	</style>
+	<script src="/assets/js/themes.js"></script>
+
+	<script src="/assets/js/localization.js"></script>
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVF89FNN39"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'G-JVF89FNN39');
+	</script>
+</head>
+<body class="bg-theme color-theme">
+<script>
+	loadTheme();
+	Localize();
+</script>
+
+{% include navigation.html %}
+
+{{ content }}
+
+<div class="overflow-hidden" id="star_container"></div>
+<script src="/assets/js/jquery-3.6.0.min.js"></script>
+<script src="/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/js/cursorPath.js"></script>
+</body>
+</html>

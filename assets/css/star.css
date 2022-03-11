@@ -1,0 +1,13 @@
+.star {
+	position: fixed;
+	pointer-events: none;
+	/*animation-name: rotation;*/
+	/*animation-duration: 0.75s;*/
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(355deg);
+	}
+}
+

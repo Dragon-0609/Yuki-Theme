@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+	font-family: 'Montserrat', sans-serif;
+	background-size: cover;
+	background-repeat: no-repeat;
+	min-height: 100vh;
+}
+
+.bg-theme {
+	background-color: #2B2B2B;
+}
+
+.color-theme, button, a {
+	color: #DDDDDD !important;
+}
+
+code {
+	background-color: rgba(0, 0, 0, 0.2);
+	padding: 3px 6px;
+	margin: 4px;
+	border-radius: 6px;
+}
+
+.bg-dark-transparent {
+	background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.bg-night {
+	background-color: #323232 !important;
+}
+
+a.list-group-item:hover {
+	background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.top-0 {
+	top: 0;
+}
+
+.left-0 {
+	left: 0;
+}
+
+.right-0 {
+	right: 0;
+}
+
+
+.bn-effect-parent {
+	overflow-y: hidden;
+}
+
+.bn-effect {
+	position: relative;
+	top: -28px;
+	-webkit-box-shadow: inset 0px -5px 0 0px #F00;
+	-moz-box-shadow: inset 0px -5px 0 0px #F00;
+	box-shadow: inset 0px -5px 0 0px #F00;
+	padding-top: 3px;
+	padding-bottom: 5px;
+	transition: 2s all;
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.bn-logo-effect > span {
+	position: relative;
+	top: -34px;
+	transition: 2s all;
+}
+
+.bn-effect:hover, .bn-logo-effect:hover > span {
+	top: -2px;
+	transition: 0.5s all cubic-bezier(.87, -.11, .19, 1.44);
+}
+
+.bn-effect-left {
+	clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+}
+
+.bn-effect-right {
+	clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+}
+
+.bn-effect-center {
+	clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
+}
+
+/* SVG */
+#cursor {
+	pointer-events: none;
+	transform-origin: center center;
+	transition: all 700ms ease-out;
+}
+
+.vh-50 {
+	height: 50% !important;
+}
+
+.content_en, .content_ru, .content_inline_en, .content_inline_ru {}
+
+@media (max-width: 510px) {
+	.bn-effect, .bn-logo-effect > span {
+		top: -2px !important;
+
+	}
+
+	.bn-effect-center {
+		clip-path: none;
+	}
+}
+
+@media (max-width: 575px) {
+	.bn-logo-effect > span {
+		top: -112px;
+	}
+}
+
+
+@media (max-width: 767px) {
+
+	body {
+		font-size: 0.875rem !important;
+	}
+
+	h1, .h1 {
+		font-size: 1.15rem !important;
+	}
+
+	h2, .h2 {
+		font-size: 1.125rem !important;
+	}
+
+	h3, .h3 {
+		font-size: 1rem !important;
+	}
+
+	h4, .h4 {
+		font-size: 0.875rem !important;
+	}
+
+	h5, .h5 {
+		font-size: 0.75rem !important;
+	}
+
+	h6, .h6 {
+		font-size: 0.65rem !important;
+	}
+
+	.svg_fill > svg {
+		height: 0.85rem;
+	}
+}
+
+@media (max-width: 1400px) {
+
+	body {
+		font-size: 0.9rem !important;
+	}
+
+	h1, .h1 {
+		font-size: 2rem !important;
+	}
+
+	h2, .h2 {
+		font-size: 1.5rem !important;
+	}
+
+	h3, .h3 {
+		font-size: 1.25rem !important;
+	}
+
+	h4, .h4 {
+		font-size: 1rem !important;
+	}
+
+	h5, .h5 {
+		font-size: 0.85rem !important;
+	}
+
+	h6, .h6 {
+		font-size: 0.75rem !important;
+	}
+
+	.svg_fill > svg {
+		height: 1rem;
+	}
+}
+
