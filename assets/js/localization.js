@@ -42,7 +42,6 @@ function changeLanguage(lang) {
 			display: inline;
 		}
 	`;
-	console.log(lang_style.innerHTML);
 	puttoStorage("language", lang);
 }
 
