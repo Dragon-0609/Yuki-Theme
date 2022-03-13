@@ -215,6 +215,7 @@ namespace Yuki_Theme.Core
 		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
+			Console.WriteLine("{0}, {1}", nameToLoad,  isDefault ());
 			if (!isDefault ())
 				saveList (img2, img3, wantToKeep);
 		}
@@ -549,6 +550,7 @@ namespace Yuki_Theme.Core
 		{
 			if (!isDefault ())
 			{
+				Console.WriteLine("AS OLD: " + Settings.saveAsOld);
 				if (Settings.saveAsOld)
 					OldThemeFormat.saveList (img2, img3, wantToKeep);
 				else

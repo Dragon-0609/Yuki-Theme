@@ -37,9 +37,6 @@
     <Reference Include="CodeCompletion, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\CodeCompletion.dll</HintPath>
     </Reference>
-    <Reference Include="Compiler, Version=3.7.1.2692, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Compiler.dll</HintPath>
-    </Reference>
     <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
       <HintPath>..\packages\Fizzler.dll</HintPath>
       <Private>True</Private>

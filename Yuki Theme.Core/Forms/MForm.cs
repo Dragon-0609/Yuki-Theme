@@ -1036,6 +1036,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void save_Click (object sender, EventArgs e)
 		{
+			Console.WriteLine("Saving...");
 			CLI.save (img2, img3);
 		}
 
