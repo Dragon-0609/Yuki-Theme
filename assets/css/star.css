@@ -1,6 +1,7 @@
 .star {
 	position: fixed;
 	pointer-events: none;
+	transition: opacity 0.3s;
 	/*animation-name: rotation;*/
 	/*animation-duration: 0.75s;*/
 }

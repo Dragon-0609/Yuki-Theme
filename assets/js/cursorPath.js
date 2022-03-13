@@ -14,6 +14,8 @@ class Star {
 	y = 0;
 	velocityX = 0;
 	velocityY = 0;
+	faded = false;
+	fadedSteps = 0;
 	mx_steps;
 
 	inleft = false;
@@ -70,11 +72,24 @@ class Star {
 	}
 
 	update() {
-		if (this.steps > this.mx_steps) {
+		if (this.faded && this.fadedSteps >= stepsToHide) {
 			this.destroy ();
 		} else {
+			if (this.steps > this.mx_steps){
+				if (!this.faded)
+					this.fade();
+				else
+					this.fadedSteps++;
+			}
 			this.updateLocation ();
 		}
+	}
+
+	fade(){
+		this.faded = true;
+		$ ("#" + this.html_item).css ({
+			opacity: 0,
+		});
 	}
 
 	updateLocation() {
@@ -106,7 +121,7 @@ class Star {
 
 let start = Date.now ();
 const refreshRate = 40;
-
+const stepsToHide = 300 / 40;
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
 	if (millis >= refreshRate) {
