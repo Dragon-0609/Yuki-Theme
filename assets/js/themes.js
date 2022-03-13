@@ -714,7 +714,10 @@ function loadTheme() {
 			rnd = wallpapers[getfromStorage ("theme", "Re:Zero: Rem")];
 		}
 	}
-	let image = "url('"+wallpaper_url+"/wallpapers/" + rnd.wallpaper + "')";
+	if (!wallpaper_url.endsWith("/")) {
+		wallpaper_url += "/";
+	}
+	let image = "url('"+wallpaper_url+"wallpapers/" + rnd.wallpaper + "')";
 	document.body.style.backgroundImage = image;
 	document.body.style.backgroundPosition = rnd.position; // compatibility for IE 11
 	let stl = ".bg-theme {  background-color: " + rnd.background + " !important; } " +
