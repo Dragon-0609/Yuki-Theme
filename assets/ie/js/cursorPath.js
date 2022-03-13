@@ -93,10 +93,6 @@ function destroy(itm) {
 	x_y.delete (itm);
 	velocity.delete (itm);
 	let el = document.getElementById (itm);
-
-	console.log("GET...");
-	console.log(itm);
-	console.log(el);
 	document.getElementById ('star_container').removeChild (el);
 }
 
