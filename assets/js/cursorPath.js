@@ -171,3 +171,31 @@ function updateStars() {
 
 updateStars ();
 
+
+function addScrollEvents(){
+	document.addEventListener('touchmove', function(e) {
+		const millis = Date.now () - start;
+		if (millis >= refreshRate) {
+			var touch = e.touches[0];
+			start = Date.now ();
+			const p1 = {
+				x: touch.clientX,
+				y: touch.clientY
+			};
+			const delta = Math.abs (p1.x - lastPosX) + Math.abs (p1.y - lastPosY);
+			let canAdd = true;
+			if (delta < 10) {
+				canAdd = millis >= refreshRate * 2;
+			}
+			if (canAdd) {
+				const angleDeg = Math.atan2 (lastPosY - p1.y, lastPosX - p1.x) * 180 / Math.PI;
+				lastPosX = touch.clientX;
+				lastPosY = touch.clientY;
+				new Star (p1, Math.round (angleDeg), 90, true, max_steps);
+			}
+		}
+
+	}, false);
+}
+
+addScrollEvents();

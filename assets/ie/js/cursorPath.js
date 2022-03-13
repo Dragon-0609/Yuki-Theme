@@ -11,6 +11,8 @@ let rotation_angle = new Map ();
 let velocity = new Map ();
 let x_y = new Map ();
 let steps = new Map ();
+let faded = new Map ();
+let fadedSteps = new Map ();
 
 
 function add(pos, angle_c, angle_change, need_to_left, m_steps, speed) {
@@ -19,7 +21,9 @@ function add(pos, angle_c, angle_change, need_to_left, m_steps, speed) {
 	mx_steps.set (item, m_steps);
 	indexes++;
 	inleft.set (item, left);
+	faded.set (item, false);
 	steps.set (item, 0);
+	fadedSteps.set (item, 0);
 	if (need_to_left) {
 		angle.set (item, angle_c - (inleft ? angle_change : -angle_change));
 	} else {
@@ -58,11 +62,24 @@ function setVelocity(itm, length) {
 }
 
 function update(itm) {
-	if (steps.get(itm) > mx_steps.get(itm)) {
+	if(faded.get(itm) && fadedSteps.get(itm) >= stepsToHide){
 		destroy (itm);
-	} else {
+	} else{ 
+		if (steps.get(itm) > mx_steps.get(itm)) {
+			if (!faded.get(itm))
+				fade(itm);
+			else
+				fadedSteps.set(itm,fadedSteps.get(itm)+1);
+		}
 		updateLocation (itm);
 	}
+}
+
+function fade(itm){
+	faded.set(itm, true);
+	$ ("#" + itm).css ({
+		opacity: 0,
+	});
 }
 
 function updateLocation(itm) {
@@ -92,6 +109,8 @@ function destroy(itm) {
 	angle.delete (itm);
 	x_y.delete (itm);
 	velocity.delete (itm);
+	faded.delete (itm);
+	fadedSteps.delete (itm);
 	let el = document.getElementById (itm);
 	document.getElementById ('star_container').removeChild (el);
 }
@@ -99,14 +118,15 @@ function destroy(itm) {
 
 let start = Date.now ();
 const refreshRate = 40;
+const stepsToHide = 300 / refreshRate;
 
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
 	if (millis >= refreshRate) {
 		start = Date.now ();
 		const p1 = {
-			x: e.pageX,
-			y: e.pageY
+			x: e.clientX,
+			y: e.clientY
 		};
 		const delta = Math.abs (p1.x - lastPosX) + Math.abs (p1.y - lastPosY);
 		let canAdd = true;
@@ -115,8 +135,8 @@ document.addEventListener ("mousemove", function (e) {
 		}
 		if (canAdd) {
 			const angleDeg = Math.atan2 (lastPosY - p1.y, lastPosX - p1.x) * 180 / Math.PI;
-			lastPosX = e.pageX;
-			lastPosY = e.pageY;
+			lastPosX = e.clientX;
+			lastPosY = e.clientY;
 			add (p1, Math.round (angleDeg), 90, true, max_steps, 4);
 		}
 	}
