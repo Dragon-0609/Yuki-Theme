@@ -3,7 +3,12 @@ permalink: /404.html
 title: Not found
 layout: layer
 ---
-
+<script>
+	let charsetMetaTag = self.editorIframeDocument.createElement('meta');
+	charsetMetaTag['httpEquiv'] = 'Content-Type';
+	charsetMetaTag['content'] = 'text/html; charset=utf-8';
+	document.head.insertBefore(charsetMetaTag,document.head.firstChild);
+</script>
 <div class="container">
 	<div class="row">
 		<div class="col-lg-5">

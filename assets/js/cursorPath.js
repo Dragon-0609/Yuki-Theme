@@ -2,7 +2,7 @@ let stars = [];
 let indexes = 0;
 let lastPosX = 0;
 let lastPosY = 0;
-const max_steps = 15;
+const max_steps = 20;
 let left = false;
 
 class Star {
@@ -36,8 +36,8 @@ class Star {
 			this.angle = angle_c - angle_change;
 		}
 		left = !left;
-		let size = Math.random () + 0.4;
-		let sizeSVG = size * 16;
+		let size = Math.random () + 0.6;
+		let sizeSVG = Math.min(size, 1.4) * 16;
 		let color = '#' + (Math.random () * 0xFFFFFF << 0).toString (16).padStart (6, '0');
 		$ ('#star_container').append (`
 			<div class="star" id="${ item }">
@@ -105,7 +105,7 @@ class Star {
 }
 
 let start = Date.now ();
-const refreshRate = 50;
+const refreshRate = 40;
 
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
@@ -118,7 +118,7 @@ document.addEventListener ("mousemove", function (e) {
 		const delta = Math.abs (p1.x - lastPosX) + Math.abs (p1.y - lastPosY);
 		let canAdd = true;
 		if (delta < 10) {
-			canAdd = millis >= 100;
+			canAdd = millis >= refreshRate * 2;
 		}
 		if (canAdd) {
 			const angleDeg = Math.atan2 (lastPosY - p1.y, lastPosX - p1.x) * 180 / Math.PI;
@@ -151,7 +151,7 @@ function updateStars() {
 			}
 		}
 		updateStars ();
-	}, 50);
+	}, refreshRate);
 }
 
 updateStars ();

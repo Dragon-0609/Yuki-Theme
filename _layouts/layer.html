@@ -2,47 +2,84 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta content="text/html; charset=UTF-8" http-equiv="content-type">
 	<title>{{ page.title }}</title>
 	<meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-	<meta name="author" content="Dragon-LV">
-	<meta name="description" content="This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: Darcula, Monokai and etc.">
-	<meta name="keywords" content="Yuki Theme, Yuki Theme Pascal, pascal, syntax color, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github">
-
+	<meta content="Dragon-LV" name="author">
+	<meta content="This program is for people, who want to customize PascalABC.NET IDE. By this program you can select and export default popular color schemes like: Darcula, Monokai and etc."
+		  name="description">
+	<meta content="Yuki Theme, Yuki Theme Pascal, pascal, syntax color, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github"
+		  name="keywords">
+	<meta content="IE=Edge,10,9,7,8" http-equiv="X-UA-Compatible"/>
 	<link href="{{ '/assets/css/bootstrap.min.css' | relative_url }}" rel="stylesheet">
 	<link href="{{ '/assets/img/favicon.ico' | relative_url }}" rel="icon">
 	<link href="{{ '/assets/css/theme.css' | relative_url }}" rel="stylesheet">
 	<link href="{{ '/assets/css/star.css' | relative_url }}" rel="stylesheet">
 	<style>
-	a {
-		transition: 0.3s;
-	}
+		a {
+			transition: 0.3s;
+		}
 	</style>
+	<script> var wallpaper_url = "{{ '/assets/img/' | relative_url }}" </script>
 	<script src="{{ '/assets/js/themes.js' | relative_url }}"></script>
 
 	<script src="{{ '/assets/js/localization.js' | relative_url }}"></script>
 
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JVF89FNN39"></script>
+	<script src="https://www.googletagmanager.com/gtag/js?id=G-JVF89FNN39" async></script>
 	<script>
 		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
 
-		gtag('config', 'G-JVF89FNN39');
+		function gtag() {dataLayer.push (arguments);}
+
+		gtag ('js', new Date ());
+
+		gtag ('config', 'G-JVF89FNN39');
 	</script>
 </head>
-<body class="bg-theme color-theme">
+<body class="bg-theme color-theme" id="top">
 <script>
-	loadTheme();
-	Localize();
+	loadTheme ();
+	Localize ();
 </script>
-
 {% include navigation.html %}
 
 {{ content }}
 
 <div class="overflow-hidden" id="star_container"></div>
+<a class="position-fixed bottom-link btn btn-sm btn-special-2 special-1" href="#top" id="totop" style="display: none;">
+	<svg class="bi bi-chevron-up" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+		<path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"
+			  fill-rule="evenodd"/>
+	</svg>
+</a>
 <script src="{{ '/assets/js/jquery-3.6.0.min.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/bootstrap.bundle.min.js' | relative_url }}"></script>
-<script src="{{ '/assets/js/cursorPath.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/scrollsmooth.js' | relative_url }}"></script>
+
+
+<!--<script src="/assets/js/cursorPath.js"></script>-->
+<script>
+
+	function loadScript(csc) {
+		let script_loader = document.createElement ('script');
+		script_loader.src = csc;
+
+		document.head.appendChild (script_loader);
+	}
+
+	if (/MSIE \d|Trident.*rv:/.test (navigator.userAgent)) {
+		loadScript ("{{ '/assets/ie/js/cursorPath.js' | relative_url }}");
+		let light_mode = document.createElement ('div');
+		light_mode.className = "position-fixed";
+		light_mode.style.bottom = "0";
+		light_mode.style.left = "10px";
+		light_mode.innerHTML = "<span class=\"special-1 text-uppercase mr-2\">Light mode is Activated</span> <a href=\"javascript: void(0);\" onclick=\"window.external.OpenURL('{{ page.url | absolute_url }}')\" class=\"special-2\">Open Full</a>\n";
+		document.body.appendChild (light_mode);
+	} else {
+		loadScript ("{{ '/assets/js/cursorPath.js' | relative_url }}");
+	}
+
+
+</script>
 </body>
 </html>

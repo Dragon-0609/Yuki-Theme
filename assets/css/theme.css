@@ -4,6 +4,7 @@ body {
 	font-family: 'Montserrat', sans-serif;
 	background-size: cover;
 	background-repeat: no-repeat;
+	background-attachment: fixed;
 	min-height: 100vh;
 }
 
@@ -99,6 +100,15 @@ a.list-group-item:hover {
 
 .content_en, .content_ru, .content_inline_en, .content_inline_ru {}
 
+.task-list-item-checkbox {
+	margin-right: 5px;
+}
+
+.bottom-link {
+	bottom: 1.5rem;
+	right: 1.5rem;
+}
+
 @media (max-width: 510px) {
 	.bn-effect, .bn-logo-effect > span {
 		top: -2px !important;
@@ -145,6 +155,11 @@ a.list-group-item:hover {
 
 	h6, .h6 {
 		font-size: 0.65rem !important;
+	}
+
+	.bottom-link {
+		bottom: 5rem;
+		right: 1.5rem;
 	}
 
 	.svg_fill > svg {

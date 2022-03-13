@@ -701,7 +701,7 @@ function loadTheme() {
 		themeName = window.external.GetThemeName();
 		rnd = wallpapers[themeName];
 		console.log(themeName);
-	} catch {
+	} catch (e) {
 		themeName = null;
 		console.log("Couldn't get theme name");
 	}
@@ -714,35 +714,22 @@ function loadTheme() {
 			rnd = wallpapers[getfromStorage ("theme", "Re:Zero: Rem")];
 		}
 	}
-	let image = `url('/Yuki-Theme/assets/img/wallpapers/${ rnd.wallpaper }')`;
+	let image = "url('"+wallpaper_url+"/wallpapers/" + rnd.wallpaper + "')";
 	document.body.style.backgroundImage = image;
-	document.body.style.backgroundPosition = rnd.position;
-	document.body.style.backgroundAttachment: 'fixed';
-	let stl = `.bg-theme { 
-				background-color: ${ rnd.background } !important; 
-				}
-		.color-theme, button, a {
-			color: ${ rnd.color } !important;
-		}
-		
-		a:hover {
-			color: ${ rnd.hover } !important;
-		}
-		
-		.svg_fill {
-			fill: ${ rnd.color } !important;
-		}
-		
-		.svg_fill:hover {
-			fill: ${ rnd.hover } !important;
-		}
-		
-		.bn-effect {
-			-webkit-box-shadow: inset 0px -5px 0 0px ${ rnd.keyword } !important;
-			-moz-box-shadow: inset 0px -5px 0 0px ${ rnd.keyword } !important;
-			box-shadow: inset 0px -5px 0 0px ${ rnd.keyword } !important;
-		}
-	`;
+	document.body.style.backgroundPosition = rnd.position; // compatibility for IE 11
+	let stl = ".bg-theme {  background-color: " + rnd.background + " !important; } " +
+		".color-theme, button, a {  color: " + rnd.color + " !important;  } " +
+		"a:hover, .special-1 { color: " + rnd.hover + " !important; } " +
+		".svg_fill { fill: " + rnd.color + " !important; } " +
+		".svg_fill:hover { fill: " + rnd.hover + " !important; } " +
+		".special-2 { color: " + rnd.keyword + " !important; } " +
+		".btn-special-2:hover {  	 background-color: " + rnd.keyword + " !important;" +
+									"border-color: " + rnd.keyword + " !important; } " +
+		".bn-effect { " +
+		"	-webkit-box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; " +
+		"	-moz-box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; " +
+		"	box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; " +
+		"}";
 
 	if (!preLoad) {
 		private_style = document.createElement ('style');

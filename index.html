@@ -2,26 +2,22 @@
 title: Main Page
 layout: layer
 permalink: /
+redirect_from:
+- /ie/
 ---
 
 <script>
 	let style = document.createElement ('style');
 	style.type = 'text/css';
-	style.innerHTML = `@font-face {
-	font-family: SAO;
-	src: url({{ "/assets/fonts/SAOWelcome-Regular.otf" | relative_url }});
-}
-.SAO-font {
-	font-family: 'SAO', 'Montserrat', 'sans-serif';
-}
-`;
+	style.innerHTML = "@font-face { font-family: SAO; src: url({{' /assets/fonts/SAOWelcome-Regular.otf' | relative_url }}); } " +
+			".SAO-font { font-family: 'SAO', 'Montserrat', 'sans-serif'; } ";
 	document.getElementsByTagName ('head')[0].appendChild (style);
 </script>
 
 <div class="d-flex flex-column justify-content-around SAO-font mt-5" onclick="Click(event)">
 	<div class="h1 text-center font-weight-normal my-3">Yuki Theme</div>
 	<div align="center" class="my-3">
-		<img src="{{ '/assets/img/yuki128_2.png' | relative_url }} " class="mx-auto mx-md-3" draggable="false" alt="icon" height="100" width="100"/>
+		<img src="{{ '/assets/img/yuki128_2.png' | relative_url }}" class="mx-auto mx-md-3" draggable="false" alt="icon" height="100" width="100"/>
 	</div>
 	<div class="h2 text-center font-weight-normal my-3">
 		It's impossible until it's done
