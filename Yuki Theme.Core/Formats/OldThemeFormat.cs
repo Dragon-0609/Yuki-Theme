@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Formats
 {
 	public static class OldThemeFormat
 	{

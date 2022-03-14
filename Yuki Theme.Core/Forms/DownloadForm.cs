@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define CONSOLE_LOGS
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -13,7 +14,7 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class DownloadForm : Form
 	{
-		private readonly MForm     form;
+		private readonly PopupFormsController     popupController;
 		public           string    downloadlink;
 		public           string    size;
 		private          WebClient web;
@@ -22,11 +23,11 @@ namespace Yuki_Theme.Core.Forms
 		private string user_agent =
 			"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
 
-		public DownloadForm (MForm fm)
+		public DownloadForm (PopupFormsController controller)
 		{
 			InitializeComponent ();
-			form = fm;
-			form.OnColorUpdate += (bg, fg, clicked) => {
+			popupController = controller;
+			popupController.colorUpdatable.OnColorUpdate += (bg, fg, clicked) => {
 				BackColor = button1.BackColor = button1.FlatAppearance.MouseDownBackColor = bg;
 				ForeColor = button1.FlatAppearance.BorderColor = fg;
 				button1.FlatAppearance.MouseOverBackColor = clicked;
@@ -35,117 +36,142 @@ namespace Yuki_Theme.Core.Forms
 
 		public async void CheckUpdate ()
 		{
-			var url = Settings.Beta
-				? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
-				: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
-			try
+			if (IsUpdateDownloaded ())
 			{
-				using (var client = new HttpClient ())
+				QuestionForm quform = new QuestionForm ();
+				quform.EditMessage ("New version is already downloaded", "New version is already downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
+				if (quform.ShowDialog(popupController.form) == DialogResult.Yes)
 				{
-					client.DefaultRequestHeaders.Add ("User-Agent",
-					                                  user_agent);
-					var response = await client.GetAsync (url);
-					if (response != null)
+					startUpdating ();
+				} else
+				{
+					popupController.CloseDownloader ();
+				}
+			}else
+			{
+				var url = Settings.Beta
+					? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
+					: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+				try
+				{
+					using (var client = new HttpClient ())
 					{
-						var json = await response.Content.ReadAsStringAsync ();
-						if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
-							json = "{\n\""+ json.Split (new [] {"{\n    \"","\"\n  },"}, StringSplitOptions.None) [1] + "\"\n}";
-						
-						Console.WriteLine (json);
-						var jresponse = JObject.Parse (json);
-						string tg = jresponse ["tag_name"].ToString ();
-						Console.WriteLine (tg);
-						if (Settings.Beta)
+						client.DefaultRequestHeaders.Add ("User-Agent",
+						                                  user_agent);
+						var response = await client.GetAsync (url);
+						if (response != null)
 						{
-							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/" + tg;
-						} else
-						{
-							github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/latest";
-						}
-						string nv = "";
-						bool hasBeta = false;
-						if (tg.Contains ("-"))
-						{
-							nv = tg.Split ('-') [0];
-							Console.WriteLine (nv);
-							nv = nv.Substring (1, nv.Length - 3);
-							hasBeta = true;
-						}else
-						{
-							nv = tg.Substring (1, tg.Length - 3);
-						}
-						Console.WriteLine (nv);
-						
-						double ver = double.Parse (nv, CultureInfo.InvariantCulture);
-						Console.WriteLine (ver);
-						if (Settings.current_version < ver || (Settings.current_version == ver && Settings.current_version_add.Length != 0 && !hasBeta))
-						{
-							int md = (int) Helper.mode;
-							size = jresponse ["assets"] [md] ["size"].ToString ();
-							size = string.Format ("{0:0.0} MB", double.Parse (size) / 1024 / 1024);
-							downloadlink = jresponse ["assets"] [md] ["browser_download_url"].ToString ();
-							form.nf.onClick = startUpdate;
-							form.nf.onClick2 = openInGithub;
-							form.nf.button1.Text = "Update";
-							form.nf.button3.Text = "Open in Github";
-							string sw = jresponse ["name"].ToString ().Substring (1);
-							form.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
-							
-							form.nf.button1.Visible = true;
-							form.nf.button3.Visible = true;
-							
-							form.nf.Show (form);
-							lock (Settings.next_version)
+							string json = await response.Content.ReadAsStringAsync ();
+							JObject jresponse = JObject.Parse (json);
+							if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
+								jresponse = (JObject)jresponse [0];
+
+							string tg = jresponse ["tag_name"].ToString ();
+#if CONSOLE_LOGS
+							Console.WriteLine (json);
+							Console.WriteLine (tg);
+#endif
+							if (url.EndsWith ("latest"))
 							{
-								Settings.next_version = $"{ver} | {size}";								
+								github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/latest";
+							} else
+							{
+								github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/" + tg;
 							}
-							form.changeNotificationLocation ();
-							size = jresponse ["assets"] [md] ["size"].ToString ();
-							size = string.Format ("{0:0.0}", double.Parse (size) / 1024 / 1024);
-						} else
-						{
-							form.ShowNotification ("Up to date", "Your version is the latest.");
-							form.nf.button1.Visible = false;
-							form.nf.button3.Visible = false;
-							form.changeNotificationLocation ();
+
+							string nv = "";
+							bool hasBeta = false;
+							if (tg.Contains ("-"))
+							{
+								nv = tg.Split ('-') [0];
+#if CONSOLE_LOGS
+								Console.WriteLine (nv);
+#endif
+								nv = nv.Substring (1, nv.Length - 3);
+								hasBeta = true;
+							} else
+							{
+								nv = tg.Substring (1, tg.Length - 3);
+							}
+
+							double ver = double.Parse (nv, CultureInfo.InvariantCulture);
+
+#if CONSOLE_LOGS
+							Console.WriteLine (nv);
+							Console.WriteLine (ver);
+#endif
+							if (Settings.current_version < ver ||
+							    (Settings.current_version == ver && Settings.current_version_add.Length != 0 && !hasBeta))
+							{
+								int md = (int)Helper.mode;
+								size = jresponse ["assets"] [md] ["size"].ToString ();
+								size = string.Format ("{0:0.0} MB", double.Parse (size) / 1024 / 1024);
+								downloadlink = jresponse ["assets"] [md] ["browser_download_url"].ToString ();
+								popupController.nf.onClick = startUpdate;
+								popupController.nf.onClick2 = openInGithub;
+								popupController.nf.button1.Text = "Update";
+								popupController.nf.button3.Text = "Open in Github";
+								string sw = jresponse ["name"].ToString ();
+								if (sw.StartsWith ("v")) sw = sw.Substring (1);
+								popupController.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
+
+								popupController.nf.button1.Visible = true;
+								popupController.nf.button3.Visible = true;
+
+								popupController.nf.Show (popupController.form);
+								lock (Settings.next_version)
+								{
+									Settings.next_version = $"{ver} | {size}";
+								}
+
+								popupController.changeNotificationLocation ();
+								size = jresponse ["assets"] [md] ["size"].ToString ();
+								size = $"{double.Parse (size) / 1024 / 1024:0.0}";
+							} else
+							{
+								popupController.ShowNotification ("Up to date", "Your version is the latest.");
+								popupController.nf.button1.Visible = false;
+								popupController.nf.button3.Visible = false;
+								popupController.changeNotificationLocation ();
+							}
 						}
 					}
+				} catch (Exception ex)
+				{
+					Console.WriteLine (ex.Message + "\n" + ex.StackTrace);
 				}
-			} catch (Exception ex)
-			{
-				Console.WriteLine (ex.Message + "\n" + ex.StackTrace);
 			}
 		}
 
 		private void openInGithub ()
 		{
-			form.nf.onClick = null;
-			form.nf.onClick2 = null;
+			popupController.nf.onClick = null;
+			popupController.nf.onClick2 = null;
 			Process.Start (github_url);
 		}
 		
 		private void startUpdate ()
 		{
-			form.nf.onClick = null;
-			form.nf.onClick2 = null;
+			popupController.nf.onClick = null;
+			popupController.nf.onClick2 = null;
 			// Console.WriteLine ("Update is started");
 			
-			form.showDownloader ();
-			form.df.downloadlink = downloadlink;
-			form.df.size = size;
+			popupController.showDownloader ();
+			popupController.df.downloadlink = downloadlink;
+			popupController.df.size = size;
 			if (!File.Exists(Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 			                               "yuki_theme.zip")))
 			{
-				form.df.downl.ClickHere (EventArgs.Empty);
+				popupController.df.downl.ClickHere (EventArgs.Empty);
 			} else
 			{
 				var fi = new FileInfo (Path.Combine (
-					                       Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-					                       "Yuki Theme", "yuki_theme.zip"));
+					                       Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
+					                       "yuki_theme.zip"));
 				string siz = string.Format ("{0:0.0}", fi.Length / 1024 / 1024.0);
 				if (siz != size)
 				{
-					form.df.downl.ClickHere (EventArgs.Empty);
+					popupController.df.downl.ClickHere (EventArgs.Empty);
 				} else
 				{
 					startUpdating ();
@@ -155,9 +181,9 @@ namespace Yuki_Theme.Core.Forms
 
 		public void InstallManually ()
 		{
-			form.showDownloader ();
-			form.df.downloadlink = downloadlink;
-			form.df.size = size;
+			popupController.showDownloader ();
+			popupController.df.downloadlink = downloadlink;
+			popupController.df.size = size;
 			startUpdating ();
 		}
 		
@@ -192,13 +218,14 @@ namespace Yuki_Theme.Core.Forms
 
 				if (e.Error is WebException)
 				{
-					form.ShowNotification (title, message);
-					form.nf.onClick = openInGithub;
-					form.nf.onClick2 = null;
-					form.nf.button1.Text = "Open in Github";
-					form.nf.button1.Visible = true;
+					popupController.ShowNotification (title, message);
+					popupController.nf.onClick = openInGithub;
+					popupController.nf.onClick2 = null;
+					popupController.nf.button1.Text = "Open in Github";
+					popupController.nf.button1.Visible = true;
 					
-					form.changeNotificationLocation ();
+					popupController.changeNotificationLocation ();
+					popupController.CloseDownloader ();
 				}
 				else
 					throw e.Error;
@@ -207,20 +234,26 @@ namespace Yuki_Theme.Core.Forms
 				// Console.WriteLine(e.Error.Message);
 				if (e.Cancelled)
 				{
-					form.ShowNotification ("Canceled", $"Downloading is canceled");
-					form.nf.button1.Visible = false;
-					form.changeNotificationLocation ();
+					popupController.ShowNotification ("Canceled", $"Downloading is canceled");
+					popupController.nf.button1.Visible = false;
+					popupController.changeNotificationLocation ();
+					popupController.CloseDownloader ();
 				} else
 				{
-					form.ShowNotification ("New version is downloaded", $"Installing...The program will be closed.");
-					form.nf.button1.Visible = false;
-					form.changeNotificationLocation ();
-					startUpdating ();
+					QuestionForm quform = new QuestionForm ();
+					quform.EditMessage ("New version is downloaded", "New version is downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
+					if (quform.ShowDialog(popupController.form) == DialogResult.Yes)
+					{
+						startUpdating ();
+					} else
+					{
+						popupController.CloseDownloader ();
+					}
 				}
 			}
 		}
 
-		private void startUpdating ()
+		public void startUpdating ()
 		{
 			Preparer prep = new Preparer ();
 			prep.prepare ();
@@ -263,5 +296,19 @@ namespace Yuki_Theme.Core.Forms
 			
 			button1.FlatAppearance.MouseOverBackColor = Helper.bgClick;
 		}
+
+		
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			base.OnPaint (e);
+			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
+		}
+		
+		public static bool IsUpdateDownloaded ()
+		{
+			return File.Exists (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
+			                                  "yuki_theme.zip"));
+		}
+		
 	}
 }

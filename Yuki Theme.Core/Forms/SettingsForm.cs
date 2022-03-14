@@ -62,7 +62,7 @@ namespace Yuki_Theme.Core.Forms
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
 			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
 			settingsPanel.SettingsPanel_Load ();
-			settingsPanel.mf = mf;
+			settingsPanel.popupController = mf.popupController;
 			FontManager.SetAllControlsFont (this.Controls, 0);
 		}
 

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Yuki_Theme.Core;
+namespace Yuki_Theme.Core.Themes;
 
 public class ThemeField
 {

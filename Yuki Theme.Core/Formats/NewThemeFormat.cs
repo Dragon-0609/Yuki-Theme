@@ -4,10 +4,9 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
-using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Formats
 {
 	public static class NewThemeFormat
 	{

@@ -35,6 +35,7 @@ namespace Yuki_Theme.Core.Controls
 			this.tabPage1 = new System.Windows.Forms.TabPage ();
 			this.tbpanel = new System.Windows.Forms.Panel ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.restartUpdate = new System.Windows.Forms.Button ();
 			this.showHelp = new System.Windows.Forms.Button ();
 			this.saveOld = new System.Windows.Forms.CheckBox ();
 			this.askSave = new System.Windows.Forms.CheckBox ();
@@ -131,6 +132,7 @@ namespace Yuki_Theme.Core.Controls
 			this.panel1.AutoScroll = true;
 			this.panel1.AutoScrollMargin = new System.Drawing.Size (0, 10);
 			this.panel1.AutoScrollMinSize = new System.Drawing.Size (100, 0);
+			this.panel1.Controls.Add (this.restartUpdate);
 			this.panel1.Controls.Add (this.showHelp);
 			this.panel1.Controls.Add (this.saveOld);
 			this.panel1.Controls.Add (this.askSave);
@@ -151,6 +153,18 @@ namespace Yuki_Theme.Core.Controls
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size (397, 224);
 			this.panel1.TabIndex = 36;
+			// 
+			// restartUpdate
+			// 
+			this.restartUpdate.AutoSize = true;
+			this.restartUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.restartUpdate.Location = new System.Drawing.Point (170, 379);
+			this.restartUpdate.Name = "restartUpdate";
+			this.restartUpdate.Size = new System.Drawing.Size (130, 32);
+			this.restartUpdate.TabIndex = 42;
+			this.restartUpdate.Text = "Restart for update";
+			this.restartUpdate.UseVisualStyleBackColor = true;
+			this.restartUpdate.Click += new System.EventHandler (this.restartUpdate_Click);
 			// 
 			// showHelp
 			// 
@@ -356,11 +370,11 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox1
 			// 
-			this.checkBox1.Location = new System.Drawing.Point (12, 379);
+			this.checkBox1.Location = new System.Drawing.Point (12, 366);
 			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size (127, 29);
+			this.checkBox1.Size = new System.Drawing.Size (124, 42);
 			this.checkBox1.TabIndex = 30;
-			this.checkBox1.Text = "Beta version";
+			this.checkBox1.Text = "Updates for Beta version";
 			this.checkBox1.UseVisualStyleBackColor = true;
 			// 
 			// button5
@@ -685,6 +699,8 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize)(this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.Button restartUpdate;
 
 		public System.Windows.Forms.Button showHelp;
 

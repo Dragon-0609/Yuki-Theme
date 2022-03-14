@@ -22,7 +22,7 @@ namespace Yuki_Theme.Core.Forms
 			button3.Visible = false;
 		}
 
-		private void label1_Click (object sender, EventArgs e)
+		private void button2_Click (object sender, EventArgs e)
 		{
 			this.Close ();
 		}
@@ -53,6 +53,7 @@ namespace Yuki_Theme.Core.Forms
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
+			base.OnPaint (e);
 			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
 		}
 

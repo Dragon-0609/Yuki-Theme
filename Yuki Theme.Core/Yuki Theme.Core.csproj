@@ -121,9 +121,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI.cs" />
+    <Compile Include="Formats\NewThemeFormat.cs" />
+    <Compile Include="Formats\OldThemeFormat.cs" />
+    <Compile Include="Forms\PopupFormsController.cs" />
+    <Compile Include="IColorUpdatable.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
+    <Compile Include="Themes\Theme.cs" />
+    <Compile Include="Themes\ThemeField.cs" />
     <None Include="Controls\CustomB.cs" />
     <Compile Include="CLI_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
@@ -254,8 +260,6 @@
     </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Highlighter.cs" />
-    <Compile Include="NewThemeFormat.cs" />
-    <Compile Include="OldThemeFormat.cs" />
     <Compile Include="Parsers\AbstractParser.cs" />
     <Compile Include="Parsers\DokiThemeParser.cs" />
     <Compile Include="Parsers\JetBrainsParser.cs" />
@@ -268,8 +272,6 @@
     <Compile Include="Settings.cs" />
     <Compile Include="ShadowNames.cs" />
     <Compile Include="SmallDocumentation.cs" />
-    <Compile Include="ThemeField.cs" />
-    <Compile Include="Theme.cs" />
     <Compile Include="Themes\DefaultThemes.cs" />
     <EmbeddedResource Include="Controls\ColorEditor\ColorPicker\Controls\ColorSliderVertical.resx" />
     <EmbeddedResource Include="Controls\RJComboBox.resx">

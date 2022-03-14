@@ -13,7 +13,6 @@ namespace Yuki_Theme.Core.Controls
 {
 	public partial class SettingsPanel : UserControl
 	{
-		public  MForm                mf;
 		public  Color                bg;
 		public  Color                bg2;
 		public  Color                fg;
@@ -30,6 +29,7 @@ namespace Yuki_Theme.Core.Controls
 		public  List <string>        itemsToRight;
 		public  List <CustomPicture> stickerToUpdate;
 		public  string               customSticker;
+		public  PopupFormsController popupController;
 
 		public Action <List <ToolStripItem>, List <string>, List <string>> onChange;
 
@@ -110,9 +110,8 @@ namespace Yuki_Theme.Core.Controls
 
 		private void button5_Click (object sender, EventArgs e)
 		{
-			if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
-			if (!mf.Visible) mf.Show ();
-			mf.update_Click (sender, e);
+			popupController.InitializeAllWindows ();
+			popupController.df.CheckUpdate ();
 		}
 
 		private void button6_Click (object sender, EventArgs e)
@@ -136,11 +135,8 @@ namespace Yuki_Theme.Core.Controls
 								           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
 								           "Yuki Theme",
 								           "yuki_theme.zip"), true);
-							if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
-							if (!mf.Visible) mf.Show ();
-							if (mf.df == null)
-								mf.df = new DownloadForm (mf);
-							mf.df.InstallManually ();
+							popupController.InitializeAllWindows ();
+							popupController.df.InstallManually ();
 						}
 					}
 				}
@@ -428,6 +424,7 @@ namespace Yuki_Theme.Core.Controls
 			fitWidth.Enabled = Settings.bgImage;
 			askSave.Checked = Settings.askToSave;
 			saveOld.Checked = Settings.saveAsOld;
+			restartUpdate.Enabled = DownloadForm.IsUpdateDownloaded ();
 			loadSVG ();
 		}
 
@@ -458,6 +455,18 @@ namespace Yuki_Theme.Core.Controls
 			hf.setMessage ("Old New Formats", SmallDocumentation.Documentation [SmallDocumentation.OLD_NEW_HELP]);
 			hf.setColors (back, fore, brdr);
 			hf.ShowDialog (ParentForm);
+		}
+
+		private void restartUpdate_Click (object sender, EventArgs e)
+		{
+			if (DownloadForm.IsUpdateDownloaded())
+			{
+				popupController.InitializeAllWindows ();
+				popupController.df.startUpdating ();
+			} else
+			{
+				CLI_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
+			}
 		}
 	}
 }

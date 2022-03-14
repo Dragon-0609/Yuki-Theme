@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Database;
+using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
@@ -357,7 +358,7 @@ namespace Yuki_Theme.Core
 				if (!File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_OLD}")) && !File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_NEW}")))
 				{
 					canOperate = false;
-					if (CLI_Actions.showError != null) CLI_Actions.showError ("The name isn't exist! Choose another name", "Name isn't exist");
+					if (CLI_Actions.showError != null) CLI_Actions.showError ("The theme isn't exist! Choose another theme", "Theme isn't exist");
 				}
 
 				if (canOperate)
@@ -369,6 +370,10 @@ namespace Yuki_Theme.Core
 							File.Move (frmpath, tp);
 							WriteName (tp, to);
 
+							AddThemeToLists (to, false, oldThemeList [from]);
+							isDefaultTheme.Remove (from);
+							oldThemeList.Remove (from);
+							
 							if (CLI_Actions.onRename != null) CLI_Actions.onRename (from, to);
 							
 						} else
@@ -382,10 +387,6 @@ namespace Yuki_Theme.Core
 						if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is exist! Choose another name", "Name Exist");
 					}
 				}
-
-				AddThemeToLists (to, false, oldThemeList [from]);
-				isDefaultTheme.Remove (from);
-				oldThemeList.Remove (from);
 
 			} else
 			{

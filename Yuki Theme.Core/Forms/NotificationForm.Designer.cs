@@ -56,7 +56,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button2
 			// 
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.AutoSize = true;
 			this.button2.FlatAppearance.BorderSize = 0;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -66,13 +66,14 @@ namespace Yuki_Theme.Core.Forms
 			this.button2.TabIndex = 4;
 			this.button2.Text = "X";
 			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler (this.label1_Click);
+			this.button2.Click += new System.EventHandler (this.button2_Click);
 			this.button2.MouseEnter += new System.EventHandler (this.button2_MouseEnter);
 			this.button2.MouseLeave += new System.EventHandler (this.button2_MouseLeave);
 			// 
 			// button1
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button1.Cursor = System.Windows.Forms.Cursors.Arrow;
 			this.button1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
 			this.button1.LinkColor = System.Drawing.Color.Black;
 			this.button1.Location = new System.Drawing.Point (12, 52);
@@ -87,7 +88,8 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button3
 			// 
-			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.button3.Cursor = System.Windows.Forms.Cursors.Arrow;
 			this.button3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
 			this.button3.LinkColor = System.Drawing.Color.Black;
 			this.button3.Location = new System.Drawing.Point (111, 52);

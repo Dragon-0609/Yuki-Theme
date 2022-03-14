@@ -29,7 +29,7 @@ using Timer = System.Windows.Forms.Timer;
 namespace Yuki_Theme_Plugin
 {
 	
-	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
+	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable
 	{
 		public string Name => "Yuki Theme";
 
@@ -145,6 +145,8 @@ namespace Yuki_Theme_Plugin
 		bool                    nameInStatusBar = false;     // Name in status bar
 		private ToolStripItem openInExplorerItem;
 
+		public PopupFormsController popupController;
+
 		/// <summary>
 		///     The main entry point for the application.
 		/// </summary>
@@ -185,7 +187,7 @@ namespace Yuki_Theme_Plugin
 		private void Initialize ()
 		{
 			fm.AllowTransparency = true;
-			
+			popupController = new PopupFormsController (fm, 0, this);
 			LoadColors ();
 			defaultSize = new Size (32, 32);
 			
@@ -193,7 +195,6 @@ namespace Yuki_Theme_Plugin
 			textArea = textEditor.ActiveTextAreaControl.TextArea;
 			context = textEditor.ContextMenuStrip;
 			context2 = fm.MainDockPanel.ContextMenuStrip;
-			
 			openInExplorerItem = context2.Items.Add ("Open in Explorer", null, OpenInExplorer);
 			CheckAvailabilityForOpening ();
 			LoadImage ();
@@ -433,6 +434,12 @@ namespace Yuki_Theme_Plugin
 			MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
 			MForm.TrackInstall ();
+
+			if (Settings.update)
+			{
+				popupController.InitializeAllWindows ();
+				popupController.df.CheckUpdate ();
+			}
 		}
 
 		private void loadSVG ()
@@ -735,11 +742,15 @@ namespace Yuki_Theme_Plugin
 			
 			output_panel2.BackColor = output_panel6.BackColor = output_input.BackColor = output_panel4.BackColor =
 				output_panel3.BackColor = output_panel5.BackColor = output_panel1.BackColor = output_text.BackColor =
-					output_output.BackColor = fm.ProjectPane.BackColor = errorsList.BackColor = compilerConsole.BackColor = bgdef;
+					output_output.BackColor = fm.ProjectPane.BackColor = errorsList.BackColor = compilerConsole.BackColor = Helper.bgColor = bgdef;
 
 			output_output.ForeColor = output_panel2.ForeColor = output_text.ForeColor = menu.ForeColor =
 				statusBar.ForeColor = toolsPanel.ForeColor = tools.ForeColor = errorsList.ForeColor =
-					compilerConsole.ForeColor = clr;
+					compilerConsole.ForeColor = Helper.fgColor = clr;
+
+			Helper.bgClick = bgClick;
+			Helper.bgBorder = bgBorder;
+			Helper.fgHover = clrHover;
 			
 			foreach (Control o in output_panel1.Controls)
 			{
@@ -799,7 +810,10 @@ namespace Yuki_Theme_Plugin
 			{
 
 			}
-
+		
+			if (OnColorUpdate != null)
+				OnColorUpdate (bgdef, clr, bgClick);
+			popupController.TryToUpdateNotificationWindow ();
 			errorsList.Refresh ();
 			WaitAndUpdateMenuColors ();
 			manager.UpdateColors ();
@@ -1636,6 +1650,7 @@ namespace Yuki_Theme_Plugin
 		
 		
 		#endregion
-		
+
+		public event ColorUpdate OnColorUpdate;
 	}
 }
