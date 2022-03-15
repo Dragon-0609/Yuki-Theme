@@ -4,7 +4,7 @@ title: Not found
 layout: layer
 ---
 <script>
-	let charsetMetaTag = self.editorIframeDocument.createElement('meta');
+	let charsetMetaTag = document.createElement('meta');
 	charsetMetaTag['httpEquiv'] = 'Content-Type';
 	charsetMetaTag['content'] = 'text/html; charset=utf-8';
 	document.head.insertBefore(charsetMetaTag,document.head.firstChild);
