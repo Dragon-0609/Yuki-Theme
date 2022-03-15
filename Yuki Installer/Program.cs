@@ -33,7 +33,7 @@ namespace Yuki_Installer
 							string targetProcessName = "Yuki Theme";
 
 							Process [] runningProcesses = Process.GetProcesses ();
-							foreach (Process process in runningProcesses)
+							foreach (Process process in runningProcesses) // Be sure that Yuki Theme isn't working
 							{
 								if (process.ProcessName == targetProcessName &&
 								    process.MainModule != null &&
@@ -142,6 +142,7 @@ namespace Yuki_Installer
 					{
 						Console.WriteLine (
 							$"ERROR> {e.ToString ()}");
+						Console.ReadLine ();
 					}
 
 					RegistryKey ke =
@@ -154,7 +155,7 @@ namespace Yuki_Installer
 					{
 						case 0 :
 						{
-							Process.Start ("Yuki Theme.exe");
+							Process.Start ("Yuki_Theme.exe");
 						}
 							break;
 						case 1 :

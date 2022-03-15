@@ -69,9 +69,9 @@ public class PopupFormsController
 
 	public void InitializeAllWindows ()
 	{
-		if (df == null)
+		if (df == null || df.IsDisposed)
 			df = new DownloadForm (this);
-		if (nf == null)
+		if (nf == null || nf.IsDisposed)
 			nf = new NotificationForm ();
 	}
 	
@@ -97,4 +97,10 @@ public class PopupFormsController
 		}
 	}
 
+	public void CloseNotification ()
+	{
+		if (nf != null && !nf.IsDisposed)
+			nf.Close ();
+	}
+	
 }

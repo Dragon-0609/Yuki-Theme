@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Sockets;
@@ -36,7 +37,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public async void CheckUpdate ()
 		{
-			if (IsUpdateDownloaded ())
+			if (IsValidUpdate (null))
 			{
 				QuestionForm quform = new QuestionForm ();
 				quform.EditMessage ("New version is already downloaded", "New version is already downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
@@ -62,9 +63,16 @@ namespace Yuki_Theme.Core.Forms
 						if (response != null)
 						{
 							string json = await response.Content.ReadAsStringAsync ();
-							JObject jresponse = JObject.Parse (json);
+							Console.WriteLine (json);
+							JObject jresponse;
 							if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
-								jresponse = (JObject)jresponse [0];
+							{
+								jresponse = (JObject)JArray.Parse (json).First;
+							} else
+							{
+								jresponse = JObject.Parse (json);
+							}
+								
 
 							string tg = jresponse ["tag_name"].ToString ();
 #if CONSOLE_LOGS
@@ -107,6 +115,9 @@ namespace Yuki_Theme.Core.Forms
 								size = jresponse ["assets"] [md] ["size"].ToString ();
 								size = string.Format ("{0:0.0} MB", double.Parse (size) / 1024 / 1024);
 								downloadlink = jresponse ["assets"] [md] ["browser_download_url"].ToString ();
+								popupController.CloseNotification ();
+								popupController.InitializeAllWindows ();
+								
 								popupController.nf.onClick = startUpdate;
 								popupController.nf.onClick2 = openInGithub;
 								popupController.nf.button1.Text = "Update";
@@ -152,6 +163,10 @@ namespace Yuki_Theme.Core.Forms
 		
 		private void startUpdate ()
 		{
+			if (IsUpdateDownloaded () && !IsValidUpdate (null)) // update downloaded, but it isn't valid
+			{
+				File.Delete (GetUpdatePath ());
+			}
 			popupController.nf.onClick = null;
 			popupController.nf.onClick2 = null;
 			// Console.WriteLine ("Update is started");
@@ -304,10 +319,60 @@ namespace Yuki_Theme.Core.Forms
 			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
 		}
 		
-		public static bool IsUpdateDownloaded ()
+		public static bool IsUpdateDownloaded (string path = null)
 		{
-			return File.Exists (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
-			                                  "yuki_theme.zip"));
+			path ??= GetUpdatePath ();
+			int lng = 0;
+			if (File.Exists (path))
+			{
+				lng = Convert.ToInt32 ((new FileInfo (path).Length / 1024) / 1024);
+				Console.WriteLine (lng);
+			}
+			return lng > 1;
+		}
+
+		private static string GetUpdatePath ()
+		{
+			return Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
+			                     "yuki_theme.zip");
+		}
+
+		public static bool IsValidUpdate (string path)
+		{
+			path ??= GetUpdatePath ();
+			bool valid = false;
+
+			if (IsUpdateDownloaded (path))
+			{
+				bool has = ZipHasFile ("Yuki Theme.Core.dll", path);
+				if (has)
+				{
+					has = ZipHasFile ("Newtonsoft.Json.dll", path);
+					if (has)
+					{
+						has = ZipHasFile ("FastColoredTextBox.dll", path);
+						valid = has;
+					}
+				}
+			}
+			
+			return valid;
+		}
+		
+		public static bool ZipHasFile (string fileFullName, string zipFullPath)
+		{
+			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
+			{
+				foreach (ZipArchiveEntry entry in archive.Entries)
+				{
+					if (entry.FullName.EndsWith (fileFullName, StringComparison.Ordinal))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 		
 	}

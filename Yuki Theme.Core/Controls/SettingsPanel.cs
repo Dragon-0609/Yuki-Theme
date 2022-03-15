@@ -122,47 +122,21 @@ namespace Yuki_Theme.Core.Controls
 			of.Multiselect = false;
 			if (of.ShowDialog () == DialogResult.OK)
 			{
-				bool has = ZipHasFile ("Yuki Theme.Core.dll", of.FileName);
+				bool has = DownloadForm.IsValidUpdate (of.FileName);
+
 				if (has)
 				{
-					has = ZipHasFile ("Newtonsoft.Json.dll", of.FileName);
-					if (has)
-					{
-						has = ZipHasFile ("FastColoredTextBox.dll", of.FileName);
-						if (has)
-						{
-							File.Copy (of.FileName, System.IO.Path.Combine (
-								           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-								           "Yuki Theme",
-								           "yuki_theme.zip"), true);
-							popupController.InitializeAllWindows ();
-							popupController.df.InstallManually ();
-						}
-					}
-				}
-
-				if (!has)
-				{
+					File.Copy (of.FileName, Path.Combine (
+						           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+						           "Yuki Theme",
+						           "yuki_theme.zip"), true);
+					popupController.InitializeAllWindows ();
+					popupController.df.InstallManually ();
+				}else{
 					MessageBox.Show ("The zip isn't Yuki Theme. Please, go to github and download from there",
 					                 "The wrong zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-		}
-
-		private bool ZipHasFile (string fileFullName, string zipFullPath)
-		{
-			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
-			{
-				foreach (ZipArchiveEntry entry in archive.Entries)
-				{
-					if (entry.FullName.EndsWith (fileFullName, StringComparison.Ordinal))
-					{
-						return true;
-					}
-				}
-			}
-
-			return false;
 		}
 
 		public void setVisible (bool vis)

@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle ("Yuki Theme Plugin")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
+[assembly: AssemblyCompany ("Dragon-LV")]
 [assembly: AssemblyProduct ("Yuki Theme Plugin")]
-[assembly: AssemblyCopyright ("Copyright ©  2021")]
-[assembly: AssemblyTrademark ("")]
+[assembly: AssemblyCopyright ("Copyright © Dragon-LV 2021-2022")]
+[assembly: AssemblyTrademark ("Yuki")]
 [assembly: AssemblyCulture ("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
