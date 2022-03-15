@@ -743,8 +743,8 @@ function loadTheme() {
 		"	-webkit-box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; " +
 		"	-moz-box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; " +
 		"	box-shadow: inset 0px -5px 0 0px " + rnd.keyword + " !important; }\n" +
-		"::selection { color: " + rnd.color + " !important; background: " + rnd.keyword + " !important; }\n";
-		" ::-moz-selection { color: " + rnd.color + " !important; background: " + rnd.keyword + " !important; }";
+		"::selection { color: " + rnd.keyword + " !important; }\n";
+		" ::-moz-selection { color: " + rnd.keyword + " !important; }";
 
 	if (!preLoad) {
 		private_style = document.createElement ('style');
