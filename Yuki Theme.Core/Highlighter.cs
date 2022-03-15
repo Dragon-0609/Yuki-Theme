@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Themes;
 using static System.Drawing.Brushes;
 using TextStyle = FastColoredTextBoxNS.TextStyle;
 

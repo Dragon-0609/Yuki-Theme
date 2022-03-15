@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Xml;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Database;
+using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
@@ -39,7 +40,7 @@ namespace Yuki_Theme.Core
 		#endregion
 		
 		public static string selectedItem = "empty";
-		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location);
+		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
 		public static bool   isEdited;
 		public static string groupName = "";
 
@@ -56,10 +57,11 @@ namespace Yuki_Theme.Core
 		{
 			schemes.Clear ();
 
-			schemes.AddRange (DefaultThemes.def);
 			isDefaultTheme.Clear ();
 			oldThemeList.Clear ();
-			DefaultThemes.addDefaultThemes (ref isDefaultTheme);
+			DefaultThemes.addDefaultThemes ();
+			DefaultThemes.addExternalThemes ();
+			schemes.AddRange (DefaultThemes.names);
 			DefaultThemes.addOldNewThemeDifference (ref oldThemeList);
 			Helper.CreateThemeDirectory ();
 			if (Directory.Exists (Path.Combine (currentPath, "Themes")))
@@ -126,7 +128,7 @@ namespace Yuki_Theme.Core
 				{
 					schemes.Add (name);
 					isDefaultTheme.Add (name, false);
-					oldThemeList.Add (name, CLI.oldThemeList [copyFrom]);
+					oldThemeList.Add (name, oldThemeList [copyFrom]);
 				}
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)
@@ -214,6 +216,7 @@ namespace Yuki_Theme.Core
 		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
+			Console.WriteLine("{0}, {1}", nameToLoad,  isDefault ());
 			if (!isDefault ())
 				saveList (img2, img3, wantToKeep);
 		}
@@ -355,7 +358,7 @@ namespace Yuki_Theme.Core
 				if (!File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_OLD}")) && !File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_NEW}")))
 				{
 					canOperate = false;
-					if (CLI_Actions.showError != null) CLI_Actions.showError ("The name isn't exist! Choose another name", "Name isn't exist");
+					if (CLI_Actions.showError != null) CLI_Actions.showError ("The theme isn't exist! Choose another theme", "Theme isn't exist");
 				}
 
 				if (canOperate)
@@ -367,6 +370,10 @@ namespace Yuki_Theme.Core
 							File.Move (frmpath, tp);
 							WriteName (tp, to);
 
+							AddThemeToLists (to, false, oldThemeList [from]);
+							isDefaultTheme.Remove (from);
+							oldThemeList.Remove (from);
+							
 							if (CLI_Actions.onRename != null) CLI_Actions.onRename (from, to);
 							
 						} else
@@ -380,10 +387,6 @@ namespace Yuki_Theme.Core
 						if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is exist! Choose another name", "Name Exist");
 					}
 				}
-
-				AddThemeToLists (to, false, oldThemeList [from]);
-				isDefaultTheme.Remove (from);
-				oldThemeList.Remove (from);
 
 			} else
 			{
@@ -430,14 +433,15 @@ namespace Yuki_Theme.Core
 
 		private static Stream GetStreamFromMemory (string file, string name)
 		{
-			var a = GetCore ();
+			IThemeHeader header = DefaultThemes.headers[name];
+			Assembly a = header.Location;
 			if (file.Contains (":"))
 			{
 				file = Helper.ConvertNameToPath(file);
 			}
 
 			string ext = oldThemeList [name] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW;
-			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + ext);
+			Stream stream = a.GetManifestResourceStream ($"{header.ResourceHeader}.{file}" + ext);
 			return stream;
 		}
 
@@ -499,7 +503,7 @@ namespace Yuki_Theme.Core
 			nameToLoad = name;
 			pathToLoad = Helper.ConvertNameToPath (name);
 			Console.WriteLine(isDefaultTheme [name]);
-			ThemeFormat extension = Helper.GetThemeFormat (isDefaultTheme [name], pathToLoad);
+			ThemeFormat extension = Helper.GetThemeFormat (isDefaultTheme [name], pathToLoad, name);
 			if (extension == ThemeFormat.Null)
 			{
 				CLI_Actions.showError ("The file isn't exist", "File isn't exist");
@@ -547,6 +551,7 @@ namespace Yuki_Theme.Core
 		{
 			if (!isDefault ())
 			{
+				Console.WriteLine("AS OLD: " + Settings.saveAsOld);
 				if (Settings.saveAsOld)
 					OldThemeFormat.saveList (img2, img3, wantToKeep);
 				else
@@ -694,18 +699,19 @@ namespace Yuki_Theme.Core
 
 		private static string GetThemeFormatFromMemory (string file)
 		{
-			var a = GetCore ();
+			IThemeHeader header = DefaultThemes.headers [file];
+			Assembly a = header.Location;
 			if (file.Contains (":"))
 			{
 				file = Helper.ConvertNameToPath (file);
 			}
 
-			string format = $"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_OLD;
-			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_OLD);
+			string format = $"{header.ResourceHeader}.{file}" + Helper.FILE_EXTENSTION_OLD;
+			Stream stream = a.GetManifestResourceStream (format);
 			if (stream == null)
 			{
-				stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_NEW);
-				format = stream != null ? $"Yuki_Theme.Core.Themes.{file}" + Helper.FILE_EXTENSTION_NEW : null;
+				stream = a.GetManifestResourceStream ($"{header.ResourceHeader}.{file}" + Helper.FILE_EXTENSTION_NEW);
+				format = stream != null ? format : null;
 			}
 
 			stream?.Dispose ();
@@ -738,7 +744,8 @@ namespace Yuki_Theme.Core
 			var doc = new XmlDocument ();
 			try
 			{
-				OldThemeFormat.loadThemeToPopulate (ref doc, oldPath, oldPath, false, DefaultThemes.isDefault (name), ref theme);
+				OldThemeFormat.loadThemeToPopulate (ref doc, oldPath, false, DefaultThemes.isDefault (oldName), ref theme, oldName,
+				                                    Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
 				return;
@@ -787,7 +794,8 @@ namespace Yuki_Theme.Core
 
 		private static void ReGenerateFromNew (string path, string oldPath, string name, string oldName)
 		{
-			string json = NewThemeFormat.loadThemeToPopulate (oldPath, oldPath, false, DefaultThemes.isDefault (oldName));
+			string json = NewThemeFormat.loadThemeToPopulate (oldPath, false, DefaultThemes.isDefault (oldName), oldName,
+			                                                  Helper.FILE_EXTENSTION_NEW);
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.Name = name;
 			theme.Group = "";

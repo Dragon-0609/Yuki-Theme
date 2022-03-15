@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle ("Yuki Theme.Core")]
-[assembly: AssemblyDescription ("This library is Scheme editor for PascalABC.NET. By this library you can change colors of the Pascal's text editor. Also as addition, you can import your scheme from any JetBrains IDE.")]
+[assembly: AssemblyDescription ("This is Core of Yuki Theme. It includes everything that has programm version.")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Dragon-LV")]
 [assembly: AssemblyProduct ("Yuki Theme.Core")]
-[assembly: AssemblyCopyright ("Copyright ©  2021")]
+[assembly: AssemblyCopyright ("Copyright © Dragon-LV 2021-2022")]
 [assembly: AssemblyTrademark ("Yuki")]
 [assembly: AssemblyCulture ("")]
 

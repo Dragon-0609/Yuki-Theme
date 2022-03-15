@@ -4,13 +4,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("Yuki_Theme")]
+[assembly: AssemblyTitle ("Yuki Theme")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("Yuki_Theme")]
-[assembly: AssemblyCopyright ("Copyright ©  2021")]
-[assembly: AssemblyTrademark ("")]
+[assembly: AssemblyCompany ("Dragon-LV")]
+[assembly: AssemblyProduct ("Yuki Theme")]
+[assembly: AssemblyCopyright ("Copyright © Dragon-LV 2021-2022")]
+[assembly: AssemblyTrademark ("Yuki")]
 [assembly: AssemblyCulture ("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

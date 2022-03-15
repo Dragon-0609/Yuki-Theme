@@ -91,7 +91,7 @@ namespace Yuki_Theme_Plugin
 						}
 
 						plugin.mf = null;
-						settingsPanel.mf = null;
+						settingsPanel.popupController = plugin.popupController;
 						oldeditor = Settings.Editor;
 						// Change colors for About Form
 						settingsPanel.bg = YukiTheme_VisualPascalABCPlugin.bg;
@@ -148,23 +148,14 @@ namespace Yuki_Theme_Plugin
 					Settings.saveAsOld = settingsPanel.saveOld.Checked;
 					Settings.saveData ();
 					plugin.LoadSticker ();
-					if (settingsPanel.mf != null && !settingsPanel.mf.IsDisposed)
-					{
-						settingsPanel.mf.Dispose ();
-					}
-
-					settingsPanel.mf = null;
+					
+					settingsPanel.popupController = null;
 					plugin.mf = null;
 					alreadyShown = false;
 					//this.Enabled = true;           
 					break;
 				case OptionsContentAction.Cancel :
-					if (settingsPanel.mf != null && !settingsPanel.mf.IsDisposed)
-					{
-						settingsPanel.mf.Dispose ();
-					}
-
-					settingsPanel.mf = null;
+					settingsPanel.popupController = null;
 					plugin.mf = null;
 					alreadyShown = false;
 					break;

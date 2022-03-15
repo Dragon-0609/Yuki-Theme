@@ -13,3 +13,4 @@ System.Runtime.CompilerServices.Unsafe.dll
 Yuki Theme.Core.dll
 Yuki Installer.exe
 Yuki Theme Plugin.dll
+Yuki Theme.Themes.dll

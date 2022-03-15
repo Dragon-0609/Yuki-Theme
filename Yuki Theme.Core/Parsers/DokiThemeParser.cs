@@ -30,13 +30,13 @@ namespace Yuki_Theme.Core.Parsers
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
 			flname = ofname;
-			outname = Path.Combine (CLI.currentPath, "Themes",
+			PathToSave = Path.Combine (CLI.currentPath, "Themes",
 			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
-			if (!MainParser.checkAvailableAndAsk (outname, ask, exist))
+			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
 				throw new InvalidDataException ("The theme is exist...canceling...");
 
-			overwrite = File.Exists (outname);
-			Console.WriteLine ("{0} | Exist: {1}", outname, overwrite);
+			overwrite = File.Exists (PathToSave);
+			Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
 			dark = bool.Parse (json ["dark"].ToString ());
 
 			foreach (JProperty cl in json ["colors"])
@@ -87,7 +87,7 @@ namespace Yuki_Theme.Core.Parsers
 			
 			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
-			addDefaults ("foregroundColorEditor");
+			addDefaults ("foregroundColor");
 			addDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
@@ -380,7 +380,7 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				case "constantColor" :
 				case "comments" :
 				case "stringColor" :
@@ -416,10 +416,10 @@ namespace Yuki_Theme.Core.Parsers
 		}
 
 		private readonly Dictionary <string, string> _defaultForegroundColors = new Dictionary <string, string> ()
-			{ { "constantColor", "#4C94D6" }, { "foregroundColorEditor", "#4D4D4A" }, { "comments", "#6a737d" } };
+			{ { "constantColor", "#4C94D6" }, { "foregroundColor", "#4D4D4A" }, { "comments", "#6a737d" } };
 
 		private readonly Dictionary <string, string> _defaultDarkForegroundColors = new Dictionary <string, string> ()
-			{ { "constantColor", "#86dbfd" }, { "foregroundColorEditor", "#F8F8F2" }, { "comments", "#6272a4" } };
+			{ { "constantColor", "#86dbfd" }, { "foregroundColor", "#F8F8F2" }, { "comments", "#6272a4" } };
 
 		private Tuple <string, string> getDefault (string st)
 		{
@@ -443,7 +443,7 @@ namespace Yuki_Theme.Core.Parsers
 			bool res = false;
 			switch (st)
 			{
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				case "constantColor" :
 				case "comments" :
 				case "stringColor" :
@@ -469,7 +469,7 @@ namespace Yuki_Theme.Core.Parsers
 				}
 					break;
 
-				case "foregroundColorEditor" :
+				case "foregroundColor" :
 				{
 					res = new [] { "Default", "Punctuation" };
 				}
@@ -557,7 +557,7 @@ namespace Yuki_Theme.Core.Parsers
 			if (!overwrite)
 			{
 				var doc = new XmlDocument ();
-				doc.Load (outname);
+				doc.Load (PathToSave);
 
 				Tuple <bool, Image> wallp = getImage (getWallpaper);
 
@@ -629,7 +629,7 @@ namespace Yuki_Theme.Core.Parsers
 					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				Helper.Zip (outname, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
+				Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 			}
 		}
 

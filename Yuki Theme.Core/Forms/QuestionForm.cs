@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Yuki_Theme.Core.Forms
 {
-	partial class QuestionForm : Form
+	internal partial class QuestionForm : Form
 	{
 		
 		public QuestionForm ()
@@ -28,6 +28,22 @@ namespace Yuki_Theme.Core.Forms
 		private void button1_Click (object sender, EventArgs e)
 		{
 			DialogResult = DialogResult.No;
+		}
+
+		public void EditMessage (string title, string content, string buttonYes, string buttonNo, string buttonOther = null)
+		{
+			Text = title;
+			Message.Text = content;
+			button2.Text = buttonYes;
+			button1.Text = buttonNo;
+			if (buttonOther != null)
+			{
+				button3.Text = buttonOther;
+			} else
+			{
+				button3.Visible = false;
+				button2.Location = new Point (button1.Location.X - button2.Size.Width - 8, button1.Location.Y);
+			}
 		}
 
 		private void QuestionForm_Shown (object sender, EventArgs e)

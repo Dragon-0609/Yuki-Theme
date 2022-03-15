@@ -18,7 +18,7 @@ using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace Yuki_Theme.Core.Forms
 {
-	public partial class MForm : Form
+	public partial class MForm : Form, IColorUpdatable
 	{
 		private readonly ColorPicker col;
 		private readonly Highlighter highlighter;
@@ -143,16 +143,15 @@ namespace Yuki_Theme.Core.Forms
 
 		#endregion
 
-		public  SelectionForm selform;
-		private SettingsForm  setform;
+		public SelectionForm selform;
+		public SettingsForm  setform;
 
-		private ThemeManager     tmanagerform;
-		public  DownloadForm     df;
-		public  NotificationForm nf;
-		private Image            img  = null;
-		private Image            img2 = null;
-		private Image            img3 = null;
-		private Image            img4 = null;
+		private ThemeManager         tmanagerform;
+		public  PopupFormsController popupController;
+		private Image                img  = null;
+		private Image                img2 = null;
+		private Image                img3 = null;
+		private Image                img4 = null;
 
 		private string bgtext;
 		private string sttext;
@@ -172,16 +171,16 @@ namespace Yuki_Theme.Core.Forms
 
 		public  Brush         fgbrush;
 		private int           textBoxHeight = 0;
-		private int           notHeight     = 0;
-		private ImageType    imgCurrent    = ImageType.None;
+		private ImageType     imgCurrent    = ImageType.None;
 		public  CustomPicture stickerControl;
 		private Timer         tmr;
+		public  bool          preventFromUpdate = false;
 
-		public MForm (int mode = 0, bool quiet = false)
+		public MForm (int mode = 0)
 		{
 			Helper.mode = (ProductMode) mode;                               // Write current type
 			textBoxHeight = Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
-			notHeight = Helper.mode == ProductMode.Program ? 50 : 88;
+			int notHeight = Helper.mode == ProductMode.Program ? 50 : 88;
 			InitializeComponent ();
 			list_1.ItemHeight = list_1.Font.Height + 2;
 			// Set Actions
@@ -200,6 +199,7 @@ namespace Yuki_Theme.Core.Forms
 			if (Helper.mode != ProductMode.Plugin)
 				Settings.connectAndGet (); // Get Data
 			initSticker ();
+			popupController = new PopupFormsController (this, notHeight, this);
 
 			highlighter = new Highlighter (sBox, this);
 			load_schemes ();
@@ -209,7 +209,6 @@ namespace Yuki_Theme.Core.Forms
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
-
 			if (currentFile != "N|L") // If theme couldn't find
 			{
 				col = new ColorPicker (this);
@@ -219,8 +218,8 @@ namespace Yuki_Theme.Core.Forms
 				AddTips ();
 
 				sBox.Paint += bgImagePaint;
-				if (update && !quiet)
-					update_Click (this, EventArgs.Empty);
+				if (update && Helper.mode != ProductMode.Plugin)
+					checkUpdate ();
 				MForm_SizeChanged (this, EventArgs.Empty);
 				if (Helper.mode != ProductMode.Plugin)
 				{
@@ -243,6 +242,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public void load_schemes ()
 		{
+			ResetSchemes();
+			
 			schemes.Items.Clear ();
 
 			CLI.load_schemes (ifZero);
@@ -277,8 +278,6 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (swSticker)
 			{
-				// Console.WriteLine (customSticker);
-				// Console.WriteLine (File.Exists (customSticker));
 				if (useCustomSticker && File.Exists (customSticker))
 				{
 					img4 = Image.FromFile (customSticker);
@@ -477,21 +476,28 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (tmanagerform == null || tmanagerform.IsDisposed)
 				tmanagerform = new ThemeManager (this);
-
-			ReItem defa = new ReItem ("Default", true);
-			ReItem doki = new ReItem ("Doki Theme", true);
-			ReItem custom = new ReItem ("Custom", true);
+			
 			tmanagerform.groups.Clear ();
-			tmanagerform.groups.Add (defa);
-			tmanagerform.groups.Add (doki);
+
+			Dictionary <string, ReItem> groupItems = new Dictionary <string, ReItem> ();
+
+			foreach (string sc in DefaultThemes.categoriesList)
+			{
+				ReItem defa = new ReItem (sc, true);
+				tmanagerform.groups.Add (defa);
+				groupItems.Add (sc, defa);
+			}
+			
+			ReItem custom = new ReItem ("Custom", true);
 			tmanagerform.groups.Add (custom);
+			groupItems.Add ("Custom", custom);
 			
 			foreach (string item in schemes.Items)
 			{
 				ReItem litem;
 				if (CLI.isDefaultTheme [item])
 				{
-					ReItem cat = DefaultThemes.getCategory (item) == "Doki Theme" ? doki : defa;
+					ReItem cat = groupItems [DefaultThemes.getCategory (item)];
 					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
 				} else
 				{
@@ -630,7 +636,6 @@ namespace Yuki_Theme.Core.Forms
 				check_italic.Enabled = false;
 				lastIndex = list_1.SelectedIndex;
 				blocked = true;
-				// Console.WriteLine(list_1.SelectedItem.ToString ());
 				var str = list_1.SelectedItem.ToString ();
 				if (!str.Contains ("Wallpaper") && !str.Contains ("Sticker"))
 				{
@@ -835,7 +840,6 @@ namespace Yuki_Theme.Core.Forms
 		public void onSelect ()
 		{
 			list_1.Items.AddRange (CLI.names.ToArray ());
-			// Console.WriteLine(list_1.Items.Count);
 			list_1.SelectedIndex = 0;
 			onSelectItem (list_1, EventArgs.Empty);
 		}
@@ -843,43 +847,46 @@ namespace Yuki_Theme.Core.Forms
 		private void check_bold_CheckedChanged (object sender, EventArgs e)
 		{
 			if (!blocked)
-				// Console.WriteLine ("Not blocked");
 				updateCurrentItem ();
-			// else Console.WriteLine ("Blocked");
 		}
 
 		private void check_italic_CheckedChanged (object sender, EventArgs e)
 		{
 			if (!blocked)
-				// Console.WriteLine ("Not blocked");
 				updateCurrentItem ();
-			// else Console.WriteLine ("Blocked");
 		}
 
 		private void schemes_SelectedIndexChanged (object sender, EventArgs e)
 		{
-			bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
-			
-			if (cnd)
+			if (preventFromUpdate)
 			{
-				if (CLI.isEdited) // Ask to save the changes
-				{
-					if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
-						save_Click (sender, e); // save before restoring
-				}
-				restore_Click (sender, e);
-				
-				save_button.Visible = !isDefault ();
+				preventFromUpdate = false;
+			}else
+			{
+				bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
 
-				selectedItem = schemes.SelectedItem.ToString ();
-				database.UpdateData (Settings.ACTIVE, selectedItem);
+				if (cnd)
+				{
+					if (CLI.isEdited) // Ask to save the changes
+					{
+						if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
+							save_Click (sender, e); // save before restoring
+					}
+
+					restore_Click (sender, e);
+
+					save_button.Visible = !isDefault ();
+
+					selectedItem = schemes.SelectedItem.ToString ();
+					database.UpdateData (Settings.ACTIVE, selectedItem);
+				}
 			}
 		}
 		
 		private void panel1_Resize (object sender, EventArgs e)
 		{
-			changeDownloaderLocation ();
-			changeNotificationLocation ();
+			popupController.changeDownloaderLocation ();
+			popupController.changeNotificationLocation ();
 		}
 
 		private void selectImage_Click (object sender, EventArgs e)
@@ -1001,10 +1008,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void MForm_FormClosing (object sender, FormClosingEventArgs e)
 		{
-			if (nf != null)
-				nf.Dispose ();
-			if (df != null)
-				df.Dispose ();
+			popupController.CloseAllWindows ();
 			database.SaveLocation (DesktopLocation);
 			CLI_Actions.ifHasImage = null;
 			CLI_Actions.ifDoesntHave = null;
@@ -1015,8 +1019,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private void MForm_Move (object sender, EventArgs e)
 		{
-			changeDownloaderLocation ();
-			changeNotificationLocation ();
+			popupController.changeDownloaderLocation ();
+			popupController.changeNotificationLocation ();
 		}
 		
 		private void MForm_SizeChanged (object sender, EventArgs e)
@@ -1030,75 +1034,14 @@ namespace Yuki_Theme.Core.Forms
 			CLI.save (img2, img3);
 		}
 
-		public void update_Click (object sender, EventArgs e)
+		public void checkUpdate ()
 		{
-			/*if (!isDefault ())
-				saveList ();*/
-			// showDownloader ();
-			if (df == null)
-				df = new DownloadForm (this);
-			if (nf == null)
-				nf = new NotificationForm ();
-			// Thread th = new Thread (new ThreadStart(df.CheckUpdate));
-			// th.Start();
-			df.CheckUpdate ();
+			popupController.InitializeAllWindows ();
+			popupController.df.CheckUpdate ();
 		}
 		
 		#endregion
 		
-		
-		#region Helper Forms
-
-		public void showDownloader ()
-		{
-			if (df == null || nf.IsDisposed)
-				df = new DownloadForm (this);
-			df.Show (this);
-			changeDownloaderLocation ();
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-			{
-				nf.Visible = false;
-			}
-		}
-
-		public void changeDownloaderLocation ()
-		{
-			if (df != null && !df.IsDisposed && df.Visible)
-			{
-				df.StartPosition = FormStartPosition.Manual;
-				df.Location = new Point (this.Location.X + this.ClientRectangle.Width - 284,
-				                         this.Location.Y + this.ClientRectangle.Height - 73);
-			}
-		}
-
-		public void changeNotificationLocation ()
-		{
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-			{
-				nf.StartPosition = FormStartPosition.Manual;
-				nf.Location = new Point (this.Location.X + this.ClientRectangle.Width - 306,
-				                         this.Location.Y + this.ClientRectangle.Height - notHeight);
-			}
-		}
-
-		public void ShowNotification (string title, string content)
-		{
-			if (nf == null || nf.IsDisposed)
-				nf = new NotificationForm ();
-			nf.Visible = false;
-			nf.changeContent (title, content);
-
-
-			nf.Show (this);
-
-			if (df != null && !df.IsDisposed && df.Visible)
-			{
-				df.Visible = false;
-			}
-		}
-
-		#endregion
-
 
 		#region Updates
 
@@ -1142,8 +1085,8 @@ namespace Yuki_Theme.Core.Forms
 				OnColorUpdate (bgDefault, fgDefault, bgClicked);
 			fgbrush = new SolidBrush (fgDefault);
 			loadSVG ();
-			if (nf != null && !nf.IsDisposed && nf.Visible)
-				nf.NotificationForm_Shown (this, EventArgs.Empty);
+			
+			popupController.TryToUpdateNotificationWindow ();
 		}
 
 		private void updateCurrentItem ()
@@ -1291,7 +1234,6 @@ namespace Yuki_Theme.Core.Forms
 
 		public static void showLicense (Color bg, Color fg, Color bgClick, Form parent)
 		{
-			Console.WriteLine(Settings.license);
 			if (!Settings.license)
 			{
 				MessageForm msgf = new MessageForm ();
@@ -1365,6 +1307,15 @@ namespace Yuki_Theme.Core.Forms
 			return ColorTranslator.ToHtml (clr);
 		}
 		
+		private void ResetSchemes ()
+		{
+			CLI.schemes.Clear ();
+			DefaultThemes.categories.Clear ();
+			DefaultThemes.headers.Clear ();
+			DefaultThemes.names.Clear ();
+			DefaultThemes.categoriesList.Clear ();
+			DefaultThemes.headersList.Clear ();
+		}
 
 		#endregion
 		
@@ -1372,7 +1323,4 @@ namespace Yuki_Theme.Core.Forms
 
 
 	public delegate void SetTheme ();
-
-
-	public delegate void ColorUpdate (Color bg, Color fg, Color bgClick);
 }

@@ -7,9 +7,11 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
+using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core
 {
@@ -21,8 +23,6 @@ namespace Yuki_Theme.Core
 		public static RelativeUnit unit;
 
 		private static Size Standart32 = new Size (32, 32);
-
-		public static string DefaultThemesBegin = "Yuki_Theme.Core.Themes.";
 		public static string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
@@ -204,14 +204,20 @@ namespace Yuki_Theme.Core
 				}
 		}
 
-		public static ThemeFormat GetThemeFormat (bool isDefault, string path)
+		public static ThemeFormat GetThemeFormat (bool isDefault, string path, string name)
 		{
 			if (isDefault)
 			{
-				Assembly assembly = CLI.GetCore ();
-				if (assembly.GetManifestResourceStream ($"{DefaultThemesBegin}{path}{FILE_EXTENSTION_OLD}") != null)
+				Assembly assembly;
+				string pathHeader;
+				IThemeHeader header = DefaultThemes.headers [name];
+				assembly = header.Location;
+				pathHeader = header.ResourceHeader;
+				Console.WriteLine(pathHeader);
+				Console.WriteLine (path);
+				if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_OLD}") != null)
 					return ThemeFormat.Old;
-				else if (assembly.GetManifestResourceStream ($"{DefaultThemesBegin}{path}{FILE_EXTENSTION_NEW}") != null)
+				else if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_NEW}") != null)
 					return ThemeFormat.New;
 				else
 				{
@@ -575,6 +581,13 @@ namespace Yuki_Theme.Core
 		{
 			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+		}
+
+		public static T GetRandomElement <T> (List <T> list)
+		{
+			Random random = new Random ();
+			int start2 = random.Next (0, list.Count);
+			return list [start2];
 		}
 	}
 

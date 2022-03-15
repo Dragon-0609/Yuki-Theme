@@ -75,7 +75,17 @@ namespace Yuki_Theme.Core.Forms
 			ListViewItem res = scheme.Items.Find (from, true) [0];
 			ReItem reit = (ReItem)res;
 			reit.SetName (to);
-			form.schemes.Items [form.schemes.Items.IndexOf (from)] = to;
+			int indx = form.schemes.Items.IndexOf (from);
+			bool needToReSelect = false;
+			if (form.schemes.SelectedIndex == indx)
+			{
+				form.preventFromUpdate = true;
+				form.schemes.SelectedIndex = 0;
+				needToReSelect = true;
+			}
+			form.schemes.Items [indx] = to;
+			if (needToReSelect)
+				form.schemes.SelectedIndex = indx;
 			scheme.Invalidate();
 			form.schemes.Invalidate();
 		}
@@ -112,14 +122,19 @@ namespace Yuki_Theme.Core.Forms
 			{
 				string from = form.selform.comboBox1.SelectedItem.ToString ();
 				string to = form.selform.textBox1.Text;
-				
-				if (!CLI.add (from, to))
+				if (from != to)
 				{
-					form.schemes.Items.Add (to);
-					form.schemes.SelectedItem = to;
-				}
+					if (!CLI.add (from, to))
+					{
+						form.schemes.Items.Add (to);
+						form.schemes.SelectedItem = to;
+					}
 				
-				DialogResult = DialogResult.OK;
+					DialogResult = DialogResult.OK;
+				} else
+				{
+					CLI_Actions.showError ("Names are equal! Choose another name for 'To' field", "Names are equal");
+				}
 			}
 		}
 

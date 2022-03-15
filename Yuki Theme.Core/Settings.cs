@@ -74,7 +74,7 @@ public static class Settings
 	
 	
 	public const  double current_version     = 6.0;
-	public const  string current_version_add = "beta";
+	public const  string current_version_add = "";
 	public static string next_version        = "";
 
 	#endregion

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+using System.Reflection;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Formats
 {
 	public static class OldThemeFormat
 	{
-		
 		#region XML
 
 		/// <summary>
@@ -76,6 +75,7 @@ namespace Yuki_Theme.Core
 						}
 					}
 				}
+
 				if (!namesExtra.Contains (nm))
 				{
 					namesExtra.Add (nm);
@@ -91,8 +91,8 @@ namespace Yuki_Theme.Core
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeParentForLight (XmlNode   node, ref Theme theme,
-		                                            ref List <string> namesExtra)
+		public static void PopulateByXMLNodeParentForLight (XmlNode           node, ref Theme theme,
+		                                                    ref List <string> namesExtra)
 		{
 			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNodeForLight (xne, ref theme, ref namesExtra);
 		}
@@ -101,8 +101,8 @@ namespace Yuki_Theme.Core
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeForLight (XmlNode   node, ref Theme theme,
-		                                      ref List <string> namesExtra)
+		public static void PopulateByXMLNodeForLight (XmlNode           node, ref Theme theme,
+		                                              ref List <string> namesExtra)
 		{
 			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingularForLight (xn, ref theme, ref namesExtra);
 		}
@@ -111,8 +111,8 @@ namespace Yuki_Theme.Core
 		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeSingularForLight (XmlNode   node, ref Theme theme,
-		                                              ref List <string> namesExtra)
+		public static void PopulateByXMLNodeSingularForLight (XmlNode           node, ref Theme theme,
+		                                                      ref List <string> namesExtra)
 		{
 			// Console.WriteLine("TEST");
 			var attrs = new ThemeField ();
@@ -245,11 +245,21 @@ namespace Yuki_Theme.Core
 			{
 				doc.Load (themePath);
 			}
-			
-			MergeThemeFieldsWithFile (CLI.currentTheme.Fields, doc);
+
+			Dictionary <string, ThemeField> localDic;
+
+			if (Settings.settingMode == SettingMode.Light)
+				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, CLI.currentTheme);
+			else
+				localDic = CLI.currentTheme.Fields;
+			foreach (KeyValuePair <string, ThemeField> themeField in localDic)
+			{
+				Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
+			}
+			MergeThemeFieldsWithFile (localDic, doc);
 
 			MergeCommentsWithFile (CLI.currentTheme, doc);
-			
+
 			SaveXML (img2, img3, wantToKeep, iszip, ref doc, themePath);
 		}
 
@@ -281,18 +291,41 @@ namespace Yuki_Theme.Core
 				PopulateByXMLNodeParentForLight (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0], ref theme, ref namesExtra);
 			} else
 			{
-				if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1) PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0], ref theme, ref namesExtra);
+				if (doc.SelectNodes ("/SyntaxDefinition/Environment").Count == 1)
+					PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0], ref theme, ref namesExtra);
 				PopulateByXMLNode (doc.SelectNodes ("/SyntaxDefinition/Environment") [0], ref theme, ref namesExtra);
 				PopulateByXMLNodeSingular (doc.SelectNodes ("/SyntaxDefinition/Digits") [0], ref theme, ref namesExtra);
 				PopulateByXMLNodeParent (doc.SelectNodes ("/SyntaxDefinition/RuleSets") [0], ref theme, ref namesExtra);
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc, string pathForMemory, string pathForFile, bool needToDoActions, bool   isDefault, ref Theme themeToSet) 
+		public static void loadThemeToPopulate (ref XmlDocument doc,        string pathForFile, bool needToDoActions, bool isDefault,
+		                                        ref Theme       themeToSet, string nameToLoadForMemory, string extension,
+		                                        bool            customNameForMemory)
 		{
 			if (isDefault)
 			{
-				var a = CLI.GetCore ();
+				Assembly a;
+				string pathForMemory = "";
+				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
+				if (customNameForMemory)
+				{
+					a = CLI.GetCore ();
+					pathForMemory = pathForFile;
+				} else
+				{
+					if (DefaultThemes.names.Contains (nameToLoadForMemory))
+					{
+						IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+						a = header.Location;
+						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
+					} else
+					{
+						a = CLI.GetCore ();
+						pathForMemory = $"{DefaultThemesHeader.CoreThemeHeader}.{pathToLoad}{extension}";
+					}
+				}
+
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
 				themeToSet.fullPath = pathForMemory;
 				themeToSet.isDefault = true;
@@ -322,7 +355,7 @@ namespace Yuki_Theme.Core
 								CLI_Actions.ifDoesntHave2 ();
 						}
 					}
-					
+
 					themeToSet.HasWallpaper = iag.Item1;
 
 					iag = null;
@@ -349,6 +382,7 @@ namespace Yuki_Theme.Core
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
+
 					themeToSet.HasSticker = iag.Item1;
 				} else
 				{
@@ -401,6 +435,7 @@ namespace Yuki_Theme.Core
 								CLI_Actions.ifDoesntHave2 ();
 						}
 					}
+
 					themeToSet.HasWallpaper = iag.Item1;
 
 					iag = Helper.GetSticker (pathForFile);
@@ -422,6 +457,7 @@ namespace Yuki_Theme.Core
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
+
 					themeToSet.HasSticker = iag.Item1;
 				} else
 				{
@@ -453,7 +489,6 @@ namespace Yuki_Theme.Core
 					}
 				}
 			}
-
 		}
 
 		public static Dictionary <string, string> GetAdditionalInfoFromDoc (XmlDocument doc)
@@ -461,7 +496,7 @@ namespace Yuki_Theme.Core
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
 			Dictionary <string, string> dictionary = new Dictionary <string, string> ();
-			dictionary.Add ("align", ((int) Alignment.Center).ToString ());
+			dictionary.Add ("align", ((int)Alignment.Center).ToString ());
 			dictionary.Add ("opacity", "15");
 			dictionary.Add ("stickerOpacity", "100");
 			foreach (XmlComment comm in comms)
@@ -543,14 +578,15 @@ namespace Yuki_Theme.Core
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToMemory, CLI.pathToFile, true, isDef, ref theme);
+				loadThemeToPopulate (ref doc, CLI.pathToFile, true, isDef, ref theme, CLI.nameToLoad, Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
 				return;
 			}
+
 			theme.Fields = new Dictionary <string, ThemeField> ();
 			PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
-			
+
 			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
 			if (!theme.Fields.ContainsKey (methdoName))
 			{
@@ -558,11 +594,11 @@ namespace Yuki_Theme.Core
 				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
 				CLI.names.Add (methdoName);
 			}
-			
+
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 			theme.SetAdditionalInfo (additionalInfo);
 			theme.path = CLI.pathToLoad;
-			
+
 			CLI.currentTheme = theme;
 			/*string all = "";
 			foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
@@ -593,7 +629,10 @@ namespace Yuki_Theme.Core
 					var attrs = local [nms].GetAttributes ();
 
 					foreach (var att in attrs)
+					{
+						Console.WriteLine("{0}: {1}, {2}", nms, att.Key, att.Value);
 						childNode.Attributes [att.Key].Value = att.Value;
+					}
 				}
 
 			if (hadSavedImage)
@@ -655,16 +694,16 @@ namespace Yuki_Theme.Core
 			{
 				Dictionary <string, bool> comments = new Dictionary <string, bool>
 				{
-					{"name", false}, {"align", false}, {"opacity", false}, {"sopacity", false},
-					{"hasImage", false}, {"hasSticker", false}
+					{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
+					{ "hasImage", false }, { "hasSticker", false }
 				};
 
 				Dictionary <string, string> commentValues = new Dictionary <string, string>
 				{
-					{"name", "name:" + themeToMerge.Name}, {"align", "align:" + ((int) themeToMerge.WallpaperAlign)},
-					{"opacity", "opacity:" + (themeToMerge.WallpaperOpacity)},
-					{"sopacity", "sopacity:" + (themeToMerge.StickerOpacity)},
-					{"hasImage", "hasImage:" + themeToMerge.HasWallpaper}, {"hasSticker", "hasSticker:" + themeToMerge.HasSticker}
+					{ "name", "name:" + themeToMerge.Name }, { "align", "align:" + ((int)themeToMerge.WallpaperAlign) },
+					{ "opacity", "opacity:" + (themeToMerge.WallpaperOpacity) },
+					{ "sopacity", "sopacity:" + (themeToMerge.StickerOpacity) },
+					{ "hasImage", "hasImage:" + themeToMerge.HasWallpaper }, { "hasSticker", "hasSticker:" + themeToMerge.HasSticker }
 				};
 				foreach (XmlComment comm in comms)
 				{
@@ -705,7 +744,7 @@ namespace Yuki_Theme.Core
 			} else
 			{
 				node.AppendChild (doc.CreateComment ("name:" + themeToMerge.Name));
-				node.AppendChild (doc.CreateComment ("align:" + ((int) themeToMerge.WallpaperAlign)));
+				node.AppendChild (doc.CreateComment ("align:" + ((int)themeToMerge.WallpaperAlign)));
 				node.AppendChild (doc.CreateComment ("opacity:" + (themeToMerge.WallpaperOpacity)));
 				node.AppendChild (doc.CreateComment ("sopacity:" + (themeToMerge.StickerOpacity)));
 				node.AppendChild (doc.CreateComment ("hasImage:" + themeToMerge.HasWallpaper));

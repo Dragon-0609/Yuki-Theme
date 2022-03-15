@@ -13,7 +13,6 @@ namespace Yuki_Theme.Core.Controls
 {
 	public partial class SettingsPanel : UserControl
 	{
-		public  MForm                mf;
 		public  Color                bg;
 		public  Color                bg2;
 		public  Color                fg;
@@ -30,6 +29,7 @@ namespace Yuki_Theme.Core.Controls
 		public  List <string>        itemsToRight;
 		public  List <CustomPicture> stickerToUpdate;
 		public  string               customSticker;
+		public  PopupFormsController popupController;
 
 		public Action <List <ToolStripItem>, List <string>, List <string>> onChange;
 
@@ -110,9 +110,8 @@ namespace Yuki_Theme.Core.Controls
 
 		private void button5_Click (object sender, EventArgs e)
 		{
-			if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
-			if (!mf.Visible) mf.Show ();
-			mf.update_Click (sender, e);
+			popupController.InitializeAllWindows ();
+			popupController.df.CheckUpdate ();
 		}
 
 		private void button6_Click (object sender, EventArgs e)
@@ -123,50 +122,21 @@ namespace Yuki_Theme.Core.Controls
 			of.Multiselect = false;
 			if (of.ShowDialog () == DialogResult.OK)
 			{
-				bool has = ZipHasFile ("Yuki Theme.Core.dll", of.FileName);
+				bool has = DownloadForm.IsValidUpdate (of.FileName);
+
 				if (has)
 				{
-					has = ZipHasFile ("Newtonsoft.Json.dll", of.FileName);
-					if (has)
-					{
-						has = ZipHasFile ("FastColoredTextBox.dll", of.FileName);
-						if (has)
-						{
-							File.Copy (of.FileName, System.IO.Path.Combine (
-								           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-								           "Yuki Theme",
-								           "yuki_theme.zip"), true);
-							if (mf == null || mf.IsDisposed) mf = new MForm ((int) ProductMode.Plugin, true);
-							if (!mf.Visible) mf.Show ();
-							if (mf.df == null)
-								mf.df = new DownloadForm (mf);
-							mf.df.InstallManually ();
-						}
-					}
-				}
-
-				if (!has)
-				{
+					File.Copy (of.FileName, Path.Combine (
+						           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+						           "Yuki Theme",
+						           "yuki_theme.zip"), true);
+					popupController.InitializeAllWindows ();
+					popupController.df.InstallManually ();
+				}else{
 					MessageBox.Show ("The zip isn't Yuki Theme. Please, go to github and download from there",
 					                 "The wrong zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-		}
-
-		private bool ZipHasFile (string fileFullName, string zipFullPath)
-		{
-			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
-			{
-				foreach (ZipArchiveEntry entry in archive.Entries)
-				{
-					if (entry.FullName.EndsWith (fileFullName, StringComparison.Ordinal))
-					{
-						return true;
-					}
-				}
-			}
-
-			return false;
 		}
 
 		public void setVisible (bool vis)
@@ -428,6 +398,7 @@ namespace Yuki_Theme.Core.Controls
 			fitWidth.Enabled = Settings.bgImage;
 			askSave.Checked = Settings.askToSave;
 			saveOld.Checked = Settings.saveAsOld;
+			restartUpdate.Enabled = DownloadForm.IsUpdateDownloaded ();
 			loadSVG ();
 		}
 
@@ -458,6 +429,18 @@ namespace Yuki_Theme.Core.Controls
 			hf.setMessage ("Old New Formats", SmallDocumentation.Documentation [SmallDocumentation.OLD_NEW_HELP]);
 			hf.setColors (back, fore, brdr);
 			hf.ShowDialog (ParentForm);
+		}
+
+		private void restartUpdate_Click (object sender, EventArgs e)
+		{
+			if (DownloadForm.IsUpdateDownloaded())
+			{
+				popupController.InitializeAllWindows ();
+				popupController.df.startUpdating ();
+			} else
+			{
+				CLI_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
+			}
 		}
 	}
 }

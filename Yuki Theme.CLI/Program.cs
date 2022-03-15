@@ -139,10 +139,12 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
+				Assembly location;
+				string pathToMemory;
+				Tuple <bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, location);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -171,10 +173,12 @@ namespace Yuki_Theme.CLI
 			Image res = null;
 			if(Core.CLI.isDefault ())
 			{
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
+				Assembly location;
+				string pathToMemory;
+				Tuple <bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (Core.CLI.pathToMemory, Core.CLI.GetCore ());
+					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (pathToMemory, location);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -194,7 +198,19 @@ namespace Yuki_Theme.CLI
 			}
 			return res;
 		}
-		
+
+		private static Tuple <bool, string> GetThemeFromMemory (out Assembly location , out string pathToMemory)
+		{
+			IThemeHeader header = DefaultThemes.headers [Core.CLI.nameToLoad];
+			string ext = Helper.GetThemeFormat (true, Core.CLI.pathToLoad, Core.CLI.nameToLoad) == ThemeFormat.Old
+				? Helper.FILE_EXTENSTION_OLD
+				: Helper.FILE_EXTENSTION_NEW;
+			pathToMemory = $"{header}.{Core.CLI.pathToLoad}{ext}";
+			location = header.Location;
+			Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, location);
+			return content;
+		}
+
 		#endregion
 
 		/// <summary>

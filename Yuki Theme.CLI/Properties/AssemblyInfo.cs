@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle ("Yuki_Theme.CLI")]
+[assembly: AssemblyTitle ("Yuki Theme.CLI")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Dragon-LV")]
 [assembly: AssemblyProduct ("Yuki Theme.CLI")]
-[assembly: AssemblyCopyright ("Copyright (c) Dragon-LV 2021")]
+[assembly: AssemblyCopyright ("Copyright © Dragon-LV 2021-2022")]
 [assembly: AssemblyTrademark ("Yuki")]
 [assembly: AssemblyCulture ("")]
 

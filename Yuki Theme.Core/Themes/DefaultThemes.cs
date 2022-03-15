@@ -1,4 +1,4 @@
-﻿#define ACTIVATE_DOKI_THEME
+﻿// #define ACTIVATE_DOKI_THEME
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,20 +7,11 @@ namespace Yuki_Theme.Core.Themes
 {
 	public class DefaultThemes
 	{
-	
-		public static string [] def = new string []
+
+		public static List <string> names = new List <string> ()
 		{
-			"Darcula",
-			"Dracula",
-			"Github Dark",
-			"Github Light",
-			"Monokai Dark",
-			"Monokai Light",
-			"Nightshade",
-			"Oblivion",
-			"Shades of Purple"
 #if ACTIVATE_DOKI_THEME
-			,"AzurLane: Essex",
+			, "AzurLane: Essex",
 			"BlendS: Maika",
 			"BunnySenpai: Mai Dark",
 			"BunnySenpai: Mai Light",
@@ -99,30 +90,57 @@ namespace Yuki_Theme.Core.Themes
 
 		public static bool isDefault (string str)
 		{
-			return def.Contains (str);
+			return names.Contains (str);
 		}
 
-		public static void addDefaultThemes (ref Dictionary <string, bool> themes)
+		public static void addDefaultThemes ()
 		{
-			foreach (string themeName in def)
+			DefaultThemesHeader header = new DefaultThemesHeader ();
+			addHeader (header);
+		}
+
+		public static void addHeader (IThemeHeader header)
+		{
+			names.AddRange (header.ThemeNames);
+			categoriesList.Add (header.GroupName);
+			headersList.Add (header);
+			foreach (string themeName in header.ThemeNames)
 			{
-				themes.Add (themeName, true);
+				CLI.isDefaultTheme.Add (themeName, true);
+				categories.Add (themeName, header.GroupName);
+				headers.Add (themeName, header);
 			}
+		}
+
+		public static void addExternalThemes ()
+		{
+			ExternalThemeManager.LoadThemes ();
 		}
 
 		public static void addOldNewThemeDifference (ref Dictionary <string, bool> list)
 		{
-			Assembly assembly = Assembly.GetExecutingAssembly ();
-			foreach (string theme in def)
+			foreach (string theme in names)
 			{
-				ThemeFormat extension = Helper.GetThemeFormat (true, Helper.ConvertNameToPath (theme));
+				ThemeFormat extension = Helper.GetThemeFormat (true, Helper.ConvertNameToPath (theme), theme);
 				list.Add (theme, extension == ThemeFormat.Old);
 			}
 		}
 
+		public static Dictionary <string, string> categories     = new Dictionary <string, string> ();
+		public static List <string>               categoriesList = new List <string> ();
+
+		public static Dictionary <string, IThemeHeader> headers     = new Dictionary <string, IThemeHeader> ();
+		public static List <IThemeHeader>               headersList = new List <IThemeHeader> ();
+
 		public static string getCategory (string st)
 		{
 			string res = "Custom";
+
+			if (categories.ContainsKey (st))
+				res = categories [st];
+			return res;
+			
+			/*
 			switch (st)
 			{
 				case "Darcula" :
@@ -220,7 +238,7 @@ namespace Yuki_Theme.Core.Themes
 					break;
 #endif
 			}
-			return res;
+			return res;*/
 		}
 	}
 }
