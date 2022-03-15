@@ -109,6 +109,7 @@
     <Compile Include="Controls\Helpers\DockHelper.cs" />
     <Compile Include="Controls\Helpers\DrawHelper.cs" />
     <Compile Include="Controls\Helpers\ResourceHelper.cs" />
+    <Compile Include="Controls\Helpers\UpdatePageControl.cs" />
     <Compile Include="Controls\Helpers\Win32Helper.cs" />
     <Compile Include="Controls\Win32\Enums.cs" />
     <Compile Include="Controls\Win32\NativeMethods.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
     <EmbeddedResource Include="Controls\DockStyles\Strings.resx" />
+    <EmbeddedResource Include="Controls\Helpers\UpdatePageControl.resx" />
     <EmbeddedResource Include="PluginOptionsContent.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

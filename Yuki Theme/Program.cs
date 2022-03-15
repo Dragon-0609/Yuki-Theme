@@ -17,7 +17,7 @@ namespace Yuki_Theme
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run (new MForm ());
-			// Application.Run (new TesterForm ());
+			// Application.Run (new TForm ());
 		}
 		
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

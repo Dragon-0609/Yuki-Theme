@@ -12,15 +12,18 @@ using System.Xml;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
+using Microsoft.Win32;
 using Svg;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
 using VisualPascalABCPlugins;
+using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
+using Yuki_Theme_Plugin.Controls.Helpers;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using CustomList = Yuki_Theme_Plugin.Controls.DockStyles.CustomList;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
@@ -114,17 +117,28 @@ namespace Yuki_Theme_Plugin
 
 		#region Stuff of menu
 
+		#region Menu Items
+
 		private ToolStripMenuItem menu_settings;
 		private ToolStripMenuItem quiet;
 		private ToolStripMenuItem stick;
 		private ToolStripMenuItem backimage;
 		private ToolStripMenuItem switchTheme;
 		private ToolStripMenuItem enablePositioning;
-		private Image             quietImage;
-		private Image             positioningImage;
-		private Image             wallpaperImage;
-		private Image             switchImage;
+		private ToolStripMenuItem resetStickerPosition;
+		private ToolStripMenuItem updatePage;
 		
+		#endregion
+
+		#region Menu Items Images
+
+		private Image quietImage;
+		private Image positioningImage;
+		private Image wallpaperImage;
+		private Image switchImage;
+		private Image resetPositionImage;
+		
+		#endregion
 
 		#endregion
 		
@@ -140,10 +154,11 @@ namespace Yuki_Theme_Plugin
 		private bool      bgImage => Settings.bgImage;
 		private Rectangle oldSizeOfTextEditor = Rectangle.Empty;
 		
-		bool                    toggled         = false; // is toggle activated
-		int                     imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
-		bool                    nameInStatusBar = false;     // Name in status bar
+		bool                  toggled         = false; // is toggle activated
+		int                   imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
+		bool                  nameInStatusBar = false; // Name in status bar
 		private ToolStripItem openInExplorerItem;
+		const   string        yukiThemeUpdate = "Yuki Theme Update";
 
 		public PopupFormsController popupController;
 
@@ -162,8 +177,8 @@ namespace Yuki_Theme_Plugin
 
 		public void GetGUI (List <IPluginGUIItem> MenuItems, List <IPluginGUIItem> ToolBarItems)
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon icon = ((Icon) (resources.GetObject ($"$this.Icon")));
+			ComponentResourceManager resources = new ComponentResourceManager (typeof (MForm));
+			Icon icon = (Icon) resources.GetObject ($"$this.Icon");
 			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", icon.ToBitmap (), Color.Transparent, InitCore);
 			//Добавляем в меню
 			MenuItems.Add (item1);
@@ -397,11 +412,23 @@ namespace Yuki_Theme_Plugin
 				enablePositioning.BackColor = menu_settings.BackColor;
 				enablePositioning.ForeColor = menu_settings.ForeColor;
 				positioningImage = Helper.RenderSvg (enablePositioning.Size, Helper.LoadSvg (
-					                                     "export" + add, Assembly.GetExecutingAssembly (),
-					                                     "Yuki_Theme_Plugin.Resources.icons"));
+					                                     "refresh", Assembly.GetExecutingAssembly (),
+					                                     "Yuki_Theme_Plugin.Resources"));
 				enablePositioning.Image = Settings.positioning
 					? updateBgofImage (positioningImage)
 					: positioningImage;
+
+				resetStickerPosition = new ToolStripMenuItem ("Reset Sticker Margins",
+				                                              resetPositionImage, ResetStickerPosition);
+				
+				resetStickerPosition.BackColor = menu_settings.BackColor;
+				resetStickerPosition.ForeColor = menu_settings.ForeColor;
+
+				updatePage = new ToolStripMenuItem ("Show Update Notification",
+				                                    icon.ToBitmap (), ShowUpdatePage);
+				
+				updatePage.BackColor = menu_settings.BackColor;
+				updatePage.ForeColor = menu_settings.ForeColor;
 
 				main.DropDownItems.Add (stick);
 				main.DropDownItems.Add (backimage);
@@ -409,6 +436,8 @@ namespace Yuki_Theme_Plugin
 				main.DropDownItems.Add (quiet);
 				main.DropDownItems.Add (switchTheme);
 				main.DropDownItems.Add (menu_settings);
+				main.DropDownItems.Add (resetStickerPosition);
+				main.DropDownItems.Add (updatePage);
 
 				// Move Yuki Theme to the Top
 				List <ToolStripItem> coll = new List <ToolStripItem> ();
@@ -434,8 +463,7 @@ namespace Yuki_Theme_Plugin
 			MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
 			MForm.TrackInstall ();
-
-			if (Settings.update)
+			if (!IsUpdated () && Settings.update)
 			{
 				popupController.InitializeAllWindows ();
 				popupController.df.CheckUpdate ();
@@ -482,7 +510,16 @@ namespace Yuki_Theme_Plugin
 				                                "refresh", Assembly.GetExecutingAssembly (),
 				                                "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
 			                                bgBorder);
-
+			if(resetPositionImage != null)
+			{
+				resetPositionImage.Dispose ();
+				resetPositionImage = null;
+			}
+			
+			resetPositionImage = Helper.RenderSvg (defaultSize, Helper.LoadSvg (
+				                                "refresh", Assembly.GetExecutingAssembly (),
+				                                "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
+			                                bgBorder);
 		}
 		
 		private void LoadColors ()
@@ -721,6 +758,18 @@ namespace Yuki_Theme_Plugin
 			stickerControl.Enabled = Settings.positioning;
 			updatestickersPositioningImage ();
 		}
+		
+		private void ResetStickerPosition (object sender, EventArgs e)
+		{
+			Settings.positioning = !Settings.positioning;
+			stickerControl.Enabled = Settings.positioning;
+			updatestickersPositioningImage ();
+		}
+		
+		private void ShowUpdatePage (object sender, EventArgs e)
+		{
+			openUpdate ();
+		}
 
 		private void ToggleSticker (object sender, EventArgs e)
 		{
@@ -791,6 +840,8 @@ namespace Yuki_Theme_Plugin
 			if (stick != null) stick.BackColor = bgdef;
 			if (backimage != null) backimage.BackColor = bgdef;
 			if (switchTheme != null) switchTheme.BackColor = bgdef;
+			if (resetStickerPosition != null) resetStickerPosition.BackColor = bgdef;
+			if (updatePage != null) updatePage.BackColor = bgdef;
 			if (enablePositioning != null)
 			{
 				enablePositioning.BackColor = bgdef;
@@ -930,7 +981,8 @@ namespace Yuki_Theme_Plugin
 			updateWallpaperImage ();
 			updateStickerImage ();
 			updateSwitchImage ();
-			
+			updateResetPositionImage ();
+			UpdateWebBrowserTheme ();
 		}
 		
 		private Bitmap updateBgofImage (Image oldImage)
@@ -979,6 +1031,14 @@ namespace Yuki_Theme_Plugin
 			if (switchTheme != null)
 			{
 				switchTheme.Image = switchImage;
+			}
+		}
+		
+		private void updateResetPositionImage ()
+		{
+			if (resetStickerPosition != null)
+			{
+				resetStickerPosition.Image = resetPositionImage;
 			}
 		}
 
@@ -1092,7 +1152,20 @@ namespace Yuki_Theme_Plugin
 			menuItemsColorUpdator.Stop ();
 			menuItemsColorUpdator.Dispose ();
 		}
-
+		
+		private void UpdateWebBrowserTheme()
+		{
+			WebBrowserControl tp = null;
+			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
+			Dictionary <string, WebBrowserControl> OpenBrowserDocuments = (Dictionary <string, WebBrowserControl>)field.GetValue (fm);
+			OpenBrowserDocuments.TryGetValue (yukiThemeUpdate, out tp); 
+			if (tp is UpdatePageControl)
+			{
+				UpdatePageControl upage = (UpdatePageControl)tp;
+				upage.UpdateTheme ();
+			}
+		}
+		
 		#endregion
 
 		
@@ -1448,6 +1521,14 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
+		
+		public void openUpdate ()
+		{
+			string version = Settings.current_version.ToString ("0.0").Replace (',', '.');
+			if (Settings.current_version_add != null && Settings.current_version_add.Length > 1)
+				version += "-" + Settings.current_version_add;
+			AddTabWithUrl (fm.MainDockPanel, yukiThemeUpdate, $"https://dragon-0609.github.io/Yuki-Theme/updates/{version}");
+		}
 
 		private void GetWindowProperities ()
 		{
@@ -1648,9 +1729,47 @@ namespace Yuki_Theme_Plugin
 			pen = new Pen (color, width) {Alignment = alignment};
 		}
 		
+		public void AddTabWithUrl(DockPanel tabControl, string title, string url)
+		{
+			WebBrowserControl tp = null; //new UpdatePageControl();
+			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
+			Dictionary <string, WebBrowserControl> OpenBrowserDocuments = (Dictionary <string, WebBrowserControl>)field.GetValue (fm);
+			if (!OpenBrowserDocuments.TryGetValue(title, out tp))
+			{
+				tp = new UpdatePageControl();
+				tp.OpenPage(title, url);
+				fm.AddWindowToDockPanel(tp, tabControl, tp.Dock, DockState.Document, tp.IsFloat, null, 0);
+				OpenBrowserDocuments.Add(title, tp);
+			}
+			else if (tp is UpdatePageControl)
+			{
+				tp.Activate ();
+			} else
+			{
+				MessageBox.Show ("Couldn't find web browser");
+			}
+		}
+		
+		
+		private bool IsUpdated ()
+		{
+			bool updated = false;
+			RegistryKey ke =
+				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			if (inst == 1)
+			{
+				openUpdate ();
+				ke?.DeleteValue ("install");
+				updated = true;
+			}
+
+			return updated;
+		}
 		
 		#endregion
-
+		
 		public event ColorUpdate OnColorUpdate;
 	}
 }
