@@ -121,7 +121,7 @@ class Star {
 
 let start = Date.now ();
 const refreshRate = 40;
-const stepsToHide = 300 / 40;
+const stepsToHide = 300 / refreshRate;
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
 	if (millis >= refreshRate) {

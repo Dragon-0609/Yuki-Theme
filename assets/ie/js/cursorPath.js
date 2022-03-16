@@ -25,7 +25,7 @@ function add(pos, angle_c, angle_change, need_to_left, m_steps, speed) {
 	steps.set (item, 0);
 	fadedSteps.set (item, 0);
 	if (need_to_left) {
-		angle.set (item, angle_c - (inleft ? angle_change : -angle_change));
+		angle.set (item, angle_c - (inleft.get(item) ? angle_change : -angle_change));
 	} else {
 		angle.set (item, angle_c - angle_change);
 	}
@@ -122,7 +122,7 @@ const stepsToHide = 300 / refreshRate;
 
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
-	if (millis >= refreshRate) {
+	if (millis >= refreshRate && lastPosX != e.clientX || lastPosY != e.clientY) {
 		start = Date.now ();
 		const p1 = {
 			x: e.clientX,

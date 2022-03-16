@@ -109,6 +109,13 @@ a.list-group-item:hover {
 	right: 1.5rem;
 }
 
+.sticky-top-ie{
+	position:fixed;
+	width:100%;
+	z-index:99;
+	top:0px;
+}
+
 @media (max-width: 510px) {
 	.bn-effect, .bn-logo-effect > span {
 		top: -2px !important;

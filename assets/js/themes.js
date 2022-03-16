@@ -705,6 +705,7 @@ function loadTheme() {
 		themeName = null;
 		console.log("Couldn't get theme name");
 	}
+	let fromPlugin = themeName != null;
 	if (themeName == null){
 		if (getfromStorage ("theme", null) == null) {
 			let nm = getRandomKey ();
@@ -722,13 +723,20 @@ function loadTheme() {
 			return this.substring(this_len - search.length, this_len) === search;
 		};
 	}
-	
 	if (!wallpaper_url.endsWith("/")) {
 		wallpaper_url += "/";
 	}
+	let imgUrl = wallpaper_url+"wallpapers/" + rnd.wallpaper;
 	
+	if (fromPlugin){
+		try {
+			imgUrl = window.external.ReadImage();
+		} catch (exep){
+			// alert(exep);
+		}
+	}
 	
-	let image = "url('"+wallpaper_url+"wallpapers/" + rnd.wallpaper + "')";
+	let image = "url(" + imgUrl + ")";
 	document.body.style.backgroundImage = image;
 	document.body.style.backgroundPosition = rnd.position; // compatibility for IE 11
 	let stl = ".bg-theme {  background-color: " + rnd.background + " !important; } " +
