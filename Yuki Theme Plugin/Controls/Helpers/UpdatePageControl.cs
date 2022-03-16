@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -101,5 +103,17 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 		public void OpenURL(string url) {
 			System.Diagnostics.Process.Start (url);
 		}
+
+		public string ReadImage ()
+		{
+			string b64 = "";
+			ImageConverter imageConverter = new ImageConverter();
+			byte[] buffer = (byte[])imageConverter.ConvertTo(YukiTheme_VisualPascalABCPlugin.img, typeof(byte[]));
+			string base64 = Convert.ToBase64String(buffer);
+			b64 = "'data:image/png;base64," + base64 + "'";
+			
+			return b64;
+		}
+		
 	}
 }

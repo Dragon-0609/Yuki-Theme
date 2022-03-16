@@ -103,17 +103,17 @@ namespace Yuki_Theme_Plugin
 
 		#endregion
 
-		private Image           img;		
-		private Alignment       wallpaperAlign;
-		private int             wallpaperOpacity;
-		private Timer           documentUpdator;
-		private Timer           menuItemsColorUpdator;
-		private Timer           tim3;
-		public  MForm           mf;
-		private ToolStripButton currentThemeName;
-		private PictureBox      logoBox;
-		private Image           sticker;
-		public  CustomPicture   stickerControl;
+		public static Image           img;		
+		private       Alignment       wallpaperAlign;
+		private       int             wallpaperOpacity;
+		private       Timer           documentUpdator;
+		private       Timer           menuItemsColorUpdator;
+		private       Timer           tim3;
+		public        MForm           mf;
+		private       ToolStripButton currentThemeName;
+		private       PictureBox      logoBox;
+		private       Image           sticker;
+		public        CustomPicture   stickerControl;
 
 		#region Stuff of menu
 
@@ -159,6 +159,7 @@ namespace Yuki_Theme_Plugin
 		bool                  nameInStatusBar = false; // Name in status bar
 		private ToolStripItem openInExplorerItem;
 		const   string        yukiThemeUpdate = "Yuki Theme Update";
+		private int           lastFocused     = -1;
 
 		public PopupFormsController popupController;
 
@@ -685,6 +686,8 @@ namespace Yuki_Theme_Plugin
 			{
 				if (mf == null || mf.IsDisposed)
 				{
+					RememberCurrentEditor ();
+					 
 					panel_bg = new CustomPanel (0);
 					panel_bg.Name = "Custom Panel Switcher";
 
@@ -1338,6 +1341,8 @@ namespace Yuki_Theme_Plugin
 				tmpImage2.Dispose ();
 				tmpImage2 = null;
 			}
+
+			ReFocusCurrentEditor ();
 		}
 		
 		private void ThemeListOnSelectedIndexChanged (object sender, EventArgs e)
@@ -1392,6 +1397,35 @@ namespace Yuki_Theme_Plugin
 		}
 		
 		#endregion
+
+		private void RememberCurrentEditor ()
+		{
+			if (fm.ActiveControl is UpdatePageControl)
+			{
+				UpdatePageControl update = (UpdatePageControl)fm.ActiveControl;
+				lastFocused = update.TabIndex;
+			}else
+			{
+				lastFocused = fm.CurrentCodeFileDocument.TabIndex;
+			}
+		}
+
+		private void ReFocusCurrentEditor ()
+		{
+			IDockContent [] docs = fm.MainDockPanel.DocumentsToArray ();			
+			IDockContent doc = docs [lastFocused];
+			doc.DockHandler.Pane.Focus ();
+			if (doc.DockHandler.Content is UpdatePageControl)
+			{
+				UpdatePageControl update = (UpdatePageControl)doc.DockHandler.Content;
+				update.Focus ();
+			} else
+			{
+				CodeFileDocumentControl cod = (CodeFileDocumentControl)doc.DockHandler.Content;
+				cod.Focus ();
+			}
+			docs = null;
+		}
 		
 		private void GetFields ()
 		{
