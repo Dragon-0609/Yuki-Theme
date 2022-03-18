@@ -104,6 +104,22 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 			System.Diagnostics.Process.Start (url);
 		}
 
+		public void SetTheme(string theme) {
+			bool cnd = Yuki_Theme.Core.CLI.SelectTheme (theme);
+            Yuki_Theme.Core.CLI.selectedItem = CLI.nameToLoad;
+            Yuki_Theme.Core.CLI_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
+            Yuki_Theme.Core.CLI_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
+            Yuki_Theme.Core.CLI_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
+            Yuki_Theme.Core.CLI_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
+            Yuki_Theme.Core.CLI.restore (false, null);
+            Yuki_Theme.Core.CLI.export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1, YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2, YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout, YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);
+
+            Yuki_Theme.Core.CLI_Actions.ifHasImage2 = null;
+            Yuki_Theme.Core.CLI_Actions.ifHasSticker2 = null;
+            Yuki_Theme.Core.CLI_Actions.ifDoesntHave2 = null;
+            Yuki_Theme.Core.CLI_Actions.ifDoesntHaveSticker2 = null;
+		}
+
 		public string ReadImage ()
 		{
 			string b64 = "";

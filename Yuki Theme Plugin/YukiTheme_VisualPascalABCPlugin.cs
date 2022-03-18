@@ -145,8 +145,8 @@ namespace Yuki_Theme_Plugin
 		private Size              defaultSize;
 		private Panel             panel_bg;
 		private CustomList        themeList;
-		private Image             tmpImage1;
-		private Image             tmpImage2;
+		public Image             tmpImage1;
+		public Image             tmpImage2;
 		
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
@@ -162,6 +162,8 @@ namespace Yuki_Theme_Plugin
 		private int           lastFocused     = -1;
 
 		public PopupFormsController popupController;
+
+        public static YukiTheme_VisualPascalABCPlugin plugin;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -192,7 +194,7 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nameInStatusBar = Settings.swStatusbar;
-
+            plugin = this;
 			loadWithWaiting ();
 			Initialize ();
 		}
@@ -971,7 +973,7 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 		
-		private void ReloadLayout ()
+		public void ReloadLayout ()
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
 			LoadImage ();
@@ -1276,23 +1278,23 @@ namespace Yuki_Theme_Plugin
 		
 		#region Events For Core
 
-		private void ifHsImage (Image img)
+		public void ifHsImage (Image img)
 		{
 			tmpImage1 = img;
 			
 		}
 
-		private void ifHsSticker (Image img)
+		public void ifHsSticker (Image img)
 		{
 			tmpImage2 = img;
 		}
 		
-		private void ifDNIMG ()
+		public void ifDNIMG ()
 		{
 			tmpImage1 = null;
 		}
 		
-		private void ifDNSTCK ()
+		public void ifDNSTCK ()
 		{
 			tmpImage2 = null;
 		}
@@ -1538,7 +1540,7 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private void ReleaseResources ()
+		public void ReleaseResources ()
 		{
 			
 			if (img != null)
