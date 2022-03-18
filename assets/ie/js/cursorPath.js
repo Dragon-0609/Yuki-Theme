@@ -118,11 +118,12 @@ function destroy(itm) {
 
 let start = Date.now ();
 const refreshRate = 40;
+const starsLimit = 40;
 const stepsToHide = 300 / refreshRate;
 
 document.addEventListener ("mousemove", function (e) {
 	const millis = Date.now () - start;
-	if (millis >= refreshRate && lastPosX != e.clientX || lastPosY != e.clientY) {
+	if (millis >= refreshRate && (lastPosX != e.clientX || lastPosY != e.clientY) && stars.length < starsLimit ) {
 		start = Date.now ();
 		const p1 = {
 			x: e.clientX,
@@ -143,17 +144,18 @@ document.addEventListener ("mousemove", function (e) {
 });
 
 function Click(e) {
-	e = e || window.event;
-	const p1 = {
-		x: e.clientX,
-		y: e.clientY
-	};
-	const angleDeg = Math.atan2 (lastPosY - p1.y, lastPosX - p1.x) * 180 / Math.PI;
-	for (let i = 1; i < 25; i++) {
-		let spd = (Math.random () + 0.5) * 4;
-		add (p1, Math.round (angleDeg), 15 * i, true, 30, spd);
+	if (stars.length < starsLimit * 1.5) {
+		e = e || window.event;
+		const p1 = {
+			x: e.clientX,
+			y: e.clientY
+		};
+		const angleDeg = Math.atan2 (lastPosY - p1.y, lastPosX - p1.x) * 180 / Math.PI;
+		for (let i = 1; i < 25; i++) {
+			let spd = (Math.random () + 0.5) * 4;
+			add (p1, Math.round (angleDeg), 15 * i, true, 30, spd);
+		}
 	}
-
 }
 
 function updateStars() {

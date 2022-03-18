@@ -1,0 +1,101 @@
+---
+title: Themes
+layout: layer
+permalink: /themes
+---
+<div class="container-xl mt-3">
+	<h2 class="my-3 font-weight-normal text-center">
+		Themes
+	</h2>
+	<div class="row mx-0 row-cols-1 row-cols-sm-2" id="thms">
+
+	</div>
+	<script>
+		if (window.NodeList && !NodeList.prototype.forEach) {
+			NodeList.prototype.forEach = Array.prototype.forEach;
+		}
+		function changeTheme(theme){
+			localStorage.setItem("theme", theme);
+			console.log(theme);
+			document.querySelectorAll('#thms .selected').forEach(function(e) {
+				e.classList.remove("selected");
+			});
+
+			try {
+				window.external.SetTheme(theme);
+			} catch (e) {
+
+			}
+			let km = theme.replace (/ /g, "_").replace (/:/g, "__");
+			document.getElementById(km).children[0].classList.add("selected");
+			loadTheme();
+		}
+
+		var addClick = function(i, mc){
+			mc.onclick=function(){
+				changeTheme(i);
+			};
+		}
+
+		let thms = document.getElementById('thms');
+		for (let m in wallpapers){
+			if (m !== undefined) {
+				let km = m.replace (/ /g, "_").replace (/:/g, "__");
+				let mv = document.createElement ('div');
+				mv.id = km;
+				mv.classList.add ("col");
+				mv.classList.add ("p-2");
+				addClick(m, mv);
+				mv.innerHTML = "" +
+						"\t\t\t<div class=\"themed-tab\">\n" +
+						"\t\t\t\t<div class=\"text-center tab-header rounded-top-5\">" + m + "</div>\n" +
+						"\t\t\t\t<div class=\"tab-strip rounded-bottom-5\">\n" +
+						"\t\t\t\t\t<div class=\"d-flex tabs noselect\">\n" +
+						"\t\t\t\t\t\t<div class=\"tab-active pt-1 px-3 font-weight-bold\">Program1.pas *</div>\n" +
+						"\t\t\t\t\t\t<div class=\"py-1 px-3\">Program2.pas</div>\n" +
+						"\t\t\t\t\t</div>\n" +
+						"\t\t\t\t\t<div class=\"code d-flex\">\n" +
+						"\t\t\t\t\t\t<div class=\"line-numbers pl-3 mr-2 noselect\">\n" +
+						"\t\t\t\t\t\t\t<div>1</div>\n" +
+						"\t\t\t\t\t\t\t<div>2</div>\n" +
+						"\t\t\t\t\t\t\t<div>3</div>\n" +
+						"\t\t\t\t\t\t\t<div>4</div>\n" +
+						"\t\t\t\t\t\t\t<div>5</div>\n" +
+						"\t\t\t\t\t\t\t<div>6</div>\n" +
+						"\t\t\t\t\t\t\t<div>7</div>\n" +
+						"\t\t\t\t\t\t\t<div>8</div>\n" +
+						"\t\t\t\t\t\t\t<div>9</div>\n" +
+						"\t\t\t\t\t\t\t<div>10</div>\n" +
+						"\t\t\t\t\t\t</div>\n" +
+						"\t\t\t\t\t\t<div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"keyword\">function</span> <span class=\"method\">Add</span>(x, y: <span\n" +
+						"\t\t\t\t\t\t\t\t\tclass=\"keyword\">integer</span>) :\n" +
+						"\t\t\t\t\t\t\t\t<span class=\"keyword\">integer</span>;\n" +
+						"\t\t\t\t\t\t\t</div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
+						"\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"keyword\">result</span> := x + y;</div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>;</div>\n" +
+						"\t\t\t\t\t\t\t<div></div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"keyword\">var</span> a,b : <span class=\"keyword\">integer</span>;</div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
+						"\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (a);</div>\n" +
+						"\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (b);</div>\n" +
+						"\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Writeln</span> (<span class=\"string\">'Result: '</span> + <span\n" +
+						"\t\t\t\t\t\t\t\t\tclass=\"method\">Add</span> (a,b));\n" +
+						"\t\t\t\t\t\t\t</div>\n" +
+						"\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>.</div>\n" +
+						"\t\t\t\t\t\t</div>\n" +
+						"\t\t\t\t\t</div>\n" +
+						"\t\t\t\t</div>\n" +
+						"\t\t\t</div>\n";
+				thms.appendChild (mv);
+			}
+		}
+
+		let mca = getfromStorage("theme", undefined);
+		if (mca !== undefined) {
+			let mcm = mca.replace (/ /g, "_").replace (/:/g, "__");
+			document.getElementById (mcm).children[0].classList.add ("selected");
+		}
+	</script>
+</div>

@@ -8,6 +8,58 @@ body {
 	min-height: 100vh;
 }
 
+*::-webkit-scrollbar {
+	width: 0.5em;
+}
+
+.themed-tab {
+	cursor: default;
+	font-size: 20px;
+	transition: all 1s;
+	position: relative;
+}
+
+/* Pre-render the bigger shadow, but hide it */
+.themed-tab::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	border-radius: 5px;
+	transition: opacity 0.4s ease-out;
+}
+
+/* Transition to showing the bigger shadow on hover */
+.themed-tab:hover::after {
+	opacity: 1;
+}
+
+.tabs {
+	font-family: "Arial", "Microsoft Sans Serif", sans-serif;
+	font-size: 16px;
+	border-bottom: 1px solid #000000;
+}
+
+.tab-active {
+	border-bottom: 4px solid #000000;
+}
+
+.tab-header {
+	border-bottom: 1px solid #656565;
+}
+
+.code {
+	font-family: "Consolas", monospace;
+}
+
+.line-numbers {
+	width: 40px;
+	border-right: 1px dotted;
+}
+
 .bg-theme {
 	background-color: #2B2B2B;
 }
@@ -23,6 +75,34 @@ code {
 	border-radius: 6px;
 }
 
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.rounded-top-5 {
+	border-top-left-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
+	-moz-border-radius-topleft: 0.5rem;
+	-moz-border-radius-topright: 0.5rem;
+	-webkit-border-top-left-radius: 0.5rem;
+	-webkit-border-top-right-radius: 0.5rem;
+}
+
+.rounded-bottom-5 {
+	border-bottom-left-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
+	-moz-border-radius-bottomleft: 0.5rem;
+	-moz-border-radius-bottomright: 0.5rem;
+	-webkit-border-bottom-left-radius: 0.5rem;
+	-webkit-border-bottom-right-radius: 0.5rem;
+}
+
 .bg-dark-transparent {
 	background-color: rgba(0, 0, 0, 0.2) !important;
 }
@@ -33,6 +113,10 @@ code {
 
 a.list-group-item:hover {
 	background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.monsterrat {
+	font-family: 'Montserrat', sans-serif;
 }
 
 .top-0 {
@@ -206,6 +290,16 @@ a.list-group-item:hover {
 
 	.svg_fill > svg {
 		height: 1rem;
+	}
+
+
+
+	.themed-tab {
+		font-size: 16px;
+	}
+
+	.tabs {
+		font-size: 12px;
 	}
 }
 

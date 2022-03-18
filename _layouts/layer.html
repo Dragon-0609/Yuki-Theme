@@ -20,7 +20,13 @@
 			transition: 0.3s;
 		}
 	</style>
-	<script> var wallpaper_url = "{{ '/assets/img/' | relative_url }}" </script>
+	<script> var wallpaper_url = "{{ '/assets/img/' | relative_url }}";
+			{% if page.url == "/themes" %}
+				var themes = true;
+			{% else %}
+				var themes = false;
+			{% endif %}
+	</script>
 	<script src="{{ '/assets/js/themes.js' | relative_url }}"></script>
 
 	<script src="{{ '/assets/js/localization.js' | relative_url }}"></script>
@@ -75,6 +81,20 @@
 		light_mode.style.left = "10px";
 		light_mode.innerHTML = "<span class=\"special-1 text-uppercase mr-2\">Light mode is Activated</span> <a href=\"javascript: void(0);\" onclick=\"window.external.OpenURL('{{ page.url | absolute_url }}')\" class=\"special-2\">Open Full</a>\n";
 		document.body.appendChild (light_mode);
+		$(window).scroll(function (event) {
+			var scroll = $(window).scrollTop();
+
+			// Activate sticky for IE if scrolltop is more than 20px
+			if ( scroll > 20) {
+				if (!($('.sticky-top').hasClass("sticky-top-ie")))
+					$('.sticky-top').addClass( "sticky-top-ie" );
+			}else{
+				if ($('.sticky-top').hasClass("sticky-top-ie"))
+					$('.sticky-top').removeClass( "sticky-top-ie" );
+			}
+
+		});
+		
 	} else {
 		loadScript ("{{ '/assets/js/cursorPath.js' | relative_url }}");
 	}
