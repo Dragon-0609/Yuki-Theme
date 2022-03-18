@@ -8,7 +8,7 @@ permalink: /
 	let style = document.createElement ('style');
 	style.type = 'text/css';
 	style.innerHTML = "@font-face { font-family: SAO; src: url({{ '/assets/fonts/SAOWelcome-Regular.otf' | relative_url }}); } @font-face { font-family: OBY; src: url({{ '/assets/fonts/OoohBaby-Regular.ttf' | relative_url }}); } " +
-			".SAO-font { font-family: 'SAO', 'Montserrat', 'sans-serif'; } .OBY-font { font-family: 'OBY', 'Montserrat', 'sans-serif'; } ";
+			".SAO-font { font-family: 'SAO', 'Montserrat', 'sans-serif'; } .OBY-font { font-family: 'OBY', 'Montserrat', 'sans-serif'; } @media (max-width: 767px) {  .imcp { width: 100% !important; }  }";
 	document.getElementsByTagName ('head')[0].appendChild (style);
 </script>
 
@@ -56,7 +56,7 @@ permalink: /
 				</g>
 			</svg>
 	</div>
-	<h3 class="text-center font-weight-normal my-3 special-1 mx-auto OBY-font text-break" style="width: 700px;">
+	<h3 class="text-center font-weight-normal my-3 special-1 mx-auto OBY-font text-break imcp" style="width: 700px;">
 		An implementation of The Doki Theme for PascalABC.NET, which is a large collection of themes built with love and care.
 	</h3>
 	<h3 class="text-center font-weight-normal my-3">
