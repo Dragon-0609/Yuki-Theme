@@ -44,36 +44,39 @@ namespace Yuki_Theme_Plugin
 
 		#region IDE Controls
 
-		private          AboutBox                          about;
-		private          IVisualEnvironmentCompiler        compiler;
-		private          Form1                             fm;
-		private          MenuStrip                         menu;
-		private          Panel                             output_input;
-		private          RichTextBox                       output_output;
-		private          Panel                             output_panel1;
-		private          Panel                             output_panel2;
-		private          Panel                             output_panel3;
-		private          Panel                             output_panel4;
-		private          Panel                             output_panel5;
-		private          Panel                             output_panel6;
-		private          TextBox                           output_text;
-		private          Control                           outputWindow;
-		private          IHighlightingStrategy             highlighting;
-		private          StatusStrip                       statusBar;
-		private          ToolStrip                         tools;
-		private          Panel                             toolsPanel;
-		private readonly IWorkbench                        workbench;
-		private          TextArea                          textArea;
-		private          CodeFileDocumentTextEditorControl textEditor;
-		private          ContextMenuStrip                  context;
-		private          ContextMenuStrip                  context2;
-		private          MenuRenderer                      renderer;
-		private          IconBarMargin                     margin;
-		private          FoldMargin                        foldmargin;
-		private          ListView                          errorsList;
-		private          TextBox                           compilerConsole;
+		private          AboutBox              about;
+		private          Form1                 fm;
+		private          MenuStrip             menu;
+		private          Panel                 output_input;
+		private          RichTextBox           output_output;
+		private          Panel                 output_panel1;
+		private          Panel                 output_panel2;
+		private          Panel                 output_panel3;
+		private          Panel                 output_panel4;
+		private          Panel                 output_panel5;
+		private          Panel                 output_panel6;
+		private          TextBox               output_text;
+		private          Control               outputWindow;
+		private          IHighlightingStrategy highlighting;
+		private          StatusStrip           statusBar;
+		private          ToolStrip             tools;
+		private          Panel                 toolsPanel;
+		private readonly IWorkbench            workbench;
+		private          TextArea              textArea;
+		private          ContextMenuStrip      context;
+		private          ContextMenuStrip      context2;
+		private          MenuRenderer          renderer;
+		private          IconBarMargin         margin;
+		private          FoldMargin            foldmargin;
+		private          ListView              errorsList;
+		private          TextBox               compilerConsole;
 		
-		private Hashtable ht;
+		private IVisualEnvironmentCompiler                  compiler;
+		private CodeFileDocumentTextEditorControl           textEditor;
+		private Dictionary <ICodeFileDocument, RichTextBox> OutputTextBoxs;
+
+		private RichTextBox oldInputPanel;
+		private Hashtable   ht;
 
 		#endregion
 
@@ -667,6 +670,7 @@ namespace Yuki_Theme_Plugin
 			updateQuietImage ();
 			updateWallpaperImage ();
 			updateStickerImage ();
+			// GetWindowProperities ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)
@@ -781,12 +785,12 @@ namespace Yuki_Theme_Plugin
 		{
 			if (!(fm.MainDockPanel.ActiveContent is CodeFileDocumentControl))
 			{
-				openInExplorerItem.Visible = true;
-				openInExplorerItem.Enabled = CheckAvailabilityOfDocument ();
+				openInExplorerItem.Visible = false;
 			}
 			else
 			{
-				openInExplorerItem.Visible = false;
+				openInExplorerItem.Visible = true;
+				openInExplorerItem.Enabled = CheckAvailabilityOfDocument ();
 			}
 		}
 		
@@ -799,7 +803,7 @@ namespace Yuki_Theme_Plugin
 		{
 			fm.BackColor = menu.BackColor = statusBar.BackColor = toolsPanel.BackColor = tools.BackColor =
 				fm.cmEditor.BackColor = textEditor.Parent.BackColor =
-					fm.CurrentCodeFileDocument.BackColor = bg;
+					fm.CurrentCodeFileDocument.BackColor = fm.BottomPane.Parent.BackColor = bg;
 			
 			output_panel2.BackColor = output_panel6.BackColor = output_input.BackColor = output_panel4.BackColor =
 				output_panel3.BackColor = output_panel5.BackColor = output_panel1.BackColor = output_text.BackColor =
@@ -880,6 +884,7 @@ namespace Yuki_Theme_Plugin
 			errorsList.Refresh ();
 			WaitAndUpdateMenuColors ();
 			manager.UpdateColors ();
+			UpdateBottomTextPanel ();
 		}
 
 		private void ResetBrushesAndPens ()
@@ -955,19 +960,8 @@ namespace Yuki_Theme_Plugin
 				
 				textArea.Paint += PaintBG;
 				textArea.Refresh ();
-				try
-				{
-					if (output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex] is RichTextBox)
-					{
-						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BorderStyle =
-							BorderStyle.None;
-						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BackColor =
-							bgdef;
-					}
-				} catch (ArgumentOutOfRangeException)
-				{
-				}
-				
+				UpdateBottomTextPanel ();
+
 				if (Unsubscribe (ht [textEditor]))
 				{
 					SubscribeCompletion ();
@@ -977,7 +971,20 @@ namespace Yuki_Theme_Plugin
 				}
 			}
 		}
-		
+
+		private void UpdateBottomTextPanel ()
+		{
+			// if (oldInputPanel != null)
+			// {
+			// 	oldInputPanel.Paint -= OldInputPanelOnPaint;
+			// }
+			oldInputPanel = OutputTextBoxs [fm.CurrentCodeFileDocument];
+			oldInputPanel.BackColor = bgdef;
+			oldInputPanel.BorderStyle = BorderStyle.None;
+			// oldInputPanel.Paint += OldInputPanelOnPaint;
+			// oldInputPanel.Invalidate();
+		}
+
 		public void ReloadLayout ()
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
@@ -1249,17 +1256,54 @@ namespace Yuki_Theme_Plugin
 
 			if (img != null && bgImage)
 			{
-				if (oldSizeOfTextEditor.Width != textEditor.ClientRectangle.Width ||
-				    oldSizeOfTextEditor.Height != textEditor.ClientRectangle.Height)
+				Size vm = textEditor.ClientSize;
+				// bool chnd = false;
+				// if (outputWindow.Visible)
+				// {
+				// 	if(oldInputPanel != null)
+				// 	{
+				// 		vm.Height += oldInputPanel.ClientSize.Height;
+				// 		chnd = true;
+				// 	}
+				// }
+				if (oldSizeOfTextEditor.Width != vm.Width ||
+				    oldSizeOfTextEditor.Height != vm.Height)
 				{
-					oldSizeOfTextEditor = Helper.GetSizes (img.Size, textEditor.ClientRectangle.Width, textEditor.ClientRectangle.Height,
+					oldSizeOfTextEditor = Helper.GetSizes (img.Size, vm.Width, vm.Height,
 					                                       wallpaperAlign);
 				}
-
-				e.Graphics.DrawImage (img, oldSizeOfTextEditor);
+				// if(chnd)
+				// {
+				// 	Rectangle rct = new Rectangle (oldSizeOfTextEditor.X, 0, oldSizeOfTextEditor.Width, textEditor.ClientSize.Height);
+				// 	float pr = oldSizeOfTextEditor.Height / 100f;
+				// 	float px = img.Height / 100f;
+				// 	float hg = img.Height - (px * ((oldSizeOfTextEditor.Height - rct.Height) / pr));
+				// 	e.Graphics.DrawImage (img, rct, 0, 0, img.Width, hg, GraphicsUnit.Pixel);
+				// }
+				// else
+				// {
+					e.Graphics.DrawImage (img, oldSizeOfTextEditor);
+				// }
 			}
 		}
-
+		
+		private void OldInputPanelOnPaint (object sender, PaintEventArgs e)
+		{
+			if (outputWindow.Visible)
+			{
+				Size vm = textEditor.ClientSize;
+				vm.Height += oldInputPanel.ClientSize.Height;
+				Rectangle rct = new Rectangle (oldSizeOfTextEditor.X, textEditor.ClientSize.Height, oldSizeOfTextEditor.Width,
+				                               oldInputPanel.ClientSize.Height);
+				float pr = oldSizeOfTextEditor.Height / 100f;
+				float px = img.Height / 100f;
+				float hg = px * ((oldSizeOfTextEditor.Height - rct.Height) / pr);
+				((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
+					"Yuki Theme: "+rct.ToString ()+ " _ " + oldSizeOfTextEditor.ToString () + " | ");
+				e.Graphics.DrawImage (img, rct, 0, 0, img.Width, hg, GraphicsUnit.Pixel);
+			}
+		}
+		
 		private void CtrlOnPaint (object sender, PaintEventArgs e)
 		{
 			e.Graphics.FillRectangle (new SolidBrush (bgdef), e.ClipRectangle);
@@ -1491,6 +1535,10 @@ namespace Yuki_Theme_Plugin
 					b.FlatAppearance.BorderColor = bgBorder;
 				}
 			}
+
+			FieldInfo fp = typeof (Form1).GetField ("OutputTextBoxs", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			OutputTextBoxs = (Dictionary <ICodeFileDocument, RichTextBox>)fp.GetValue (fm);
 		}
 		
 		private void OpenInExplorer (object sender, EventArgs e)
@@ -1573,8 +1621,8 @@ namespace Yuki_Theme_Plugin
 		private void GetWindowProperities ()
 		{
 			Props prop = new Props ();
-			prop.root = context;
-			prop.propertyGrid1.SelectedObject = context;
+			prop.root = fm;
+			prop.propertyGrid1.SelectedObject = fm;
 			prop.Show ();
 		}
 		
