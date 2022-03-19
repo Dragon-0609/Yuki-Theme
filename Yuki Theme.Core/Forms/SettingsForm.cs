@@ -59,8 +59,7 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			form = mf;
 			this.StartPosition = FormStartPosition.CenterParent;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			settingsPanel.SettingsPanel_Load ();
 			settingsPanel.popupController = mf.popupController;
 			FontManager.SetAllControlsFont (this.Controls, 0);

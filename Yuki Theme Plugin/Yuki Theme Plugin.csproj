@@ -292,6 +292,7 @@
     <EmbeddedResource Include="Resources\icons\help_dark.svg" />
     <EmbeddedResource Include="Resources\icons\export.svg" />
     <EmbeddedResource Include="Resources\icons\export_dark.svg" />
+    <EmbeddedResource Include="Resources\yuki_theme.svg" />
     <Content Include="Resources\YukiTheme.gif" />
   </ItemGroup>
   <ItemGroup>

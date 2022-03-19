@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.Forms
 			this.textBox1 = new System.Windows.Forms.TextBox ();
 			this.panel1 = new System.Windows.Forms.Panel ();
 			this.button1 = new System.Windows.Forms.Button ();
-			this.stickerPicture1 = new Yuki_Theme.Core.Controls.StickerPicture ();
+			this.stickerPicture1 = new System.Windows.Forms.PictureBox ();
 			this.panel1.SuspendLayout ();
 			this.SuspendLayout ();
 			// 
@@ -95,7 +95,7 @@ namespace Yuki_Theme.Core.Forms
 			this.PerformLayout ();
 		}
 
-		private Yuki_Theme.Core.Controls.StickerPicture stickerPicture1;
+		private System.Windows.Forms.PictureBox stickerPicture1;
 
 		private System.Windows.Forms.Button         button1;
 

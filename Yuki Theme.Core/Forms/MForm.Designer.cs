@@ -605,7 +605,6 @@
 			this.Controls.Add (this.bottomPanel);
 			this.Controls.Add (this.list_1);
 			this.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject ("$this.Icon")));
 			this.Location = new System.Drawing.Point (15, 15);
 			this.MaximumSize = new System.Drawing.Size (1920, 1080);
 			this.MinimumSize = new System.Drawing.Size (600, 400);

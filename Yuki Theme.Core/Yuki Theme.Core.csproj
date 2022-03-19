@@ -246,12 +246,12 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <None Include="Forms\TesterForm.cs">
+    <Compile Include="Forms\TesterForm.cs">
       <SubType>Form</SubType>
-    </None>
-    <None Include="Forms\TesterForm.Designer.cs">
+    </Compile>
+    <Compile Include="Forms\TesterForm.Designer.cs">
       <DependentUpon>TesterForm.cs</DependentUpon>
-    </None>
+    </Compile>
     <Compile Include="Forms\ThemeManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -320,9 +320,9 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Forms\TesterForm.resx">
+    <Resource Include="Forms\TesterForm.resx">
       <DependentUpon>TesterForm.cs</DependentUpon>
-    </None>
+    </Resource>
     <EmbeddedResource Include="Forms\ThemeManager.resx">
       <DependentUpon>ThemeManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -376,6 +376,7 @@
     <EmbeddedResource Include="Resources\SVG\traceInto_dark.svg" />
     <EmbeddedResource Include="Database\files.txt" />
     <EmbeddedResource Include="Resources\SVG\upload.svg" />
+    <EmbeddedResource Include="Resources\SVG\yuki_theme.svg" />
     <EmbeddedResource Include="Resources\Syntax Templates\CSharp.xshd" />
     <EmbeddedResource Include="Resources\Syntax Templates\Haskell.xshd" />
     <EmbeddedResource Include="Resources\Syntax Templates\KuMir.xshd" />
@@ -388,8 +389,6 @@
     <EmbeddedResource Include="Resources\SVG\findAndShowNextMatches_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches.svg" />
     <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches_dark.svg" />
-    <Content Include="Resources\yuki.png" />
-    <EmbeddedResource Include="yuki.png" />
     <EmbeddedResource Include="Themes\Darcula.yukitheme" />
     <EmbeddedResource Include="Themes\Dracula.yukitheme" />
     <EmbeddedResource Include="Themes\Github Dark.yukitheme" />

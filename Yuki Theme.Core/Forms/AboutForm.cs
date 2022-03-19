@@ -17,9 +17,10 @@ namespace Yuki_Theme.Core.Forms
 			this.StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
 				$"version: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
-			System.ComponentModel.ComponentResourceManager resources =
-				new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+
+			Image icon = Helper.GetYukiThemeIconImage (new Size (pictureBox1.Size.Height, pictureBox1.Size.Height));
+			pictureBox1.Image = icon;
+			Icon = Icon.FromHandle (((Bitmap)icon).GetHicon ());
 			sp = s;
 
 			FontManager.SetAllControlsFont (panel1.Controls, 0);

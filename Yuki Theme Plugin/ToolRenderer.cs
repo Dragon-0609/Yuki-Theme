@@ -25,7 +25,7 @@ namespace Yuki_Theme_Plugin
 			bounds.Y = bounds.Height / 4;
 			bounds.X = bounds.Width / 2;
 			bounds.Height -= bounds.Height / 4;
-			e.Graphics.DrawLine (YukiTheme_VisualPascalABCPlugin.clrPen, bounds.X, bounds.Y, bounds.X, bounds.Height);
+			e.Graphics.DrawLine (YukiTheme_VisualPascalABCPlugin.separatorPen, bounds.X, bounds.Y, bounds.X, bounds.Height);
 		}
 	}
 }

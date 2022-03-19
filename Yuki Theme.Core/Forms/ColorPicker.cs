@@ -26,8 +26,7 @@ namespace Yuki_Theme.Core.Forms
 			this.colorBox2D.ColorMode = this.colorMode;
 			this.colorSlider.ColorMode = this.colorMode;
 			this.StartPosition = FormStartPosition.CenterParent;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon = ((Icon) (resources.GetObject ("$this.Icon")));
+			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			tabHexagon.Enter += TabHexagonOnEnter;
 			tabWheel.Enter += TabWheelOnEnter;
 			tabColorBox.Enter += TabColorBoxOnEnter;

@@ -194,7 +194,6 @@ namespace Yuki_Theme.Core.Forms
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
 			CLI_Actions.ifHasSticker = ifHasSticker;
 			CLI_Actions.ifDoesntHaveSticker = ifDoesntHaveSticker;
-			Helper.giveMessage = GiveMessage;
 
 			if (Helper.mode != ProductMode.Plugin)
 				Settings.connectAndGet (); // Get Data
@@ -205,7 +204,7 @@ namespace Yuki_Theme.Core.Forms
 			load_schemes ();
 			if (Helper.mode == ProductMode.Plugin)
 				initPlugin ();
-
+			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			checkEditor ();
 			this.StartPosition = FormStartPosition.Manual; // Set default position for the window
 			DesktopLocation = database.ReadLocation ();
@@ -376,11 +375,6 @@ namespace Yuki_Theme.Core.Forms
 				content,
 				"Theme file is invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			schemes.SelectedIndex = 0;
-		}
-
-		public void GiveMessage (string content)
-		{
-			MessageBox.Show (content);
 		}
 		
 		public bool SaveInExport (string content, string title)

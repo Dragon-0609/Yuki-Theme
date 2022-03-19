@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -12,14 +11,14 @@ using Yuki_Theme.Core.Themes;
 namespace Yuki_Theme_Plugin.Controls.Helpers
 {
 	[ComVisible(true)]
-	public partial class UpdatePageControl : WebBrowserControl
+	public class UpdatePageControl : WebBrowserControl
 	{
 		private TableLayoutPanel      updateTable;
 		private WebBrowser            updateBrowser;
 		private TextBox               updateUrl;
 		private Button                updatePrev;
 
-		public UpdatePageControl () : base ()
+		public UpdatePageControl ()
 		{
 			updateTable = (TableLayoutPanel)GetValueFromField ("tableLayoutPanel1");
 			updateBrowser = (WebBrowser)GetValueFromField ("webBrowser1");
@@ -27,21 +26,6 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 			updatePrev = (Button)GetValueFromField ("btnPrev");
 			updateBrowser.AllowWebBrowserDrop = false;
 			updateBrowser.IsWebBrowserContextMenuEnabled = false;
-			updateBrowser.DocumentCompleted += (o, e) =>
-			{
-				updateBrowser.Document.Window.Error += (w, we) =>
-				{
-					we.Handled = true;
-
-					// Do something with the error...
-					MessageBox.Show(
-						string.Format(
-							"Error: {1}\nline: {0}\nurl: {2}",
-							we.LineNumber,  //#0
-							we.Description, //#1
-							we.Url));       //#2
-				};
-			};
 			
 			updateBrowser.Navigated += (sender, e) =>
 			{
@@ -75,7 +59,7 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 
 		public new void OpenPage(string title, string url)
 		{
-			this.TabText = title;
+			TabText = title;
 			updateBrowser.Navigate (url);
 		}
 		
@@ -97,27 +81,33 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 		public string GetThemeName() {
 			string name = DefaultThemes.getCategory (Yuki_Theme.Core.Helper.currentTheme);
 			name = name != "Doki Theme" ? null : Yuki_Theme.Core.Helper.currentTheme;
-			string nm = name ?? "null";
 			return name;
 		}
 		public void OpenURL(string url) {
-			System.Diagnostics.Process.Start (url);
+			Process.Start (url);
 		}
 
 		public void SetTheme(string theme) {
-			bool cnd = Yuki_Theme.Core.CLI.SelectTheme (theme);
-            Yuki_Theme.Core.CLI.selectedItem = CLI.nameToLoad;
-            Yuki_Theme.Core.CLI_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
-            Yuki_Theme.Core.CLI_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
-            Yuki_Theme.Core.CLI_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
-            Yuki_Theme.Core.CLI_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
-            Yuki_Theme.Core.CLI.restore (false, null);
-            Yuki_Theme.Core.CLI.export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1, YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2, YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout, YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);
+			bool cnd = CLI.SelectTheme (theme);
 
-            Yuki_Theme.Core.CLI_Actions.ifHasImage2 = null;
-            Yuki_Theme.Core.CLI_Actions.ifHasSticker2 = null;
-            Yuki_Theme.Core.CLI_Actions.ifDoesntHave2 = null;
-            Yuki_Theme.Core.CLI_Actions.ifDoesntHaveSticker2 = null;
+			if (cnd)
+			{
+				CLI.selectedItem = CLI.nameToLoad;
+				CLI_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
+				CLI_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
+				CLI_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
+				CLI_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
+				CLI.restore (false);
+				CLI.export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
+				                            YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2,
+				                            YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
+				                            YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);
+
+				CLI_Actions.ifHasImage2 = null;
+				CLI_Actions.ifHasSticker2 = null;
+				CLI_Actions.ifDoesntHave2 = null;
+				CLI_Actions.ifDoesntHaveSticker2 = null;
+			}
 		}
 
 		public string ReadImage ()
