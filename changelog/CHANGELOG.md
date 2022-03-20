@@ -1,5 +1,13 @@
 ﻿### Changelog
 
+## 7.0
+
+Added to `Plugin`:
+1. Update notification after installing update
+2. Integration with site of Yuki Theme
+
+Fixed (`Plugin`): Auto focusing to the first tab after theme changing
+
 ## 6.0
 
 Added to `Plugin`:

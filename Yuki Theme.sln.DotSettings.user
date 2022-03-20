@@ -77,7 +77,7 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FDownloadForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FHelperForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMessageForm/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMForm/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FMForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FNotificationForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FPathForm/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_0020Theme_002ECore_002FForms_002FQuestionForm/@EntryIndexedValue">True</s:Boolean>

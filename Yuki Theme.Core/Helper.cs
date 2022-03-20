@@ -62,17 +62,21 @@ namespace Yuki_Theme.Core
 
 		public static string currentTheme;
 
-		public static Action <string> giveMessage;
+		#region CONST
 
-		private const string THEME_NAME_OLD = "theme.xshd";
-		private const string THEME_NAME_NEW = "theme.json";
-		private const string WALLPAPER_NAME = "background.png";
-		private const string STICKER_NAME   = "sticker.png";
-		public const string FILE_EXTENSTION_OLD   = ".yukitheme";
-		public const string FILE_EXTENSTION_NEW   = ".yuki";
-		public const string PASCALTEMPLATE   = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
+		private const string THEME_NAME_OLD      = "theme.xshd";
+		private const string THEME_NAME_NEW      = "theme.json";
+		private const string WALLPAPER_NAME      = "background.png";
+		private const string STICKER_NAME        = "sticker.png";
+		public const  string FILE_EXTENSTION_OLD = ".yukitheme";
+		public const  string FILE_EXTENSTION_NEW = ".yuki";
+		public const  string PASCALTEMPLATE      = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
+		
+		#endregion
 		
 		
+		#region Get Image
+
 		public static Tuple <bool, Image> GetImage (string path)
 		{
 			return GetImage (path, WALLPAPER_NAME);
@@ -150,7 +154,11 @@ namespace Yuki_Theme.Core
 				return new Tuple <bool, Image> (false, null);
 			}
 		}
+		
+		#endregion
 
+		
+		#region Get Theme
 
 		public static Tuple <bool, string> GetTheme (string path)
 		{
@@ -188,20 +196,20 @@ namespace Yuki_Theme.Core
 
 		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
 		{
-				var theme = zipFile.GetEntry (themefile);
-				if (theme != null)
+			var theme = zipFile.GetEntry (themefile);
+			if (theme != null)
+			{
+				string content = "";
+				using (StreamReader reader = new StreamReader (theme.Open ()))
 				{
-					string content = "";
-					using (StreamReader reader = new StreamReader (theme.Open ()))
-					{
-						content = reader.ReadToEnd ();
-					}
-
-					return new Tuple <bool, string> (true, content);
-				} else
-				{
-					return new Tuple <bool, string> (false, "");
+					content = reader.ReadToEnd ();
 				}
+
+				return new Tuple <bool, string> (true, content);
+			} else
+			{
+				return new Tuple <bool, string> (false, "");
+			}
 		}
 
 		public static ThemeFormat GetThemeFormat (bool isDefault, string path, string name)
@@ -235,6 +243,11 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
+		
+		#endregion
+		
+		
+		#region Zip
 
 		public static bool IsZip (string path)
 		{
@@ -373,8 +386,8 @@ namespace Yuki_Theme.Core
 			{
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
-					if (giveMessage != null)
-						giveMessage ($"There's no {filename}");
+					if (CLI_Actions.showError != null)
+						CLI_Actions.showError ($"There's no {filename}", filename + "isn't exist");
 				} else
 				{
 					throw;
@@ -427,6 +440,11 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		#endregion
+
+		
+		#region Color Management
+
 		public static Color ChangeColorBrightness (Color color, float correctionFactor)
 		{
 			float red = (float) color.R;
@@ -449,16 +467,6 @@ namespace Yuki_Theme.Core
 			return Color.FromArgb (color.A, (int) red, (int) green, (int) blue);
 		}
 
-		public static string GetThemeSaveName (bool asOld)
-		{
-			return "theme." + GetSaveFormat (asOld);
-		}
-
-		public static string GetSaveFormat (bool asOld)
-		{
-			return asOld ? "xshd" : "json";
-		}
-
 		public static bool IsDark (Color clr)
 		{
 			bool dark = ((clr.R + clr.G + clr.B) / 3 < 127);
@@ -468,10 +476,15 @@ namespace Yuki_Theme.Core
 		public static Color DarkerOrLighter (Color clr, float percent = 0)
 		{
 			if (IsDark (clr))
-				return Helper.ChangeColorBrightness (clr, percent);
+				return ChangeColorBrightness (clr, percent);
 			else
-				return Helper.ChangeColorBrightness (clr, -percent);
+				return ChangeColorBrightness (clr, -percent);
 		}
+		
+		#endregion
+		
+		
+		#region SVG Manager
 
 		public static SvgDocument LoadSvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
 		{
@@ -528,6 +541,20 @@ namespace Yuki_Theme.Core
 			else
 				return svg.Draw (cSize.Width, cSize.Height);
 		}
+
+		#endregion
+		
+		
+		public static string GetThemeSaveName (bool asOld)
+		{
+			return "theme." + GetSaveFormat (asOld);
+		}
+
+		public static string GetSaveFormat (bool asOld)
+		{
+			return asOld ? "xshd" : "json";
+		}
+
 
 		public static Image SetOpacity (Image image, float opacity)
 		{
@@ -588,6 +615,17 @@ namespace Yuki_Theme.Core
 			Random random = new Random ();
 			int start2 = random.Next (0, list.Count);
 			return list [start2];
+		}
+
+		public static Image GetYukiThemeIconImage (Size size)
+		{
+			return RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()));
+		}
+		
+		public static Icon GetYukiThemeIcon (Size size)
+		{
+
+			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
 		}
 	}
 

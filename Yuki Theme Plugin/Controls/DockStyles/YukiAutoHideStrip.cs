@@ -166,7 +166,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		private static Pen PenTabBorder
 		{
-			get	{	return YukiTheme_VisualPascalABCPlugin.clrPen;	}
+			get	{	return YukiTheme_VisualPascalABCPlugin.separatorPen;	}
 		}
 
 		private static Brush BrushTabText

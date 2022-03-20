@@ -37,8 +37,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon = ((Icon)(resources.GetObject ("$this.Icon")));
+			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			form = fm;
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);

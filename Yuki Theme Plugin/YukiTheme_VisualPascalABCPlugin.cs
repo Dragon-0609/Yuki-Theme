@@ -12,15 +12,19 @@ using System.Xml;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
+using Microsoft.Win32;
 using Svg;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
 using VisualPascalABCPlugins;
+using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
+using Yuki_Theme_Plugin.Controls.Helpers;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using CustomList = Yuki_Theme_Plugin.Controls.DockStyles.CustomList;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
@@ -40,36 +44,39 @@ namespace Yuki_Theme_Plugin
 
 		#region IDE Controls
 
-		private          AboutBox                          about;
-		private          IVisualEnvironmentCompiler        compiler;
-		private          Form1                             fm;
-		private          MenuStrip                         menu;
-		private          Panel                             output_input;
-		private          RichTextBox                       output_output;
-		private          Panel                             output_panel1;
-		private          Panel                             output_panel2;
-		private          Panel                             output_panel3;
-		private          Panel                             output_panel4;
-		private          Panel                             output_panel5;
-		private          Panel                             output_panel6;
-		private          TextBox                           output_text;
-		private          Control                           outputWindow;
-		private          IHighlightingStrategy             highlighting;
-		private          StatusStrip                       statusBar;
-		private          ToolStrip                         tools;
-		private          Panel                             toolsPanel;
-		private readonly IWorkbench                        workbench;
-		private          TextArea                          textArea;
-		private          CodeFileDocumentTextEditorControl textEditor;
-		private          ContextMenuStrip                  context;
-		private          ContextMenuStrip                  context2;
-		private          MenuRenderer                      renderer;
-		private          IconBarMargin                     margin;
-		private          FoldMargin                        foldmargin;
-		private          ListView                          errorsList;
-		private          TextBox                           compilerConsole;
+		private          AboutBox              about;
+		private          Form1                 fm;
+		private          MenuStrip             menu;
+		private          Panel                 output_input;
+		private          RichTextBox           output_output;
+		private          Panel                 output_panel1;
+		private          Panel                 output_panel2;
+		private          Panel                 output_panel3;
+		private          Panel                 output_panel4;
+		private          Panel                 output_panel5;
+		private          Panel                 output_panel6;
+		private          TextBox               output_text;
+		private          Control               outputWindow;
+		private          IHighlightingStrategy highlighting;
+		private          StatusStrip           statusBar;
+		private          ToolStrip             tools;
+		private          Panel                 toolsPanel;
+		private readonly IWorkbench            workbench;
+		private          TextArea              textArea;
+		private          ContextMenuStrip      context;
+		private          ContextMenuStrip      context2;
+		private          MenuRenderer          renderer;
+		private          IconBarMargin         margin;
+		private          FoldMargin            foldmargin;
+		private          ListView              errorsList;
+		private          TextBox               compilerConsole;
 		
-		private Hashtable ht;
+		private IVisualEnvironmentCompiler                  compiler;
+		private CodeFileDocumentTextEditorControl           textEditor;
+		private Dictionary <ICodeFileDocument, RichTextBox> OutputTextBoxs;
+
+		private RichTextBox oldInputPanel;
+		private Hashtable   ht;
 
 		#endregion
 
@@ -85,7 +92,6 @@ namespace Yuki_Theme_Plugin
 		public static Color clrHover;
 		public static Color bgBorder;
 		public static Color bgType;
-		public static Color bgvruler;
 		public static Brush bgdefBrush;
 		public static Brush bgBrush;
 		public static Brush selectionBrush;
@@ -94,25 +100,26 @@ namespace Yuki_Theme_Plugin
 		public static Brush typeBrush;
 		public static Brush clrBrush;
 		public static Brush bgInactiveBrush;
-		public static Pen   bgPen;
-		public static Pen   clrPen;
+		public static Pen   separatorPen;
 		public static Pen   bgBorderPen;
 
 		#endregion
 
-		private Image           img;		
-		private Alignment       wallpaperAlign;
-		private int             wallpaperOpacity;
-		private Timer           documentUpdator;
-		private Timer           menuItemsColorUpdator;
-		private Timer           tim3;
-		public  MForm           mf;
-		private ToolStripButton currentThemeName;
-		private PictureBox      logoBox;
-		private Image           sticker;
-		public  CustomPicture   stickerControl;
+		public static Image           img;		
+		private       Alignment       wallpaperAlign;
+		private       int             wallpaperOpacity;
+		private       Timer           documentUpdator;
+		private       Timer           menuItemsColorUpdator;
+		private       Timer           tim3;
+		public        MForm           mf;
+		private       ToolStripButton currentThemeName;
+		private       PictureBox      logoBox;
+		private       Image           sticker;
+		public        CustomPicture   stickerControl;
 
 		#region Stuff of menu
+
+		#region Menu Items
 
 		private ToolStripMenuItem menu_settings;
 		private ToolStripMenuItem quiet;
@@ -120,19 +127,28 @@ namespace Yuki_Theme_Plugin
 		private ToolStripMenuItem backimage;
 		private ToolStripMenuItem switchTheme;
 		private ToolStripMenuItem enablePositioning;
-		private Image             quietImage;
-		private Image             positioningImage;
-		private Image             wallpaperImage;
-		private Image             switchImage;
+		private ToolStripMenuItem resetStickerPosition;
+		private ToolStripMenuItem updatePage;
 		
+		#endregion
+
+		#region Menu Items Images
+
+		private Image quietImage;
+		private Image positioningImage;
+		private Image wallpaperImage;
+		private Image switchImage;
+		private Image resetPositionImage;
+		
+		#endregion
 
 		#endregion
 		
 		private Size              defaultSize;
 		private Panel             panel_bg;
 		private CustomList        themeList;
-		private Image             tmpImage1;
-		private Image             tmpImage2;
+		public Image             tmpImage1;
+		public Image             tmpImage2;
 		
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
@@ -140,12 +156,16 @@ namespace Yuki_Theme_Plugin
 		private bool      bgImage => Settings.bgImage;
 		private Rectangle oldSizeOfTextEditor = Rectangle.Empty;
 		
-		bool                    toggled         = false; // is toggle activated
-		int                     imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
-		bool                    nameInStatusBar = false;     // Name in status bar
+		bool                  toggled         = false; // is toggle activated
+		int                   imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
+		bool                  nameInStatusBar = false; // Name in status bar
 		private ToolStripItem openInExplorerItem;
+		const   string        yukiThemeUpdate = "Yuki Theme Update";
+		private int           lastFocused     = -1;
 
 		public PopupFormsController popupController;
+
+        public static YukiTheme_VisualPascalABCPlugin plugin;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -162,9 +182,7 @@ namespace Yuki_Theme_Plugin
 
 		public void GetGUI (List <IPluginGUIItem> MenuItems, List <IPluginGUIItem> ToolBarItems)
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager (typeof (MForm));
-			Icon icon = ((Icon) (resources.GetObject ($"$this.Icon")));
-			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", icon.ToBitmap (), Color.Transparent, InitCore);
+			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", null, Color.Transparent, InitCore);
 			//Добавляем в меню
 			MenuItems.Add (item1);
 
@@ -176,7 +194,7 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nameInStatusBar = Settings.swStatusbar;
-
+            plugin = this;
 			loadWithWaiting ();
 			Initialize ();
 		}
@@ -196,7 +214,8 @@ namespace Yuki_Theme_Plugin
 			context = textEditor.ContextMenuStrip;
 			context2 = fm.MainDockPanel.ContextMenuStrip;
 			openInExplorerItem = context2.Items.Add ("Open in Explorer", null, OpenInExplorer);
-			CheckAvailabilityForOpening ();
+			
+			context2.Opening += EditorContextOpening;
 			LoadImage ();
 			
 			GetFields ();
@@ -254,7 +273,7 @@ namespace Yuki_Theme_Plugin
 			fm.Resize += FmOnResize;
 			addToSettings ();
 		}
-		
+
 		private void InitStyles ()
 		{
 			Extender.SetSchema (fm.MainDockPanel);
@@ -350,14 +369,13 @@ namespace Yuki_Theme_Plugin
 					                                        "gearPlain"+add, Assembly.GetExecutingAssembly (),
 					                                        "Yuki_Theme_Plugin.Resources.icons"), false, Size.Empty,
 				                                        true, clr);
-				menu_settings.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 				ToolStrip ow = menu_settings.Owner;
 				ow.Items.Remove (menu_settings);
-				ComponentResourceManager resources = new ComponentResourceManager (typeof (MForm));	
-				Icon icon = ((Icon) (resources.GetObject ($"$this.Icon")));
 
+				Image icon = Helper.GetYukiThemeIconImage (new Size (32, 32));
+				
 				ToolStripMenuItem main =
-					new ToolStripMenuItem ("Yuki Theme", icon.ToBitmap ());
+					new ToolStripMenuItem ("Yuki Theme", icon);
 
 				quiet = new ToolStripMenuItem ("Toggle Discreet Mode", null, ToggleQuiet, Keys.Alt | Keys.A);
 				quiet.ShortcutKeyDisplayString = "Alt + A";
@@ -403,12 +421,26 @@ namespace Yuki_Theme_Plugin
 					? updateBgofImage (positioningImage)
 					: positioningImage;
 
+				resetStickerPosition = new ToolStripMenuItem ("Reset Sticker Margins",
+				                                              resetPositionImage, ResetStickerPosition);
+				
+				resetStickerPosition.BackColor = menu_settings.BackColor;
+				resetStickerPosition.ForeColor = menu_settings.ForeColor;
+
+				updatePage = new ToolStripMenuItem ("Show Update Notification",
+				                                    icon, ShowUpdatePage);
+				
+				updatePage.BackColor = menu_settings.BackColor;
+				updatePage.ForeColor = menu_settings.ForeColor;
+
 				main.DropDownItems.Add (stick);
 				main.DropDownItems.Add (backimage);
 				main.DropDownItems.Add (enablePositioning);
 				main.DropDownItems.Add (quiet);
 				main.DropDownItems.Add (switchTheme);
 				main.DropDownItems.Add (menu_settings);
+				main.DropDownItems.Add (resetStickerPosition);
+				main.DropDownItems.Add (updatePage);
 
 				// Move Yuki Theme to the Top
 				List <ToolStripItem> coll = new List <ToolStripItem> ();
@@ -434,8 +466,7 @@ namespace Yuki_Theme_Plugin
 			MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
 			MForm.TrackInstall ();
-
-			if (Settings.update)
+			if (!IsUpdated () && Settings.update)
 			{
 				popupController.InitializeAllWindows ();
 				popupController.df.CheckUpdate ();
@@ -482,7 +513,16 @@ namespace Yuki_Theme_Plugin
 				                                "refresh", Assembly.GetExecutingAssembly (),
 				                                "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
 			                                bgBorder);
-
+			if(resetPositionImage != null)
+			{
+				resetPositionImage.Dispose ();
+				resetPositionImage = null;
+			}
+			
+			resetPositionImage = Helper.RenderSvg (defaultSize, Helper.LoadSvg (
+				                                "refresh", Assembly.GetExecutingAssembly (),
+				                                "Yuki_Theme_Plugin.Resources"), false, Size.Empty, true,
+			                                bgBorder);
 		}
 		
 		private void LoadColors ()
@@ -498,9 +538,6 @@ namespace Yuki_Theme_Plugin
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
-			// Console.WriteLine (highlighting.GetColorFor ("VRuler").ToString ());
-			// bgvruler = highlighting.GetColorFor ("VRuler").Color;
-			// Console.WriteLine (bgvruler);
 
 			ResetBrushesAndPens ();
 		}
@@ -633,6 +670,7 @@ namespace Yuki_Theme_Plugin
 			updateQuietImage ();
 			updateWallpaperImage ();
 			updateStickerImage ();
+			// GetWindowProperities ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)
@@ -648,6 +686,8 @@ namespace Yuki_Theme_Plugin
 			{
 				if (mf == null || mf.IsDisposed)
 				{
+					RememberCurrentEditor ();
+					 
 					panel_bg = new CustomPanel (0);
 					panel_bg.Name = "Custom Panel Switcher";
 
@@ -721,6 +761,18 @@ namespace Yuki_Theme_Plugin
 			stickerControl.Enabled = Settings.positioning;
 			updatestickersPositioningImage ();
 		}
+		
+		private void ResetStickerPosition (object sender, EventArgs e)
+		{
+			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
+			stickerControl.ReadData ();
+			stickerControl.UpdateLocation ();
+		}
+		
+		private void ShowUpdatePage (object sender, EventArgs e)
+		{
+			openUpdate ();
+		}
 
 		private void ToggleSticker (object sender, EventArgs e)
 		{
@@ -729,6 +781,19 @@ namespace Yuki_Theme_Plugin
 			updateStickerImage ();
 		}
 
+		private void EditorContextOpening (object sender, CancelEventArgs e)
+		{
+			if (!(fm.MainDockPanel.ActiveContent is CodeFileDocumentControl))
+			{
+				openInExplorerItem.Visible = false;
+			}
+			else
+			{
+				openInExplorerItem.Visible = true;
+				openInExplorerItem.Enabled = CheckAvailabilityOfDocument ();
+			}
+		}
+		
 		#endregion
 
 		
@@ -738,7 +803,7 @@ namespace Yuki_Theme_Plugin
 		{
 			fm.BackColor = menu.BackColor = statusBar.BackColor = toolsPanel.BackColor = tools.BackColor =
 				fm.cmEditor.BackColor = textEditor.Parent.BackColor =
-					fm.CurrentCodeFileDocument.BackColor = bg;
+					fm.CurrentCodeFileDocument.BackColor = fm.BottomPane.Parent.BackColor = bg;
 			
 			output_panel2.BackColor = output_panel6.BackColor = output_input.BackColor = output_panel4.BackColor =
 				output_panel3.BackColor = output_panel5.BackColor = output_panel1.BackColor = output_text.BackColor =
@@ -791,6 +856,8 @@ namespace Yuki_Theme_Plugin
 			if (stick != null) stick.BackColor = bgdef;
 			if (backimage != null) backimage.BackColor = bgdef;
 			if (switchTheme != null) switchTheme.BackColor = bgdef;
+			if (resetStickerPosition != null) resetStickerPosition.BackColor = bgdef;
+			if (updatePage != null) updatePage.BackColor = bgdef;
 			if (enablePositioning != null)
 			{
 				enablePositioning.BackColor = bgdef;
@@ -817,6 +884,7 @@ namespace Yuki_Theme_Plugin
 			errorsList.Refresh ();
 			WaitAndUpdateMenuColors ();
 			manager.UpdateColors ();
+			UpdateBottomTextPanel ();
 		}
 
 		private void ResetBrushesAndPens ()
@@ -829,9 +897,8 @@ namespace Yuki_Theme_Plugin
 			ResetBrush (ref bgInactiveBrush, bgInactive);
 			ResetBrush (ref clrBrush, clr);
 			ResetBrush (ref typeBrush, bgType);
-
-			ResetPen (ref bgPen, bgBorder, 1, PenAlignment.Center);
-			ResetPen (ref clrPen, clrHover, 1, default);
+			
+			ResetPen (ref separatorPen, bgClick3, 1, default);
 			ResetPen (ref bgBorderPen, bgBorder, 8, default);
 		}
 
@@ -893,20 +960,8 @@ namespace Yuki_Theme_Plugin
 				
 				textArea.Paint += PaintBG;
 				textArea.Refresh ();
-				CheckAvailabilityForOpening ();
-				try
-				{
-					if (output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex] is RichTextBox)
-					{
-						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BorderStyle =
-							BorderStyle.None;
-						((RichTextBox)output_panel6.Controls [fm.CurrentCodeFileDocument.TabIndex]).BackColor =
-							bgdef;
-					}
-				} catch (ArgumentOutOfRangeException)
-				{
-				}
-				
+				UpdateBottomTextPanel ();
+
 				if (Unsubscribe (ht [textEditor]))
 				{
 					SubscribeCompletion ();
@@ -916,8 +971,21 @@ namespace Yuki_Theme_Plugin
 				}
 			}
 		}
-		
-		private void ReloadLayout ()
+
+		private void UpdateBottomTextPanel ()
+		{
+			// if (oldInputPanel != null)
+			// {
+			// 	oldInputPanel.Paint -= OldInputPanelOnPaint;
+			// }
+			oldInputPanel = OutputTextBoxs [fm.CurrentCodeFileDocument];
+			oldInputPanel.BackColor = bgdef;
+			oldInputPanel.BorderStyle = BorderStyle.None;
+			// oldInputPanel.Paint += OldInputPanelOnPaint;
+			// oldInputPanel.Invalidate();
+		}
+
+		public void ReloadLayout ()
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
 			LoadImage ();
@@ -930,7 +998,8 @@ namespace Yuki_Theme_Plugin
 			updateWallpaperImage ();
 			updateStickerImage ();
 			updateSwitchImage ();
-			
+			updateResetPositionImage ();
+			UpdateWebBrowserTheme ();
 		}
 		
 		private Bitmap updateBgofImage (Image oldImage)
@@ -979,6 +1048,14 @@ namespace Yuki_Theme_Plugin
 			if (switchTheme != null)
 			{
 				switchTheme.Image = switchImage;
+			}
+		}
+		
+		private void updateResetPositionImage ()
+		{
+			if (resetStickerPosition != null)
+			{
+				resetStickerPosition.Image = resetPositionImage;
 			}
 		}
 
@@ -1092,7 +1169,20 @@ namespace Yuki_Theme_Plugin
 			menuItemsColorUpdator.Stop ();
 			menuItemsColorUpdator.Dispose ();
 		}
-
+		
+		private void UpdateWebBrowserTheme()
+		{
+			WebBrowserControl tp = null;
+			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
+			Dictionary <string, WebBrowserControl> OpenBrowserDocuments = (Dictionary <string, WebBrowserControl>)field.GetValue (fm);
+			OpenBrowserDocuments.TryGetValue (yukiThemeUpdate, out tp); 
+			if (tp is UpdatePageControl)
+			{
+				UpdatePageControl upage = (UpdatePageControl)tp;
+				upage.UpdateTheme ();
+			}
+		}
+		
 		#endregion
 
 		
@@ -1166,17 +1256,54 @@ namespace Yuki_Theme_Plugin
 
 			if (img != null && bgImage)
 			{
-				if (oldSizeOfTextEditor.Width != textEditor.ClientRectangle.Width ||
-				    oldSizeOfTextEditor.Height != textEditor.ClientRectangle.Height)
+				Size vm = textEditor.ClientSize;
+				// bool chnd = false;
+				// if (outputWindow.Visible)
+				// {
+				// 	if(oldInputPanel != null)
+				// 	{
+				// 		vm.Height += oldInputPanel.ClientSize.Height;
+				// 		chnd = true;
+				// 	}
+				// }
+				if (oldSizeOfTextEditor.Width != vm.Width ||
+				    oldSizeOfTextEditor.Height != vm.Height)
 				{
-					oldSizeOfTextEditor = Helper.GetSizes (img.Size, textEditor.ClientRectangle.Width, textEditor.ClientRectangle.Height,
+					oldSizeOfTextEditor = Helper.GetSizes (img.Size, vm.Width, vm.Height,
 					                                       wallpaperAlign);
 				}
-
-				e.Graphics.DrawImage (img, oldSizeOfTextEditor);
+				// if(chnd)
+				// {
+				// 	Rectangle rct = new Rectangle (oldSizeOfTextEditor.X, 0, oldSizeOfTextEditor.Width, textEditor.ClientSize.Height);
+				// 	float pr = oldSizeOfTextEditor.Height / 100f;
+				// 	float px = img.Height / 100f;
+				// 	float hg = img.Height - (px * ((oldSizeOfTextEditor.Height - rct.Height) / pr));
+				// 	e.Graphics.DrawImage (img, rct, 0, 0, img.Width, hg, GraphicsUnit.Pixel);
+				// }
+				// else
+				// {
+					e.Graphics.DrawImage (img, oldSizeOfTextEditor);
+				// }
 			}
 		}
-
+		
+		private void OldInputPanelOnPaint (object sender, PaintEventArgs e)
+		{
+			if (outputWindow.Visible)
+			{
+				Size vm = textEditor.ClientSize;
+				vm.Height += oldInputPanel.ClientSize.Height;
+				Rectangle rct = new Rectangle (oldSizeOfTextEditor.X, textEditor.ClientSize.Height, oldSizeOfTextEditor.Width,
+				                               oldInputPanel.ClientSize.Height);
+				float pr = oldSizeOfTextEditor.Height / 100f;
+				float px = img.Height / 100f;
+				float hg = px * ((oldSizeOfTextEditor.Height - rct.Height) / pr);
+				((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
+					"Yuki Theme: "+rct.ToString ()+ " _ " + oldSizeOfTextEditor.ToString () + " | ");
+				e.Graphics.DrawImage (img, rct, 0, 0, img.Width, hg, GraphicsUnit.Pixel);
+			}
+		}
+		
 		private void CtrlOnPaint (object sender, PaintEventArgs e)
 		{
 			e.Graphics.FillRectangle (new SolidBrush (bgdef), e.ClipRectangle);
@@ -1184,7 +1311,7 @@ namespace Yuki_Theme_Plugin
 
 		private void ToolStripPanelOnPaint (object sender, PaintEventArgs e)
 		{
-			e.Graphics.DrawLine (clrPen, e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width,
+			e.Graphics.DrawLine (separatorPen, e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width,
 			                     e.ClipRectangle.Y);
 		}
 
@@ -1200,23 +1327,23 @@ namespace Yuki_Theme_Plugin
 		
 		#region Events For Core
 
-		private void ifHsImage (Image img)
+		public void ifHsImage (Image img)
 		{
 			tmpImage1 = img;
 			
 		}
 
-		private void ifHsSticker (Image img)
+		public void ifHsSticker (Image img)
 		{
 			tmpImage2 = img;
 		}
 		
-		private void ifDNIMG ()
+		public void ifDNIMG ()
 		{
 			tmpImage1 = null;
 		}
 		
-		private void ifDNSTCK ()
+		public void ifDNSTCK ()
 		{
 			tmpImage2 = null;
 		}
@@ -1265,6 +1392,8 @@ namespace Yuki_Theme_Plugin
 				tmpImage2.Dispose ();
 				tmpImage2 = null;
 			}
+
+			ReFocusCurrentEditor ();
 		}
 		
 		private void ThemeListOnSelectedIndexChanged (object sender, EventArgs e)
@@ -1274,18 +1403,22 @@ namespace Yuki_Theme_Plugin
 				if(themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
 					bool cnd = CLI.SelectTheme (themeList.SelectedItem.ToString ());
-					CLI.selectedItem = CLI.nameToLoad;
-					CLI_Actions.ifHasImage2 = ifHsImage;
-					CLI_Actions.ifHasSticker2 = ifHsSticker;
-					CLI_Actions.ifDoesntHave2 = ifDNIMG;
-					CLI_Actions.ifDoesntHaveSticker2 = ifDNSTCK;
-					CLI.restore (false, null);
-					CLI.export (tmpImage1, tmpImage2, ReloadLayout, ReleaseResources);
 
-					CLI_Actions.ifHasImage2 = null;
-					CLI_Actions.ifHasSticker2 = null;
-					CLI_Actions.ifDoesntHave2 = null;
-					CLI_Actions.ifDoesntHaveSticker2 = null;
+					if (cnd)
+					{
+						CLI.selectedItem = CLI.nameToLoad;
+						CLI_Actions.ifHasImage2 = ifHsImage;
+						CLI_Actions.ifHasSticker2 = ifHsSticker;
+						CLI_Actions.ifDoesntHave2 = ifDNIMG;
+						CLI_Actions.ifDoesntHaveSticker2 = ifDNSTCK;
+						CLI.restore (false, null);
+						CLI.export (tmpImage1, tmpImage2, ReloadLayout, ReleaseResources);
+
+						CLI_Actions.ifHasImage2 = null;
+						CLI_Actions.ifHasSticker2 = null;
+						CLI_Actions.ifDoesntHave2 = null;
+						CLI_Actions.ifDoesntHaveSticker2 = null;
+					}
 				}
 				
 				CloseOnClick (sender, e);
@@ -1319,6 +1452,35 @@ namespace Yuki_Theme_Plugin
 		}
 		
 		#endregion
+
+		private void RememberCurrentEditor ()
+		{
+			if (fm.ActiveControl is UpdatePageControl)
+			{
+				UpdatePageControl update = (UpdatePageControl)fm.ActiveControl;
+				lastFocused = update.TabIndex;
+			}else
+			{
+				lastFocused = fm.CurrentCodeFileDocument.TabIndex;
+			}
+		}
+
+		private void ReFocusCurrentEditor ()
+		{
+			IDockContent [] docs = fm.MainDockPanel.DocumentsToArray ();			
+			IDockContent doc = docs [lastFocused];
+			doc.DockHandler.Pane.Focus ();
+			if (doc.DockHandler.Content is UpdatePageControl)
+			{
+				UpdatePageControl update = (UpdatePageControl)doc.DockHandler.Content;
+				update.Focus ();
+			} else
+			{
+				CodeFileDocumentControl cod = (CodeFileDocumentControl)doc.DockHandler.Content;
+				cod.Focus ();
+			}
+			docs = null;
+		}
 		
 		private void GetFields ()
 		{
@@ -1373,11 +1535,10 @@ namespace Yuki_Theme_Plugin
 					b.FlatAppearance.BorderColor = bgBorder;
 				}
 			}
-		}
 
-		private void CheckAvailabilityForOpening ()
-		{
-			openInExplorerItem.Enabled = CheckAvailabilityOfDocument ();
+			FieldInfo fp = typeof (Form1).GetField ("OutputTextBoxs", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			OutputTextBoxs = (Dictionary <ICodeFileDocument, RichTextBox>)fp.GetValue (fm);
 		}
 		
 		private void OpenInExplorer (object sender, EventArgs e)
@@ -1431,7 +1592,7 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private void ReleaseResources ()
+		public void ReleaseResources ()
 		{
 			
 			if (img != null)
@@ -1448,12 +1609,20 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
+		
+		public void openUpdate ()
+		{
+			string version = Settings.current_version.ToString ("0.0").Replace (',', '.');
+			if (Settings.current_version_add != null && Settings.current_version_add.Length > 1)
+				version += "-" + Settings.current_version_add;
+			AddTabWithUrl (fm.MainDockPanel, yukiThemeUpdate, $"https://dragon-0609.github.io/Yuki-Theme/updates/{version}");
+		}
 
 		private void GetWindowProperities ()
 		{
 			Props prop = new Props ();
-			prop.root = context;
-			prop.propertyGrid1.SelectedObject = context;
+			prop.root = fm;
+			prop.propertyGrid1.SelectedObject = fm;
 			prop.Show ();
 		}
 		
@@ -1648,9 +1817,47 @@ namespace Yuki_Theme_Plugin
 			pen = new Pen (color, width) {Alignment = alignment};
 		}
 		
+		public void AddTabWithUrl(DockPanel tabControl, string title, string url)
+		{
+			WebBrowserControl tp = null; //new UpdatePageControl();
+			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
+			Dictionary <string, WebBrowserControl> OpenBrowserDocuments = (Dictionary <string, WebBrowserControl>)field.GetValue (fm);
+			if (!OpenBrowserDocuments.TryGetValue(title, out tp))
+			{
+				tp = new UpdatePageControl();
+				tp.OpenPage(title, url);
+				fm.AddWindowToDockPanel(tp, tabControl, tp.Dock, DockState.Document, tp.IsFloat, null, 0);
+				OpenBrowserDocuments.Add(title, tp);
+			}
+			else if (tp is UpdatePageControl)
+			{
+				tp.Activate ();
+			} else
+			{
+				MessageBox.Show ("Couldn't find web browser");
+			}
+		}
+		
+		
+		private bool IsUpdated ()
+		{
+			bool updated = false;
+			RegistryKey ke =
+				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			if (inst == 1)
+			{
+				openUpdate ();
+				ke?.DeleteValue ("install");
+				updated = true;
+			}
+
+			return updated;
+		}
 		
 		#endregion
-
+		
 		public event ColorUpdate OnColorUpdate;
 	}
 }

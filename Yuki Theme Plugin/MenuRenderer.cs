@@ -26,7 +26,7 @@ namespace Yuki_Theme_Plugin
 
 			bounds.Y = bounds.Height / 2;
 
-			e.Graphics.DrawLine (YukiTheme_VisualPascalABCPlugin.clrPen, 0, bounds.Y, bounds.Width, bounds.Y);
+			e.Graphics.DrawLine (YukiTheme_VisualPascalABCPlugin.separatorPen, 0, bounds.Y, bounds.Width, bounds.Y);
 		}
 
 		protected override void OnRenderArrow (ToolStripArrowRenderEventArgs e)
