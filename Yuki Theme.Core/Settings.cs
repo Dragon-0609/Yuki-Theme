@@ -73,8 +73,8 @@ public static class Settings
 	public const int SAVEASOLD = 29;
 	
 	
-	public const  double current_version     = 6.0;
-	public const  string current_version_add = "";
+	public const  double current_version     = 7.0;
+	public const  string current_version_add = "beta";
 	public static string next_version        = "";
 
 	#endregion
