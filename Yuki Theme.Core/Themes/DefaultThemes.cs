@@ -106,9 +106,12 @@ namespace Yuki_Theme.Core.Themes
 			headersList.Add (header);
 			foreach (string themeName in header.ThemeNames)
 			{
-				CLI.isDefaultTheme.Add (themeName, true);
-				categories.Add (themeName, header.GroupName);
-				headers.Add (themeName, header);
+				if(!CLI.isDefaultTheme.ContainsKey (themeName))
+				{
+					CLI.isDefaultTheme.Add (themeName, true);
+					categories.Add (themeName, header.GroupName);
+					headers.Add (themeName, header);
+				}
 			}
 		}
 
