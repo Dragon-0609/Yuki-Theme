@@ -1414,8 +1414,12 @@ namespace Yuki_Theme_Plugin
 			{
 				PreExportTheme (themeList.AccessibleName, oldThemeNameForPreExport);
 				needToReturnTheme = false;
+			} else
+			{
+				hideBG = !CLI.currentTheme.HasWallpaper;
+				stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
 			}
-			
+
 			fm.Controls.Remove (panel_bg);
 			panel_bg?.Dispose ();
 			themeList?.searchBar.Dispose ();
