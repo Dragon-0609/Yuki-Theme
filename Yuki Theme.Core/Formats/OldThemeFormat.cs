@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
@@ -234,17 +235,11 @@ namespace Yuki_Theme.Core.Formats
 		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			var doc = new XmlDocument ();
-			bool iszip = false;
 			string themePath = CLI.currentTheme.fullPath;
 			Tuple <bool, string> content = Helper.GetTheme (themePath);
-			if (content.Item1)
-			{
-				doc.LoadXml (content.Item2);
-				iszip = true;
-			} else
-			{
-				doc.Load (themePath);
-			}
+			bool iszip = content.Item1;
+
+			doc.LoadXml (ReadThemeTemplate ());
 
 			Dictionary <string, ThemeField> localDic;
 
@@ -751,5 +746,19 @@ namespace Yuki_Theme.Core.Formats
 				node.AppendChild (doc.CreateComment ("hasSticker:" + themeToMerge.HasSticker));
 			}
 		}
+
+		private static string ReadThemeTemplate ()
+		{
+			string res = "";
+			var a = CLI.GetCore ();
+			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd");
+			using (StreamReader reader = new StreamReader (stream))
+			{
+				res = reader.ReadToEnd ();
+			}
+
+			return res;
+		}
+		
 	}
 }

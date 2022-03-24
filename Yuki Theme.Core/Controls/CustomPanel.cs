@@ -75,7 +75,7 @@ namespace Yuki_Theme.Core.Controls
 		{
 			if (mode == 0)
 			{
-				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (160, 0, 0, 0)), this.ClientRectangle);
+				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (5, 0, 0, 0)), this.ClientRectangle);
 			} else if (!painted)
 			{
 				// painted = true;

@@ -624,7 +624,6 @@ namespace Yuki_Theme.Core
 		
 		public static Icon GetYukiThemeIcon (Size size)
 		{
-
 			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
 		}
 	}
