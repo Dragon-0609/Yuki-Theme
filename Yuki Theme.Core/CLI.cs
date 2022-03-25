@@ -328,16 +328,26 @@ namespace Yuki_Theme.Core
 		/// Export just .xshd file without images. It can be used for preview a theme
 		/// </summary>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
-		public static void pre_export (Action setTheme = null)
+		public static void preview (SyntaxType syntax, bool needToDelete, Action setTheme = null)
 		{
-			var files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			var path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
-			if (files != null && files.Length > 0)
+			if (needToDelete)
 			{
-				DeleteFiles (files);
+				var files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
+				if (files != null && files.Length > 0)
+				{
+					DeleteFiles (files);
+				}
 			}
 
-			PrepareToExport (path);
+			if (syntax != SyntaxType.NULL)
+			{
+				string dir = Path.GetDirectoryName (path);
+				MergeSyntax (dir, syntax);
+			} else
+			{
+				PrepareToExport (path);
+			}
 
 			Helper.currentTheme = currentTheme.Name;
 			if (setTheme != null)
@@ -596,19 +606,25 @@ namespace Yuki_Theme.Core
 			// Console.WriteLine(currentTheme.Fields["Method"].ToString ());
 			foreach (SyntaxType syntax in (SyntaxType [])Enum.GetValues (typeof (SyntaxType)))
 			{
-				string npath = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
-				var a = GetCore ();
-				var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
-				using (var fs = new FileStream (npath, FileMode.Create))
-				{
-					stream.Seek (0, SeekOrigin.Begin);
-					stream.CopyTo (fs);
-				}
-
-				Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
-				Console.WriteLine (syntax.ToString ());
-				MergeFiles (npath, localDic);
+				if (syntax != SyntaxType.NULL)
+					MergeSyntax (dir, syntax);
 			}
+		}
+
+		private static void MergeSyntax (string dir, SyntaxType syntax)
+		{
+			string npath = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
+			var a = GetCore ();
+			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
+			using (var fs = new FileStream (npath, FileMode.Create))
+			{
+				stream.Seek (0, SeekOrigin.Begin);
+				stream.CopyTo (fs);
+			}
+
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			Console.WriteLine (syntax.ToString ());
+			MergeFiles (npath, localDic);
 		}
 
 		public static void MergeFiles (string path, Dictionary <string, ThemeField> local)

@@ -163,6 +163,7 @@ namespace Yuki_Theme_Plugin
 		const   string        yukiThemeUpdate          = "Yuki Theme Update";
 		private int           lastFocused              = -1;
 		private bool          needToReturnTheme        = false;
+		private bool          needToFullExportTheme        = false;
 		private string        oldThemeNameForPreExport = "";
 		private DateTime      prevPreExportTime;
 		private bool          hideBG = false;
@@ -695,6 +696,7 @@ namespace Yuki_Theme_Plugin
 					panel_bg = new CustomPanel (0);
 					panel_bg.Name = "Custom Panel Switcher";
 					needToReturnTheme = true;
+					needToFullExportTheme = false;
 					prevPreExportTime = DateTime.Now;
 					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
 
@@ -1412,8 +1414,10 @@ namespace Yuki_Theme_Plugin
 		{
 			if (needToReturnTheme)
 			{
-				PreExportTheme (themeList.AccessibleName, oldThemeNameForPreExport);
+				needToFullExportTheme = true;
+				PreviewTheme (themeList.AccessibleName, oldThemeNameForPreExport);
 				needToReturnTheme = false;
+				needToFullExportTheme = false;
 			} else
 			{
 				hideBG = !CLI.currentTheme.HasWallpaper;
@@ -1475,12 +1479,12 @@ namespace Yuki_Theme_Plugin
 			if((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25) // Preview Theme if delay is more than 25 milliseconds
 			{
 				prevPreExportTime = DateTime.Now;
-				PreExportTheme (themeList.Items [themeList.selectionindex].ToString (), oldThemeNameForPreExport);
+				PreviewTheme (themeList.Items [themeList.selectionindex].ToString (), oldThemeNameForPreExport);
 				oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
 			}
 		}
 
-		private void PreExportTheme (string name, string oldName)
+		private void PreviewTheme (string name, string oldName)
 		{
 			if(name != oldName)
 			{
@@ -1488,8 +1492,22 @@ namespace Yuki_Theme_Plugin
 				{
 					CLI.restore ();
 					hideBG = !CLI.currentTheme.HasWallpaper;
-					stickerControl.Visible = CLI.currentTheme.HasSticker;
-					CLI.pre_export (ReloadLayoutLight);
+					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+					if (needToFullExportTheme)
+					{
+						CLI.preview (SyntaxType.NULL, true, ReloadLayoutLight);
+					} else
+					{
+						SyntaxType type = ShadowNames.GetSyntaxByExtension (Path.GetExtension (fm.CurrentCodeFileDocument.FileName));
+						if (type != SyntaxType.Pascal)
+						{
+							CLI.preview (type, true, null); // Not to reload layout
+							CLI.preview (SyntaxType.Pascal, false, ReloadLayoutLight); // Pascal theme is necessary for UI
+						} else
+						{
+							CLI.preview (type, true, ReloadLayoutLight);
+						}
+					}
 				}
 			}
 		}
