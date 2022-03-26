@@ -1412,16 +1412,19 @@ namespace Yuki_Theme_Plugin
 
 		private void CloseOnClick (object sender, EventArgs e)
 		{
-			if (needToReturnTheme)
+			if (Settings.showPreview)
 			{
-				needToFullExportTheme = true;
-				PreviewTheme (themeList.AccessibleName, oldThemeNameForPreExport);
-				needToReturnTheme = false;
-				needToFullExportTheme = false;
-			} else
-			{
-				hideBG = !CLI.currentTheme.HasWallpaper;
-				stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+				if (needToReturnTheme)
+				{
+					needToFullExportTheme = true;
+					PreviewTheme (themeList.AccessibleName, oldThemeNameForPreExport);
+					needToReturnTheme = false;
+					needToFullExportTheme = false;
+				} else
+				{
+					hideBG = !CLI.currentTheme.HasWallpaper;
+					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+				}
 			}
 
 			fm.Controls.Remove (panel_bg);
@@ -1476,11 +1479,14 @@ namespace Yuki_Theme_Plugin
 		private void ThemeListMouseHover(object sender, EventArgs e)
 		{
 			InvalidateItem ();
-			if((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25) // Preview Theme if delay is more than 25 milliseconds
+			if (Settings.showPreview)
 			{
-				prevPreExportTime = DateTime.Now;
-				PreviewTheme (themeList.Items [themeList.selectionindex].ToString (), oldThemeNameForPreExport);
-				oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
+				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25) // Preview Theme if delay is more than 25 milliseconds
+				{
+					prevPreExportTime = DateTime.Now;
+					PreviewTheme (themeList.Items [themeList.selectionindex].ToString (), oldThemeNameForPreExport);
+					oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
+				}
 			}
 		}
 

@@ -297,14 +297,7 @@ namespace Yuki_Theme.Core
 					DeleteFiles (files);
 				}
 
-				if (currentTheme.isDefault)
-				{
-					CopyFromMemory (currentTheme.path, currentTheme.Name, path, true);
-				} else
-				{
-					ExportTheme (path);
-				}
-
+				ExportImages (path);
 				PrepareToExport (path);
 
 				if (Helper.mode != ProductMode.Plugin)
@@ -324,6 +317,17 @@ namespace Yuki_Theme.Core
 			}
 		}
 
+		public static void ExportImages (string path)
+		{
+			if (currentTheme.isDefault)
+			{
+				CopyFromMemory (currentTheme.path, currentTheme.Name, path, true);
+			} else
+			{
+				ExportTheme (path);
+			}
+		}
+
 		/// <summary>
 		/// Export just .xshd file without images. It can be used for preview a theme
 		/// </summary>
@@ -337,6 +341,12 @@ namespace Yuki_Theme.Core
 				if (files != null && files.Length > 0)
 				{
 					DeleteFiles (files);
+
+					if (Settings.previewImages)
+					{
+						files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.png");
+						DeleteFiles (files);
+					}
 				}
 			}
 
@@ -516,7 +526,7 @@ namespace Yuki_Theme.Core
 					return;
 				}
 
-				File.Move (nxp, path);
+				// File.Move (nxp, path);
 			}
 
 			stream.Dispose ();

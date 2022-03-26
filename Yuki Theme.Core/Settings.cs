@@ -32,6 +32,8 @@ public static class Settings
 	public static bool         autoFitByWidth;
 	public static bool         askToSave;
 	public static bool         saveAsOld;
+	public static bool         showPreview;
+	public static bool         previewImages;
 	
 	#endregion
 	
@@ -71,6 +73,12 @@ public static class Settings
 	public const int ASKTOSAVE = 28;
 
 	public const int SAVEASOLD = 29;
+	public const int SHOWPREVIEW = 30;
+	
+	/// <summary>
+	/// Previewing theme with wallpaper and sticker can slow down the IDE. So, you can disable showing wallpaper and sticker on preview.  
+	/// </summary>
+	public const int PREVIEWIMAGES = 31;
 	
 	
 	public const  double current_version     = 7.0;
@@ -104,8 +112,7 @@ public static class Settings
 					pascalPath = defpas;
 				} else
 				{
-					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) +
-					         "PascalABC.NET";
+					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
 					if (CLI.isPasalDirectory (defpas))
 					{
 						pascalPath = defpas;
@@ -143,6 +150,8 @@ public static class Settings
 		autoFitByWidth = bool.Parse (data [AUTOFITWIDTH]);
 		askToSave = bool.Parse (data [ASKTOSAVE]);
 		saveAsOld = bool.Parse (data [SAVEASOLD]);
+		showPreview = bool.Parse (data [SHOWPREVIEW]);
+		previewImages = bool.Parse (data [PREVIEWIMAGES]);
 
 		CLI.selectedItem = data [ACTIVE];
 		var os = 0;
@@ -183,6 +192,8 @@ public static class Settings
 		dict.Add (AUTOFITWIDTH, autoFitByWidth.ToString ());
 		dict.Add (ASKTOSAVE, askToSave.ToString ());
 		dict.Add (SAVEASOLD, saveAsOld.ToString ());
+		dict.Add (SHOWPREVIEW, showPreview.ToString ());
+		dict.Add (PREVIEWIMAGES, previewImages.ToString ());
 		database.UpdateData (dict);
 		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
 		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();

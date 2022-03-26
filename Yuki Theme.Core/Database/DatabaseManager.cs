@@ -21,67 +21,81 @@ namespace Yuki_Theme.Core.Database
 			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			if (ke.GetValue ("1") == null)
 			{
-				ke.SetValue (Settings.PASCALPATH.ToString (), "empty");
-				ke.SetValue (Settings.ACTIVE.ToString (), "empty");
-				ke.SetValue (Settings.ASKCHOICE.ToString (), "true");
-				ke.SetValue (Settings.CHOICEINDEX.ToString (), "0");
-				ke.SetValue (Settings.SETTINGMODE.ToString (), "0");
-				ke.SetValue (Settings.AUTOUPDATE.ToString (), "true");
-				ke.SetValue (Settings.BGIMAGE.ToString (), "true");
-				ke.SetValue (Settings.STICKER.ToString (), "true");
-				ke.SetValue (Settings.STATUSBAR.ToString (), "true");
-				ke.SetValue (Settings.LOGO.ToString (), "true");
-				ke.SetValue (Settings.EDITOR.ToString (), "false");
-				ke.SetValue (Settings.BETA.ToString (), "true");
-				ke.SetValue (Settings.LOGIN.ToString (), "false");
-				ke.SetValue (Settings.STICKERPOSITIONUNIT.ToString (), "1");
-				ke.SetValue (Settings.ALLOWPOSITIONING.ToString (), "false");
-				ke.SetValue (Settings.SHOWGRIDS.ToString (), "false");
-				ke.SetValue (Settings.USECUSTOMSTICKER.ToString (), "false");
-				ke.SetValue (Settings.CUSTOMSTICKER.ToString (), "");
-				ke.SetValue (Settings.LICENSE.ToString (), "false");
-				ke.SetValue (Settings.GOOGLEANALYTICS.ToString (), "false");
-				ke.SetValue (Settings.DONTTRACK.ToString (), "false");
-				ke.SetValue (Settings.AUTOFITWIDTH.ToString (), "true");
-				ke.SetValue (Settings.ASKTOSAVE.ToString (), "true");
-				ke.SetValue (Settings.SAVEASOLD.ToString (), "true");
+				SetValueToDatabase (ke, Settings.PASCALPATH, "empty");
+				SetValueToDatabase (ke, Settings.ACTIVE, "empty");
+				SetValueToDatabase (ke, Settings.ASKCHOICE, "true");
+				SetValueToDatabase (ke, Settings.CHOICEINDEX, "0");
+				SetValueToDatabase (ke, Settings.SETTINGMODE, "0");
+				SetValueToDatabase (ke, Settings.AUTOUPDATE, "true");
+				SetValueToDatabase (ke, Settings.BGIMAGE, "true");
+				SetValueToDatabase (ke, Settings.STICKER, "true");
+				SetValueToDatabase (ke, Settings.STATUSBAR, "true");
+				SetValueToDatabase (ke, Settings.LOGO, "true");
+				SetValueToDatabase (ke, Settings.EDITOR, "false");
+				SetValueToDatabase (ke, Settings.BETA, "true");
+				SetValueToDatabase (ke, Settings.LOGIN, "false");
+				SetValueToDatabase (ke, Settings.STICKERPOSITIONUNIT, "1");
+				SetValueToDatabase (ke, Settings.ALLOWPOSITIONING, "false");
+				SetValueToDatabase (ke, Settings.SHOWGRIDS, "false");
+				SetValueToDatabase (ke, Settings.USECUSTOMSTICKER, "false");
+				SetValueToDatabase (ke, Settings.CUSTOMSTICKER, "");
+				SetValueToDatabase (ke, Settings.LICENSE, "false");
+				SetValueToDatabase (ke, Settings.GOOGLEANALYTICS, "false");
+				SetValueToDatabase (ke, Settings.DONTTRACK, "false");
+				SetValueToDatabase (ke, Settings.AUTOFITWIDTH, "true");
+				SetValueToDatabase (ke, Settings.ASKTOSAVE, "true");
+				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
+				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
+				SetValueToDatabase (ke, Settings.PREVIEWIMAGES, "false");
 			}
+		}
+
+		private static void SetValueToDatabase (RegistryKey ke, int name, string value)
+		{
+			ke.SetValue (name.ToString (), value);
+		}
+
+		private void AddToDictionary (ref Dictionary <int, string> dictionary, RegistryKey key, int name, string defValue)
+		{
+			dictionary.Add (name, key.GetValue (name.ToString (), defValue).ToString ());
 		}
 
 		public Dictionary <int, string> ReadData ()
 		{
 			Dictionary <int, string> dictionary = new Dictionary <int, string> ();
-
-
+			
 			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
-			dictionary.Add (Settings.PASCALPATH, key.GetValue (Settings.PASCALPATH.ToString (), "empty").ToString ());
-			dictionary.Add (Settings.ACTIVE, key.GetValue (Settings.ACTIVE.ToString (), "empty").ToString ());
-			dictionary.Add (Settings.ASKCHOICE, key.GetValue (Settings.ASKCHOICE.ToString (), "true").ToString ());
-			dictionary.Add (Settings.CHOICEINDEX, key.GetValue (Settings.CHOICEINDEX.ToString (), "0").ToString ());
-			dictionary.Add (Settings.SETTINGMODE, key.GetValue (Settings.SETTINGMODE.ToString (), "0").ToString ());
-			dictionary.Add (Settings.AUTOUPDATE, key.GetValue (Settings.AUTOUPDATE.ToString (), "true").ToString ());
-			dictionary.Add (Settings.BGIMAGE, key.GetValue (Settings.BGIMAGE.ToString (), "true").ToString ());
-			dictionary.Add (Settings.STICKER, key.GetValue (Settings.STICKER.ToString (), "true").ToString ());
-			dictionary.Add (Settings.STATUSBAR, key.GetValue (Settings.STATUSBAR.ToString (), "true").ToString ());
-			dictionary.Add (Settings.LOGO, key.GetValue (Settings.LOGO.ToString (), "true").ToString ());
-			dictionary.Add (Settings.EDITOR, key.GetValue (Settings.EDITOR.ToString (), "false").ToString ());
-			dictionary.Add (Settings.BETA, key.GetValue (Settings.BETA.ToString (), "true").ToString ());
-			dictionary.Add (Settings.LOGIN, key.GetValue (Settings.LOGIN.ToString (), "false").ToString ());
-			dictionary.Add (Settings.STICKERPOSITIONUNIT, key.GetValue (Settings.STICKERPOSITIONUNIT.ToString (), "1").ToString ());
-			dictionary.Add (Settings.ALLOWPOSITIONING, key.GetValue (Settings.ALLOWPOSITIONING.ToString (), "false").ToString ());
-			dictionary.Add (Settings.SHOWGRIDS, key.GetValue (Settings.SHOWGRIDS.ToString (), "false").ToString ());
-			dictionary.Add (Settings.USECUSTOMSTICKER, key.GetValue (Settings.USECUSTOMSTICKER.ToString (), "false").ToString ());
-			dictionary.Add (Settings.CUSTOMSTICKER, key.GetValue (Settings.CUSTOMSTICKER.ToString (), "").ToString ());
-			dictionary.Add (Settings.LICENSE, key.GetValue (Settings.LICENSE.ToString (), "false").ToString ());
-			dictionary.Add (Settings.GOOGLEANALYTICS, key.GetValue (Settings.GOOGLEANALYTICS.ToString (), "false").ToString ());
-			dictionary.Add (Settings.DONTTRACK, key.GetValue (Settings.DONTTRACK.ToString (), "false").ToString ());
-			dictionary.Add (Settings.AUTOFITWIDTH, key.GetValue (Settings.AUTOFITWIDTH.ToString (), "true").ToString ());
-			dictionary.Add (Settings.ASKTOSAVE, key.GetValue (Settings.ASKTOSAVE.ToString (), "true").ToString ());
-			dictionary.Add (Settings.SAVEASOLD, key.GetValue (Settings.SAVEASOLD.ToString (), "true").ToString ());
+			AddToDictionary (ref dictionary, key, Settings.PASCALPATH, "empty");
+			AddToDictionary (ref dictionary, key, Settings.ACTIVE, "empty");
+			AddToDictionary (ref dictionary, key, Settings.ASKCHOICE, "true");
+			AddToDictionary (ref dictionary, key, Settings.CHOICEINDEX, "0");
+			AddToDictionary (ref dictionary, key, Settings.SETTINGMODE, "0");
+			AddToDictionary (ref dictionary, key, Settings.AUTOUPDATE, "true");
+			AddToDictionary (ref dictionary, key, Settings.BGIMAGE, "true");
+			AddToDictionary (ref dictionary, key, Settings.STICKER, "true");
+			AddToDictionary (ref dictionary, key, Settings.STATUSBAR, "true");
+			AddToDictionary (ref dictionary, key, Settings.LOGO, "true");
+			AddToDictionary (ref dictionary, key, Settings.EDITOR, "false");
+			AddToDictionary (ref dictionary, key, Settings.BETA, "true");
+			AddToDictionary (ref dictionary, key, Settings.LOGIN, "false");
+			AddToDictionary (ref dictionary, key, Settings.STICKERPOSITIONUNIT, "1");
+			AddToDictionary (ref dictionary, key, Settings.ALLOWPOSITIONING, "false");
+			AddToDictionary (ref dictionary, key, Settings.SHOWGRIDS, "false");
+			AddToDictionary (ref dictionary, key, Settings.USECUSTOMSTICKER, "false");
+			AddToDictionary (ref dictionary, key, Settings.CUSTOMSTICKER,  "");
+			AddToDictionary (ref dictionary, key, Settings.LICENSE, "false");
+			AddToDictionary (ref dictionary, key, Settings.GOOGLEANALYTICS, "false");
+			AddToDictionary (ref dictionary, key, Settings.DONTTRACK, "false");
+			AddToDictionary (ref dictionary, key, Settings.AUTOFITWIDTH, "true");
+			AddToDictionary (ref dictionary, key, Settings.ASKTOSAVE, "true");
+			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
+			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
+			AddToDictionary (ref dictionary, key, Settings.PREVIEWIMAGES, "false");
 
 			return dictionary;
 		}
 
+		
 		public string ReadData (int key, string defaultValue = "")
 		{
 			RegistryKey kes = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
@@ -93,14 +107,14 @@ namespace Yuki_Theme.Core.Database
 			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			foreach (KeyValuePair <int, string> pair in dictionary)
 			{
-				key.SetValue (pair.Key.ToString (), pair.Value);
+				SetValueToDatabase (key, pair.Key, pair.Value);
 			}
 		}
 
 		public void UpdateData (int key, string value)
 		{
 			RegistryKey kes = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			kes.SetValue (key.ToString (), value);
+			SetValueToDatabase (kes, key, value);
 		}
 
 		public static void DeleteData (int key)

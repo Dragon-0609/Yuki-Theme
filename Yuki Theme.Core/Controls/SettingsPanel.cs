@@ -399,6 +399,7 @@ namespace Yuki_Theme.Core.Controls
 			askSave.Checked = Settings.askToSave;
 			saveOld.Checked = Settings.saveAsOld;
 			restartUpdate.Enabled = DownloadForm.IsUpdateDownloaded ();
+			preview.Checked = Settings.showPreview;
 			loadSVG ();
 		}
 
@@ -441,6 +442,11 @@ namespace Yuki_Theme.Core.Controls
 			{
 				CLI_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
 			}
+		}
+
+		private void preview_CheckedChanged (object sender, EventArgs e)
+		{
+			throw new System.NotImplementedException ();
 		}
 	}
 }
