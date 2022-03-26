@@ -678,7 +678,6 @@ namespace Yuki_Theme.Core.Controls
 			this.preview.TabIndex = 3;
 			this.preview.Text = "Preview Theme";
 			this.preview.UseVisualStyleBackColor = true;
-			this.preview.CheckedChanged += new System.EventHandler (this.preview_CheckedChanged);
 			// 
 			// add_toolbar
 			// 

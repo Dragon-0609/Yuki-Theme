@@ -144,11 +144,12 @@ namespace Yuki_Theme_Plugin
 
 		#endregion
 		
-		private Size              defaultSize;
-		private Panel             panel_bg;
-		private CustomList        themeList;
-		public Image             tmpImage1;
-		public Image             tmpImage2;
+		private Size       defaultSize;
+		private Panel      panel_bg;
+		private CustomList themeList;
+		private Label      lbl;
+		public  Image      tmpImage1;
+		public  Image      tmpImage2;
 		
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
@@ -699,8 +700,8 @@ namespace Yuki_Theme_Plugin
 					needToFullExportTheme = false;
 					prevPreExportTime = DateTime.Now;
 					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
-
-					Label lbl = new Label ();
+					
+					lbl = new Label ();
 					lbl.BackColor = bg;
 					lbl.ForeColor = clr;
 					lbl.Font = fnt;
@@ -1481,10 +1482,15 @@ namespace Yuki_Theme_Plugin
 			InvalidateItem ();
 			if (Settings.showPreview)
 			{
-				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25) // Preview Theme if delay is more than 25 milliseconds
+				string nm = themeList.Items [themeList.selectionindex].ToString ();
+				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25 && nm != oldThemeNameForPreExport) // Preview Theme if delay is more than 25 milliseconds
 				{
 					prevPreExportTime = DateTime.Now;
-					PreviewTheme (themeList.Items [themeList.selectionindex].ToString (), oldThemeNameForPreExport);
+					PreviewTheme (nm, oldThemeNameForPreExport);
+					lbl.BackColor = bg;
+					lbl.ForeColor = clr;
+					themeList.BackColor = bgdef;
+					themeList.ForeColor = clr;
 					oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
 				}
 			}

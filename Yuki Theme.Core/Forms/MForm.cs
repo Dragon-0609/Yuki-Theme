@@ -609,6 +609,8 @@ namespace Yuki_Theme.Core.Forms
 				Settings.autoFitByWidth = setform.settingsPanel.fitWidth.Checked;
 				Settings.askToSave = setform.settingsPanel.askSave.Checked;
 				Settings.saveAsOld = setform.settingsPanel.saveOld.Checked;
+				Settings.showPreview = setform.settingsPanel.preview.Checked;
+				
 				Settings.saveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = Settings.positioning;

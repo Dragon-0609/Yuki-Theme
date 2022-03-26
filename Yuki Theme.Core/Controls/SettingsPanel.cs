@@ -444,9 +444,5 @@ namespace Yuki_Theme.Core.Controls
 			}
 		}
 
-		private void preview_CheckedChanged (object sender, EventArgs e)
-		{
-			throw new System.NotImplementedException ();
-		}
 	}
 }
