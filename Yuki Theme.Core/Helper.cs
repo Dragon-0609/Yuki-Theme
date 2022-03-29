@@ -221,8 +221,8 @@ namespace Yuki_Theme.Core
 				IThemeHeader header = DefaultThemes.headers [name];
 				assembly = header.Location;
 				pathHeader = header.ResourceHeader;
-				Console.WriteLine(pathHeader);
-				Console.WriteLine (path);
+				// Console.WriteLine(pathHeader);
+				// Console.WriteLine (path);
 				if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_OLD}") != null)
 					return ThemeFormat.Old;
 				else if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_NEW}") != null)

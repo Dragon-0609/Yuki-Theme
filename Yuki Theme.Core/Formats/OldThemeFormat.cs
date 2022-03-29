@@ -625,7 +625,7 @@ namespace Yuki_Theme.Core.Formats
 
 					foreach (var att in attrs)
 					{
-						Console.WriteLine("{0}: {1}, {2}", nms, att.Key, att.Value);
+						// Console.WriteLine("{0}: {1}, {2}", nms, att.Key, att.Value);
 						childNode.Attributes [att.Key].Value = att.Value;
 					}
 				}

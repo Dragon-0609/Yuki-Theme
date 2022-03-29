@@ -5,6 +5,9 @@
 Added to `Plugin`:
 1. Update notification after installing update
 2. Integration with site of Yuki Theme
+3. Preview to Theme Switcher
+
+Updated Default Themes.
 
 Fixed (`Plugin`): Auto focusing to the first tab after theme changing
 
