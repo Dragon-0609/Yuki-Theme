@@ -146,6 +146,7 @@ namespace Yuki_Theme_Plugin
 					Settings.autoFitByWidth = settingsPanel.fitWidth.Checked;
 					Settings.askToSave = settingsPanel.askSave.Checked;
 					Settings.saveAsOld = settingsPanel.saveOld.Checked;
+					Settings.showPreview = settingsPanel.preview.Checked;
 					Settings.saveData ();
 					plugin.LoadSticker ();
 					

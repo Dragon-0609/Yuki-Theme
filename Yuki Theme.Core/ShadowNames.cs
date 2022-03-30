@@ -6,12 +6,11 @@ namespace Yuki_Theme.Core
 {
 	public enum SyntaxType
 	{
-		Pascal, CSharp, Haskell, KuMir, KuMir00, Python, VBNET
+		Pascal, CSharp, Haskell, KuMir, KuMir00, Python, VBNET, NULL
 	}
 
 	public static class ShadowNames
 	{
-		
 		public static string [] names = new []
 		{
 			"Default Text",
@@ -42,7 +41,7 @@ namespace Yuki_Theme.Core
 			"Constants",
 			"DireciveNames"
 		};
-		
+
 		public static string [] imageNames = new []
 		{
 			"Wallpaper",
@@ -52,7 +51,7 @@ namespace Yuki_Theme.Core
 		public static string [] GetFields (SyntaxType type)
 		{
 			string [] res = null;
-			
+
 			switch (type)
 			{
 				case SyntaxType.Pascal :
@@ -138,7 +137,7 @@ namespace Yuki_Theme.Core
 				"SpecialDireciveNames",
 				"DireciveValues"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -182,7 +181,7 @@ namespace Yuki_Theme.Core
 				"XmlTag",
 				"SpecialComment",
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -221,7 +220,7 @@ namespace Yuki_Theme.Core
 				"SpecialDireciveNames",
 				"DireciveValues"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -245,7 +244,7 @@ namespace Yuki_Theme.Core
 				"ErrorWords",
 				"WarningWords"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -269,7 +268,7 @@ namespace Yuki_Theme.Core
 				"ErrorWords",
 				"WarningWords"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -300,7 +299,7 @@ namespace Yuki_Theme.Core
 				"ErrorWords",
 				"WarningWords"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -328,7 +327,7 @@ namespace Yuki_Theme.Core
 				"ContextKeywords",
 				"PreProcessor"
 			};
-			res = (string []) GetEnvironmentFields ().Concat (res);
+			res = (string [])GetEnvironmentFields ().Concat (res);
 			return res;
 		}
 
@@ -362,6 +361,7 @@ namespace Yuki_Theme.Core
 
 			return res;
 		}
+
 		public static bool HasRealName (string shadow, SyntaxType type)
 		{
 			bool res = false;
@@ -450,48 +450,48 @@ namespace Yuki_Theme.Core
 
 		private static Dictionary <string, string []> EnvironmentFields = new Dictionary <string, string []>
 		{
-			{"Default Text", new [] {"Default"}},
-			{"Selection", new [] {"Selection"}},
-			{"Line Number", new [] {"LineNumbers"}},
-			{"Invalid Line", new [] {"InvalidLines"}},
-			{"Vertical Ruler", new [] {"VRuler"}},
-			{"Caret", new [] {"CaretMarker"}},
-			{"Fold's Line", new [] {"FoldLine"}},
-			{"Fold's Rectangle", new [] {"FoldMarker"}},
-			{"Other Marker", new [] {"EOLMarkers", "SpaceMarkers", "TabMarkers"}},
-			{"Selected Fold's Line", new [] {"SelectedFoldLine"}}
+			{ "Default Text", new [] { "Default" } },
+			{ "Selection", new [] { "Selection" } },
+			{ "Line Number", new [] { "LineNumbers" } },
+			{ "Invalid Line", new [] { "InvalidLines" } },
+			{ "Vertical Ruler", new [] { "VRuler" } },
+			{ "Caret", new [] { "CaretMarker" } },
+			{ "Fold's Line", new [] { "FoldLine" } },
+			{ "Fold's Rectangle", new [] { "FoldMarker" } },
+			{ "Other Marker", new [] { "EOLMarkers", "SpaceMarkers", "TabMarkers" } },
+			{ "Selected Fold's Line", new [] { "SelectedFoldLine" } }
 		};
 
 		public static Dictionary <string, string []> PascalFields_raw = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LineBigComment", "LineComment", "BlockComment", "BlockComment2"}},
-			{"String", new [] {"String"}},
-			{"Method", new [] {"MarkPrevious"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LineBigComment", "LineComment", "BlockComment", "BlockComment2" } },
+			{ "String", new [] { "String" } },
+			{ "Method", new [] { "MarkPrevious" } },
 			{
 				"Keyword",
-				new [] {"KeyWords", "AccessKeywords1", "OperatorKeywords", "NonReserved1", "JumpStatements", "JumpProcedures", "Async"}
+				new [] { "KeyWords", "AccessKeywords1", "OperatorKeywords", "NonReserved1", "JumpStatements", "JumpProcedures", "Async" }
 			},
-			{"Begin, End", new [] {"BeginEnd"}},
-			{"Special Character", new [] {"Special"}},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", new [] {"ExceptionHandlingStatements", "RaiseStatement"}},
-			{"Types", new [] {"InternalTypes", "ReferenceTypes", "ProgramSections"}},
-			{"Modifiers", new [] {"Modifiers", "AccessModifiers"}},
-			{"Constants", new [] {"InternalConstant"}},
-			{"DireciveNames", new [] {"ErrorWords", "WarningWords", "DireciveNames", "SpecialDireciveNames", "DireciveValues"}},
+			{ "Begin, End", new [] { "BeginEnd" } },
+			{ "Special Character", new [] { "Special" } },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", new [] { "ExceptionHandlingStatements", "RaiseStatement" } },
+			{ "Types", new [] { "InternalTypes", "ReferenceTypes", "ProgramSections" } },
+			{ "Modifiers", new [] { "Modifiers", "AccessModifiers" } },
+			{ "Constants", new [] { "InternalConstant" } },
+			{ "DireciveNames", new [] { "ErrorWords", "WarningWords", "DireciveNames", "SpecialDireciveNames", "DireciveValues" } },
 		};
 
 		public static Dictionary <string, string []> PascalFields = MergeD (PascalFields_raw, EnvironmentFields);
 
 		private static Dictionary <string, string []> CSharpFields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"DocLineComment", "LineComment", "LineComment2", "BlockComment"}},
-			{"String", new [] {"String", "MultiLineString", "Char"}},
-			{"Method", new [] {"MarkPrevious"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "DocLineComment", "LineComment", "LineComment2", "BlockComment" } },
+			{ "String", new [] { "String", "MultiLineString", "Char" } },
+			{ "Method", new [] { "MarkPrevious" } },
 			{
 				"Keyword",
 				new []
@@ -500,330 +500,333 @@ namespace Yuki_Theme.Core
 					"ConversionKeyWords", "MethodParameters", "NameSpaces", "LockKeyWord", "GetSet"
 				}
 			},
-			{"Begin, End", null},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", new [] {"ExceptionHandlingStatements"}},
-			{"Types", new [] {"ValueTypes", "ReferenceTypes", "XmlTag", "SpecialComment"}},
-			{"Modifiers", new [] {"Modifiers", "AccessModifiers"}},
-			{"Constants", new [] {"Literals", "OperatorKeywords"}},
-			{"DireciveNames", new [] {"PreprocessorDirectives", "ErrorWords", "WarningWords"}},
+			{ "Begin, End", null },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", new [] { "ExceptionHandlingStatements" } },
+			{ "Types", new [] { "ValueTypes", "ReferenceTypes", "XmlTag", "SpecialComment" } },
+			{ "Modifiers", new [] { "Modifiers", "AccessModifiers" } },
+			{ "Constants", new [] { "Literals", "OperatorKeywords" } },
+			{ "DireciveNames", new [] { "PreprocessorDirectives", "ErrorWords", "WarningWords" } },
 		}.Merge (EnvironmentFields);
 
 		private static Dictionary <string, string []> HaskellFields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LineComment", "BlockComment"}},
-			{"String", new [] {"Char", "String"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LineComment", "BlockComment" } },
+			{ "String", new [] { "Char", "String" } },
 			{
 				"Keyword",
-				new [] {"KeyWords", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords", "JumpStatements", "JumpProcedures"}
+				new [] { "KeyWords", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords", "JumpStatements", "JumpProcedures" }
 			},
-			{"Begin, End", new [] {"BeginEnd"}},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", new [] {"ExceptionHandlingStatements", "RaiseStatement"}},
-			{"Types", new [] {"ProgramSections", "InternalTypes", "ReferenceTypes"}},
-			{"Modifiers", new [] {"Modifiers", "AccessModifiers"}},
-			{"Constants", new [] {"InternalConstant"}},
+			{ "Begin, End", new [] { "BeginEnd" } },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", new [] { "ExceptionHandlingStatements", "RaiseStatement" } },
+			{ "Types", new [] { "ProgramSections", "InternalTypes", "ReferenceTypes" } },
+			{ "Modifiers", new [] { "Modifiers", "AccessModifiers" } },
+			{ "Constants", new [] { "InternalConstant" } },
 			{
 				"DireciveNames",
-				new [] {"CompilerDirectives", "ErrorWords", "WarningWords", "DireciveNames", "SpecialDireciveNames", "DireciveValues"}
+				new [] { "CompilerDirectives", "ErrorWords", "WarningWords", "DireciveNames", "SpecialDireciveNames", "DireciveValues" }
 			},
 		}.Merge (EnvironmentFields);
 
 		private static Dictionary <string, string []> KuMirFields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LineComment"}},
-			{"String", new [] {"String", "Char"}},
-			{"Keyword", new [] {"KeyWords", "OperatorKeywords"}},
-			{"Begin, End", new [] {"BeginEnd"}},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", null},
-			{"Types", new [] {"ProgramSections", "InternalTypes"}},
-			{"Modifiers", null},
-			{"Constants", new [] {"InternalConstant"}},
-			{"DireciveNames", new [] {"ErrorWords", "WarningWords"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LineComment" } },
+			{ "String", new [] { "String", "Char" } },
+			{ "Keyword", new [] { "KeyWords", "OperatorKeywords" } },
+			{ "Begin, End", new [] { "BeginEnd" } },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", null },
+			{ "Types", new [] { "ProgramSections", "InternalTypes" } },
+			{ "Modifiers", null },
+			{ "Constants", new [] { "InternalConstant" } },
+			{ "DireciveNames", new [] { "ErrorWords", "WarningWords" } },
 		}.Merge (EnvironmentFields);
 
 		private static Dictionary <string, string []> KuMir00Fields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LineComment"}},
-			{"String", new [] {"String", "Char"}},
-			{"Keyword", new [] {"KeyWords", "OperatorKeywords"}},
-			{"Begin, End", new [] {"BeginEnd"}},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", null},
-			{"Types", new [] {"ProgramSections", "InternalTypes"}},
-			{"Modifiers", null},
-			{"Constants", new [] {"InternalConstant"}},
-			{"DireciveNames", new [] {"ErrorWords", "WarningWords"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LineComment" } },
+			{ "String", new [] { "String", "Char" } },
+			{ "Keyword", new [] { "KeyWords", "OperatorKeywords" } },
+			{ "Begin, End", new [] { "BeginEnd" } },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", null },
+			{ "Types", new [] { "ProgramSections", "InternalTypes" } },
+			{ "Modifiers", null },
+			{ "Constants", new [] { "InternalConstant" } },
+			{ "DireciveNames", new [] { "ErrorWords", "WarningWords" } },
 		}.Merge (EnvironmentFields);
 
 		private static Dictionary <string, string []> PythonFields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LineComment"}},
-			{"String", new [] {"MultilineString1", "MultilineString2", "String1", "String2"}},
-			{"Keyword", new [] {"KeyWords", "OperatorKeywords", "JumpProcedures", "Builtins"}},
-			{"Begin, End", new [] {"BeginEnd"}},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation2", "Punctuation123"}},
-			{"If, else Statements", new [] {"SelectionStatements"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", new [] {"ExceptionHandlingStatements", "RaiseStatement"}},
-			{"Types", new [] {"ReferenceTypes"}},
-			{"Modifiers", new [] {"Modifiers"}},
-			{"Constants", new [] {"InternalConstant"}},
-			{"DireciveNames", new [] {"ErrorWords", "WarningWords"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LineComment" } },
+			{ "String", new [] { "MultilineString1", "MultilineString2", "String1", "String2" } },
+			{ "Keyword", new [] { "KeyWords", "OperatorKeywords", "JumpProcedures", "Builtins" } },
+			{ "Begin, End", new [] { "BeginEnd" } },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation2", "Punctuation123" } },
+			{ "If, else Statements", new [] { "SelectionStatements" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", new [] { "ExceptionHandlingStatements", "RaiseStatement" } },
+			{ "Types", new [] { "ReferenceTypes" } },
+			{ "Modifiers", new [] { "Modifiers" } },
+			{ "Constants", new [] { "InternalConstant" } },
+			{ "DireciveNames", new [] { "ErrorWords", "WarningWords" } },
 		}.Merge (EnvironmentFields);
 
 		private static Dictionary <string, string []> VBNETFields = new Dictionary <string, string []>
 		{
-			{"Number", new [] {"Digits"}},
-			{"Comment", new [] {"LINECOMMENT"}},
-			{"String", new [] {"STRING"}},
-			{"Keyword", new [] {"Operators", "CommonKeywords", "FunctionKeywords", "Statements", "TypeLevelConstructs", "ContextKeywords"}},
-			{"Begin, End", null},
-			{"Special Character", null},
-			{"Punctuation", new [] {"Punctuation"}},
-			{"If, else Statements", new [] {"Constructs"}},
-			{"Iteration Statements", new [] {"IterationStatements"}},
-			{"Exception Handlers", new [] {"Exception"}},
-			{"Types", new [] {"DataTypes", "GlobalConstructs"}},
-			{"Modifiers", new [] {"ParamModifiers", "AccessModifiers", "OtherModifiers"}},
-			{"Constants", new [] {"Constants"}},
-			{"DireciveNames", new [] {"PREPROCESSORDIRECTIVE", "DATELITERAL", "PreProcessor"}},
+			{ "Number", new [] { "Digits" } },
+			{ "Comment", new [] { "LINECOMMENT" } },
+			{ "String", new [] { "STRING" } },
+			{
+				"Keyword",
+				new [] { "Operators", "CommonKeywords", "FunctionKeywords", "Statements", "TypeLevelConstructs", "ContextKeywords" }
+			},
+			{ "Begin, End", null },
+			{ "Special Character", null },
+			{ "Punctuation", new [] { "Punctuation" } },
+			{ "If, else Statements", new [] { "Constructs" } },
+			{ "Iteration Statements", new [] { "IterationStatements" } },
+			{ "Exception Handlers", new [] { "Exception" } },
+			{ "Types", new [] { "DataTypes", "GlobalConstructs" } },
+			{ "Modifiers", new [] { "ParamModifiers", "AccessModifiers", "OtherModifiers" } },
+			{ "Constants", new [] { "Constants" } },
+			{ "DireciveNames", new [] { "PREPROCESSORDIRECTIVE", "DATELITERAL", "PreProcessor" } },
 		}.Merge (EnvironmentFields);
 
 
 		private static Dictionary <string, string> EnvironmentFields_Reverted = new Dictionary <string, string>
 		{
-			{"Default", "Default Text"},
-			{"Selection", "Selection"},
-			{"LineNumbers", "Line Number"},
-			{"VRuler", "Vertical Ruler"},
-			{"InvalidLines", "Invalid Line"},
-			{"CaretMarker", "Caret"},
-			{"FoldLine", "Fold's Line"},
-			{"FoldMarker", "Fold's Rectangle"},
-			{"EOLMarkers", "Other Marker"},
-			{"SpaceMarkers", "Other Marker"},
-			{"TabMarkers", "Other Marker"},
-			{"SelectedFoldLine", "Selected Fold's Line"},
-			{"Wallpaper", null},
-			{"Sticker", null},
+			{ "Default", "Default Text" },
+			{ "Selection", "Selection" },
+			{ "LineNumbers", "Line Number" },
+			{ "VRuler", "Vertical Ruler" },
+			{ "InvalidLines", "Invalid Line" },
+			{ "CaretMarker", "Caret" },
+			{ "FoldLine", "Fold's Line" },
+			{ "FoldMarker", "Fold's Rectangle" },
+			{ "EOLMarkers", "Other Marker" },
+			{ "SpaceMarkers", "Other Marker" },
+			{ "TabMarkers", "Other Marker" },
+			{ "SelectedFoldLine", "Selected Fold's Line" },
+			{ "Wallpaper", null },
+			{ "Sticker", null },
 		};
 
 		private static Dictionary <string, string> PascalFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LineBigComment", "Comment"},
-			{"LineComment", "Comment"},
-			{"BlockComment", "Comment"},
-			{"BlockComment2", "Comment"},
-			{"MarkPrevious", "Method"},
-			{"String", "String"},
-			{"KeyWords", "Keyword"},
-			{"AccessKeywords1", "Keyword"},
-			{"OperatorKeywords", "Keyword"},
-			{"NonReserved1", "Keyword"},
-			{"JumpStatements", "Keyword"},
-			{"JumpProcedures", "Keyword"},
-			{"Async", "Keyword"},
-			{"BeginEnd", "Begin, End"},
-			{"Special", "Special Character"},
-			{"Punctuation", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ExceptionHandlingStatements", "Exception Handlers"},
-			{"RaiseStatement", "Exception Handlers"},
-			{"InternalTypes", "Types"},
-			{"ReferenceTypes", "Types"},
-			{"ProgramSections", "Types"},
-			{"Modifiers", "Modifiers"},
-			{"AccessModifiers", "Modifiers"},
-			{"InternalConstant", "Constants"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
-			{"DireciveNames", "DireciveNames"},
-			{"SpecialDireciveNames", "DireciveNames"},
-			{"DireciveValues", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LineBigComment", "Comment" },
+			{ "LineComment", "Comment" },
+			{ "BlockComment", "Comment" },
+			{ "BlockComment2", "Comment" },
+			{ "MarkPrevious", "Method" },
+			{ "String", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "AccessKeywords1", "Keyword" },
+			{ "OperatorKeywords", "Keyword" },
+			{ "NonReserved1", "Keyword" },
+			{ "JumpStatements", "Keyword" },
+			{ "JumpProcedures", "Keyword" },
+			{ "Async", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Special", "Special Character" },
+			{ "Punctuation", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ExceptionHandlingStatements", "Exception Handlers" },
+			{ "RaiseStatement", "Exception Handlers" },
+			{ "InternalTypes", "Types" },
+			{ "ReferenceTypes", "Types" },
+			{ "ProgramSections", "Types" },
+			{ "Modifiers", "Modifiers" },
+			{ "AccessModifiers", "Modifiers" },
+			{ "InternalConstant", "Constants" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
+			{ "DireciveNames", "DireciveNames" },
+			{ "SpecialDireciveNames", "DireciveNames" },
+			{ "DireciveValues", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> CSharpFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"DocLineComment", "Comment"},
-			{"LineComment", "Comment"},
-			{"LineComment2", "Comment"},
-			{"BlockComment", "Comment"},
-			{"String", "String"},
-			{"MarkPrevious", "Method"},
-			{"MultiLineString", "String"},
-			{"Char", "String"},
-			{"AccessKeywords", "Keyword"},
-			{"JumpStatements", "Keyword"},
-			{"ContextKeywords", "Keyword"},
-			{"CheckedUncheckedStatements", "Keyword"},
-			{"UnsafeFixedStatements", "Keyword"},
-			{"Void", "Keyword"},
-			{"ConversionKeyWords", "Keyword"},
-			{"MethodParameters", "Keyword"},
-			{"NameSpaces", "Keyword"},
-			{"LockKeyWord", "Keyword"},
-			{"GetSet", "Keyword"},
-			{"Punctuation", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ExceptionHandlingStatements", "Exception Handlers"},
-			{"ValueTypes", "Types"},
-			{"ReferenceTypes", "Types"},
-			{"XmlTag", "Types"},
-			{"SpecialComment", "Types"},
-			{"Modifiers", "Modifiers"},
-			{"AccessModifiers", "Modifiers"},
-			{"Literals", "Constants"},
-			{"OperatorKeywords", "Constants"},
-			{"PreprocessorDirectives", "DireciveNames"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "DocLineComment", "Comment" },
+			{ "LineComment", "Comment" },
+			{ "LineComment2", "Comment" },
+			{ "BlockComment", "Comment" },
+			{ "String", "String" },
+			{ "MarkPrevious", "Method" },
+			{ "MultiLineString", "String" },
+			{ "Char", "String" },
+			{ "AccessKeywords", "Keyword" },
+			{ "JumpStatements", "Keyword" },
+			{ "ContextKeywords", "Keyword" },
+			{ "CheckedUncheckedStatements", "Keyword" },
+			{ "UnsafeFixedStatements", "Keyword" },
+			{ "Void", "Keyword" },
+			{ "ConversionKeyWords", "Keyword" },
+			{ "MethodParameters", "Keyword" },
+			{ "NameSpaces", "Keyword" },
+			{ "LockKeyWord", "Keyword" },
+			{ "GetSet", "Keyword" },
+			{ "Punctuation", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ExceptionHandlingStatements", "Exception Handlers" },
+			{ "ValueTypes", "Types" },
+			{ "ReferenceTypes", "Types" },
+			{ "XmlTag", "Types" },
+			{ "SpecialComment", "Types" },
+			{ "Modifiers", "Modifiers" },
+			{ "AccessModifiers", "Modifiers" },
+			{ "Literals", "Constants" },
+			{ "OperatorKeywords", "Constants" },
+			{ "PreprocessorDirectives", "DireciveNames" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> HaskellFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LineComment", "Comment"},
-			{"BlockComment", "Comment"},
-			{"Char", "String"},
-			{"String", "String"},
-			{"KeyWords", "Keyword"},
-			{"Async", "Keyword"},
-			{"AccessKeywords1", "Keyword"},
-			{"NonReserved1", "Keyword"},
-			{"OperatorKeywords", "Keyword"},
-			{"JumpStatements", "Keyword"},
-			{"JumpProcedures", "Keyword"},
-			{"BeginEnd", "Begin, End"},
-			{"Punctuation", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ExceptionHandlingStatements", "Exception Handlers"},
-			{"RaiseStatement", "Exception Handlers"},
-			{"ProgramSections", "Types"},
-			{"InternalTypes", "Types"},
-			{"ReferenceTypes", "Types"},
-			{"Modifiers", "Modifiers"},
-			{"AccessModifiers", "Modifiers"},
-			{"Constants", "InternalConstant"},
-			{"CompilerDirectives", "DireciveNames"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
-			{"DireciveNames", "DireciveNames"},
-			{"SpecialDireciveNames", "DireciveNames"},
-			{"DireciveValues", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LineComment", "Comment" },
+			{ "BlockComment", "Comment" },
+			{ "Char", "String" },
+			{ "String", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "Async", "Keyword" },
+			{ "AccessKeywords1", "Keyword" },
+			{ "NonReserved1", "Keyword" },
+			{ "OperatorKeywords", "Keyword" },
+			{ "JumpStatements", "Keyword" },
+			{ "JumpProcedures", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Punctuation", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ExceptionHandlingStatements", "Exception Handlers" },
+			{ "RaiseStatement", "Exception Handlers" },
+			{ "ProgramSections", "Types" },
+			{ "InternalTypes", "Types" },
+			{ "ReferenceTypes", "Types" },
+			{ "Modifiers", "Modifiers" },
+			{ "AccessModifiers", "Modifiers" },
+			{ "Constants", "InternalConstant" },
+			{ "CompilerDirectives", "DireciveNames" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
+			{ "DireciveNames", "DireciveNames" },
+			{ "SpecialDireciveNames", "DireciveNames" },
+			{ "DireciveValues", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> KuMirFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LineComment", "Comment"},
-			{"String", "String"},
-			{"Char", "String"},
-			{"KeyWords", "Keyword"},
-			{"OperatorKeywords", "Keyword"},
-			{"BeginEnd", "Begin, End"},
-			{"Punctuation", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ProgramSections", "Types"},
-			{"InternalTypes", "Types"},
-			{"InternalConstant", "Constants"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LineComment", "Comment" },
+			{ "String", "String" },
+			{ "Char", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "OperatorKeywords", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Punctuation", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ProgramSections", "Types" },
+			{ "InternalTypes", "Types" },
+			{ "InternalConstant", "Constants" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> KuMir00Fields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LineComment", "Comment"},
-			{"String", "String"},
-			{"Char", "String"},
-			{"KeyWords", "Keyword"},
-			{"OperatorKeywords", "Keyword"},
-			{"BeginEnd", "Begin, End"},
-			{"Punctuation", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ProgramSections", "Types"},
-			{"InternalTypes", "Types"},
-			{"InternalConstant", "Constants"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LineComment", "Comment" },
+			{ "String", "String" },
+			{ "Char", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "OperatorKeywords", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Punctuation", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ProgramSections", "Types" },
+			{ "InternalTypes", "Types" },
+			{ "InternalConstant", "Constants" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> PythonFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LineComment", "Comment"},
-			{"MultilineString1", "String"},
-			{"MultilineString2", "String"},
-			{"String1", "String"},
-			{"String2", "String"},
-			{"KeyWords", "Keyword"},
-			{"OperatorKeywords", "Keyword"},
-			{"JumpProcedures", "Keyword"},
-			{"Builtins", "Keyword"},
-			{"BeginEnd", "Begin, End"},
-			{"Punctuation2", "Punctuation"},
-			{"Punctuation123", "Punctuation"},
-			{"SelectionStatements", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"ExceptionHandlingStatements", "Exception Handlers"},
-			{"RaiseStatement", "Exception Handlers"},
-			{"ReferenceTypes", "Types"},
-			{"Modifiers", "Modifiers"},
-			{"InternalConstant", "Constants"},
-			{"ErrorWords", "DireciveNames"},
-			{"WarningWords", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LineComment", "Comment" },
+			{ "MultilineString1", "String" },
+			{ "MultilineString2", "String" },
+			{ "String1", "String" },
+			{ "String2", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "OperatorKeywords", "Keyword" },
+			{ "JumpProcedures", "Keyword" },
+			{ "Builtins", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Punctuation2", "Punctuation" },
+			{ "Punctuation123", "Punctuation" },
+			{ "SelectionStatements", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "ExceptionHandlingStatements", "Exception Handlers" },
+			{ "RaiseStatement", "Exception Handlers" },
+			{ "ReferenceTypes", "Types" },
+			{ "Modifiers", "Modifiers" },
+			{ "InternalConstant", "Constants" },
+			{ "ErrorWords", "DireciveNames" },
+			{ "WarningWords", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		private static Dictionary <string, string> VBNETFields_Reverted = new Dictionary <string, string>
 		{
-			{"Digits", "Number"},
-			{"LINECOMMENT", "Comment"},
-			{"STRING", "String"},
-			{"Operators", "Keyword"},
-			{"CommonKeywords", "Keyword"},
-			{"FunctionKeywords", "Keyword"},
-			{"Statements", "Keyword"},
-			{"TypeLevelConstructs", "Keyword"},
-			{"ContextKeywords", "Keyword"},
-			{"Punctuation", "Punctuation"},
-			{"Constructs", "If, else Statements"},
-			{"IterationStatements", "Iteration Statements"},
-			{"Exception", "Exception Handlers"},
-			{"DataTypes", "Types"},
-			{"GlobalConstructs", "Types"},
-			{"ParamModifiers", "Modifiers"},
-			{"AccessModifiers", "Modifiers"},
-			{"OtherModifiers", "Modifiers"},
-			{"Constants", "Constants"},
-			{"PREPROCESSORDIRECTIVE", "DireciveNames"},
-			{"DATELITERAL", "DireciveNames"},
-			{"PreProcessor", "DireciveNames"},
+			{ "Digits", "Number" },
+			{ "LINECOMMENT", "Comment" },
+			{ "STRING", "String" },
+			{ "Operators", "Keyword" },
+			{ "CommonKeywords", "Keyword" },
+			{ "FunctionKeywords", "Keyword" },
+			{ "Statements", "Keyword" },
+			{ "TypeLevelConstructs", "Keyword" },
+			{ "ContextKeywords", "Keyword" },
+			{ "Punctuation", "Punctuation" },
+			{ "Constructs", "If, else Statements" },
+			{ "IterationStatements", "Iteration Statements" },
+			{ "Exception", "Exception Handlers" },
+			{ "DataTypes", "Types" },
+			{ "GlobalConstructs", "Types" },
+			{ "ParamModifiers", "Modifiers" },
+			{ "AccessModifiers", "Modifiers" },
+			{ "OtherModifiers", "Modifiers" },
+			{ "Constants", "Constants" },
+			{ "PREPROCESSORDIRECTIVE", "DireciveNames" },
+			{ "DATELITERAL", "DireciveNames" },
+			{ "PreProcessor", "DireciveNames" },
 		}.Merge (EnvironmentFields_Reverted);
 
 		public static Dictionary <TKey, TValue> MergeD <TKey, TValue> (Dictionary <TKey, TValue> me, Dictionary <TKey, TValue> merge)
@@ -833,6 +836,7 @@ namespace Yuki_Theme.Core
 			{
 				newDict [item.Key] = item.Value;
 			}
+
 			foreach (var item in merge)
 			{
 				newDict [item.Key] = item.Value;
@@ -840,7 +844,7 @@ namespace Yuki_Theme.Core
 
 			return newDict;
 		}
-		
+
 		public static Dictionary <TKey, TValue> Merge <TKey, TValue> (this Dictionary <TKey, TValue> me, Dictionary <TKey, TValue> merge)
 		{
 			foreach (var item in merge)
@@ -849,6 +853,55 @@ namespace Yuki_Theme.Core
 			}
 
 			return me;
+		}
+
+		public static SyntaxType GetSyntaxByExtension (string str)
+		{
+			SyntaxType type = SyntaxType.Pascal;
+			if (str != null)
+			{
+				switch (str)
+				{
+					case ".cs" :
+					{
+						type = SyntaxType.CSharp;
+					}
+						break;
+					case ".hs" :
+					{
+						type = SyntaxType.Haskell;
+					}
+						break;
+					case ".alg" :
+					{
+						type = SyntaxType.KuMir;
+					}
+						break;
+					case ".alg00" :
+					{
+						type = SyntaxType.KuMir00;
+					}
+						break;
+					case ".pas" :
+					case ".paspart_" :
+					{
+						type = SyntaxType.Pascal;
+					}
+						break;
+					case ".py" :
+					{
+						type = SyntaxType.Python;
+					}
+						break;
+					case ".vb" :
+					{
+						type = SyntaxType.VBNET;
+					}
+						break;
+				}
+			}
+
+			return type;
 		}
 	}
 }

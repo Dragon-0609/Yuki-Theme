@@ -8,6 +8,7 @@
             background-color: __bg__;
             color: __clr__;
             font-family: sans-serif;
+            padding-bottom: 26px;
         }
 
         a {
@@ -20,11 +21,30 @@
             color: __clr_click__;
         }
 
+        * {
+            scrollbar-base-color: __bg__;
+            scrollbar-face-color: __clr_click__;
+            scrollbar-3dlight-color: __clr_click__;
+            scrollbar-highlight-color: __clr_click__;
+            scrollbar-track-color: __bg__;
+            scrollbar-arrow-color: __bg__;
+            scrollbar-shadow-color: __bg__;
+            scrollbar-dark-shadow-color: __bg__;
+        }
+        
+        .expand {
+            position: fixed;
+            bottom: 0;
+            z-index: 99;
+            background-color: __bg__;
+            width: 100%;
+            padding-bottom: 4px;
+        }
     </style>
 </head>
 <body>
 <div id="content">
-    __content__    
+    __content__
 </div>
 
 

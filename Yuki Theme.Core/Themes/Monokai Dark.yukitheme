@@ -2,18 +2,18 @@
 <!-- syntaxdefinition for PascalABC.NET (c) Ivan Bondarev, Stanislav Mikhalkovich -->
 <SyntaxDefinition name="PascalABC.NET" extensions=".pas;.paspart_">
   <Environment>
-    <Default color="#F8F8F2" bgcolor="#272822" />
+    <Default color="#F7F7F2" bgcolor="#272821" />
     <Selection bgcolor="#49483E" />
-    <VRuler color="#555651" />
+    <VRuler color="#575852" />
     <InvalidLines color="Red" />
-    <CaretMarker color="#999332" />
-    <LineNumbers color="#8F908A" bgcolor="#2F3129" />
+    <CaretMarker color="#65D9EF" />
+    <LineNumbers color="#BCBCBC" bgcolor="#272821" />
     <FoldLine color="#8C8C8C" />
     <FoldMarker color="#BCBC89" bgcolor="#272727" />
     <SelectedFoldLine color="#3D3D3D" bgcolor="#FFFFFF" />
-    <EOLMarkers color="LightBlue" />
-    <SpaceMarkers color="LightBlue" />
-    <TabMarkers color="LightBlue" />
+    <EOLMarkers color="#6698CC" />
+    <SpaceMarkers color="#6698CC" />
+    <TabMarkers color="#6698CC" />
   </Environment>
   <Properties>
     <Property name="LineComment" value="//" />
@@ -21,36 +21,52 @@
   <Digits name="Digits" bold="false" italic="false" color="#AE81FF" />
   <RuleSets>
     <RuleSet ignorecase="true">
-      <Delimiters>&lt;&gt;~!%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
-      <Span name="LineBigComment" rule="CommentMarkerSet" bold="false" italic="true" color="#75715E" stopateol="true">
+      <Delimiters>&lt;&gt;~!%^*()-+=|\/{}[]:;"' , .?</Delimiters>
+      <Span name="LineBigComment" rule="CommentMarkerSet" bold="false" italic="true" color="#74705E" stopateol="true">
         <Begin>////</Begin>
       </Span>
-      <Span name="LineComment" rule="CommentMarkerSet" bold="false" italic="true" color="#75715E" stopateol="true">
+      <Span name="LineComment" rule="CommentMarkerSet" bold="false" italic="true" color="#74705E" stopateol="true">
         <Begin>//@!/@</Begin>
       </Span>
-      <Span name="LineComment" bold="false" italic="true" color="#75715E" stopateol="true">
+      <Span name="LineComment" bold="false" italic="true" color="#74705E" stopateol="true">
         <Begin>///@!/@</Begin>
       </Span>
       <!-- <Span name = "CompilerDirectives" rule = "CompilerDirectivesSet" bold = "false" italic = "false" color = "Black" stopateol = "true">
-			   	<Begin>#</Begin>
-		  	</Span> -->
-      <Span name="BlockComment" rule="CommentMarkerSet" bold="false" italic="true" color="#75715E" stopateol="false">
+                 <Begin>#</Begin>
+            </Span> -->
+      <Span name="BlockComment" rule="CommentMarkerSet" bold="false" italic="true" color="#74705E" stopateol="false">
         <Begin>{@!$@</Begin>
         <End>}</End>
       </Span>
-      <Span name="BlockComment" bold="false" italic="true" color="#75715E" stopateol="false">
+      <Span name="BlockComment" bold="false" italic="true" color="#74705E" stopateol="false">
         <Begin>{$</Begin>
         <End>}</End>
       </Span>
-      <Span name="BlockComment2" rule="CommentMarkerSet" bold="false" italic="true" color="#75715E" stopateol="false">
+      <Span name="BlockComment2" rule="CommentMarkerSet" bold="false" italic="true" color="#74705E" stopateol="false">
         <Begin>(*</Begin>
         <End>*)</End>
       </Span>
-      <Span name="String" bold="false" italic="false" color="#E6DB74" stopateol="true">
+      <Span name="String" bold="false" italic="false" color="#E6DB73" stopateol="true">
         <Begin>'</Begin>
         <End>'</End>
       </Span>
-      <KeyWords name="KeyWords" bold="false" italic="false" color="#F92672">
+      <!--<Span name="InterpolatedString" rule="StringInterpolation" bold="false" italic="false" color="Blue" stopateol="true">
+                <Begin>$'</Begin>
+                <End>'</End>
+            </Span>-->
+      <!--
+            <Span name="AccessModifiers" bold="false" italic="false" color="Red" stopateol="true">
+                <Begin></Begin>
+                <End></End>
+            </Span>-->
+      <!--
+
+            <KeyWords name="ShortProgram" bold="false" italic="false" color="Green">
+                <Key word="##"/>
+                <Key word="###"/>
+            </KeyWords>-->
+      <MarkPrevious color="#FD971E" bold="false" italic="false">(</MarkPrevious>
+      <KeyWords name="KeyWords" bold="false" italic="false" color="#F92671">
         <Key word="external" />
         <Key word="in" />
         <Key word="array" />
@@ -102,7 +118,7 @@
         <Key word="match" />
         <Key word="when" />
       </KeyWords>
-      <KeyWords name="ProgramSections" bold="false" italic="false" color="#F92672">
+      <KeyWords name="ProgramSections" bold="false" italic="false" color="#F92671">
         <Key word="unit" />
         <Key word="library" />
         <Key word="namespace" />
@@ -110,18 +126,18 @@
         <Key word="interface" />
         <Key word="implementation" />
       </KeyWords>
-      <KeyWords name="BeginEnd" bold="false" italic="false" color="#A6E22E">
+      <KeyWords name="BeginEnd" bold="false" italic="false" color="#A5E22E">
         <Key word="begin" />
         <Key word="end" />
       </KeyWords>
-      <KeyWords name="Special" bold="false" italic="false" color="Red">
+      <KeyWords name="Special" bold="true" italic="false" color="Red">
         <Key word="•" />
       </KeyWords>
-      <KeyWords name="Async" bold="false" italic="false" color="#F92672">
+      <KeyWords name="Async" bold="false" italic="false" color="#F92671">
         <Key word="async" />
         <Key word="asyncparam" />
       </KeyWords>
-      <KeyWords name="Punctuation" bold="false" italic="false" color="White">
+      <KeyWords name="Punctuation" bold="false" italic="false" color="#F7F7F2">
         <Key word="," />
         <Key word="." />
         <Key word=";" />
@@ -141,15 +157,15 @@
         <Key word="=" />
         <Key word="&amp;" />
       </KeyWords>
-      <KeyWords name="AccessKeywords1" bold="false" italic="false" color="White">
+      <KeyWords name="AccessKeywords1" bold="false" italic="false" color="#F92671">
         <Key word="inherited" />
       </KeyWords>
-      <KeyWords name="NonReserved1" bold="false" italic="false" color="White">
+      <KeyWords name="NonReserved1" bold="false" italic="false" color="#F92671">
         <Key word="self" />
         <Key word="result" />
         <Key word="value" />
       </KeyWords>
-      <KeyWords name="OperatorKeywords" bold="false" italic="false" color="#F92672">
+      <KeyWords name="OperatorKeywords" bold="false" italic="false" color="#F92671">
         <Key word="or" />
         <Key word="xor" />
         <Key word="and" />
@@ -164,29 +180,29 @@
         <Key word="sizeof" />
         <Key word="typeof" />
       </KeyWords>
-      <KeyWords name="SelectionStatements" bold="false" italic="false" color="#F92672">
+      <KeyWords name="SelectionStatements" bold="false" italic="false" color="#F92671">
         <Key word="else" />
         <Key word="if" />
         <Key word="case" />
       </KeyWords>
-      <KeyWords name="IterationStatements" bold="false" italic="false" color="#F92672">
+      <KeyWords name="IterationStatements" bold="false" italic="false" color="#F92671">
         <Key word="do" />
         <Key word="for" />
         <Key word="foreach" />
       </KeyWords>
-      <KeyWords name="ExceptionHandlingStatements" bold="false" italic="false" color="#F92672">
+      <KeyWords name="ExceptionHandlingStatements" bold="false" italic="false" color="#F92671">
         <Key word="except" />
         <Key word="on" />
         <Key word="try" />
         <Key word="finally" />
       </KeyWords>
-      <KeyWords name="RaiseStatement" bold="false" italic="false" color="#F92672">
+      <KeyWords name="RaiseStatement" bold="false" italic="false" color="#F92671">
         <Key word="raise" />
       </KeyWords>
-      <KeyWords name="JumpStatements" bold="false" italic="false" color="#F92672">
+      <KeyWords name="JumpStatements" bold="false" italic="false" color="#F92671">
         <Key word="goto" />
       </KeyWords>
-      <KeyWords name="JumpProcedures" bold="false" italic="false" color="#F92672">
+      <KeyWords name="JumpProcedures" bold="false" italic="false" color="#F92671">
         <Key word="break" />
         <Key word="exit" />
         <Key word="continue" />
@@ -196,7 +212,7 @@
         <Key word="false" />
         <Key word="nil" />
       </KeyWords>
-      <KeyWords name="InternalTypes" bold="false" italic="false" color="#F92672">
+      <KeyWords name="InternalTypes" bold="false" italic="false" color="#F92671">
         <Key word="boolean" />
         <Key word="byte" />
         <Key word="shortint" />
@@ -218,11 +234,11 @@
         <Key word="object" />
         <Key word="decimal" />
       </KeyWords>
-      <KeyWords name="ReferenceTypes" bold="false" italic="false" color="#F92672">
+      <KeyWords name="ReferenceTypes" bold="false" italic="false" color="#F92671">
         <Key word="class" />
         <Key word="interface" />
       </KeyWords>
-      <KeyWords name="Modifiers" bold="false" italic="false" color="#F92672">
+      <KeyWords name="Modifiers" bold="false" italic="false" color="#F92671">
         <Key word="abstract" />
         <Key word="overload" />
         <Key word="reintroduce" />
@@ -232,31 +248,34 @@
         <Key word="default" />
         <Key word="forward" />
       </KeyWords>
-      <KeyWords name="AccessModifiers" bold="false" italic="false" color="#F92672">
+      <KeyWords name="AccessModifiers" bold="false" italic="false" color="#F92671">
         <Key word="internal" />
         <Key word="public" />
         <Key word="protected" />
         <Key word="private" />
       </KeyWords>
+      <!--			<KeyWords name = "AccessModifiers" bold="true" italic="false" color="Black">-->
+      <!--				<Key word = "\w+\(" />-->
+      <!--			</KeyWords>-->
     </RuleSet>
     <RuleSet name="CommentMarkerSet" ignorecase="true">
-      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
-      <KeyWords name="ErrorWords" bold="false" italic="false" color="Red">
+      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+      <KeyWords name="ErrorWords" bold="false" italic="false" color="#F92671">
         <Key word="TODO" />
         <Key word="FIXME" />
       </KeyWords>
-      <KeyWords name="WarningWords" bold="false" italic="false" color="#EEE0E000">
+      <KeyWords name="WarningWords" bold="false" italic="false" color="#F92671">
         <Key word="HACK" />
         <Key word="UNDONE" />
       </KeyWords>
     </RuleSet>
     <RuleSet name="CompilerDirectivesSet" ignorecase="true">
-      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' ,	.?</Delimiters>
-      <Span name="String" bold="false" italic="false" color="#E6DB74" stopateol="true">
+      <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+      <Span name="String" bold="false" italic="false" color="#E6DB73" stopateol="true">
         <Begin>'</Begin>
         <End>'</End>
       </Span>
-      <KeyWords name="DireciveNames" bold="false" italic="false" color="#A6E22E">
+      <KeyWords name="DireciveNames" bold="false" italic="false" color="#F92671">
         <Key word="apptype" />
         <Key word="resource" />
         <Key word="reference" />
@@ -269,10 +288,10 @@
         <Key word="NullBasedStrings" />
         <Key word="gendoc" />
       </KeyWords>
-      <KeyWords name="SpecialDireciveNames" bold="false" italic="false" color="#A6E22E">
+      <KeyWords name="SpecialDireciveNames" bold="false" italic="false" color="#F92671">
         <Key word="savepcu" />
       </KeyWords>
-      <KeyWords name="DireciveValues" bold="false" italic="false" color="#A6E22E">
+      <KeyWords name="DireciveValues" bold="false" italic="false" color="#F92671">
         <Key word="console" />
         <Key word="windows" />
         <Key word="dll" />
@@ -281,9 +300,20 @@
         <Key word="true" />
       </KeyWords>
     </RuleSet>
+    <RuleSet name="StringInterpolation" ignorecase="true">
+      <Span name="String" rule="Default" bold="false" italic="false" color="#E6DB73" stopateol="true">
+        <Begin>{</Begin>
+        <End>}</End>
+      </Span>
+    </RuleSet>
+    <RuleSet name="Default" ignorecase="true" reference="PascalABC.NET">
+      <Delimiters>&lt;&gt;~!%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+    </RuleSet>
   </RuleSets>
   <!--name:Monokai Dark-->
   <!--align:2-->
   <!--opacity:15-->
   <!--sopacity:100-->
+  <!--hasImage:False-->
+  <!--hasSticker:False-->
 </SyntaxDefinition>

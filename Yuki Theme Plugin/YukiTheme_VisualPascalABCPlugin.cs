@@ -144,11 +144,12 @@ namespace Yuki_Theme_Plugin
 
 		#endregion
 		
-		private Size              defaultSize;
-		private Panel             panel_bg;
-		private CustomList        themeList;
-		public Image             tmpImage1;
-		public Image             tmpImage2;
+		private Size       defaultSize;
+		private Panel      panel_bg;
+		private CustomList themeList;
+		private Label      lbl;
+		public  Image      tmpImage1;
+		public  Image      tmpImage2;
 		
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
@@ -160,8 +161,13 @@ namespace Yuki_Theme_Plugin
 		int                   imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
 		bool                  nameInStatusBar = false; // Name in status bar
 		private ToolStripItem openInExplorerItem;
-		const   string        yukiThemeUpdate = "Yuki Theme Update";
-		private int           lastFocused     = -1;
+		const   string        yukiThemeUpdate          = "Yuki Theme Update";
+		private int           lastFocused              = -1;
+		private bool          needToReturnTheme        = false;
+		private bool          needToFullExportTheme        = false;
+		private string        oldThemeNameForPreExport = "";
+		private DateTime      prevPreExportTime;
+		private bool          hideBG = false;
 
 		public PopupFormsController popupController;
 
@@ -670,7 +676,6 @@ namespace Yuki_Theme_Plugin
 			updateQuietImage ();
 			updateWallpaperImage ();
 			updateStickerImage ();
-			// GetWindowProperities ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)
@@ -690,10 +695,12 @@ namespace Yuki_Theme_Plugin
 					 
 					panel_bg = new CustomPanel (0);
 					panel_bg.Name = "Custom Panel Switcher";
-
+					needToReturnTheme = true;
+					needToFullExportTheme = false;
+					prevPreExportTime = DateTime.Now;
 					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
-
-					Label lbl = new Label ();
+					
+					lbl = new Label ();
 					lbl.BackColor = bg;
 					lbl.ForeColor = clr;
 					lbl.Font = fnt;
@@ -737,6 +744,7 @@ namespace Yuki_Theme_Plugin
 					themeList.SelectedIndexChanged += ThemeListOnSelectedIndexChanged;
 					themeList.AccessibleName = themeList.SelectedItem.ToString ();
 					panel_bg.Click += CloseOnClick;
+					oldThemeNameForPreExport = themeList.AccessibleName;
 
 					panel_bg.Controls.Add (themeList);
 					panel_bg.Controls.Add (lbl);
@@ -987,9 +995,37 @@ namespace Yuki_Theme_Plugin
 
 		public void ReloadLayout ()
 		{
+			ReloadLayoutAll (false);
+		}
+		
+		public void ReloadLayoutLight ()
+		{
+			ReloadLayoutAll (true);
+			panel_bg.Visible = false;
+			
+			Timer tim = new Timer ();
+			tim.Interval = 5;
+			tim.Tick += (sender, args) =>
+			{
+				tim.Stop ();
+				if (panel_bg != null && !panel_bg.IsDisposed)
+				{
+					panel_bg.Visible = true;
+					panel_bg.BringToFront ();
+					themeList.searchBar.Focus ();
+				}
+			};
+			tim.Start ();
+		}
+		
+		public void ReloadLayoutAll (bool lightReload)
+		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
-			LoadImage ();
-			LoadSticker ();
+			if (!lightReload)
+			{
+				LoadImage ();
+				LoadSticker ();
+			}
 			LoadColors ();
 			UpdateColors ();
 			fm.Refresh ();
@@ -1254,7 +1290,7 @@ namespace Yuki_Theme_Plugin
 				                     foldmargin.DrawingPosition.Height);
 			}
 
-			if (img != null && bgImage)
+			if (img != null && bgImage && !hideBG)
 			{
 				Size vm = textEditor.ClientSize;
 				// bool chnd = false;
@@ -1376,6 +1412,21 @@ namespace Yuki_Theme_Plugin
 
 		private void CloseOnClick (object sender, EventArgs e)
 		{
+			if (Settings.showPreview)
+			{
+				if (needToReturnTheme)
+				{
+					needToFullExportTheme = true;
+					PreviewTheme (themeList.AccessibleName, oldThemeNameForPreExport);
+					needToReturnTheme = false;
+					needToFullExportTheme = false;
+				} else
+				{
+					hideBG = !CLI.currentTheme.HasWallpaper;
+					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+				}
+			}
+
 			fm.Controls.Remove (panel_bg);
 			panel_bg?.Dispose ();
 			themeList?.searchBar.Dispose ();
@@ -1420,19 +1471,66 @@ namespace Yuki_Theme_Plugin
 						CLI_Actions.ifDoesntHaveSticker2 = null;
 					}
 				}
-				
+				needToReturnTheme = false;
 				CloseOnClick (sender, e);
 			}
 		}
 		
 		private void ThemeListMouseHover(object sender, EventArgs e)
 		{
-			Point point = themeList.PointToClient(Cursor.Position);
-			int index = themeList.IndexFromPoint(point);
+			InvalidateItem ();
+			if (Settings.showPreview)
+			{
+				string nm = themeList.Items [themeList.selectionindex].ToString ();
+				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25 && nm != oldThemeNameForPreExport) // Preview Theme if delay is more than 25 milliseconds
+				{
+					prevPreExportTime = DateTime.Now;
+					PreviewTheme (nm, oldThemeNameForPreExport);
+					lbl.BackColor = bg;
+					lbl.ForeColor = clr;
+					themeList.BackColor = bgdef;
+					themeList.ForeColor = clr;
+					oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
+				}
+			}
+		}
+
+		private void PreviewTheme (string name, string oldName)
+		{
+			if(name != oldName)
+			{
+				if(CLI.SelectTheme (name))
+				{
+					CLI.restore ();
+					hideBG = !CLI.currentTheme.HasWallpaper;
+					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+					if (needToFullExportTheme)
+					{
+						CLI.preview (SyntaxType.NULL, true, ReloadLayoutLight);
+					} else
+					{
+						SyntaxType type = ShadowNames.GetSyntaxByExtension (Path.GetExtension (fm.CurrentCodeFileDocument.FileName));
+						if (type != SyntaxType.Pascal)
+						{
+							CLI.preview (type, true, null); // Not to reload layout
+							CLI.preview (SyntaxType.Pascal, false, ReloadLayoutLight); // Pascal theme is necessary for UI
+						} else
+						{
+							CLI.preview (type, true, ReloadLayoutLight);
+						}
+					}
+				}
+			}
+		}
+
+		private void InvalidateItem ()
+		{
+			Point point = themeList.PointToClient (Cursor.Position);
+			int index = themeList.IndexFromPoint (point);
 			//Do any action with the item
 			themeList.UpdateHighlighting (index);
 		}
-		
+
 		void setBorder(Control ctl, Control ctl2, Control ctl3)
 		{
 			Panel pan = new Panel();

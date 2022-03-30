@@ -6,10 +6,10 @@
 
 ## English
 
-This program is for people, who want to customize (change) PascalABC.NET IDE. By this program you can select and export default popular color schemes like: `Darcula`, `Monokai` and etc.
+This program helps to customize PascalABC.NET IDE. By this program you can apply default popular color schemes like: `Darcula`, `Monokai` and etc.
 Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl.
 
-Or, you can make your own color scheme by clicking `plus` button. Also, you can import your color scheme from any JetBrains IDE, by clicking `Import`.
+Or, you can make your own color scheme by clicking `plus` button.
 
 Before 
 

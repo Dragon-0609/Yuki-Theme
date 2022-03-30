@@ -173,6 +173,12 @@ namespace Yuki_Theme.Core
 							sBox.ServiceColors.SelectedMarkerBorderColor = Parse (style.Value.Foreground);
 						}
 							break;
+						case "Other Marker" :
+						case "EOLMarkers" :
+						{
+							sBox.BracketsStyle.BackgroundBrush = new SolidBrush (Color.FromArgb (100, Parse(style.Value.Foreground)));
+						}
+							break;
 					}
 				}
 			}
@@ -247,7 +253,7 @@ namespace Yuki_Theme.Core
 			styles.Add ("blockcomment", new TextStyle (Green, null, FontStyle.Regular));
 			styles.Add ("blockcomment2", new TextStyle (Green, null, FontStyle.Regular));
 			styles.Add ("beginend", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("markprevious", new TextStyle (Red, null, FontStyle.Bold));
+			styles.Add ("markprevious", new TextStyle (Red, null, FontStyle.Regular));
 			styles.Add ("keywords", new TextStyle (PowderBlue, null, FontStyle.Bold));
 			styles.Add ("programsections", new TextStyle (PowderBlue, null, FontStyle.Bold));
 			styles.Add ("punctuation", new TextStyle (Red, null, FontStyle.Regular));
