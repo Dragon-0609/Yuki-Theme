@@ -676,7 +676,6 @@ namespace Yuki_Theme_Plugin
 			updateQuietImage ();
 			updateWallpaperImage ();
 			updateStickerImage ();
-			// GetWindowProperities ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)
