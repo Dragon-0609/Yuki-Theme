@@ -125,6 +125,7 @@
     <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
     <Compile Include="IColorUpdatable.cs" />
+    <Compile Include="Localization\Localization.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
@@ -350,6 +351,7 @@
     <EmbeddedResource Include="Resources\SVG\edit.svg" />
     <EmbeddedResource Include="Resources\CHANGELOG.html" />
     <EmbeddedResource Include="Resources\LICENSE" />
+    <EmbeddedResource Include="Localization\en.lang" />
     <Content Include="Resources\center.png" />
     <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />

@@ -116,6 +116,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// tabPage1
 			// 
+			this.tabPage1.AccessibleName = "settings.general.title";
 			this.tabPage1.Controls.Add (this.tbpanel);
 			this.tabPage1.Location = new System.Drawing.Point (4, 25);
 			this.tabPage1.Margin = new System.Windows.Forms.Padding (12, 6, 12, 6);
@@ -176,6 +177,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// backImage
 			// 
+			this.backImage.AccessibleName = "settings.general.background.enabled";
 			this.backImage.AutoSize = true;
 			this.backImage.Location = new System.Drawing.Point (9, 15);
 			this.backImage.Margin = new System.Windows.Forms.Padding (3, 3, 3, 6);
@@ -188,6 +190,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// editor
 			// 
+			this.editor.AccessibleName = "settings.general.editor";
 			this.editor.AutoSize = true;
 			this.editor.Location = new System.Drawing.Point (176, 15);
 			this.editor.Margin = new System.Windows.Forms.Padding (6, 3, 3, 6);
@@ -199,6 +202,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// fitWidth
 			// 
+			this.fitWidth.AccessibleName = "settings.general.fitbywidth.title";
 			this.fitWidth.AutoSize = true;
 			this.fitWidth.Location = new System.Drawing.Point (9, 42);
 			this.fitWidth.Margin = new System.Windows.Forms.Padding (3, 3, 3, 6);
@@ -210,6 +214,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// askSave
 			// 
+			this.askSave.AccessibleName = "settings.general.asktosave";
 			this.askSave.AutoSize = true;
 			this.askSave.Location = new System.Drawing.Point (131, 45);
 			this.askSave.Margin = new System.Windows.Forms.Padding (15, 6, 3, 3);
@@ -221,6 +226,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// label5
 			// 
+			this.label5.AccessibleName = "settings.general.fitbywidth.help";
 			this.label5.AutoSize = true;
 			this.label5.Location = new System.Drawing.Point (9, 72);
 			this.label5.Margin = new System.Windows.Forms.Padding (3, 6, 3, 9);
@@ -231,6 +237,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.AccessibleName = "settings.general.sticker.title";
 			this.groupBox1.AutoSize = true;
 			this.groupBox1.Controls.Add (this.flowLayoutPanel2);
 			this.groupBox1.Font = new System.Drawing.Font ("Calibri", 10F);
@@ -264,6 +271,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// swsticker
 			// 
+			this.swsticker.AccessibleName = "settings.general.sticker.enabled";
 			this.swsticker.AutoSize = true;
 			this.flowLayoutPanel2.SetFlowBreak (this.swsticker, true);
 			this.swsticker.Location = new System.Drawing.Point (6, 11);
@@ -277,6 +285,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// cstm_sticker
 			// 
+			this.cstm_sticker.AccessibleName = "settings.general.sticker.choose";
 			this.cstm_sticker.AutoSize = true;
 			this.cstm_sticker.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.cstm_sticker.Location = new System.Drawing.Point (6, 42);
@@ -289,6 +298,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// use_cstm_sticker
 			// 
+			this.use_cstm_sticker.AccessibleName = "settings.general.sticker.custom";
 			this.use_cstm_sticker.AutoSize = true;
 			this.flowLayoutPanel2.SetFlowBreak (this.use_cstm_sticker, true);
 			this.use_cstm_sticker.Location = new System.Drawing.Point (123, 47);
@@ -301,6 +311,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox3
 			// 
+			this.checkBox3.AccessibleName = "settings.general.positioning.enabled";
 			this.checkBox3.AutoSize = true;
 			this.checkBox3.Location = new System.Drawing.Point (6, 81);
 			this.checkBox3.Margin = new System.Windows.Forms.Padding (3, 6, 5, 3);
@@ -313,6 +324,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// label2
 			// 
+			this.label2.AccessibleName = "settings.general.positioning.unit";
 			this.label2.AutoSize = true;
 			this.label2.Font = new System.Drawing.Font ("Book Antiqua", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label2.Location = new System.Drawing.Point (144, 81);
@@ -345,6 +357,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox4
 			// 
+			this.checkBox4.AccessibleName = "settings.general.positioning.grids";
 			this.checkBox4.AutoSize = true;
 			this.checkBox4.Location = new System.Drawing.Point (6, 119);
 			this.checkBox4.Margin = new System.Windows.Forms.Padding (3, 8, 6, 3);
@@ -356,6 +369,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// reset_margin
 			// 
+			this.reset_margin.AccessibleName = "settings.general.positioning.reset";
 			this.reset_margin.AutoSize = true;
 			this.reset_margin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.reset_margin.Location = new System.Drawing.Point (104, 114);
@@ -368,6 +382,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// saveOld
 			// 
+			this.saveOld.AccessibleName = "settings.general.format.old";
 			this.saveOld.AutoSize = true;
 			this.saveOld.Location = new System.Drawing.Point (9, 300);
 			this.saveOld.Margin = new System.Windows.Forms.Padding (3, 6, 0, 3);
@@ -380,6 +395,7 @@ namespace Yuki_Theme.Core.Controls
 			// roundLabel1
 			// 
 			this.roundLabel1._BackColor = System.Drawing.Color.Black;
+			this.roundLabel1.AccessibleName = "settings.general.beta.dev";
 			this.roundLabel1.AutoSize = true;
 			this.roundLabel1.Font = new System.Drawing.Font ("Calibri", 8F);
 			this.roundLabel1.ForeColor = System.Drawing.Color.WhiteSmoke;
@@ -407,6 +423,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// label4
 			// 
+			this.label4.AccessibleName = "settings.general.mode";
 			this.label4.AutoSize = true;
 			this.label4.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label4.Location = new System.Drawing.Point (10, 332);
@@ -438,6 +455,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox2
 			// 
+			this.checkBox2.AccessibleName = "settings.general.update.auto";
 			this.checkBox2.AutoSize = true;
 			this.checkBox2.Location = new System.Drawing.Point (9, 371);
 			this.checkBox2.Margin = new System.Windows.Forms.Padding (3, 9, 3, 3);
@@ -449,6 +467,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// button5
 			// 
+			this.button5.AccessibleName = "settings.general.update.check";
 			this.button5.AutoSize = true;
 			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button5.Location = new System.Drawing.Point (197, 365);
@@ -461,6 +480,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// button6
 			// 
+			this.button6.AccessibleName = "settings.general.update.install";
 			this.button6.AutoSize = true;
 			this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button6.Location = new System.Drawing.Point (9, 406);
@@ -474,6 +494,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// restartUpdate
 			// 
+			this.restartUpdate.AccessibleName = "settings.general.update.restart";
 			this.restartUpdate.AutoSize = true;
 			this.restartUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.restartUpdate.Location = new System.Drawing.Point (153, 406);
@@ -487,6 +508,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// checkBox1
 			// 
+			this.checkBox1.AccessibleName = "settings.general.update.beta";
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Location = new System.Drawing.Point (9, 447);
 			this.checkBox1.Margin = new System.Windows.Forms.Padding (3, 6, 9, 3);
@@ -498,6 +520,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// button4
 			// 
+			this.button4.AccessibleName = "settings.general.about";
 			this.button4.AutoSize = true;
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button4.Location = new System.Drawing.Point (187, 444);
@@ -511,6 +534,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// add_program
 			// 
+			this.add_program.AccessibleName = "settings.additional.title";
 			this.add_program.Controls.Add (this.flowLayoutPanel3);
 			this.add_program.Location = new System.Drawing.Point (4, 25);
 			this.add_program.Margin = new System.Windows.Forms.Padding (12, 6, 12, 6);
@@ -539,6 +563,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// label1
 			// 
+			this.label1.AccessibleName = "settings.additional.path";
 			this.label1.AutoSize = true;
 			this.flowLayoutPanel3.SetFlowBreak (this.label1, true);
 			this.label1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -577,6 +602,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// askC
 			// 
+			this.askC.AccessibleName = "settings.additional.ask";
 			this.askC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.askC.AutoSize = true;
 			this.flowLayoutPanel3.SetFlowBreak (this.askC, true);
@@ -591,6 +617,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// label3
 			// 
+			this.label3.AccessibleName = "settings.additional.action";
 			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -625,6 +652,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// add_plugin
 			// 
+			this.add_plugin.AccessibleName = "settings.additional.title";
 			this.add_plugin.Controls.Add (this.flowLayoutPanel4);
 			this.add_plugin.Location = new System.Drawing.Point (4, 25);
 			this.add_plugin.Name = "add_plugin";
@@ -648,6 +676,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// logo
 			// 
+			this.logo.AccessibleName = "settings.additional.logo";
 			this.logo.AutoSize = true;
 			this.logo.Location = new System.Drawing.Point (9, 15);
 			this.logo.Name = "logo";
@@ -658,6 +687,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// swStatusbar
 			// 
+			this.swStatusbar.AccessibleName = "settings.additional.statusbar";
 			this.swStatusbar.AutoSize = true;
 			this.flowLayoutPanel4.SetFlowBreak (this.swStatusbar, true);
 			this.swStatusbar.Location = new System.Drawing.Point (117, 15);
@@ -670,6 +700,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// preview
 			// 
+			this.preview.AccessibleName = "settings.additional.preview";
 			this.preview.AutoSize = true;
 			this.preview.Location = new System.Drawing.Point (9, 45);
 			this.preview.Margin = new System.Windows.Forms.Padding (3, 9, 3, 3);
@@ -681,6 +712,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// add_toolbar
 			// 
+			this.add_toolbar.AccessibleName = "settings.toolbar.title";
 			this.add_toolbar.Controls.Add (this.toolBarPosition);
 			this.add_toolbar.Controls.Add (this.toolBarPositionLabel);
 			this.add_toolbar.Controls.Add (this.button2);
@@ -709,6 +741,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// toolBarPositionLabel
 			// 
+			this.toolBarPositionLabel.AccessibleName = "settings.toolbar.right";
 			this.toolBarPositionLabel.AutoSize = true;
 			this.toolBarPositionLabel.Location = new System.Drawing.Point (157, 113);
 			this.toolBarPositionLabel.Name = "toolBarPositionLabel";
@@ -718,6 +751,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// button2
 			// 
+			this.button2.AccessibleName = "settings.toolbar.reset";
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button2.Location = new System.Drawing.Point (157, 182);
 			this.button2.Name = "button2";
@@ -740,6 +774,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// toolBarVisibleLabel
 			// 
+			this.toolBarVisibleLabel.AccessibleName = "settings.toolbar.visible";
 			this.toolBarVisibleLabel.AutoSize = true;
 			this.toolBarVisibleLabel.Location = new System.Drawing.Point (157, 67);
 			this.toolBarVisibleLabel.Name = "toolBarVisibleLabel";
@@ -749,6 +784,7 @@ namespace Yuki_Theme.Core.Controls
 			// 
 			// toolBarIconLabel
 			// 
+			this.toolBarIconLabel.AccessibleName = "settings.toolbar.icon";
 			this.toolBarIconLabel.AutoSize = true;
 			this.toolBarIconLabel.Location = new System.Drawing.Point (157, 10);
 			this.toolBarIconLabel.Name = "toolBarIconLabel";

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yuki_Theme.Core.Database;
-using Yuki_Theme.Core.Forms;
 
 namespace Yuki_Theme.Core;
 
@@ -33,7 +32,8 @@ public static class Settings
 	public static bool         askToSave;
 	public static bool         saveAsOld;
 	public static bool         showPreview;
-	
+	public static string       localization = "";
+
 	#endregion
 	
 	#region CONST
@@ -71,8 +71,9 @@ public static class Settings
 	/// </summary>
 	public const int ASKTOSAVE = 28;
 
-	public const int SAVEASOLD = 29;
-	public const int SHOWPREVIEW = 30;
+	public const int SAVEASOLD    = 29;
+	public const int SHOWPREVIEW  = 30;
+	public const int LOCALIZATION = 31;
 	
 	
 	public const  double current_version     = 7.0;
@@ -80,8 +81,10 @@ public static class Settings
 	public static string next_version        = "";
 
 	#endregion
-	
+
 	public static DatabaseManager database = new DatabaseManager ();
+
+	public static Localization.Localization translation = new Localization.Localization ();
 
 	/// <summary>
 	/// Get settings
@@ -145,6 +148,7 @@ public static class Settings
 		askToSave = bool.Parse (data [ASKTOSAVE]);
 		saveAsOld = bool.Parse (data [SAVEASOLD]);
 		showPreview = bool.Parse (data [SHOWPREVIEW]);
+		localization = data [LOCALIZATION];
 
 		CLI.selectedItem = data [ACTIVE];
 		var os = 0;
@@ -154,6 +158,8 @@ public static class Settings
 		settingMode = (SettingMode) os;
 		int.TryParse (data [STICKERPOSITIONUNIT], out os);
 		unit = (RelativeUnit) os;
+		
+		translation.LoadLocalization ();
 	}
 
 	/// <summary>
@@ -186,6 +192,7 @@ public static class Settings
 		dict.Add (ASKTOSAVE, askToSave.ToString ());
 		dict.Add (SAVEASOLD, saveAsOld.ToString ());
 		dict.Add (SHOWPREVIEW, showPreview.ToString ());
+		dict.Add (LOCALIZATION, localization);
 		database.UpdateData (dict);
 		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
 		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();

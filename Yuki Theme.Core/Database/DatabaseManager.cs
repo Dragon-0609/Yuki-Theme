@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.Database
 		{
 			// CreateConnection ();
 			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			if (ke.GetValue ("1") == null)
+			if (ke.GetValue (Settings.PASCALPATH.ToString()) == null)
 			{
 				SetValueToDatabase (ke, Settings.PASCALPATH, "empty");
 				SetValueToDatabase (ke, Settings.ACTIVE, "empty");
@@ -46,6 +46,7 @@ namespace Yuki_Theme.Core.Database
 				SetValueToDatabase (ke, Settings.ASKTOSAVE, "true");
 				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
 				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
+				SetValueToDatabase (ke, Settings.LOCALIZATION, "en");
 			}
 		}
 
@@ -89,6 +90,7 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.ASKTOSAVE, "true");
 			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
 			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
+			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "en");
 
 			return dictionary;
 		}
