@@ -20,28 +20,31 @@ public class Localization
 
 	public void SearchLocals ()
 	{
-		List <string> locales = new List <string> () { "en", "ru" };
-		List <string> languagesdisplay = new List <string> () { "English", "Русский" };
-		Dictionary <string, bool> external = new Dictionary <string, bool> () { { "en", false }, { "ru", false } };
-		string [] files = Directory.GetFiles (Path.Combine (CLI.currentPath, "Langs"), "*.lang");
-		foreach (string file in files)
+		List <string> locales = new List <string> () { "en"/*, "ru"*/ };
+		List <string> languagesdisplay = new List <string> () { "English"/*, "Русский"*/ };
+		Dictionary <string, bool> external = new Dictionary <string, bool> () { { "en", false }/*, { "ru", false }*/ };
+		string pth = Path.Combine (CLI.currentPath, "Langs");
+		if (Directory.Exists (pth))
 		{
-			try
+			string [] files = Directory.GetFiles (pth, "*.lang");
+			foreach (string file in files)
 			{
-				JObject jObject = JObject.Parse (File.ReadAllText (file));
-				string lang = jObject ["language"].ToString ().ToLower();
-				if (!locales.Contains (lang))
+				try
 				{
-					locales.Add (lang);
-					external.Add (lang, true);
-					languagesdisplay.Add (jObject ["display"].ToString ());
+					JObject jObject = JObject.Parse (File.ReadAllText (file));
+					string lang = jObject ["language"].ToString ().ToLower ();
+					if (!locales.Contains (lang))
+					{
+						locales.Add (lang);
+						external.Add (lang, true);
+						languagesdisplay.Add (jObject ["display"].ToString ());
+					}
+				} catch (Exception e)
+				{
+					CLI_Actions.showError (e.Message, "Something went wrong");
 				}
-			} catch (Exception e)
-			{
-				CLI_Actions.showError (e.Message, "Something went wrong");
 			}
 		}
-		
 		languages = locales.ToArray ();
 		externalLang = external;
 	}
@@ -61,6 +64,8 @@ public class Localization
 	public void LoadLocale (string lang)
 	{
 		recursionCalls = 0;
+		Console.WriteLine (lang);
+		Console.WriteLine (externalLang [lang]);
 		if (externalLang [lang])
 			LoadLocaleFromFile (lang);
 		else
@@ -87,7 +92,7 @@ public class Localization
 
 	public void LoadLocaleFromMemory (string lang)
 	{
-		string path = Path.Combine (MemoryNamespace, lang + ".lang");
+		string path = MemoryNamespace + lang + ".lang";
 		Stream str = Assembly.GetExecutingAssembly ().GetManifestResourceStream (path);
 		if (str != null)
 		{

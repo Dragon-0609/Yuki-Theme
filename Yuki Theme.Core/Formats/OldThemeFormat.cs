@@ -479,7 +479,7 @@ namespace Yuki_Theme.Core.Formats
 					{
 						if (CLI_Actions.hasProblem != null)
 							CLI_Actions.hasProblem (
-								"There's problem in your theme file. Sorry, but I can't open it. The default scheme will be selected");
+								CLI.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
 				}

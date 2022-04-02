@@ -372,8 +372,7 @@ namespace Yuki_Theme.Core.Forms
 		public void hasProblem (string content)
 		{
 			MessageBox.Show (
-				content,
-				"Theme file is invalid", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				content, CLI.Translate ("messages.theme.invalid.short"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 			schemes.SelectedIndex = 0;
 		}
 		

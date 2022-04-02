@@ -40,7 +40,7 @@ namespace Yuki_Theme.Core.Forms
 			if (IsValidUpdate (null))
 			{
 				QuestionForm quform = new QuestionForm ();
-				quform.EditMessage ("New version is already downloaded", "New version is already downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
+				quform.EditMessage (Translate ("download.downloaded.already"), Translate ("download.downloaded.already.restarttoinstall"), Translate ("download.buttons.install"), Translate ("download.buttons.later"));
 				if (quform.ShowDialog(popupController.form) == DialogResult.Yes)
 				{
 					startUpdating ();
@@ -120,11 +120,11 @@ namespace Yuki_Theme.Core.Forms
 								
 								popupController.nf.onClick = startUpdate;
 								popupController.nf.onClick2 = openInGithub;
-								popupController.nf.button1.Text = "Update";
-								popupController.nf.button3.Text = "Open in Github";
+								popupController.nf.button1.Text = Translate ("download.buttons.update");
+								popupController.nf.button3.Text = Translate ("download.buttons.github");
 								string sw = jresponse ["name"].ToString ();
 								if (sw.StartsWith ("v")) sw = sw.Substring (1);
-								popupController.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
+								popupController.nf.changeContent (Translate ("download.available"), $"Yuki theme {sw}      {Translate ("download.size")}: {size}");
 
 								popupController.nf.button1.Visible = true;
 								popupController.nf.button3.Visible = true;
@@ -140,7 +140,7 @@ namespace Yuki_Theme.Core.Forms
 								size = $"{double.Parse (size) / 1024 / 1024:0.0}";
 							} else
 							{
-								popupController.ShowNotification ("Up to date", "Your version is the latest.");
+								popupController.ShowNotification (Translate ("download.uptodate"), Translate ("download.latest"));
 								popupController.nf.button1.Visible = false;
 								popupController.nf.button3.Visible = false;
 								popupController.changeNotificationLocation ();
@@ -329,6 +329,11 @@ namespace Yuki_Theme.Core.Forms
 				Console.WriteLine (lng);
 			}
 			return lng > 1;
+		}
+
+		private string Translate (string key)
+		{
+			return CLI.Translate (key);
 		}
 
 		private static string GetUpdatePath ()

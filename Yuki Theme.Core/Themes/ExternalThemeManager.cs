@@ -15,9 +15,13 @@ public static class ExternalThemeManager
 		string [] files = Directory.GetFiles (CLI.currentPath, "*Themes.dll");
 		if (files.Length > 0)
 			AddThemesToDB (files);
-		files = Directory.GetFiles (Path.Combine (CLI.currentPath, "Themes"), "*.dll");
-		if (files.Length > 0)
-			AddThemesToDB (files);	
+		string path = Path.Combine (CLI.currentPath, "Themes");
+		if (Directory.Exists (path))
+		{
+			files = Directory.GetFiles (path, "*.dll");
+			if (files.Length > 0)
+				AddThemesToDB (files);
+		}	
 	}
 
 	private static void AddThemesToDB (string [] files)

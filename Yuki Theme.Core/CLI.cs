@@ -95,7 +95,7 @@ namespace Yuki_Theme.Core
 		{
 			if (name.Length < 2)
 			{
-				if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is too short. At least it must be 2", "Too short");
+				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
 				return true;
 			}
 
@@ -110,9 +110,9 @@ namespace Yuki_Theme.Core
 
 			if (File.Exists (patsh))
 			{
-				if (!CLI_Actions.SaveInExport ("The file is exist. Do you want to override?", "Override?"))
+				if (!CLI_Actions.SaveInExport (Translate ("messages.file.exist.override.full"), Translate ("messages.file.exist.override.short")))
 				{
-					if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is exist! Choose another name", "Name Exist");
+					if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.exist.full"), Translate ("messages.name.exist.short"));
 					return true;
 				}
 
@@ -136,14 +136,13 @@ namespace Yuki_Theme.Core
 
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess ("The theme has been duplicated!", "Done");
+						CLI_Actions.showSuccess (Translate ("messages.theme.duplicate"), Translate ("messages.done"));
 
 				return exist;
 			} else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError ("You musn't choose default theme's name. Choose another name!",
-					                       "Default theme's name");
+					CLI_Actions.showError (Translate ("messages.name.default.full"), Translate ("messages.name.default.short"));
 
 				return true;
 			}
@@ -157,8 +156,7 @@ namespace Yuki_Theme.Core
 				if (path == null)
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError ("Couldn't find theme in memory! Try to choose another theme",
-						                       "Can't find theme in memory");
+						CLI_Actions.showError (Translate ("messages.theme.memory.notfound.full"), Translate ("messages.theme.memory.notfound.short"));
 
 					return true;
 				}
@@ -205,12 +203,12 @@ namespace Yuki_Theme.Core
 				} else
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError ("Theme isn't exist! Choose another name", "Theme isn't exist");
+						CLI_Actions.showError (Translate ("messages.theme.file.notfound.full"), Translate ("messages.theme.file.notfound.short"));
 				}
 			} else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError ("You musn't choose default theme. Choose custom theme!", "Default theme");
+					CLI_Actions.showError (Translate ("messages.theme.default.full"), Translate ("messages.theme.default.short"));
 			}
 		}
 
@@ -240,8 +238,7 @@ namespace Yuki_Theme.Core
 
 			if (Settings.pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
 			{
-				CLI_Actions.setPath ("Please, set path to the PascalABC.NET Direcory.",
-				                     "Path to the PascalABC.NET Direcory");
+				CLI_Actions.setPath (Translate ("messages.path.select.inexport.full"), Translate ("messages.path.select.inexport.short"));
 			}
 
 			if (Settings.pascalPath.Length > 6 || Helper.mode == ProductMode.Plugin)
@@ -253,7 +250,7 @@ namespace Yuki_Theme.Core
 				if (files != null && files.Length > 0)
 				{
 					string [] unknownThemes = IdentifySyntaxHighlightings (files);
-					Console.WriteLine ("UNKNOWN: " + unknownThemes.Length);
+					// Console.WriteLine ("UNKNOWN: " + unknownThemes.Length);
 					if (unknownThemes.Length == 0)
 					{
 						DeleteFiles (files);
@@ -309,9 +306,7 @@ namespace Yuki_Theme.Core
 
 				if (Helper.mode != ProductMode.Plugin)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess (
-							"Your scheme has been exported to the Pascal Directory. Restart PascalABC.NET to activate this scheme",
-							"Done");
+						CLI_Actions.showSuccess (Translate ("messages.export.success"), Translate ("messages.done"));
 
 				Helper.currentTheme = currentTheme.Name;
 				if (setTheme != null)
@@ -319,8 +314,7 @@ namespace Yuki_Theme.Core
 			} else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError ("Export failed, because you didn't set path to the PascalABC.NET directory!",
-					                       "Export failed");
+					CLI_Actions.showError (Translate ("messages.export.error.full"), Translate ("messages.export.error.short"));
 			}
 		}
 
@@ -372,7 +366,7 @@ namespace Yuki_Theme.Core
 		{
 			if (to.Length < 2)
 			{
-				if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is too short. At least it must be 2", "Too short");
+				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
 			}
 
 			if (!isDefaultTheme [from])
@@ -399,7 +393,7 @@ namespace Yuki_Theme.Core
 				{
 					canOperate = false;
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError ("The theme isn't exist! Choose another theme", "Theme isn't exist");
+						CLI_Actions.showError (Translate ("messages.theme.notexist.full"), Translate ("messages.theme.notexist.short"));
 				}
 
 				if (canOperate)
@@ -419,18 +413,17 @@ namespace Yuki_Theme.Core
 						} else
 						{
 							if (CLI_Actions.showError != null)
-								CLI_Actions.showError ("You musn't choose default theme's name. Choose another name!",
-								                       "Default theme's name");
+								CLI_Actions.showError (Translate ("messages.name.default.full"), Translate ("messages.name.default.short"));
 						}
 					} else
 					{
-						if (CLI_Actions.showError != null) CLI_Actions.showError ("The name is exist! Choose another name", "Name Exist");
+						if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.exist.full"), Translate ("messages.name.exist.short"));
 					}
 				}
 			} else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError ("You mustn't choose default theme. Choose custom theme!", "Default theme");
+					CLI_Actions.showError (Translate ("messages.theme.default.full"), Translate ("messages.theme.default.short"));
 			}
 		}
 
@@ -547,7 +540,7 @@ namespace Yuki_Theme.Core
 			ThemeFormat extension = Helper.GetThemeFormat (isDefaultTheme [name], pathToLoad, name);
 			if (extension == ThemeFormat.Null)
 			{
-				CLI_Actions.showError ("The file isn't exist", "File isn't exist");
+				CLI_Actions.showError (Translate ("messages.file.notexist.full"), Translate ("messages.file.notexist.short"));
 				return false;
 			} else
 			{
@@ -854,7 +847,7 @@ namespace Yuki_Theme.Core
 				str = reader.ReadToEnd ();
 			}
 
-			Console.WriteLine ("REGENERATION...");
+			// Console.WriteLine ("REGENERATION...");
 			LoadFieldsAndMergeFiles (str, path, theme);
 		}
 
@@ -900,7 +893,7 @@ namespace Yuki_Theme.Core
 		{
 			if (!isDefault () && Helper.mode != ProductMode.Plugin && isEdited)
 			{
-				if (CLI_Actions.SaveInExport ("Do you want to save current scheme?", "Save"))
+				if (CLI_Actions.SaveInExport ("messages.theme.save.full", "messages.theme.save.short"))
 					save (img2, img3, wantToKeep);
 			} else if (!isDefault ())
 			{
@@ -930,6 +923,11 @@ namespace Yuki_Theme.Core
 			}
 
 			return unknowThemes.ToArray ();
+		}
+
+		internal static string Translate (string key)
+		{
+			return Settings.translation.GetText (key);
 		}
 	}
 }
