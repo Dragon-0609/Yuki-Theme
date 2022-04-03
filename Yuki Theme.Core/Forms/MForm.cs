@@ -232,7 +232,7 @@ namespace Yuki_Theme.Core.Forms
 				tmr.Start ();
 			} else
 			{
-				throw new ApplicationException ("Error on loading the scheme file");
+				throw new ApplicationException (Translate ("main.theme.loading.error"));
 			}
 		}
 
@@ -372,7 +372,7 @@ namespace Yuki_Theme.Core.Forms
 		public void hasProblem (string content)
 		{
 			MessageBox.Show (
-				content, CLI.Translate ("messages.theme.invalid.short"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+				content, Translate ("messages.theme.invalid.short"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 			schemes.SelectedIndex = 0;
 		}
 		
@@ -537,8 +537,7 @@ namespace Yuki_Theme.Core.Forms
 			// fd.DefaultExt = "icls";
 			fd.Title = "Import";
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
-			fd.Filter =
-				"All Themes(*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
+			fd.Filter = Translate ("main.import.extensions.all") + " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
@@ -554,9 +553,7 @@ namespace Yuki_Theme.Core.Forms
 			CommonFileDialogResult res = co.ShowDialog ();
 			if (res == CommonFileDialogResult.Ok)
 			{
-				MessageBox.Show (
-					"Hi. You have selected the directory, so you will have to wait until the import is done. Your current theme will be changed" +
-					"on finishing import.");
+				MessageBox.Show (Translate ("main.import.directory"));
 				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
 				foreach (string fl in fls)
 				{
@@ -790,8 +787,7 @@ namespace Yuki_Theme.Core.Forms
 						if (img3.Width > 400 || img3.Height > 400)
 						{
 							if (MessageBox.Show (
-								    "The image is very big. It will be displayed in original size. Are you sure?",
-								    "Image is very big", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+								    Translate ("main.sticker.select.big.full"), Translate ("main.sticker.select.big.short"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
 							    DialogResult.No)
 							{
 								restore_Click (sender, e);
@@ -804,8 +800,8 @@ namespace Yuki_Theme.Core.Forms
 					}
 				} else
 				{
-					MessageBox.Show ("File format must be .png!", "Invalid format", MessageBoxButtons.OK,
-					                 MessageBoxIcon.Error);
+					MessageBox.Show (Translate ("main.sticker.select.invalid.full"), Translate ("main.sticker.select.invalid.short"),
+					                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			} else if (imagePath.Text.Length < 2)
 			{
@@ -821,7 +817,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			} else
 			{
-				MessageBox.Show ("File isn't exist", "File not found", MessageBoxButtons.OK,
+				MessageBox.Show (Translate ("messages.file.notexist.short"), Translate ("messages.file.notexist.full2"), MessageBoxButtons.OK,
 				                 MessageBoxIcon.Error);
 			}
 		}
@@ -864,7 +860,7 @@ namespace Yuki_Theme.Core.Forms
 				{
 					if (CLI.isEdited) // Ask to save the changes
 					{
-						if (SaveInExport ("Do you want to save the theme?", "Theme is edited"))
+						if (SaveInExport (Translate ("main.theme.edited.full"), Translate ("main.theme.edited.short")))
 							save_Click (sender, e); // save before restoring
 					}
 
@@ -1176,14 +1172,14 @@ namespace Yuki_Theme.Core.Forms
 		private void AddTips ()
 		{
 			
-			AddTip ( save_button, "Save");
-			AddTip ( restore_button, "Restore");
-			AddTip ( settings_button, "Settings");
-			AddTip ( export_button, "Export");
-			AddTip ( import_button, "Import");
-			AddTip ( add_button, "Add New Scheme");
-			AddTip ( manage_button, "Manage Themes");
-			AddTip (import_directory, "Import Themes");
+			AddTip ( save_button, Translate("main.tips.save"));
+			AddTip ( restore_button, Translate("main.tips.restore"));
+			AddTip ( settings_button, Translate("main.tips.settings"));
+			AddTip ( export_button, Translate("main.tips.export"));
+			AddTip ( import_button, Translate("main.tips.import"));
+			AddTip ( add_button, Translate("main.tips.add"));
+			AddTip ( manage_button, Translate("main.tips.manage"));
+			AddTip (import_directory, Translate("main.tips.import_directory"));
 			
 		}
 
@@ -1241,8 +1237,8 @@ namespace Yuki_Theme.Core.Forms
 					description = reader.ReadToEnd ();
 				}
 
-				msgf.Text = "LICENSE";
-				msgf.setMessage ("JetBrains.Icons License", description, "Accept");
+				msgf.Text = CLI.Translate("main.license.title");
+				msgf.setMessage (CLI.Translate ("main.license.jetbrains"), description, CLI.Translate ("main.license.accept"));
 				msgf.ShowDialog (parent);
 				Settings.license = true;
 				Settings.database.UpdateData (Settings.LICENSE, "true");
@@ -1310,6 +1306,11 @@ namespace Yuki_Theme.Core.Forms
 			DefaultThemes.names.Clear ();
 			DefaultThemes.categoriesList.Clear ();
 			DefaultThemes.headersList.Clear ();
+		}
+
+		private string Translate (string key)
+		{
+			return Translate (key);
 		}
 
 		#endregion

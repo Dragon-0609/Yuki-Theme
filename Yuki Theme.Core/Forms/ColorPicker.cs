@@ -295,11 +295,6 @@ namespace Yuki_Theme.Core.Forms
 			textboxHexColor.Text = ColorTranslator.ToHtml(colorWheel.Color);
 		}
 
-		public void UpdateText(int lang)
-		{
-			Text = "Color Switcher";
-		}
-
 		private void TabHexagonOnEnter (object sender, EventArgs e)
 		{
 				cbox=1;
@@ -321,7 +316,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (form.isDefault ())
 			{
-				MessageBox.Show ((IWin32Window) this, "This theme is default theme, so it's readonly! It can't be changed. You can just copy this and after that you can change it.", "This theme is readonly", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show ((IWin32Window) this, CLI.Translate ("colors.default.error.full"), CLI.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}else
 				DialogResult = DialogResult.OK;	
 		}

@@ -10,14 +10,20 @@ namespace Yuki_Theme.Core.Forms
 	{
 		public  bool          isFromPascal = false;
 		private SettingsPanel sp;
-		
+
 		public AboutForm (SettingsPanel s)
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
-				$"version: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
-
+				$"{Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+			
+			changelog_link.Text = Translate ("about.changelog");
+			label2.Text = Translate ("about.inspiration");
+			label4.Text = Translate ("about.used");
+			linkLabel5.Text = Translate ("about.developer") + ": Dragon-LV";
+			Text = Translate ("about.title");
+			
 			Image icon = Helper.GetYukiThemeIconImage (new Size (pictureBox1.Size.Height, pictureBox1.Size.Height));
 			pictureBox1.Image = icon;
 			Icon = Icon.FromHandle (((Bitmap)icon).GetHicon ());
@@ -31,6 +37,11 @@ namespace Yuki_Theme.Core.Forms
 			FontManager.SetControlFont (vers, 1);
 			FontManager.SetControlFont (changelog_link, 1);
 			FontManager.SetControlFont (label4, 1);
+		}
+
+		private string Translate (string key)
+		{
+			return CLI.Translate (key);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -88,14 +99,14 @@ namespace Yuki_Theme.Core.Forms
 				key = sp.key;
 				click = sp.click;
 			}
-			
+
 			button1.BackColor = panel1.BackColor = BackColor = bg;
-			
+
 			button1.ForeColor = linkLabel1.LinkColor = linkLabel2.LinkColor = linkLabel3.LinkColor =
-				linkLabel4.LinkColor = linkLabel5.LinkColor = linkLabel6.LinkColor = linkLabel7.LinkColor = 
-				linkLabel8.LinkColor = linkLabel10.LinkColor = linkLabel11.LinkColor = 
-					linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor = 
-						linkLabel15.LinkColor = changelog_link.LinkColor = ForeColor = fg;
+				linkLabel4.LinkColor = linkLabel5.LinkColor = linkLabel6.LinkColor = linkLabel7.LinkColor =
+					linkLabel8.LinkColor = linkLabel10.LinkColor = linkLabel11.LinkColor =
+						linkLabel12.LinkColor = linkLabel13.LinkColor = linkLabel14.LinkColor =
+							linkLabel15.LinkColor = changelog_link.LinkColor = ForeColor = fg;
 
 			linkLabel1.ActiveLinkColor = linkLabel2.ActiveLinkColor = linkLabel3.ActiveLinkColor =
 				linkLabel4.ActiveLinkColor = linkLabel5.ActiveLinkColor = linkLabel6.ActiveLinkColor =
@@ -103,7 +114,7 @@ namespace Yuki_Theme.Core.Forms
 						linkLabel10.ActiveLinkColor = linkLabel11.ActiveLinkColor = linkLabel12.ActiveLinkColor =
 							linkLabel13.ActiveLinkColor = linkLabel14.ActiveLinkColor =
 								linkLabel15.ActiveLinkColor = changelog_link.ActiveLinkColor = key;
-				
+
 			button1.FlatAppearance.MouseOverBackColor = click;
 		}
 

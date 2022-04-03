@@ -15,6 +15,7 @@ namespace Yuki_Theme.Core.Forms
 		public ChangelogForm ()
 		{
 			InitializeComponent ();
+			this.Text = label1.Text = CLI.Translate ("changelog.title");
 			
 			Assembly a = Assembly.GetExecutingAssembly ();
 
@@ -41,7 +42,7 @@ namespace Yuki_Theme.Core.Forms
 			md = ReplaceCheckbox (md);
 			string str = CommonMark.CommonMarkConverter.Convert (md);
 
-			html = html.Replace ("__content__", str);
+			html = html.Replace ("Expand",CLI.Translate ("changelog.expand")).Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
 			webBrowser1.ScrollBarsEnabled = true;
 			this.webBrowser1.ObjectForScripting = this;
@@ -80,10 +81,10 @@ namespace Yuki_Theme.Core.Forms
 			string ntxt = "";
 			if (expanded)
 			{
-				ntxt = "Collapse";
+				ntxt = CLI.Translate ("changelog.collapse");
 			} else
 			{
-				ntxt = "Expand";
+				ntxt = CLI.Translate("changelog.expand");
 			}
 			
 			Assembly a = Assembly.GetExecutingAssembly ();
