@@ -226,6 +226,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 
 				isUpdated ();
+				UpdateTranslation ();
 				tmr = new Timer ();
 				tmr.Interval = 100;
 				tmr.Tick += trackInstall;
@@ -476,24 +477,29 @@ namespace Yuki_Theme.Core.Forms
 
 			foreach (string sc in DefaultThemes.categoriesList)
 			{
-				ReItem defa = new ReItem (sc, true);
+				string nameTranslation = Translate (sc);
+				ReItem defa = new ReItem (nameTranslation, true);
 				tmanagerform.groups.Add (defa);
 				groupItems.Add (sc, defa);
 			}
-			
-			ReItem custom = new ReItem ("Custom", true);
+
+			string customgroup = Translate ("messages.theme.group.custom");
+			ReItem custom = new ReItem (customgroup, true);
 			tmanagerform.groups.Add (custom);
-			groupItems.Add ("Custom", custom);
+			groupItems.Add (customgroup, custom);
 			
 			foreach (string item in schemes.Items)
 			{
 				ReItem litem;
+				Console.WriteLine (item);
 				if (CLI.isDefaultTheme [item])
 				{
 					ReItem cat = groupItems [DefaultThemes.getCategory (item)];
+					Console.WriteLine (cat.Name);
 					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
 				} else
 				{
+					Console.WriteLine (custom.Name);
 					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
 				}
 
@@ -535,7 +541,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			OpenFileDialog fd = new OpenFileDialog ();
 			// fd.DefaultExt = "icls";
-			fd.Title = "Import";
+			fd.Title = Translate ("main.tips.import");
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
 			fd.Filter = Translate ("main.import.extensions.all") + " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
 			fd.Multiselect = false;
@@ -584,7 +590,8 @@ namespace Yuki_Theme.Core.Forms
 			}
 
 			bool oldeditor = Editor;
-			var st = settingMode;
+			SettingMode st = settingMode;
+			string lang = Settings.localization;
 			if (setform.ShowDialog () == DialogResult.OK)
 			{
 				pascalPath = setform.Path;
@@ -614,6 +621,13 @@ namespace Yuki_Theme.Core.Forms
 				if (oldeditor != Editor) // Check if the Editor is changed
 					checkEditor ();
 				if (settingMode != st) restore_Click (this, EventArgs.Empty);
+				if (lang != Settings.localization)
+				{
+					UpdateTranslation ();
+				}
+			} else
+			{
+				Settings.localization = lang;
 			}
 		}
 
@@ -1310,7 +1324,20 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return Translate (key);
+			return CLI.Translate (key);
+		}
+
+		private void UpdateTranslation ()
+		{
+			colorLabel.Text = Translate ("main.labels.foreground");
+			backgroundColorLabel.Text = Translate ("main.labels.background");
+			select_btn.Text = Translate ("messages.buttons.select");
+			close_btn.Text = Translate ("messages.buttons.close");
+			opacityLabel.Text = $"{Translate ("main.labels.opacity")}:";
+			clearButton.Text = Translate ("main.labels.clear");
+			applyButton.Text = Translate ("main.labels.apply");
+			check_italic.Text = Translate ("main.labels.italic");
+			check_bold.Text = Translate ("main.labels.bold");
 		}
 
 		#endregion

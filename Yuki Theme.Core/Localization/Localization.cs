@@ -20,9 +20,9 @@ public class Localization
 
 	public void SearchLocals ()
 	{
-		List <string> locales = new List <string> () { "en"/*, "ru"*/ };
-		List <string> languagesdisplay = new List <string> () { "English"/*, "Русский"*/ };
-		Dictionary <string, bool> external = new Dictionary <string, bool> () { { "en", false }/*, { "ru", false }*/ };
+		List <string> locales = new List <string> () { "en" , "ru" };
+		List <string> languagesdisplayFull = new List <string> () { "English" , "Русский" };
+		Dictionary <string, bool> external = new Dictionary <string, bool> () { { "en", false } , { "ru", false } };
 		string pth = Path.Combine (CLI.currentPath, "Langs");
 		if (Directory.Exists (pth))
 		{
@@ -37,7 +37,7 @@ public class Localization
 					{
 						locales.Add (lang);
 						external.Add (lang, true);
-						languagesdisplay.Add (jObject ["display"].ToString ());
+						languagesdisplayFull.Add (jObject ["display"].ToString ());
 					}
 				} catch (Exception e)
 				{
@@ -45,17 +45,24 @@ public class Localization
 				}
 			}
 		}
+
 		languages = locales.ToArray ();
+		languagesdisplay = languagesdisplayFull.ToArray ();
 		externalLang = external;
 	}
-	
+
 	public void LoadLocalization ()
 	{
 		SearchLocals ();
-		string locale = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName.ToLower();
+		string locale = Settings.localization;
 		if (!externalLang.ContainsKey (locale))
 		{
-			locale = languages [0];
+			locale = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName.ToLower ();
+			if (!externalLang.ContainsKey (locale))
+			{
+				locale = languages [0];
+			}
+			Settings.localization = locale;
 		}
 
 		LoadLocale (locale);
@@ -124,5 +131,20 @@ public class Localization
 			return translation [definition];
 		else
 			return definition;
+	}
+
+	public string [] GetLanguages ()
+	{
+		return languagesdisplay;
+	}
+
+	public string GetLanguageISO2 (string lang)
+	{
+		return languages [Array.IndexOf (languagesdisplay, lang)];
+	}
+
+	public int GetIndexOfLangShort (string lang)
+	{
+		return Array.IndexOf (languages, lang);
 	}
 }

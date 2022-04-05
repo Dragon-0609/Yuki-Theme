@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI.cs" />
+    <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Formats\NewThemeFormat.cs" />
     <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
@@ -327,6 +328,7 @@
     <EmbeddedResource Include="Forms\ThemeManager.resx">
       <DependentUpon>ThemeManager.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Localization\ru.lang" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

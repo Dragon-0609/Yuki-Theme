@@ -387,7 +387,8 @@ namespace Yuki_Theme.Core
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError ($"There's no {filename}", filename + "isn't exist");
+						CLI_Actions.showError (CLI.Translate ("messages.file.notexist.withname.param", filename),
+						                       CLI.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;

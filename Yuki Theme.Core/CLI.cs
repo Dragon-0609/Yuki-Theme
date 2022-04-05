@@ -136,7 +136,7 @@ namespace Yuki_Theme.Core
 
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess (Translate ("messages.theme.duplicate"), Translate ("messages.done"));
+						CLI_Actions.showSuccess (Translate ("messages.theme.duplicate"), Translate ("messages.buttons.done"));
 
 				return exist;
 			} else
@@ -306,7 +306,7 @@ namespace Yuki_Theme.Core
 
 				if (Helper.mode != ProductMode.Plugin)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess (Translate ("messages.export.success"), Translate ("messages.done"));
+						CLI_Actions.showSuccess (Translate ("messages.export.success"), Translate ("messages.buttons.done"));
 
 				Helper.currentTheme = currentTheme.Name;
 				if (setTheme != null)
@@ -928,6 +928,16 @@ namespace Yuki_Theme.Core
 		internal static string Translate (string key)
 		{
 			return Settings.translation.GetText (key);
+		}
+
+		internal static string Translate (string key, string p1)
+		{
+			return Settings.translation.GetText (key).Replace ("{0}", p1);
+		}
+
+		internal static string Translate (string key, string p1, string p2)
+		{
+			return Settings.translation.GetText (key).Replace ("{0}", p1).Replace ("{1}", p2);
 		}
 	}
 }

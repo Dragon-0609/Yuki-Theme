@@ -32,7 +32,7 @@ namespace Yuki_Theme.Core.Forms
 		private Font          fdef, fcat;
 
 		private Image expandImage, collapseImage;
-		
+
 		public ThemeManager (MForm fm)
 		{
 			InitializeComponent ();
@@ -44,6 +44,8 @@ namespace Yuki_Theme.Core.Forms
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
 			CLI_Actions.onRename = onRename;
 			scheme.MouseClick += CheckFolding;
+			label1.Text = CLI.Translate ("theme.manager.old");
+			label2.Text = CLI.Translate ("theme.manager.new");
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
@@ -82,11 +84,12 @@ namespace Yuki_Theme.Core.Forms
 				form.schemes.SelectedIndex = 0;
 				needToReSelect = true;
 			}
+
 			form.schemes.Items [indx] = to;
 			if (needToReSelect)
 				form.schemes.SelectedIndex = indx;
-			scheme.Invalidate();
-			form.schemes.Invalidate();
+			scheme.Invalidate ();
+			form.schemes.Invalidate ();
 		}
 
 		#region Events
@@ -128,18 +131,18 @@ namespace Yuki_Theme.Core.Forms
 						form.schemes.Items.Add (to);
 						form.schemes.SelectedItem = to;
 					}
-				
+
 					DialogResult = DialogResult.OK;
 				} else
 				{
-					CLI_Actions.showError ("Names are equal! Choose another name for 'To' field", "Names are equal");
+					CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
 				}
 			}
 		}
 
 		private void remove_Click (object sender, EventArgs e)
 		{
-			if (scheme.SelectedItems.Count > 0 && scheme.SelectedItems[0] is ReItem)
+			if (scheme.SelectedItems.Count > 0 && scheme.SelectedItems [0] is ReItem)
 			{
 				ReItem item = (ReItem)scheme.SelectedItems [0];
 				CLI.remove (item.Name, askDelete, afterAsk, afterDelete);
@@ -161,12 +164,12 @@ namespace Yuki_Theme.Core.Forms
 							CLI.rename (rf.fromTBox.Text, rf.toTBox.Text);
 						} else
 						{
-							MessageBox.Show ("You didn't change the name", "Canceled",
+							MessageBox.Show (CLI.Translate ("messages.name.notchanged"), CLI.Translate ("download.canceled.title"),
 							                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						}
 					} else
 					{
-						MessageBox.Show ("Invalid name. You must enter at least 1 character", "Invalid name",
+						MessageBox.Show (CLI.Translate ("messages.name.invalid"), CLI.Translate ("messages.name.invalid.short"),
 						                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
@@ -199,18 +202,18 @@ namespace Yuki_Theme.Core.Forms
 			CLI.ReGenerateTheme (npath, pth, name, name, true);
 			File.Delete (pth);
 			CLI.oldThemeList [name] = !CLI.IsOldTheme (pth);
-			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name]; 
-			scheme.Invalidate();
+			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name];
+			scheme.Invalidate ();
 
 			if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)
 			{
 				CLI.SelectTheme (name);
 			}
-			
-			MessageBox.Show ($"{name} has been regenerated to {format} format", "Regeneration compeleted");
-			
+
+			MessageBox.Show (CLI.Translate ("messages.regeneration.completed.fromto", name, format),
+			                 CLI.Translate ("messages.regeneration.completed.title"));
 		}
-		
+
 		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
 		{
 			var a = Assembly.GetExecutingAssembly ();
@@ -226,9 +229,9 @@ namespace Yuki_Theme.Core.Forms
 				oldIndex = scheme.SelectedIndices [0];
 				ReItem re = (ReItem)scheme.SelectedItems [0];
 				re.BackColor = cbgclick;
-				if (re.ParentGroup != null && !re.ParentGroup.Name.Equals ("default", StringComparison.OrdinalIgnoreCase)
-				                          && !re.ParentGroup.Name.Equals (
-					                             "doki theme", StringComparison.OrdinalIgnoreCase))
+				if (re.ParentGroup != null && !re.ParentGroup.Name.Equals (CLI.Translate ("Default"))
+				                           && !re.ParentGroup.Name.Equals (
+					                              "doki theme", StringComparison.OrdinalIgnoreCase))
 				{
 					remove.Visible = rename_btn.Visible = regenerate.Visible = true;
 				}
@@ -237,7 +240,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private void ThemeManager_Shown (object sender, EventArgs e)
 		{
-			add.BackColor = scheme.BackColor = BackColor = closeButton.BackColor = mask_1.BackColor = mask_2.BackColor = cbg = Helper.bgColor;
+			add.BackColor = scheme.BackColor =
+				BackColor = closeButton.BackColor = mask_1.BackColor = mask_2.BackColor = cbg = Helper.bgColor;
 
 			add.ForeColor = remove.ForeColor = regenerate.ForeColor = rename_btn.ForeColor = scheme.ForeColor = ForeColor = Helper.fgColor;
 
@@ -247,12 +251,12 @@ namespace Yuki_Theme.Core.Forms
 
 			panel1.BackColor = Helper.bgBorder;
 			panel2.BackColor = panel2_2.BackColor = Helper.fgKeyword;
-			
+
 			bg = new SolidBrush (BackColor);
 			fg = new SolidBrush (ForeColor);
 			fgsp = new SolidBrush (Helper.fgKeyword);
 			borderBrush = new SolidBrush (Helper.bgBorder);
-			
+
 			cbgclick = Helper.bgClick;
 			loadSVG ();
 			remove.Visible = rename_btn.Visible = regenerate.Visible = false;
@@ -271,7 +275,7 @@ namespace Yuki_Theme.Core.Forms
 			expandImage?.Dispose ();
 			collapseImage?.Dispose ();
 		}
-		
+
 		#endregion
 
 		private void scheme_DrawColumnHeader (object sender, DrawListViewColumnHeaderEventArgs e)
@@ -287,7 +291,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				ReItem re = (ReItem)e.Item;
 				e.Graphics.FillRectangle (re.isGroup ? bg : new SolidBrush (re.BackColor), e.Bounds);
-				
+
 				Rectangle rec = e.Bounds;
 				if (re.isGroup)
 				{
@@ -295,7 +299,6 @@ namespace Yuki_Theme.Core.Forms
 					rec = new Rectangle (((e.Bounds.Width - 10) / 2) - (sz.Width / 2), e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
 				} else
 				{
-
 					Brush brush = re.isOld ? borderBrush : fgsp;
 					int thickness = 10;
 					int thickness_internal = 2;
@@ -355,7 +358,6 @@ namespace Yuki_Theme.Core.Forms
 
 			collapseImage = Helper.RenderSvg (size, Helper.LoadSvg ("findAndShowPrevMatches" + adda, a), false, default, false,
 			                                  default);
-
 		}
 
 		private Size MeasureString (string candidate, Font fnt)
@@ -373,15 +375,14 @@ namespace Yuki_Theme.Core.Forms
 
 		private void CheckFolding (object sender, MouseEventArgs e)
 		{
-			if (scheme.SelectedIndices.Count == 1 && scheme.SelectedIndices [0] >= 0 && scheme.SelectedItems[0] is ReItem)
+			if (scheme.SelectedIndices.Count == 1 && scheme.SelectedIndices [0] >= 0 && scheme.SelectedItems [0] is ReItem)
 			{
-				ReItem re = (ReItem) scheme.SelectedItems [0];
-				if (re.isGroup && e.X > scheme.Columns[0].Width - (fcat.Height + 14))
+				ReItem re = (ReItem)scheme.SelectedItems [0];
+				if (re.isGroup && e.X > scheme.Columns [0].Width - (fcat.Height + 14))
 				{
 					re.isHidden = !re.isHidden;
 					ResetList ();
-					scheme.Invalidate();
-					
+					scheme.Invalidate ();
 				}
 			}
 		}
@@ -394,7 +395,7 @@ namespace Yuki_Theme.Core.Forms
 				return GetNewThemeFigure (Bounds, thickness, thickness_internal);
 		}
 
-		private PointF[] GetOldThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
+		private PointF [] GetOldThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
 		{
 			return new PointF []
 			{
@@ -408,7 +409,7 @@ namespace Yuki_Theme.Core.Forms
 			};
 		}
 
-		private PointF[] GetNewThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
+		private PointF [] GetNewThemeFigure (Rectangle Bounds, int thickness, int thickness_internal)
 		{
 			return new PointF []
 			{
@@ -425,6 +426,5 @@ namespace Yuki_Theme.Core.Forms
 				new PointF (Bounds.X, Bounds.Y + Bounds.Height - thickness_internal * 3),
 			};
 		}
-		
 	}
 }

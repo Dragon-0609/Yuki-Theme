@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.Windows.Forms;
+using CustomControls.RJControls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
@@ -24,6 +25,7 @@ namespace Yuki_Theme.Core.Controls
 		private int                  selectionindex;
 		public  bool                 lockCheckbox = false;
 		public  bool                 lockList     = false;
+		public  bool                 lockLang     = false;
 		public  List <ToolStripItem> items;
 		public  List <string>        itemsToHide;
 		public  List <string>        itemsToRight;
@@ -31,7 +33,11 @@ namespace Yuki_Theme.Core.Controls
 		public  string               customSticker;
 		public  PopupFormsController popupController;
 
+		private RJComboBox [] _comboBoxes;
+
 		public Action <List <ToolStripItem>, List <string>, List <string>> onChange;
+
+		public Action updateTranslation;
 
 		public SettingsPanel ()
 		{
@@ -132,9 +138,10 @@ namespace Yuki_Theme.Core.Controls
 						           "yuki_theme.zip"), true);
 					popupController.InitializeAllWindows ();
 					popupController.df.InstallManually ();
-				}else{
-					MessageBox.Show ("The zip isn't Yuki Theme. Please, go to github and download from there",
-					                 "The wrong zip", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				} else
+				{
+					MessageBox.Show (CLI.Translate ("messages.update.invalid"),
+					                 CLI.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -154,8 +161,7 @@ namespace Yuki_Theme.Core.Controls
 			{
 				add = Helper.IsDark (bg) ? "" : "_dark";
 				fr = fg;
-			}
-			else
+			} else
 			{
 				add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
 				fr = Helper.fgColor;
@@ -181,7 +187,7 @@ namespace Yuki_Theme.Core.Controls
 			}
 
 			e.DrawBackground ();
-			e.Graphics.DrawString (((ListBox) sender).Items [e.Index].ToString (), e.Font, fgBrush, e.Bounds);
+			e.Graphics.DrawString (((ListBox)sender).Items [e.Index].ToString (), e.Font, fgBrush, e.Bounds);
 
 			e.DrawFocusRectangle ();
 		}
@@ -211,7 +217,7 @@ namespace Yuki_Theme.Core.Controls
 				{
 					if (items != null && itemsToHide != null)
 					{
-						string nm = (string) toolBarList.SelectedItem;
+						string nm = (string)toolBarList.SelectedItem;
 						ToolStripItem item = getByText (nm);
 
 						if (item != null)
@@ -247,7 +253,7 @@ namespace Yuki_Theme.Core.Controls
 			{
 				if (toolBarList.SelectedIndex >= 0)
 				{
-					string nm = (string) toolBarList.SelectedItem;
+					string nm = (string)toolBarList.SelectedItem;
 					ToolStripItem item = getByText (nm);
 
 					if (toolBarVisible.Checked)
@@ -303,7 +309,7 @@ namespace Yuki_Theme.Core.Controls
 			{
 				if (toolBarList.SelectedIndex >= 0)
 				{
-					string nm = (string) toolBarList.SelectedItem;
+					string nm = (string)toolBarList.SelectedItem;
 					ToolStripItem item = getByText (nm);
 
 					if (toolBarPosition.Checked)
@@ -348,7 +354,6 @@ namespace Yuki_Theme.Core.Controls
 				{
 				}
 			}
-
 		}
 
 		private void swsticker_CheckedChanged (object sender, EventArgs e)
@@ -369,14 +374,17 @@ namespace Yuki_Theme.Core.Controls
 
 		public void SettingsPanel_Load ()
 		{
-			ActionBox.Items.AddRange (new string [] {"Delete", "Import and Delete", "Ignore"});
-			mode.Items.AddRange (new string [] {"Light", "Advanced"});
+			ActionBox.Items.AddRange (new ExtendedDropItem [] { new ("settings.additional.action.delete"), new ("settings.additional.action.import"), new ("settings.additional.action.ignore") });
+			mode.Items.AddRange (new ExtendedDropItem [] { new ("settings.general.mode.light"), new ("settings.general.mode.advanced") });
+			_comboBoxes = new [] { ActionBox, mode };
 			stickerToUpdate = new List <CustomPicture> ();
 			foreach (string name in Enum.GetNames (typeof (RelativeUnit)))
 			{
 				unit.Items.Add (name);
 			}
 
+			AddLanguages ();
+			
 			toolBarList.ItemHeight = Font.Height + 3;
 			backImage.Checked = Settings.bgImage;
 			swsticker.Checked = Settings.swSticker;
@@ -387,8 +395,8 @@ namespace Yuki_Theme.Core.Controls
 			askC.Checked = Settings.askChoice;
 			checkBox2.Checked = Settings.update;
 			ActionBox.SelectedIndex = Settings.actionChoice;
-			mode.SelectedIndex = (int) Settings.settingMode;
-			unit.SelectedIndex = (int) Settings.unit;
+			mode.SelectedIndex = (int)Settings.settingMode;
+			unit.SelectedIndex = (int)Settings.unit;
 			checkBox3.Checked = Settings.positioning;
 			unit.Enabled = checkBox4.Enabled = reset_margin.Enabled = Settings.positioning && Settings.swSticker;
 			checkBox4.Checked = Settings.showGrids;
@@ -400,7 +408,11 @@ namespace Yuki_Theme.Core.Controls
 			saveOld.Checked = Settings.saveAsOld;
 			restartUpdate.Enabled = DownloadForm.IsUpdateDownloaded ();
 			preview.Checked = Settings.showPreview;
+			lockLang = true;
+			lang.SelectedIndex = Settings.translation.GetIndexOfLangShort (Settings.localization);
+			lockLang = false;
 			loadSVG ();
+			UpdateTranslations ();
 		}
 
 		private void backImage_CheckedChanged (object sender, EventArgs e)
@@ -418,14 +430,13 @@ namespace Yuki_Theme.Core.Controls
 				back = bg;
 				fore = fg;
 				brdr = border;
-			}
-			else
+			} else
 			{
 				back = Helper.bgColor;
 				fore = Helper.fgColor;
 				brdr = Helper.bgBorder;
 			}
-			
+
 			HelperForm hf = new HelperForm ();
 			hf.setMessage ("Old New Formats", SmallDocumentation.Documentation [SmallDocumentation.OLD_NEW_HELP]);
 			hf.setColors (back, fore, brdr);
@@ -434,7 +445,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void restartUpdate_Click (object sender, EventArgs e)
 		{
-			if (DownloadForm.IsUpdateDownloaded())
+			if (DownloadForm.IsUpdateDownloaded ())
 			{
 				popupController.InitializeAllWindows ();
 				popupController.df.startUpdating ();
@@ -444,5 +455,66 @@ namespace Yuki_Theme.Core.Controls
 			}
 		}
 
+		private void AddLanguages ()
+		{
+			lang.Items.AddRange (Settings.translation.GetLanguages ());
+		}
+		
+		private void UpdateTranslations ()
+		{
+			TranslateControls (tabs);
+			if (updateTranslation != null)
+				updateTranslation ();
+			ReSize ();
+			ReAddItems ();
+		}
+
+		private void ReSize ()
+		{
+			flowLayoutPanel2.Size = new Size (flowLayoutPanel2.Width, 50);
+			flowLayoutPanel1.Size = new Size (flowLayoutPanel1.Width, 50);
+		}
+
+		private void ReAddItems ()
+		{
+			foreach (RJComboBox comboBox in _comboBoxes)
+			{
+				for (var i = 0; i < comboBox.Items.Count; i++)
+				{
+					if (comboBox.Items [i] is ExtendedDropItem)
+					{
+						ExtendedDropItem item = (ExtendedDropItem) comboBox.Items [i];
+						comboBox.Items [i] = item;
+					}
+				}
+			}
+		}
+
+		private void TranslateControls (Control parent)
+		{
+			foreach (Control control in parent.Controls)
+			{
+				if (control.AccessibleName != null)
+					control.Text = CLI.Translate (control.AccessibleName);
+				if (control.Controls.Count > 0)
+				{
+					TranslateControls (control);
+				}
+			}
+		}
+
+		private void lang_OnSelectedIndexChanged (object sender, EventArgs e)
+		{
+			if (!lockLang)
+			{
+				if (Settings.localization != Settings.translation.GetLanguageISO2 ((string)lang.SelectedItem))
+				{
+					string language = Settings.translation.GetLanguageISO2 ((string)lang.SelectedItem);
+					Settings.localization = language;
+					Settings.translation.LoadLocale (language);
+					UpdateTranslations ();
+				}
+			}
+		}
 	}
 }

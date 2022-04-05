@@ -17,7 +17,7 @@ namespace Yuki_Theme.Core.Forms
 			this.StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
 				$"{Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
-			
+
 			changelog_link.Text = Translate ("about.changelog");
 			label2.Text = Translate ("about.inspiration");
 			label4.Text = Translate ("about.used");

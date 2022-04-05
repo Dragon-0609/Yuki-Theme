@@ -30,7 +30,8 @@ namespace Yuki_Theme.Core.Forms
 			tabHexagon.Enter += TabHexagonOnEnter;
 			tabWheel.Enter += TabWheelOnEnter;
 			tabColorBox.Enter += TabColorBoxOnEnter;
-			
+			OKBTN.Text = CLI.Translate ("messages.buttons.select");
+			CNBTN.Text = CLI.Translate ("download.cancel");
 		}
 
 		public Color MainColor

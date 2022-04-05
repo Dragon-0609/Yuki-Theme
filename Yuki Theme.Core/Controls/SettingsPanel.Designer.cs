@@ -62,6 +62,8 @@ namespace Yuki_Theme.Core.Controls
 			this.restartUpdate = new System.Windows.Forms.Button ();
 			this.checkBox1 = new System.Windows.Forms.CheckBox ();
 			this.button4 = new System.Windows.Forms.Button ();
+			this.langLabel = new System.Windows.Forms.Label ();
+			this.lang = new CustomControls.RJControls.RJComboBox ();
 			this.add_program = new System.Windows.Forms.TabPage ();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel ();
 			this.label1 = new System.Windows.Forms.Label ();
@@ -167,12 +169,14 @@ namespace Yuki_Theme.Core.Controls
 			this.flowLayoutPanel1.Controls.Add (this.restartUpdate);
 			this.flowLayoutPanel1.Controls.Add (this.checkBox1);
 			this.flowLayoutPanel1.Controls.Add (this.button4);
+			this.flowLayoutPanel1.Controls.Add (this.langLabel);
+			this.flowLayoutPanel1.Controls.Add (this.lang);
 			this.flowLayoutPanel1.Location = new System.Drawing.Point (0, 0);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding (3, 3, 3, 0);
 			this.flowLayoutPanel1.MaximumSize = new System.Drawing.Size (379, 0);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding (6, 12, 6, 12);
-			this.flowLayoutPanel1.Size = new System.Drawing.Size (379, 491);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size (379, 527);
 			this.flowLayoutPanel1.TabIndex = 43;
 			// 
 			// backImage
@@ -523,6 +527,7 @@ namespace Yuki_Theme.Core.Controls
 			this.button4.AccessibleName = "settings.general.about";
 			this.button4.AutoSize = true;
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.flowLayoutPanel1.SetFlowBreak (this.button4, true);
 			this.button4.Location = new System.Drawing.Point (187, 444);
 			this.button4.Margin = new System.Windows.Forms.Padding (8, 3, 3, 3);
 			this.button4.Name = "button4";
@@ -531,6 +536,39 @@ namespace Yuki_Theme.Core.Controls
 			this.button4.Text = "About";
 			this.button4.UseVisualStyleBackColor = true;
 			this.button4.Click += new System.EventHandler (this.button4_Click);
+			// 
+			// langLabel
+			// 
+			this.langLabel.AccessibleName = "settings.general.language";
+			this.langLabel.AutoSize = true;
+			this.langLabel.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.langLabel.Location = new System.Drawing.Point (10, 485);
+			this.langLabel.Margin = new System.Windows.Forms.Padding (4, 6, 4, 0);
+			this.langLabel.Name = "langLabel";
+			this.langLabel.Size = new System.Drawing.Size (67, 17);
+			this.langLabel.TabIndex = 42;
+			this.langLabel.Text = "Language:";
+			this.langLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// lang
+			// 
+			this.lang.BackColor = System.Drawing.Color.WhiteSmoke;
+			this.lang.BorderColor = System.Drawing.Color.MediumSlateBlue;
+			this.lang.BorderSize = 1;
+			this.lang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.lang.Font = new System.Drawing.Font ("Calibri", 9F);
+			this.lang.ForeColor = System.Drawing.Color.DimGray;
+			this.lang.IconColor = System.Drawing.Color.MediumSlateBlue;
+			this.lang.ListBackColor = System.Drawing.Color.FromArgb (((int)(((byte)(230)))), ((int)(((byte)(228)))), ((int)(((byte)(245)))));
+			this.lang.ListTextColor = System.Drawing.Color.DimGray;
+			this.lang.Location = new System.Drawing.Point (84, 482);
+			this.lang.MinimumSize = new System.Drawing.Size (100, 30);
+			this.lang.Name = "lang";
+			this.lang.Padding = new System.Windows.Forms.Padding (1);
+			this.lang.Size = new System.Drawing.Size (105, 30);
+			this.lang.TabIndex = 43;
+			this.lang.Texts = "";
+			this.lang.OnSelectedIndexChanged += new System.EventHandler (this.lang_OnSelectedIndexChanged);
 			// 
 			// add_program
 			// 
@@ -850,6 +888,9 @@ namespace Yuki_Theme.Core.Controls
 			((System.ComponentModel.ISupportInitialize)(this.toolBarImage)).EndInit ();
 			this.ResumeLayout (false);
 		}
+
+		public System.Windows.Forms.Label           langLabel;
+		public CustomControls.RJControls.RJComboBox lang;
 
 		public System.Windows.Forms.CheckBox preview;
 

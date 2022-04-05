@@ -12,6 +12,10 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
+			Message.Text = CLI.Translate ("messages.theme.others.found");
+			button1.Text = CLI.Translate ("messages.buttons.no");
+			button2.Text = CLI.Translate ("messages.buttons.yes");
+			button3.Text = CLI.Translate ("settings.additional.action.import");
 		}
 
 		private void button2_Click (object sender, EventArgs e)

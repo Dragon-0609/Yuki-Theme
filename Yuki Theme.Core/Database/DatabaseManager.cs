@@ -46,7 +46,7 @@ namespace Yuki_Theme.Core.Database
 				SetValueToDatabase (ke, Settings.ASKTOSAVE, "true");
 				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
 				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
-				SetValueToDatabase (ke, Settings.LOCALIZATION, "en");
+				SetValueToDatabase (ke, Settings.LOCALIZATION, "unknown");
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.ASKTOSAVE, "true");
 			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
 			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
-			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "en");
+			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "unknown");
 
 			return dictionary;
 		}

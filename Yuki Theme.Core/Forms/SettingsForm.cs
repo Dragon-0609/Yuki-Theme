@@ -62,6 +62,7 @@ namespace Yuki_Theme.Core.Forms
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			settingsPanel.SettingsPanel_Load ();
 			settingsPanel.popupController = mf.popupController;
+			settingsPanel.updateTranslation = UpdateTranslation;
 			FontManager.SetAllControlsFont (this.Controls, 0);
 		}
 
@@ -95,29 +96,30 @@ namespace Yuki_Theme.Core.Forms
 		{
 			BackColor = settingsPanel.button1.BackColor = button2.BackColor = button3.BackColor = settingsPanel.button4.BackColor =
 				settingsPanel.button5.BackColor = settingsPanel.button6.BackColor = settingsPanel.ActionBox.ListBackColor =
-					settingsPanel.ActionBox.BackColor = settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor =
-						settingsPanel.textBox1.BackColor = settingsPanel.add_program.BackColor = settingsPanel.add_plugin.BackColor =
-							settingsPanel.tabPage1.BackColor = settingsPanel.unit.ListBackColor = settingsPanel.unit.BackColor =
-								settingsPanel.BackColor = settingsPanel.add_toolbar.BackColor = Helper.bgColor;
+					settingsPanel.lang.ListBackColor = settingsPanel.ActionBox.BackColor = settingsPanel.lang.BackColor =
+						settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor = settingsPanel.textBox1.BackColor =
+							settingsPanel.add_program.BackColor = settingsPanel.add_plugin.BackColor = settingsPanel.tabPage1.BackColor =
+								settingsPanel.unit.ListBackColor = settingsPanel.unit.BackColor =
+									settingsPanel.BackColor = settingsPanel.add_toolbar.BackColor = Helper.bgColor;
 
 			ForeColor = settingsPanel.button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
 				button3.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
 					settingsPanel.button5.FlatAppearance.BorderColor = settingsPanel.button6.FlatAppearance.BorderColor =
-						settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor = settingsPanel.mode.ForeColor =
-							settingsPanel.mode.ListTextColor = settingsPanel.unit.ForeColor =
-								settingsPanel.unit.ListTextColor = settingsPanel.textBox1.ForeColor = settingsPanel.tabs.ForeColor =
-									settingsPanel.add_program.ForeColor = settingsPanel.add_plugin.ForeColor =
-										settingsPanel.add_toolbar.ForeColor = settingsPanel.tabPage1.ForeColor =
-											settingsPanel.roundLabel1.ForeColor = Helper.fgColor;
+						settingsPanel.ActionBox.ForeColor = settingsPanel.ActionBox.ListTextColor = settingsPanel.lang.ForeColor =
+							settingsPanel.lang.ListTextColor = settingsPanel.mode.ForeColor = settingsPanel.mode.ListTextColor =
+								settingsPanel.unit.ForeColor = settingsPanel.unit.ListTextColor = settingsPanel.textBox1.ForeColor =
+									settingsPanel.tabs.ForeColor = settingsPanel.add_program.ForeColor =
+										settingsPanel.add_plugin.ForeColor = settingsPanel.add_toolbar.ForeColor =
+											settingsPanel.tabPage1.ForeColor = settingsPanel.roundLabel1.ForeColor = Helper.fgColor;
 
 			settingsPanel.button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
 				button3.FlatAppearance.MouseOverBackColor = settingsPanel.button4.FlatAppearance.MouseOverBackColor =
-					settingsPanel.button5.FlatAppearance.MouseOverBackColor =
-						settingsPanel.button6.FlatAppearance.MouseOverBackColor = settingsPanel.roundLabel1._BackColor = Helper.bgClick;
+					settingsPanel.button5.FlatAppearance.MouseOverBackColor = settingsPanel.button6.FlatAppearance.MouseOverBackColor =
+						settingsPanel.roundLabel1._BackColor = Helper.bgClick;
 
-			settingsPanel.ActionBox.BorderColor = settingsPanel.ActionBox.IconColor = settingsPanel.mode.BorderColor =
-				settingsPanel.mode.IconColor = settingsPanel.unit.BorderColor =
-					settingsPanel.unit.IconColor = settingsPanel.textBox1.BorderColor = Helper.bgBorder;
+			settingsPanel.ActionBox.BorderColor = settingsPanel.ActionBox.IconColor = settingsPanel.lang.BorderColor =
+				settingsPanel.lang.IconColor = settingsPanel.mode.BorderColor = settingsPanel.mode.IconColor =
+					settingsPanel.unit.BorderColor = settingsPanel.unit.IconColor = settingsPanel.textBox1.BorderColor = Helper.bgBorder;
 
 			settingsPanel.tabs.bg = new SolidBrush (Helper.bgColor);
 			settingsPanel.tabs.bgClick = new SolidBrush (Helper.bgClick);
@@ -130,6 +132,13 @@ namespace Yuki_Theme.Core.Forms
 		public void setVisible (bool vis)
 		{
 			settingsPanel.setVisible (vis);
+		}
+
+		public void UpdateTranslation ()
+		{
+			button2.Text = CLI.Translate ("main.tips.save");
+			button3.Text = CLI.Translate ("download.cancel");
+			this.Text = CLI.Translate ("main.tips.settings");
 		}
 	}
 }
