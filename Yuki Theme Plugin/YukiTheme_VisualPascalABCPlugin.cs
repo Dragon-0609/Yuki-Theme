@@ -463,6 +463,7 @@ namespace Yuki_Theme_Plugin
 				ow.Items.Add (new ToolStripSeparator ());
 
 				ow.Items.AddRange (coll.ToArray ());
+				UpdateTranslations ();
 			}
 
 			((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
@@ -758,7 +759,7 @@ namespace Yuki_Theme_Plugin
 					
 				} else
 				{
-					MessageBox.Show ("Please, close Yuki Theme window to activate 'Switch theme'");
+					MessageBox.Show (CLI.Translate ("plugin.close"));
 				}
 			}
 		}
@@ -1217,6 +1218,18 @@ namespace Yuki_Theme_Plugin
 				UpdatePageControl upage = (UpdatePageControl)tp;
 				upage.UpdateTheme ();
 			}
+		}
+
+		public void UpdateTranslations ()
+		{
+			openInExplorerItem.Text = CLI.Translate ("Open in Explorer");
+			menu_settings.Text = CLI.Translate ("Show Settings");
+			quiet.Text = CLI.Translate ("Toggle Discreet Mode");
+			stick.Text = CLI.Translate ("Enable Stickers");
+			backimage.Text = CLI.Translate ("Enable Wallpaper");
+			switchTheme.Text = CLI.Translate ("Switch Theme");
+			enablePositioning.Text = CLI.Translate ("Enable Stickers Positioning");
+			resetStickerPosition.Text = CLI.Translate ("Reset Sticker Margins");
 		}
 		
 		#endregion
@@ -1748,7 +1761,7 @@ namespace Yuki_Theme_Plugin
 
 		private void SubscribeCompletion ()
 		{
-			Console.WriteLine ("Unsubscribed");
+			// Console.WriteLine ("Unsubscribed");
 			CodeCompletionKeyHandler handler = new CodeCompletionKeyHandler (textEditor);
 			ht [textEditor] = handler;
 
@@ -1932,7 +1945,7 @@ namespace Yuki_Theme_Plugin
 				tp.Activate ();
 			} else
 			{
-				MessageBox.Show ("Couldn't find web browser");
+				MessageBox.Show (CLI.Translate ("plugin.browser.error"));
 			}
 		}
 		

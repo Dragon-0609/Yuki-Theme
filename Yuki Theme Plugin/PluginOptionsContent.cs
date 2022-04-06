@@ -14,12 +14,15 @@ namespace Yuki_Theme_Plugin
 	{
 		private YukiTheme_VisualPascalABCPlugin plugin;
 
+		private string locale;
+		
 		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
 		{
 			InitializeComponent ();
 			plugin = plug;
 			settingsPanel.isFromPascal = true; // To recognize
 			settingsPanel.SettingsPanel_Load ();
+			locale = Settings.localization;
 		}
 
 		private bool alreadyShown;
@@ -114,7 +117,7 @@ namespace Yuki_Theme_Plugin
 						                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight);
 
 						settingsPanel.onChange = YukiTheme_VisualPascalABCPlugin.camouflage.Update;
-
+						settingsPanel.updateTranslation = plugin.UpdateTranslations;
 						alreadyShown = true;
 					} else
 					{
@@ -160,6 +163,11 @@ namespace Yuki_Theme_Plugin
 					settingsPanel.popupController = null;
 					plugin.mf = null;
 					alreadyShown = false;
+					if (locale != Settings.localization)
+					{
+						Settings.localization = locale;
+						plugin.UpdateTranslations ();
+					}
 					break;
 			}
 		}
