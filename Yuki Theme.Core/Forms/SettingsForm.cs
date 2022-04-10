@@ -63,6 +63,7 @@ namespace Yuki_Theme.Core.Forms
 			settingsPanel.SettingsPanel_Load ();
 			settingsPanel.popupController = mf.popupController;
 			settingsPanel.updateTranslation = UpdateTranslation;
+			UpdateTranslation ();
 			FontManager.SetAllControlsFont (this.Controls, 0);
 		}
 

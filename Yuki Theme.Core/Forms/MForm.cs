@@ -178,7 +178,7 @@ namespace Yuki_Theme.Core.Forms
 
 		public MForm (int mode = 0)
 		{
-			Helper.mode = (ProductMode) mode;                               // Write current type
+			Helper.mode = (ProductMode)mode;                                // Write current type
 			textBoxHeight = Helper.mode == ProductMode.Program ? 140 : 178; // This is necessary to change height properly
 			int notHeight = Helper.mode == ProductMode.Program ? 50 : 88;
 			InitializeComponent ();
@@ -237,13 +237,13 @@ namespace Yuki_Theme.Core.Forms
 			}
 		}
 
-		
+
 		#region Initialization
 
 		public void load_schemes ()
 		{
-			ResetSchemes();
-			
+			ResetSchemes ();
+
 			schemes.Items.Clear ();
 
 			CLI.load_schemes (ifZero);
@@ -255,7 +255,7 @@ namespace Yuki_Theme.Core.Forms
 			else
 				schemes.SelectedIndex = 0;
 		}
-		
+
 		private void initSticker ()
 		{
 			stickerControl = new CustomPicture (this);
@@ -265,7 +265,7 @@ namespace Yuki_Theme.Core.Forms
 			else
 				stickerControl.margin = new Point (10, 0);
 			stickerControl.Enabled = Settings.positioning;
-			CustomPanel pnl = new CustomPanel (1) {Visible = false, Name = "LayerGrids"};
+			CustomPanel pnl = new CustomPanel (1) { Visible = false, Name = "LayerGrids" };
 			stickerControl.pnl = pnl;
 			pnl.pict = stickerControl;
 			Controls.Add (pnl);
@@ -296,6 +296,7 @@ namespace Yuki_Theme.Core.Forms
 						stickerControl.Visible = false;
 					}
 				}
+
 				stickerControl.img = img4;
 			} else
 			{
@@ -309,7 +310,7 @@ namespace Yuki_Theme.Core.Forms
 			var a = Assembly.GetExecutingAssembly ();
 
 			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			
+
 			Helper.RenderSvg (save_button, Helper.LoadSvg ("menu-saveall" + add, a));
 			Helper.RenderSvg (restore_button, Helper.LoadSvg ("refresh" + add, a));
 			Helper.RenderSvg (export_button, Helper.LoadSvg ("export" + add, a));
@@ -328,7 +329,7 @@ namespace Yuki_Theme.Core.Forms
 
 		#endregion
 
-		
+
 		#region Events For Core
 
 		public void ifHasImage (Image imgc)
@@ -369,14 +370,14 @@ namespace Yuki_Theme.Core.Forms
 				res = op.FileName;
 			return res;
 		}
-		
+
 		public void hasProblem (string content)
 		{
 			MessageBox.Show (
 				content, Translate ("messages.theme.invalid.short"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 			schemes.SelectedIndex = 0;
 		}
-		
+
 		public bool SaveInExport (string content, string title)
 		{
 			return MessageBox.Show (content, title,
@@ -421,7 +422,7 @@ namespace Yuki_Theme.Core.Forms
 
 			return nm;
 		}
-		
+
 		public void setPath (string content, string title)
 		{
 			MessageBox.Show (content, title, MessageBoxButtons.OK,
@@ -465,12 +466,12 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 		}
-		
+
 		private void manage_Click (object sender, EventArgs e)
 		{
 			if (tmanagerform == null || tmanagerform.IsDisposed)
 				tmanagerform = new ThemeManager (this);
-			
+
 			tmanagerform.groups.Clear ();
 
 			Dictionary <string, ReItem> groupItems = new Dictionary <string, ReItem> ();
@@ -487,7 +488,7 @@ namespace Yuki_Theme.Core.Forms
 			ReItem custom = new ReItem (customgroup, true);
 			tmanagerform.groups.Add (custom);
 			groupItems.Add (customgroup, custom);
-			
+
 			foreach (string item in schemes.Items)
 			{
 				ReItem litem;
@@ -502,9 +503,8 @@ namespace Yuki_Theme.Core.Forms
 					Console.WriteLine (custom.Name);
 					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
 				}
-
 			}
-			
+
 			tmanagerform.ResetList ();
 			tmanagerform.ShowDialog ();
 		}
@@ -543,7 +543,8 @@ namespace Yuki_Theme.Core.Forms
 			// fd.DefaultExt = "icls";
 			fd.Title = Translate ("main.tips.import");
 			fd.InitialDirectory = Path.GetDirectoryName (Application.ExecutablePath);
-			fd.Filter = Translate ("main.import.extensions.all") + " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
+			fd.Filter = Translate ("main.import.extensions.all") +
+			            " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd";
 			fd.Multiselect = false;
 			if (fd.ShowDialog () == DialogResult.OK)
 			{
@@ -580,6 +581,12 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (setform == null)
 				setform = new SettingsForm (this);
+			else
+			{
+				setform.settingsPanel.UpdateLanguageSelection ();
+				setform.settingsPanel.UpdateTranslations ();
+			}
+
 			if (Helper.mode == ProductMode.Program)
 			{
 				setform.Path = pascalPath;
@@ -603,9 +610,9 @@ namespace Yuki_Theme.Core.Forms
 				swStatusbar = setform.StatusBar;
 				askChoice = setform.settingsPanel.askC.Checked;
 				update = setform.settingsPanel.checkBox2.Checked;
-				settingMode = (SettingMode) setform.settingsPanel.mode.SelectedIndex;
+				settingMode = (SettingMode)setform.settingsPanel.mode.SelectedIndex;
 				Settings.positioning = setform.settingsPanel.checkBox3.Checked;
-				Settings.unit = (RelativeUnit) setform.settingsPanel.unit.SelectedIndex;
+				Settings.unit = (RelativeUnit)setform.settingsPanel.unit.SelectedIndex;
 				Settings.showGrids = setform.settingsPanel.checkBox4.Checked;
 				Settings.useCustomSticker = setform.settingsPanel.use_cstm_sticker.Checked;
 				Settings.customSticker = setform.settingsPanel.customSticker;
@@ -613,7 +620,7 @@ namespace Yuki_Theme.Core.Forms
 				Settings.askToSave = setform.settingsPanel.askSave.Checked;
 				Settings.saveAsOld = setform.settingsPanel.saveOld.Checked;
 				Settings.showPreview = setform.settingsPanel.preview.Checked;
-				
+
 				Settings.saveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = Settings.positioning;
@@ -628,10 +635,11 @@ namespace Yuki_Theme.Core.Forms
 			} else
 			{
 				Settings.localization = lang;
+				Settings.translation.LoadLocale (lang);
 			}
 		}
 
-		
+
 		private void onSelectItem (object sender, EventArgs e)
 		{
 			if (lastIndex != list_1.SelectedIndex)
@@ -669,11 +677,15 @@ namespace Yuki_Theme.Core.Forms
 						bgButton.BackColor = ColorTranslator.FromHtml (dic.Background);
 						bgButton.Visible = backgroundColorLabel.Visible = true;
 					}
-					if (dic.Bold != null){
-						check_bold.Checked = (bool) dic.Bold;
+
+					if (dic.Bold != null)
+					{
+						check_bold.Checked = (bool)dic.Bold;
 					}
-					if (dic.Italic != null){
-						check_italic.Checked = (bool) dic.Italic;
+
+					if (dic.Italic != null)
+					{
+						check_italic.Checked = (bool)dic.Italic;
 					}
 
 					blocked = false;
@@ -694,7 +706,7 @@ namespace Yuki_Theme.Core.Forms
 					{
 						alignpanel.Enabled = true;
 						imgCurrent = ImageType.Wallpaper;
-						align = (Alignment) CLI.currentTheme.WallpaperAlign;
+						align = (Alignment)CLI.currentTheme.WallpaperAlign;
 						imagePath.Text = bgtext;
 						blockedNumeric = true;
 						opacitySlider.Value = CLI.currentTheme.WallpaperOpacity;
@@ -718,7 +730,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 		}
-		
+
 		private void colorButton_Click (object sender, EventArgs e)
 		{
 			if (!blocked)
@@ -726,7 +738,7 @@ namespace Yuki_Theme.Core.Forms
 				col.MainColor = colorButton.BackColor;
 				if (col.ShowDialog (this) == DialogResult.OK)
 				{
-					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor; 
+					if (!CLI.isEdited) CLI.isEdited = colorButton.BackColor != col.MainColor;
 					colorButton.BackColor = col.MainColor;
 					updateCurrentItem ();
 				}
@@ -746,7 +758,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 		}
-		
+
 		private void Apply_Click (object sender, EventArgs e)
 		{
 			if (imgCurrent == ImageType.Wallpaper)
@@ -793,7 +805,8 @@ namespace Yuki_Theme.Core.Forms
 						img2 = Image.FromFile (imagePath.Text);
 
 						unblockedScrool = true;
-						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.WallpaperOpacity));
+						opacity_slider_Scroll (
+							sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.WallpaperOpacity));
 					} else if (imgCurrent == ImageType.Sticker)
 					{
 						img3 = Image.FromFile (imagePath.Text);
@@ -801,7 +814,8 @@ namespace Yuki_Theme.Core.Forms
 						if (img3.Width > 400 || img3.Height > 400)
 						{
 							if (MessageBox.Show (
-								    Translate ("main.sticker.select.big.full"), Translate ("main.sticker.select.big.short"), MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+								    Translate ("main.sticker.select.big.full"), Translate ("main.sticker.select.big.short"),
+								    MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
 							    DialogResult.No)
 							{
 								restore_Click (sender, e);
@@ -810,7 +824,8 @@ namespace Yuki_Theme.Core.Forms
 						}
 
 						unblockedScrool = true;
-						opacity_slider_Scroll (sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
+						opacity_slider_Scroll (
+							sender, new ScrollEventArgs (ScrollEventType.ThumbPosition, CLI.currentTheme.StickerOpacity));
 					}
 				} else
 				{
@@ -831,7 +846,8 @@ namespace Yuki_Theme.Core.Forms
 				}
 			} else
 			{
-				MessageBox.Show (Translate ("messages.file.notexist.short"), Translate ("messages.file.notexist.full2"), MessageBoxButtons.OK,
+				MessageBox.Show (Translate ("messages.file.notexist.short"), Translate ("messages.file.notexist.full2"),
+				                 MessageBoxButtons.OK,
 				                 MessageBoxIcon.Error);
 			}
 		}
@@ -841,14 +857,14 @@ namespace Yuki_Theme.Core.Forms
 			imagePath.Text = "";
 			Apply_Click (sender, e);
 		}
-		
+
 		public void onSelect ()
 		{
 			list_1.Items.AddRange (CLI.names.ToArray ());
 			list_1.SelectedIndex = 0;
 			onSelectItem (list_1, EventArgs.Empty);
 		}
-		
+
 		private void check_bold_CheckedChanged (object sender, EventArgs e)
 		{
 			if (!blocked)
@@ -866,7 +882,7 @@ namespace Yuki_Theme.Core.Forms
 			if (preventFromUpdate)
 			{
 				preventFromUpdate = false;
-			}else
+			} else
 			{
 				bool cnd = CLI.SelectTheme (schemes.SelectedItem.ToString ());
 
@@ -887,7 +903,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 		}
-		
+
 		private void panel1_Resize (object sender, EventArgs e)
 		{
 			popupController.changeDownloaderLocation ();
@@ -914,6 +930,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				align = Alignment.Left;
 			}
+
 			updateAlignButton ();
 		}
 
@@ -923,6 +940,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				align = Alignment.Center;
 			}
+
 			updateAlignButton ();
 		}
 
@@ -932,6 +950,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				align = Alignment.Right;
 			}
+
 			updateAlignButton ();
 		}
 
@@ -1027,7 +1046,7 @@ namespace Yuki_Theme.Core.Forms
 			popupController.changeDownloaderLocation ();
 			popupController.changeNotificationLocation ();
 		}
-		
+
 		private void MForm_SizeChanged (object sender, EventArgs e)
 		{
 			int he = ClientSize.Height - textBoxHeight;
@@ -1044,9 +1063,9 @@ namespace Yuki_Theme.Core.Forms
 			popupController.InitializeAllWindows ();
 			popupController.df.CheckUpdate ();
 		}
-		
+
 		#endregion
-		
+
 
 		#region Updates
 
@@ -1090,7 +1109,7 @@ namespace Yuki_Theme.Core.Forms
 				OnColorUpdate (bgDefault, fgDefault, bgClicked);
 			fgbrush = new SolidBrush (fgDefault);
 			loadSVG ();
-			
+
 			popupController.TryToUpdateNotificationWindow ();
 		}
 
@@ -1102,10 +1121,10 @@ namespace Yuki_Theme.Core.Forms
 
 			highlighter.updateColors ();
 		}
-		
+
 		#endregion
 
-		
+
 		#region Painting
 
 		private void bgImagePaint (object sender, PaintEventArgs e)
@@ -1121,7 +1140,7 @@ namespace Yuki_Theme.Core.Forms
 				e.Graphics.DrawImage (img, oldV);
 			}
 		}
-		
+
 		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
 		{
 			if (e.Index < 0) return;
@@ -1137,10 +1156,10 @@ namespace Yuki_Theme.Core.Forms
 
 			e.DrawFocusRectangle ();
 		}
-		
+
 		#endregion
 
-		
+
 		#region Checkers
 
 		public bool isDefault ()
@@ -1160,7 +1179,7 @@ namespace Yuki_Theme.Core.Forms
 				ke.DeleteValue ("install");
 			}
 		}
-		
+
 		private void checkEditor ()
 		{
 			import_directory.Visible = import_button.Visible =
@@ -1177,24 +1196,22 @@ namespace Yuki_Theme.Core.Forms
 
 			MForm_SizeChanged (this, EventArgs.Empty);
 		}
-		
+
 		#endregion
 
-		
+
 		#region Helper Methods
 
 		private void AddTips ()
 		{
-			
-			AddTip ( save_button, Translate("main.tips.save"));
-			AddTip ( restore_button, Translate("main.tips.restore"));
-			AddTip ( settings_button, Translate("main.tips.settings"));
-			AddTip ( export_button, Translate("main.tips.export"));
-			AddTip ( import_button, Translate("main.tips.import"));
-			AddTip ( add_button, Translate("main.tips.add"));
-			AddTip ( manage_button, Translate("main.tips.manage"));
-			AddTip (import_directory, Translate("main.tips.import_directory"));
-			
+			AddTip (save_button, Translate ("main.tips.save"));
+			AddTip (restore_button, Translate ("main.tips.restore"));
+			AddTip (settings_button, Translate ("main.tips.settings"));
+			AddTip (export_button, Translate ("main.tips.export"));
+			AddTip (import_button, Translate ("main.tips.import"));
+			AddTip (add_button, Translate ("main.tips.add"));
+			AddTip (manage_button, Translate ("main.tips.manage"));
+			AddTip (import_directory, Translate ("main.tips.import_directory"));
 		}
 
 		private void AddTip (Control control, string text)
@@ -1203,7 +1220,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				tip.Show (text, control);
 			};
-			
+
 			control.MouseLeave += (sender, args) =>
 			{
 				if (tip.Active)
@@ -1251,7 +1268,7 @@ namespace Yuki_Theme.Core.Forms
 					description = reader.ReadToEnd ();
 				}
 
-				msgf.Text = CLI.Translate("main.license.title");
+				msgf.Text = CLI.Translate ("main.license.title");
 				msgf.setMessage (CLI.Translate ("main.license.jetbrains"), description, CLI.Translate ("main.license.accept"));
 				msgf.ShowDialog (parent);
 				Settings.license = true;
@@ -1266,7 +1283,7 @@ namespace Yuki_Theme.Core.Forms
 			{
 				QuestionForm_2 qf = new QuestionForm_2 ();
 				qf.setColors (bg, fg, bgClick);
-				
+
 				if (qf.ShowDialog (parent) == DialogResult.Yes)
 				{
 					Settings.googleAnalytics = true;
@@ -1311,7 +1328,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			return ColorTranslator.ToHtml (clr);
 		}
-		
+
 		private void ResetSchemes ()
 		{
 			CLI.schemes.Clear ();
@@ -1341,7 +1358,6 @@ namespace Yuki_Theme.Core.Forms
 		}
 
 		#endregion
-		
 	}
 
 

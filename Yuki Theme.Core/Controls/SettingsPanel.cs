@@ -409,10 +409,15 @@ namespace Yuki_Theme.Core.Controls
 			restartUpdate.Enabled = DownloadForm.IsUpdateDownloaded ();
 			preview.Checked = Settings.showPreview;
 			lockLang = true;
-			lang.SelectedIndex = Settings.translation.GetIndexOfLangShort (Settings.localization);
+			UpdateLanguageSelection ();
 			lockLang = false;
 			loadSVG ();
 			UpdateTranslations ();
+		}
+
+		public void UpdateLanguageSelection ()
+		{
+			lang.SelectedIndex = Settings.translation.GetIndexOfLangShort (Settings.localization);
 		}
 
 		private void backImage_CheckedChanged (object sender, EventArgs e)
@@ -459,8 +464,8 @@ namespace Yuki_Theme.Core.Controls
 		{
 			lang.Items.AddRange (Settings.translation.GetLanguages ());
 		}
-		
-		private void UpdateTranslations ()
+
+		public void UpdateTranslations ()
 		{
 			TranslateControls (tabs);
 			if (updateTranslation != null)

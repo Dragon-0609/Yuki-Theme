@@ -46,6 +46,7 @@ namespace Yuki_Theme.Core.Forms
 			scheme.MouseClick += CheckFolding;
 			label1.Text = CLI.Translate ("theme.manager.old");
 			label2.Text = CLI.Translate ("theme.manager.new");
+			closeButton.Text = CLI.Translate ("messages.buttons.close");
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 

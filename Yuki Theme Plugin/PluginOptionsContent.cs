@@ -13,6 +13,8 @@ namespace Yuki_Theme_Plugin
 	public partial class PluginOptionsContent : UserControl, IOptionsContent
 	{
 		private YukiTheme_VisualPascalABCPlugin plugin;
+		
+		string lang = Settings.localization;
 
 		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
 		{
@@ -114,7 +116,7 @@ namespace Yuki_Theme_Plugin
 						                            YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight);
 
 						settingsPanel.onChange = YukiTheme_VisualPascalABCPlugin.camouflage.Update;
-
+						lang = Settings.localization;
 						alreadyShown = true;
 					} else
 					{
@@ -124,6 +126,8 @@ namespace Yuki_Theme_Plugin
 						settingsPanel.toolBarPosition.Checked = false;
 						settingsPanel.lockCheckbox = false;
 						settingsPanel.toolBarList.SelectedIndex = -1;
+						settingsPanel.UpdateLanguageSelection ();
+						settingsPanel.UpdateTranslations ();
 					}
 
 					break;
@@ -159,6 +163,8 @@ namespace Yuki_Theme_Plugin
 				case OptionsContentAction.Cancel :
 					settingsPanel.popupController = null;
 					plugin.mf = null;
+					Settings.localization = lang;
+					Settings.translation.LoadLocalization ();
 					alreadyShown = false;
 					break;
 			}
