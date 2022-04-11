@@ -696,6 +696,10 @@ namespace Yuki_Theme.Core
 
 			Helper.ExtractZip (source, path, img.Item1, sticker.Item1, false);
 		}
+		
+		
+		
+		
 
 		/// <summary>
 		/// Delete files if exist
