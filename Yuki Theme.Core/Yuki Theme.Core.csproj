@@ -367,7 +367,8 @@
     <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
-    <Content Include="Resources\HTML\loading.html" />
+    <EmbeddedResource Include="Resources\HTML\loading.html" />
+    <EmbeddedResource Include="Resources\HTML\theme_downloader.html" />
     <Content Include="Resources\left.png" />
     <Content Include="Resources\right.png" />
     <EmbeddedResource Include="Resources\SVG\add.svg" />

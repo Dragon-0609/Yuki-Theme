@@ -22,16 +22,16 @@ namespace Yuki_Theme.Core
 		public static ProductMode  mode;
 		public static RelativeUnit unit;
 
-		private static Size Standart32 = new Size (32, 32);
-		public static string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
+		private static Size   Standart32 = new Size (32, 32);
+		public static  string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
 			Rectangle res = new Rectangle ();
-			double rY = (double) mHeight / ima.Height;
-			res.Width = (int) (ima.Width * rY);
-			res.Height = (int) (ima.Height * rY);
-			res.X = (mWidth - res.Width) / (int) align;
+			double rY = (double)mHeight / ima.Height;
+			res.Width = (int)(ima.Width * rY);
+			res.Height = (int)(ima.Height * rY);
+			res.X = (mWidth - res.Width) / (int)align;
 
 			// If image's drawing rectangle's width is smaller than mWidth.
 
@@ -52,9 +52,9 @@ namespace Yuki_Theme.Core
 		private static Rectangle GetSizesHorizontal (Size ima, int mWidth, int mHeight)
 		{
 			Rectangle res = new Rectangle ();
-			double rY = (double) mWidth / ima.Width;
-			res.Width = (int) (ima.Width * rY);
-			res.Height = (int) (ima.Height * rY);
+			double rY = (double)mWidth / ima.Width;
+			res.Width = (int)(ima.Width * rY);
+			res.Height = (int)(ima.Height * rY);
 			res.Y = (mHeight - res.Height) / 2;
 
 			return res;
@@ -71,10 +71,10 @@ namespace Yuki_Theme.Core
 		public const  string FILE_EXTENSTION_OLD = ".yukitheme";
 		public const  string FILE_EXTENSTION_NEW = ".yuki";
 		public const  string PASCALTEMPLATE      = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
-		
+
 		#endregion
-		
-		
+
+
 		#region Get Image
 
 		public static Tuple <bool, Image> GetImage (string path)
@@ -154,10 +154,10 @@ namespace Yuki_Theme.Core
 				return new Tuple <bool, Image> (false, null);
 			}
 		}
-		
+
 		#endregion
 
-		
+
 		#region Get Theme
 
 		public static Tuple <bool, string> GetTheme (string path)
@@ -183,7 +183,7 @@ namespace Yuki_Theme.Core
 			{
 				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
 				{
-					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
 						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
 					else
 						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
@@ -243,10 +243,10 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
-		
+
 		#endregion
-		
-		
+
+
 		#region Zip
 
 		public static bool IsZip (string path)
@@ -255,7 +255,7 @@ namespace Yuki_Theme.Core
 			{
 				using (ZipArchive zipFile = ZipFile.OpenRead (path))
 				{
-					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
 						return IsZip (zipFile, THEME_NAME_OLD);
 					else
 						return IsZip (zipFile, THEME_NAME_NEW);
@@ -287,7 +287,6 @@ namespace Yuki_Theme.Core
 		{
 			var theme = zipFile.GetEntry (themefile);
 			return true;
-			
 		}
 
 		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
@@ -307,7 +306,7 @@ namespace Yuki_Theme.Core
 					// To be sure that there's no old theme file
 					entry = archive.GetEntry (THEME_NAME_OLD);
 					entry?.Delete ();
-					
+
 					entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
@@ -443,14 +442,14 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-		
+
 		#region Color Management
 
 		public static Color ChangeColorBrightness (Color color, float correctionFactor)
 		{
-			float red = (float) color.R;
-			float green = (float) color.G;
-			float blue = (float) color.B;
+			float red = (float)color.R;
+			float green = (float)color.G;
+			float blue = (float)color.B;
 
 			if (correctionFactor < 0)
 			{
@@ -465,7 +464,7 @@ namespace Yuki_Theme.Core
 				blue = (255 - blue) * correctionFactor + blue;
 			}
 
-			return Color.FromArgb (color.A, (int) red, (int) green, (int) blue);
+			return Color.FromArgb (color.A, (int)red, (int)green, (int)blue);
 		}
 
 		public static bool IsDark (Color clr)
@@ -481,10 +480,10 @@ namespace Yuki_Theme.Core
 			else
 				return ChangeColorBrightness (clr, -percent);
 		}
-		
+
 		#endregion
-		
-		
+
+
 		#region SVG Manager
 
 		public static SvgDocument LoadSvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
@@ -515,7 +514,7 @@ namespace Yuki_Theme.Core
 		                              bool customColor = false, Color       clr = default)
 		{
 			// im.Icon?.Dispose ();
-			IntPtr ptr = ((Bitmap) RenderSvg (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
+			IntPtr ptr = ((Bitmap)RenderSvg (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
 
 			im.Icon = Icon.FromHandle (ptr);
 			// DestroyIcon (ptr);
@@ -544,8 +543,29 @@ namespace Yuki_Theme.Core
 		}
 
 		#endregion
-		
-		
+
+		/// <summary>
+		/// Load HTML from memory and return as string
+		/// </summary>
+		/// <param name="name">Name of file with extension (.html)</param>
+		/// <param name="namespac">Namespace of resource. Default: Yuki_Theme.Core.Resources. (dot must be included)</param>
+		/// <returns></returns>
+		public static string ReadHTML (string name, string namespac = "Yuki_Theme.Core.Resources.")
+		{
+			Assembly a = Assembly.GetExecutingAssembly ();
+
+			Stream stm = a.GetManifestResourceStream (namespac + name);
+			string md = "";
+			using (StreamReader reader = new StreamReader (stm))
+			{
+				md = reader.ReadToEnd ();
+			}
+
+			stm.Dispose ();
+
+			return md;
+		}
+
 		public static string GetThemeSaveName (bool asOld)
 		{
 			return "theme." + GetSaveFormat (asOld);
@@ -622,10 +642,18 @@ namespace Yuki_Theme.Core
 		{
 			return RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()));
 		}
-		
+
 		public static Icon GetYukiThemeIcon (Size size)
 		{
 			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
+		}
+
+		public static string ReplaceHTMLColors (string html)
+		{
+			html = html.Replace ("__bg__", ColorTranslator.ToHtml (bgColor));
+			html = html.Replace ("__clr__", ColorTranslator.ToHtml (fgColor));
+			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (fgHover));
+			return html;
 		}
 	}
 
