@@ -17,7 +17,8 @@ namespace Yuki_Theme.Core.Parsers
 			string st = Path.GetFileNameWithoutExtension (path);
 			if (isDefault (st))
 			{
-				if (defaultTheme != null) defaultTheme ("The theme is default! You can't import it!", "Default Theme");
+				if (defaultTheme != null)
+					defaultTheme (CLI.Translate ("parser.theme.default"), CLI.Translate ("messages.theme.default.short"));
 				return;
 			}
 

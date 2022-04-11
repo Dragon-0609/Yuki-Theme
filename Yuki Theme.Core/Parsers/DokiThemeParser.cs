@@ -33,10 +33,10 @@ namespace Yuki_Theme.Core.Parsers
 			PathToSave = Path.Combine (CLI.currentPath, "Themes",
 			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
 			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
-				throw new InvalidDataException ("The theme is exist...canceling...");
+				throw new InvalidDataException (CLI.Translate ("parser.theme.exist"));
 
 			overwrite = File.Exists (PathToSave);
-			Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
+			// Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
 			dark = bool.Parse (json ["dark"].ToString ());
 
 			foreach (JProperty cl in json ["colors"])

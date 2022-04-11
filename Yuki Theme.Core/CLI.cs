@@ -925,17 +925,17 @@ namespace Yuki_Theme.Core
 			return unknowThemes.ToArray ();
 		}
 
-		internal static string Translate (string key)
+		public static string Translate (string key)
 		{
 			return Settings.translation.GetText (key);
 		}
 
-		internal static string Translate (string key, string p1)
+		public static string Translate (string key, string p1)
 		{
 			return Settings.translation.GetText (key).Replace ("{0}", p1);
 		}
 
-		internal static string Translate (string key, string p1, string p2)
+		public static string Translate (string key, string p1, string p2)
 		{
 			return Settings.translation.GetText (key).Replace ("{0}", p1).Replace ("{1}", p2);
 		}

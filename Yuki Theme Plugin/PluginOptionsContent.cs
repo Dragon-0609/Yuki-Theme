@@ -117,6 +117,7 @@ namespace Yuki_Theme_Plugin
 
 						settingsPanel.onChange = YukiTheme_VisualPascalABCPlugin.camouflage.Update;
 						lang = Settings.localization;
+						settingsPanel.updateTranslation = plugin.UpdateTranslations;
 						alreadyShown = true;
 					} else
 					{
