@@ -4,10 +4,13 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
+using CommandLine.Infrastructure;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Localization;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 
@@ -15,9 +18,10 @@ namespace Yuki_Theme.CLI
 {
 	class MainClass
 	{
-		private static bool quit = false;
-		private static bool loop = false;
-		
+		private static bool quit      = false;
+		private static bool loop      = false;
+		private const  int  MAX_WIDTH = 80;
+
 		#region Other Methods
 
 		private static void AskPath (string content, string title)
@@ -25,13 +29,13 @@ namespace Yuki_Theme.CLI
 			Console.WriteLine ($"{title}:\n {content}");
 			bool isPath = false;
 			string pth = "";
-			while(!isPath)
+			while (!isPath)
 			{
 				string path = Console.ReadLine ();
 				if (path.ToLower () == "exit")
 				{
 					break;
-				}else if (Directory.Exists (path))
+				} else if (Directory.Exists (path))
 				{
 					if (Directory.Exists (System.IO.Path.Combine (path, "Highlighting")))
 					{
@@ -54,20 +58,20 @@ namespace Yuki_Theme.CLI
 				Core.Settings.saveData ();
 			}
 		}
-		
+
 		private static void GiveMessage (string content, string title)
 		{
 			Console.WriteLine ($"{title}:\n {content}");
 		}
-		
+
 		private static void ShowSuccess (string content, string title)
 		{
-			ConsoleColor clr = Console.ForegroundColor; 
+			ConsoleColor clr = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Green;
 			GiveMessage (content, title);
 			Console.ForegroundColor = clr;
 		}
-		
+
 		private static void ShowInvertSuccess (string content, string title)
 		{
 			ShowSuccess (title, content);
@@ -123,7 +127,7 @@ namespace Yuki_Theme.CLI
 
 			return ans;
 		}
-		
+
 		private static void AfterDelete (string content, object obj)
 		{
 			ShowError ($@"{content} has been successfully deleted.");
@@ -133,11 +137,11 @@ namespace Yuki_Theme.CLI
 		{
 			return st == null || st.Length == 0;
 		}
-		
+
 		private static Image LoadImage ()
 		{
 			Image res = null;
-			if(Core.CLI.isDefault ())
+			if (Core.CLI.isDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
@@ -149,8 +153,6 @@ namespace Yuki_Theme.CLI
 					{
 						res = iag.Item2;
 					}
-
-
 				}
 			} else
 			{
@@ -171,7 +173,7 @@ namespace Yuki_Theme.CLI
 		private static Image LoadSticker ()
 		{
 			Image res = null;
-			if(Core.CLI.isDefault ())
+			if (Core.CLI.isDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
@@ -196,10 +198,11 @@ namespace Yuki_Theme.CLI
 					}
 				}
 			}
+
 			return res;
 		}
 
-		private static Tuple <bool, string> GetThemeFromMemory (out Assembly location , out string pathToMemory)
+		private static Tuple <bool, string> GetThemeFromMemory (out Assembly location, out string pathToMemory)
 		{
 			IThemeHeader header = DefaultThemes.headers [Core.CLI.nameToLoad];
 			string ext = Helper.GetThemeFormat (true, Core.CLI.pathToLoad, Core.CLI.nameToLoad) == ThemeFormat.Old
@@ -262,15 +265,14 @@ namespace Yuki_Theme.CLI
 		/// <param name="str">Content</param>
 		public static void ShowError (string str)
 		{
-			ConsoleColor clr = Console.ForegroundColor; 
+			ConsoleColor clr = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Red;
 			Console.WriteLine (str);
 			Console.ForegroundColor = clr;
 		}
 
-		public static void Main (string[] args)
+		public static void Main (string [] args)
 		{
-			
 			var parser = new Parser (parserSettings =>
 			{
 				parserSettings.AutoHelp = true;
@@ -308,22 +310,23 @@ namespace Yuki_Theme.CLI
 
 		private static void ShowLoopMessage ()
 		{
-			if(loop)
+			if (loop)
 				ShowError ("Loop mode is activated. To exit write 'QUIT'.\n".ToUpper ());
 		}
-		
-		static string[] ParseArguments(string commandLine)
+
+		static string [] ParseArguments (string commandLine)
 		{
-			char[] parmChars = commandLine.ToCharArray();
+			char [] parmChars = commandLine.ToCharArray ();
 			bool inQuote = false;
 			for (int index = 0; index < parmChars.Length; index++)
 			{
-				if (parmChars[index] == '"')
+				if (parmChars [index] == '"')
 					inQuote = !inQuote;
-				if (!inQuote && parmChars[index] == ' ')
-					parmChars[index] = '\n';
+				if (!inQuote && parmChars [index] == ' ')
+					parmChars [index] = '\n';
 			}
-			return (new string(parmChars)).Split('\n');
+
+			return (new string (parmChars)).Split ('\n');
 		}
 
 		/// <summary>
@@ -331,17 +334,18 @@ namespace Yuki_Theme.CLI
 		/// </summary>
 		/// <param name="parser">Parser</param>
 		/// <param name="args">Arguments of commands</param>
-		private static void Parse (Parser parser, string[] args)
+		private static void Parse (Parser parser, string [] args)
 		{
 			var res = parser
-				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand, DeleteCommand,
+				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
+					DeleteCommand,
 					RenameCommand, SettingsCommand, EditCommand> (args);
 
 			res.WithParsed <CopyCommand> (o =>
 			   {
 				   string fr = ConvertToText (o.Names.ElementAt (0));
 				   string to = ConvertToText (o.Names.ElementAt (1));
-				   
+
 				   if (fr.Length > 0 && to.Length > 0)
 				   {
 					   if (fr != to)
@@ -396,7 +400,7 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <ExportCommand> (o =>
 			   {
 				   bool showerror = false;
-				   if(o.Name !=null)
+				   if (o.Name != null)
 				   {
 					   o.Name = ConvertToText (o.Name);
 					   LoadCLI (true);
@@ -410,8 +414,7 @@ namespace Yuki_Theme.CLI
 						   ShowError (
 							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
 					   }
-				   }
-				   else
+				   } else
 				   {
 					   showerror = true;
 				   }
@@ -424,17 +427,15 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <ImportCommand> (o =>
 			   {
 				   bool showerror = false;
-				   if(o.Path !=null)
+				   if (o.Path != null)
 				   {
 					   if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
 					   {
 						   LoadCLI (true);
 						   Core.CLI.import (o.Path, AskToDelete);
-					   }
-					   else
+					   } else
 						   showerror = true;
-				   }
-				   else
+				   } else
 				   {
 					   showerror = true;
 				   }
@@ -500,8 +501,9 @@ namespace Yuki_Theme.CLI
 					   {
 						   ShowError (
 							   $"{o.Path} isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
-					   }   
+					   }
 				   }
+
 				   if (!isNull (o.Quiet))
 				   {
 					   bool resa = false;
@@ -514,6 +516,7 @@ namespace Yuki_Theme.CLI
 						   ShowError ("Wrong input. Acceptable values: 'true' or 'false'", "Quiet: ");
 					   }
 				   }
+
 				   if (!isNull (o.Mode))
 				   {
 					   bool isValid = false;
@@ -529,9 +532,8 @@ namespace Yuki_Theme.CLI
 							   isValid = true;
 						   }
 							   break;
-
 					   }
-					   
+
 					   if (isValid)
 					   {
 						   Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
@@ -541,6 +543,7 @@ namespace Yuki_Theme.CLI
 						   ShowError ("Invalid input! Acceptable values: 'LIGHT' or 'ADVANCED'");
 					   }
 				   }
+
 				   if (!isNull (o.Action))
 				   {
 					   bool isValid = false;
@@ -565,7 +568,6 @@ namespace Yuki_Theme.CLI
 							   act = 2;
 						   }
 							   break;
-
 					   }
 
 					   if (isValid)
@@ -589,7 +591,7 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <EditCommand> (o =>
 			   {
 				   bool showerror = false;
-				   if(o.Name !=null)
+				   if (o.Name != null)
 				   {
 					   o.Name = ConvertToText (o.Name);
 					   LoadCLI (true);
@@ -619,7 +621,7 @@ namespace Yuki_Theme.CLI
 									   bool txt = false;
 									   Color bgcolor = Color.Empty;
 									   Color txtcolor = Color.Empty;
-									   
+
 									   if (o.Background != null)
 									   {
 										   bgcolor = ColorTranslator.FromHtml (o.Background);
@@ -661,35 +663,29 @@ namespace Yuki_Theme.CLI
 									   }
 								   } else
 								   {
-									   if (!File.Exists (o.Path))
+									   bool changed = false;
+									   if (o.Opacity != null)
 									   {
-										   ShowError ("The file isn't exist!");
-										   return;
+										   if (o.Definition.ToLower () == "sticker")
+											   Core.CLI.currentTheme.StickerOpacity = int.Parse (o.Opacity);
+										   else
+											   Core.CLI.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
+										   changed = true;
 									   }
 
-									   bool img = false;
-									   bool stick = false;
-									   Image image = null;
-									   Image sticker = null;
-									   if (o.Definition.ToLower () == "image")
+									   if (o.Align != null && o.Definition.ToLower () == "image")
 									   {
-										   image = Image.FromFile (o.Path);
-										   sticker = LoadSticker ();
-										   img = true;
-									   } else
-									   {
-										   sticker = Image.FromFile (o.Path);
-										   image = LoadImage ();
-										   stick = true;
+										   Alignment align = Alignment.Center;
+										   if (o.Align.ToLower () == "left") align = Alignment.Left;
+										   else if (o.Align.ToLower () == "center") align = Alignment.Center;
+										   else align = Alignment.Right;
+										   Core.CLI.currentTheme.WallpaperAlign = (int)align;
+										   changed = true;
 									   }
 
-									   if (img || stick)
-									   {
-										   Core.CLI.save (image, sticker, false);
-									   } else
-									   {
-										   ShowError ("Strange error raised!");
-									   }
+									   if (changed)
+										   Core.CLI.save (null, null, true);
+									   SetImageLocation (o);
 								   }
 							   } else
 							   {
@@ -701,8 +697,7 @@ namespace Yuki_Theme.CLI
 						   ShowError (
 							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
 					   }
-				   }
-				   else
+				   } else
 				   {
 					   showerror = true;
 				   }
@@ -712,15 +707,19 @@ namespace Yuki_Theme.CLI
 					   ShowError (
 						   $"Can't edit '{o.Name}'.");
 				   }
-				   
 			   })
 			   .WithNotParsed (errors =>
 			   {
 				   HelpText helpText = null;
+				   Settings.translation.LoadLocalization ();
 				   if (errors.IsHelp () || errors.IsVersion ())
 				   {
 					   helpText = HelpText.AutoBuild (res);
-					   Console.WriteLine (helpText);
+					   // Console.WriteLine("preOptionsHelp: {0}", GetPrivateField("preOptionsHelp", helpText).ToString());
+					   // Console.WriteLine("optionsHelp: {0}", GetPrivateField("optionsHelp", helpText).ToString());
+					   // Console.WriteLine("postOptionsHelp: {0}", GetPrivateField("postOptionsHelp", helpText).ToString());
+					   Console.WriteLine ( Translation (helpText.ToString () ));
+					   // Console.WriteLine ( helpText.ToString ());
 				   } else
 				   {
 					   foreach (var error in errors)
@@ -740,7 +739,7 @@ namespace Yuki_Theme.CLI
 
 							   case MissingValueOptionError missingValueOptionError :
 								   helpText = HelpText.AutoBuild (res);
-								   Console.WriteLine (helpText);
+								   Console.WriteLine (Translation (helpText.ToString ()));
 								   break;
 							   // Handler other appropriate exceptions downhere.
 							   default :
@@ -751,6 +750,42 @@ namespace Yuki_Theme.CLI
 			   });
 		}
 
+		private static void SetImageLocation (EditCommand o)
+		{
+			if (o.Path != null)
+			{
+				bool img = false;
+				bool stick = false;
+				Image image = null;
+				Image sticker = null;
+				if (!File.Exists (o.Path))
+				{
+					ShowError ("The file isn't exist!");
+					return;
+				}
+
+				if (o.Definition.ToLower () == "image")
+				{
+					image = Image.FromFile (o.Path);
+					sticker = LoadSticker ();
+					img = true;
+				} else
+				{
+					sticker = Image.FromFile (o.Path);
+					image = LoadImage ();
+					stick = true;
+				}
+
+				if (img || stick)
+				{
+					Core.CLI.save (image, sticker, false);
+				} else
+				{
+					ShowError ("Strange error raised!");
+				}
+			}
+		}
+
 		private static void SetColorsToField (ref ThemeField dic, bool txt, Color txtcolor, bool bg, Color bgcolor)
 		{
 			if (dic.Foreground != null && txt)
@@ -759,7 +794,7 @@ namespace Yuki_Theme.CLI
 				dic.Background = ColorTranslator.ToHtml (bgcolor);
 		}
 
-		private static bool isColor(string definition)
+		private static bool isColor (string definition)
 		{
 			definition = definition.ToLower ();
 			switch (definition)
@@ -783,6 +818,8 @@ namespace Yuki_Theme.CLI
 				case "caretmarker" :
 				case "linenumbers" :
 				case "foldline" :
+				case "method" :
+				case "markprevious" :
 				case "selectedfoldline" :
 				case "eolmarkers" :
 				case "spacemarkers" :
@@ -831,5 +868,53 @@ namespace Yuki_Theme.CLI
 			throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
 		}
 
+		private static string Translation (string help)
+		{
+			string res = help;
+			Regex regex = new Regex ("cli.help(\n|\\S)*", RegexOptions.Multiline);
+			MatchCollection matches = regex.Matches (res);
+			foreach (Match match in matches)
+			{
+				string translation = Core.CLI.Translate (match.Value);
+				Match matched = Regex.Match (res, "^.*?(?=" + match.Value + ")", RegexOptions.Multiline);
+				string whitespace = new string (' ', matched.Value.Length);
+				string [] cv = translation.Split ('\n');
+				if (cv.Length > 1)
+				{
+					translation = "";
+					int cvLength = cv.Length-1;
+					for (var i = 0; i < cv.Length; i++)
+					{
+						translation += cv [i];
+						if (i != cvLength)
+						{
+							translation += "\n" + whitespace;
+						}
+					}
+				}
+				
+				int cnt = 0;
+				string [] cc = translation.Split (' ');
+				if (cc.Length > 1)
+				{
+					translation = "";
+					foreach (string ccv in cc)
+					{
+						if (cnt >= MAX_WIDTH)
+						{
+							translation += "\n" + whitespace;
+							cnt = 0;
+						}
+
+						translation += ccv + " ";
+						cnt += ccv.Length;
+					}
+				}
+
+				res = Regex.Replace (res, match.Value, translation);
+			}
+
+			return res;
+		}
 	}
 }

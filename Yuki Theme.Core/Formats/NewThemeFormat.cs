@@ -228,7 +228,7 @@ namespace Yuki_Theme.Core.Formats
 				json = content.Item2;
 			else
 				json = File.ReadAllText (path);
-			Console.WriteLine (json);
+			// Console.WriteLine (json);
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.Name = name;
 			json = JsonConvert.SerializeObject (theme, Formatting.Indented);
@@ -257,7 +257,7 @@ namespace Yuki_Theme.Core.Formats
 
 		public static void populateList ()
 		{
-			Console.WriteLine (CLI.nameToLoad);
+			// Console.WriteLine (CLI.nameToLoad);
 			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
 			string json = loadThemeToPopulate (CLI.pathToFileNew, true, isDef, CLI.nameToLoad, Helper.FILE_EXTENSTION_NEW);
 

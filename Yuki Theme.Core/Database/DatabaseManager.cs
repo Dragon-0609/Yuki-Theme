@@ -135,7 +135,7 @@ namespace Yuki_Theme.Core.Database
 			if (!sp.Contains (":"))
 				sp = "0:0";
 			string [] spp = sp.Split (':');
-			Console.WriteLine (sp);
+			// Console.WriteLine (sp);
 			return new Point (int.Parse (spp [0]), int.Parse (spp [1]));
 		}
 

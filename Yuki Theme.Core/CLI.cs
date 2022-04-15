@@ -220,7 +220,7 @@ namespace Yuki_Theme.Core
 		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
-			Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
+			// Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
 			if (!isDefault ())
 				saveList (img2, img3, wantToKeep);
 		}
@@ -536,7 +536,7 @@ namespace Yuki_Theme.Core
 		{
 			nameToLoad = name;
 			pathToLoad = Helper.ConvertNameToPath (name);
-			Console.WriteLine (isDefaultTheme [name]);
+			// Console.WriteLine (isDefaultTheme [name]);
 			ThemeFormat extension = Helper.GetThemeFormat (isDefaultTheme [name], pathToLoad, name);
 			if (extension == ThemeFormat.Null)
 			{
@@ -569,7 +569,7 @@ namespace Yuki_Theme.Core
 		/// <returns>Name of the theme</returns>
 		public static string GetNameOfTheme (string path)
 		{
-			Console.WriteLine (path);
+			// Console.WriteLine (path);
 			if (IsNewTheme (path))
 				return NewThemeFormat.GetNameOfTheme (path);
 			return OldThemeFormat.GetNameOfTheme (path);
@@ -584,7 +584,7 @@ namespace Yuki_Theme.Core
 		{
 			if (!isDefault ())
 			{
-				Console.WriteLine ("AS OLD: " + Settings.saveAsOld);
+				// Console.WriteLine ("AS OLD: " + Settings.saveAsOld);
 				if (Settings.saveAsOld)
 					OldThemeFormat.saveList (img2, img3, wantToKeep);
 				else
@@ -616,7 +616,7 @@ namespace Yuki_Theme.Core
 			}
 
 			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
-			Console.WriteLine (syntax.ToString ());
+			// Console.WriteLine (syntax.ToString ());
 			MergeFiles (npath, localDic);
 		}
 

@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.Parsers
 			
 			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
-			Console.WriteLine (PathToSave);
+			// Console.WriteLine (PathToSave);
 
 			if (!overwrite)
 			{

@@ -559,7 +559,7 @@ namespace Yuki_Theme_Plugin
 			if (File.Exists (pth))
 			{
 				Image iamg = Image.FromFile (pth);
-				Console.WriteLine("Image loaded");
+				// Console.WriteLine("Image loaded");
 				wallpaperAlign = Alignment.Center;
 				wallpaperOpacity = 10;
 
@@ -598,7 +598,7 @@ namespace Yuki_Theme_Plugin
 				{
 					img = iamg;
 				}
-				Console.WriteLine("Image set");
+				// Console.WriteLine("Image set");
 			} else
 			{
 				img = null;
@@ -1775,7 +1775,7 @@ namespace Yuki_Theme_Plugin
 		
 		private bool Unsubscribe (object target)
 		{
-			Console.WriteLine (target.GetType ().Name);
+			// Console.WriteLine (target.GetType ().Name);
 			MethodInfo handler = target.GetType ().GetMethod ("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
 			if (handler == null)
 			{

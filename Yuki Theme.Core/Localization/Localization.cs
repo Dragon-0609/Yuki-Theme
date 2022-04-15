@@ -71,8 +71,8 @@ public class Localization
 	public void LoadLocale (string lang)
 	{
 		recursionCalls = 0;
-		Console.WriteLine (lang);
-		Console.WriteLine (externalLang [lang]);
+		/*Console.WriteLine (lang);
+		Console.WriteLine (externalLang [lang]);*/
 		if (externalLang [lang])
 			LoadLocaleFromFile (lang);
 		else
