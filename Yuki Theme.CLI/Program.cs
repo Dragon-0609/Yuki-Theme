@@ -22,6 +22,594 @@ namespace Yuki_Theme.CLI
 		private static bool loop      = false;
 		private const  int  MAX_WIDTH = 80;
 
+		/// <summary>
+		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
+		/// </summary>
+		public static void LoadCLI (bool refreshSchemes)
+		{
+			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
+			{
+				Helper.mode = ProductMode.CLI;
+				CLI_Actions.setPath = AskPath;
+				CLI_Actions.showSuccess = ShowSuccess;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.showError = ShowError;
+				CLI_Actions.onRename = ShowInvertSuccess;
+				CLI_Actions.SaveInExport = AskToDelete;
+				Settings.connectAndGet ();
+				Settings.settingMode = SettingMode.Light;
+				Settings.saveAsOld = true;
+				Core.CLI.load_schemes ();
+			} else if (refreshSchemes)
+			{
+				Core.CLI.load_schemes ();
+			}
+		}
+
+		/// <summary>
+		/// Set current theme to process it. For example export it.
+		/// </summary>
+		/// <param name="theme">Theme name</param>
+		public static void SetFile (string theme)
+		{
+			Core.CLI.SelectTheme (theme);
+		}
+
+		public static void Main (string [] args)
+		{
+			var parser = new Parser (parserSettings =>
+			{
+				parserSettings.AutoHelp = true;
+				parserSettings.AutoVersion = true;
+				parserSettings.CaseInsensitiveEnumValues = false;
+				parserSettings.CaseSensitive = true;
+				parserSettings.EnableDashDash = true;
+				parserSettings.IgnoreUnknownArguments = false;
+			});
+			Settings.translation.LoadLocalization ();
+
+			if (args != null && args.Length > 0)
+			{
+				Parse (parser, args);
+			} else
+			{
+				loop = true;
+				ShowLoopMessage ();
+				while (!quit)
+				{
+					Console.Write ("yuki >");
+					string command = Console.ReadLine ();
+					if (command.ToLower ().Contains ("quit")) break;
+					/*Regex argReg = new Regex (@"\w+|""[\w\s]*""");
+					string [] cmds = new string[argReg.Matches (command).Count];
+					int i = 0;
+					foreach (var enumer in argReg.Matches (command))
+					{
+						cmds [i] = (string) enumer.ToString ();
+						i++;
+					}*/
+					if (command.ToLower ().StartsWith ("yuki "))
+					{
+						command = command.Substring (5);
+					}
+					Parse (parser, ParseArguments (command));
+				}
+			}
+		}
+
+		private static void ShowLoopMessage ()
+		{
+			if (loop)
+				ShowError (Core.CLI.Translate ("cli.errors.loop").ToUpper ());
+		}
+
+		static string [] ParseArguments (string commandLine)
+		{
+			char [] parmChars = commandLine.ToCharArray ();
+			bool inQuote = false;
+			for (int index = 0; index < parmChars.Length; index++)
+			{
+				if (parmChars [index] == '"')
+					inQuote = !inQuote;
+				if (!inQuote && parmChars [index] == ' ')
+					parmChars [index] = '\n';
+			}
+
+			return (new string (parmChars)).Split ('\n');
+		}
+
+		/// <summary>
+		/// Parse commands.
+		/// </summary>
+		/// <param name="parser">Parser</param>
+		/// <param name="args">Arguments of commands</param>
+		private static void Parse (Parser parser, string [] args)
+		{
+			var res = parser
+				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
+					DeleteCommand,
+					RenameCommand, SettingsCommand, EditCommand> (args);
+
+			res.WithParsed <CopyCommand> (o =>
+			   {
+				   CopyC (o);
+			   }).WithParsed <ListCommand> (o =>
+			   {
+				   ListC ();
+			   }).WithParsed <ClearCommand> (o =>
+			   {
+				   ClearC ();
+			   }).WithParsed <FieldsCommand> (o =>
+			   {
+				   FieldsC ();
+			   }).WithParsed <AllFieldsCommand> (o =>
+			   {
+				   AllFieldsC ();
+			   }).WithParsed <ExportCommand> (o =>
+			   {
+				   ExportC (o);
+			   }).WithParsed <ImportCommand> (o =>
+			   {
+				   ImportC (o);
+			   }).WithParsed <DeleteCommand> (o =>
+			   {
+				   DeleteC (o);
+			   }).WithParsed <RenameCommand> (o =>
+			   {
+				   RenameC (o);
+			   }).WithParsed <SettingsCommand> (o =>
+			   {
+				   SettingC (o);
+			   }).WithParsed <EditCommand> (o =>
+			   {
+				   EditC (o);
+			   })
+			   .WithNotParsed (errors =>
+			   {
+				   HelpText helpText = null;
+				   if (errors.IsHelp () || errors.IsVersion ())
+				   {
+					   helpText = HelpText.AutoBuild (res);
+					   // Console.WriteLine("preOptionsHelp: {0}", GetPrivateField("preOptionsHelp", helpText).ToString());
+					   // Console.WriteLine("optionsHelp: {0}", GetPrivateField("optionsHelp", helpText).ToString());
+					   // Console.WriteLine("postOptionsHelp: {0}", GetPrivateField("postOptionsHelp", helpText).ToString());
+					   Console.WriteLine ( Translation (helpText.ToString () ));
+					   // Console.WriteLine ( helpText.ToString ());
+				   } else
+				   {
+					   foreach (var error in errors)
+						   switch (error)
+						   {
+							   case BadVerbSelectedError badVerbSelectedError :
+								   ShowError (Core.CLI.Translate ("cli.errors.nocommand", badVerbSelectedError.Token));
+								   break;
+
+							   case UnknownOptionError unknownOptionError :
+								   ShowError (Core.CLI.Translate ("cli.errors.nooption", unknownOptionError.Token));
+								   break;
+
+							   case SequenceOutOfRangeError sequenceOutOfRange :
+								   ShowError (sequenceOutOfRange.ToString ());
+								   // ShowError (Core.CLI.Translate ("cli.errors.length"));
+								   break;
+
+							   case MissingValueOptionError missingValueOptionError :
+								   helpText = HelpText.AutoBuild (res);
+								   Console.WriteLine (Translation (helpText.ToString ()));
+								   break;
+							   // Handler other appropriate exceptions downhere.
+							   default :
+								   ShowError (Core.CLI.Translate ("cli.errors.happened", error.ToString ()));
+								   break;
+						   }
+				   }
+			   });
+		}
+
+		#region Commands
+
+
+		private static void CopyC (CopyCommand o)
+		{
+			string fr = ConvertToText (o.Names.ElementAt (0));
+			string to = ConvertToText (o.Names.ElementAt (1));
+
+			if (fr.Length > 1 && to.Length > 1)
+			{
+				if (fr != to)
+				{
+					LoadCLI (true);
+					if (Contains (fr))
+					{
+						if (!Contains (to))
+						{
+							Core.CLI.add (fr, to);
+						} else
+						{
+							ShowError (Core.CLI.Translate ("messages.name.exist.full"));
+						}
+					} else
+					{
+						ShowError (Core.CLI.Translate ("cli.errors.notinthemes", fr));
+					}
+				} else
+				{
+					ShowError (Core.CLI.Translate ("messages.name.notchanged"), Core.CLI.Translate ("download.canceled.title"));
+				}
+			} else
+			{
+				ShowError (Core.CLI.Translate ("messages.name.invalid"), Core.CLI.Translate ("messages.name.invalid.short"));
+			}
+		}
+
+		private static void ListC ()
+		{
+			LoadCLI (true);
+			Console.WriteLine ("Theme list:");
+			foreach (string scheme in Core.CLI.schemes)
+			{
+				Console.WriteLine (scheme);
+			}
+		}
+
+		private static void ClearC ()
+		{
+			Console.Clear ();
+			ShowLoopMessage ();
+		}
+
+		private static void FieldsC ()
+		{
+			LoadCLI (true);
+			SetFile ("Darcula");
+			Core.CLI.restore ();
+			Console.WriteLine ($"There're {Core.CLI.names.Count} fields:");
+			foreach (string name in Core.CLI.names)
+			{
+				Console.WriteLine ("\t" + Populater.getChangedName (name));
+			}
+
+			SetFile ("N|L"); // Set to the default value
+		}
+
+		private static void AllFieldsC ()
+		{
+			LoadCLI (true);
+			Settings.settingMode = SettingMode.Advanced;
+			SetFile ("Darcula");
+			Core.CLI.restore ();
+			Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
+			foreach (string name in Core.CLI.currentTheme.Fields.Keys)
+			{
+				Console.WriteLine ("\t" + name);
+			}
+
+			SetFile ("N|L"); // Set to the default value
+		}
+
+		private static void ExportC (ExportCommand o)
+		{
+			bool showerror = false;
+			if (o.Name != null)
+			{
+				o.Name = ConvertToText (o.Name);
+				LoadCLI (true);
+				if (Contains (o.Name))
+				{
+					SetFile (o.Name);
+
+					Core.CLI.export (null, null, null, null, true);
+				} else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+				}
+			} else
+			{
+				showerror = true;
+			}
+
+			if (showerror)
+			{
+				ShowError (Core.CLI.Translate ("cli.errors.cantexport", o.Name));
+			}
+		}
+
+		private static void ImportC (ImportCommand o)
+		{
+			bool showerror = false;
+			if (o.Path != null)
+			{
+				if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
+				{
+					LoadCLI (true);
+					Core.CLI.import (o.Path, AskToDelete);
+				} else
+					showerror = true;
+			} else
+			{
+				showerror = true;
+			}
+
+			if (showerror)
+			{
+				ShowError (Core.CLI.Translate ("cli.errors.cantimport", o.Path));
+			}
+		}
+
+		private static void DeleteC (DeleteCommand o)
+		{
+			bool showerror = false;
+			if (o.Name != null)
+			{
+				LoadCLI (true);
+				o.Name = ConvertToText (o.Name);
+				if (Contains (o.Name))
+					Core.CLI.remove (o.Name, AskToDelete, null, AfterDelete);
+				else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+				}
+			} else
+			{
+				showerror = true;
+			}
+
+			if (showerror)
+			{
+				ShowError (Core.CLI.Translate ("cli.errors.cantdelete", o.Name));
+			}
+		}
+
+		private static void RenameC (RenameCommand o)
+		{
+			LoadCLI (true);
+			string fr = ConvertToText (o.Names.ElementAt (0));
+			string to = ConvertToText (o.Names.ElementAt (1));
+			if (fr.Length > 1 && to.Length > 1)
+			{
+				if (fr != to)
+				{
+					Core.CLI.rename (fr, to);
+				} else
+				{
+					ShowError (Core.CLI.Translate ("messages.name.notchanged"), Core.CLI.Translate ("download.canceled.title"));
+				}
+			} else
+			{
+				ShowError (Core.CLI.Translate ("messages.name.invalid"), Core.CLI.Translate ("messages.name.invalid.short"));
+			}
+		}
+
+		private static void SettingC (SettingsCommand o)
+		{
+			LoadCLI (true);
+			bool changed = false;
+			if (!isNull (o.Path))
+			{
+				if (Directory.Exists (Path.Combine (o.Path, "Highlighting")))
+				{
+					Settings.pascalPath = o.Path;
+					changed = true;
+				} else
+				{
+					ShowError (Core.CLI.Translate ("messages.path.wrong"));
+				}
+			}
+
+			if (!isNull (o.Quiet))
+			{
+				bool resa = false;
+				if (bool.TryParse (o.Quiet, out resa))
+				{
+					Settings.askChoice = resa;
+					changed = true;
+				} else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.quiet.wrong.full"), Core.CLI.Translate ("cli.errors.quiet.wrong.short"));
+				}
+			}
+
+			if (!isNull (o.Mode))
+			{
+				bool isValid = false;
+				switch (o.Mode.ToLower ())
+				{
+					case "light" :
+					{
+						isValid = true;
+					}
+						break;
+					case "advanced" :
+					{
+						isValid = true;
+					}
+						break;
+				}
+
+				if (isValid)
+				{
+					Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
+					changed = true;
+				} else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.mode.invalid"));
+				}
+			}
+
+			if (!isNull (o.Action))
+			{
+				bool isValid = false;
+				int act = 0;
+				switch (o.Action.ToLower ())
+				{
+					case "delete" :
+					{
+						isValid = true;
+						act = 0;
+					}
+						break;
+					case "import" :
+					{
+						isValid = true;
+						act = 1;
+					}
+						break;
+					case "ignore" :
+					{
+						isValid = true;
+						act = 2;
+					}
+						break;
+				}
+
+				if (isValid)
+				{
+					Settings.actionChoice = act;
+					changed = true;
+				} else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.action.invalid"));
+				}
+			}
+
+			if (changed)
+			{
+				Settings.saveData ();
+				ShowSuccess ("Settings are saved!", "Saved");
+			} else
+			{
+				ShowError (Core.CLI.Translate ("cli.errors.settings.notsaved.full"),
+				           Core.CLI.Translate ("cli.errors.settings.notsaved.short"));
+			}
+		}
+
+		private static void EditC (EditCommand o)
+		{
+			bool showerror = false;
+			if (o.Name != null)
+			{
+				o.Name = ConvertToText (o.Name);
+				LoadCLI (true);
+				if (Contains (o.Name))
+				{
+					if (!Core.CLI.isDefaultTheme[o.Name])
+					{
+						SetFile (o.Name);
+						Core.CLI.restore ();
+						if (o.Definition != null)
+						{
+							bool color = false;
+							bool error = false;
+							string err_txt = "";
+							try
+							{
+								color = isColor (o.Definition);
+							} catch (ArgumentException e)
+							{
+								error = true;
+								err_txt = e.Message;
+							}
+
+							if (!error)
+							{
+								if (color)
+								{
+									bool bg = false;
+									bool txt = false;
+									Color bgcolor = Color.Empty;
+									Color txtcolor = Color.Empty;
+
+									if (o.Background != null)
+									{
+										bgcolor = ColorTranslator.FromHtml (o.Background);
+										bg = true;
+									}
+
+									if (o.Text != null)
+									{
+										txtcolor = ColorTranslator.FromHtml (o.Text);
+										txt = true;
+									}
+
+									if (bg || txt)
+									{
+										o.Definition = Populater.getNormalizedName (o.Definition);
+										if (Core.CLI.currentTheme.Fields.ContainsKey (o.Definition))
+										{
+											ThemeField dic = Core.CLI.currentTheme.Fields [o.Definition];
+											SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
+											foreach (KeyValuePair <string, string> keyValuePair in dic.GetAttributes ())
+											{
+												GiveMessage (keyValuePair.Value, keyValuePair.Key);
+											}
+										}
+
+										var sttr = Populater.getDependencies (o.Definition);
+										if (sttr != null)
+											foreach (var sr in sttr)
+											{
+												ThemeField dic = Core.CLI.currentTheme.Fields [sr];
+												SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
+											}
+
+										Core.CLI.save (null, null, true);
+									} else
+									{
+										ShowError (Core.CLI.Translate ("cli.errors.parameter"));
+									}
+								} else
+								{
+									bool changed = false;
+									if (o.Opacity != null)
+									{
+										if (o.Definition.ToLower () == "sticker")
+											Core.CLI.currentTheme.StickerOpacity = int.Parse (o.Opacity);
+										else
+											Core.CLI.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
+										changed = true;
+									}
+
+									if (o.Align != null && o.Definition.ToLower () == "image")
+									{
+										Alignment align = Alignment.Center;
+										if (o.Align.ToLower () == "left") align = Alignment.Left;
+										else if (o.Align.ToLower () == "center") align = Alignment.Center;
+										else align = Alignment.Right;
+										Core.CLI.currentTheme.WallpaperAlign = (int)align;
+										changed = true;
+									}
+
+									if (changed)
+										Core.CLI.save (null, null, true);
+									SetImageLocation (o);
+								}
+							} else
+							{
+								ShowError (err_txt);
+							}
+						}
+					} else
+					{
+						ShowError (Core.CLI.Translate ("colors.default.error.full"), Core.CLI.Translate ("colors.default.error.short"));
+					}
+				} else
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+				}
+			} else
+			{
+				showerror = true;
+			}
+
+			if (showerror)
+			{
+				ShowError (Core.CLI.Translate ("cli.errors.cantedit", o.Name));
+			}
+		}
+
+		
+		#endregion
+		
 		#region Other Methods
 
 		private static void AskPath (string content, string title)
@@ -43,12 +631,11 @@ namespace Yuki_Theme.CLI
 						isPath = true;
 					} else
 					{
-						ShowError (
-							$"{path} isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
+						ShowError (Core.CLI.Translate ("messages.path.wrong"));
 					}
 				} else
 				{
-					ShowError ("The directory isn't exist");
+					ShowError (Core.CLI.Translate ("cli.errors.directory.notexist"));
 				}
 			}
 
@@ -122,7 +709,7 @@ namespace Yuki_Theme.CLI
 
 			if (err)
 			{
-				ShowError ("Wrong input. Acceptable values: yes or no");
+				ShowError (Core.CLI.Translate ("cli.errors.input.wrong"));
 			}
 
 			return ans;
@@ -130,7 +717,7 @@ namespace Yuki_Theme.CLI
 
 		private static void AfterDelete (string content, object obj)
 		{
-			ShowError ($@"{content} has been successfully deleted.");
+			ShowError (Core.CLI.Translate ("cli.message.deleted", content));
 		}
 
 		private static bool isNull (string st)
@@ -214,41 +801,7 @@ namespace Yuki_Theme.CLI
 			return content;
 		}
 
-		#endregion
-
-		/// <summary>
-		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
-		/// </summary>
-		public static void LoadCLI (bool refreshSchemes)
-		{
-			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
-			{
-				Helper.mode = ProductMode.CLI;
-				CLI_Actions.setPath = AskPath;
-				CLI_Actions.showSuccess = ShowSuccess;
-				CLI_Actions.showError = ShowError;
-				CLI_Actions.showError = ShowError;
-				CLI_Actions.onRename = ShowInvertSuccess;
-				CLI_Actions.SaveInExport = AskToDelete;
-				Settings.connectAndGet ();
-				Settings.settingMode = SettingMode.Light;
-				Settings.saveAsOld = true;
-				Core.CLI.load_schemes ();
-			} else if (refreshSchemes)
-			{
-				Core.CLI.load_schemes ();
-			}
-		}
-
-		/// <summary>
-		/// Set current theme to process it. For example export it.
-		/// </summary>
-		/// <param name="theme">Theme name</param>
-		public static void SetFile (string theme)
-		{
-			Core.CLI.SelectTheme (theme);
-		}
-
+		
 		/// <summary>
 		/// If something went wrong, here we can Write it to console with Red Color.
 		/// </summary>
@@ -271,485 +824,7 @@ namespace Yuki_Theme.CLI
 			Console.ForegroundColor = clr;
 		}
 
-		public static void Main (string [] args)
-		{
-			var parser = new Parser (parserSettings =>
-			{
-				parserSettings.AutoHelp = true;
-				parserSettings.AutoVersion = true;
-				parserSettings.CaseInsensitiveEnumValues = false;
-				parserSettings.CaseSensitive = true;
-				parserSettings.EnableDashDash = true;
-				parserSettings.IgnoreUnknownArguments = false;
-			});
-
-			if (args != null && args.Length > 0)
-			{
-				Parse (parser, args);
-			} else
-			{
-				loop = true;
-				ShowLoopMessage ();
-				while (!quit)
-				{
-					Console.Write ("yuki >");
-					string command = Console.ReadLine ();
-					if (command.ToLower ().Contains ("quit")) break;
-					/*Regex argReg = new Regex (@"\w+|""[\w\s]*""");
-					string [] cmds = new string[argReg.Matches (command).Count];
-					int i = 0;
-					foreach (var enumer in argReg.Matches (command))
-					{
-						cmds [i] = (string) enumer.ToString ();
-						i++;
-					}*/
-					Parse (parser, ParseArguments (command));
-				}
-			}
-		}
-
-		private static void ShowLoopMessage ()
-		{
-			if (loop)
-				ShowError ("Loop mode is activated. To exit write 'QUIT'.\n".ToUpper ());
-		}
-
-		static string [] ParseArguments (string commandLine)
-		{
-			char [] parmChars = commandLine.ToCharArray ();
-			bool inQuote = false;
-			for (int index = 0; index < parmChars.Length; index++)
-			{
-				if (parmChars [index] == '"')
-					inQuote = !inQuote;
-				if (!inQuote && parmChars [index] == ' ')
-					parmChars [index] = '\n';
-			}
-
-			return (new string (parmChars)).Split ('\n');
-		}
-
-		/// <summary>
-		/// Parse commands.
-		/// </summary>
-		/// <param name="parser">Parser</param>
-		/// <param name="args">Arguments of commands</param>
-		private static void Parse (Parser parser, string [] args)
-		{
-			var res = parser
-				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
-					DeleteCommand,
-					RenameCommand, SettingsCommand, EditCommand> (args);
-
-			res.WithParsed <CopyCommand> (o =>
-			   {
-				   string fr = ConvertToText (o.Names.ElementAt (0));
-				   string to = ConvertToText (o.Names.ElementAt (1));
-
-				   if (fr.Length > 0 && to.Length > 0)
-				   {
-					   if (fr != to)
-					   {
-						   LoadCLI (true);
-						   Core.CLI.add (fr, to);
-					   } else
-					   {
-						   ShowError ("You didn't change the name", "Canceled");
-					   }
-				   } else
-				   {
-					   ShowError ("Invalid name. You must enter at least 1 character", "Invalid name");
-				   }
-			   }).WithParsed <ListCommand> (o =>
-			   {
-				   LoadCLI (true);
-				   Console.WriteLine ("Theme list:");
-				   foreach (string scheme in Core.CLI.schemes)
-				   {
-					   Console.WriteLine (scheme);
-				   }
-			   }).WithParsed <ClearCommand> (o =>
-			   {
-				   Console.Clear ();
-				   ShowLoopMessage ();
-			   }).WithParsed <FieldsCommand> (o =>
-			   {
-				   LoadCLI (true);
-				   SetFile ("Darcula");
-				   Core.CLI.restore ();
-				   Console.WriteLine ($"There're {Core.CLI.names.Count} fields:");
-				   foreach (string name in Core.CLI.names)
-				   {
-					   Console.WriteLine ("\t" + Populater.getChangedName (name));
-				   }
-
-				   SetFile ("N|L"); // Set to the default value
-			   }).WithParsed <AllFieldsCommand> (o =>
-			   {
-				   LoadCLI (true);
-				   Settings.settingMode = SettingMode.Advanced;
-				   SetFile ("Darcula");
-				   Core.CLI.restore ();
-				   Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
-				   foreach (string name in Core.CLI.currentTheme.Fields.Keys)
-				   {
-					   Console.WriteLine ("\t" + name);
-				   }
-
-				   SetFile ("N|L"); // Set to the default value
-			   }).WithParsed <ExportCommand> (o =>
-			   {
-				   bool showerror = false;
-				   if (o.Name != null)
-				   {
-					   o.Name = ConvertToText (o.Name);
-					   LoadCLI (true);
-					   if (Contains (o.Name))
-					   {
-						   SetFile (o.Name);
-
-						   Core.CLI.export (null, null, null, null, true);
-					   } else
-					   {
-						   ShowError (
-							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
-					   }
-				   } else
-				   {
-					   showerror = true;
-				   }
-
-				   if (showerror)
-				   {
-					   ShowError (
-						   $"Can't export '{o.Name}'.");
-				   }
-			   }).WithParsed <ImportCommand> (o =>
-			   {
-				   bool showerror = false;
-				   if (o.Path != null)
-				   {
-					   if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
-					   {
-						   LoadCLI (true);
-						   Core.CLI.import (o.Path, AskToDelete);
-					   } else
-						   showerror = true;
-				   } else
-				   {
-					   showerror = true;
-				   }
-
-				   if (showerror)
-				   {
-					   ShowError (
-						   $"Can't import '{o.Path}'. The acceptable formats: '.yukitheme', '.icls', '.json'");
-				   }
-			   }).WithParsed <DeleteCommand> (o =>
-			   {
-				   bool showerror = false;
-				   if (o.Name != null)
-				   {
-					   LoadCLI (true);
-					   o.Name = ConvertToText (o.Name);
-					   if (Contains (o.Name))
-						   Core.CLI.remove (o.Name, AskToDelete, null, AfterDelete);
-					   else
-					   {
-						   ShowError (
-							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
-					   }
-				   } else
-				   {
-					   showerror = true;
-				   }
-
-				   if (showerror)
-				   {
-					   ShowError (
-						   $"Can't delete '{o.Name}'.");
-				   }
-			   }).WithParsed <RenameCommand> (o =>
-			   {
-				   LoadCLI (true);
-				   string fr = ConvertToText (o.Names.ElementAt (0));
-				   string to = ConvertToText (o.Names.ElementAt (1));
-				   if (fr.Length > 0 && to.Length > 0)
-				   {
-					   if (fr != to)
-					   {
-						   Core.CLI.rename (fr, to);
-					   } else
-					   {
-						   ShowError ("You didn't change the name", "Canceled");
-					   }
-				   } else
-				   {
-					   ShowError ("Invalid name. You must enter at least 1 character", "Invalid name");
-				   }
-			   }).WithParsed <SettingsCommand> (o =>
-			   {
-				   LoadCLI (true);
-				   bool changed = false;
-				   if (!isNull (o.Path))
-				   {
-					   if (Directory.Exists (System.IO.Path.Combine (o.Path, "Highlighting")))
-					   {
-						   Settings.pascalPath = o.Path;
-						   changed = true;
-					   } else
-					   {
-						   ShowError (
-							   $"{o.Path} isn't PascalABC.NET directory. Select Path to the PascalABC.NET directory");
-					   }
-				   }
-
-				   if (!isNull (o.Quiet))
-				   {
-					   bool resa = false;
-					   if (bool.TryParse (o.Quiet, out resa))
-					   {
-						   Settings.askChoice = resa;
-						   changed = true;
-					   } else
-					   {
-						   ShowError ("Wrong input. Acceptable values: 'true' or 'false'", "Quiet: ");
-					   }
-				   }
-
-				   if (!isNull (o.Mode))
-				   {
-					   bool isValid = false;
-					   switch (o.Mode.ToLower ())
-					   {
-						   case "light" :
-						   {
-							   isValid = true;
-						   }
-							   break;
-						   case "advanced" :
-						   {
-							   isValid = true;
-						   }
-							   break;
-					   }
-
-					   if (isValid)
-					   {
-						   Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
-						   changed = true;
-					   } else
-					   {
-						   ShowError ("Invalid input! Acceptable values: 'LIGHT' or 'ADVANCED'");
-					   }
-				   }
-
-				   if (!isNull (o.Action))
-				   {
-					   bool isValid = false;
-					   int act = 0;
-					   switch (o.Action.ToLower ())
-					   {
-						   case "delete" :
-						   {
-							   isValid = true;
-							   act = 0;
-						   }
-							   break;
-						   case "import" :
-						   {
-							   isValid = true;
-							   act = 1;
-						   }
-							   break;
-						   case "ignore" :
-						   {
-							   isValid = true;
-							   act = 2;
-						   }
-							   break;
-					   }
-
-					   if (isValid)
-					   {
-						   Settings.actionChoice = act;
-						   changed = true;
-					   } else
-					   {
-						   ShowError ("Invalid input! Acceptable values: 'DELETE', 'IMPORT' or 'IGNORE'");
-					   }
-				   }
-
-				   if (changed)
-				   {
-					   Core.Settings.saveData ();
-					   ShowSuccess ("Settings are saved!", "Saved");
-				   } else
-				   {
-					   ShowError ("Settings aren't saved!", "Not saved");
-				   }
-			   }).WithParsed <EditCommand> (o =>
-			   {
-				   bool showerror = false;
-				   if (o.Name != null)
-				   {
-					   o.Name = ConvertToText (o.Name);
-					   LoadCLI (true);
-					   if (Contains (o.Name))
-					   {
-						   SetFile (o.Name);
-						   Core.CLI.restore ();
-						   if (o.Definition != null)
-						   {
-							   bool color = false;
-							   bool error = false;
-							   string err_txt = "";
-							   try
-							   {
-								   color = isColor (o.Definition);
-							   } catch (ArgumentException e)
-							   {
-								   error = true;
-								   err_txt = e.Message;
-							   }
-
-							   if (!error)
-							   {
-								   if (color)
-								   {
-									   bool bg = false;
-									   bool txt = false;
-									   Color bgcolor = Color.Empty;
-									   Color txtcolor = Color.Empty;
-
-									   if (o.Background != null)
-									   {
-										   bgcolor = ColorTranslator.FromHtml (o.Background);
-										   bg = true;
-									   }
-
-									   if (o.Text != null)
-									   {
-										   txtcolor = ColorTranslator.FromHtml (o.Text);
-										   txt = true;
-									   }
-
-									   if (bg || txt)
-									   {
-										   o.Definition = Populater.getNormalizedName (o.Definition);
-										   if (Core.CLI.currentTheme.Fields.ContainsKey (o.Definition))
-										   {
-											   ThemeField dic = Core.CLI.currentTheme.Fields [o.Definition];
-											   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
-											   foreach (KeyValuePair <string, string> keyValuePair in dic.GetAttributes ())
-											   {
-												   GiveMessage (keyValuePair.Value, keyValuePair.Key);
-											   }
-										   }
-
-										   var sttr = Populater.getDependencies (o.Definition);
-										   if (sttr != null)
-											   foreach (var sr in sttr)
-											   {
-												   ThemeField dic = Core.CLI.currentTheme.Fields [sr];
-												   SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
-											   }
-
-										   Core.CLI.save (null, null, true);
-									   } else
-									   {
-										   ShowError (
-											   "You must set at least one parameter. Acceptable parameters: '-b' and '-t' ");
-									   }
-								   } else
-								   {
-									   bool changed = false;
-									   if (o.Opacity != null)
-									   {
-										   if (o.Definition.ToLower () == "sticker")
-											   Core.CLI.currentTheme.StickerOpacity = int.Parse (o.Opacity);
-										   else
-											   Core.CLI.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
-										   changed = true;
-									   }
-
-									   if (o.Align != null && o.Definition.ToLower () == "image")
-									   {
-										   Alignment align = Alignment.Center;
-										   if (o.Align.ToLower () == "left") align = Alignment.Left;
-										   else if (o.Align.ToLower () == "center") align = Alignment.Center;
-										   else align = Alignment.Right;
-										   Core.CLI.currentTheme.WallpaperAlign = (int)align;
-										   changed = true;
-									   }
-
-									   if (changed)
-										   Core.CLI.save (null, null, true);
-									   SetImageLocation (o);
-								   }
-							   } else
-							   {
-								   ShowError (err_txt);
-							   }
-						   }
-					   } else
-					   {
-						   ShowError (
-							   $"'{o.Name}' isn't in the themes. Please, write 'yuki list' to get all themes' names");
-					   }
-				   } else
-				   {
-					   showerror = true;
-				   }
-
-				   if (showerror)
-				   {
-					   ShowError (
-						   $"Can't edit '{o.Name}'.");
-				   }
-			   })
-			   .WithNotParsed (errors =>
-			   {
-				   HelpText helpText = null;
-				   Settings.translation.LoadLocalization ();
-				   if (errors.IsHelp () || errors.IsVersion ())
-				   {
-					   helpText = HelpText.AutoBuild (res);
-					   // Console.WriteLine("preOptionsHelp: {0}", GetPrivateField("preOptionsHelp", helpText).ToString());
-					   // Console.WriteLine("optionsHelp: {0}", GetPrivateField("optionsHelp", helpText).ToString());
-					   // Console.WriteLine("postOptionsHelp: {0}", GetPrivateField("postOptionsHelp", helpText).ToString());
-					   Console.WriteLine ( Translation (helpText.ToString () ));
-					   // Console.WriteLine ( helpText.ToString ());
-				   } else
-				   {
-					   foreach (var error in errors)
-						   switch (error)
-						   {
-							   case BadVerbSelectedError badVerbSelectedError :
-								   ShowError ($"There is no \"{badVerbSelectedError.Token}\" subcommand.");
-								   break;
-
-							   case UnknownOptionError unknownOptionError :
-								   ShowError ($"There is no \"{unknownOptionError.Token}\" option.");
-								   break;
-
-							   case SequenceOutOfRangeError sequenceOutOfRange :
-								   ShowError ("Length of values are invalid. There must be 2 values");
-								   break;
-
-							   case MissingValueOptionError missingValueOptionError :
-								   helpText = HelpText.AutoBuild (res);
-								   Console.WriteLine (Translation (helpText.ToString ()));
-								   break;
-							   // Handler other appropriate exceptions downhere.
-							   default :
-								   ShowError ($"The {error} happened.");
-								   break;
-						   }
-				   }
-			   });
-		}
-
+		
 		private static void SetImageLocation (EditCommand o)
 		{
 			if (o.Path != null)
@@ -760,7 +835,7 @@ namespace Yuki_Theme.CLI
 				Image sticker = null;
 				if (!File.Exists (o.Path))
 				{
-					ShowError ("The file isn't exist!");
+					ShowError (Core.CLI.Translate ("cli.errors.file.notexist"));
 					return;
 				}
 
@@ -781,7 +856,7 @@ namespace Yuki_Theme.CLI
 					Core.CLI.save (image, sticker, false);
 				} else
 				{
-					ShowError ("Strange error raised!");
+					ShowError (Core.CLI.Translate ("cli.errors.strange"));
 				}
 			}
 		}
@@ -916,5 +991,9 @@ namespace Yuki_Theme.CLI
 
 			return res;
 		}
+		
+		
+		#endregion
+		
 	}
 }

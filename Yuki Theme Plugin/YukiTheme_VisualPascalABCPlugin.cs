@@ -705,7 +705,7 @@ namespace Yuki_Theme_Plugin
 					lbl.BackColor = bg;
 					lbl.ForeColor = clr;
 					lbl.Font = fnt;
-					lbl.Text = "Themes";
+					lbl.Text = CLI.Translate ("plugin.themes");
 					lbl.TextAlign = ContentAlignment.MiddleCenter;
 					lbl.Size = new Size (200, 25);
 
@@ -1222,14 +1222,15 @@ namespace Yuki_Theme_Plugin
 
 		public void UpdateTranslations ()
 		{
-			openInExplorerItem.Text = CLI.Translate ("Open in Explorer");
-			menu_settings.Text = CLI.Translate ("Show Settings");
-			quiet.Text = CLI.Translate ("Toggle Discreet Mode");
-			stick.Text = CLI.Translate ("Enable Stickers");
-			backimage.Text = CLI.Translate ("Enable Wallpaper");
-			switchTheme.Text = CLI.Translate ("Switch Theme");
-			enablePositioning.Text = CLI.Translate ("Enable Stickers Positioning");
-			resetStickerPosition.Text = CLI.Translate ("Reset Sticker Margins");
+			openInExplorerItem.Text = CLI.Translate ("plugin.explorer.open");
+			menu_settings.Text = CLI.Translate ("plugin.menu.settings");
+			quiet.Text = CLI.Translate ("plugin.menu.discreet");
+			stick.Text = CLI.Translate("plugin.menu.stickers");
+			backimage.Text = CLI.Translate("plugin.menu.wallpaper");
+			switchTheme.Text = CLI.Translate ("plugin.menu.switch");
+			enablePositioning.Text = CLI.Translate ("plugin.menu.positioning");
+			resetStickerPosition.Text = CLI.Translate ("plugin.menu.margins");
+			updatePage.Text = CLI.Translate ("plugin.menu.notification");
 		}
 		
 		#endregion
@@ -1756,7 +1757,7 @@ namespace Yuki_Theme_Plugin
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
 			options.AddContent (new PluginOptionsContent (this));
 		}
-
+		
 		#region Inspection
 
 		private void SubscribeCompletion ()

@@ -59,6 +59,7 @@ namespace Yuki_Theme.Core
 
 			isDefaultTheme.Clear ();
 			oldThemeList.Clear ();
+			DefaultThemes.Clear ();
 			DefaultThemes.addDefaultThemes ();
 			DefaultThemes.addExternalThemes ();
 			schemes.AddRange (DefaultThemes.names);
