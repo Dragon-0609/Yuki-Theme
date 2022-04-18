@@ -1,0 +1,48 @@
+﻿<Window x:Class="Yuki_Theme.Core.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Yuki_Theme.Core.WPF"
+        mc:Ignorable="d"
+        MinWidth="400"
+        MinHeight="300"
+        Loaded="Init"
+        Title="Yuki Theme" Height="300" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+            <ListView Background="#323232" Foreground="#DDDDDD" Padding="5" Name="Definitions">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Foreground" Value="Gold" />
+                                <Setter Property="Background" Value="Red" />
+                                <Setter Property="BorderBrush" Value="Red" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+        <Grid Grid.Column="1" Background="#212121">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel>
+
+                <ComboBox Width="200" Margin="5 10 5 5" HorizontalAlignment="Left" SelectionChanged="Theme_Changed" Name="Themes">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="1">
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

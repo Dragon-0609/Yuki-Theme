@@ -403,5 +403,8 @@
     <EmbeddedResource Include="Themes\Oblivion.yukitheme" />
     <EmbeddedResource Include="Themes\Shades of Purple.yukitheme" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WPF" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
