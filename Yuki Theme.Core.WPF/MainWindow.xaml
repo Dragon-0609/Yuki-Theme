@@ -19,11 +19,25 @@
             <ListView Background="#323232" Foreground="#DDDDDD" Padding="5" Name="Definitions">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
+                        <!-- <Setter Property="Background" Value="Transparent" /> -->
+                        <!-- <Setter Property="BorderBrush" Value="Transparent" /> -->
+                        <!-- <Setter Property="BorderThickness" Value="0" /> -->
+                        <Style.Resources>
+                            <!-- Foreground for Selected ListViewItem -->
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" 
+                                             Color="Black"/>
+                            <!-- Background for Selected ListViewItem -->
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                             Color="Transparent"/>
+                        </Style.Resources>
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Foreground" Value="Gold" />
                                 <Setter Property="Background" Value="Red" />
                                 <Setter Property="BorderBrush" Value="Red" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Foreground" Value="#FF00FF" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
