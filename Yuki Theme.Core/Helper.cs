@@ -627,6 +627,11 @@ namespace Yuki_Theme.Core
 		{
 			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
 		}
+
+		public static bool Exist (this string path)
+		{
+			return File.Exists (path);
+		}
 	}
 
 	public static class GoogleAnalyticsHelper

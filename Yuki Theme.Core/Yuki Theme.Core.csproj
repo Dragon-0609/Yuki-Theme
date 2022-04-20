@@ -282,6 +282,8 @@
     <EmbeddedResource Include="Controls\SettingsPanel.resx">
       <DependentUpon>SettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Database\files_plugin.txt" />
+    <EmbeddedResource Include="Database\files_program.txt" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>

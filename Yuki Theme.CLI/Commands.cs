@@ -61,7 +61,7 @@ namespace Yuki_Theme.CLI
 		public IEnumerable<string> Names {get; set;}
 	}
 
-	[Verb ("settings", HelpText = "Change Setting")]
+	[Verb ("settings", HelpText = "cli.help.settings")]
 	public class SettingsCommand
 	{
 		[Option ('p', "path", Required = false, HelpText = "cli.help.settings.path")]
@@ -99,6 +99,15 @@ namespace Yuki_Theme.CLI
 		public string Align { get; set; }
 
 		[Option ('p', "path", Required = false, HelpText = "cli.help.edit.path")]
+		public string Path { get; set; }
+
+	}
+
+
+	[Verb ("features", HelpText = "cli.help.features")]
+	public class FeatureCommand
+	{
+		[Option ('u', "update", Required = false, HelpText = "cli.help.features.update")]
 		public string Path { get; set; }
 
 	}

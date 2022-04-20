@@ -44,58 +44,37 @@ namespace Yuki_Installer
 								}
 							}
 
-							int mode = getMode ();
-
 							string dir = Path.GetDirectoryName (path);
 							string ndr = dir + "_tmp";
 							Console.WriteLine ($"DIR> {dir}");
-							// Directory.Move (dir, dir + "_tmp");
-							// if(mode == 0)
-							// {
+							
 							if (Directory.Exists (ndr))
 							{
 								Directory.Delete (ndr, true);
 							}
-							/*} else if (mode == 1)
-							{
-								string[] lines = File.ReadAllLines("files.txt");  
-	  
-								foreach (string line in lines)
-								{
-									File.Delete (line);
-								}
-							}*/
 
 							Directory.CreateDirectory (ndr);
-							if (mode == 0)
-							{
-								foreach (var file in new DirectoryInfo (dir).GetFiles ())
-								{
-									try
-									{
-										file.MoveTo ($@"{ndr}\{file.Name}");
-									} catch (IOException e)
-									{
-										Console.WriteLine ("ERROR> {0}", e);
-									}
-								}
-							} else
-							{
-								string [] lines = File.ReadAllLines (
-									Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-									              "Yuki Theme", "files.txt"));
+							string [] lines = File.ReadAllLines (
+								Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+								              "Yuki Theme", "files.txt"));
 
-								foreach (string line in lines)
+							foreach (string line in lines)
+							{
+								try
 								{
-									try
+									string fileName = Path.Combine (dir, line);
+									if (File.Exists (fileName))
+										File.Move (fileName, $@"{ndr}\{line}");
+									else
 									{
-										File.Move (Path.Combine (dir, line), $@"{ndr}\{line}");
-									} catch (IOException e)
-									{
-										Console.WriteLine ("ERROR> {0}", e);
+										Console.WriteLine ("ERROR> File not exist: {0}, in {1}", line, fileName);
+										Console.ReadLine ();
 									}
-									// File.Delete (line);
+								} catch (IOException e)
+								{
+									Console.WriteLine ("ERROR> {0}", e);
 								}
+								// File.Delete (line);
 							}
 
 							Directory.Move (Path.Combine (dir, "Themes"), Path.Combine (ndr, "Themes"));
@@ -111,10 +90,13 @@ namespace Yuki_Installer
 									file.MoveTo ($@"{ndir}\{file.Name}");
 								} catch (IOException e)
 								{
+									Console.WriteLine ("ERROR FS> {0}", e);
+								} catch (Exception e)
+								{
 									Console.WriteLine ("ERROR> {0}", e);
 								}
 							}
-
+							
 							ndir = Path.Combine (dir, "Yuki Installer.exe");
 							Process.Start (ndir, $"\"{dir}_tmp\" \"{zip}\"");
 						}
@@ -151,18 +133,26 @@ namespace Yuki_Installer
 					ke.SetValue ("install", "1");
 
 					int mode = getMode ();
-					switch (mode)
+					
+					bool cli = isCLIUpdate ();
+					if (!cli)
 					{
-						case 0 :
+						switch (mode)
 						{
-							Process.Start ("Yuki_Theme.exe");
+							case 0 :
+							{
+								Process.Start ("Yuki_Theme.exe");
+							}
+								break;
+							case 1 :
+							{
+								Process.Start ("PascalABCNET.exe");
+							}
+								break;
 						}
-							break;
-						case 1 :
-						{
-							Process.Start ("PascalABCNET.exe");
-						}
-							break;
+					} else
+					{
+						Process.Start ("yuki.exe");
 					}
 				} else
 				{
@@ -176,6 +166,12 @@ namespace Yuki_Installer
 					$"ERROR> ARGS ARE NULL OR LENGTH ISN'T ENOUGH. IS NULL: {args == null}, LENGTH: {args.Length}");
 				Console.ReadLine ();
 			}
+		}
+
+		private static bool isCLIUpdate ()
+		{
+			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+			return bool.Parse (ke.GetValue ("cli_update", "false").ToString ());
 		}
 
 		private static int getMode ()

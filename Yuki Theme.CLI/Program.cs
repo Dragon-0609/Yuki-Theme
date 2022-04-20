@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using CommandLine;
 using CommandLine.Text;
 using CommandLine.Infrastructure;
+using Microsoft.Win32;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Localization;
 using Yuki_Theme.Core.Parsers;
@@ -128,7 +129,7 @@ namespace Yuki_Theme.CLI
 			var res = parser
 				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
 					DeleteCommand,
-					RenameCommand, SettingsCommand, EditCommand> (args);
+					RenameCommand, SettingsCommand, EditCommand, FeatureCommand> (args);
 
 			res.WithParsed <CopyCommand> (o =>
 			   {
@@ -163,6 +164,9 @@ namespace Yuki_Theme.CLI
 			   }).WithParsed <EditCommand> (o =>
 			   {
 				   EditC (o);
+			   }).WithParsed <FeatureCommand> (o =>
+			   {
+				   FeaturesC (o);
 			   })
 			   .WithNotParsed (errors =>
 			   {
@@ -606,7 +610,82 @@ namespace Yuki_Theme.CLI
 				ShowError (Core.CLI.Translate ("cli.errors.cantedit", o.Name));
 			}
 		}
+		
+		private static void FeaturesC (FeatureCommand o)
+		{
+			if (o.Path != null)
+			{
+				if (o.Path.StartsWith ("\"") && o.Path.EndsWith ("\"")) o.Path = o.Path.Substring (1, o.Path.Length - 2);
+				if (o.Path.Exist ())
+				{
+					File.Copy (
+						o.Path,
+						Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
+						              "yuki_theme.zip"), true);
 
+					Assembly a = Core.CLI.GetCore ();
+					int md = 0;
+					bool found = false;
+					while (!found)
+					{
+						string pth = Preparer.FileNamespace +
+						             (md == 0 ? "files_program.txt" : "files_plugin.txt");
+						Stream str = a.GetManifestResourceStream (pth);
+						if (str != null)
+						{
+							using StreamReader reader = new StreamReader (str);
+							string cx = reader.ReadLine ();
+							string ph = Path.Combine (Core.CLI.currentPath, cx);
+							Console.WriteLine (ph);
+							if (ph.Exist ())
+							{
+								found = true;
+								break;
+							}
+						}
+
+						md++;
+						if (md >= 2)
+						{
+							ShowError ("cli.errors.mode.notrecognized");
+							string type = Console.ReadLine ();
+							if (type.ToLower () == "program")
+							{
+								md = 0;
+								found = true;
+							} else if (type.ToLower () == "plugin")
+							{
+								md = 1;
+								found = true;
+							} else
+							{
+								md = 2;
+								break;
+							}
+							
+						}
+					}
+					
+					if (found)
+					{
+						Helper.mode = md == 0 ? ProductMode.Program : ProductMode.Plugin;
+						Preparer prep = new Preparer ();
+						prep.prepare (false);
+						RegistryKey ke =
+							Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+						if (ke != null) ke.SetValue ("cli_update", "true");
+						
+						quit = true;
+					} else
+					{
+						ShowError ("Couldn't find out app mode");
+					}
+				} else
+				{
+					ShowError ("Couldn't find the file");
+				}
+			}
+		}
 		
 		#endregion
 		

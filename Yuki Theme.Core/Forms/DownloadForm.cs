@@ -273,7 +273,7 @@ namespace Yuki_Theme.Core.Forms
 		public void startUpdating ()
 		{
 			Preparer prep = new Preparer ();
-			prep.prepare ();
+			prep.prepare (true);
 		}
 
 		private void button1_Click (object sender, EventArgs e)

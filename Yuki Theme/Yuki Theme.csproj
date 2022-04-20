@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A4A29993-E643-48B2-A2C6-D4EAD69313B4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Yuki_Theme</RootNamespace>
     <AssemblyName>Yuki_Theme</AssemblyName>
@@ -36,20 +36,18 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
+    <None Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <None Include="Program.cs" />
+    </None>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -57,15 +55,15 @@
     <None Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <None Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj">
-      <Project>{2ab7513f-70fb-4ffa-88ff-b133f20dd7dc}</Project>
-      <Name>Yuki Theme.Core.WPF</Name>
+    <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
+      <Project>{c12b1851-e2ae-4a31-95dc-1daafcdcb108}</Project>
+      <Name>Yuki Theme.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,7 +10,9 @@ namespace Yuki_Theme.Core
 {
 	public class Preparer
 	{
-		public void prepare ()
+		public const string FileNamespace = "Yuki_Theme.Core.Database.";
+
+		public void prepare (bool forceExit)
 		{
 			string path = Path.Combine (
 				Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
@@ -18,26 +20,40 @@ namespace Yuki_Theme.Core
 			File.Copy (Path.Combine (CLI.currentPath, "Yuki Installer.exe"), path, true);
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			ke.SetValue ("mode", ((int) Helper.mode).ToString ());
+			if (ke != null) ke.SetValue ("mode", ((int)Helper.mode).ToString ());
+
 			// Set false to track install again
-			ke.SetValue (Settings.LOGIN.ToString (), "false");
+			Settings.database.UpdateData (Settings.LOGIN, "false");
+
 			var a = Assembly.GetExecutingAssembly ();
-			using (Stream str = (a.GetManifestResourceStream ($"Yuki_Theme.Core.Database.files.txt")))
+			using (Stream str = (a.GetManifestResourceStream ($"{FileNamespace}files.txt")))
 			{
-				using (var fstream =
-					File.Create (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-					                           "Yuki Theme", "files.txt")))
+				using (FileStream fstream =
+				       File.Create (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+				                                  "Yuki Theme", "files.txt")))
 				{
 					str.Seek (0, SeekOrigin.Begin);
 					str.CopyTo (fstream);
+					using (StreamWriter sw = new StreamWriter (fstream))
+					{
+						string pth = FileNamespace + (Helper.mode == ProductMode.Program ? "files_program.txt" : "files_plugin.txt");
+						using (StreamReader reader = new StreamReader (a.GetManifestResourceStream (pth)))
+						{
+							string cx = reader.ReadToEnd ();
+							sw.WriteLine ("\n" + cx);
+						}
+					}
 				}
 			}
 
 			Process.Start (path, $"Install \"{Application.ExecutablePath}\"");
-			if (Helper.mode == ProductMode.Program)
-				Application.Exit ();
-			else if (Helper.mode == ProductMode.Plugin)
-				System.Environment.Exit (1);
+			if (forceExit)
+			{
+				if (Helper.mode == ProductMode.Program)
+					Application.Exit ();
+				else if (Helper.mode == ProductMode.Plugin)
+					System.Environment.Exit (1);
+			}
 		}
 	}
 }

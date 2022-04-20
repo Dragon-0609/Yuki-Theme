@@ -42,6 +42,8 @@
     "settings.additional.action.ignore": "Ignore",
     "settings.general.mode.light": "Light",
     "settings.general.mode.advanced": "Advanced",
+    "settings.toolbar.icon": "Icon: ",
+    
     "download.downloaded.already": "New version is already downloaded",
     "download.downloaded.already.restarttoinstall": "New version is already downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.",
     "download.buttons.install": "Install",
@@ -60,6 +62,7 @@
     "download.cancel": "Cancel",
     "download.downloaded.short": "New version is downloaded",
     "download.downloaded.full": "New version is downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.",
+    
     "main.theme.loading.error": "Error on loading the scheme file",
     "main.import.extensions.all": "All Themes",
     "main.import.directory": "Hi. You have selected the directory, so you will have to wait until the import is done. Your current theme will be changed on finishing import.",
@@ -87,6 +90,7 @@
     "main.labels.apply": "Apply",
     "main.labels.italic": "Italic",
     "main.labels.bold": "Bold",
+    
     "about.version": "version",
     "about.changelog": "Changelog",
     "about.inspiration": "Inspiration",
@@ -104,6 +108,7 @@
     "theme.manager.new": "New Theme",
     "parser.theme.exist": "The theme is exist...canceling...",
     "parser.theme.default": "The theme is default! You can't import it!",
+    
     "plugin.explorer.open": "Open in Explorer",
     "plugin.menu.settings": "Show Settings",
     "plugin.menu.discreet": "Toggle Discreet Mode",
@@ -116,6 +121,7 @@
     "plugin.themes": "Themes",
     "plugin.close": "Please, close Yuki Theme window to activate 'Switch theme'",
     "plugin.browser.error": "Couldn't find web browser",
+    
     "messages.name.equal.title": "Names are equal",
     "messages.name.equal.message": "Names are equal! Choose another name for 'To' field",
     "messages.name.notchanged": "You didn't change the name",
@@ -179,6 +185,7 @@
     "messages.buttons.accept": "Accept",
     "messages.buttons.decline": "Decline",
     "messages.buttons.close": "Close",
+    
     "cli.help.copy": "Copy the specified themes\ncopy <from> <to>",
     "cli.help.copy.names": "Copy <from> <to>",
     "cli.help.list": "Show list of themes",
@@ -206,6 +213,10 @@
     "cli.help.edit.opacity": "Opacity of the image.\n\n For example:\n yuki edit Test -d Image -o 15",
     "cli.help.edit.align": "Alignment of the image.\n\n For example:\n yuki edit Test -d Image -a left",
     "cli.help.edit.path": "Path to the image.\n\n For example:\n yuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\"",
+    "cli.help.features": "",
+    "cli.help.features.update": "Install update from the path",
+    "cli.help.features.": "",
+    
     "cli.errors.nocommand": "There is no \"{0}\" subcommand.",
     "cli.errors.nooption": "There is no \"{0}\" option.",
     "cli.errors.length": "Length of values are invalid. There must be 2 values",
@@ -228,8 +239,11 @@
     "cli.message.deleted": "{0} has been successfully deleted.",
     "cli.errors.file.notexist": "The file isn't exist!",
     "cli.errors.strange": "Strange error raised!",
+    "cli.errors.mode.notrecognized": "Error! App type isn't recognized. Write the type yourself: plugin or program",
+    
     "cli.success.settings.saved.short": "Saved",
     "cli.success.settings.saved.full": "Settings are saved",
+    
     "cli.": ""
   }
 }

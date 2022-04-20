@@ -42,6 +42,8 @@
     "settings.additional.action.ignore": "Игнорировать",
     "settings.general.mode.light": "Поверхностный",
     "settings.general.mode.advanced": "Углублённый",
+    "settings.toolbar.icon": "Иконка: ",
+    
     "download.downloaded.already": "Новая версия уже скачано",
     "download.downloaded.already.restarttoinstall": "Новая версия уже скачано. Вам нужно перезапустить приложения для обновления. Если вы хотите обновить позже, в настройках есть кнопка 'Перезапустить для обновления'.",
     "download.buttons.install": "Установить",
@@ -60,6 +62,7 @@
     "download.cancel": "Отменить",
     "download.downloaded.short": "Новая версия скачано",
     "download.downloaded.full": "Новая версия скачано. Вам нужно перезапустить приложения для обновления. Если вы хотите обновить позже, в настройках есть кнопка 'Перезапустить для обновления'.",
+    
     "main.theme.loading.error": "Ошибка при загрузке файла темы",
     "main.import.extensions.all": "Все темы",
     "main.import.directory": "Привет. Вы выбрали папку, так что вам придётся подождать пока импорт закончится. Ваша текущая тема будет измена на другую при завершении импорта.",
@@ -87,6 +90,7 @@
     "main.labels.apply": "Применить",
     "main.labels.italic": "Курсив",
     "main.labels.bold": "Жирный",
+    
     "about.version": "версия",
     "about.changelog": "Список изменений",
     "about.inspiration": "Вдохновение",
@@ -104,6 +108,7 @@
     "theme.manager.new": "Новая",
     "parser.theme.exist": "Эта тема уже существует...отмена...",
     "parser.theme.default": "Эта тема встроенная! Вы не можете импортировать её!",
+    
     "plugin.explorer.open": "Открыть в проводнике",
     "plugin.menu.settings": "Показать Настройки",
     "plugin.menu.discreet": "Переключить Тихий Режим",
@@ -116,6 +121,7 @@
     "plugin.themes": "Темы",
     "plugin.close": "Пожалуйста, закройте окно Yuki Theme чтобы использовать 'Поменять Тему'",
     "plugin.browser.error": "Не удалось найти веб-браузер",
+    
     "messages.name.equal.title": "Имена одинаковы",
     "messages.name.equal.message": "Имена одинаковы! Выберите другое имя для полья 'На'.",
     "messages.name.notchanged": "Вы не изменили имя",
@@ -179,6 +185,7 @@
     "messages.buttons.accept": "Принять",
     "messages.buttons.decline": "Отказать",
     "messages.buttons.close": "Закрыть",
+    
     "cli.help.copy": "Копировать выбранные темы\ncopy <из> <в>",
     "cli.help.copy.names": "copy <из> <в>",
     "cli.help.list": "Показать список тем",
@@ -206,6 +213,10 @@
     "cli.help.edit.opacity": "Прозрачность изображения.\n\n Например:\n yuki edit Test -d Image -o 15",
     "cli.help.edit.align": "Выравнивание изображения.\n\n Например:\n yuki edit Test -d Image -a left",
     "cli.help.edit.path": "Путь до изображения.\n\n Например:\n yuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\"",
+    "cli.help.features": "",
+    "cli.help.features.update": "Установить обновление с введённого пути",
+    "cli.help.features.": "",
+    
     "cli.errors.nocommand": "Команда \"{0}\" не найдена.",
     "cli.errors.nooption": "Выбор \"{0}\" не найдена.",
     "cli.errors.length": "Количество значений неправильное. Должно быть 2 значения.",
@@ -228,6 +239,8 @@
     "cli.message.deleted": "{0} успешно удален.",
     "cli.errors.file.notexist": "Файл не существует!",
     "cli.errors.strange": "Вылезла странная ошибка!",
+    "cli.errors.mode.notrecognized": "Ошибка! Тип приложение не распознано. Введите тип: plugin или program",
+    
     "cli.success.settings.saved.short": "Сохранено",
     "cli.success.settings.saved.full": "Настройки сохранены",
     "cli.": ""

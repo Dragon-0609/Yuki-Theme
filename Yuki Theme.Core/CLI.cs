@@ -109,7 +109,7 @@ namespace Yuki_Theme.Core
 
 			bool exist = false;
 
-			if (File.Exists (patsh))
+			if (patsh.Exist ())
 			{
 				if (!CLI_Actions.SaveInExport (Translate ("messages.file.exist.override.full"), Translate ("messages.file.exist.override.short")))
 				{
@@ -166,7 +166,7 @@ namespace Yuki_Theme.Core
 			} else
 			{
 				path = Path.Combine (currentPath, $"Themes/{themeName}{Helper.FILE_EXTENSTION_OLD}");
-				if (!File.Exists (path))
+				if (!path.Exist ())
 					path = Path.Combine (currentPath, $"Themes/{themeName}{Helper.FILE_EXTENSTION_NEW}");
 				File.Copy (path, destination);
 			}
@@ -189,7 +189,7 @@ namespace Yuki_Theme.Core
 			if (DefaultThemes.getCategory (st).ToLower () == "custom")
 			{
 				string ext = oldThemeList [st] ? Helper.FILE_EXTENSTION_OLD : Helper.FILE_EXTENSTION_NEW;
-				if (File.Exists (Path.Combine (currentPath, "Themes", $"{sft}{ext}")))
+				if (Path.Combine (currentPath, "Themes", $"{sft}{ext}").Exist ())
 				{
 					if (askD ($"Do you really want to delete '{st}'?", "Delete"))
 					{
@@ -389,8 +389,8 @@ namespace Yuki_Theme.Core
 					canOperate = true;
 				}
 
-				if (!File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_OLD}")) &&
-				    !File.Exists (Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_NEW}")))
+				if (!Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_OLD}").Exist () &&
+				    !Path.Combine (currentPath, "Themes", $"{frm}{Helper.FILE_EXTENSTION_NEW}").Exist ())
 				{
 					canOperate = false;
 					if (CLI_Actions.showError != null)
@@ -399,7 +399,7 @@ namespace Yuki_Theme.Core
 
 				if (canOperate)
 				{
-					if (!File.Exists (tp))
+					if (!tp.Exist ())
 					{
 						if (!DefaultThemes.isDefault (to))
 						{
@@ -671,7 +671,7 @@ namespace Yuki_Theme.Core
 			foreach (var file in files)
 			{
 				var fs = Path.Combine (currentPath, "Themes", Path.GetFileNameWithoutExtension (file) + Helper.FILE_EXTENSTION_OLD);
-				if (!File.Exists (fs))
+				if (!fs.Exist ())
 					File.Copy (file, fs);
 			}
 		}
@@ -706,7 +706,7 @@ namespace Yuki_Theme.Core
 		{
 			foreach (var file in files)
 			{
-				if (File.Exists (file))
+				if (file.Exist ())
 					File.Delete (file);
 			}
 		}
