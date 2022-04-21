@@ -240,9 +240,13 @@
     "cli.errors.file.notexist": "The file isn't exist!",
     "cli.errors.strange": "Strange error raised!",
     "cli.errors.mode.notrecognized": "Error! App type isn't recognized. Write the type yourself: plugin or program",
+    "cli.errors.find.app": "Couldn't find out app type",
+    "cli.errors.find.file": "Couldn't find the file",
     
     "cli.success.settings.saved.short": "Saved",
     "cli.success.settings.saved.full": "Settings are saved",
+    "cli.success.update.short": "Successfully updated.",
+    "cli.success.update.full": "The app has been successfully updated.",
     
     "cli.": ""
   }

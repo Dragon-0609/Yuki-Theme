@@ -240,6 +240,10 @@
     "cli.errors.file.notexist": "Файл не существует!",
     "cli.errors.strange": "Вылезла странная ошибка!",
     "cli.errors.mode.notrecognized": "Ошибка! Тип приложение не распознано. Введите тип: plugin или program",
+    "cli.errors.find.app": "Не удалось выяснить тип приложения",
+    "cli.errors.find.file": "Не удалось найти файл",
+    "cli.success.update.short": "Успешно обновлено",
+    "cli.success.update.full": "Приложение успешно обновлено.",
     
     "cli.success.settings.saved.short": "Сохранено",
     "cli.success.settings.saved.full": "Настройки сохранены",

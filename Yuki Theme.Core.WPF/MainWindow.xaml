@@ -8,6 +8,7 @@
         MinWidth="400"
         MinHeight="300"
         Loaded="Init"
+        Background="#323232" Foreground="#DDDDDD"
         Title="Yuki Theme" Height="300" Width="600">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -16,44 +17,101 @@
         </Grid.ColumnDefinitions>
 
         <Grid>
-            <ListView Background="#323232" Foreground="#DDDDDD" Padding="5" Name="Definitions">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <!-- <Setter Property="Background" Value="Transparent" /> -->
-                        <!-- <Setter Property="BorderBrush" Value="Transparent" /> -->
-                        <!-- <Setter Property="BorderThickness" Value="0" /> -->
-                        <Style.Resources>
-                            <!-- Foreground for Selected ListViewItem -->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" 
-                                             Color="Black"/>
-                            <!-- Background for Selected ListViewItem -->
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                             Color="Transparent"/>
-                        </Style.Resources>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="Gold" />
-                                <Setter Property="Background" Value="Red" />
-                                <Setter Property="BorderBrush" Value="Red" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Foreground" Value="#FF00FF" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
+            <ListView Padding="5" Name="Definitions" SelectionMode="Single"></ListView>
         </Grid>
         <Grid Grid.Column="1" Background="#212121">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <StackPanel>
+            <WrapPanel HorizontalAlignment="Center">
+                <WrapPanel.Resources>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Margin" Value="5 10 5 5" />
+                        <Setter Property="Width" Value="24" />
+                        <Setter Property="Height" Value="24" />
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Margin" Value="15 10 5 5" />
+                        <Setter Property="FontSize" Value="14" />
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Margin" Value="15 10 5 5" />
+                        <Setter Property="FontSize" Value="14" />
+                    </Style>
+                </WrapPanel.Resources>
 
-                <ComboBox Width="200" Margin="5 10 5 5" HorizontalAlignment="Left" SelectionChanged="Theme_Changed" Name="Themes">
+                <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top">
                 </ComboBox>
-            </StackPanel>
+
+                <Button Name="AddButton" Margin="15 10 5 5" VerticalAlignment="Top"></Button>
+                <Button Name="ManageButton" VerticalAlignment="Top" />
+                <Button Name="SaveButton" VerticalAlignment="Top" />
+                <Button Name="RestoreButton" VerticalAlignment="Top" />
+                <Button Name="ExportButton" VerticalAlignment="Top" />
+                <Button Name="ImportButton" VerticalAlignment="Top" />
+                <Button Name="ImportDirectoryButton" VerticalAlignment="Top" />
+                <Button Name="SettingsButton" VerticalAlignment="Top" />
+
+                <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition /><RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" /><ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Background Color:" VerticalAlignment="Center" />
+                        <Button Grid.Column="1" Width="32" Height="32" Name="BGButton" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                        <TextBlock Grid.Row="1" Text="Foreground Color:" VerticalAlignment="Center" />
+                        <Button Grid.Row="1" Grid.Column="1" Width="32" Height="32" Name="FGButton" />
+                    </StackPanel>
+                </Grid>
+
+                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Visible">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Width="120" Height="20" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="Testing" />
+                            <Button Name="ImagePathButton" Margin="1 5 5 0" Width="20" Height="20" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+                            <Button Name="ApplyButton" Content="Apply" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
+                            <Button Name="CancelButton" Content="Cancel" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="" />
+                    </Grid>
+
+                    <StackPanel>
+                        <TextBlock Text="Algin:" Margin="7 0" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button Width="32" Height="32" Margin="10 10 5 5" Name="LAlignButton" />
+                            <Button Width="32" Height="32" Name="CAlignButton" />
+                            <Button Width="32" Height="32" Name="RAlignButton" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock Text="Opacity:" Margin="7 0" />
+
+                        <Slider Width="120" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1"
+                                Margin="5 5 5 0"
+                                Name="OpacitySlider" />
+                    </StackPanel>
+
+
+                </WrapPanel>
+
+            </WrapPanel>
             <StackPanel Grid.Row="1">
 
             </StackPanel>

@@ -14,6 +14,7 @@ namespace Yuki_Theme.Core.WPF
 		public MainWindow ()
 		{
 			InitializeComponent ();
+			
 		}
 
 		private void Init (object sender, RoutedEventArgs e)

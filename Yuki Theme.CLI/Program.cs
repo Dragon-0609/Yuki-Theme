@@ -74,6 +74,7 @@ namespace Yuki_Theme.CLI
 				Parse (parser, args);
 			} else
 			{
+				CheckUpdateInslattaion ();
 				loop = true;
 				ShowLoopMessage ();
 				while (!quit)
@@ -678,11 +679,11 @@ namespace Yuki_Theme.CLI
 						quit = true;
 					} else
 					{
-						ShowError ("Couldn't find out app mode");
+						ShowError (Core.CLI.Translate("cli.errors.find.app"));
 					}
 				} else
 				{
-					ShowError ("Couldn't find the file");
+					ShowError (Core.CLI.Translate("cli.errors.find.file"));
 				}
 			}
 		}
@@ -1070,7 +1071,20 @@ namespace Yuki_Theme.CLI
 
 			return res;
 		}
-		
+
+		private static void CheckUpdateInslattaion ()
+		{
+			RegistryKey ke =
+				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+
+			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			if (inst == 1)
+			{
+				ShowSuccess (Core.CLI.Translate ("cli.success.update"), Core.CLI.Translate ("cli.success.update.short"));
+				ke?.DeleteValue ("install");
+				ke?.DeleteValue ("cli_update");
+			}
+		}
 		
 		#endregion
 		
