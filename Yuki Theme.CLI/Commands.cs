@@ -107,8 +107,8 @@ namespace Yuki_Theme.CLI
 	[Verb ("features", HelpText = "cli.help.features")]
 	public class FeatureCommand
 	{
-		[Option ('u', "update", Required = false, HelpText = "cli.help.features.update")]
-		public string Path { get; set; }
+		[Value( 0, HelpText = "cli.help.copy.names", Min = 1, Max = 2, MetaName = "Commands")]
+		public IEnumerable<string> Commands {get; set;}
 
 	}
 }

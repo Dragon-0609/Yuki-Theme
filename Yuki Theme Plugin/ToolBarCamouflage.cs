@@ -10,12 +10,13 @@ namespace Yuki_Theme_Plugin
 {
 	public class ToolBarCamouflage
 	{
-		private readonly DatabaseManager      database;
-		public           List <ToolItemGroup> groups;
-		public           List <ToolStripItem> items;
-		public           List <string>        itemsToHide;
-		public           List <string>        itemsToRight;
-		private readonly ToolStrip            tools;
+		private DatabaseManager      database => Settings.database;
+		public  List <ToolItemGroup> groups;
+		public  List <ToolStripItem> items;
+		public  List <string>        itemsToHide;
+		public  List <string>        itemsToRight;
+
+		private readonly ToolStrip tools;
 
 		public ToolBarCamouflage (ToolStrip toolStrip)
 		{
@@ -24,7 +25,6 @@ namespace Yuki_Theme_Plugin
 			groups = new List <ToolItemGroup> ();
 			itemsToHide = new List <string> ();
 			itemsToRight = new List <string> ();
-			database = new DatabaseManager ();
 			Init ();
 		}
 
@@ -131,7 +131,7 @@ namespace Yuki_Theme_Plugin
 
 		private void PopulateList ()
 		{
-			var data = database.ReadData (Settings.CAMOUFLAGEHIDDEN);
+			var data = database.ReadData (Settings.CAMOUFLAGEHIDDEN, "");
 
 			PopulateLists (data, ref itemsToHide);
 

@@ -153,7 +153,7 @@ namespace Yuki_Theme_Plugin
 					Settings.askToSave = settingsPanel.askSave.Checked;
 					Settings.saveAsOld = settingsPanel.saveOld.Checked;
 					Settings.showPreview = settingsPanel.preview.Checked;
-					Settings.saveData ();
+					Settings.SaveData ();
 					plugin.LoadSticker ();
 
 					settingsPanel.popupController = null;

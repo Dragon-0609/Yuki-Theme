@@ -242,11 +242,17 @@
     "cli.errors.mode.notrecognized": "Error! App type isn't recognized. Write the type yourself: plugin or program",
     "cli.errors.find.app": "Couldn't find out app type",
     "cli.errors.find.file": "Couldn't find the file",
+    "cli.errors.export.extension": "'{0}' doesn't have extension. The path should have extension. Therefore, the path set to '{1}'",
+    "cli.errors.export.null": "The path is empty. You should write the path to import settings",
     
     "cli.success.settings.saved.short": "Saved",
     "cli.success.settings.saved.full": "Settings are saved",
     "cli.success.update.short": "Successfully updated.",
     "cli.success.update.full": "The app has been successfully updated.",
+    "cli.success.settings.export.short": "Export of settings finished",
+    "cli.success.settings.export.full": "Settings have been successfully exported.",
+    "cli.success.settings.import.short": "Import of settings finished",
+    "cli.success.settings.import.full": "Settings have been successfully imported.",
     
     "cli.": ""
   }

@@ -1957,7 +1957,8 @@ namespace Yuki_Theme_Plugin
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			
-			ke?.DeleteValue ("cli_update");
+			if ((string)ke?.GetValue ("cli_update", "null") != "null")
+				ke.DeleteValue ("cli_update");
 
 			int inst = ke?.GetValue ("install") != null ? 1 : 0;
 			if (inst == 1)

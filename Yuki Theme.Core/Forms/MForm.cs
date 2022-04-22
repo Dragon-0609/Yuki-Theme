@@ -621,7 +621,7 @@ namespace Yuki_Theme.Core.Forms
 				Settings.saveAsOld = setform.settingsPanel.saveOld.Checked;
 				Settings.showPreview = setform.settingsPanel.preview.Checked;
 
-				Settings.saveData ();
+				Settings.SaveData ();
 				sBox.Refresh ();
 				stickerControl.Enabled = Settings.positioning;
 				LoadSticker ();
@@ -1172,7 +1172,8 @@ namespace Yuki_Theme.Core.Forms
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			
-			ke?.DeleteValue ("cli_update");
+			if ((string)ke?.GetValue ("cli_update", "null") != "null")
+				ke.DeleteValue ("cli_update");
 
 			int inst = ke.GetValue ("install") != null ? 1 : 0;
 			if (inst == 1)

@@ -165,38 +165,62 @@ public static class Settings
 	/// <summary>
 	/// Save current settings
 	/// </summary>
-	public static void saveData ()
+	public static void SaveData ()
 	{
-		var dict = new Dictionary <int, string> ();
-		dict.Add (PASCALPATH, pascalPath);
-		dict.Add (ACTIVE, CLI.selectedItem);
-		dict.Add (ASKCHOICE, askChoice.ToString ());
-		dict.Add (CHOICEINDEX, actionChoice.ToString ());
-		dict.Add (SETTINGMODE, ((int)settingMode).ToString ());
-		dict.Add (AUTOUPDATE, update.ToString ());
-		dict.Add (BGIMAGE, bgImage.ToString ());
-		dict.Add (STICKER, swSticker.ToString ());
-		dict.Add (STATUSBAR, swStatusbar.ToString ());
-		dict.Add (LOGO, swLogo.ToString ());
-		dict.Add (EDITOR, Editor.ToString ());
-		dict.Add (BETA, Beta.ToString ());
-		dict.Add (ALLOWPOSITIONING, positioning.ToString ());
-		dict.Add (SHOWGRIDS, showGrids.ToString ());
-		dict.Add (STICKERPOSITIONUNIT, ((int)unit).ToString ());
-		dict.Add (USECUSTOMSTICKER, useCustomSticker.ToString ());
-		dict.Add (CUSTOMSTICKER, customSticker);
-		dict.Add (LICENSE, license.ToString ());
-		dict.Add (GOOGLEANALYTICS, googleAnalytics.ToString ());
-		dict.Add (DONTTRACK, dontTrack.ToString ());
-		dict.Add (AUTOFITWIDTH, autoFitByWidth.ToString ());
-		dict.Add (ASKTOSAVE, askToSave.ToString ());
-		dict.Add (SAVEASOLD, saveAsOld.ToString ());
-		dict.Add (SHOWPREVIEW, showPreview.ToString ());
-		dict.Add (LOCALIZATION, localization);
+		Dictionary <int, string> dict = PrepareToSave;
 		database.UpdateData (dict);
 		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
 		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();
 		if (CLI_Actions.onSTATUSChange != null) CLI_Actions.onSTATUSChange ();
 	}
 
+	private static Dictionary <int, string> PrepareToSave
+	{
+		get
+		{
+			Dictionary <int, string> dict = new Dictionary <int, string>
+			{
+				{ PASCALPATH, pascalPath },
+				{ ACTIVE, CLI.selectedItem },
+				{ ASKCHOICE, askChoice.ToString () },
+				{ CHOICEINDEX, actionChoice.ToString () },
+				{ SETTINGMODE, ((int)settingMode).ToString () },
+				{ AUTOUPDATE, update.ToString () },
+				{ BGIMAGE, bgImage.ToString () },
+				{ STICKER, swSticker.ToString () },
+				{ STATUSBAR, swStatusbar.ToString () },
+				{ LOGO, swLogo.ToString () },
+				{ EDITOR, Editor.ToString () },
+				{ BETA, Beta.ToString () },
+				{ ALLOWPOSITIONING, positioning.ToString () },
+				{ SHOWGRIDS, showGrids.ToString () },
+				{ STICKERPOSITIONUNIT, ((int)unit).ToString () },
+				{ USECUSTOMSTICKER, useCustomSticker.ToString () },
+				{ CUSTOMSTICKER, customSticker },
+				{ LICENSE, license.ToString () },
+				{ GOOGLEANALYTICS, googleAnalytics.ToString () },
+				{ DONTTRACK, dontTrack.ToString () },
+				{ AUTOFITWIDTH, autoFitByWidth.ToString () },
+				{ ASKTOSAVE, askToSave.ToString () },
+				{ SAVEASOLD, saveAsOld.ToString () },
+				{ SHOWPREVIEW, showPreview.ToString () },
+				{ LOCALIZATION, localization }
+			};
+			return dict;
+		}
+	}
+
+	public static SortedDictionary <int, string> PrepareAll
+	{
+		get
+		{
+			Dictionary <int, string> dict = PrepareToSave;
+			dict.Add (LOCATION, DatabaseManager.GetLocation ());
+			dict.Add (CAMOUFLAGEHIDDEN, database.ReadData (CAMOUFLAGEHIDDEN, ""));
+			dict.Add (LOGIN, Logged.ToString ());
+			SortedDictionary <int, string> sorted = new SortedDictionary <int, string> (dict);
+			
+			return sorted;
+		}
+	}
 }

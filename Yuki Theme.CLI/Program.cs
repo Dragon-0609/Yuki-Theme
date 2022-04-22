@@ -71,6 +71,7 @@ namespace Yuki_Theme.CLI
 
 			if (args != null && args.Length > 0)
 			{
+				quit = true;
 				Parse (parser, args);
 			} else
 			{
@@ -479,7 +480,7 @@ namespace Yuki_Theme.CLI
 
 			if (changed)
 			{
-				Settings.saveData ();
+				Settings.SaveData ();
 				ShowSuccess ("Settings are saved!", "Saved");
 			} else
 			{
@@ -614,13 +615,31 @@ namespace Yuki_Theme.CLI
 		
 		private static void FeaturesC (FeatureCommand o)
 		{
-			if (o.Path != null)
+			string command = o.Commands.ElementAt (0).ToLower();
+			string path = "null";
+			if (o.Commands.Count () == 2)
+				path = o.Commands.ElementAt (1);
+			
+			if (command == "update")
+				UpdateC (path);
+			else if (command == "export")
+				ExportSettings (path);
+			else if (command == "import")
+				ImportSettings (path);
+			else if (command == "print")
+				PrintSettings ();
+		}
+
+		private static void UpdateC (string path)
+		{
+			// Update from path
+			if (path != "null")
 			{
-				if (o.Path.StartsWith ("\"") && o.Path.EndsWith ("\"")) o.Path = o.Path.Substring (1, o.Path.Length - 2);
-				if (o.Path.Exist ())
+				if (path.StartsWith ("\"") && path.EndsWith ("\"")) path = path.Substring (1, path.Length - 2);
+				if (path.Exist ())
 				{
 					File.Copy (
-						o.Path,
+						path,
 						Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 						              "yuki_theme.zip"), true);
 
@@ -663,10 +682,9 @@ namespace Yuki_Theme.CLI
 								md = 2;
 								break;
 							}
-							
 						}
 					}
-					
+
 					if (found)
 					{
 						Helper.mode = md == 0 ? ProductMode.Program : ProductMode.Plugin;
@@ -675,19 +693,97 @@ namespace Yuki_Theme.CLI
 						RegistryKey ke =
 							Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 						if (ke != null) ke.SetValue ("cli_update", "true");
-						
+
 						quit = true;
 					} else
 					{
-						ShowError (Core.CLI.Translate("cli.errors.find.app"));
+						ShowError (Core.CLI.Translate ("cli.errors.find.app"));
 					}
 				} else
 				{
-					ShowError (Core.CLI.Translate("cli.errors.find.file"));
+					ShowError (Core.CLI.Translate ("cli.errors.find.file"));
 				}
+			} else // Check Update
+			{
+				
 			}
 		}
-		
+
+		private static void ExportSettings (string path)
+		{
+			Settings.connectAndGet ();
+			string destination;
+			if (path != "null" && Path.HasExtension (path))
+			{
+				destination = path;
+			} else
+			{
+				destination = Path.Combine (Core.CLI.currentPath, "settings.syuki");
+				if (!Path.HasExtension (path)) ShowError (Core.CLI.Translate ("cli.errors.export.extension", path, destination));
+			}
+
+			SortedDictionary <int, string> dict = Settings.PrepareAll;
+			string output = "";
+			int o = dict.Count - 1;
+			for (var i = 0; i < dict.Count; i++)
+			{
+				output += $"{dict.Keys.ElementAt (i)} => {dict.Values.ElementAt (i)}";
+				if (i != o) output += "\n";
+			}
+
+			string outdir = Path.GetDirectoryName (destination);
+			if (outdir != null) Directory.CreateDirectory (outdir);
+			File.WriteAllText (destination, output, Encoding.UTF8);
+			ShowSuccess (Core.CLI.Translate ("cli.success.settings.export.full"), Core.CLI.Translate ("cli.success.settings.export.short"));
+		}
+
+		private static void ImportSettings (string path)
+		{
+			Settings.connectAndGet ();
+			if (path != "null" && File.Exists (path))
+			{
+				try
+				{
+					string input = File.ReadAllText (path, Encoding.UTF8);
+					string[] lines = input.Split ('\n');
+					Dictionary <int, string> dict = new Dictionary <int, string> ();
+					foreach (string line in lines)
+					{
+						string [] param = line.Split (new string [] { " => " }, StringSplitOptions.None);
+						if (param.Length == 2)
+						{
+							int key = int.Parse (param [0]);
+							dict.Add (key, param [1]);
+						}
+					}
+
+					Settings.database.UpdateData (dict);
+					Settings.connectAndGet ();
+					ShowSuccess (Core.CLI.Translate ("cli.success.settings.import.full"), Core.CLI.Translate ("cli.success.settings.import.short"));
+				} catch (Exception e)
+				{
+					ShowError (Core.CLI.Translate ("cli.errors.happened", e.ToString ()));
+				}
+			} else
+			{
+				ShowError (path == "null"
+					           ? Core.CLI.Translate ("cli.errors.export.null")
+					           : Core.CLI.Translate ("messages.file.notexist.full2"));
+			}
+		}
+
+		private static void PrintSettings ()
+		{
+			Settings.connectAndGet ();
+			SortedDictionary <int, string> dict = Settings.PrepareAll;
+			Console.WriteLine();
+			foreach (KeyValuePair <int, string> pair in dict)
+			{
+				Console.WriteLine ($"{pair.Key} => {pair.Value}");
+			}
+			Console.WriteLine();
+		}
+
 		#endregion
 		
 		#region Other Methods
@@ -722,7 +818,7 @@ namespace Yuki_Theme.CLI
 			if (isPath)
 			{
 				Settings.pascalPath = pth;
-				Core.Settings.saveData ();
+				Core.Settings.SaveData ();
 			}
 		}
 
@@ -1080,9 +1176,10 @@ namespace Yuki_Theme.CLI
 			int inst = ke?.GetValue ("install") != null ? 1 : 0;
 			if (inst == 1)
 			{
-				ShowSuccess (Core.CLI.Translate ("cli.success.update"), Core.CLI.Translate ("cli.success.update.short"));
+				ShowSuccess (Core.CLI.Translate ("cli.success.update.full"), Core.CLI.Translate ("cli.success.update.short"));
 				ke?.DeleteValue ("install");
-				ke?.DeleteValue ("cli_update");
+				if ((string)ke?.GetValue ("cli_update", "null") != "null")
+					ke.DeleteValue ("cli_update");
 			}
 		}
 		

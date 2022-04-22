@@ -242,11 +242,18 @@
     "cli.errors.mode.notrecognized": "Ошибка! Тип приложение не распознано. Введите тип: plugin или program",
     "cli.errors.find.app": "Не удалось выяснить тип приложения",
     "cli.errors.find.file": "Не удалось найти файл",
-    "cli.success.update.short": "Успешно обновлено",
-    "cli.success.update.full": "Приложение успешно обновлено.",
+    "cli.errors.export.extension": "'{0}' не имеет расширения. Путь должен иметь расширения. Поэтому, путь был изменён на '{1}'",
+    "cli.errors.export.null": "Путь не задан. Вам нужно ввести путь, чтобы импортировать настройки",
     
     "cli.success.settings.saved.short": "Сохранено",
     "cli.success.settings.saved.full": "Настройки сохранены",
+    "cli.success.update.short": "Успешно обновлено",
+    "cli.success.update.full": "Приложение успешно обновлено.",
+    "cli.success.settings.export.short": "Экспорт настроек завершен",
+    "cli.success.settings.export.full": "Настройки успешно экспортированы.",
+    "cli.success.settings.import.short": "Импорт настроек завершен",
+    "cli.success.settings.import.full": "Настройки успешно импортированы.",
+    
     "cli.": ""
   }
 }

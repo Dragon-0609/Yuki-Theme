@@ -196,7 +196,7 @@ namespace Yuki_Theme.Core
 						object bn = null;
 						if (afterAsk != null) bn = afterAsk (sft);
 
-						Settings.saveData ();
+						Settings.SaveData ();
 						File.Delete (Path.Combine (currentPath, $"Themes/{sft}{ext}"));
 						schemes.Remove (sft);
 						if (afterDelete != null) afterDelete (sft, bn);

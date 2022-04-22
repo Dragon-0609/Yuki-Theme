@@ -130,13 +130,23 @@ namespace Yuki_Theme.Core.Database
 
 		public Point ReadLocation ()
 		{
-			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
-			string sp = key.GetValue (Settings.LOCATION.ToString (), "0:0").ToString ();
-			if (!sp.Contains (":"))
-				sp = "0:0";
+			string sp = GetLocation ();
 			string [] spp = sp.Split (':');
 			// Console.WriteLine (sp);
 			return new Point (int.Parse (spp [0]), int.Parse (spp [1]));
+		}
+
+		internal static string GetLocation ()
+		{
+			string sp = "0:0";
+			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
+			if (key != null)
+			{
+				key.GetValue (Settings.LOCATION.ToString (), "0:0").ToString ();
+				if (!sp.Contains (":"))
+					sp = "0:0";
+			}
+			return sp;
 		}
 
 		public void SaveLocation (Point loc)
