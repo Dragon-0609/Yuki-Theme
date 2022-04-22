@@ -6,13 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using CLITools;
 using CommandLine;
 using CommandLine.Text;
-using CommandLine.Infrastructure;
 using Microsoft.Win32;
 using Yuki_Theme.Core;
-using Yuki_Theme.Core.Localization;
-using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.CLI
@@ -23,10 +21,12 @@ namespace Yuki_Theme.CLI
 		private static bool loop      = false;
 		private const  int  MAX_WIDTH = 80;
 
+		private static Completion completion;
+
 		/// <summary>
 		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
 		/// </summary>
-		public static void LoadCLI (bool refreshSchemes)
+		private static void LoadCLI (bool refreshSchemes)
 		{
 			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
 			{
@@ -41,9 +41,23 @@ namespace Yuki_Theme.CLI
 				Settings.settingMode = SettingMode.Light;
 				Settings.saveAsOld = true;
 				Core.CLI.load_schemes ();
+				AddThemeCompletion ();
 			} else if (refreshSchemes)
 			{
 				Core.CLI.load_schemes ();
+				AddThemeCompletion ();
+			}
+		}
+
+		private static void AddThemeCompletion ()
+		{
+			completion.themes.Clear ();
+			string [] themes = Core.CLI.schemes.ToArray ();
+			string [] commands = new [] { "copy", "export", "delete", "rename", "edit" };
+			foreach (string command in commands)
+			{
+				completion.themes.Add (command, themes);
+				Console.WriteLine(command);
 			}
 		}
 
@@ -78,19 +92,15 @@ namespace Yuki_Theme.CLI
 				CheckUpdateInslattaion ();
 				loop = true;
 				ShowLoopMessage ();
+				completion = new Completion();
+				ReadLine.AutoCompletionHandler = completion;
+				ReadLine.HistoryEnabled = true;
+				
+				LoadCLI (true);
 				while (!quit)
 				{
-					Console.Write ("yuki >");
-					string command = Console.ReadLine ();
+					string command = ReadLine.Read ("yuki> ");
 					if (command.ToLower ().Contains ("quit")) break;
-					/*Regex argReg = new Regex (@"\w+|""[\w\s]*""");
-					string [] cmds = new string[argReg.Matches (command).Count];
-					int i = 0;
-					foreach (var enumer in argReg.Matches (command))
-					{
-						cmds [i] = (string) enumer.ToString ();
-						i++;
-					}*/
 					if (command.ToLower ().StartsWith ("yuki "))
 					{
 						command = command.Substring (5);

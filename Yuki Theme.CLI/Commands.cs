@@ -89,7 +89,7 @@ namespace Yuki_Theme.CLI
 		[Option ('b', "bg", Required = false, HelpText = "cli.help.edit.background")]
 		public string Background { get; set; }
 
-		[Option ('t', "opacity", Required = false, HelpText = "cli.help.edit.text")]
+		[Option ('t', "text", Required = false, HelpText = "cli.help.edit.text")]
 		public string Text { get; set; }
 
 		[Option ('o', "opacity", Required = false, HelpText = "cli.help.edit.opacity")]
