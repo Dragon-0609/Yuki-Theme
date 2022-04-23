@@ -42,6 +42,7 @@ namespace Yuki_Theme.CLI
 				Settings.saveAsOld = true;
 				Core.CLI.load_schemes ();
 				AddThemeCompletion ();
+				AddDefinitionCompletion ();
 			} else if (refreshSchemes)
 			{
 				Core.CLI.load_schemes ();
@@ -57,8 +58,18 @@ namespace Yuki_Theme.CLI
 			foreach (string command in commands)
 			{
 				completion.themes.Add (command, themes);
-				Console.WriteLine(command);
 			}
+		}
+
+		private static void AddDefinitionCompletion ()
+		{
+			List <string> list = new List <string> ();
+			foreach (KeyValuePair <string, string> pair in Populater.changedNames)
+			{
+				list.Add (pair.Value);
+			}
+
+			completion.definitions = list.ToArray ();
 		}
 
 		/// <summary>

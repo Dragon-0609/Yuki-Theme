@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace CLITools
 {
@@ -12,17 +13,30 @@ namespace CLITools
 		private  Dictionary <string, string []> commands;
 		internal Dictionary <string, string []> themes;
 
+		internal string [] definitions;
+
 		private string [] defaultCompletion;
 
 		// text - The current text entered in the console
 		// index - The index of the terminal cursor within {text}
 		public string [] GetSuggestions (string text, int index)
 		{
-			string [] clx;
+			string [] clx = null;
+			
 			if (CheckDictionary (text, commands, false, out string [] strings)) return strings;
+			
 			if (CheckDictionary (text, themes, true, out string [] strinv)) return strinv;
 
-			clx = ChangeCase (text, SortBySimilarity (text, defaultCompletion, false));
+			if (definitions.Length != 0)
+			{
+				if (CheckByRegex (text, definitions, @"^edit\s\w*\s-d\s", out string [] strinr)) return strinr;
+			}
+
+			if (CheckByRegex (text, new [] { "-d" }, @"^edit\s\w*\s", out string [] strinh)) return strinh;
+			
+			if (text.Length == 0 || !text.Contains (" "))
+				clx = ChangeCase (text, SortBySimilarity (text, defaultCompletion, false));
+
 			return clx;
 		}
 
@@ -30,7 +44,8 @@ namespace CLITools
 		{
 			foreach (KeyValuePair <string, string []> pair in comms)
 			{
-				if (text.ToLower ().StartsWith (pair.Key + " "))
+				string lower = text.ToLower ();
+				if (lower.StartsWith (pair.Key + " "))
 				{
 					string [] clx;
 					if (keepCase)
@@ -38,14 +53,32 @@ namespace CLITools
 					else
 						clx = ChangeCase (text, SortBySimilarity (text.Substring (pair.Key.Length + 1), pair.Value, false));
 					
+					if (clx.All(cx => Regex.Matches(lower, cx, RegexOptions.IgnoreCase).Count == 0))
 					{
 						strings = clx;
 						return true;
 					}
+
+					break;
 				}
 			}
 
 			strings = null;
+			return false;
+		}
+
+		private bool CheckByRegex (string text, string[] values, string regex, out string[] strinr)
+		{
+			Match match = Regex.Match (text, regex, RegexOptions.Singleline);
+			if (match.Success)
+			{
+				if (values.All(cx => Regex.Matches(text, cx, RegexOptions.IgnoreCase).Count == 0))
+				{
+					strinr = SortBySimilarity (text.Substring (match.Value.Length), values, false);
+					return true;
+				}				
+			}
+			strinr = null;
 			return false;
 		}
 
@@ -90,6 +123,7 @@ namespace CLITools
 				"copy", "list", "clear", "fields", "allfields", "export", "import", "delete", "rename", "settings", "edit", "features"
 			};
 			themes = new Dictionary <string, string []> ();
+			definitions = new string[0];
 		}
 
 		private string [] SortBySimilarity (string target, string [] reference, bool keepCase)
@@ -97,7 +131,8 @@ namespace CLITools
 			if (target.Length == 0) return reference;
 			if (!keepCase)
 				target = target.ToLower ();
-			string [] result = reference.OrderBy (m => m.StartsWith (target) ? 0 : 1).ThenBy (m => m).ToArray ();
+			string [] result = reference.OrderBy (m => m.ToLower().StartsWith (target) ? 0 : 1).ThenBy (m => m.ToLower().Contains (target) ? 0 : 1)
+			                            .ThenBy (m => m).ToArray ();
 			return result;
 		}
 	}
