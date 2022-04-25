@@ -22,6 +22,7 @@ using Yuki_Theme.Core;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;

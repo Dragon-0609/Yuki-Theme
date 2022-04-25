@@ -3,48 +3,78 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Yuki_Theme.Core.WPF"
         mc:Ignorable="d"
         MinWidth="400"
         MinHeight="300"
         Loaded="Init"
-        Background="#323232" Foreground="#DDDDDD"
-        Title="Yuki Theme" Height="300" Width="600">
+        Background="#212121" Foreground="#DDDDDD"
+        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.controls"
+        SizeChanged="MainWindow_OnSizeChanged"
+        Title="Yuki Theme" Height="400" Width="670">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition MinWidth="150" Width="200" />
+            <ColumnDefinition Width="2" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid>
             <ListView Padding="5" Name="Definitions" SelectionMode="Single"></ListView>
         </Grid>
-        <Grid Grid.Column="1" Background="#212121">
+
+        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <WrapPanel HorizontalAlignment="Center">
+            <WrapPanel Name="TopPanel" HorizontalAlignment="Center">
                 <WrapPanel.Resources>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Margin" Value="5 10 5 5" />
+
+                    <Style x:Key="SmallMargin" TargetType="FrameworkElement">
+                        <Setter Property="Margin" Value="2 10 2 5" />
+                    </Style>
+
+                    <Style x:Key="BigMargin" TargetType="FrameworkElement">
+                        <Setter Property="Margin" Value="15 10 5 5" />
+                    </Style>
+
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource SmallMargin}">
                         <Setter Property="Width" Value="24" />
                         <Setter Property="Height" Value="24" />
                     </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Margin" Value="15 10 5 5" />
+
+                    <Style x:Key="MarginButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BigMargin}">
+                        <Setter Property="Width" Value="24" />
+                        <Setter Property="Height" Value="24" />
+                    </Style>
+
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigMargin}">
                         <Setter Property="FontSize" Value="14" />
                     </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="15 10 5 5" />
+                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BigMargin}">
                         <Setter Property="FontSize" Value="14" />
                     </Style>
                 </WrapPanel.Resources>
 
                 <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top">
+                    <ComboBox.Tag>
+                        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" />
+                    </ComboBox.Tag>
                 </ComboBox>
 
-                <Button Name="AddButton" Margin="15 10 5 5" VerticalAlignment="Top"></Button>
+                <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top"></Button>
                 <Button Name="ManageButton" VerticalAlignment="Top" />
                 <Button Name="SaveButton" VerticalAlignment="Top" />
                 <Button Name="RestoreButton" VerticalAlignment="Top" />
@@ -53,24 +83,36 @@
                 <Button Name="ImportDirectoryButton" VerticalAlignment="Top" />
                 <Button Name="SettingsButton" VerticalAlignment="Top" />
 
-                <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
+                <Grid Name="ColorPanel" Margin="15 5" Visibility="Visible">
                     <Grid.RowDefinitions>
                         <RowDefinition /><RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" /><ColumnDefinition />
+                        <ColumnDefinition Width="Auto" /><ColumnDefinition />
+                        <ColumnDefinition Width="Auto" /><ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Background Color:" VerticalAlignment="Center" />
-                        <Button Grid.Column="1" Width="32" Height="32" Name="BGButton" />
+                        <Button Width="32" Height="32" Name="BGButton" Style="{StaticResource MarginButton}" />
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                        <TextBlock Grid.Row="1" Text="Foreground Color:" VerticalAlignment="Center" />
-                        <Button Grid.Row="1" Grid.Column="1" Width="32" Height="32" Name="FGButton" />
+                        <TextBlock Text="Foreground Color:" VerticalAlignment="Center" />
+                        <Button Width="32" Height="32" Name="FGButton" Style="{StaticResource MarginButton}" />
                     </StackPanel>
+
+                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Bold:" VerticalAlignment="Center" Margin=" 10 2" />
+                        <CheckBox VerticalAlignment="Center" Margin=" 2 2" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Italic:" VerticalAlignment="Center" Margin=" 10 2" />
+                        <CheckBox VerticalAlignment="Center" Margin=" 2 2" />
+                    </StackPanel>
+
                 </Grid>
 
-                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Visible">
+                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Collapsed">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -88,7 +130,6 @@
                             <Button Name="ApplyButton" Content="Apply" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
                             <Button Name="CancelButton" Content="Cancel" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
                         </StackPanel>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Text="" />
                     </Grid>
 
                     <StackPanel>
@@ -112,9 +153,13 @@
                 </WrapPanel>
 
             </WrapPanel>
-            <StackPanel Grid.Row="1">
-
-            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid>
+                    <controls:CodeTextboxHost x:Name="FSTB" />
+                    <!-- Doesn't work -->
+                    <Image Grid.ZIndex="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Name="Sticker" Width="200" Height="200" Margin="0 0 20 20"/>
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

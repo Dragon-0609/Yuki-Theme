@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Themes;
 using static System.Drawing.Brushes;
 using TextStyle = FastColoredTextBoxNS.TextStyle;
@@ -34,8 +35,6 @@ namespace Yuki_Theme.Core
 		protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform ();
 
 		//styles
-
-		private MForm form;
 
 		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
 
@@ -69,9 +68,8 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-		public Highlighter (FastColoredTextBox fs, MForm fm)
+		public Highlighter (FastColoredTextBox fs)
 		{
-			form = fm;
 			sBox = fs;
 			sBox.Clear ();
 			sBox.TextChanged += PascalSyntaxHighlight;
@@ -127,14 +125,12 @@ namespace Yuki_Theme.Core
 							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
 							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
 							Helper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
-
-							// sBox.WhitespaceColor = sBox.BackColor;
-							form.updateBackgroundColors ();
 						}
 							break;
 						case "Selection" :
 						{
-							sBox.SelectionColor = Color.FromArgb (100, Parse (style.Value.Background));
+							Helper.selectionColor = Parse (style.Value.Background);
+							sBox.SelectionColor = Color.FromArgb (100, Helper.selectionColor);
 						}
 							break;
 						case "VRuler" :

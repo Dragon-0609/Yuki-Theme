@@ -12,6 +12,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Svg;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -200,7 +201,7 @@ namespace Yuki_Theme.Core.Forms
 			initSticker ();
 			popupController = new PopupFormsController (this, notHeight, this);
 
-			highlighter = new Highlighter (sBox, this);
+			highlighter = new Highlighter (sBox);
 			load_schemes ();
 			if (Helper.mode == ProductMode.Plugin)
 				initPlugin ();

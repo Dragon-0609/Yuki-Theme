@@ -125,7 +125,8 @@
     <Compile Include="Formats\NewThemeFormat.cs" />
     <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
-    <Compile Include="IColorUpdatable.cs" />
+    <Compile Include="Interfaces\IColorUpdatable.cs" />
+    <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Localization\Localization.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
@@ -404,9 +405,6 @@
     <EmbeddedResource Include="Themes\Nightshade.yukitheme" />
     <EmbeddedResource Include="Themes\Oblivion.yukitheme" />
     <EmbeddedResource Include="Themes\Shades of Purple.yukitheme" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WPF" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
