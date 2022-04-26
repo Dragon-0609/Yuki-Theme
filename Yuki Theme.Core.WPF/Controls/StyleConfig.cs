@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Brush = System.Windows.Media.Brush;
 
-namespace Yuki_Theme.Core.WPF.controls
+namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class StyleConfig
 	{

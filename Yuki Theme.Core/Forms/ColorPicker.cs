@@ -16,13 +16,13 @@ namespace Yuki_Theme.Core.Forms
 		public  Color      colorRgb    = Color.Empty;
 		private bool       lockUpdates = false;
 		private int        cbox        = 3;
-		private MForm      form;
+		// private MForm      form;
 		#endregion
 		
-		public ColorPicker (MForm fm)
+		public ColorPicker (/*MForm fm*/)
 		{
 			InitializeComponent ();
-			form = fm;
+			// form = fm;
 			this.colorBox2D.ColorMode = this.colorMode;
 			this.colorSlider.ColorMode = this.colorMode;
 			this.StartPosition = FormStartPosition.CenterParent;
@@ -315,10 +315,10 @@ namespace Yuki_Theme.Core.Forms
 
 		private void OKBTN_Click (object sender, EventArgs e)
 		{
-			if (form.isDefault ())
+			/*if (form.isDefault ())
 			{
 				MessageBox.Show ((IWin32Window) this, CLI.Translate ("colors.default.error.full"), CLI.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}else
+			}else*/
 				DialogResult = DialogResult.OK;	
 		}
 

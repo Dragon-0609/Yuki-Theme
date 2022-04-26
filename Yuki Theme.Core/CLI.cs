@@ -355,7 +355,7 @@ namespace Yuki_Theme.Core
 		/// <param name="path">Theme from</param>
 		public static void import (string path, Func <string, string, bool> exist)
 		{
-			MainParser.Parse (path, null, true, true, CLI_Actions.showError, exist);
+			MainParser.Parse (path, /*null, */true, true, CLI_Actions.showError, exist);
 		}
 
 		/// <summary>
@@ -608,15 +608,15 @@ namespace Yuki_Theme.Core
 		private static void MergeSyntax (string dir, SyntaxType syntax)
 		{
 			string npath = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
-			var a = GetCore ();
-			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
-			using (var fs = new FileStream (npath, FileMode.Create))
+			Assembly a = GetCore ();
+			Stream stream = a.GetManifestResourceStream ($"{Helper.TEMPLATENAMESPACE}{syntax.ToString ()}.xshd");
+			using (FileStream fs = new FileStream (npath, FileMode.Create))
 			{
 				stream.Seek (0, SeekOrigin.Begin);
 				stream.CopyTo (fs);
 			}
 
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			Dictionary <string, ThemeField> localDic = ConvertToRealNames (syntax);
 			// Console.WriteLine (syntax.ToString ());
 			MergeFiles (npath, localDic);
 		}
@@ -643,13 +643,20 @@ namespace Yuki_Theme.Core
 			OldThemeFormat.SaveXML (null, null, true, theme.IsZip (), ref doc, path);
 		}
 
-		private static void MergeFiles (Dictionary <string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
+		public static void MergeFiles (Dictionary <string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
 		{
 			OldThemeFormat.MergeThemeFieldsWithFile (fields, doc);
 
 			OldThemeFormat.MergeCommentsWithFile (themeToMerge, doc);
 		}
 
+		
+		public static Dictionary <string, ThemeField> ConvertToRealNames (SyntaxType syntax)
+		{
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			return localDic;
+		}
+		
 		/// <summary>
 		/// Clean destination before export. Delete background image and sticker 
 		/// </summary>

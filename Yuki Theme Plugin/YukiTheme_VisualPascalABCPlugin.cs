@@ -112,7 +112,7 @@ namespace Yuki_Theme_Plugin
 		private       Timer           documentUpdator;
 		private       Timer           menuItemsColorUpdator;
 		private       Timer           tim3;
-		public        MForm           mf;
+		// public        MForm           mf;
 		private       ToolStripButton currentThemeName;
 		private       PictureBox      logoBox;
 		private       Image           sticker;
@@ -288,7 +288,7 @@ namespace Yuki_Theme_Plugin
 		
 		private void InitCore ()
 		{
-			if (mf == null || mf.IsDisposed)
+			/*if (mf == null || mf.IsDisposed)
 			{
 				mf = new MForm (1);
 				mf.startSettingTheme += ReleaseResources;
@@ -300,7 +300,7 @@ namespace Yuki_Theme_Plugin
 				};
 			}
 			if (mf.Visible) return;
-			mf.Show();
+			mf.Show();*/
 		}
 		
 		private void InitializeSticker ()
@@ -471,9 +471,9 @@ namespace Yuki_Theme_Plugin
 				"Yuki Theme: Initialization finished.\n");
 			
 			InjectCodeCompletion ();
-			MForm.showLicense (bg, clr, bgClick, fm);
+			/*MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
-			MForm.TrackInstall ();
+			MForm.TrackInstall ();*/
 			if (!IsUpdated () && Settings.update)
 			{
 				popupController.InitializeAllWindows ();
@@ -691,8 +691,8 @@ namespace Yuki_Theme_Plugin
 		{
 			if(!fm.Controls.ContainsKey ("Custom Panel Switcher"))
 			{
-				if (mf == null || mf.IsDisposed)
-				{
+				// if (mf == null || mf.IsDisposed)
+				// {
 					RememberCurrentEditor ();
 					 
 					panel_bg = new CustomPanel (0);
@@ -758,10 +758,10 @@ namespace Yuki_Theme_Plugin
 					panel_bg.BringToFront ();
 					themeList.searchBar.Focus ();
 					
-				} else
-				{
-					MessageBox.Show (CLI.Translate ("plugin.close"));
-				}
+				// } else
+				// {
+				// 	MessageBox.Show (CLI.Translate ("plugin.close"));
+				// }
 			}
 		}
 		

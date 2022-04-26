@@ -10,7 +10,7 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class SettingsForm : Form
 	{
-		private MForm form;
+		// private MForm form;
 
 		public string Path
 		{
@@ -54,14 +54,14 @@ namespace Yuki_Theme.Core.Forms
 			set => settingsPanel.checkBox1.Checked = value;
 		}
 
-		public SettingsForm (MForm mf)
+		public SettingsForm (/*MForm mf*/)
 		{
 			InitializeComponent ();
-			form = mf;
+			// form = mf;
 			this.StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			settingsPanel.SettingsPanel_Load ();
-			settingsPanel.popupController = mf.popupController;
+			// settingsPanel.popupController = mf.popupController;
 			settingsPanel.updateTranslation = UpdateTranslation;
 			UpdateTranslation ();
 			FontManager.SetAllControlsFont (this.Controls, 0);
@@ -125,7 +125,7 @@ namespace Yuki_Theme.Core.Forms
 			settingsPanel.tabs.bg = new SolidBrush (Helper.bgColor);
 			settingsPanel.tabs.bgClick = new SolidBrush (Helper.bgClick);
 
-			settingsPanel.stickerToUpdate.Add (form.stickerControl);
+			// settingsPanel.stickerToUpdate.Add (form.stickerControl);
 			bool isProgram = Helper.mode == ProductMode.Program;
 			settingsPanel.HideTabPage (isProgram, false);
 		}

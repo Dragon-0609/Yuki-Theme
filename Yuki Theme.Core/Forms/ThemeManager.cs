@@ -24,7 +24,7 @@ namespace Yuki_Theme.Core.Forms
 {
 	public partial class ThemeManager : Form
 	{
-		private MForm         form;
+		// private MForm         form;
 		private Brush         bg,  fg, fgsp, borderBrush;
 		private Color         cbg, cbgclick;
 		public  List <ReItem> groups;
@@ -33,12 +33,12 @@ namespace Yuki_Theme.Core.Forms
 
 		private Image expandImage, collapseImage;
 
-		public ThemeManager (MForm fm)
+		public ThemeManager (/*MForm fm*/)
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
-			form = fm;
+			// form = fm;
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
@@ -58,10 +58,10 @@ namespace Yuki_Theme.Core.Forms
 		public object afterAsk (string sel)
 		{
 			ListViewItem sifr = scheme.SelectedItems [0];
-			if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
+			/*if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
 			{
 				form.schemes.SelectedIndex = 0;
-			}
+			}*/
 
 			return (object)sifr;
 		}
@@ -69,7 +69,7 @@ namespace Yuki_Theme.Core.Forms
 		public void afterDelete (string sel, object sifr)
 		{
 			scheme.Items.Remove ((ListViewItem)sifr);
-			form.schemes.Items.Remove (sel);
+			// form.schemes.Items.Remove (sel);
 		}
 
 		public void onRename (string from, string to)
@@ -77,7 +77,7 @@ namespace Yuki_Theme.Core.Forms
 			ListViewItem res = scheme.Items.Find (from, true) [0];
 			ReItem reit = (ReItem)res;
 			reit.SetName (to);
-			int indx = form.schemes.Items.IndexOf (from);
+			/*int indx = form.schemes.Items.IndexOf (from);
 			bool needToReSelect = false;
 			if (form.schemes.SelectedIndex == indx)
 			{
@@ -90,7 +90,7 @@ namespace Yuki_Theme.Core.Forms
 			if (needToReSelect)
 				form.schemes.SelectedIndex = indx;
 			scheme.Invalidate ();
-			form.schemes.Invalidate ();
+			form.schemes.Invalidate ();*/
 		}
 
 		#region Events
@@ -102,7 +102,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void add_Click (object sender, EventArgs e)
 		{
-			if (form.selform == null)
+			/*if (form.selform == null)
 				form.selform = new SelectionForm ();
 			form.selform.textBox1.Text = "";
 			form.selform.comboBox1.Items.Clear ();
@@ -138,7 +138,7 @@ namespace Yuki_Theme.Core.Forms
 				{
 					CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
 				}
-			}
+			}*/
 		}
 
 		private void remove_Click (object sender, EventArgs e)
@@ -206,10 +206,10 @@ namespace Yuki_Theme.Core.Forms
 			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name];
 			scheme.Invalidate ();
 
-			if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)
-			{
+			// if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)
+			// {
 				CLI.SelectTheme (name);
-			}
+			// }
 
 			MessageBox.Show (CLI.Translate ("messages.regeneration.completed.fromto", name, format),
 			                 CLI.Translate ("messages.regeneration.completed.title"));

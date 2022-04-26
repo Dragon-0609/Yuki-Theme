@@ -2,7 +2,7 @@
 using System.Windows.Forms.Integration;
 using FastColoredTextBoxNS;
 
-namespace Yuki_Theme.Core.WPF.controls
+namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class CodeTextboxHost : WindowsFormsHost
 	{
@@ -45,6 +45,8 @@ namespace Yuki_Theme.Core.WPF.controls
 			box.ShowFoldingLines = true;
 			box.Text = "begin\r\nWriteln(\'Hello World\');\r\nend.";
 			box.Zoom = 100;
+			
+			box.SendToBack ();
 		}
 
 		private void BoxTextChanged (object sender, TextChangedEventArgs e)

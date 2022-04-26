@@ -751,7 +751,7 @@ namespace Yuki_Theme.Core.Formats
 		{
 			string res = "";
 			var a = CLI.GetCore ();
-			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd");
+			var stream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
 			using (StreamReader reader = new StreamReader (stream))
 			{
 				res = reader.ReadToEnd ();

@@ -22,7 +22,7 @@ namespace Yuki_Theme.Core.Parsers
 
 		public Action <string, string> defaultTheme;
 
-		public void Parse (string path, string st, string pathToSave, MForm form, bool ak = false, bool rewrite =false, bool select = true)
+		public void Parse (string path, string st, string pathToSave, /*MForm form, */bool ak = false, bool rewrite =false, bool select = true)
 		{
 			theme = ThemeFunctions.LoadDefault ();
 			theme.Fields = new Dictionary <string, ThemeField> ();
@@ -72,24 +72,24 @@ namespace Yuki_Theme.Core.Parsers
 			{
 				CLI.AddThemeToLists (flname, false, true);
 				CLI.names.Add (flname);
-				if (form != null)
-					form.schemes.Items.Add (flname);
+				/*if (form != null)
+					form.schemes.Items.Add (flname);*/
 			}
-			if(select && form != null)
+			/*if(select && form != null)
 			{
 				// If selected theme is not theme that we just parsed
 				if ((string)form.schemes.SelectedItem != flname)
 					form.schemes.SelectedItem = flname;
 				else
 					form.restore_Click (form, EventArgs.Empty); // Reset
-			}
+			}*/
 		}
 
 		public void MergeFiles (string path)
 		{
 			XmlDocument doc = new XmlDocument ();
 
-			OldThemeFormat.loadThemeToPopulate (ref doc, "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd", false, true,
+			OldThemeFormat.loadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
 			                                    ref theme, PathToSave, Helper.FILE_EXTENSTION_OLD, true);
 			
 			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);

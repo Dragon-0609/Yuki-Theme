@@ -70,7 +70,8 @@ namespace Yuki_Theme.Core
 		private const string STICKER_NAME        = "sticker.png";
 		public const  string FILE_EXTENSTION_OLD = ".yukitheme";
 		public const  string FILE_EXTENSTION_NEW = ".yuki";
-		public const  string PASCALTEMPLATE      = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
+		public const  string TEMPLATENAMESPACE   = "Yuki_Theme.Core.Resources.Syntax_Templates.";
+		public const  string PASCALTEMPLATE      = $"{TEMPLATENAMESPACE}Pascal.xshd";
 		
 		#endregion
 		

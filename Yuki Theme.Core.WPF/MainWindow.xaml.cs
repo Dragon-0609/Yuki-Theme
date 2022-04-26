@@ -1,9 +1,13 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
-using Yuki_Theme.Core.WPF.controls;
+using System.Xml;
+using Yuki_Theme.Core.WPF.Controls;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 using Image = System.Drawing.Image;
@@ -40,12 +44,10 @@ namespace Yuki_Theme.Core.WPF
 			CLI_Actions.ifHasSticker = ifHasSticker;
 			CLI_Actions.ifDoesntHaveSticker = ifDoesntHaveSticker;
 			
-			highlighter = new Highlighter (FSTB.box);
-			
+			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
-			
 			highlighter.InitializeSyntax ();
-			FSTB.box.Paint += bgImagePaint;
+			Fstb.box.Paint += bgImagePaint;
 		}
 
 		private void load_schemes ()
@@ -94,12 +96,13 @@ namespace Yuki_Theme.Core.WPF
 					}
 				}
 
-				Sticker.Width = img4.Width;
-				Sticker.Height = img4.Height;
+				Popup.Width = Sticker.Width = img4.Width;
+				Popup.Height = Sticker.Height = img4.Height;
 				Sticker.Source = img4.ToWPFImage ();
+				Popup.UpdatePopupPosition ();
 			} else
 			{
-				Sticker.Visibility = Visibility.Hidden;
+				Popup.Visibility = Visibility.Hidden;
 			}
 		}
 		
@@ -137,9 +140,9 @@ namespace Yuki_Theme.Core.WPF
 		{
 			if (img != null && Settings.bgImage)
 			{
-				if (oldV.Width != FSTB.box.ClientRectangle.Width || oldV.Height != FSTB.box.ClientRectangle.Height)
+				if (oldV.Width != Fstb.box.ClientRectangle.Width || oldV.Height != Fstb.box.ClientRectangle.Height)
 				{
-					oldV = Helper.GetSizes (img.Size, FSTB.box.ClientRectangle.Width, FSTB.box.ClientRectangle.Height,
+					oldV = Helper.GetSizes (img.Size, Fstb.box.ClientRectangle.Width, Fstb.box.ClientRectangle.Height,
 					                        CLI.currentTheme.align);
 				}
 
@@ -181,7 +184,7 @@ namespace Yuki_Theme.Core.WPF
 		private void SetOpacityWallpaper ()
 		{
 			img = Helper.SetOpacity (img2, CLI.currentTheme.WallpaperOpacity);
-			FSTB.box.Refresh ();
+			Fstb.box.Refresh ();
 		}
 
 		private void MainWindow_OnSizeChanged (object sender, SizeChangedEventArgs e)
@@ -214,5 +217,6 @@ namespace Yuki_Theme.Core.WPF
 			Themes.Tag = config;
 			// MessageBox.Show (Themes.Tag.GetType ().ToString ());
 		}
+
 	}
 }

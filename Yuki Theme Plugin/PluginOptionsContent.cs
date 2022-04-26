@@ -88,12 +88,12 @@ namespace Yuki_Theme_Plugin
 						settingsPanel.tabs.bgClick = YukiTheme_VisualPascalABCPlugin.bgClickBrush;
 						settingsPanel.HideTabPage (false, true);
 
-						if (plugin.mf != null && !plugin.mf.IsDisposed)
+						/*if (plugin.mf != null && !plugin.mf.IsDisposed)
 						{
 							plugin.mf.Dispose ();
 						}
 
-						plugin.mf = null;
+						plugin.mf = null;*/
 						settingsPanel.popupController = plugin.popupController;
 						oldeditor = Settings.Editor;
 						// Change colors for About Form
@@ -157,13 +157,13 @@ namespace Yuki_Theme_Plugin
 					plugin.LoadSticker ();
 
 					settingsPanel.popupController = null;
-					plugin.mf = null;
+					// plugin.mf = null;
 					alreadyShown = false;
 					//this.Enabled = true;           
 					break;
 				case OptionsContentAction.Cancel :
 					settingsPanel.popupController = null;
-					plugin.mf = null;
+					// plugin.mf = null;
 					Settings.localization = lang;
 					Settings.translation.LoadLocalization ();
 					alreadyShown = false;

@@ -78,6 +78,7 @@
           <DependentUpon>App.xaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Include="Controls\AirspacePopup.cs" />
         <Compile Include="Controls\CodeTextboxHost.cs" />
         <Compile Include="Controls\StyleConfig.cs" />
         <Compile Include="InnerHelper.cs" />

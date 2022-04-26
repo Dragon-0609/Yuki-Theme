@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- syntaxdefinition for PascalABC.NET (c) Ivan Bondarev, Stanislav Mikhalkovich -->
 
-<SyntaxDefinition name="PascalABC.NET" extensions=".pas;.paspart_">
+<SyntaxDefinition name="C#" extensions=".pas;.paspart_">
     <Environment>
         <Default color="#F5DEDA" bgcolor="#4B364C"/>
         <Selection bgcolor="#836785"/>
@@ -350,7 +350,7 @@
             </Span>
         </RuleSet>
 
-        <RuleSet name="Default" ignorecase="true" reference="PascalABC.NET">
+        <RuleSet name="Default" ignorecase="true" reference="C#">
             <Delimiters>&lt;&gt;~!%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
         </RuleSet>
 

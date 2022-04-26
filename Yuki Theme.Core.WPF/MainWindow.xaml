@@ -8,7 +8,9 @@
         MinHeight="300"
         Loaded="Init"
         Background="#212121" Foreground="#DDDDDD"
-        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.controls"
+        xmlns:fastColoredTextBoxNs="clr-namespace:FastColoredTextBoxNS;assembly=FastColoredTextBox"
+        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+
         SizeChanged="MainWindow_OnSizeChanged"
         Title="Yuki Theme" Height="400" Width="670">
     <Window.Resources>
@@ -61,10 +63,7 @@
                     </Style>
 
                     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigMargin}">
-                        <Setter Property="FontSize" Value="14" />
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BigMargin}">
-                        <Setter Property="FontSize" Value="14" />
+                        <!-- <Setter Property="FontSize" Value=" FontSize="{Binding ElementName=Themes, Path=FontSize }"" /> -->
                     </Style>
                 </WrapPanel.Resources>
 
@@ -93,11 +92,15 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Background Color:" VerticalAlignment="Center" />
-                        <Button Width="32" Height="32" Name="BGButton" Style="{StaticResource MarginButton}" />
+                        <Border BorderBrush="Black" BorderThickness="0.5" Style="{StaticResource SmallMargin}">
+                        <Button Width="32" Height="16" Name="BGButton" Margin="0" />
+                        </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="Foreground Color:" VerticalAlignment="Center" />
-                        <Button Width="32" Height="32" Name="FGButton" Style="{StaticResource MarginButton}" />
+                        <Border BorderBrush="Black" BorderThickness="0.5" Style="{StaticResource SmallMargin}">
+                        <Button Width="32" Height="16" Name="FGButton" Margin="0" />
+                        </Border>
                     </StackPanel>
 
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
@@ -133,7 +136,7 @@
                     </Grid>
 
                     <StackPanel>
-                        <TextBlock Text="Algin:" Margin="7 0" />
+                        <TextBlock Text="Algin:" Margin="7 0" Style="{StaticResource BigMargin}" />
                         <StackPanel Orientation="Horizontal">
                             <Button Width="32" Height="32" Margin="10 10 5 5" Name="LAlignButton" />
                             <Button Width="32" Height="32" Name="CAlignButton" />
@@ -154,11 +157,23 @@
 
             </WrapPanel>
             <Grid Grid.Row="1">
-                <Grid>
-                    <controls:CodeTextboxHost x:Name="FSTB" />
-                    <!-- Doesn't work -->
-                    <Image Grid.ZIndex="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Name="Sticker" Width="200" Height="200" Margin="0 0 20 20"/>
-                </Grid>
+
+                <controls:AirspacePopup PlacementTarget="{Binding ElementName=Fstb}"
+                                        FollowPlacementTarget="True"
+                                        AllowOutsideScreenPlacement="True"
+                                        ParentWindow="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        IsOpen="True"
+                                        AllowsTransparency="True"
+                                        Placement="Bottom, Right"
+                                        x:Name="Popup" Width="200" Height="200">
+                    <Grid>
+                        <Image VerticalAlignment="Bottom" HorizontalAlignment="Right" Name="Sticker" Width="200" Height="200"
+                               Visibility="Hidden" />
+                    </Grid>
+                </controls:AirspacePopup>
+
+                <controls:CodeTextboxHost x:Name="Fstb"></controls:CodeTextboxHost>
+
             </Grid>
         </Grid>
     </Grid>
