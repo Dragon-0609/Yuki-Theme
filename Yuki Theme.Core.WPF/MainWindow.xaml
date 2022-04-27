@@ -8,33 +8,48 @@
         MinHeight="300"
         Loaded="Init"
         Background="#212121" Foreground="#DDDDDD"
-        xmlns:fastColoredTextBoxNs="clr-namespace:FastColoredTextBoxNS;assembly=FastColoredTextBox"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
-
+        Name="Window"
         SizeChanged="MainWindow_OnSizeChanged"
-        Title="Yuki Theme" Height="400" Width="670">
+        Title="Yuki Theme" Height="400" Width="680">
+
+    <Window.Tag>
+        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
+                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" />
+    </Window.Tag>
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/ListViewStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/SliderStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
+
     </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="150" Width="200" />
+            <ColumnDefinition MinWidth="150" MaxWidth="250" Width="200" />
             <ColumnDefinition Width="2" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <Grid>
-            <ListView Padding="5" Name="Definitions" SelectionMode="Single"></ListView>
+            <ListView Padding="5" Name="Definitions" SelectionMode="Single" BorderThickness="0"
+                      Background="{Binding ElementName=Window, Path=Background}" Foreground="{Binding ElementName=Window, Path=Foreground}"
+                      Tag="{Binding ElementName=Window, Path=Tag}">
+            </ListView>
         </Grid>
 
-        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch"
+                      Background="{Binding ElementName=Definitions, Path=Tag.BorderColor}" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
@@ -62,15 +77,15 @@
                         <Setter Property="Height" Value="24" />
                     </Style>
 
-                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BigMargin}">
-                        <!-- <Setter Property="FontSize" Value=" FontSize="{Binding ElementName=Themes, Path=FontSize }"" /> -->
+                    <Style x:Key="BigButton" TargetType="Button" BasedOn="{StaticResource SmallMargin}">
+                        <Setter Property="Width" Value="32" />
+                        <Setter Property="Height" Value="32" />
                     </Style>
                 </WrapPanel.Resources>
 
-                <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top">
-                    <ComboBox.Tag>
-                        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" />
-                    </ComboBox.Tag>
+                <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top"
+                          Background="{Binding ElementName=Window, Path=Background}"
+                          Foreground="{Binding ElementName=Window, Path=Foreground}" Tag="{Binding ElementName=Window, Path=Tag}">
                 </ComboBox>
 
                 <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top"></Button>
@@ -82,7 +97,7 @@
                 <Button Name="ImportDirectoryButton" VerticalAlignment="Top" />
                 <Button Name="SettingsButton" VerticalAlignment="Top" />
 
-                <Grid Name="ColorPanel" Margin="15 5" Visibility="Visible">
+                <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
                     <Grid.RowDefinitions>
                         <RowDefinition /><RowDefinition />
                     </Grid.RowDefinitions>
@@ -93,13 +108,13 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Background Color:" VerticalAlignment="Center" />
                         <Border BorderBrush="Black" BorderThickness="0.5" Style="{StaticResource SmallMargin}">
-                        <Button Width="32" Height="16" Name="BGButton" Margin="0" />
+                            <Button Width="32" Height="16" Name="BGButton" Margin="0" />
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                         <TextBlock Text="Foreground Color:" VerticalAlignment="Center" />
                         <Border BorderBrush="Black" BorderThickness="0.5" Style="{StaticResource SmallMargin}">
-                        <Button Width="32" Height="16" Name="FGButton" Margin="0" />
+                            <Button Width="32" Height="16" Name="FGButton" Margin="0" />
                         </Border>
                     </StackPanel>
 
@@ -115,14 +130,14 @@
 
                 </Grid>
 
-                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Collapsed">
+                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Visible">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition />
+                            <RowDefinition Height="*" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
@@ -130,17 +145,17 @@
                             <Button Name="ImagePathButton" Margin="1 5 5 0" Width="20" Height="20" />
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                            <Button Name="ApplyButton" Content="Apply" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
-                            <Button Name="CancelButton" Content="Cancel" Width="NaN" Height="20" FontSize="12" Padding="6 0" />
+                            <Button Name="ApplyButton" Content="Apply" Width="NaN" Padding="6 2" />
+                            <Button Name="CancelButton" Content="Cancel" Width="NaN" Padding="6 2" />
                         </StackPanel>
                     </Grid>
 
                     <StackPanel>
                         <TextBlock Text="Algin:" Margin="7 0" Style="{StaticResource BigMargin}" />
                         <StackPanel Orientation="Horizontal">
-                            <Button Width="32" Height="32" Margin="10 10 5 5" Name="LAlignButton" />
-                            <Button Width="32" Height="32" Name="CAlignButton" />
-                            <Button Width="32" Height="32" Name="RAlignButton" />
+                            <Button Style="{StaticResource BigButton}" Margin="10 10 5 5" Name="LAlignButton" />
+                            <Button Style="{StaticResource BigButton}" Name="CAlignButton" />
+                            <Button Style="{StaticResource BigButton}" Name="RAlignButton" />
                         </StackPanel>
                     </StackPanel>
 
@@ -148,8 +163,9 @@
                         <TextBlock Text="Opacity:" Margin="7 0" />
 
                         <Slider Width="120" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1"
-                                Margin="5 5 5 0"
-                                Name="OpacitySlider" />
+                                Margin="5 5 5 0" Background="{Binding ElementName=Window, Path=Background}"
+                                Foreground="{Binding ElementName=Window, Path=Foreground}"
+                                Name="OpacitySlider" Tag="{Binding ElementName=Window, Path=Tag}" />
                     </StackPanel>
 
 

@@ -10,6 +10,7 @@ using System.Xml;
 using Yuki_Theme.Core.WPF.Controls;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Image = System.Drawing.Image;
 
 namespace Yuki_Theme.Core.WPF
@@ -23,6 +24,9 @@ namespace Yuki_Theme.Core.WPF
 
 		private Highlighter highlighter;
 		private Rectangle   oldV = Rectangle.Empty;
+
+		private Thickness minMargin  = new Thickness (0);
+		private Thickness normMargin = new Thickness (24, 0, 0, 0);
 		
 		private Image img  = null;
 		private Image img2 = null;
@@ -38,6 +42,8 @@ namespace Yuki_Theme.Core.WPF
 		{
 			if (Helper.mode != ProductMode.Plugin)
 				Settings.connectAndGet ();
+			
+			Definitions.ItemContainerStyle = Definitions.FindResource ("Win10") as Style;
 			
 			CLI_Actions.ifHasImage = ifHasImage;
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
@@ -191,32 +197,52 @@ namespace Yuki_Theme.Core.WPF
 		{
 			if (Width < 680)
 			{
+				if (TopPanel.HorizontalAlignment != HorizontalAlignment.Center)
+				{
+					TopPanel.HorizontalAlignment = HorizontalAlignment.Center;
+					TopPanel.Margin = minMargin;
+				}
 			} else
 			{
+				if (TopPanel.HorizontalAlignment == HorizontalAlignment.Center)
+				{
+					TopPanel.HorizontalAlignment = HorizontalAlignment.Left;
+					TopPanel.Margin = normMargin;
+				}
 			}
 		}
 
 		public void updateBackgroundColors ()
 		{
 			Color bgColor = Helper.bgColor.ToWPFColor ();
+			Color bgClickColor = Helper.bgClick.ToWPFColor ();
 			Color fgColor = Helper.fgColor.ToWPFColor ();
 			Color borderColor = Helper.bgBorder.ToWPFColor ();
 			Color selectionColor = Helper.selectionColor.ToWPFColor ();
+			Color KeywordColor = Helper.fgKeyword.ToWPFColor ();
 			Brush bgBrush = new SolidColorBrush (bgColor);
+			Brush bgClickBrush = new SolidColorBrush (bgClickColor);
 			Brush fgBrush = new SolidColorBrush (fgColor);
 			Brush borderBrush = new SolidColorBrush (borderColor);
 			Brush selectionBrush = new SolidColorBrush (selectionColor);
+			Brush KeywordBrush = new SolidColorBrush (KeywordColor);
 			
-			Background = Themes.Background = bgBrush;
-			Foreground = Themes.Foreground = fgBrush;
+			Background = bgBrush;
+			Foreground = fgBrush;
 			StyleConfig config = new StyleConfig
 			{
-				BorderColor = borderBrush,
-				SelectionColor = selectionBrush 
+				BorderColor = borderColor,
+				SelectionColor = selectionColor,
+				KeywordColor = KeywordColor,
+				BorderBrush = borderBrush,
+				SelectionBrush = selectionBrush,
+				KeywordBrush = KeywordBrush,
+				BackgroundClickBrush = bgClickBrush
 			};
-			Themes.Tag = config;
+			Window.Tag = config;
 			// MessageBox.Show (Themes.Tag.GetType ().ToString ());
 		}
 
+		
 	}
 }

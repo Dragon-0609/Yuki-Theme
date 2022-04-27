@@ -87,6 +87,8 @@
             <SubType>Code</SubType>
         </Compile>
         <Page Include="Styles\DropDownStyles.xaml" />
+        <Page Include="Styles\ListViewStyles.xaml" />
+        <Page Include="Styles\SliderStyles.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">
