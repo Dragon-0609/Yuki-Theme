@@ -9,8 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Yuki_Theme.Core.Forms;
 
-[PermissionSet(SecurityAction.Demand, Name="FullTrust")]
-[System.Runtime.InteropServices.ComVisibleAttribute(true)]
+[ComVisible (true)]
 public partial class ThemeDownloaderForm : Form
 {
 	private const string THEME_NAMESPACE = "Yuki_Theme.Core.Resources.HTML.";
