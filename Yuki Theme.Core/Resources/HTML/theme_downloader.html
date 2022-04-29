@@ -47,10 +47,15 @@
         .svg_fill:hover {
             fill: __clr_click__ !important;
         }
-        
+
         .my-3 {
             margin-top: 1rem !important;
             margin-bottom: 1rem !important;
+        }
+
+        .my-2 {
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
         }
 
         .font-weight-normal {
@@ -136,7 +141,18 @@
         .h2, h2 {
             font-size: 2rem;
         }
-
+        
+        #grow {
+            -moz-transition: height .5s;
+            -ms-transition: height .5s;
+            -o-transition: height .5s;
+            -webkit-transition: height .5s;
+            transition: height .5s;
+            height: 0;
+            overflow: hidden;
+            width: 100%;
+            line-height: 1.25rem;
+        }
     </style>
 </head>
 <body>
@@ -145,10 +161,36 @@
     <h2 class="my-3 font-weight-normal text-center">
         The Doki Themes
     </h2>
-    <div>
+    <a href="javascript:void(0);" onclick="growDiv()" id="branch-button" class="my-2">Branches</a>
+
+    <div id="grow" class="my-3">
+        <div class="measuringWrapper">__branches__</div>
+    </div>
+
+    <div id="themes">
         __content__
     </div>
 </div>
+
+<script>
+    function LoadBranch(name) {
+        window.external.LoadBranch(name);
+    }
+</script>
+
+<script>
+    function growDiv() {
+        let growDiv = document.getElementById('grow');
+        if (growDiv.clientHeight) {
+            growDiv.style.height = 0;
+        } else {
+            let wrapper = document.querySelector('.measuringWrapper');
+            growDiv.style.height = wrapper.clientHeight + "px";
+        }
+        let element = document.getElementById("branch-button");
+        element.innterText = element.innterText === 'Show Branches' ? 'Hide Branches' : 'Show Branches';
+    }
+</script>
 
 </body>
 </html>
