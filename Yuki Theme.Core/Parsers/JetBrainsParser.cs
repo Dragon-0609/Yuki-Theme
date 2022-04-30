@@ -14,7 +14,10 @@ namespace Yuki_Theme.Core.Parsers
 		{
 			var doc = new XmlDocument ();
 
-			doc.Load (path);
+			if (needToWrite)
+				doc.Load (path);
+			else
+				doc.LoadXml (path);
 
 			PopulateByXMLNodeTreeType (doc.SelectSingleNode ("/scheme/attributes/option[@name='TEXT']"));
 			PopulateByXMLNodeSingleType ("Selection", null,

@@ -653,6 +653,10 @@ namespace Yuki_Theme.Core
 			html = html.Replace ("__bg__", ColorTranslator.ToHtml (bgColor));
 			html = html.Replace ("__clr__", ColorTranslator.ToHtml (fgColor));
 			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (fgHover));
+			if (html.Contains ("__border__"))
+			{
+				html = html.Replace ("__border__", ColorTranslator.ToHtml (bgBorder));
+			}
 			return html;
 		}
 	}

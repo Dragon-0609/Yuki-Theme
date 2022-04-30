@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using Yuki_Theme.Core.Parsers;
+using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core.Forms;
 
@@ -13,11 +18,20 @@ namespace Yuki_Theme.Core.Forms;
 public partial class ThemeDownloaderForm : Form
 {
 	private const string THEME_NAMESPACE = "Yuki_Theme.Core.Resources.HTML.";
-	
+
 	private string        branch       = "master";
 	private int           searchMode   = 0;
 	private List <string> branches     = new List <string> ();
 	private bool          isFromBranch = false;
+	private Task          loadingJSONSTask;
+	private HtmlElement   themesElement;
+	
+	private double stepProgress;
+	private double currentProgress;
+	private bool   needToReset = false;
+
+	private CancellationTokenSource taskSource = new CancellationTokenSource ();
+	private CancellationToken       ct;
 
 	private Dictionary <string, string> themes = new ();
 
@@ -27,17 +41,18 @@ public partial class ThemeDownloaderForm : Form
 		browser.ScrollBarsEnabled = true;
 		browser.ObjectForScripting = this;
 		browser.ScriptErrorsSuppressed = false;
-		
+
 		Helper.bgColor = Color.FromArgb (32, 32, 32);
 		Helper.fgColor = Color.FromArgb (240, 240, 240);
 		Helper.fgKeyword = Color.Green;
-		
+		Helper.bgBorder = Color.FromArgb (252, 152, 252);
+
 		ShowLoading ();
-		
+
 		ParseBranches ();
-		
+
 		ParseAllThemes ();
-		
+
 		// LoadThemePage ();
 	}
 
@@ -50,7 +65,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private async void ParseBranches ()
 	{
-		Console.WriteLine("Requesting branch info...");
+		Console.WriteLine ("Requesting branch info...");
 		string search_api = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 		branches.Clear ();
 		using (HttpClient client = new HttpClient ())
@@ -60,12 +75,12 @@ public partial class ThemeDownloaderForm : Form
 			var response = await client.GetAsync (search_api);
 			if (response != null)
 			{
-				Console.WriteLine("Branch info loaded.");
+				Console.WriteLine ("Branch info loaded.");
 				string json = await response.Content.ReadAsStringAsync ();
 				JArray jresponse;
 				jresponse = JArray.Parse (json);
 
-				Console.WriteLine("Parsing branch info...");
+				Console.WriteLine ("Parsing branch info...");
 				foreach (JObject s in jresponse)
 				{
 					Console.WriteLine ("Branch: {0}\n", s ["name"]);
@@ -77,7 +92,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private async void ParseAllThemes ()
 	{
-		Console.WriteLine("Requesting themes info...");
+		Console.WriteLine ("Requesting themes info...");
 		string search_api = GetSearchAPI ();
 		themes.Clear ();
 		using (HttpClient client = new HttpClient ())
@@ -87,18 +102,22 @@ public partial class ThemeDownloaderForm : Form
 			var response = await client.GetAsync (search_api);
 			if (response != null)
 			{
-				Console.WriteLine("Themes info laoded.");
+				Console.WriteLine ("Themes info laoded.");
 				string json = await response.Content.ReadAsStringAsync ();
 				// Console.WriteLine (json);
-				Console.WriteLine("Parsing themes info...");
+				Console.WriteLine ("Parsing themes info...");
 				ParseThemes (json);
-				
-				Console.WriteLine("Parsing end.");
-				
+
+				Console.WriteLine ("Parsing end.");
 			}
 		}
+
 		LoadThemePage ();
-		Console.WriteLine("Themes parse end.");
+		Console.WriteLine ("Themes parse end.");
+
+		ct = taskSource.Token;
+		Task.Factory.StartNew (LoadJSONS, ct);
+		// LoadJSONS ();
 	}
 
 	private void ParseThemes (string json)
@@ -136,10 +155,10 @@ public partial class ThemeDownloaderForm : Form
 
 
 		JArray jarray = JArray.FromObject (jresponse.GetValue ("tree"));
-		
+
 		foreach (JObject s in jarray)
 		{
-			if (s["mode"].ToString() == "100644") // If object is file
+			if (s ["mode"].ToString () == "100644") // If object is file
 			{
 				if (s ["path"].ToString ().EndsWith (".master.definition.json"))
 				{
@@ -160,6 +179,7 @@ public partial class ThemeDownloaderForm : Form
 		{
 			result = result.Substring (result.LastIndexOf ("/") + 1);
 		}
+
 		return result;
 	}
 
@@ -189,7 +209,7 @@ public partial class ThemeDownloaderForm : Form
 		{
 			result += $"<div><a href='javascript:void(0);' onclick='LoadBranch(\"{branch}\")' class='px-3'>{branch}</a></div>";
 		}
-		
+
 		return result;
 	}
 
@@ -201,37 +221,99 @@ public partial class ThemeDownloaderForm : Form
 		{
 			result += $"<div>{theme.Key} + {theme.Value}</div>";
 		}
-		
+
 		return result;
 	}
-	
+
+	private void LoadJSONS ()
+	{
+		stepProgress = themes.Count / 100.0;
+		currentProgress = 0;
+		needToReset = true;
+		foreach (KeyValuePair <string, string> pair in themes)
+		{
+			if (!ct.IsCancellationRequested)
+				LoadJson (pair);
+			else
+				break;
+		}
+
+		if (!ct.IsCancellationRequested)
+		{
+			isFromBranch = true;
+			LoadThemePage ();
+		}
+	}
+
+	private async void LoadJson (KeyValuePair <string, string> pair)
+	{
+		string search_api = pair.Value;
+		Console.WriteLine("Loading theme json info...\n");
+		using (HttpClient client = new HttpClient ())
+		{
+			client.DefaultRequestHeaders.Add ("User-Agent",
+			                                  DownloadForm.user_agent);
+			var response = await client.GetAsync (search_api);
+			if (response != null)
+			{
+				Console.WriteLine ("Theme json info laoded.\n");
+				string json = await response.Content.ReadAsStringAsync ();
+
+				DokiThemeParser doki = new DokiThemeParser ();
+				doki.needToWrite = false;
+				doki.Parse (json, "none", "none", null, false, false, false);
+				LoadThemeIntoPage (doki.theme);
+			}
+		}
+		
+	}
+
+	private void LoadThemeIntoPage (Theme theme)
+	{
+		currentProgress += stepProgress;
+		browser.Document.InvokeScript ("SetProgress", new Object [] { currentProgress });
+
+		browser.Document.InvokeScript (
+			"AddTheme",
+			new object []
+			{
+				theme.Name, needToReset, theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
+				theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
+				theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background, theme.Fields ["MarkPrevious"].Foreground
+			});
+	}
+
 	private void LoadThemePage ()
 	{
 		if (isFromBranch)
 		{
-			browser.Document.GetElementById ("themes").InnerHtml = CollectThemesHTML ();
+			themesElement.InnerHtml = CollectThemesHTML ();
 			isFromBranch = false;
-		}else
+		} else
 		{
 			string html = Helper.ReadHTML ("theme_downloader.html", THEME_NAMESPACE);
 			html = Helper.ReplaceHTMLColors (html);
 
 			html = html.Replace ("__branches__", CollectBranchesHTML ());
 
-			html = html.Replace ("__content__", CollectThemesHTML ());
-
+			html = html.Replace ("__content__", "");
+			
 			browser.Navigate ("about:blank");
 			browser.Document.OpenNew (false);
 			browser.Document.Write (html);
 			browser.Refresh ();
+			
 		}
 	}
 
 	public void LoadBranch (string name)
 	{
-		Console.WriteLine("Loading branch...\n");
+		Console.WriteLine ("Loading branch...\n");
 		branch = name;
 		isFromBranch = true;
+
+		if (ct != null)
+			taskSource.Cancel ();
 		ParseAllThemes ();
 	}
 }

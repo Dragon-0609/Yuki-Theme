@@ -20,15 +20,17 @@ namespace Yuki_Theme.Core.Parsers
 		public bool   ask       = false;
 		public bool   overwrite = false;
 
+		public bool needToWrite = false;
+
 		public Action <string, string> defaultTheme;
 
-		public void Parse (string path, string st, string pathToSave, MForm form, bool ak = false, bool rewrite =false, bool select = true)
+		public void Parse (string path, string fileName, string pathToSave, MForm form, bool askToOverwrite = false, bool rewrite =false, bool select = true)
 		{
 			theme = ThemeFunctions.LoadDefault ();
 			theme.Fields = new Dictionary <string, ThemeField> ();
 			PathToSave = pathToSave;
-			flname = st;
-			ask = ak;
+			flname = fileName;
+			ask = askToOverwrite;
 			overwrite = rewrite;
 			try
 			{
@@ -39,49 +41,54 @@ namespace Yuki_Theme.Core.Parsers
 				return;
 			}
 			
-			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
-			Console.WriteLine (PathToSave);
+			if (needToWrite)
+			{
+				if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
+					Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+				Console.WriteLine (PathToSave);
 
-			if (!overwrite)
-			{
-				string syt = CLI.schemes [1];
-				if (DefaultThemes.isDefault (syt))
-					CLI.CopyFromMemory (syt, PathToSave, PathToSave);
-				else
+				if (!overwrite)
 				{
-					// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-					if (!CLI.schemes.Contains (flname))
-						File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
-				}
-			} else
-			{
-				if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
+					string syt = CLI.schemes [1];
+					if (DefaultThemes.isDefault (syt))
+						CLI.CopyFromMemory (syt, PathToSave, PathToSave);
+					else
+					{
+						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
+						if (!CLI.schemes.Contains (flname))
+							File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
+					}
+				} else
 				{
-					XmlDocument document = new XmlDocument ();
-					OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, flname, Helper.FILE_EXTENSTION_OLD, false);
-					Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
-					theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
-					theme.SetAdditionalInfo (additionalInfo);
+					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
+					{
+						XmlDocument document = new XmlDocument ();
+						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, flname,
+						                                    Helper.FILE_EXTENSTION_OLD, false);
+						Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
+						theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
+						theme.SetAdditionalInfo (additionalInfo);
+					}
 				}
-			}
 
-			MergeFiles (PathToSave);
-			finishParsing (path);
-			if (!overwrite)
-			{
-				CLI.AddThemeToLists (flname, false, true);
-				CLI.names.Add (flname);
-				if (form != null)
-					form.schemes.Items.Add (flname);
-			}
-			if(select && form != null)
-			{
-				// If selected theme is not theme that we just parsed
-				if ((string)form.schemes.SelectedItem != flname)
-					form.schemes.SelectedItem = flname;
-				else
-					form.restore_Click (form, EventArgs.Empty); // Reset
+				MergeFiles (PathToSave);
+				finishParsing (path);
+				if (!overwrite)
+				{
+					CLI.AddThemeToLists (flname, false, true);
+					CLI.names.Add (flname);
+					if (form != null)
+						form.schemes.Items.Add (flname);
+				}
+
+				if (select && form != null)
+				{
+					// If selected theme is not theme that we just parsed
+					if ((string)form.schemes.SelectedItem != flname)
+						form.schemes.SelectedItem = flname;
+					else
+						form.restore_Click (form, EventArgs.Empty); // Reset
+				}
 			}
 		}
 

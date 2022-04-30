@@ -24,19 +24,31 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override void populateList (string path)
 		{
-			curd = Path.GetDirectoryName (path);
-			JObject json = JObject.Parse (File.ReadAllText (path));
+			string text = "";
+
+			if (needToWrite)
+			{
+				curd = Path.GetDirectoryName (path);
+				text = File.ReadAllText (path); // If it's file mode, then read from file, else read from input
+			} else
+				text = path;
+
+			JObject json = JObject.Parse (text);
 			fname = json ["stickers"] ["default"].ToString ();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
-			flname = ofname;
-			PathToSave = Path.Combine (CLI.currentPath, "Themes",
-			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
-			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
-				throw new InvalidDataException ("The theme is exist...canceling...");
+			flname = theme.Name = ofname;
+			if (needToWrite)
+			{
+				PathToSave = Path.Combine (CLI.currentPath, "Themes",
+				                           $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
+				if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
+					throw new InvalidDataException ("The theme is exist...canceling...");
 
-			overwrite = File.Exists (PathToSave);
-			Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
+				overwrite = File.Exists (PathToSave);
+				Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
+			}
+
 			dark = bool.Parse (json ["dark"].ToString ());
 
 			foreach (JProperty cl in json ["colors"])
@@ -77,21 +89,21 @@ namespace Yuki_Theme.Core.Parsers
 
 				foreach (var nm in name)
 				{
-					theme.Fields.Add (nm, attrs);
+					if (!theme.Fields.ContainsKey (nm))
+						theme.Fields.Add (nm, attrs);
 				}
 			}
-			
-			
+
 
 			theme.Fields ["LineNumbers"].Background = theme.Fields ["Default"].Background;
-			
+
 			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
 			addDefaults ("foregroundColor");
 			addDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
-			
+
 			// throw new Exception ("ERROR");
 			theme.Fields.Add ("FoldMarker", new ThemeField
 			{
@@ -115,7 +127,7 @@ namespace Yuki_Theme.Core.Parsers
 
 		private string ConvertGroup (string st)
 		{
-			string res = "";
+			string res = st;
 			switch (st)
 			{
 				case "Kill la Kill" :

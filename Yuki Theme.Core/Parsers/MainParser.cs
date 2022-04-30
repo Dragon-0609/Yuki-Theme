@@ -14,20 +14,20 @@ namespace Yuki_Theme.Core.Parsers
 
 		public static void Parse (string path, MForm form = null, bool ask = true, bool select = true, Action<string, string> defaultTheme = null, Func <string, string, bool> exist = null)
 		{
-			string st = Path.GetFileNameWithoutExtension (path);
-			if (isDefault (st))
+			string fileName = Path.GetFileNameWithoutExtension (path);
+			if (isDefault (fileName))
 			{
 				if (defaultTheme != null) defaultTheme ("The theme is default! You can't import it!", "Default Theme");
 				return;
 			}
 
-			string pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
-			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yukitheme");
+			string pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{fileName}.yukitheme");
+			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (fileName)}.yukitheme");
 
-			if (st.EndsWith (".yuki"))
+			if (fileName.EndsWith (".yuki"))
 			{
-				pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
-                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yuki");
+				pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{fileName}.yuki");
+                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (fileName)}.yuki");
 			}
 			
 			if (checkAvailableAndAsk ( pathef, ask, exist))
@@ -46,7 +46,8 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						bool has = checkAvailable (pathef);
 						jetparser = new JetBrainsParser ();
-						jetparser.Parse (path, st, pathToSave, form, ask, has, select);
+						jetparser.needToWrite = true;
+						jetparser.Parse (path, fileName, pathToSave, form, ask, has, select);
 						
 						jetparser = null;
 						GC.Collect();
@@ -57,9 +58,10 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						bool has = checkAvailable (pathef);
 						dokiparser = new DokiThemeParser ();
+						dokiparser.needToWrite = true;
 						dokiparser.defaultTheme = defaultTheme;
 						dokiparser.exist = exist;
-						dokiparser.Parse (path, st, pathToSave, form, ask, has, select);
+						dokiparser.Parse (path, fileName, pathToSave, form, ask, has, select);
 						
 						dokiparser = null;
 						GC.Collect();
