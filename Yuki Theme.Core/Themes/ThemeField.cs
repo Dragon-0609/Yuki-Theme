@@ -169,4 +169,29 @@ public class ThemeField
 		if (fiel.Italic != null)
 			Italic = fiel.Italic;
 	}
+	
+	public ThemeField MergeWithAnother (ThemeField target)
+	{
+		if (this.Background == null && target.Background != null)
+		{
+			this.Background = target.Background;
+		}
+
+		if (this.Foreground == null && target.Foreground != null)
+		{
+			this.Foreground = target.Foreground;
+		}
+		
+		if (this.Bold == null && target.Bold != null)
+		{
+			this.Bold = target.Bold;
+		}
+		
+		if (this.Italic == null && target.Italic != null)
+		{
+			this.Italic = target.Italic;
+		}
+		
+		return this;
+	}
 }

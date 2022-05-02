@@ -1,0 +1,168 @@
+---
+title: Themes
+layout: layer
+permalink: /themes
+---
+<div class="container-xl mt-3">
+    <h2 class="my-3 font-weight-normal text-center">
+        Themes
+    </h2>
+
+    <div class="row mx-0 row-cols-1 row-cols-sm-2" id="thms">
+        <div class="col p-2" id="KonoSuba___Aqua">
+            <div class="themed-tab">
+                <div class="text-center tab-header rounded-top-5">KonoSuba: Aqua</div>
+                <div class="tab-strip rounded-bottom-5">
+                    <div class="d-flex tabs noselect">
+                        <div class="tab-active pt-1 px-3 font-weight-bold">Program1.pas *</div>
+                        <div class="py-1 px-3">Program2.pas</div>
+                    </div>
+                    <div class="code d-flex">
+                        <div class="line-numbers pl-3 mr-2 noselect">
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                            <div>4</div>
+                            <div>5</div>
+                            <div>6</div>
+                            <div>7</div>
+                            <div>8</div>
+                            <div>9</div>
+                            <div>10</div>
+                        </div>
+                        <div>
+                            <div><span class="keyword">function</span> <span class="method">Add</span>(x, y: <span
+                                    class="keyword">integer</span>) :
+                                <span class="keyword">integer</span>;
+                            </div>
+                            <div><span class="beginend">begin</span></div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">result</span> := x + y;</div>
+                            <div><span class="beginend">end</span>;</div>
+                            <div></div>
+                            <div><span class="keyword">var</span> a,b : <span class="keyword">integer</span>;</div>
+                            <div><span class="beginend">begin</span></div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="method">Readln</span> (a);</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="method">Readln</span> (b);</div>
+                            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="method">Writeln</span> (<span class="string">'Result: '</span> + <span
+                                    class="method">Add</span> (a,b));
+                            </div>
+                            <div><span class="beginend">end</span>.</div>
+                        </div>
+                    </div>
+                    <div class="hidden-hover justify-content-end position-relative">
+                        <div class="d-flex">
+                            <a class="p-2 svg_fill" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>
+                                </svg>
+                            </a>
+                            <a class="p-2 svg_fill" href="#">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                    <g fill-rule="evenodd">
+                                        <polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>
+                                        <rect width="12" height="2" x="2" y="12"/>
+                                    </g>
+                                </svg>
+
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (window.NodeList && !NodeList.prototype.forEach) {
+            NodeList.prototype.forEach = Array.prototype.forEach;
+        }
+
+        function changeTheme(theme) {
+            localStorage.setItem("theme", theme);
+            console.log(theme);
+            document.querySelectorAll('#thms .selected').forEach(function (e) {
+                e.classList.remove("selected");
+            });
+
+            try {
+                window.external.SetTheme(theme);
+            } catch (e) {
+
+            }
+            let km = theme.replace(/ /g, "_").replace(/:/g, "__");
+            document.getElementById(km).children[0].classList.add("selected");
+            loadTheme();
+        }
+
+        var addClick = function (i, mc) {
+            mc.onclick = function () {
+                changeTheme(i);
+            };
+        }
+
+        let thms = document.getElementById('thms');
+        for (let m in wallpapers) {
+            if (m !== undefined) {
+                let km = m.replace(/ /g, "_").replace(/:/g, "__");
+                if (km !== "KonoSuba___Aqua") {
+                    let mv = document.createElement('div');
+                    mv.id = km;
+                    mv.classList.add("col");
+                    mv.classList.add("p-2");
+                    addClick(m, mv);
+                    mv.innerHTML = "" +
+                        "\t\t\t<div class=\"themed-tab\">\n" +
+                        "\t\t\t\t<div class=\"text-center tab-header rounded-top-5\">" + m + "</div>\n" +
+                        "\t\t\t\t<div class=\"tab-strip rounded-bottom-5\">\n" +
+                        "\t\t\t\t\t<div class=\"d-flex tabs noselect\">\n" +
+                        "\t\t\t\t\t\t<div class=\"tab-active pt-1 px-3 font-weight-bold\">Program1.pas *</div>\n" +
+                        "\t\t\t\t\t\t<div class=\"py-1 px-3\">Program2.pas</div>\n" +
+                        "\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t<div class=\"code d-flex\">\n" +
+                        "\t\t\t\t\t\t<div class=\"line-numbers pl-3 mr-2 noselect\">\n" +
+                        "\t\t\t\t\t\t\t<div>1</div>\n" +
+                        "\t\t\t\t\t\t\t<div>2</div>\n" +
+                        "\t\t\t\t\t\t\t<div>3</div>\n" +
+                        "\t\t\t\t\t\t\t<div>4</div>\n" +
+                        "\t\t\t\t\t\t\t<div>5</div>\n" +
+                        "\t\t\t\t\t\t\t<div>6</div>\n" +
+                        "\t\t\t\t\t\t\t<div>7</div>\n" +
+                        "\t\t\t\t\t\t\t<div>8</div>\n" +
+                        "\t\t\t\t\t\t\t<div>9</div>\n" +
+                        "\t\t\t\t\t\t\t<div>10</div>\n" +
+                        "\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t\t<div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"keyword\">function</span> <span class=\"method\">Add</span>(x, y: <span\n" +
+                        "\t\t\t\t\t\t\t\t\tclass=\"keyword\">integer</span>) :\n" +
+                        "\t\t\t\t\t\t\t\t<span class=\"keyword\">integer</span>;\n" +
+                        "\t\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
+                        "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"keyword\">result</span> := x + y;</div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>;</div>\n" +
+                        "\t\t\t\t\t\t\t<div></div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"keyword\">var</span> a,b : <span class=\"keyword\">integer</span>;</div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
+                        "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (a);</div>\n" +
+                        "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (b);</div>\n" +
+                        "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Writeln</span> (<span class=\"string\">'Result: '</span> + <span\n" +
+                        "\t\t\t\t\t\t\t\t\tclass=\"method\">Add</span> (a,b));\n" +
+                        "\t\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>.</div>\n" +
+                        "\t\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t\t</div>\n" +
+                        "\t\t\t\t</div>\n" +
+                        "\t\t\t</div>\n";
+                    thms.appendChild(mv);
+                }
+            }
+        }
+
+        let mca = getfromStorage("theme", undefined);
+        if (mca !== undefined) {
+            let mcm = mca.replace(/ /g, "_").replace(/:/g, "__");
+            document.getElementById(mcm).children[0].classList.add("selected");
+        }
+    </script>
+</div>

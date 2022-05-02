@@ -369,6 +369,7 @@
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
     <EmbeddedResource Include="Resources\HTML\loading.html" />
     <EmbeddedResource Include="Resources\HTML\theme_downloader.html" />
+    <EmbeddedResource Include="Resources\HTML\css\bootstrap.min.css" />
     <Content Include="Resources\left.png" />
     <Content Include="Resources\right.png" />
     <EmbeddedResource Include="Resources\SVG\add.svg" />

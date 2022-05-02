@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using System.Xml;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core.Parsers
@@ -70,6 +66,7 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						attrs.Background = cl.Value.ToString ();
 					}
+					// Console.WriteLine ("{0} - {1}", cl.Name, attrs.Background);
 				}
 
 				Tuple <string, string> defaults = getDefault (cl.Name);
@@ -90,7 +87,12 @@ namespace Yuki_Theme.Core.Parsers
 				foreach (var nm in name)
 				{
 					if (!theme.Fields.ContainsKey (nm))
+					{
 						theme.Fields.Add (nm, attrs);
+					} else
+					{
+						theme.Fields [nm] = attrs.MergeWithAnother (theme.Fields [nm]);
+					}
 				}
 			}
 
@@ -117,7 +119,7 @@ namespace Yuki_Theme.Core.Parsers
 			{
 				Foreground = df.Background
 			});
-
+			
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 

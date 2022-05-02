@@ -11,6 +11,7 @@
     <meta content="Yuki Theme, Yuki Theme Pascal, pascal, syntax color, кастомизация интерфейса, customization of interface, PascalABC NET, change colors, изменить цвета, Dragon-LV, Dragon-0609, github"
           name="keywords">
     <meta content="IE=Edge,11,10,9,7,8" http-equiv="X-UA-Compatible"/>
+    <link rel="stylesheet" href="__bootstrap_css__">
     <style>
         body {
             background-color: __bg__;
@@ -46,113 +47,6 @@
 
         .svg_fill:hover {
             fill: __clr_click__ !important;
-        }
-
-        .m-0 {
-            margin: 0 !important;
-        }
-
-        .mx-0 {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
-
-        .my-3 {
-            margin-top: 1rem !important;
-            margin-bottom: 1rem !important;
-        }
-
-        .my-2 {
-            margin-top: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-
-        .font-weight-normal {
-            font-weight: 400 !important;
-        }
-
-        .text-center {
-            text-align: center !important;
-        }
-
-        .row {
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-        }
-
-        .row-cols-1 > * {
-            -ms-flex: 0 0 100%;
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-
-        .row-cols-sm-2 > * {
-            -ms-flex: 0 0 50%;
-            flex: 0 0 50%;
-            max-width: 50%;
-        }
-
-        .col {
-            -ms-flex-preferred-size: 0;
-            flex-basis: 0;
-            -ms-flex-positive: 1;
-            flex-grow: 1;
-            max-width: 100%;
-        }
-
-        .p-0 {
-            padding: 0;
-        }
-
-        .p-2 {
-            padding: .5rem !important;
-        }
-
-        .px-3 {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-        }
-
-        .pl-3 {
-            padding-left: 1rem !important
-        }
-
-        .pt-1, .py-1 {
-            padding-top: .25rem !important
-        }
-
-        .mr-2 {
-            margin-right: .5rem !important
-        }
-
-        .d-flex {
-            display: -ms-flexbox !important;
-            display: flex !important;
-        }
-
-        .font-weight-bold {
-            font-weight: 700 !important;
-        }
-
-        .justify-content-end {
-            -ms-flex-pack: end !important;
-            justify-content: flex-end !important;
-        }
-
-        .position-relative {
-            position: relative !important;
-        }
-
-        .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-            margin-bottom: .5rem;
-            font-weight: 500;
-            line-height: 1.2;
-        }
-
-        .h2, h2 {
-            font-size: 2rem;
         }
 
         #grow {
@@ -251,7 +145,7 @@
         <div class="measuringWrapper">__branches__</div>
     </div>
 
-    <div id="themes">
+    <div id="themes" class="row mx-0 row-cols-1 row-cols-sm-2">
         __content__
     </div>
 </div>
@@ -260,9 +154,7 @@
     function LoadBranch(name) {
         window.external.LoadBranch(name);
     }
-</script>
 
-<script>
     function growDiv() {
         let growDiv = document.getElementById('grow');
         if (growDiv.clientHeight) {
@@ -292,7 +184,7 @@
 
     function hexToRgb(hex) {
         // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        let shorthandRegex = new RegExp(/^#?([a-f\d])([a-f\d])([a-f\d])$/i);
         hex = hex.replace(shorthandRegex, function (m, r, g, b) {
             return r + r + g + g + b + b;
         });
@@ -351,21 +243,23 @@
         progressBar.style.width = progrs + "%";
     }
 
-    function AddThemeHTML(syntax) {
+    function AddThemeHTML(syntax, nam, canDownload) {
         let mv = document.createElement('div');
         mv.id = syntax;
         mv.classList.add("col");
         mv.classList.add("p-2");
+        if (!canDownload)
+            mv.classList.add("deactive");
         mv.innerHTML = "" +
-            "\t\t\t<div class=\"themed-tab\">\n" +
-            "\t\t\t\t<div class=\"text-center tab-header rounded-top-5\">" + m + "</div>\n" +
-            "\t\t\t\t<div class=\"tab-strip rounded-bottom-5\">\n" +
-            "\t\t\t\t\t<div class=\"d-flex tabs noselect\">\n" +
-            "\t\t\t\t\t\t<div class=\"tab-active pt-1 px-3 font-weight-bold\">Program1.pas *</div>\n" +
-            "\t\t\t\t\t\t<div class=\"py-1 px-3\">Program2.pas</div>\n" +
+            "\t\t\t<div class='themed-tab'>\n" +
+            "\t\t\t\t<div class='text-center tab-header rounded-top-5'>" + nam + "</div>\n" +
+            "\t\t\t\t<div class='tab-strip rounded-bottom-5'>\n" +
+            "\t\t\t\t\t<div class='d-flex tabs noselect'>\n" +
+            "\t\t\t\t\t\t<div class='tab-active pt-1 px-3 font-weight-bold'>Program1.pas *</div>\n" +
+            "\t\t\t\t\t\t<div class='py-1 px-3'>Program2.pas</div>\n" +
             "\t\t\t\t\t</div>\n" +
-            "\t\t\t\t\t<div class=\"code d-flex\">\n" +
-            "\t\t\t\t\t\t<div class=\"line-numbers pl-3 mr-2 noselect\">\n" +
+            "\t\t\t\t\t<div class='code d-flex'>\n" +
+            "\t\t\t\t\t\t<div class='line-numbers pl-3 mr-2 noselect'>\n" +
             "\t\t\t\t\t\t\t<div>1</div>\n" +
             "\t\t\t\t\t\t\t<div>2</div>\n" +
             "\t\t\t\t\t\t\t<div>3</div>\n" +
@@ -378,51 +272,44 @@
             "\t\t\t\t\t\t\t<div>10</div>\n" +
             "\t\t\t\t\t\t</div>\n" +
             "\t\t\t\t\t\t<div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"keyword\">function</span> <span class=\"method\">Add</span>(x, y: <span\n" +
-            "\t\t\t\t\t\t\t\t\tclass=\"keyword\">integer</span>) :\n" +
-            "\t\t\t\t\t\t\t\t<span class=\"keyword\">integer</span>;\n" +
+            "\t\t\t\t\t\t\t<div><span class='keyword'>function</span> <span class='method'>Add</span>(x, y: <span\n" +
+            "\t\t\t\t\t\t\t\t\tclass='keyword'>integer</span>) :\n" +
+            "\t\t\t\t\t\t\t\t<span class='keyword'>integer</span>;\n" +
             "\t\t\t\t\t\t\t</div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
-            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"keyword\">result</span> := x + y;</div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>;</div>\n" +
+            "\t\t\t\t\t\t\t<div><span class='beginend'>begin</span></div>\n" +
+            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>result</span> := x + y;</div>\n" +
+            "\t\t\t\t\t\t\t<div><span class='beginend'>end</span>;</div>\n" +
             "\t\t\t\t\t\t\t<div></div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"keyword\">var</span> a,b : <span class=\"keyword\">integer</span>;</div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"beginend\">begin</span></div>\n" +
-            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (a);</div>\n" +
-            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Readln</span> (b);</div>\n" +
-            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"method\">Writeln</span> (<span class=\"string\">'Result: '</span> + <span\n" +
-            "\t\t\t\t\t\t\t\t\tclass=\"method\">Add</span> (a,b));\n" +
+            "\t\t\t\t\t\t\t<div><span class='keyword'>var</span> a,b : <span class='keyword'>integer</span>;</div>\n" +
+            "\t\t\t\t\t\t\t<div><span class='beginend'>begin</span></div>\n" +
+            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class='method'>Readln</span> (a);</div>\n" +
+            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class='method'>Readln</span> (b);</div>\n" +
+            "\t\t\t\t\t\t\t<div>&nbsp;&nbsp;&nbsp;&nbsp;<span class='method'>Writeln</span> (<span class='string'>'Result: '</span> + <span\n" +
+            "\t\t\t\t\t\t\t\t\tclass='method'>Add</span> (a,b));\n" +
             "\t\t\t\t\t\t\t</div>\n" +
-            "\t\t\t\t\t\t\t<div><span class=\"beginend\">end</span>.</div>\n" +
+            "\t\t\t\t\t\t\t<div><span class='beginend'>end</span>.</div>\n" +
             "\t\t\t\t\t\t</div>\n" +
             "\t\t\t\t\t</div>" +
-            '<div class="hidden-hover justify-content-end position-relative">' +
-            '<div class="d-flex">' +
-            '<a class="p-2 svg_fill" href="#">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"' +
-            'class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">' +
-            '<path fill-rule="evenodd"' +
-            'd="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707zm-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707z"/>' +
-            '</svg>' +
-            '</a>' +
-            '<a class="p-2 svg_fill" href="#">' +
-            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">' +
-            '<g fill-rule="evenodd">' +
-            '<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
-            '<rect width="12" height="2" x="2" y="12"/>' +
-            '</g>' +
-            '</svg>' +
-
-            '</a>' +
-            '</div>' +
-            '</div>' +
+            '\t\t\t\t\t<div class="hidden-hover justify-content-end position-relative">' +
+            '\t\t\t\t\t\t<div class="d-flex">' +
+            '\t\t\t\t\t\t\t<a class="ml-auto p-2 svg_fill" href="#">' +
+            '\t\t\t\t\t\t\t\t<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">' +
+            '\t\t\t\t\t\t\t\t\t<g fill-rule="evenodd">' +
+            '\t\t\t\t\t\t\t\t\t\t<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
+            '\t\t\t\t\t\t\t\t\t\t<rect width="12" height="2" x="2" y="12"/>' +
+            '\t\t\t\t\t\t\t\t\t</g>' +
+            '\t\t\t\t\t\t\t\t</svg>' +
+            '\t\t\t\t\t\t\t</a>' +
+            '\t\t\t\t\t\t</div>' +
+            '\t\t\t\t\t</div>' +
             "\t\t\t\t</div>\n" +
             "\t\t\t</div>\n";
         themesElement.appendChild(mv);
     }
 
-    function AddTheme(syntax, reset, bgColor, fgColor, keyWord, borderColor, stringColor, beginEnd, selectionColor, methodColor) {
-        let km = "#" + syntax.replace(/ /g, "_").replace(/:/g, "__");
+    function AddTheme(syntax, reset, canDownload, bgColor, fgColor, keyWord, borderColor, stringColor, beginEnd, selectionColor, methodColor) {
+        let syntax_2 = syntax.replace(/ /g, "_").replace(/:/g, "__");
+        let km = "#" + syntax_2;
         let bg = DarkerOrLighter(bgColor, 0.05);
         let bgClick = DarkerOrLighter(bgColor, 0.2);
         let bgClick3 = DarkerOrLighter(bgColor, 0.1);
@@ -432,11 +319,12 @@
         }
 
         themesSyntax += km + " .keyword {color: " + keyWord + ";}\n" +
-            km + " .themed-tab { color: " + fgColor + "; } \n" +
+            km + " .themed-tab, " + km + " .svg_fill { color: " + fgColor + "; } \n" +
             km + " .themed-tab::after { box-shadow: 0px 0px 33px 2px " + borderColor + ";\n" +
             "-webkit-box-shadow: 0px 0px 33px 2px " + borderColor + "; } \n" +
-            km + " .method { color: " + methodColor + " }\n" +
+            km + " .method, " + km + " .svg_fill:hover { color: " + methodColor + " }\n" +
             km + " .beginend { color: " + beginEnd + "; }\n" +
+            km + " .deactive { color: " + bg + " !important; }\n" +
             km + " .string { color: " + stringColor + "; }\n" +
             km + " .tab-header { background-color: " + bg + "; }\n" +
             km + " .tab-strip { background-color: " + bgColor + "; }\n" +
@@ -447,7 +335,7 @@
             km + " .code ::-moz-selection { background-color: " + selectionColor + " !important; color: " + fgColor + " !important; }\n";
 
         private_style.innerHTML = themesSyntax;
-        AddThemeHTML(km);
+        AddThemeHTML(syntax_2, syntax, canDownload);
     }
 </script>
 

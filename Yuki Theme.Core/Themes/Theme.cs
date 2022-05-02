@@ -72,5 +72,7 @@ namespace Yuki_Theme.Core.Themes
 			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
 		}
 
+		
+		
 	}
 }
