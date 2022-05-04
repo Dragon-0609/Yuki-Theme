@@ -346,6 +346,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SVG\positionCenter.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionCenter_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionLeft.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionLeft_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionRight.svg" />
     <EmbeddedResource Include="Resources\SVG\help.svg" />
     <EmbeddedResource Include="..\changelog\CHANGELOG.md">
       <Link>Resources\CHANGELOG.md</Link>
@@ -375,6 +380,7 @@
     <EmbeddedResource Include="Resources\SVG\listFiles_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\moreHorizontal.svg" />
     <EmbeddedResource Include="Resources\SVG\moreHorizontal_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\refresh.svg" />
     <EmbeddedResource Include="Resources\SVG\refresh_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\remove.svg" />
