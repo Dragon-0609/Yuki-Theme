@@ -157,7 +157,7 @@
                         </StackPanel>
                     </Grid>
 
-                    <StackPanel>
+                    <StackPanel Name="AlignPanel">
                         <TextBlock Text="Algin:" Margin="7 0" Style="{StaticResource BigMargin}" />
                         <StackPanel Orientation="Horizontal">
                             <Button Style="{StaticResource BigButton}" Margin="10 10 5 5" Name="LAlignButton"

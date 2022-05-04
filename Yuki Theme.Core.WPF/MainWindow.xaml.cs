@@ -33,6 +33,23 @@ namespace Yuki_Theme.Core.WPF
 		private Drawing.Image img3 = null;
 		private Drawing.Image img4 = null;
 
+		#region Colors and Brushes
+
+		private Color bgColor;
+		private Color bgClickColor;
+		private Color fgColor;
+		private Color borderColor;
+		private Color selectionColor;
+		private Color keywordColor;
+		private Brush bgBrush;
+		private Brush bgClickBrush;
+		private Brush fgBrush;
+		private Brush borderBrush;
+		private Brush selectionBrush;
+		private Brush keywordBrush;
+
+		#endregion
+
 		public MainWindow ()
 		{
 			InitializeComponent ();
@@ -73,6 +90,12 @@ namespace Yuki_Theme.Core.WPF
 				Themes.SelectedIndex = 0;
 
 			CLI.restore (false, null);
+			LoadDefinitions ();
+		}
+
+		private void LoadDefinitions ()
+		{
+			Definitions.Items.Clear ();
 			foreach (string definition in CLI.names.ToArray ())
 			{
 				Definitions.Items.Add (definition);
@@ -133,12 +156,14 @@ namespace Yuki_Theme.Core.WPF
 					// }
 					int prevSelectedField = Definitions.SelectedIndex;
 					Restore ();
+					LoadDefinitions ();
 
 					if (prevSelectedField != -1)
 						Definitions.SelectedIndex = prevSelectedField;
 					else
 						Definitions.SelectedIndex = 0;
 
+					SelectField ();
 					CLI.selectedItem = Themes.SelectedItem.ToString ();
 					Settings.database.UpdateData (Settings.ACTIVE, CLI.selectedItem);
 				}
@@ -157,58 +182,80 @@ namespace Yuki_Theme.Core.WPF
 
 		private void SelectField ()
 		{
-			ColorPanel.Visibility = Visibility.Collapsed;
-			ImagePanel.Visibility = Visibility.Collapsed;
-			if (IsColorField ())
+			if (Definitions.SelectedItem != null)
 			{
-				ColorPanel.Visibility = Visibility.Visible;
-				ItalicPanel.IsEnabled = BoldPanel.IsEnabled =
-					Highlighter.isInNames (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
-				
-				ItalicPanel.Visibility = BoldPanel.Visibility =
-					Highlighter.isInNames (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
-				
-				ThemeField dic = CLI.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
-				
-				if (dic.Foreground != null)
+				ColorPanel.Visibility = Visibility.Collapsed;
+				ImagePanel.Visibility = Visibility.Collapsed;
+				if (IsColorField ())
 				{
-					ColorPanel.Resources ["ForeBrush"] =
-						new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Foreground).ToWPFColor ());
-					FGColorPanel.Visibility = Visibility.Visible;
+					ColorPanel.Visibility = Visibility.Visible;
+					ItalicPanel.IsEnabled = BoldPanel.IsEnabled =
+						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
+
+					ItalicPanel.Visibility = BoldPanel.Visibility =
+						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
+
+					ThemeField dic = CLI.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
+
+					if (dic.Foreground != null)
+					{
+						ColorPanel.Resources ["ForeBrush"] =
+							new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Foreground).ToWPFColor ());
+						FGColorPanel.Visibility = Visibility.Visible;
+					} else
+					{
+						FGColorPanel.Visibility = Visibility.Hidden;
+					}
+
+					if (dic.Background != null)
+					{
+						ColorPanel.Resources ["BackBrush"] =
+							new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Background).ToWPFColor ());
+						BGColorPanel.Visibility = Visibility.Visible;
+					} else
+					{
+						BGColorPanel.Visibility = Visibility.Hidden;
+					}
+
+					if (dic.Bold != null)
+					{
+						BoldCheckBox.IsChecked = (bool)dic.Bold;
+					}
+
+					if (dic.Italic != null)
+					{
+						ItalicCheckBox.IsChecked = (bool)dic.Bold;
+					}
+
+					highlighter.activateColors (Definitions.SelectedItem.ToString ());
 				} else
 				{
-					FGColorPanel.Visibility = Visibility.Collapsed;
-				}
+					ImagePanel.Visibility = Visibility.Visible;
+					AlignPanel.Visibility = Visibility.Collapsed;
 
-				if (dic.Background != null)
-				{
-					ColorPanel.Resources ["BackBrush"] =
-						new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Background).ToWPFColor ());
-					BGColorPanel.Visibility = Visibility.Visible;
-				} else
-				{
-					BGColorPanel.Visibility = Visibility.Collapsed;
-				}
+					if (ShadowNames.imageNames [0] == Definitions.SelectedItem.ToString ())
+					{
+						LAlignButton.ClearValue (BackgroundProperty);
+						CAlignButton.ClearValue (BackgroundProperty);
+						RAlignButton.ClearValue (BackgroundProperty);
+						AlignPanel.Visibility = Visibility.Visible;
 
-				if (dic.Bold != null)
-				{
-					BoldCheckBox.IsChecked = (bool)dic.Bold;
-				}
+						if (CLI.currentTheme.align == Alignment.Left)
+							LAlignButton.Background = bgClickBrush;
+						else if (CLI.currentTheme.align == Alignment.Center)
+							CAlignButton.Background = bgClickBrush;
+						else
+							RAlignButton.Background = bgClickBrush;
 
-				if (dic.Italic != null)
-				{
-					ItalicCheckBox.IsChecked = (bool)dic.Bold;
+					}
 				}
-				
-				highlighter.activateColors (Definitions.SelectedItem.ToString ());
-			} else
-			{
-				ImagePanel.Visibility = Visibility.Visible;
 			}
 		}
 
 		private bool IsColorField ()
 		{
+			if (Definitions.SelectedItem == null)
+				return true;
 			return !ShadowNames.imageNames.Contains (Definitions.SelectedItem.ToString ());
 		}
 
@@ -241,18 +288,18 @@ namespace Yuki_Theme.Core.WPF
 
 		public void updateColors ()
 		{
-			Color bgColor = Helper.bgColor.ToWPFColor ();
-			Color bgClickColor = Helper.bgClick.ToWPFColor ();
-			Color fgColor = Helper.fgColor.ToWPFColor ();
-			Color borderColor = Helper.bgBorder.ToWPFColor ();
-			Color selectionColor = Helper.selectionColor.ToWPFColor ();
-			Color KeywordColor = Helper.fgKeyword.ToWPFColor ();
-			Brush bgBrush = new SolidColorBrush (bgColor);
-			Brush bgClickBrush = new SolidColorBrush (bgClickColor);
-			Brush fgBrush = new SolidColorBrush (fgColor);
-			Brush borderBrush = new SolidColorBrush (borderColor);
-			Brush selectionBrush = new SolidColorBrush (selectionColor);
-			Brush KeywordBrush = new SolidColorBrush (KeywordColor);
+			bgColor = Helper.bgColor.ToWPFColor ();
+			bgClickColor = Helper.bgClick.ToWPFColor ();
+			fgColor = Helper.fgColor.ToWPFColor ();
+			borderColor = Helper.bgBorder.ToWPFColor ();
+			selectionColor = Helper.selectionColor.ToWPFColor ();
+			keywordColor = Helper.fgKeyword.ToWPFColor ();
+			bgBrush = new SolidColorBrush (bgColor);
+			bgClickBrush = new SolidColorBrush (bgClickColor);
+			fgBrush = new SolidColorBrush (fgColor);
+			borderBrush = new SolidColorBrush (borderColor);
+			selectionBrush = new SolidColorBrush (selectionColor);
+			keywordBrush = new SolidColorBrush (keywordColor);
 
 			Background = bgBrush;
 			Foreground = fgBrush;
@@ -260,10 +307,10 @@ namespace Yuki_Theme.Core.WPF
 			{
 				BorderColor = borderColor,
 				SelectionColor = selectionColor,
-				KeywordColor = KeywordColor,
+				KeywordColor = keywordColor,
 				BorderBrush = borderBrush,
 				SelectionBrush = selectionBrush,
-				KeywordBrush = KeywordBrush,
+				KeywordBrush = keywordBrush,
 				BackgroundClickBrush = bgClickBrush
 			};
 			Window.Tag = config;
