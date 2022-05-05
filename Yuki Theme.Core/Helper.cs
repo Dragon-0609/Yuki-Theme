@@ -17,7 +17,7 @@ namespace Yuki_Theme.Core
 {
 	public static class Helper
 	{
-		public static Color bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
+		public static Color bgdefColor, bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
 
 		public static ProductMode  mode;
 		public static RelativeUnit unit;

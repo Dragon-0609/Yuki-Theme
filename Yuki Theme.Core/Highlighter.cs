@@ -121,6 +121,7 @@ namespace Yuki_Theme.Core
 					{
 							sBox.BackColor = Parse (style.Value.Background);
 							sBox.ForeColor = Parse (style.Value.Foreground);
+							Helper.bgdefColor = sBox.BackColor;
 							Helper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
 							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
 							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);

@@ -3,21 +3,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media;
-using System.Xml;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.WPF.Controls;
 using Brush = System.Windows.Media.Brush;
-using Button = System.Windows.Controls.Button;
 using Color = System.Windows.Media.Color;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Drawing = System.Drawing;
-using Image = System.Windows.Controls.Image;
 
-namespace Yuki_Theme.Core.WPF
+namespace Yuki_Theme.Core.WPF.Windows
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow
 	{
 		private bool blockedThemeSelector = true;
@@ -36,12 +30,14 @@ namespace Yuki_Theme.Core.WPF
 		#region Colors and Brushes
 
 		private Color bgColor;
+		private Color bgdefColor;
 		private Color bgClickColor;
 		private Color fgColor;
 		private Color borderColor;
 		private Color selectionColor;
 		private Color keywordColor;
 		private Brush bgBrush;
+		private Brush bgdefBrush;
 		private Brush bgClickBrush;
 		private Brush fgBrush;
 		private Brush borderBrush;
@@ -49,6 +45,9 @@ namespace Yuki_Theme.Core.WPF
 		private Brush keywordBrush;
 
 		#endregion
+
+
+		#region Initialization
 
 		public MainWindow ()
 		{
@@ -141,33 +140,40 @@ namespace Yuki_Theme.Core.WPF
 			}
 		}
 
-		private void Theme_Changed (object sender, SelectionChangedEventArgs e)
+		private void LoadSVG ()
 		{
-			if (!blockedThemeSelector)
+			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			WPFHelper.SetSVGImage (AddButton, "add" + add);
+			WPFHelper.SetSVGImage (ManageButton, "listFiles" + add);
+			WPFHelper.SetSVGImage (SaveButton, "menu-saveall");
+			WPFHelper.SetSVGImage (RestoreButton, "refresh" + add);
+			WPFHelper.SetSVGImage (ExportButton, "export" + add);
+			WPFHelper.SetSVGImage (ImportButton, "import" + add);
+			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add);
+			WPFHelper.SetSVGImage (SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage (ImagePathButton, "moreHorizontal" + add);
+			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
+			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
+			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
+		}
+
+		#endregion
+
+		private void AddTheme ()
+		{
+			AddThemeWindow themeWindow = new AddThemeWindow
 			{
-				bool cnd = CLI.SelectTheme (Themes.SelectedItem.ToString ());
+				Background = bgBrush,
+				Foreground = fgBrush,
+				Tag = Tag,
+				Owner = this
+			};
+			themeWindow.TName.Background = bgdefBrush;
+			themeWindow.TName.Foreground = fgBrush;
+			
+			themeWindow.AddThemes ();
 
-				if (cnd)
-				{
-					// if (CLI.isEdited) // Ask to save the changes
-					// {
-					// 	if (SaveInExport (Translate ("main.theme.edited.full"), Translate ("main.theme.edited.short")))
-					// 		save_Click (sender, e); // save before restoring
-					// }
-					int prevSelectedField = Definitions.SelectedIndex;
-					Restore ();
-					LoadDefinitions ();
-
-					if (prevSelectedField != -1)
-						Definitions.SelectedIndex = prevSelectedField;
-					else
-						Definitions.SelectedIndex = 0;
-
-					SelectField ();
-					CLI.selectedItem = Themes.SelectedItem.ToString ();
-					Settings.database.UpdateData (Settings.ACTIVE, CLI.selectedItem);
-				}
-			}
+			themeWindow.Show ();
 		}
 
 		private void Restore ()
@@ -235,74 +241,34 @@ namespace Yuki_Theme.Core.WPF
 
 					if (ShadowNames.imageNames [0] == Definitions.SelectedItem.ToString ())
 					{
-						LAlignButton.ClearValue (BackgroundProperty);
-						CAlignButton.ClearValue (BackgroundProperty);
-						RAlignButton.ClearValue (BackgroundProperty);
 						AlignPanel.Visibility = Visibility.Visible;
-
-						if (CLI.currentTheme.align == Alignment.Left)
-							LAlignButton.Background = bgClickBrush;
-						else if (CLI.currentTheme.align == Alignment.Center)
-							CAlignButton.Background = bgClickBrush;
-						else
-							RAlignButton.Background = bgClickBrush;
-
+						ShowAlignSelection ();
 					}
 				}
 			}
 		}
 
-		private bool IsColorField ()
-		{
-			if (Definitions.SelectedItem == null)
-				return true;
-			return !ShadowNames.imageNames.Contains (Definitions.SelectedItem.ToString ());
-		}
-
-		private void LoadSVG ()
-		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			SetSVGImage (AddButton, "add" + add);
-			SetSVGImage (ManageButton, "listFiles" + add);
-			SetSVGImage (SaveButton, "menu-saveall");
-			SetSVGImage (RestoreButton, "refresh" + add);
-			SetSVGImage (ExportButton, "export" + add);
-			SetSVGImage (ImportButton, "import" + add);
-			SetSVGImage (ImportDirectoryButton, "traceInto" + add);
-			SetSVGImage (SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
-			SetSVGImage (ImagePathButton, "moreHorizontal" + add);
-			SetSVGImage (LAlignButton, "positionLeft" + add);
-			SetSVGImage (CAlignButton, "positionCenter" + add);
-			SetSVGImage (RAlignButton, "positionRight" + add);
-		}
-
-		private void SetSVGImage (Button btn, string source, bool customColor = false, Drawing.Color color = default)
-		{
-			btn.Content = new Image ()
-			{
-				Source = (Helper.RenderSvg (new Drawing.Size (System.Convert.ToInt32 (btn.Width), System.Convert.ToInt32 (btn.Height)),
-				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty, customColor, color))
-					.ToWPFImage ()
-			};
-		}
 
 		public void updateColors ()
 		{
 			bgColor = Helper.bgColor.ToWPFColor ();
+			bgdefColor = Helper.bgdefColor.ToWPFColor ();
 			bgClickColor = Helper.bgClick.ToWPFColor ();
 			fgColor = Helper.fgColor.ToWPFColor ();
 			borderColor = Helper.bgBorder.ToWPFColor ();
 			selectionColor = Helper.selectionColor.ToWPFColor ();
 			keywordColor = Helper.fgKeyword.ToWPFColor ();
-			bgBrush = new SolidColorBrush (bgColor);
-			bgClickBrush = new SolidColorBrush (bgClickColor);
-			fgBrush = new SolidColorBrush (fgColor);
-			borderBrush = new SolidColorBrush (borderColor);
-			selectionBrush = new SolidColorBrush (selectionColor);
-			keywordBrush = new SolidColorBrush (keywordColor);
+			bgBrush = bgColor.ToBrush ();
+			bgdefBrush = bgdefColor.ToBrush ();
+			bgClickBrush = bgClickColor.ToBrush ();
+			fgBrush = fgColor.ToBrush ();
+			borderBrush = borderColor.ToBrush ();
+			selectionBrush = selectionColor.ToBrush ();
+			keywordBrush = keywordColor.ToBrush ();
 
 			Background = bgBrush;
 			Foreground = fgBrush;
+			ImagePath.Background = bgdefBrush;
 			StyleConfig config = new StyleConfig
 			{
 				BorderColor = borderColor,
@@ -362,6 +328,9 @@ namespace Yuki_Theme.Core.WPF
 
 		#endregion
 
+
+		#region Helper Methods
+
 		private void SetOpacityWallpaper ()
 		{
 			if (img2 != null)
@@ -373,6 +342,86 @@ namespace Yuki_Theme.Core.WPF
 			}
 
 			Fstb.box.Refresh ();
+		}
+
+		private bool IsColorField ()
+		{
+			if (Definitions.SelectedItem == null)
+				return true;
+			return !ShadowNames.imageNames.Contains (Definitions.SelectedItem.ToString ());
+		}
+
+		private void SetAlign (Alignment align)
+		{
+			CLI.currentTheme.WallpaperAlign = (int)align;
+			ShowAlignSelection ();
+			Fstb.box.Refresh ();
+		}
+
+		private void ShowAlignSelection ()
+		{
+			LAlignButton.IsSelected = CAlignButton.IsSelected = RAlignButton.IsSelected = false;
+
+			if (CLI.currentTheme.align == Alignment.Left)
+				LAlignButton.IsSelected = true;
+			else if (CLI.currentTheme.align == Alignment.Center)
+				CAlignButton.IsSelected = true;
+			else
+				RAlignButton.IsSelected = true;
+		}
+
+		#endregion
+
+
+		#region Control Events
+
+		private void Theme_Changed (object sender, SelectionChangedEventArgs e)
+		{
+			if (!blockedThemeSelector)
+			{
+				bool cnd = CLI.SelectTheme (Themes.SelectedItem.ToString ());
+
+				if (cnd)
+				{
+					// if (CLI.isEdited) // Ask to save the changes
+					// {
+					// 	if (SaveInExport (Translate ("main.theme.edited.full"), Translate ("main.theme.edited.short")))
+					// 		save_Click (sender, e); // save before restoring
+					// }
+					int prevSelectedField = Definitions.SelectedIndex;
+					Restore ();
+					LoadDefinitions ();
+
+					if (prevSelectedField != -1)
+						Definitions.SelectedIndex = prevSelectedField;
+					else
+						Definitions.SelectedIndex = 0;
+
+					SelectField ();
+					CLI.selectedItem = Themes.SelectedItem.ToString ();
+					Settings.database.UpdateData (Settings.ACTIVE, CLI.selectedItem);
+				}
+			}
+		}
+
+		private void Definitions_SelectionChanged (object sender, SelectionChangedEventArgs e)
+		{
+			SelectField ();
+		}
+
+		private void LAlignButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			SetAlign (Alignment.Left);
+		}
+
+		private void CAlignButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			SetAlign (Alignment.Center);
+		}
+
+		private void RAlignButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			SetAlign (Alignment.Right);
 		}
 
 		private void MainWindow_OnSizeChanged (object sender, SizeChangedEventArgs e)
@@ -394,9 +443,16 @@ namespace Yuki_Theme.Core.WPF
 			}
 		}
 
-		private void Definitions_SelectionChanged (object sender, SelectionChangedEventArgs e)
+		private void AddButton_OnClick (object sender, RoutedEventArgs e)
 		{
-			SelectField ();
+			AddTheme ();
 		}
+
+		private void RestoreButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			Restore ();
+		}
+
+		#endregion
 	}
 }
