@@ -154,10 +154,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile);
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -186,10 +186,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile);
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;

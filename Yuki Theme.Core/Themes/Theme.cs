@@ -1,56 +1,107 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Yuki_Theme.Core.Themes
 {
 	public class Theme
 	{
-		[JsonProperty("name")]
+		[JsonProperty ("name")]
 		public string Name { get; set; }
-		
-		[JsonProperty("group")]
-		public string Group { get; set; }
-		
-		[JsonProperty("version")]
-		public int Version { get; set; }
-		
-		[JsonProperty("hasWallpaper")]
-		public bool HasWallpaper { get; set; }
-		
-		[JsonProperty("hasSticker")]
-		public bool HasSticker { get; set; }
-		
-		[JsonProperty("wallpaperOpacity")]
-		public int WallpaperOpacity { get; set; }
-		
-		[JsonProperty("wallpaperAlign")]
-		public int WallpaperAlign { get; set; }
-		
-		[JsonProperty("stickerOpacity")]
-		public int StickerOpacity   { get; set; }
 
-		[JsonProperty("fields")]
+		[JsonProperty ("group")]
+		public string Group { get; set; }
+
+		[JsonProperty ("version")]
+		public int Version { get; set; }
+
+		[JsonProperty ("hasWallpaper")]
+		public bool HasWallpaper { get; set; }
+
+		[JsonProperty ("hasSticker")]
+		public bool HasSticker { get; set; }
+
+		[JsonProperty ("wallpaperOpacity")]
+		public int WallpaperOpacity { get; set; }
+
+		[JsonProperty ("wallpaperAlign")]
+		public int WallpaperAlign { get; set; }
+
+		[JsonProperty ("stickerOpacity")]
+		public int StickerOpacity { get; set; }
+
+		[JsonProperty ("fields")]
 		public Dictionary <string, ThemeField> Fields { get; set; }
 
 		[JsonIgnore]
 		public bool isDefault;
-		
+
 		[JsonIgnore]
 		public string path;
-		
+
 		[JsonIgnore]
 		public string fullPath;
 
 		[JsonIgnore]
-		public Alignment align => (Alignment) WallpaperAlign;
+		public Alignment align => (Alignment)WallpaperAlign;
 
 
 		[JsonIgnore]
 		public bool IsOld => CLI.oldThemeList [Name];
 
+		public static bool operator == (Theme t1, Theme t2)
+		{
+			if (t1 is null)
+				return t2 is null;
+			else if (t2 is null)
+				return false;
+
+			bool isEqual = true;
+			isEqual = isEqual && t1.Name == t2.Name;
+			if (isEqual)
+			{
+				Console.WriteLine (t1.Name + " A:- " + t1.align + " | " + t2.align);
+				isEqual = t1.WallpaperAlign == t2.WallpaperAlign;
+			}
+
+			if (isEqual)
+			{
+				Console.WriteLine (t1.Name + " Op:- " + t1.WallpaperOpacity + " | " + t2.WallpaperOpacity);
+				isEqual = t1.WallpaperOpacity == t2.WallpaperOpacity;
+			}
+
+			if (isEqual)
+			{
+				Console.WriteLine (t1.Name + " Sop:- " + t1.StickerOpacity + " | " + t2.StickerOpacity);
+				isEqual = t1.StickerOpacity == t2.StickerOpacity;
+			}
+
+			if (isEqual)
+			{
+				isEqual = t1.Fields.ContentEquals (t2.Fields);
+			}
+
+			return isEqual;
+		}
+
+		public static bool operator != (Theme t1, Theme t2)
+		{
+			return !(t1 == t2);
+		}
+
+		public void ParseWallpaperAlign (string target)
+		{
+			target = target.ToLower ();
+			if (target == "left") WallpaperAlign = (int)Alignment.Left;
+			else if (target == "center") WallpaperAlign = (int)Alignment.Center;
+			else WallpaperAlign = (int)Alignment.Right;
+		}
+
 	}
-	
-	public static class ThemeFunctions {
+
+	public static class ThemeFunctions
+	{
 		public static bool IsZip (this Theme theme)
 		{
 			return theme.HasWallpaper || theme.HasWallpaper;
@@ -72,7 +123,27 @@ namespace Yuki_Theme.Core.Themes
 			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
 		}
 
-		
-		
+		public static bool ContentEquals (this Dictionary <string, ThemeField> dictionary,
+		                                                 Dictionary <string, ThemeField>      otherDictionary)
+		{
+			bool equality = true;
+
+			foreach (KeyValuePair <string, ThemeField> pair in dictionary)
+			{
+				if (otherDictionary.ContainsKey (pair.Key))
+				{
+					equality = pair.Value.IsEqual (otherDictionary [pair.Key]);
+				} else
+				{
+					equality = false;
+				}
+
+				Console.WriteLine (pair.Key + " = " + equality);
+				if (!equality)
+					break;
+			}
+			
+			return equality;
+		}
 	}
 }

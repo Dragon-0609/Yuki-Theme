@@ -30,9 +30,12 @@ namespace Yuki_Theme.Core.Parsers
 				text = path;
 
 			JObject json = JObject.Parse (text);
-			fname = json ["stickers"] ["default"].ToString ();
+			fname = json ["stickers"] ["default"]["name"].ToString ();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
+			theme.ParseWallpaperAlign (json ["stickers"] ["default"] ["anchor"].ToString ());
+			theme.WallpaperOpacity = json ["stickers"] ["default"] ["opacity"].ToObject <int> ();
+			
 			flname = theme.Name = ofname;
 			if (needToWrite)
 			{

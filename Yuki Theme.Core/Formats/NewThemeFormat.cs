@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Themes;
 
@@ -235,7 +236,7 @@ namespace Yuki_Theme.Core.Formats
 
 
 			if (!iszip)
-				File.WriteAllText (CLI.pathToFileNew, json);
+				File.WriteAllText (path, json);
 			else
 			{
 				Helper.UpdateZip (path, json, null, true, null, true, "", false);
@@ -254,20 +255,42 @@ namespace Yuki_Theme.Core.Formats
 				}
 			}
 		}
-
-		public static void populateList ()
+		
+		/// <summary>
+		/// Load Theme by name.
+		/// </summary>
+		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
+		/// <returns>Parsed theme</returns>
+		public static Theme populateList (string name)
 		{
-			Console.WriteLine (CLI.nameToLoad);
-			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
-			string json = loadThemeToPopulate (CLI.pathToFileNew, true, isDef, CLI.nameToLoad, Helper.FILE_EXTENSTION_NEW);
+			Console.WriteLine (name);
+			string path = Helper.ConvertNameToPath (name);
+			bool isDef = CLI.isDefaultTheme [name];
+			string json = loadThemeToPopulate (CLI.pathToFile(path, false), true, isDef, name, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
-			theme.fullPath = isDef ? CLI.pathToMemoryNew : CLI.pathToFileNew;
-			theme.path = CLI.pathToLoad;
-			CLI.names.AddRange (theme.Fields.Keys);
-			CLI.names.InsertRange (1, ShadowNames.imageNames);
+			theme.fullPath = isDef ? CLI.pathToMemory (path, false) : CLI.pathToFile (path, false);
+			theme.path = path;
+			return theme;
+		}
+
+		/// <summary>
+		/// Load Theme directly to the CLI
+		/// </summary>
+		public static void LoadTheme ()
+		{
+			Theme theme = populateList (CLI.nameToLoad);
 			CLI.currentTheme = theme;
+			if (theme == null)
+			{
+				MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
+				                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+			} else
+			{
+				CLI.names.AddRange (theme.Fields.Keys);
+				CLI.names.InsertRange (1, ShadowNames.imageNames);
+			}
 		}
 	}
 }

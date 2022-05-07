@@ -18,10 +18,6 @@ namespace Yuki_Theme.Core
 {
 	public static class CLI
 	{
-		public static string pathToFile      => Path.Combine (currentPath, "Themes", $"{pathToLoad}{Helper.FILE_EXTENSTION_OLD}");
-		public static string pathToFileNew   => Path.Combine (currentPath, "Themes", $"{pathToLoad}{Helper.FILE_EXTENSTION_NEW}");
-		public static string pathToMemory    => $"Yuki_Theme.Core.Themes.{pathToLoad}{Helper.FILE_EXTENSTION_OLD}";
-		public static string pathToMemoryNew => $"Yuki_Theme.Core.Themes.{pathToLoad}{Helper.FILE_EXTENSTION_NEW}";
 
 		#region Public Fields
 
@@ -78,7 +74,7 @@ namespace Yuki_Theme.Core
 					if (sm != null)
 					{
 						nameToLoad = Path.GetFileNameWithoutExtension (sm);
-						File.Copy (sm, pathToFile);
+						File.Copy (sm, pathToFile (pathToLoad, true));
 						schemes.Add (nameToLoad);
 					}
 				}
@@ -439,7 +435,7 @@ namespace Yuki_Theme.Core
 			if (currentTheme.Fields != null)
 				currentTheme.Fields.Clear ();
 			names.Clear ();
-			populateList (onSelect);
+			populateList (extensionToLoad, onSelect);
 			if (wantClean)
 			{
 				GC.Collect ();
@@ -451,18 +447,38 @@ namespace Yuki_Theme.Core
 		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
 		/// </summary>
 		/// <param name="onSelect">Action, after populating list</param>
-		public static void populateList (Action onSelect = null)
+		public static void populateList (string extension, Action onSelect = null)
 		{
-			if (string.Equals (extensionToLoad, Helper.FILE_EXTENSTION_OLD, StringComparison.OrdinalIgnoreCase))
+			if (string.Equals (extension, Helper.FILE_EXTENSTION_OLD, StringComparison.OrdinalIgnoreCase))
 			{
-				OldThemeFormat.populateList ();
+				OldThemeFormat.LoadTheme ();
 			} else
 			{
-				NewThemeFormat.populateList ();
+				NewThemeFormat.LoadTheme ();
 			}
 
 			if (onSelect != null)
 				onSelect ();
+		}
+
+		public static Theme GetTheme (string name)
+		{
+			if (oldThemeList.ContainsKey (name))
+			{
+				Theme theme;
+				if (oldThemeList [name])
+				{
+					theme = OldThemeFormat.populateList (name, false);
+				} else
+				{
+					theme = NewThemeFormat.populateList (name);
+				}
+
+				return theme;
+			} else
+			{
+				return null;
+			}
 		}
 
 		private static Stream GetStreamFromMemory (string file, string name)
@@ -551,6 +567,33 @@ namespace Yuki_Theme.Core
 		}
 
 		#endregion
+
+		#region Path Generators
+
+		public static string pathToFile (string pathLoad, bool old)
+		{
+			if (old)
+			{
+				return Path.Combine (currentPath, "Themes", $"{pathLoad}{Helper.FILE_EXTENSTION_OLD}");
+			} else
+			{
+				return Path.Combine (currentPath, "Themes", $"{pathLoad}{Helper.FILE_EXTENSTION_NEW}");
+			}
+		}
+
+		public static string pathToMemory (string pathLoad, bool old)
+		{
+			if (old)
+			{
+				return $"Yuki_Theme.Core.Themes.{pathLoad}{Helper.FILE_EXTENSTION_OLD}";
+			} else
+			{
+				return $"Yuki_Theme.Core.Themes.{pathLoad}{Helper.FILE_EXTENSTION_NEW}";
+			}
+		}
+
+		#endregion
+
 
 		/// <summary>
 		/// Check if the path is Pascal Directory. To check it, I check if there is <code>Highlighting</code> directory in it.

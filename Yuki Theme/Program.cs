@@ -16,8 +16,8 @@ namespace Yuki_Theme
 			if (Environment.OSVersion.Version.Major >= 6) SetProcessDPIAware();
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault(false);
-			// Application.Run (new MForm ());
-			Application.Run (new ThemeDownloaderForm ());
+			Application.Run (new MForm ());
+			// Application.Run (new ThemeDownloaderForm ());
 		}
 		
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

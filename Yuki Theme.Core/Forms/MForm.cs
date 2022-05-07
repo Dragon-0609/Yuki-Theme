@@ -1358,6 +1358,12 @@ namespace Yuki_Theme.Core.Forms
 		}
 
 		#endregion
+
+		private void downloader_Click (object sender, EventArgs e)
+		{
+			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm ();
+			downloaderForm.Show();
+		}
 	}
 
 

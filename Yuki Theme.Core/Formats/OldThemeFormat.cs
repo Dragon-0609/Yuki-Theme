@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
 
@@ -10,6 +11,7 @@ namespace Yuki_Theme.Core.Formats
 {
 	public static class OldThemeFormat
 	{
+		
 		#region XML
 
 		/// <summary>
@@ -562,47 +564,64 @@ namespace Yuki_Theme.Core.Formats
 		}
 
 		/// <summary>
-		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
+		/// Load Theme by name.
 		/// </summary>
-		public static void populateList ()
+		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
+		/// <param name="ToCLI">Need to load to CLI? It'll affect "CLI.names".</param>
+		/// <returns>Parsed theme</returns>
+		public static Theme populateList (string name, bool ToCLI)
 		{
-			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
+			bool isDef = CLI.isDefaultTheme [name];
+			string path = Helper.ConvertNameToPath (name);
 			Theme theme = new Theme ();
 			theme.isDefault = isDef;
-			theme.Name = CLI.nameToLoad;
+			theme.Name = name;
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToFile, true, isDef, ref theme, CLI.nameToLoad, Helper.FILE_EXTENSTION_OLD, false);
+				loadThemeToPopulate (ref doc, CLI.pathToFile(path, false), true, isDef, ref theme, name, Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
-				return;
+				return null;
 			}
 
 			theme.Fields = new Dictionary <string, ThemeField> ();
-			PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
+			if (ToCLI)
+				PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
+			else
+			{
+				List <string> localNames = new List <string> ();
+				PopulateDictionaryFromDoc (doc, ref theme, ref localNames);
+			}
 
 			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
 			if (!theme.Fields.ContainsKey (methdoName))
 			{
 				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "KeyWords";
 				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
-				CLI.names.Add (methdoName);
+				if (ToCLI)
+					CLI.names.Add (methdoName);
 			}
 
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 			theme.SetAdditionalInfo (additionalInfo);
-			theme.path = CLI.pathToLoad;
+			theme.path = path;
 
+			return theme;
+		}
+
+		/// <summary>
+		/// Load Theme directly to the CLI
+		/// </summary>
+		public static void LoadTheme ()
+		{
+			Theme theme = populateList (CLI.nameToLoad, true);
 			CLI.currentTheme = theme;
-			/*string all = "";
-			foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
+			if (theme == null)
 			{
-				all += pair.Key + "\n";
+				MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
+				                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			*/
-
-			// System.Windows.Forms.Clipboard.SetText (all);
 		}
 
 		public static void MergeThemeFieldsWithFile (Dictionary <string, ThemeField> local, XmlDocument doc)

@@ -194,4 +194,52 @@ public class ThemeField
 		
 		return this;
 	}
+
+	public bool IsEqual (ThemeField field)
+	{
+		bool equal = true;
+		if (Background != null)
+		{
+			equal = field.Background == null && Background == field.Background;
+		}else if (field.Background != null)
+		{
+			equal = false;
+		}
+
+		if (equal)
+		{
+			if (Foreground != null)
+			{
+				equal = field.Foreground == null && Foreground == field.Foreground;
+			}else if (field.Foreground != null)
+			{
+				equal = false;
+			}	
+		}
+
+		if (equal)
+		{
+			if (Bold != null)
+			{
+				equal = field.Bold == null && Bold == field.Bold;
+			}else if (field.Bold != null)
+			{
+				equal = false;
+			}	
+		}
+
+		if (equal)
+		{
+			if (Italic != null)
+			{
+				equal = field.Italic == null && Italic == field.Italic;
+			}else if (field.Italic != null)
+			{
+				equal = false;
+			}	
+		}
+		
+		return equal;
+	}
+	
 }

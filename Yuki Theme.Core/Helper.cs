@@ -566,6 +566,11 @@ namespace Yuki_Theme.Core
 			return md;
 		}
 
+		public static string ToStringLower (this bool bol)
+		{
+			return bol.ToString ().ToLower ();
+		}
+
 		public static string GetThemeSaveName (bool asOld)
 		{
 			return "theme." + GetSaveFormat (asOld);

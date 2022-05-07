@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define PRIMARLY
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -31,25 +33,30 @@ public partial class ThemeDownloaderForm : Form
 	private double currentProgress;
 	private bool   needToReset = false;
 
-	private Dictionary <string, string> themes = new ();
+	private Dictionary <string, string> themesWithUrls = new ();
+	private Dictionary <string, Theme>  themes         = new ();
 
-	private const string LOCAL_SERVER      = "http://localhost:8000/find.json";
-	private const string REMOTE_SERVER     = "https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
+
+	private const string LOCAL_SERVER = "http://localhost:8000/find.json";
+
+	private const string REMOTE_SERVER =
+		"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
+
 	private const string LOCAL_API_SERVER  = "http://localhost:8000/branches.json";
 	private const string REMOTE_API_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
-	
+
 	public ThemeDownloaderForm ()
 	{
 		InitializeComponent ();
 		browser.ScrollBarsEnabled = true;
 		browser.ObjectForScripting = this;
 		browser.ScriptErrorsSuppressed = false;
-
+#if PRIMARLY
 		Helper.bgColor = Color.FromArgb (32, 32, 32);
 		Helper.fgColor = Color.FromArgb (240, 240, 240);
 		Helper.fgKeyword = Color.Green;
 		Helper.bgBorder = Color.FromArgb (252, 152, 252);
-
+#endif
 		ShowLoading ();
 
 		ParseBranches ();
@@ -64,6 +71,8 @@ public partial class ThemeDownloaderForm : Form
 		html = Helper.ReplaceHTMLColors (html);
 		browser.DocumentText = html;
 	}
+
+	#region Parser
 
 	private async void ParseBranches ()
 	{
@@ -96,7 +105,7 @@ public partial class ThemeDownloaderForm : Form
 	{
 		Console.WriteLine ("Requesting themes info...");
 		string search_api = GetSearchAPI ();
-		themes.Clear ();
+		themesWithUrls.Clear ();
 		using (HttpClient client = new HttpClient ())
 		{
 			client.DefaultRequestHeaders.Add ("User-Agent",
@@ -116,7 +125,7 @@ public partial class ThemeDownloaderForm : Form
 
 		LoadThemePage ();
 		Console.WriteLine ("Themes parse end.");
-		
+
 		Thread thread = new Thread (LoadJSONS);
 		thread.Start ();
 		// LoadJSONS ();
@@ -133,6 +142,15 @@ public partial class ThemeDownloaderForm : Form
 			                 MessageBoxIcon.Error);
 	}
 
+	private void ParseTheme (string json)
+	{
+		DokiThemeParser doki = new DokiThemeParser ();
+		doki.needToWrite = false;
+		doki.Parse (json, "none", "none", null, false, false, false);
+		themes.Add (doki.theme.Name, doki.theme);
+		LoadThemeIntoPage (doki.theme);
+	}
+
 	private void ParseMode0 (string json)
 	{
 		JObject jresponse = JObject.Parse (json);
@@ -146,7 +164,7 @@ public partial class ThemeDownloaderForm : Form
 			{
 				string url = s ["html_url"].ToString ().Replace ("/blob", "/raw");
 				Console.WriteLine ("Theme 0: {0} = {1}\n", s ["name"], url);
-				themes.Add (s ["name"].ToString (), url);
+				themesWithUrls.Add (s ["name"].ToString (), url);
 			}
 		}
 	}
@@ -167,11 +185,13 @@ public partial class ThemeDownloaderForm : Form
 					string name = GetName (s ["path"].ToString ());
 					string url = CollectURL (s ["path"].ToString ());
 					Console.WriteLine ("Theme 1: {0} = {1}\n", name, url);
-					themes.Add (name, url);
+					themesWithUrls.Add (name, url);
 				}
 			}
 		}
 	}
+
+	#endregion
 
 	private string GetName (string path)
 	{
@@ -219,7 +239,7 @@ public partial class ThemeDownloaderForm : Form
 	{
 		string result = "";
 
-		foreach (KeyValuePair <string, string> theme in themes)
+		foreach (KeyValuePair <string, string> theme in themesWithUrls)
 		{
 			result += $"<div>{theme.Key} + {theme.Value}</div>";
 		}
@@ -242,30 +262,28 @@ public partial class ThemeDownloaderForm : Form
 		}
 	}
 
-	private void ParseTheme (string json)
-	{
-		DokiThemeParser doki = new DokiThemeParser ();
-		doki.needToWrite = false;
-		doki.Parse (json, "none", "none", null, false, false, false);
-		LoadThemeIntoPage (doki.theme);
-	}
 
 	private void LoadJSONS ()
 	{
-		
-		stepProgress = 100.0 / themes.Count;
+		themesWithUrls = themesWithUrls.OrderBy (obj => obj.Key).ToDictionary ((obj) => obj.Key, (obj) => obj.Value);
+		int max = 10; // themesWithUrls.Count
+		stepProgress = 100.0 / max;
 		currentProgress = 0;
 		needToReset = true;
-		ParallelQuery <string> downloads = themes.AsParallel ()
-		                                         .WithDegreeOfParallelism (20)
-		                                         .Select (url => downloadFile (url.Value));
+		int pars = 0;
+		ParallelQuery <string> downloads = themesWithUrls.AsParallel ()
+		                                                 .WithDegreeOfParallelism (20)
+		                                                 .Select (url => downloadFile (url.Value));
 
-		Console.WriteLine("Start loading jsons...");
-		foreach (string download in downloads)
+		Console.WriteLine ("Start loading jsons...");
+		for (int i = 0; i < max; i++)
+		{
+			ParseTheme (downloads.ElementAt (i));
+		}
+		/*foreach (string download in downloads)
 		{
 			ParseTheme (download);
-		}
-		
+		}*/
 	}
 
 	private void LoadThemeIntoPage (Theme theme)
@@ -273,12 +291,13 @@ public partial class ThemeDownloaderForm : Form
 		currentProgress += stepProgress;
 		browser.Invoke ((MethodInvoker)delegate
 		{
-			browser.Document.InvokeScript ("SetProgress", new object [] { currentProgress.ToString ("0.0").Replace (',', '.') });
 			browser.Document.InvokeScript (
 				"AddTheme",
 				new object []
 				{
-					theme.Name, needToReset, true, theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
+					theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
+					(!IsEqual (theme, CLI.GetTheme (theme.Name))).ToStringLower (),
+					theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
 					theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
 					theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background, theme.Fields ["MarkPrevious"].Foreground
 				});
@@ -301,7 +320,7 @@ public partial class ThemeDownloaderForm : Form
 
 			html = html.Replace ("__content__", "");
 			html = html.Replace ("__bootstrap_css__", LoadCSS ("bootstrap.min.css"));
-			
+
 			browser.Navigate ("about:blank");
 			browser.Document.OpenNew (false);
 			browser.Document.Write (html);
@@ -311,20 +330,42 @@ public partial class ThemeDownloaderForm : Form
 
 	public void LoadBranch (string name)
 	{
-		Console.WriteLine ("Loading branch...\n");
+		Console.WriteLine ("Loading branch " + name + "...\n");
 		branch = name;
 		themesElement.InnerHtml = "";
 		ParseAllThemes ();
 	}
-	
-	private string Base64Encode(string plainText) {
-		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-		return System.Convert.ToBase64String(plainTextBytes);
+
+	public void DownloadTheme (string name)
+	{
+		Console.WriteLine ("Downloading theme " + name);
+	}
+
+	public void DownloadAll ()
+	{
+		Console.WriteLine ("Downloading all themes.");
+	}
+
+
+	private string Base64Encode (string plainText)
+	{
+		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes (plainText);
+		return System.Convert.ToBase64String (plainTextBytes);
 	}
 
 	private string LoadCSS (string css)
 	{
 		string cssf = Helper.ReadHTML ("css." + css, THEME_NAMESPACE);
 		return "data:text/css;charset=utf-8;base64," + Base64Encode (cssf);
+	}
+
+	private bool IsEqual (Theme first, Theme second)
+	{
+		if (second == null)
+		{
+			Console.WriteLine (first.Name + " - 2nd is null");
+			return false;
+		}
+		return first == second;
 	}
 }
