@@ -34,34 +34,35 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		/// <param name="wantToKeep"></param>
+		/// <param name="themeToSave"></param>
+		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			string json = JsonConvert.SerializeObject (CLI.currentTheme, Formatting.Indented);
-			bool iszip = Helper.IsZip (CLI.currentTheme.fullPath);
+			string json = JsonConvert.SerializeObject (themeToSave, Formatting.Indented);
+			bool iszip = Helper.IsZip (themeToSave.fullPath);
 
 
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
-				File.WriteAllText (CLI.currentTheme.fullPath, json);
+				File.WriteAllText (themeToSave.fullPath, json);
 			else
 			{
 				if (iszip)
 				{
-					Helper.UpdateZip (CLI.currentTheme.fullPath, json, img2, wantToKeep, img3, wantToKeep, "", false);
+					Helper.UpdateZip (themeToSave.fullPath, json, img2, wantToKeep, img3, wantToKeep, "", false);
 				} else
 				{
-					Helper.Zip (CLI.currentTheme.fullPath, json, img2, img3, "", false);
+					Helper.Zip (themeToSave.fullPath, json, img2, img3, "", false);
 				}
 			}
 		}
 
-		public static string loadThemeToPopulate (string pathToFile, bool needToGetImages, bool isDefault, string nameToLoadForMemory,
-		                                          string extension)
+		public static string loadThemeToPopulate (string pathToTheme, bool needToGetImages, bool isDefault, string extension)
 		{
 			string json = "";
 			if (isDefault)
 			{
-				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
-				IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+				string pathToLoad = Helper.ConvertNameToPath (pathToTheme);
+				IThemeHeader header = DefaultThemes.headers [pathToTheme];
 				Assembly a = header.Location;
 				string pathToMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 				// var a = CLI.GetCore ();
@@ -138,13 +139,13 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathToFile);
+				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
 				if (content.Item1)
 				{
 					json = content.Item2;
 					if (needToGetImages)
 					{
-						Tuple <bool, Image> iag = Helper.GetImage (pathToFile);
+						Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
@@ -166,7 +167,7 @@ namespace Yuki_Theme.Core.Formats
 								CLI_Actions.ifDoesntHave2 ();
 						}
 
-						iag = Helper.GetSticker (pathToFile);
+						iag = Helper.GetSticker (pathToTheme);
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
@@ -198,7 +199,7 @@ namespace Yuki_Theme.Core.Formats
 							CLI_Actions.ifDoesntHaveSticker2 ();
 					}
 
-					json = File.ReadAllText (pathToFile);
+					json = File.ReadAllText (pathToTheme);
 				}
 			}
 
@@ -215,7 +216,7 @@ namespace Yuki_Theme.Core.Formats
 
 		private static Theme LoadTheme (string path)
 		{
-			string json = loadThemeToPopulate (path, false, false, "", "");
+			string json = loadThemeToPopulate (path, false, false, "");
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			return theme;
 		}
@@ -268,7 +269,7 @@ namespace Yuki_Theme.Core.Formats
 			Console.WriteLine (name);
 			string path = Helper.ConvertNameToPath (name);
 			bool isDef = CLI.ThemeInfos [name].isDefault;
-			string json = loadThemeToPopulate (CLI.pathToFile(path, false), loadImages, isDef, name, Helper.FILE_EXTENSTION_NEW);
+			string json = loadThemeToPopulate (isDef ? name : CLI.pathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
@@ -298,7 +299,9 @@ namespace Yuki_Theme.Core.Formats
 		public static bool VerifyToken (string path)
 		{
 			bool valid = false;
-			
+			string json = loadThemeToPopulate (path, false, false, Helper.FILE_EXTENSTION_NEW);
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			valid = Helper.VerifyToken (theme);
 			return valid;
 		}
 	}

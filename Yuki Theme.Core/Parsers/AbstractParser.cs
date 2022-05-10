@@ -63,8 +63,8 @@ namespace Yuki_Theme.Core.Parsers
 					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
 					{
 						XmlDocument document = new XmlDocument ();
-						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, flname,
-						                                    Helper.FILE_EXTENSTION_OLD, false);
+						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
+						                                    false);
 						Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
 						theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
 						theme.SetAdditionalInfo (additionalInfo);
@@ -97,7 +97,7 @@ namespace Yuki_Theme.Core.Parsers
 			XmlDocument doc = new XmlDocument ();
 
 			OldThemeFormat.loadThemeToPopulate (ref doc, "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd", false, true,
-			                                    ref theme, PathToSave, Helper.FILE_EXTENSTION_OLD, true);
+			                                    ref theme, Helper.FILE_EXTENSTION_OLD, true);
 			
 			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
 			OldThemeFormat.MergeCommentsWithFile (theme, doc);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -9,7 +10,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
@@ -175,7 +175,9 @@ namespace Yuki_Theme.Core
 				}
 			} catch (InvalidDataException)
 			{
-				return new Tuple <bool, string> (false, "");
+				string data = File.ReadAllText (path);
+				
+				return new Tuple <bool, string> (false, data);
 			}
 		}
 
@@ -733,6 +735,26 @@ namespace Yuki_Theme.Core
 	        dic.Remove(fromKey);
 	        dic[toKey] = value;
         }
+
+        public static bool VerifyToken (Theme theme)
+        {
+	        if (theme != null)
+	        {
+		        string token = theme.Token;
+		        if (token == "" || token.Length < 6) return false;
+		        try
+		        {
+			        string decryption = DecryptString (theme.Name, token);
+			        DateTime date = decryption.ToDateTime ("ddMMyyyy");
+			        return true;
+		        } catch
+		        {
+			        // ignored
+		        }
+	        }
+
+	        return false;
+        }
 	}
 
 	public static class GoogleAnalyticsHelper
@@ -765,4 +787,37 @@ namespace Yuki_Theme.Core
 			}
 		}
 	}
+	
+	public static class DateTimeExtensions {
+		public static DateTime ToDateTime(this string s, 
+		                                  string      format = "ddMMyyyy", string cultureString = "tr-TR") {
+			try {
+				var r = DateTime.ParseExact(
+					s: s,
+					format: format,
+					provider: CultureInfo.GetCultureInfo(cultureString));
+				return r;
+			} catch (FormatException) {
+				throw;
+			} catch (CultureNotFoundException) {
+				throw; // Given Culture is not supported culture
+			}
+		}
+
+		public static DateTime ToDateTime(this string s, 
+		                                  string      format, CultureInfo culture) {
+			try {
+				var r = DateTime.ParseExact(s: s, format: format, 
+				                            provider: culture);
+				return r;
+			} catch (FormatException) {
+				throw;
+			} catch (CultureNotFoundException) {
+				throw; // Given Culture is not supported culture
+			}
+
+		}
+
+	}
+	
 }

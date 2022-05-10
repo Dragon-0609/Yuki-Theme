@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -339,6 +340,20 @@ public partial class ThemeDownloaderForm : Form
 	public void DownloadTheme (string name)
 	{
 		Console.WriteLine ("Downloading theme " + name);
+
+		if (CLI.ThemeInfos.ContainsKey (name))
+		{
+			if (CLI.ThemeInfos [name].location == ThemeLocation.File && File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+			{
+				File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+			}
+		}
+
+		Theme theme = themes[name];
+		theme.fullPath = CLI.pathToFile (name, true);
+		theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
+		
+		CLI.saveList (theme);
 	}
 
 	public void DownloadAll ()

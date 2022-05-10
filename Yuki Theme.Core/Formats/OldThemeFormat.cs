@@ -234,10 +234,10 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			var doc = new XmlDocument ();
-			string themePath = CLI.currentTheme.fullPath;
+			string themePath = themeToSave.fullPath;
 			Tuple <bool, string> content = Helper.GetTheme (themePath);
 			bool iszip = content.Item1;
 
@@ -246,16 +246,16 @@ namespace Yuki_Theme.Core.Formats
 			Dictionary <string, ThemeField> localDic;
 
 			if (Settings.settingMode == SettingMode.Light)
-				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, CLI.currentTheme);
+				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, themeToSave);
 			else
-				localDic = CLI.currentTheme.Fields;
+				localDic = themeToSave.Fields;
 			foreach (KeyValuePair <string, ThemeField> themeField in localDic)
 			{
 				Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
 			}
 			MergeThemeFieldsWithFile (localDic, doc);
 
-			MergeCommentsWithFile (CLI.currentTheme, doc);
+			MergeCommentsWithFile (themeToSave, doc);
 
 			SaveXML (img2, img3, wantToKeep, iszip, ref doc, themePath);
 		}
@@ -296,24 +296,24 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc,        string pathForFile, bool needToDoActions, bool isDefault,
-		                                        ref Theme       themeToSet, string nameToLoadForMemory, string extension,
+		public static void loadThemeToPopulate (ref XmlDocument doc,        string pathToTheme, bool needToDoActions, bool isDefault,
+		                                        ref Theme       themeToSet, string extension,
 		                                        bool            customNameForMemory)
 		{
 			if (isDefault)
 			{
 				Assembly a;
 				string pathForMemory = "";
-				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
+				string pathToLoad = Helper.ConvertNameToPath (pathToTheme);
 				if (customNameForMemory)
 				{
 					a = CLI.GetCore ();
-					pathForMemory = pathForFile;
+					pathForMemory = pathToTheme;
 				} else
 				{
-					if (DefaultThemes.names.Contains (nameToLoadForMemory))
+					if (DefaultThemes.names.Contains (pathToTheme))
 					{
-						IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+						IThemeHeader header = DefaultThemes.headers [pathToTheme];
 						a = header.Location;
 						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 					} else
@@ -402,13 +402,13 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathForFile);
+				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
 				themeToSet.isDefault = false;
-				themeToSet.fullPath = pathForFile;
+				themeToSet.fullPath = pathToTheme;
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
-					Tuple <bool, Image> iag = Helper.GetImage (pathForFile);
+					Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
 					if (needToDoActions)
 					{
 						if (iag.Item1)
@@ -435,7 +435,7 @@ namespace Yuki_Theme.Core.Formats
 
 					themeToSet.HasWallpaper = iag.Item1;
 
-					iag = Helper.GetSticker (pathForFile);
+					iag = Helper.GetSticker (pathToTheme);
 					if (needToDoActions)
 					{
 						if (iag.Item1)
@@ -476,7 +476,7 @@ namespace Yuki_Theme.Core.Formats
 
 					try
 					{
-						doc.Load (pathForFile);
+						doc.Load (pathToTheme);
 					} catch (XmlException)
 					{
 						if (CLI_Actions.hasProblem != null)
@@ -583,7 +583,8 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToFile(path, false), ToCLI, isDef, ref theme, name, Helper.FILE_EXTENSTION_OLD, false);
+				loadThemeToPopulate (ref doc, isDef ? name : CLI.pathToFile (path, false), ToCLI, isDef, ref theme,
+				                     Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
 				return null;
@@ -787,6 +788,19 @@ namespace Yuki_Theme.Core.Formats
 		{
 			bool valid = false;
 			
+			Theme theme = new Theme ();
+			
+			var doc = new XmlDocument ();
+			try
+			{
+				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false);
+			} catch
+			{
+				// ignored
+			}
+			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+			theme.SetAdditionalInfo (additionalInfo);
+			valid = Helper.VerifyToken (theme);
 			return valid;
 		}
 	}

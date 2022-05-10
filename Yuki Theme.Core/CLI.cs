@@ -21,9 +21,9 @@ namespace Yuki_Theme.Core
 
 		#region Public Fields
 
-		public static List <string>                      names        = new ();
-		public static List <string>                      schemes      = new ();
-		public static Dictionary <string, ThemeInfo> ThemeInfos   = new ();
+		public static List <string>                  names      = new ();
+		public static List <string>                  schemes    = new ();
+		public static Dictionary <string, ThemeInfo> ThemeInfos = new ();
 
 		public static Theme currentTheme = ThemeFunctions.LoadDefault ();
 
@@ -208,7 +208,7 @@ namespace Yuki_Theme.Core
 			Helper.CreateThemeDirectory ();
 			Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
 			if (!isDefault ())
-				saveList (img2, img3, wantToKeep);
+				saveList (currentTheme, img2, img3, wantToKeep);
 		}
 
 		/// <summary>
@@ -597,18 +597,20 @@ namespace Yuki_Theme.Core
 		}
 
 		/// <summary>
-		/// Save current theme
+		/// Save theme to file
 		/// </summary>
+		/// <param name="themeToSave">Theme to be saved</param>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		private static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		/// <param name="wantToKeep">Want to keep old wallpaper and sticker if file is exist</param>
+		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			if (!isDefault ())
 			{
 				if (Settings.saveAsOld)
-					OldThemeFormat.saveList (img2, img3, wantToKeep);
+					OldThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
 				else
-					NewThemeFormat.saveList (img2, img3, wantToKeep);
+					NewThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
 			}
 		}
 
@@ -786,8 +788,9 @@ namespace Yuki_Theme.Core
 			var doc = new XmlDocument ();
 			try
 			{
-				OldThemeFormat.loadThemeToPopulate (ref doc, oldPath, false, DefaultThemes.isDefault (oldName), ref theme, oldName,
-				                                    Helper.FILE_EXTENSTION_OLD, false);
+				bool isDef = DefaultThemes.isDefault (oldName);
+				OldThemeFormat.loadThemeToPopulate (ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
+				                                    false);
 			} catch
 			{
 				return;
@@ -837,8 +840,8 @@ namespace Yuki_Theme.Core
 
 		private static void ReGenerateFromNew (string path, string oldPath, string name, string oldName)
 		{
-			string json = NewThemeFormat.loadThemeToPopulate (oldPath, false, DefaultThemes.isDefault (oldName), oldName,
-			                                                  Helper.FILE_EXTENSTION_NEW);
+			bool isDefaultTheme = DefaultThemes.isDefault (oldName);
+			string json = NewThemeFormat.loadThemeToPopulate (isDefaultTheme ? oldName : oldPath, false, isDefaultTheme, Helper.FILE_EXTENSTION_NEW);
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.Name = name;
 			theme.Group = "";
@@ -866,7 +869,7 @@ namespace Yuki_Theme.Core
 
 		private static void LoadSchemesByExtension (string extension)
 		{
-			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes/"), "*" + extension, SearchOption.AllDirectories))
+			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes/"), "*" + extension, SearchOption.TopDirectoryOnly))
 			{
 				string pts = Path.GetFileNameWithoutExtension (file);
 				
