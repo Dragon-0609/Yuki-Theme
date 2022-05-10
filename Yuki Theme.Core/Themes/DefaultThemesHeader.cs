@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace Yuki_Theme.Core.Themes;
 
@@ -8,17 +9,17 @@ public class DefaultThemesHeader : IThemeHeader
 	
 	public string GroupName => "Default";
 
-	public string [] ThemeNames => new []
+	public Dictionary <string, bool> ThemeNames => new ()
 	{
-		"Darcula",
-		"Dracula",
-		"Github Dark",
-		"Github Light",
-		"Monokai Dark",
-		"Monokai Light",
-		"Nightshade",
-		"Oblivion",
-		"Shades of Purple"
+		{ "Darcula", true },
+		{ "Dracula", true },
+		{ "Github Dark", true },
+		{ "Github Light", true },
+		{ "Monokai Dark", true },
+		{ "Monokai Light", true },
+		{ "Nightshade", true },
+		{ "Oblivion", true },
+		{ "Shades of Purple", true }
 	};
 
 	public string ResourceHeader => CoreThemeHeader;

@@ -496,6 +496,7 @@ namespace Yuki_Theme.Core.Formats
 			dictionary.Add ("align", ((int)Alignment.Center).ToString ());
 			dictionary.Add ("opacity", "15");
 			dictionary.Add ("stickerOpacity", "100");
+			dictionary.Add ("token", "null");
 			foreach (XmlComment comm in comms)
 			{
 				if (comm.Value.StartsWith ("align"))
@@ -507,6 +508,9 @@ namespace Yuki_Theme.Core.Formats
 				} else if (comm.Value.StartsWith ("sopacity"))
 				{
 					dictionary ["stickerOpacity"] = comm.Value.Substring (9);
+				} else if (comm.Value.StartsWith ("token"))
+				{
+					dictionary ["token"] = comm.Value.Substring (6);
 				}
 			}
 
@@ -571,7 +575,7 @@ namespace Yuki_Theme.Core.Formats
 		/// <returns>Parsed theme</returns>
 		public static Theme populateList (string name, bool ToCLI)
 		{
-			bool isDef = CLI.isDefaultTheme [name];
+			bool isDef = CLI.ThemeInfos [name].isDefault;
 			string path = Helper.ConvertNameToPath (name);
 			Theme theme = new Theme ();
 			theme.isDefault = isDef;
@@ -579,7 +583,7 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToFile(path, false), true, isDef, ref theme, name, Helper.FILE_EXTENSTION_OLD, false);
+				loadThemeToPopulate (ref doc, CLI.pathToFile(path, false), ToCLI, isDef, ref theme, name, Helper.FILE_EXTENSTION_OLD, false);
 			} catch
 			{
 				return null;
@@ -613,7 +617,7 @@ namespace Yuki_Theme.Core.Formats
 		/// <summary>
 		/// Load Theme directly to the CLI
 		/// </summary>
-		public static void LoadTheme ()
+		public static void LoadThemeToCLI ()
 		{
 			Theme theme = populateList (CLI.nameToLoad, true);
 			CLI.currentTheme = theme;
@@ -779,5 +783,11 @@ namespace Yuki_Theme.Core.Formats
 			return res;
 		}
 		
+		public static bool VerifyToken (string path)
+		{
+			bool valid = false;
+			
+			return valid;
+		}
 	}
 }

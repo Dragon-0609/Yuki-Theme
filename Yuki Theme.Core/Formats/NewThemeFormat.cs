@@ -208,14 +208,16 @@ namespace Yuki_Theme.Core.Formats
 		public static string GetNameOfTheme (string path)
 		{
 			string nm = "";
-			if (path.Contains ("__"))
-			{
-			}
-
-			string json = loadThemeToPopulate (path, false, false, "", "");
-			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			var theme = LoadTheme (path);
 			nm = theme.Name;
 			return nm;
+		}
+
+		private static Theme LoadTheme (string path)
+		{
+			string json = loadThemeToPopulate (path, false, false, "", "");
+			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			return theme;
 		}
 
 		public static void WriteName (string path, string name)
@@ -261,16 +263,16 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
 		/// <returns>Parsed theme</returns>
-		public static Theme populateList (string name)
+		public static Theme populateList (string name, bool loadImages)
 		{
 			Console.WriteLine (name);
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = CLI.isDefaultTheme [name];
-			string json = loadThemeToPopulate (CLI.pathToFile(path, false), true, isDef, name, Helper.FILE_EXTENSTION_NEW);
+			bool isDef = CLI.ThemeInfos [name].isDefault;
+			string json = loadThemeToPopulate (CLI.pathToFile(path, false), loadImages, isDef, name, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
-			theme.fullPath = isDef ? CLI.pathToMemory (path, false) : CLI.pathToFile (path, false);
+			theme.fullPath = isDef ? CLI.pathToMemory (path) : CLI.pathToFile (path, false);
 			theme.path = path;
 			return theme;
 		}
@@ -278,9 +280,9 @@ namespace Yuki_Theme.Core.Formats
 		/// <summary>
 		/// Load Theme directly to the CLI
 		/// </summary>
-		public static void LoadTheme ()
+		public static void LoadThemeToCLI ()
 		{
-			Theme theme = populateList (CLI.nameToLoad);
+			Theme theme = populateList (CLI.nameToLoad, true);
 			CLI.currentTheme = theme;
 			if (theme == null)
 			{
@@ -291,6 +293,13 @@ namespace Yuki_Theme.Core.Formats
 				CLI.names.AddRange (theme.Fields.Keys);
 				CLI.names.InsertRange (1, ShadowNames.imageNames);
 			}
+		}
+
+		public static bool VerifyToken (string path)
+		{
+			bool valid = false;
+			
+			return valid;
 		}
 	}
 }

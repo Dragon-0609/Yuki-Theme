@@ -493,15 +493,17 @@ namespace Yuki_Theme.Core.Forms
 			{
 				ReItem litem;
 				Console.WriteLine (item);
-				if (CLI.isDefaultTheme [item])
+				ThemeInfo info = CLI.ThemeInfos [item];
+				
+				if (info.isDefault)
 				{
 					ReItem cat = groupItems [DefaultThemes.getCategory (item)];
 					Console.WriteLine (cat.Name);
-					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
+					litem = new ReItem (item, false, info.isOld, cat);
 				} else
 				{
 					Console.WriteLine (custom.Name);
-					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
+					litem = new ReItem (item, false, info.isOld, custom);
 				}
 			}
 

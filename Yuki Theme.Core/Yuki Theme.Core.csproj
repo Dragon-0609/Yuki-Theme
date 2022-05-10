@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="IColorUpdatable.cs" />
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />

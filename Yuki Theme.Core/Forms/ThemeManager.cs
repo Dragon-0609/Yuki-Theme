@@ -187,23 +187,18 @@ namespace Yuki_Theme.Core.Forms
 			string pth2 = "";
 			string npath = "";
 			string format = "";
-			if (File.Exists (Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}")))
-			{
-				pth = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}");
-				npath = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_NEW}");
-				format = "new";
-			} else
-			{
-				pth = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_NEW}");
-				npath = Path.Combine (CLI.currentPath, "Themes", $"{namep}{Helper.FILE_EXTENSTION_OLD}");
-				format = "old";
-			}
+
+			bool isOldExists = File.Exists (CLI.pathToFile (namep, true)); 
+			pth = CLI.pathToFile (namep, isOldExists);
+			npath = CLI.pathToFile (namep, !isOldExists);
+			format = isOldExists ? "old" : "new";
+			
 
 			CLI.CopyTheme (name, namep, npath, out pth2, false);
 			CLI.ReGenerateTheme (npath, pth, name, name, true);
 			File.Delete (pth);
-			CLI.oldThemeList [name] = !CLI.IsOldTheme (pth);
-			((ReItem)scheme.SelectedItems [0]).isOld = CLI.oldThemeList [name];
+			CLI.ThemeInfos [name].isOld = CLI.IsOldTheme (pth);
+			((ReItem)scheme.SelectedItems [0]).isOld = CLI.ThemeInfos [name].isOld;
 			scheme.Invalidate ();
 
 			if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)

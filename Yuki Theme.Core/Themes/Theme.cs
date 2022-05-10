@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Yuki_Theme.Core.Themes
@@ -31,6 +33,10 @@ namespace Yuki_Theme.Core.Themes
 		[JsonProperty ("stickerOpacity")]
 		public int StickerOpacity { get; set; }
 
+		[DefaultValue("null")]
+		[JsonProperty ("token", DefaultValueHandling = DefaultValueHandling.Populate)]
+		public string Token { get; set; }
+
 		[JsonProperty ("fields")]
 		public Dictionary <string, ThemeField> Fields { get; set; }
 
@@ -48,7 +54,7 @@ namespace Yuki_Theme.Core.Themes
 
 
 		[JsonIgnore]
-		public bool IsOld => CLI.oldThemeList [Name];
+		public bool IsOld => CLI.ThemeInfos [Name].isOld;
 
 		public static bool operator == (Theme t1, Theme t2)
 		{
@@ -121,6 +127,7 @@ namespace Yuki_Theme.Core.Themes
 			theme.WallpaperAlign = int.Parse (additionalInfo ["align"]);
 			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
 			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
+			theme.Token = additionalInfo ["token"];
 		}
 
 		public static bool ContentEquals (this Dictionary <string, ThemeField> dictionary,
@@ -145,5 +152,6 @@ namespace Yuki_Theme.Core.Themes
 			
 			return equality;
 		}
+		
 	}
 }

@@ -6,6 +6,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -544,6 +546,7 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
+		
 		/// <summary>
 		/// Load HTML from memory and return as string
 		/// </summary>
@@ -664,6 +667,72 @@ namespace Yuki_Theme.Core
 			}
 			return html;
 		}
+		
+		public static string EncryptString(string key, string plainText)  
+        {  
+            byte[] iv = new byte[16];  
+            byte[] array;  
+  
+            using (Aes aes = Aes.Create())  
+            {  
+                aes.Key = Encoding.UTF8.GetBytes(key);  
+                aes.IV = iv;  
+  
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);  
+  
+                using (MemoryStream memoryStream = new MemoryStream())  
+                {  
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))  
+                    {  
+                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))  
+                        {  
+                            streamWriter.Write(plainText);  
+                        }  
+  
+                        array = memoryStream.ToArray();  
+                    }  
+                }  
+            }  
+  
+            return Convert.ToBase64String(array);  
+        }  
+  
+        public static string DecryptString(string key, string cipherText)  
+        {  
+            byte[] iv = new byte[16];  
+            byte[] buffer = Convert.FromBase64String(cipherText);  
+  
+            using (Aes aes = Aes.Create())  
+            {  
+                aes.Key = Encoding.UTF8.GetBytes(key);  
+                aes.IV = iv;  
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);  
+  
+                using (MemoryStream memoryStream = new MemoryStream(buffer))  
+                {  
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))  
+                    {  
+                        using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))  
+                        {  
+                            return streamReader.ReadToEnd();  
+                        }  
+                    }  
+                }  
+            }  
+        }
+
+        public static string GetExtension (bool isOld)
+        {
+	        return isOld ? FILE_EXTENSTION_OLD : FILE_EXTENSTION_NEW;
+        }
+        
+        public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic,
+                                                   TKey                           fromKey, TKey toKey)
+        {
+	        TValue value = dic[fromKey];
+	        dic.Remove(fromKey);
+	        dic[toKey] = value;
+        }
 	}
 
 	public static class GoogleAnalyticsHelper
