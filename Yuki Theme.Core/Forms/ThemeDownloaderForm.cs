@@ -339,21 +339,31 @@ public partial class ThemeDownloaderForm : Form
 
 	public void DownloadTheme (string name)
 	{
-		Console.WriteLine ("Downloading theme " + name);
+		Console.WriteLine ("Downloading theme {0}", name);
 
-		if (CLI.ThemeInfos.ContainsKey (name))
+		try
 		{
-			if (CLI.ThemeInfos [name].location == ThemeLocation.File && File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+			if (CLI.ThemeInfos.ContainsKey (name))
 			{
-				File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+				if (CLI.ThemeInfos [name].location == ThemeLocation.File &&
+				    File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+				{
+					File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+				}
 			}
-		}
 
-		Theme theme = themes[name];
-		theme.fullPath = CLI.pathToFile (name, true);
-		theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
-		
-		CLI.saveList (theme);
+			
+			Theme theme = themes [name];
+			theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
+			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
+			Console.WriteLine ("Token: {0}", theme.Token);
+			CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+			CLI.saveList (theme);
+		} catch (Exception e)
+		{
+			Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);	
+		}
+		Console.WriteLine ("{0} has been saved", name);
 	}
 
 	public void DownloadAll ()

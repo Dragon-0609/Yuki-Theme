@@ -669,59 +669,85 @@ namespace Yuki_Theme.Core
 			}
 			return html;
 		}
-		
-		public static string EncryptString(string key, string plainText)  
-        {  
-            byte[] iv = new byte[16];  
-            byte[] array;  
-  
-            using (Aes aes = Aes.Create())  
-            {  
-                aes.Key = Encoding.UTF8.GetBytes(key);  
-                aes.IV = iv;  
-  
-                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);  
-  
-                using (MemoryStream memoryStream = new MemoryStream())  
-                {  
-                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))  
-                    {  
-                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))  
-                        {  
-                            streamWriter.Write(plainText);  
-                        }  
-  
-                        array = memoryStream.ToArray();  
-                    }  
-                }  
-            }  
-  
-            return Convert.ToBase64String(array);  
-        }  
-  
-        public static string DecryptString(string key, string cipherText)  
-        {  
-            byte[] iv = new byte[16];  
-            byte[] buffer = Convert.FromBase64String(cipherText);  
-  
-            using (Aes aes = Aes.Create())  
-            {  
-                aes.Key = Encoding.UTF8.GetBytes(key);  
-                aes.IV = iv;  
-                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);  
-  
-                using (MemoryStream memoryStream = new MemoryStream(buffer))  
-                {  
-                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))  
-                    {  
-                        using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))  
-                        {  
-                            return streamReader.ReadToEnd();  
-                        }  
-                    }  
-                }  
-            }  
+
+		public static string EncryptString (string key, string plainText)
+		{
+			byte [] iv = new byte[16];
+			byte [] array;
+			key = KeyFillerNCutter (key);
+			using (Aes aes = Aes.Create ())
+			{
+				Console.WriteLine ("Key size: {0} - {1}", Encoding.UTF8.GetBytes (key).Length, key.Length);
+				KeySizes [] ks = aes.LegalKeySizes;
+				foreach (KeySizes item in ks)
+				{
+					Console.WriteLine ("Legal min key size = " + item.MinSize);
+					Console.WriteLine ("Legal max key size = " + item.MaxSize);
+					//Output
+					// Legal min key size = 128
+					// Legal max key size = 256
+				}
+
+
+				aes.Key = Encoding.UTF8.GetBytes (key);
+				aes.IV = iv;
+
+				ICryptoTransform encryptor = aes.CreateEncryptor (aes.Key, aes.IV);
+
+				using (MemoryStream memoryStream = new MemoryStream ())
+				{
+					using (CryptoStream cryptoStream = new CryptoStream ((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+					{
+						using (StreamWriter streamWriter = new StreamWriter ((Stream)cryptoStream))
+						{
+							streamWriter.Write (plainText);
+						}
+
+						array = memoryStream.ToArray ();
+					}
+				}
+			}
+
+			return Convert.ToBase64String (array);
+		}
+
+		public static string DecryptString (string key, string cipherText)
+		{
+			byte [] iv = new byte[16];
+			byte [] buffer = Convert.FromBase64String (cipherText);
+			key = KeyFillerNCutter (key);
+			using (Aes aes = Aes.Create ())
+			{
+				aes.Key = Encoding.UTF8.GetBytes (key);
+				aes.IV = iv;
+				ICryptoTransform decryptor = aes.CreateDecryptor (aes.Key, aes.IV);
+
+				using (MemoryStream memoryStream = new MemoryStream (buffer))
+				{
+					using (CryptoStream cryptoStream = new CryptoStream ((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+					{
+						using (StreamReader streamReader = new StreamReader ((Stream)cryptoStream))
+						{
+							return streamReader.ReadToEnd ();
+						}
+					}
+				}
+			}
+		}
+
+		public static string KeyFillerNCutter (string key)
+        {
+	        string res = key;
+	        if (res.Length < 16)
+	        {
+		        res += new string ('.', 16 - res.Length);
+	        }else if (res.Length > 32)
+	        {
+		        res = res.Substring (0, 32);
+	        }
+	        return res;
         }
+        
 
         public static string GetExtension (bool isOld)
         {
@@ -741,14 +767,16 @@ namespace Yuki_Theme.Core
 	        if (theme != null)
 	        {
 		        string token = theme.Token;
+		        Console.WriteLine("Name: {0}", theme.Name);
 		        if (token == "" || token.Length < 6) return false;
 		        try
 		        {
 			        string decryption = DecryptString (theme.Name, token);
 			        DateTime date = decryption.ToDateTime ("ddMMyyyy");
 			        return true;
-		        } catch
+		        } catch (Exception e)
 		        {
+			        Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
 			        // ignored
 		        }
 	        }

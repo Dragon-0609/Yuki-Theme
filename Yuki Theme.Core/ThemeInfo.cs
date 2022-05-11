@@ -12,4 +12,9 @@ public class ThemeInfo
 		this.isOld = isOld;
 		this.location = location;
 	}
+
+	public override string ToString ()
+	{
+		return $"Default: {isDefault}, Old: {isOld}, Location: {location}";
+	}
 }

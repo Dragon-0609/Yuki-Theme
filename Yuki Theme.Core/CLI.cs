@@ -577,7 +577,7 @@ namespace Yuki_Theme.Core
 		/// <returns>Name of the theme</returns>
 		public static string GetNameOfTheme (string path)
 		{
-			Console.WriteLine (path);
+			Console.WriteLine ("Path to get theme name: {0}", path);
 			if (IsNewTheme (path))
 				return NewThemeFormat.GetNameOfTheme (path);
 			return OldThemeFormat.GetNameOfTheme (path);
@@ -605,13 +605,10 @@ namespace Yuki_Theme.Core
 		/// <param name="wantToKeep">Want to keep old wallpaper and sticker if file is exist</param>
 		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			if (!isDefault ())
-			{
-				if (Settings.saveAsOld)
-					OldThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
-				else
-					NewThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
-			}
+			if (Settings.saveAsOld)
+				OldThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
+			else
+				NewThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
 		}
 
 
@@ -628,18 +625,23 @@ namespace Yuki_Theme.Core
 
 		private static void MergeSyntax (string dir, SyntaxType syntax)
 		{
-			string npath = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
-			var a = GetCore ();
-			var stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
-			using (var fs = new FileStream (npath, FileMode.Create))
+			string destination = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
+			ExtractSyntaxTemplate (syntax, destination);
+
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			Console.WriteLine (syntax.ToString ());
+			MergeFiles (destination, localDic);
+		}
+
+		public static void ExtractSyntaxTemplate (SyntaxType syntax, string destination)
+		{
+			Assembly a = GetCore ();
+			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
+			using (var fs = new FileStream (destination, FileMode.Create))
 			{
 				stream.Seek (0, SeekOrigin.Begin);
 				stream.CopyTo (fs);
 			}
-
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
-			Console.WriteLine (syntax.ToString ());
-			MergeFiles (npath, localDic);
 		}
 
 		public static void MergeFiles (string path, Dictionary <string, ThemeField> local)
@@ -790,7 +792,7 @@ namespace Yuki_Theme.Core
 			{
 				bool isDef = DefaultThemes.isDefault (oldName);
 				OldThemeFormat.loadThemeToPopulate (ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
-				                                    false);
+				                                    false, true);
 			} catch
 			{
 				return;
@@ -847,7 +849,7 @@ namespace Yuki_Theme.Core
 			theme.Group = "";
 			var a = GetCore ();
 			string str = "";
-			;
+			
 			using (StreamReader reader = new StreamReader (a.GetManifestResourceStream (Helper.PASCALTEMPLATE)))
 			{
 				str = reader.ReadToEnd ();
@@ -898,6 +900,7 @@ namespace Yuki_Theme.Core
 						}
 					} else
 					{
+						Console.WriteLine ("Token valid");
 						ForcelyAddToDefaults (pts, file);
 					}
 				}
@@ -917,6 +920,8 @@ namespace Yuki_Theme.Core
 			
 			if (!DefaultThemes.names.Contains (name))
 				DefaultThemes.names.Add (name);
+
+			Console.WriteLine ("{0}\n\n", ThemeInfos [name]);
 
 		}
 

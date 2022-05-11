@@ -30,12 +30,12 @@ namespace Yuki_Theme.Core.Parsers
 				text = path;
 
 			JObject json = JObject.Parse (text);
-			fname = json ["stickers"] ["default"]["name"].ToString ();
+			fname = json ["stickers"] ["default"] ["name"].ToString ();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
 			theme.ParseWallpaperAlign (json ["stickers"] ["default"] ["anchor"].ToString ());
 			theme.WallpaperOpacity = json ["stickers"] ["default"] ["opacity"].ToObject <int> ();
-			
+
 			flname = theme.Name = ofname;
 			if (needToWrite)
 			{
@@ -52,7 +52,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			foreach (JProperty cl in json ["colors"])
 			{
-				var name = getName (cl.Name);
+				string [] name = getName (cl.Name);
 
 				var attrs = new ThemeField ();
 
@@ -122,7 +122,9 @@ namespace Yuki_Theme.Core.Parsers
 			{
 				Foreground = df.Background
 			});
-			
+			df.Bold = null;
+			df.Italic = null;
+
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 
