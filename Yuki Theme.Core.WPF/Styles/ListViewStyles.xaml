@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls">
     <Style x:Key="Win7" TargetType="ListViewItem">
         <Style.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
@@ -17,7 +18,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="Win10" TargetType="{x:Type ListViewItem}">
+    <Style TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Padding" Value="4,1" />
         <Setter Property="HorizontalContentAlignment"
@@ -45,9 +46,10 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="Background" TargetName="Bd"
                                     Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.SelectionBrush}" />
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.BorderBrush}" />
+                            <Setter Property="BorderBrush" TargetName="Bd"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.BorderBrush}" />
                         </MultiTrigger>
-                        
+
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Selector.IsSelectionActive" Value="False" />
@@ -58,7 +60,7 @@
                             <Setter Property="BorderBrush" TargetName="Bd"
                                     Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.BorderBrush}" />
                         </MultiTrigger>
-                        
+
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="Selector.IsSelectionActive" Value="True" />

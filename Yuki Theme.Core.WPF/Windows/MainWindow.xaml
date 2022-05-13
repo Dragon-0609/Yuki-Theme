@@ -79,7 +79,7 @@
                 </ComboBox>
 
                 <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0" Click="AddButton_OnClick" />
-                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
+                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" Click="ManageButton_OnClick" />
                 <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
                 <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" Click="RestoreButton_OnClick" />
                 <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
@@ -150,7 +150,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Width="120" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center"  BorderBrush="DimGray" Padding="2 1" Foreground="{Binding ElementName=Window, Path=Foreground}" />
+                            <TextBox Width="120" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center" BorderBrush="DimGray" Padding="2 1" Foreground="{Binding ElementName=Window, Path=Foreground}" />
                             <Button Name="ImagePathButton" Margin="-1 5 5 0" Width="20" Height="20" />
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">

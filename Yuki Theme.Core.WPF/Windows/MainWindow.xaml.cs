@@ -9,6 +9,7 @@ using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Drawing = System.Drawing;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -58,8 +59,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Helper.mode != ProductMode.Plugin)
 				Settings.connectAndGet ();
-
-			Definitions.ItemContainerStyle = Definitions.FindResource ("Win10") as Style;
 
 			CLI_Actions.ifHasImage = ifHasImage;
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
@@ -173,7 +172,34 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			themeWindow.AddThemes ();
 
-			themeWindow.Show ();
+			bool? dialog = themeWindow.ShowDialog ();
+			if (dialog != null && (bool)dialog)
+			{
+				MessageBox.Show (string.Format("Saved: {0} -> {1}", themeWindow.Themes.SelectedItem.ToString (), themeWindow.TName.Text));
+			} else
+			{
+				MessageBox.Show ("Canceled");
+			}
+		}
+		private void ManageThemes ()
+		{
+			ManageThemesWindow themesWindow = new ManageThemesWindow
+			{
+				Background = bgBrush,
+				Foreground = fgBrush,
+				Tag = Tag,
+				Owner = this
+			};
+			
+
+			bool? dialog = themesWindow.ShowDialog ();
+			if (dialog != null && (bool)dialog)
+			{
+				// MessageBox.Show (string.Format("Saved: {0} -> {1}", themesWindow.Themes.SelectedItem.ToString (), themesWindow.TName.Text));
+			} else
+			{
+				MessageBox.Show ("Canceled");
+			}
 		}
 
 		private void Restore ()
@@ -452,7 +478,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Restore ();
 		}
+		
+		private void ManageButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			ManageThemes ();
+		}
 
 		#endregion
+
 	}
 }

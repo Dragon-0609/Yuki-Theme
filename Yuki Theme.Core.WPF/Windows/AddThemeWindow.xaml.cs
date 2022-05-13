@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -7,6 +9,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public AddThemeWindow ()
 		{
 			InitializeComponent ();
+			WPFHelper.windowForDialogs = this;
 		}
 
 		public void AddThemes ()
