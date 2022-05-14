@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Loaded="Initialize"
+        Name="Window"
         Title="Manage Themes" Width="400" Style="{DynamicResource SLayer}">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
@@ -30,7 +31,7 @@
         <Grid.Resources>
             <Style x:Key="ThemeManager" TargetType="{x:Type controls:ManageableItem}">
                 <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="Padding" Value="4,1" />
+                <Setter Property="Padding" Value="8,1" />
                 <Setter Property="HorizontalContentAlignment"
                         Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
                 <Setter Property="VerticalContentAlignment"
@@ -39,28 +40,45 @@
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
+                <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" />
+                <Setter Property="VGroup" Value="Collapsed" />
+
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type controls:Manageable}">
+                        <ControlTemplate TargetType="{x:Type controls:ManageableItem}">
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"
                                     Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                <Grid>
+                                    <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                                    <Button Name="Expander" Content="↓" Visibility="{TemplateBinding VGroup}" HorizontalAlignment="Right"
+                                            Padding="6 2" BorderThickness="0" Foreground="{TemplateBinding Foreground}" Click="Expander_OnClick" Tag="{TemplateBinding Tag}" />
+                                </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="controls:ManageableItem.IsGroup" Value="False" />
-                                        <Condition Property="controls:ManageableItem.IsCollapsed" Value="True" />
-                                    </MultiTrigger.Conditions>
+                                <Trigger Property="IsGroup" Value="True">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.KeywordBrush}" />
+                                    <Setter Property="FontSize" Value="18" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    <Setter Property="VGroup" Value="Visible" />
+                                </Trigger>
+
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding Mode=OneWay, Path=IsGroup}" Value="False" />
+                                        <Condition Binding="{Binding Mode=OneWay, Path=IsCollapsed}" Value="True" />
+                                    </MultiDataTrigger.Conditions>
                                     <Setter Property="Visibility" Value="Collapsed" />
-                                </MultiTrigger>
+                                </MultiDataTrigger>
+
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsMouseOver" Value="True" />
-                                        <Condition Property="controls:ManageableItem.IsGroup" Value="False" />
+                                        <Condition Property="IsGroup" Value="False" />
                                     </MultiTrigger.Conditions>
                                     <Setter Property="Background" TargetName="Bd"
                                             Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.SelectionBrush}" />
@@ -72,14 +90,15 @@
                                     <MultiTrigger.Conditions>
                                         <Condition Property="Selector.IsSelectionActive" Value="True" />
                                         <Condition Property="IsSelected" Value="True" />
-                                        <Condition Property="controls:ManageableItem.IsGroup" Value="False" />
-                                        <Condition Property="controls:ManageableItem.IsCollapsed" Value="False" />
+                                        <Condition Property="IsGroup" Value="False" />
+                                        <Condition Property="IsCollapsed" Value="False" />
                                     </MultiTrigger.Conditions>
                                     <Setter Property="Background" TargetName="Bd"
                                             Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.SelectionBrush}" />
                                     <Setter Property="BorderBrush" TargetName="Bd"
                                             Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.BorderBrush}" />
                                 </MultiTrigger>
+
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="TextElement.Foreground" TargetName="Bd"
                                             Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Foreground}" />
@@ -95,14 +114,9 @@
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
         <controls:Manageable Padding="5" x:Name="Schemes" SelectionMode="Single" BorderThickness="0"
-                             Background="#323232"
+                             Background="{Binding ElementName=Window, Path=Background}"
                              Foreground="{Binding ElementName=Window, Path=Foreground}"
-                             Tag="{Binding ElementName=Window, Path=Tag}">
-            <controls:Manageable.Items>
-                <controls:ManageableItem Title="Testing 1" />
-                <controls:ManageableItem Title="Testing 2" />
-                <controls:ManageableItem Title="Testing 3" />
-            </controls:Manageable.Items>
+                             Tag="{Binding ElementName=Window, Path=Tag}" ItemContainerStyle="{DynamicResource ThemeManager}">
         </controls:Manageable>
 
     </Grid>

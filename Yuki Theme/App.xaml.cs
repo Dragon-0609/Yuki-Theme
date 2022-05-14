@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
 
-namespace Yuki_Theme.Core.WPF
+namespace Yuki_Theme
 {
 	/// <summary>
 	///     Interaction logic for App.xaml

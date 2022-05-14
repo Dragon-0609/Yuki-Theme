@@ -198,7 +198,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				// MessageBox.Show (string.Format("Saved: {0} -> {1}", themesWindow.Themes.SelectedItem.ToString (), themesWindow.TName.Text));
 			} else
 			{
-				MessageBox.Show ("Canceled");
+				// MessageBox.Show ("Canceled");
 			}
 		}
 

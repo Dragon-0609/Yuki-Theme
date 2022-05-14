@@ -11,8 +11,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 {
 	public partial class ManageThemesWindow : Window
 	{
-		private List <ManageableItem> groups = new List <ManageableItem> ();
-		
+		private List <ManageableItem>               groups = new List <ManageableItem> ();
+		private Dictionary <string, ManageableItem> groupItems;
+
 		public ManageThemesWindow ()
 		{
 			InitializeComponent ();
@@ -21,39 +22,55 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void Initialize (object sender, RoutedEventArgs e)
 		{
-			Dictionary <string, ManageableItem> groupItems = new Dictionary <string, ManageableItem> ();
-			
+			groupItems = new Dictionary <string, ManageableItem> ();
+
 			foreach (string sc in DefaultThemes.categoriesList)
 			{
 				string nameTranslation = CLI.Translate (sc);
-				ManageableItem defa = new ManageableItem (nameTranslation, true);
+				ManageableItem defa = new ManageableItem (nameTranslation, sc, true);
 				groups.Add (defa);
 				groupItems.Add (sc, defa);
-				Schemes.Items.Add (defa);
 			}
 
 			string customgroup = CLI.Translate ("messages.theme.group.custom");
-			ManageableItem custom = new ManageableItem (customgroup, true);
+			ManageableItem custom = new ManageableItem (customgroup, customgroup, true);
 			groups.Add (custom);
 			groupItems.Add (customgroup, custom);
-			Schemes.Items.Add (customgroup);
 
 			foreach (string item in CLI.schemes)
 			{
-				ManageableItem litem;
 				if (CLI.isDefaultTheme [item])
 				{
 					ManageableItem cat = groupItems [DefaultThemes.getCategory (item)];
-					litem = new ManageableItem (item, false, CLI.oldThemeList [item]);
-					cat.children.Add (litem);
+					new ManageableItem (item, item, false, CLI.oldThemeList [item], cat);
 				} else
 				{
-					litem = new ManageableItem (item, false, CLI.oldThemeList [item]);
-					custom.children.Add (litem);
+					new ManageableItem (item, item, false, CLI.oldThemeList [item], custom);
 				}
-				Schemes.Items.Add (litem);
 			}
-			
+
+			foreach (ManageableItem group in groups)
+			{
+				Schemes.Items.Add (group);
+				foreach (ManageableItem child in group.children)
+				{
+					Schemes.Items.Add (child);
+				}
+			}
+		}
+
+		private void Expander_OnClick (object sender, RoutedEventArgs e)
+		{
+			Button snd = (Button)sender;
+			MessageBox.Show (snd.Tag.ToString ());
+			ManageableItem group = groupItems [snd.Tag.ToString ()];
+			if (group != null)
+			{
+				group.IsCollapsed = !group.IsCollapsed;
+				group.UpdateCollapse (group.IsCollapsed);
+				
+				MessageBox.Show (group.IsCollapsed ? "Collapsed" : "Expanded");
+			}
 		}
 	}
 }

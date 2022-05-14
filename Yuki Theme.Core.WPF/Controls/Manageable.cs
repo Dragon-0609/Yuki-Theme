@@ -7,12 +7,12 @@ namespace Yuki_Theme.Core.WPF.Controls
 	{
 		public Manageable ()
 		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(Manageable), new FrameworkPropertyMetadata(typeof(Manageable)));
+			DefaultStyleKeyProperty.OverrideMetadata (typeof (Manageable), new FrameworkPropertyMetadata (null));
 		}
 		
 		protected override DependencyObject GetContainerForItemOverride()
 		{
-			return new ManageableItem("Empty", false);
+			return new ManageableItem("Empty", "Empty", false);
 		}
 	}
 }
