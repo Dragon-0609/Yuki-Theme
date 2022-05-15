@@ -55,11 +55,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public Visibility VGroup
 		{
-			get { return Visibility.Visible; }
+			get { return (Visibility)GetValue (VGroupProperty); }
 			set
 			{
 				if (IsGroup)
-					IsCollapsed = value == Visibility.Collapsed;
+					SetValue (VGroupProperty, value);
 			}
 		}
 
@@ -96,15 +96,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 			return (string)Content;
 		}
 
-		public void UpdateCollapse (bool value)
+		public void UpdateCollapse ()
 		{
-			this.InvalidateProperty (IsCollapsedProperty);
-			OnPropertyChanged (new DependencyPropertyChangedEventArgs (IsCollapsedProperty, !value, value));
 			if (IsGroup)
 			{
 				foreach (ManageableItem child in children)
 				{
-					child.IsCollapsed = value;
+					child.Visibility = IsCollapsed ? Visibility.Collapsed : Visibility.Visible;
 				}
 			}
 		}

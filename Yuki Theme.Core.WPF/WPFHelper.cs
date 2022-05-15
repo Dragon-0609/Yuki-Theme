@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Yuki_Theme.Core.WPF.Controls;
@@ -30,6 +34,18 @@ namespace Yuki_Theme.Core.WPF
 					.ToWPFImage ()
 			};
 		}
+
+		public static Image GetSVGImage (string source, Size size, bool customColor = false, Drawing.Color color = default)
+		{
+
+			return new Image ()
+			{
+				Source = (Helper.RenderSvg (new Drawing.Size (System.Convert.ToInt32 (size.Width), System.Convert.ToInt32 (size.Height)),
+				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty,
+				                            customColor, color))
+					.ToWPFImage ()
+			};
+		}
 		
 		public static BitmapImage ToWPFImage (this Drawing.Image img)
 		{
@@ -48,5 +64,11 @@ namespace Yuki_Theme.Core.WPF
 
 			return bi;
 		}
+		
+		
+		[DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		public static extern bool DeleteObject([In] IntPtr hObject);
+
 	}
 }

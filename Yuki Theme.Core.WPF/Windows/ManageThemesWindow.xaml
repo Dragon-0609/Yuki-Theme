@@ -41,7 +41,6 @@
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}" />
                 <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}" />
-                <Setter Property="VGroup" Value="Collapsed" />
 
                 <Setter Property="Template">
                     <Setter.Value>
@@ -54,7 +53,8 @@
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
                                     <Button Name="Expander" Content="↓" Visibility="{TemplateBinding VGroup}" HorizontalAlignment="Right"
-                                            Padding="6 2" BorderThickness="0" Foreground="{TemplateBinding Foreground}" Click="Expander_OnClick" Tag="{TemplateBinding Tag}" />
+                                            VerticalAlignment="Center" Padding="6 2" BorderThickness="0"
+                                            Foreground="{TemplateBinding Foreground}" Click="Expander_OnClick" Tag="{TemplateBinding Tag}" />
                                 </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -66,14 +66,6 @@
                                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                                     <Setter Property="VGroup" Value="Visible" />
                                 </Trigger>
-
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Mode=OneWay, Path=IsGroup}" Value="False" />
-                                        <Condition Binding="{Binding Mode=OneWay, Path=IsCollapsed}" Value="True" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </MultiDataTrigger>
 
                                 <MultiTrigger>
                                     <MultiTrigger.Conditions>
