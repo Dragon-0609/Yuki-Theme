@@ -79,13 +79,13 @@
                 </ComboBox>
 
                 <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0" Click="AddButton_OnClick" />
-                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" Click="ManageButton_OnClick" />
-                <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
-                <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" Click="RestoreButton_OnClick" />
-                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
-                <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
-                <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
-                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button32}" />
+                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" Click="ManageButton_OnClick" />
+                <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
+                <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" Click="RestoreButton_OnClick" />
+                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
+                <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
+                <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
+                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
 
                 <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
                     <Grid.Resources>

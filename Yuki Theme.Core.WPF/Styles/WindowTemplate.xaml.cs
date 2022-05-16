@@ -14,7 +14,12 @@ namespace Yuki_Theme.Core.WPF.Styles
 
 		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
 		{
-			WPFHelper.windowForDialogs.DialogResult = true;
+			bool can = true;
+			if (WPFHelper.checkDialog != null)
+				can = WPFHelper.checkDialog ();
+			
+			if (can)
+				WPFHelper.windowForDialogs.DialogResult = true;
 		}
 		
 	}

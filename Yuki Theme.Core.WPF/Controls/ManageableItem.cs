@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -89,6 +90,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			IsOld = isOld;
 			ParentGroup = group;
 			group.children.Add (this);
+			group.children = group.children.OrderBy (t => t.Content.ToString ()).ToList ();
 		}
 
 		public override string ToString ()

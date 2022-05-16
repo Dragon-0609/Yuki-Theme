@@ -27,7 +27,7 @@
         <Setter Property="Margin" Value="2 10 2 5" />
     </Style>
     
-    <Style x:Key="Button32" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonSource}">
+    <Style x:Key="Button24" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonSource}">
         <Setter Property="Margin" Value="2 10 2 5" />
         <Setter Property="Width" Value="24" />
         <Setter Property="Height" Value="24" />

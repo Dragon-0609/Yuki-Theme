@@ -91,13 +91,13 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="copyFrom">Copy from</param>
 		/// <param name="name">Copy to</param>
-		/// <returns></returns>
-		public static bool add (string copyFrom, string name)
+		/// <returns>0 -> Theme isn't added cause of exceptions. 1 -> Theme is added. 2 -> Theme is overrided</returns>
+		public static int add (string copyFrom, string name)
 		{
-			if (name.Length < 2)
+			if (name.Length < 3)
 			{
 				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
-				return true;
+				return 0;
 			}
 
 			string sto = Helper.ConvertNameToPath (name);
@@ -114,7 +114,7 @@ namespace Yuki_Theme.Core
 				if (!CLI_Actions.SaveInExport (Translate ("messages.file.exist.override.full"), Translate ("messages.file.exist.override.short")))
 				{
 					if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.exist.full"), Translate ("messages.name.exist.short"));
-					return true;
+					return 0;
 				}
 
 				exist = true;
@@ -124,7 +124,7 @@ namespace Yuki_Theme.Core
 			if (!DefaultThemes.isDefault (name))
 			{
 				string pth = "";
-				if (CopyTheme (copyFrom, copyFrom, patsh, out pth, true)) return true;
+				if (CopyTheme (copyFrom, copyFrom, patsh, out pth, true)) return 0;
 				bool done = ReGenerateTheme (patsh, pth, name, copyFrom, false);
 				if (!done)
 					WriteName (patsh, name);
@@ -139,13 +139,13 @@ namespace Yuki_Theme.Core
 					if (CLI_Actions.showSuccess != null)
 						CLI_Actions.showSuccess (Translate ("messages.theme.duplicate"), Translate ("messages.buttons.done"));
 
-				return exist;
+				return exist ? 2 : 1;
 			} else
 			{
 				if (CLI_Actions.showError != null)
 					CLI_Actions.showError (Translate ("messages.name.default.full"), Translate ("messages.name.default.short"));
 
-				return true;
+				return 0;
 			}
 		}
 
@@ -363,11 +363,13 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="from">From</param>
 		/// <param name="to">To</param>
-		public static void rename (string from, string to)
+		/// <returns>0 -> error. 1 -> success</returns>
+		public static int rename (string from, string to)
 		{
-			if (to.Length < 2)
+			if (to.Length < 3)
 			{
 				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
+				return 0;
 			}
 
 			if (!isDefaultTheme [from])
@@ -411,6 +413,7 @@ namespace Yuki_Theme.Core
 							oldThemeList.Remove (from);
 
 							if (CLI_Actions.onRename != null) CLI_Actions.onRename (from, to);
+							return 1;
 						} else
 						{
 							if (CLI_Actions.showError != null)
@@ -426,6 +429,7 @@ namespace Yuki_Theme.Core
 				if (CLI_Actions.showError != null)
 					CLI_Actions.showError (Translate ("messages.theme.default.full"), Translate ("messages.theme.default.short"));
 			}
+			return 0;
 		}
 
 

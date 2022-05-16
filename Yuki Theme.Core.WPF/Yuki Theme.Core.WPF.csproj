@@ -91,6 +91,9 @@
         <Compile Include="Windows\ManageThemesWindow.xaml.cs">
           <DependentUpon>ManageThemesWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\RenameThemeWindow.xaml.cs">
+          <DependentUpon>RenameThemeWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="WPFHelper.cs" />
         <Page Include="Styles\ButtonStyles.xaml" />
         <Page Include="Styles\DropDownStyles.xaml" />
@@ -104,6 +107,7 @@
           <SubType>Designer</SubType>
         </Page>
         <Page Include="Windows\ManageThemesWindow.xaml" />
+        <Page Include="Windows\RenameThemeWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">

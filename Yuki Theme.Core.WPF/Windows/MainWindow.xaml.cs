@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -27,26 +29,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Drawing.Image img2 = null;
 		private Drawing.Image img3 = null;
 		private Drawing.Image img4 = null;
-
-		#region Colors and Brushes
-
-		private Color bgColor;
-		private Color bgdefColor;
-		private Color bgClickColor;
-		private Color fgColor;
-		private Color borderColor;
-		private Color selectionColor;
-		private Color keywordColor;
-		private Brush bgBrush;
-		private Brush bgdefBrush;
-		private Brush bgClickBrush;
-		private Brush fgBrush;
-		private Brush borderBrush;
-		private Brush selectionBrush;
-		private Brush keywordBrush;
-
-		#endregion
-
+		private string []     themes;
 
 		#region Initialization
 
@@ -64,7 +47,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
 			CLI_Actions.ifHasSticker = ifHasSticker;
 			CLI_Actions.ifDoesntHaveSticker = ifDoesntHaveSticker;
-
+			CLI_Actions.SaveInExport = SaveInExport;
+			CLI_Actions.showSuccess = FinishExport;
+			CLI_Actions.showError = ErrorExport;
+			CLI_Actions.hasProblem = hasProblem;
+			
 			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
 			highlighter.InitializeSyntax ();
@@ -75,7 +62,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			CLI.load_schemes ();
 			Themes.Items.Clear ();
-			foreach (string theme in CLI.schemes.ToArray ())
+			themes = CLI.schemes.ToArray ();
+			foreach (string theme in themes)
 			{
 				Themes.Items.Add (theme);
 			}
@@ -160,38 +148,53 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void AddTheme ()
 		{
-			AddThemeWindow themeWindow = new AddThemeWindow
+			ThemeAddition res = WPFHelper.AddTheme (this, Themes.SelectedItem.ToString ());
+			if (res.save != null && (bool)res.save)
 			{
-				Background = bgBrush,
-				Foreground = fgBrush,
-				Tag = Tag,
-				Owner = this
-			};
-			themeWindow.TName.Background = bgdefBrush;
-			themeWindow.TName.Foreground = fgBrush;
-			
-			themeWindow.AddThemes ();
+				if (res.result == 1)
+				{
+					List <string> customThemes = new List <string> (); 
+					
+					foreach (string item in themes)
+					{
+						if (!CLI.isDefaultTheme [item])
+						{
+							customThemes.Add (item);
+						}
+					}
+					customThemes.Add (res.to);
+					customThemes.Sort ();
+					int index = customThemes.IndexOf (res.to);
+					int index2 = 0;
 
-			bool? dialog = themeWindow.ShowDialog ();
-			if (dialog != null && (bool)dialog)
-			{
-				MessageBox.Show (string.Format("Saved: {0} -> {1}", themeWindow.Themes.SelectedItem.ToString (), themeWindow.TName.Text));
-			} else
-			{
-				MessageBox.Show ("Canceled");
+					if (index >= 1)
+					{
+						string prevTheme = customThemes [index - 1];
+						index2 = Array.IndexOf (themes, prevTheme) + 1;
+					} else
+					{
+						int mx = customThemes.Count > 2 ? 1 : 0;
+						string prevTheme = CLI.schemes [CLI.schemes.IndexOf (customThemes [mx]) - 1];
+						index2 = Array.IndexOf (themes, prevTheme) + 1;
+					}
+
+					Themes.Items.Insert (index2, res.to);
+					Themes.SelectedIndex = index2;
+					themes = CLI.schemes.ToArray ();
+				}
 			}
 		}
+		
 		private void ManageThemes ()
 		{
 			ManageThemesWindow themesWindow = new ManageThemesWindow
 			{
-				Background = bgBrush,
-				Foreground = fgBrush,
+				Background = WPFHelper.bgBrush,
+				Foreground = WPFHelper.fgBrush,
 				Tag = Tag,
 				Owner = this
 			};
 			
-
 			bool? dialog = themesWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)
 			{
@@ -277,36 +280,26 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void updateColors ()
 		{
-			bgColor = Helper.bgColor.ToWPFColor ();
-			bgdefColor = Helper.bgdefColor.ToWPFColor ();
-			bgClickColor = Helper.bgClick.ToWPFColor ();
-			fgColor = Helper.fgColor.ToWPFColor ();
-			borderColor = Helper.bgBorder.ToWPFColor ();
-			selectionColor = Helper.selectionColor.ToWPFColor ();
-			keywordColor = Helper.fgKeyword.ToWPFColor ();
-			bgBrush = bgColor.ToBrush ();
-			bgdefBrush = bgdefColor.ToBrush ();
-			bgClickBrush = bgClickColor.ToBrush ();
-			fgBrush = fgColor.ToBrush ();
-			borderBrush = borderColor.ToBrush ();
-			selectionBrush = selectionColor.ToBrush ();
-			keywordBrush = keywordColor.ToBrush ();
+			WPFHelper.bgColor = Helper.bgColor.ToWPFColor ();
+			WPFHelper.bgdefColor = Helper.bgdefColor.ToWPFColor ();
+			WPFHelper.bgClickColor = Helper.bgClick.ToWPFColor ();
+			WPFHelper.fgColor = Helper.fgColor.ToWPFColor ();
+			WPFHelper.borderColor = Helper.bgBorder.ToWPFColor ();
+			WPFHelper.selectionColor = Helper.selectionColor.ToWPFColor ();
+			WPFHelper.keywordColor = Helper.fgKeyword.ToWPFColor ();
+			WPFHelper.bgBrush = WPFHelper.bgColor.ToBrush ();
+			WPFHelper.bgdefBrush = WPFHelper.bgdefColor.ToBrush ();
+			WPFHelper.bgClickBrush = WPFHelper.bgClickColor.ToBrush ();
+			WPFHelper.fgBrush = WPFHelper.fgColor.ToBrush ();
+			WPFHelper.borderBrush = WPFHelper.borderColor.ToBrush ();
+			WPFHelper.selectionBrush = WPFHelper.selectionColor.ToBrush ();
+			WPFHelper.keywordBrush = WPFHelper.keywordColor.ToBrush ();
 
-			Background = bgBrush;
-			Foreground = fgBrush;
-			ImagePath.Background = bgdefBrush;
-			StyleConfig config = new StyleConfig
-			{
-				BorderColor = borderColor,
-				SelectionColor = selectionColor,
-				KeywordColor = keywordColor,
-				BorderBrush = borderBrush,
-				SelectionBrush = selectionBrush,
-				KeywordBrush = keywordBrush,
-				BackgroundClickBrush = bgClickBrush
-			};
+			Background = WPFHelper.bgBrush;
+			Foreground = WPFHelper.fgBrush;
+			ImagePath.Background = WPFHelper.bgdefBrush;
+			StyleConfig config = WPFHelper.GenerateTag;
 			Window.Tag = config;
-			// MessageBox.Show (Themes.Tag.GetType ().ToString ());
 		}
 
 		private void bgImagePaint (object sender, PaintEventArgs e)
@@ -352,6 +345,30 @@ namespace Yuki_Theme.Core.WPF.Windows
 			// sttext = "";
 		}
 
+		public void hasProblem (string content)
+		{
+			MessageBox.Show (
+				content, CLI.Translate ("messages.theme.invalid.short"), MessageBoxButton.OK, MessageBoxImage.Error);
+			Themes.SelectedIndex = 0;
+		}
+
+		public bool SaveInExport (string content, string title)
+		{
+			return MessageBox.Show (content, title,
+			                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+		}
+
+		public void FinishExport (string content, string title)
+		{
+			MessageBox.Show (content, title);
+		}
+
+		public void ErrorExport (string content, string title)
+		{
+			MessageBox.Show (content, title, MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		
 		#endregion
 
 
