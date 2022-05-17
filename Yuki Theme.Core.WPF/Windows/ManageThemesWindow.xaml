@@ -29,6 +29,17 @@
     </Window.Resources>
     <Grid Margin="5 0">
         <Grid.Resources>
+            <Style x:Key="FocusVisual">
+                <Setter Property="Control.Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Rectangle Margin="2" SnapsToDevicePixels="true" x:Name="Rd"
+                                       Stroke="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}, Path=Tag.KeywordBrush}"
+                                       StrokeThickness="1" StrokeDashArray="1 2" />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style x:Key="ThemeManager" TargetType="{x:Type controls:ManageableItem}">
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Padding" Value="8,1" />
@@ -112,9 +123,12 @@
                              SelectionChanged="Schemes_OnSelectionChanged">
         </controls:Manageable>
         <StackPanel Grid.Row="1" HorizontalAlignment="Left" Orientation="Horizontal">
-            <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0" Click="AddButton_OnClick" />
-            <Button Name="RemoveButton" Style="{StaticResource Button24}" VerticalAlignment="Top" BorderThickness="0" Click="RemoveButton_OnClick" />
-            <Button Name="RenameButton" Style="{StaticResource Button24}" VerticalAlignment="Top" BorderThickness="0" Click="RenameButton_OnClick" />
+            <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0"
+                    Click="AddButton_OnClick" />
+            <Button Name="RemoveButton" Style="{StaticResource Button24}" VerticalAlignment="Top" BorderThickness="0"
+                    Click="RemoveButton_OnClick" Visibility="Hidden" />
+            <Button Name="RenameButton" Style="{StaticResource Button24}" VerticalAlignment="Top" BorderThickness="0"
+                    Click="RenameButton_OnClick" Visibility="Hidden" />
         </StackPanel>
     </Grid>
 </Window>

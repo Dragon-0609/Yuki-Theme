@@ -31,6 +31,8 @@
                     Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/ToolTipStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -71,6 +73,12 @@
                         <Setter Property="Margin" Value="15 10 5 5" />
                     </Style>
 
+                    <Style x:Key="ToolTipBlocks" TargetType="TextBlock">
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Margin" Value="0,0,0,5" />
+                    </Style>
+
                 </WrapPanel.Resources>
 
                 <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top"
@@ -78,14 +86,117 @@
                           Foreground="{Binding ElementName=Window, Path=Foreground}" Tag="{Binding ElementName=Window, Path=Tag}">
                 </ComboBox>
 
-                <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0" Click="AddButton_OnClick" />
-                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" Click="ManageButton_OnClick" />
-                <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
-                <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" Click="RestoreButton_OnClick" />
-                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
-                <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
-                <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
-                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}" />
+                <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0"
+                        Click="AddButton_OnClick" ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Add Theme</TextBlock>
+                            <TextBlock>
+                                Add theme by copying from another
+                                <LineBreak />
+                                theme.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        Click="ManageButton_OnClick" ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Manage Themes</TextBlock>
+                            <TextBlock>
+                                Open Theme Manager to manage themes.
+                                <LineBreak />
+                                To Add, Remove, Rename themes.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Save the Theme</TextBlock>
+                            <TextBlock>
+                                Save current theme.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750"
+                        Click="RestoreButton_OnClick">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Restore the Theme</TextBlock>
+                            <TextBlock>
+                                Restore the Theme to default
+                                <LineBreak />
+                                case. You can use it if you
+                                <LineBreak />
+                                changed wrong field.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Export the Theme</TextBlock>
+                            <TextBlock>
+                                Export the Theme to PascalABC.NET.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Import Theme</TextBlock>
+                            <TextBlock>
+                                Import theme from file.
+                                <LineBreak />
+                                Acceptable extensions:
+                                <LineBreak />
+                                .yukitheme, .json, .xshd
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Import Theme Directory</TextBlock>
+                            <TextBlock>
+                                Same as Import Theme, but
+                                <LineBreak />
+                                import from the directory.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}">Settings</TextBlock>
+                            <TextBlock>
+                                Change Settings.
+                            </TextBlock>
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
 
                 <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
                     <Grid.Resources>
@@ -150,7 +261,8 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Width="120" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center" BorderBrush="DimGray" Padding="2 1" Foreground="{Binding ElementName=Window, Path=Foreground}" />
+                            <TextBox Width="120" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center"
+                                     BorderBrush="DimGray" Padding="2 1" Foreground="{Binding ElementName=Window, Path=Foreground}" />
                             <Button Name="ImagePathButton" Margin="-1 5 5 0" Width="20" Height="20" />
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">

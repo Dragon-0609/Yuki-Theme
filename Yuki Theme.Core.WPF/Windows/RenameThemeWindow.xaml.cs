@@ -12,14 +12,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			InitializeComponent ();
 			WPFHelper.windowForDialogs = this;
-			WPFHelper.checkDialog = TryToAdd;
+			WPFHelper.checkDialog = TryToRename;
+		}
+
+		private void Initialization (object sender, RoutedEventArgs e)
+		{
 			ChangeDialogButtons ();
 		}
 
 		public void SetColors (Brush bg, Brush fg)
 		{
 			Background = FName.Background = TName.Background = bg;
-			Foreground = FName.Foreground = TName.Foreground = bg;
+			Foreground = FName.Foreground = TName.Foreground = fg;
 		}
 		
 		private void ChangeDialogButtons ()
@@ -28,7 +32,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			saveBtn.Content = "Rename";
 		}
 		
-		private bool TryToAdd ()
+		private bool TryToRename ()
 		{
 			bool canReturn = false;
 

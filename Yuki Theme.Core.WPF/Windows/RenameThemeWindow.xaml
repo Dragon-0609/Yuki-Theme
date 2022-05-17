@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
+        Loaded="Initialization"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Title="Add Theme" Width="300" Style="{DynamicResource SLayer}">
     <Window.Tag>
@@ -30,7 +31,7 @@
         </ResourceDictionary>
 
     </Window.Resources>
-    <Grid>
+    <Grid Margin="0 0 0 -30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -43,7 +44,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Copy from: " VerticalAlignment="Center" HorizontalAlignment="Center" />
 
         <TextBox Grid.Row="0" Grid.Column="1" Height="Auto" Text="" VerticalAlignment="Center" Margin="0 5 10 5"
-                 BorderBrush="DimGray" Padding="2 1" x:Name="FName" />
+                 BorderBrush="DimGray" Padding="2 1" x:Name="FName" IsReadOnly="True" IsReadOnlyCaretVisible="False" />
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Copy to: " VerticalAlignment="Center" HorizontalAlignment="Center" />
 

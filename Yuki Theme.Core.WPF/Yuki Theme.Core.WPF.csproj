@@ -100,6 +100,7 @@
         <Page Include="Styles\ListViewStyles.xaml" />
         <Page Include="Styles\SliderStyles.xaml" />
         <Page Include="Styles\TextBoxStyles.xaml" />
+        <Page Include="Styles\ToolTipStyles.xaml" />
         <Page Include="Styles\WindowTemplate.xaml" />
         <Page Include="Windows\AddThemeWindow.xaml" />
         <Page Include="Windows\MainWindow.xaml">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -127,7 +128,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void RemoveButton_OnClick (object sender, RoutedEventArgs e)
 		{
-			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item)
+			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item && !item.IsGroup)
 			{
 				CLI.remove (item.Content.ToString (), askDelete, afterAsk, afterDelete);
 			}
@@ -135,9 +136,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void RenameButton_OnClick (object sender, RoutedEventArgs e)
 		{
-			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item)
+			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item && !item.IsGroup)
 			{
-				ThemeAddition result = ShowRenameDialog ();
+				ThemeAddition result = ShowRenameDialog (item);
 				if (result.save != null && (bool)result.save)
 				{
 					RenameTheme (result);
@@ -145,7 +146,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		private ThemeAddition ShowRenameDialog ()
+		private ThemeAddition ShowRenameDialog (ManageableItem item)
 		{
 			RenameThemeWindow rename = new RenameThemeWindow ()
 			{
@@ -153,6 +154,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Owner = this
 			};
 			rename.SetColors (WPFHelper.bgBrush, WPFHelper.fgBrush);
+			rename.FName.Text = item.Content.ToString ();
 			bool? dialog = rename.ShowDialog ();
 			WPFHelper.windowForDialogs = null;
 			WPFHelper.checkDialog = null;
@@ -191,19 +193,21 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void RenameTheme (ThemeAddition res)
 		{
-			/*ManageableItem group = groupItems ["custom"];
-			ManageableItem theme = new ManageableItem (res.to, res.to, false, true, group);
-			int index = group.children.FindIndex (op => op.Content.ToString () == theme.Content.ToString ());
-			ManageableItem prevTheme;
-			prevTheme = index > 0 ? group.children [index - 1] : group;
+			ManageableItem group = groupItems ["custom"];
+			ManageableItem old = group.children.Find (op => op.Content.ToString () == res.from);
+			Schemes.Items.Remove (old);
+			old.Content = old.Tag = res.to;
+			group.children = group.children.OrderBy (t => t.Content.ToString ()).ToList ();
+			int index = group.children.FindIndex (op => op.Content == old.Content);
+			ManageableItem prevTheme = index > 0 ? group.children [index - 1] : group;
 			int indx = Schemes.Items.IndexOf (prevTheme);
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {index}");
 			} else
 			{
-				Schemes.Items.Insert (indx + 1, theme);
-			}*/
+				Schemes.Items.Insert (indx + 1, old);
+			}
 		}
 
 		public bool askDelete (string content, string title)
