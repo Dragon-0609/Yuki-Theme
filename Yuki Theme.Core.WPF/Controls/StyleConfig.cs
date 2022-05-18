@@ -16,6 +16,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public System.Windows.Media.Color KeywordColor { get; set; }
 		public Brush KeywordBrush { get; set; }
 		
+		public System.Windows.Media.Color BackgroundClickColor { get; set; }
+		
 		public Brush BackgroundClickBrush { get; set; }
 	}
 }

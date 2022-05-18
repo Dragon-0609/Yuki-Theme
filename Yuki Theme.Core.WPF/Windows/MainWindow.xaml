@@ -15,7 +15,7 @@
 
     <Window.Tag>
         <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" />
+                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F" BackgroundClickBrush="#FF4F4F4F" />
     </Window.Tag>
 
     <Window.Resources>
@@ -186,7 +186,7 @@
                 </Button>
 
                 <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750" Click="SettingsButton_OnClick">
                     <Button.ToolTip>
                         <StackPanel>
                             <TextBlock Style="{StaticResource ToolTipBlocks}">Settings</TextBlock>

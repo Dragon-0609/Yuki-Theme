@@ -205,6 +205,20 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
+		
+		private void OpenSettings ()
+		{
+			AboutWindow settingsWindow = new AboutWindow
+			{
+				Background = WPFHelper.bgBrush,
+				Foreground = WPFHelper.fgBrush,
+				Tag = Tag,
+				Owner = this
+			};
+			
+			settingsWindow.ShowDialog ();
+		}
+
 		private void Restore ()
 		{
 			CLI.restore (false, null);
@@ -501,6 +515,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 			ManageThemes ();
 		}
 
+		private void SettingsButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			OpenSettings ();
+		}
 		#endregion
 
 	}

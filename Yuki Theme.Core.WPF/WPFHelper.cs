@@ -48,6 +48,7 @@ namespace Yuki_Theme.Core.WPF
 			BorderBrush = borderBrush,
 			SelectionBrush = selectionBrush,
 			KeywordBrush = keywordBrush,
+			BackgroundClickColor = bgClickColor,
 			BackgroundClickBrush = bgClickBrush
 		};
 
@@ -115,6 +116,11 @@ namespace Yuki_Theme.Core.WPF
 			return bi;
 		}
 
+		public static int ToInt (this double d)
+		{
+			return Convert.ToInt32 (d);
+		}
+		
 
 		[DllImport ("gdi32.dll", EntryPoint = "DeleteObject")]
 		[return: MarshalAs (UnmanagedType.Bool)]

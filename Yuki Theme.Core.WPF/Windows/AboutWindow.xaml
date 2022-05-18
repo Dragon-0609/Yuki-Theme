@@ -1,0 +1,123 @@
+﻿<Window x:Class="Yuki_Theme.Core.WPF.Windows.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
+        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+        mc:Ignorable="d"
+        Background="#212121" Foreground="#DDDDDD"
+        Loaded="AboutWindow_OnLoaded"
+        SizeToContent="Manual"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Title="AboutWindow" Height="500" Width="300">
+    <Window.Tag>
+        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
+                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F"
+                              BackgroundClickBrush="#FF4F4F4F" />
+    </Window.Tag>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/LinkStyles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Width="0" Margin="0" Name="ChangeLog">
+
+        </Grid>
+
+        <Grid Grid.Column="1" Width="300" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Image Grid.Row="0" Name="Logo" Width="150" Height="150" HorizontalAlignment="Center" />
+            <TextBlock Grid.Row="1" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Top">Yuki Theme</TextBlock>
+            <TextBlock Grid.Row="2" Name="Version" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top">version: 1.0</TextBlock>
+
+            <Grid Grid.Row="3" Margin=" 5 5 20 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="16" Margin="0 0 10 0">Inspired by: </TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="16">
+                    <Hyperlink NavigateUri="https://github.com/doki-theme/doki-theme-jetbrains" RequestNavigate="OpenLink">The Doki Theme</Hyperlink>
+                </TextBlock>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="16">Used: </TextBlock>
+                <ScrollViewer Grid.Row="1" Grid.Column="1" FontSize="14" Padding="2 2 20 2" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/PavelTorgashov/FastColoredTextBox" RequestNavigate="OpenLink">Fast Colored Text Box</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker" RequestNavigate="OpenLink">Cyotek ColorPicker</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/JamesNK/Newtonsoft.Json" RequestNavigate="OpenLink">Newtonsoft.Json</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/svg-net/SVG" RequestNavigate="OpenLink">SVG.NET</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://www.nuget.org/packages/WindowsAPICodePack" RequestNavigate="OpenLink">WindowsAPICodePack</Hyperlink>
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap">
+                            <Hyperlink NavigateUri="https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/"
+                                       RequestNavigate="OpenLink">
+                                MechanikaDesign.WinForms.UI.ColorPicker
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://github.com/Knagis/CommonMark.NET" RequestNavigate="OpenLink">CommonMark.NET</Hyperlink>
+                        </TextBlock>
+                        <TextBlock>
+                            <Hyperlink NavigateUri="https://jetbrains.design/intellij/resources/icons_list/" RequestNavigate="OpenLink">JetBrains Icons</Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="10 5 20 5">
+                <Button HorizontalAlignment="Left" Click="ToggleChangelog">Changelog</Button>
+                <Button HorizontalAlignment="Right" Click="ToggleLicense">License</Button>
+            </Grid>
+
+
+            <Button Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10 5 20 10" IsCancel="True">Close</Button>
+        </Grid>
+
+        <Grid Grid.Column="2" Width="0" Margin="0" Name="License">
+            
+        </Grid>
+
+    </Grid>
+</Window>

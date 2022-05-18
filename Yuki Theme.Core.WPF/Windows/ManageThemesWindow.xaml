@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
-        ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Loaded="Initialize"
         Name="Window"
         Title="Theme Manager" Width="300" Style="{DynamicResource SLayer}">
