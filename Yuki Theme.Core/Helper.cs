@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -164,17 +165,33 @@ namespace Yuki_Theme.Core
 
 		public static Tuple <bool, string> GetTheme (string path)
 		{
+			bool isZip = false;
+
+			using (Stream stream = File.OpenRead (path))
+			{
+				isZip = ZipVerificator.IsZip (stream);
+			}
+			Console.WriteLine("Helper.IsZIP: {0}", isZip);
 			try
 			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				if (isZip)
 				{
-					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					else
-						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+					using (ZipArchive zipFile = ZipFile.OpenRead (path))
+					{
+						if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
+							return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+						else
+							return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+					}
 				}
-			} catch (InvalidDataException)
+				else
+				{
+					string data = File.ReadAllText (path);
+					return new Tuple <bool, string> (false, data);	
+				}
+			} catch
 			{
+				Console.WriteLine("{0} - isn't zip", path);
 				string data = File.ReadAllText (path);
 				
 				return new Tuple <bool, string> (false, data);
@@ -764,7 +781,7 @@ namespace Yuki_Theme.Core
 
         public static bool VerifyToken (Theme theme)
         {
-	        if (theme != null)
+	        if (theme != null && theme.Token != null)
 	        {
 		        string token = theme.Token;
 		        Console.WriteLine("Name: {0}", theme.Name);
@@ -846,6 +863,58 @@ namespace Yuki_Theme.Core
 
 		}
 
+	}
+	
+	internal class ZipVerificator
+	{
+		private const int    ZIP_LEAD_BYTES  = 0x04034b50;
+		private const ushort GZIP_LEAD_BYTES = 0x8b1f;
+
+		internal static bool IsPkZipCompressedData(byte[] data)
+		{
+			Debug.Assert(data != null && data.Length >= 4);
+			// if the first 4 bytes of the array are the ZIP signature then it is compressed data
+			return (BitConverter.ToInt32(data, 0) == ZIP_LEAD_BYTES);
+		}
+
+		internal static bool IsGZipCompressedData(byte[] data)
+		{
+			Debug.Assert(data != null && data.Length >= 2);
+			// if the first 2 bytes of the array are theG ZIP signature then it is compressed data;
+			return (BitConverter.ToUInt16(data, 0) == GZIP_LEAD_BYTES);
+		}
+
+		public static bool IsCompressedData(byte[] data)
+		{
+			return IsPkZipCompressedData(data) || IsGZipCompressedData(data);
+		}
+
+		public static bool IsZip(Stream stream)
+		{
+			bool isZip = false;
+			Debug.Assert(stream != null);
+			Debug.Assert(stream.CanSeek);
+			stream.Seek(0, 0);
+
+			try
+			{
+				byte[] bytes = new byte[4];
+
+				stream.Read(bytes, 0, 4);
+
+				if (IsGZipCompressedData(bytes))
+					isZip = true;
+
+				if (IsPkZipCompressedData (bytes))
+					isZip = true;
+			}
+			finally
+			{
+				stream.Seek(0, 0); // set the stream back to the begining
+			}
+
+			return isZip;
+		}
 	}
 	
 }

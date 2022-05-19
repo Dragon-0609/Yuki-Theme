@@ -301,7 +301,8 @@ namespace Yuki_Theme.Core.Formats
 			bool valid = false;
 			string json = loadThemeToPopulate (path, false, false, Helper.FILE_EXTENSTION_NEW);
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
-			valid = Helper.VerifyToken (theme);
+			if (theme != null)
+				valid = Helper.VerifyToken (theme);
 			return valid;
 		}
 	}

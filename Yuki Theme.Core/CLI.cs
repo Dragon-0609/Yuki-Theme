@@ -407,6 +407,7 @@ namespace Yuki_Theme.Core
 			if (currentTheme.Fields != null)
 				currentTheme.Fields.Clear ();
 			names.Clear ();
+			Console.WriteLine ("\nCLI.NameToLoad: {0}", nameToLoad);
 			populateList (onSelect);
 			if (wantClean)
 			{
@@ -871,7 +872,7 @@ namespace Yuki_Theme.Core
 
 		private static void LoadSchemesByExtension (string extension)
 		{
-			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes/"), "*" + extension, SearchOption.TopDirectoryOnly))
+			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes"), "*" + extension, SearchOption.TopDirectoryOnly))
 			{
 				string pts = Path.GetFileNameWithoutExtension (file);
 				

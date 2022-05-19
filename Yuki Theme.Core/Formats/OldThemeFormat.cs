@@ -307,6 +307,7 @@ namespace Yuki_Theme.Core.Formats
 		                                        ref Theme       themeToSet, string extension,
 		                                        bool            customNameForMemory, bool needToSetDefaultField)
 		{
+			Console.WriteLine("OldTheme.From Assembly: {0}", isDefault);
 			if (isDefault)
 			{
 				Assembly a;
@@ -331,6 +332,7 @@ namespace Yuki_Theme.Core.Formats
 				}
 
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
+				Console.WriteLine ("IsZIP: {0}", content.Item1);
 				themeToSet.fullPath = pathForMemory;
 				if (needToSetDefaultField)
 					themeToSet.isDefault = true;
@@ -410,13 +412,32 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
+				Tuple <bool, string> content;
+				try
+				{
+					content = Helper.GetTheme (pathToTheme);
+				} catch
+				{
+					string text = File.ReadAllText (pathToTheme);
+					Console.WriteLine ("Text: {0}", text);
+					content = new Tuple <bool, string> (false, text);
+				}
+				Console.WriteLine ("OldTheme.IsZIP: {0}", content.Item1);
 				if (needToSetDefaultField)
 					themeToSet.isDefault = false;
 				themeToSet.fullPath = pathToTheme;
 				if (content.Item1)
 				{
-					doc.LoadXml (content.Item2);
+					try
+					{
+						doc.LoadXml (content.Item2);
+					} catch (XmlException)
+					{
+						if (CLI_Actions.hasProblem != null)
+							CLI_Actions.hasProblem (
+								CLI.Translate ("messages.theme.invalid.full"));
+						throw;
+					}
 					Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
 					if (needToDoActions)
 					{
@@ -485,7 +506,7 @@ namespace Yuki_Theme.Core.Formats
 
 					try
 					{
-						doc.Load (pathToTheme);
+						doc.LoadXml (content.Item2);
 					} catch (XmlException)
 					{
 						if (CLI_Actions.hasProblem != null)
@@ -588,9 +609,11 @@ namespace Yuki_Theme.Core.Formats
 			bool fromAssembly = CLI.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
 			
 			string path = Helper.ConvertNameToPath (name);
-			Theme theme = new Theme ();
-			theme.isDefault = isDef;
-			theme.Name = name;
+			Theme theme = new Theme
+			{
+				isDefault = isDef,
+				Name = name
+			};
 			var doc = new XmlDocument ();
 			try
 			{
@@ -598,6 +621,7 @@ namespace Yuki_Theme.Core.Formats
 				                     Helper.FILE_EXTENSTION_OLD, false, false);
 			} catch
 			{
+				Console.WriteLine("OldTheme.Loading Theme failed");
 				return null;
 			}
 
@@ -635,8 +659,9 @@ namespace Yuki_Theme.Core.Formats
 			CLI.currentTheme = theme;
 			if (theme == null)
 			{
-				MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
-				                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Console.WriteLine("Theme is null");
+				/*MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
+				                 MessageBoxButtons.OK, MessageBoxIcon.Error);*/
 			}
 		}
 
@@ -810,18 +835,18 @@ namespace Yuki_Theme.Core.Formats
 			try
 			{
 				Console.WriteLine("Loading theme: {0}", path);
-				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
+				// loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
+				// Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+				// theme.SetAdditionalInfo (additionalInfo);
+				// theme.Name = GetThemeName (doc);
+				// Console.WriteLine("Theme name: {0}", theme.Name);
+				// valid = Helper.VerifyToken (theme);
+				// Console.WriteLine("Theme token: {0}", theme.Token);
+				// Console.WriteLine("IsValid: {0}\n", valid);
 			} catch
 			{
 				// ignored
 			}
-			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
-			theme.SetAdditionalInfo (additionalInfo);
-			theme.Name = GetThemeName (doc);
-			Console.WriteLine("Theme name: {0}", theme.Name);
-			valid = Helper.VerifyToken (theme);
-			Console.WriteLine("Theme token: {0}", theme.Token);
-			Console.WriteLine("IsValid: {0}\n", valid);
 			return valid;
 		}
 	}
