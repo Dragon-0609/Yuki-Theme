@@ -307,7 +307,6 @@ namespace Yuki_Theme.Core.Formats
 		                                        ref Theme       themeToSet, string extension,
 		                                        bool            customNameForMemory, bool needToSetDefaultField)
 		{
-			Console.WriteLine("OldTheme.From Assembly: {0}", isDefault);
 			if (isDefault)
 			{
 				Assembly a;
@@ -332,7 +331,6 @@ namespace Yuki_Theme.Core.Formats
 				}
 
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
-				Console.WriteLine ("IsZIP: {0}", content.Item1);
 				themeToSet.fullPath = pathForMemory;
 				if (needToSetDefaultField)
 					themeToSet.isDefault = true;
@@ -412,17 +410,7 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				Tuple <bool, string> content;
-				try
-				{
-					content = Helper.GetTheme (pathToTheme);
-				} catch
-				{
-					string text = File.ReadAllText (pathToTheme);
-					Console.WriteLine ("Text: {0}", text);
-					content = new Tuple <bool, string> (false, text);
-				}
-				Console.WriteLine ("OldTheme.IsZIP: {0}", content.Item1);
+				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
 				if (needToSetDefaultField)
 					themeToSet.isDefault = false;
 				themeToSet.fullPath = pathToTheme;
@@ -506,7 +494,7 @@ namespace Yuki_Theme.Core.Formats
 
 					try
 					{
-						doc.LoadXml (content.Item2);
+						doc.Load (pathToTheme);
 					} catch (XmlException)
 					{
 						if (CLI_Actions.hasProblem != null)
@@ -617,11 +605,12 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, fromAssembly ? name : CLI.pathToFile (path, false), ToCLI, fromAssembly, ref theme,
+				loadThemeToPopulate (ref doc, fromAssembly ? name : CLI.pathToFile (path, true), ToCLI, fromAssembly, ref theme,
 				                     Helper.FILE_EXTENSTION_OLD, false, false);
-			} catch
+			} catch (Exception e)
 			{
 				Console.WriteLine("OldTheme.Loading Theme failed");
+				Console.WriteLine ("{0}\n{1}", e.Message, e.StackTrace);
 				return null;
 			}
 
@@ -835,14 +824,14 @@ namespace Yuki_Theme.Core.Formats
 			try
 			{
 				Console.WriteLine("Loading theme: {0}", path);
-				// loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
-				// Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
-				// theme.SetAdditionalInfo (additionalInfo);
-				// theme.Name = GetThemeName (doc);
-				// Console.WriteLine("Theme name: {0}", theme.Name);
-				// valid = Helper.VerifyToken (theme);
-				// Console.WriteLine("Theme token: {0}", theme.Token);
-				// Console.WriteLine("IsValid: {0}\n", valid);
+				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
+				Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+				theme.SetAdditionalInfo (additionalInfo);
+				theme.Name = GetThemeName (doc);
+				Console.WriteLine("Theme name: {0}", theme.Name);
+				valid = Helper.VerifyToken (theme);
+				Console.WriteLine("Theme token: {0}", theme.Token);
+				Console.WriteLine("IsValid: {0}\n", valid);
 			} catch
 			{
 				// ignored

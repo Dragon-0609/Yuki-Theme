@@ -897,8 +897,8 @@ namespace Yuki_Theme.Core.Forms
 					}
 
 					restore_Click (sender, e);
-
-					save_button.Visible = !isDefault ();
+					if (CLI.currentTheme != null)
+						save_button.Visible = !isDefault ();
 
 					selectedItem = schemes.SelectedItem.ToString ();
 					database.UpdateData (Settings.ACTIVE, selectedItem);

@@ -165,54 +165,43 @@ namespace Yuki_Theme.Core
 
 		public static Tuple <bool, string> GetTheme (string path)
 		{
-			bool isZip = false;
-
-			using (Stream stream = File.OpenRead (path))
-			{
-				isZip = ZipVerificator.IsZip (stream);
-			}
-			Console.WriteLine("Helper.IsZIP: {0}", isZip);
+			Tuple <bool, string> result;
 			try
 			{
-				if (isZip)
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
 				{
-					using (ZipArchive zipFile = ZipFile.OpenRead (path))
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
 					{
-						if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-							return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-						else
-							return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
-					}
-				}
-				else
-				{
-					string data = File.ReadAllText (path);
-					return new Tuple <bool, string> (false, data);	
+						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
 				}
 			} catch
 			{
 				Console.WriteLine("{0} - isn't zip", path);
-				string data = File.ReadAllText (path);
-				
-				return new Tuple <bool, string> (false, data);
+				result = new Tuple <bool, string> (false, "");
 			}
+			return result;
 		}
 
 		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
 		{
+			Tuple <bool, string> result;
 			try
 			{
 				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
 				{
 					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					else
-						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+					{
+						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
 				}
 			} catch (InvalidDataException)
 			{
-				return new Tuple <bool, string> (false, "");
+				result = new Tuple <bool, string> (false, "");
 			}
+			return result;
 		}
 
 		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)

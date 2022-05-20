@@ -420,6 +420,7 @@ namespace Yuki_Theme.Core
 		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
 		/// </summary>
 		/// <param name="onSelect">Action, after populating list</param>
+		/// <returns>True -> Valid, False -> Invalid</returns>
 		public static void populateList (Action onSelect = null)
 		{
 			if (ThemeInfos[nameToLoad].isOld)
@@ -875,7 +876,7 @@ namespace Yuki_Theme.Core
 			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes"), "*" + extension, SearchOption.TopDirectoryOnly))
 			{
 				string pts = Path.GetFileNameWithoutExtension (file);
-				
+
 				bool isValidToken = VerifyToken (file);
 				
 				
