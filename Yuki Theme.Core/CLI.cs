@@ -420,7 +420,6 @@ namespace Yuki_Theme.Core
 		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
 		/// </summary>
 		/// <param name="onSelect">Action, after populating list</param>
-		/// <returns>True -> Valid, False -> Invalid</returns>
 		public static void populateList (Action onSelect = null)
 		{
 			if (ThemeInfos[nameToLoad].isOld)

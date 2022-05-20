@@ -49,6 +49,18 @@ namespace Yuki_Theme.Core.Themes
 		[JsonIgnore]
 		public string fullPath;
 
+		/// <summary>
+		/// Used for Downloading
+		/// </summary>
+		[JsonIgnore]
+		public string imagePath;
+
+		/// <summary>
+		/// Used for Downloading
+		/// </summary>
+		[JsonIgnore]
+		public string link;
+
 		[JsonIgnore]
 		public Alignment align => (Alignment)WallpaperAlign;
 

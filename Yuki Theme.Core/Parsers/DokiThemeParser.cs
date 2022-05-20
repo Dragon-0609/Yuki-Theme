@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			theme.ParseWallpaperAlign (json ["stickers"] ["default"] ["anchor"].ToString ());
 			theme.WallpaperOpacity = json ["stickers"] ["default"] ["opacity"].ToObject <int> ();
-
+			theme.imagePath = fname;
 			flname = theme.Name = ofname;
 			if (needToWrite)
 			{

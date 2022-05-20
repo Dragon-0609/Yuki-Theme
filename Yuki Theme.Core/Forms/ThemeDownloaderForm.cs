@@ -1,4 +1,4 @@
-﻿// #define PRIMARLY
+﻿#define PRIMARLY
 
 using System;
 using System.Collections.Generic;
@@ -46,6 +46,9 @@ public partial class ThemeDownloaderForm : Form
 	private const string LOCAL_API_SERVER  = "http://localhost:8000/branches.json";
 	private const string REMOTE_API_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
+	private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
+	private const string STICKER_SERVER    = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
+
 	public ThemeDownloaderForm ()
 	{
 		InitializeComponent ();
@@ -57,6 +60,7 @@ public partial class ThemeDownloaderForm : Form
 		Helper.fgColor = Color.FromArgb (240, 240, 240);
 		Helper.fgKeyword = Color.Green;
 		Helper.bgBorder = Color.FromArgb (252, 152, 252);
+		Settings.saveAsOld = true;
 #endif
 		ShowLoading ();
 
@@ -143,11 +147,14 @@ public partial class ThemeDownloaderForm : Form
 			                 MessageBoxIcon.Error);
 	}
 
-	private void ParseTheme (string json)
+	private void ParseTheme (string jsonMulti)
 	{
 		DokiThemeParser doki = new DokiThemeParser ();
 		doki.needToWrite = false;
+		string[] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
+		string json = multi [1];
 		doki.Parse (json, "none", "none", null, false, false, false);
+		doki.theme.link = multi [0];
 		themes.Add (doki.theme.Name, doki.theme);
 		LoadThemeIntoPage (doki.theme);
 	}
@@ -254,7 +261,7 @@ public partial class ThemeDownloaderForm : Form
 		{
 			using (var wc = new WebClient ())
 			{
-				return wc.DownloadString (url);
+				return url+"-|-"+wc.DownloadString (url);
 			}
 		} catch (Exception e)
 		{
@@ -263,6 +270,15 @@ public partial class ThemeDownloaderForm : Form
 		}
 	}
 
+	private Image DownloadImage (string url)
+	{
+		Console.WriteLine (url);
+		WebClient wc = new WebClient ();
+		byte [] bytes = wc.DownloadData (url);
+		MemoryStream ms = new MemoryStream (bytes);
+		Image img = Image.FromStream (ms);
+		return img;
+	}
 
 	private void LoadJSONS ()
 	{
@@ -337,6 +353,16 @@ public partial class ThemeDownloaderForm : Form
 		ParseAllThemes ();
 	}
 
+	private string GenerateStickerUrl (Theme theme)
+	{
+		string url = "";
+
+		string split = theme.link.Split (new string [] {"definitions/" }, StringSplitOptions.None)[1];
+		split = split.Substring (0, split.LastIndexOf ("/", StringComparison.Ordinal));
+		url = STICKER_SERVER + split + "/" + theme.imagePath;
+		return url;
+	}
+	
 	public void DownloadTheme (string name)
 	{
 		Console.WriteLine ("Downloading theme {0}", name);
@@ -352,17 +378,24 @@ public partial class ThemeDownloaderForm : Form
 				}
 			}
 
-			
 			Theme theme = themes [name];
+
+			Image wallpaper = DownloadImage (WALLPAPER_SERVER + theme.imagePath);
+			Image sticker = DownloadImage (GenerateStickerUrl (theme));
+			
+			
 			theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
 			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 			Console.WriteLine ("Token: {0}", theme.Token);
 			CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-			CLI.saveList (theme);
+			CLI.saveList (theme, wallpaper, sticker);
+			wallpaper.Dispose ();
+			sticker.Dispose ();
 		} catch (Exception e)
 		{
-			Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);	
+			Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
 		}
+
 		Console.WriteLine ("{0} has been saved", name);
 	}
 
@@ -391,6 +424,7 @@ public partial class ThemeDownloaderForm : Form
 			Console.WriteLine (first.Name + " - 2nd is null");
 			return false;
 		}
+
 		return first == second;
 	}
 }
