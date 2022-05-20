@@ -72,7 +72,7 @@ namespace Yuki_Theme.Core.Parsers
 					// Console.WriteLine ("{0} - {1}", cl.Name, attrs.Background);
 				}
 
-				Tuple <string, string> defaults = getDefault (cl.Name);
+				Tuple <string, string> defaults = getDefaultForeground (cl.Name);
 
 				if (defaults != null)
 				{
@@ -115,9 +115,6 @@ namespace Yuki_Theme.Core.Parsers
 				Foreground = df.Background,
 				Background = df.Background
 			});
-			ThemeField selectedF = theme.Fields ["SelectedFoldLine"].copyField ();
-			selectedF.Background = df.Background;
-			theme.Fields ["SelectedFoldLine"] = selectedF;
 			theme.Fields.Add ("FoldLine", new ThemeField
 			{
 				Foreground = df.Background
@@ -419,8 +416,9 @@ namespace Yuki_Theme.Core.Parsers
 
 		private void addDefaults (string st)
 		{
-			var dds = getName (st);
-			Tuple <string, string> defs = getDefault (st);
+			string[] dds = getName (st);
+			Tuple <string, string> defs = getDefaultForeground (st);
+			Tuple <string, bool> defaultBold = getDefaultBold (st);
 
 			foreach (var nm in dds)
 			{
@@ -428,9 +426,16 @@ namespace Yuki_Theme.Core.Parsers
 				{
 					ThemeField field = new ThemeField ();
 					field.SetAttributeByName (defs.Item1, defs.Item2);
+					if (defaultBold != null)
+						field.SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
 					theme.Fields.Add (nm, field);
 				} else if (theme.Fields [nm].isAttributeNull (defs.Item1))
+				{
 					theme.Fields [nm].SetAttributeByName (defs.Item1, defs.Item2);
+					
+					if (defaultBold != null && theme.Fields [nm].isAttributeNull (defaultBold.Item1))
+						theme.Fields [nm].SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
+				}
 			}
 		}
 
@@ -440,7 +445,10 @@ namespace Yuki_Theme.Core.Parsers
 		private readonly Dictionary <string, string> _defaultDarkForegroundColors = new Dictionary <string, string> ()
 			{ { "constantColor", "#86dbfd" }, { "foregroundColor", "#F8F8F2" }, { "comments", "#6272a4" } };
 
-		private Tuple <string, string> getDefault (string st)
+		private readonly Dictionary <string, bool> _defaultBold = new ()
+			{ { "comments", false } };
+
+		private Tuple <string, string> getDefaultForeground (string st)
 		{
 			Tuple <string, string> res = null;
 			if (_defaultForegroundColors.ContainsKey (st))
@@ -457,6 +465,17 @@ namespace Yuki_Theme.Core.Parsers
 			return res;
 		}
 
+		private Tuple <string, bool> getDefaultBold (string st)
+		{
+			Tuple <string, bool> res = null;
+			if (_defaultBold.ContainsKey (st))
+			{
+				res = new Tuple <string, bool> ("bold", _defaultBold [st]);
+			}
+
+			return res;
+		}
+
 		private bool canBold (string st)
 		{
 			bool res = false;
@@ -468,6 +487,7 @@ namespace Yuki_Theme.Core.Parsers
 				case "stringColor" :
 				case "keywordColor" :
 				case "keyColor" :
+				case "classNameColor" :
 				{
 					res = true;
 				}

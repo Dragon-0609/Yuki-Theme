@@ -146,8 +146,30 @@ namespace Yuki_Theme.Core.Themes
 		                                                 Dictionary <string, ThemeField>      otherDictionary)
 		{
 			bool equality = true;
-
+			
+			/*
 			foreach (KeyValuePair <string, ThemeField> pair in dictionary)
+			{
+				Console.WriteLine ("FIRST: {0} => {1}", pair.Key, pair.Value);
+			}*/
+			Dictionary <string, ThemeField> localDictionary;
+			if (Settings.settingMode == SettingMode.Light)
+			{
+				localDictionary = new Dictionary <string, ThemeField> ();
+				foreach (KeyValuePair <string, ThemeField> pair in dictionary)
+				{
+					string shadowName = ShadowNames.GetShadowName (pair.Key, SyntaxType.Pascal, true);
+					if (!localDictionary.ContainsKey (shadowName))
+					{
+						localDictionary.Add (shadowName, pair.Value);
+					}
+				}
+			} else
+			{
+				localDictionary = dictionary;
+			}
+			
+			foreach (KeyValuePair <string, ThemeField> pair in localDictionary)
 			{
 				if (otherDictionary.ContainsKey (pair.Key))
 				{
@@ -157,7 +179,7 @@ namespace Yuki_Theme.Core.Themes
 					equality = false;
 				}
 
-				Console.WriteLine (pair.Key + " = " + equality);
+				Console.WriteLine ("{0} -> {1} == {2} => {3}", pair.Key, pair.Value, otherDictionary.ContainsKey (pair.Key) ? otherDictionary [pair.Key] : "null", equality);
 				if (!equality)
 					break;
 			}

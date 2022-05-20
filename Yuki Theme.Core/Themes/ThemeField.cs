@@ -71,8 +71,13 @@ public class ThemeField
 	{
 		if (name == "color")
 			Foreground = value;
-		else
+		else if (name == "bgcolor")
 			Background = value;
+		else if (name == "bold")
+		{
+			Bold = bool.Parse (value);
+			Italic = bool.Parse (value);
+		}
 	}
 
 	public Dictionary <string, string> GetAttributes ()
@@ -126,7 +131,13 @@ public class ThemeField
 
 			case "bgcolor" :
 			{
-				res = Foreground == null;
+				res = Background == null;
+			}
+				break;
+
+			case "bold" :
+			{
+				res = Bold == null;
 			}
 				break;
 		}
@@ -200,7 +211,7 @@ public class ThemeField
 		bool equal = true;
 		if (Background != null)
 		{
-			equal = field.Background == null && Background == field.Background;
+			equal = field.Background != null && Background == field.Background;
 		}else if (field.Background != null)
 		{
 			equal = false;
@@ -210,7 +221,7 @@ public class ThemeField
 		{
 			if (Foreground != null)
 			{
-				equal = field.Foreground == null && Foreground == field.Foreground;
+				equal = field.Foreground != null && Foreground == field.Foreground;
 			}else if (field.Foreground != null)
 			{
 				equal = false;
@@ -221,7 +232,7 @@ public class ThemeField
 		{
 			if (Bold != null)
 			{
-				equal = field.Bold == null && Bold == field.Bold;
+				equal = field.Bold != null && Bold == field.Bold;
 			}else if (field.Bold != null)
 			{
 				equal = false;
@@ -232,7 +243,7 @@ public class ThemeField
 		{
 			if (Italic != null)
 			{
-				equal = field.Italic == null && Italic == field.Italic;
+				equal = field.Italic != null && Italic == field.Italic;
 			}else if (field.Italic != null)
 			{
 				equal = false;

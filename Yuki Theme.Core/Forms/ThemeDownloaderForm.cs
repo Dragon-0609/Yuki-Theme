@@ -1,4 +1,4 @@
-﻿#define PRIMARLY
+﻿// #define PRIMARLY
 
 using System;
 using System.Collections.Generic;
@@ -419,6 +419,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private bool IsEqual (Theme first, Theme second)
 	{
+		Console.WriteLine ("IsNULL: {0} = {1}", first is null ? "null" : first.Name, second is null ? "null" : second.Name);
 		if (second == null)
 		{
 			Console.WriteLine (first.Name + " - 2nd is null");
