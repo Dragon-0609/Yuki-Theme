@@ -128,6 +128,10 @@
         #progress-bar {
             /*transition: width 0.5s;*/
             background-color: __border__;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 120;
         }
     </style>
 </head>
@@ -135,7 +139,7 @@
 
 <div id="progress-bar" style="height: 5px; width: 0%;"></div>
 
-<div id="content">
+<div id="content" class="container-md">
     <h2 class="my-3 font-weight-normal text-center">
         The Doki Themes
     </h2>
@@ -145,7 +149,7 @@
         <div class="measuringWrapper">__branches__</div>
     </div>
     <a href="javascript:void(0);" onclick="DownloadAll()" class="btn btn-outline-info my-2">Download All Themes</a>
-    
+
     <div id="themes" class="row mx-0 row-cols-1 row-cols-sm-2">
         __content__
     </div>
@@ -156,14 +160,14 @@
         window.external.LoadBranch(name);
     }
 
-    function DownloadTheme(name){
+    function DownloadTheme(name) {
         window.external.DownloadTheme(name);
     }
-    
-    function DownloadAll(){
+
+    function DownloadAll() {
         window.external.DownloadAll();
     }
-    
+
     function growDiv() {
         let growDiv = document.getElementById('grow');
         if (growDiv.clientHeight) {
@@ -257,8 +261,17 @@
         mv.id = syntax;
         mv.classList.add("col");
         mv.classList.add("p-2");
-        if (canDownload !== "true")
+        let btnShow = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">' +
+            '<g fill-rule="evenodd">' +
+                '<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
+                '<rect width="12" height="2" x="2" y="12"/>' +
+            '</g></svg>';
+        if (canDownload !== "true") {
             mv.classList.add("deactive");
+            btnShow = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">' +
+                '<polygon fill="currentColor" points="13.789 2.09 15.535 3.837 6.292 13.08 1.95 8.738 3.698 6.99 6.293 9.585"/>' +
+                '</svg>';
+        }
         mv.innerHTML = "" +
             "\t\t\t<div class='themed-tab'>\n" +
             "\t\t\t\t<div class='text-center tab-header rounded-top-5'>" + nam + "</div>\n" +
@@ -302,12 +315,7 @@
             '\t\t\t\t\t<div class="hidden-hover justify-content-end position-relative">' +
             '\t\t\t\t\t\t<div class="d-flex">' +
             '\t\t\t\t\t\t\t<a class="ml-auto p-2 svg_fill downloader" href="javascript:void(0);" onclick="DownloadTheme(\'' + nam + '\')">' +
-            '\t\t\t\t\t\t\t\t<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">' +
-            '\t\t\t\t\t\t\t\t\t<g fill-rule="evenodd">' +
-            '\t\t\t\t\t\t\t\t\t\t<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
-            '\t\t\t\t\t\t\t\t\t\t<rect width="12" height="2" x="2" y="12"/>' +
-            '\t\t\t\t\t\t\t\t\t</g>' +
-            '\t\t\t\t\t\t\t\t</svg>' +
+             btnShow +
             '\t\t\t\t\t\t\t</a>' +
             '\t\t\t\t\t\t</div>' +
             '\t\t\t\t\t</div>' +
@@ -333,7 +341,7 @@
             "-webkit-box-shadow: 0px 0px 33px 2px " + borderColor + "; } \n" +
             km + " .method, " + km + " .svg_fill:hover { color: " + methodColor + " }\n" +
             km + " .beginend { color: " + beginEnd + "; }\n" +
-            km + ".deactive .downloader { color: " + bg + " !important; cursor: default; pointer-events: none; }\n" +
+            km + ".deactive .downloader { cursor: default; pointer-events: none; }\n" +
             km + " .string { color: " + stringColor + "; }\n" +
             km + " .tab-header { background-color: " + bg + "; }\n" +
             km + " .tab-strip { background-color: " + bgColor + "; }\n" +

@@ -10,13 +10,54 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public class DokiThemeParser : AbstractParser
 	{
-		private bool                        dark   = true;
-		private string                      curd   = "";
-		private string                      fname  = "";
-		private string                      ofname = "";
-		private string                      getWallpaper => Path.Combine (curd, fname);
-		private string                      getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		private bool   dark   = true;
+		private string curd   = "";
+		private string fname  = "";
+		private string ofname = "";
+		private string getWallpaper => Path.Combine (curd, fname);
+		private string getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		
 		public  Func <string, string, bool> exist;
+
+		public static Dictionary <string, string> Groups = new Dictionary <string, string> ()
+		{
+			{ "Kill la Kill", "KillLaKill: " },
+			{ "Blend S", "BlendS: " },
+			{ "Re Zero", "Re:Zero: " },
+			{ "Love Live", "LoveLive: " },
+			{ "Literature Club", "DDLC: " },
+			{ "KonoSuba", "KonoSuba: " },
+			{ "Darling in the Franxx", "Franxx: " },
+			{ "Bunny Senpai", "BunnySenpai: " },
+			{ "Steins Gate", "SG: " },
+			{ "Gate", "Gate: " },
+			{ "Quintessential Quintuplets", "QQ: " },
+			{ "Fate", "TypeMoon: " },
+			{ "Type-Moon", "TypeMoon: " },
+			{ "Daily Life With A Monster Girl", "MonsterMusume: " },
+			{ "Vocaloid", "Vocaloid: " },
+			{ "DanganRonpa", "DR: " },
+			{ "High School DxD", "DxD: " },
+			{ "Sword Art Online", "SAO: " },
+			{ "Lucky Star", "LS: " },
+			{ "Evangelion", "EVA: " },
+			{ "EroManga Sensei", "EroManga: " },
+			{ "Miss Kobayashi's Dragon Maid", "DM: " },
+			{ "OreGairu", "OreGairu: " },
+			{ "OreImo", "OreImo: " },
+			{ "The Great Jahy Will Not Be Defeated", "JahySama: " },
+			{ "Future Diary", "FutureDiary: " },
+			{ "Kakegurui", "Kakegurui: " },
+			{ "Monogatari", "Monogatari: " },
+			{ "Don't Toy with me Miss Nagatoro", "DTWMMN: " },
+			{ "Miscellaneous", "Misc: " },
+			{ "Yuru Camp", "YuruCamp: " },
+			{ "NekoPara", "NekoPara: " },
+			{ "Azur Lane", "AzurLane: " },
+			{ "The Rising of Shield Hero", "ShieldHero: " },
+			{ "Toaru Majutsu no Index", "Railgun: " },
+			{ "Chuunibyou", "Chuunibyou: " },
+		};
 
 		public override void populateList (string path)
 		{
@@ -132,190 +173,8 @@ namespace Yuki_Theme.Core.Parsers
 		private string ConvertGroup (string st)
 		{
 			string res = st;
-			switch (st)
-			{
-				case "Kill la Kill" :
-				{
-					res = "KillLaKill: ";
-				}
-					break;
-				case "Blend S" :
-				{
-					res = "BlendS: ";
-				}
-					break;
-				case "Re Zero" :
-				{
-					res = "Re:Zero: ";
-				}
-					break;
-				case "Love Live" :
-				{
-					res = "LoveLive: ";
-				}
-					break;
-				case "Literature Club" :
-				{
-					res = "DDLC: ";
-				}
-					break;
-				case "KonoSuba" :
-				{
-					res = "KonoSuba: ";
-				}
-					break;
-				case "Darling in the Franxx" :
-				{
-					res = "Franxx: ";
-				}
-					break;
-				case "Bunny Senpai" :
-				{
-					res = "BunnySenpai: ";
-				}
-					break;
-				case "Steins Gate" :
-				{
-					res = "SG: ";
-				}
-					break;
-				case "Gate" :
-				{
-					res = "Gate: ";
-				}
-					break;
-				case "Quintessential Quintuplets" :
-				{
-					res = "QQ: ";
-				}
-					break;
-				case "Fate" :
-				{
-					res = "TypeMoon: ";
-				}
-					break;
-				case "Type-Moon" :
-				{
-					res = "TypeMoon: ";
-				}
-					break;
-				case "Daily Life With A Monster Girl" :
-				{
-					res = "MonsterMusume: ";
-				}
-					break;
-				case "Vocaloid" :
-				{
-					res = "Vocaloid: ";
-				}
-					break;
-				case "DanganRonpa" :
-				{
-					res = "DR: ";
-				}
-					break;
-				case "High School DxD" :
-				{
-					res = "DxD: ";
-				}
-					break;
-				case "Sword Art Online" :
-				{
-					res = "SAO: ";
-				}
-					break;
-				case "Lucky Star" :
-				{
-					res = "LS: ";
-				}
-					break;
-				case "Evangelion" :
-				{
-					res = "EVA: ";
-				}
-					break;
-				case "EroManga Sensei" :
-				{
-					res = "EroManga: ";
-				}
-					break;
-				case "Miss Kobayashi's Dragon Maid" :
-				{
-					res = "DM: ";
-				}
-					break;
-				case "OreGairu" :
-				{
-					res = "OreGairu: ";
-				}
-					break;
-				case "OreImo" :
-				{
-					res = "OreImo: ";
-				}
-					break;
-				case "The Great Jahy Will Not Be Defeated" :
-				{
-					res = "JahySama: ";
-				}
-					break;
-				case "Future Diary" :
-				{
-					res = "FutureDiary: ";
-				}
-					break;
-				case "Kakegurui" :
-				{
-					res = "Kakegurui: ";
-				}
-					break;
-				case "Monogatari" :
-				{
-					res = "Monogatari: ";
-				}
-					break;
-				case "Don't Toy with me Miss Nagatoro" :
-				{
-					res = "DTWMMN: ";
-				}
-					break;
-				case "Miscellaneous" :
-				{
-					res = "Misc: ";
-				}
-					break;
-				case "Yuru Camp" :
-				{
-					res = "YuruCamp: ";
-				}
-					break;
-				case "NekoPara" :
-				{
-					res = "NekoPara: ";
-				}
-					break;
-				case "Azur Lane" :
-				{
-					res = "AzurLane: ";
-				}
-					break;
-				case "The Rising of Shield Hero" :
-				{
-					res = "ShieldHero: ";
-				}
-					break;
-				case "Toaru Majutsu no Index" :
-				{
-					res = "Railgun: ";
-				}
-					break;
-				case "Chuunibyou" :
-				{
-					res = "Chuunibyou: ";
-				}
-					break;
-			}
-
+			if (Groups.ContainsKey (st))
+				res = Groups [st];
 			return res;
 		}
 
@@ -446,7 +305,7 @@ namespace Yuki_Theme.Core.Parsers
 			{ { "constantColor", "#86dbfd" }, { "foregroundColor", "#F8F8F2" }, { "comments", "#6272a4" } };
 
 		private readonly Dictionary <string, bool> _defaultBold = new ()
-			{ { "comments", false } };
+			{ { "comments", false }, { "constantColor", false }, { "foregroundColor", false } };
 
 		private Tuple <string, string> getDefaultForeground (string st)
 		{

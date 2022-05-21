@@ -1,5 +1,4 @@
 ﻿// #define PRIMARLY
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -48,6 +47,8 @@ public partial class ThemeDownloaderForm : Form
 
 	private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
 	private const string STICKER_SERVER    = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
+	
+	private const string GROUP_FILE    = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
 
 	public ThemeDownloaderForm ()
 	{
@@ -64,8 +65,10 @@ public partial class ThemeDownloaderForm : Form
 #endif
 		ShowLoading ();
 
-		ParseBranches ();
+		LoadGroups ();
 
+		ParseBranches ();
+		
 		ParseAllThemes ();
 		// LoadThemePage ();
 	}
@@ -82,7 +85,7 @@ public partial class ThemeDownloaderForm : Form
 	private async void ParseBranches ()
 	{
 		Console.WriteLine ("Requesting branch info...");
-		string search_api = LOCAL_API_SERVER; // to load locally
+		string search_api = REMOTE_API_SERVER;
 		branches.Clear ();
 		using (HttpClient client = new HttpClient ())
 		{
@@ -103,6 +106,76 @@ public partial class ThemeDownloaderForm : Form
 					branches.Add (s ["name"].ToString ());
 				}
 			}
+		}
+	}
+
+	private async void LoadGroups ()
+	{
+		Console.WriteLine ("Requesting groups info...");
+		string search_api = GROUP_FILE;
+		Dictionary <string, string> groups = new ();
+		using (HttpClient client = new HttpClient ())
+		{
+			client.DefaultRequestHeaders.Add ("User-Agent",
+			                                  DownloadForm.user_agent);
+			var response = await client.GetAsync (search_api);
+			if (response != null)
+			{
+				Console.WriteLine ("Groups info loaded.");
+				string file = await response.Content.ReadAsStringAsync ();
+
+				string[] lines = file.Split ('\n');
+
+				Console.WriteLine ("Parsing groups info...");
+				Dictionary <string, string> namespaces = new ();
+
+				foreach (string line in lines)
+				{
+					if (line.Contains (" val "))
+					{
+						Tuple <string, string> res = ParseNamespace (line);
+						if (res != null)
+							namespaces.Add (res.Item1, res.Item2);
+					} else if (line.Contains (" to "))
+					{
+						string cline = line.TrimStart ();
+						cline = cline.Replace (",", "");
+						string [] splitted = cline.Split (new [] { " to " }, StringSplitOptions.None);
+						string name = splitted [0].Replace ("\"", "");
+						string converted = "";
+						if (!splitted [1].Contains ("\""))
+						{
+							if (namespaces.ContainsKey (splitted [1]))
+								converted = namespaces [splitted [1]];
+							else
+								converted = splitted [1];
+						} else
+						{
+							converted = splitted [1].Replace ("\"", "");
+						}
+
+						groups.Add (name, converted);
+					}
+				}
+			}
+		}
+
+		if (groups.Count > 0)
+			DokiThemeParser.Groups = groups;
+	}
+
+	private Tuple <string, string> ParseNamespace (string target)
+	{
+		string starting = "const val ";
+		if (target.StartsWith (starting))
+		{
+			string ctarget = target.Substring (starting.Length);
+			string[] splitted = ctarget.Split (new [] { " = " }, StringSplitOptions.None);
+			splitted [1] = splitted [1].Replace ("\"", "");
+			return new Tuple <string, string> (splitted [0], splitted [1]);
+		} else
+		{
+			return null;
 		}
 	}
 
@@ -149,14 +222,17 @@ public partial class ThemeDownloaderForm : Form
 
 	private void ParseTheme (string jsonMulti)
 	{
-		DokiThemeParser doki = new DokiThemeParser ();
-		doki.needToWrite = false;
-		string[] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
-		string json = multi [1];
-		doki.Parse (json, "none", "none", null, false, false, false);
-		doki.theme.link = multi [0];
-		themes.Add (doki.theme.Name, doki.theme);
-		LoadThemeIntoPage (doki.theme);
+		if (!this.IsDisposed)
+		{
+			DokiThemeParser doki = new DokiThemeParser ();
+			doki.needToWrite = false;
+			string [] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
+			string json = multi [1];
+			doki.Parse (json, "none", "none", null, false, false, false);
+			doki.theme.link = multi [0];
+			themes.Add (doki.theme.Name, doki.theme);
+			LoadThemeIntoPage (doki.theme);
+		}
 	}
 
 	private void ParseMode0 (string json)
@@ -218,7 +294,7 @@ public partial class ThemeDownloaderForm : Form
 		if (branch == "master")
 		{
 			searchMode = 0;
-			return LOCAL_SERVER;
+			return REMOTE_SERVER;
 		} else
 		{
 			searchMode = 1;
@@ -257,17 +333,21 @@ public partial class ThemeDownloaderForm : Form
 
 	private string downloadFile (string url)
 	{
-		try
+		if (!this.IsDisposed)
 		{
-			using (var wc = new WebClient ())
+			try
 			{
-				return url+"-|-"+wc.DownloadString (url);
+				using (var wc = new WebClient ())
+				{
+					return url + "-|-" + wc.DownloadString (url);
+				}
+			} catch (Exception e)
+			{
+				Console.WriteLine (e);
+				return null;
 			}
-		} catch (Exception e)
-		{
-			Console.WriteLine (e);
-			return null;
 		}
+		return null;
 	}
 
 	private Image DownloadImage (string url)
@@ -284,7 +364,7 @@ public partial class ThemeDownloaderForm : Form
 	{
 		themesWithUrls = themesWithUrls.OrderBy (obj => obj.Key).ToDictionary ((obj) => obj.Key, (obj) => obj.Value);
 		int max = 10; // themesWithUrls.Count
-		stepProgress = 100.0 / max;
+		stepProgress = 100.0 /  max;
 		currentProgress = 0;
 		needToReset = true;
 		int pars = 0;
@@ -305,43 +385,50 @@ public partial class ThemeDownloaderForm : Form
 
 	private void LoadThemeIntoPage (Theme theme)
 	{
-		currentProgress += stepProgress;
-		browser.Invoke ((MethodInvoker)delegate
+		if (!this.IsDisposed)
 		{
-			browser.Document.InvokeScript (
-				"AddTheme",
-				new object []
-				{
-					theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
-					(!IsEqual (theme, CLI.GetTheme (theme.Name))).ToStringLower (),
-					theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
-					theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
-					theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background, theme.Fields ["MarkPrevious"].Foreground
-				});
-		});
-		needToReset = false;
+			currentProgress += stepProgress;
+			browser.Invoke ((MethodInvoker)delegate
+			{
+				browser.Document.InvokeScript (
+					"AddTheme",
+					new object []
+					{
+						theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
+						(!IsEqual (theme, CLI.GetTheme (theme.Name))).ToStringLower (),
+						theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
+						theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
+						theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background,
+						theme.Fields ["MarkPrevious"].Foreground
+					});
+			});
+			needToReset = false;
+		}
 	}
 
 	private void LoadThemePage ()
 	{
-		if (isFromBranch)
+		if (!this.IsDisposed)
 		{
-			themesElement.InnerHtml = CollectThemesHTML ();
-			isFromBranch = false;
-		} else
-		{
-			string html = Helper.ReadHTML ("theme_downloader.html", THEME_NAMESPACE);
-			html = Helper.ReplaceHTMLColors (html);
+			if (isFromBranch)
+			{
+				themesElement.InnerHtml = CollectThemesHTML ();
+				isFromBranch = false;
+			} else
+			{
+				string html = Helper.ReadHTML ("theme_downloader.html", THEME_NAMESPACE);
+				html = Helper.ReplaceHTMLColors (html);
 
-			html = html.Replace ("__branches__", CollectBranchesHTML ());
+				html = html.Replace ("__branches__", CollectBranchesHTML ());
 
-			html = html.Replace ("__content__", "");
-			html = html.Replace ("__bootstrap_css__", LoadCSS ("bootstrap.min.css"));
+				html = html.Replace ("__content__", "");
+				html = html.Replace ("__bootstrap_css__", LoadCSS ("bootstrap.min.css"));
 
-			browser.Navigate ("about:blank");
-			browser.Document.OpenNew (false);
-			browser.Document.Write (html);
-			browser.Refresh ();
+				browser.Navigate ("about:blank");
+				browser.Document.OpenNew (false);
+				browser.Document.Write (html);
+				browser.Refresh ();
+			}
 		}
 	}
 
@@ -365,6 +452,26 @@ public partial class ThemeDownloaderForm : Form
 	
 	public void DownloadTheme (string name)
 	{
+		currentProgress = 0;
+		stepProgress = 100.0 / 3;
+		Thread thread = new Thread (DownloadThemeThread);
+		thread.Start (new Tuple <string, bool> (name, true));
+	}
+
+	public void DownloadAll ()
+	{
+		Console.WriteLine ("Downloading all themes.");
+		stepProgress = 100.0 / themes.Count;
+		currentProgress = 0;
+		// Doesn't work well
+		Parallel.ForEach (themes, keyValuePair => DownloadThemeThread (new Tuple <string, bool> (keyValuePair.Key, false)));
+	}
+
+	private void DownloadThemeThread (object param)
+	{
+		Tuple <string, bool> typle = (Tuple <string, bool>)param;
+		string name = typle.Item1;
+		bool eachTime = typle.Item2;
 		Console.WriteLine ("Downloading theme {0}", name);
 
 		try
@@ -381,8 +488,11 @@ public partial class ThemeDownloaderForm : Form
 			Theme theme = themes [name];
 
 			Image wallpaper = DownloadImage (WALLPAPER_SERVER + theme.imagePath);
+			if (eachTime)
+				AddNSetProgress ();
 			Image sticker = DownloadImage (GenerateStickerUrl (theme));
-			
+			if (eachTime)
+				AddNSetProgress ();
 			
 			theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
 			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
@@ -391,20 +501,24 @@ public partial class ThemeDownloaderForm : Form
 			CLI.saveList (theme, wallpaper, sticker);
 			wallpaper.Dispose ();
 			sticker.Dispose ();
+			AddNSetProgress ();
+			Console.WriteLine ("{0} has been saved", name);
 		} catch (Exception e)
 		{
 			Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
+			Console.WriteLine ("{0} hasn't been saved", name);
 		}
-
-		Console.WriteLine ("{0} has been saved", name);
 	}
 
-	public void DownloadAll ()
+	private void AddNSetProgress ()
 	{
-		Console.WriteLine ("Downloading all themes.");
+		currentProgress += stepProgress;
+		browser.Invoke ((MethodInvoker)delegate
+		{
+			browser.Document.InvokeScript ("SetProgress", new object [] { currentProgress.ToString ("0.0").Replace (',', '.') });
+		});
 	}
-
-
+	
 	private string Base64Encode (string plainText)
 	{
 		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes (plainText);

@@ -747,9 +747,9 @@ namespace Yuki_Theme.Core
 	        if (res.Length < 16)
 	        {
 		        res += new string ('.', 16 - res.Length);
-	        }else if (res.Length > 32)
+	        }else if (res.Length > 16)
 	        {
-		        res = res.Substring (0, 32);
+		        res = res.Substring (0, 16);
 	        }
 	        return res;
         }
