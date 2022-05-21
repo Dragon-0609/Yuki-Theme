@@ -521,5 +521,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 		#endregion
 
+		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			CustomStickerWindow customStickerWindow = new CustomStickerWindow
+			{
+				Background = WPFHelper.bgBrush,
+				Foreground = WPFHelper.fgBrush,
+				Tag = Tag,
+				Owner = this
+			};
+			customStickerWindow.SetColors (WPFHelper.bgBrush, WPFHelper.fgBrush);
+			bool? dialog = customStickerWindow.ShowDialog ();
+		}
 	}
 }

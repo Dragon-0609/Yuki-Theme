@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
         Title="Add Theme" Width="300" Style="{DynamicResource SLayer}">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"

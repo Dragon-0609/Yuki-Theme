@@ -3,10 +3,9 @@
                     x:Class="Yuki_Theme.Core.WPF.Styles.WindowTemplate"
                     x:ClassModifier="public">
 
-    <Style x:Key="SLayer" TargetType="Window">
+    <Style x:Key="SLayer" TargetType="{x:Type Window}">
         <Setter Property="SizeToContent" Value="Height" />
         <Setter Property="ResizeMode" Value="NoResize" />
-        <Setter Property="WindowStartupLocation" Value="CenterOwner" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">

@@ -115,6 +115,7 @@
                 </Button>
 
                 <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
+                        Click="SaveButton_OnClick"
                         ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
                     <Button.ToolTip>
                         <StackPanel>

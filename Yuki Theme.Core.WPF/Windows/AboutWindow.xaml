@@ -38,7 +38,12 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Column="0" Width="0" Margin="0" Name="ChangeLogPanel" Visibility="Collapsed">
+        <DockPanel Grid.Column="0" Width="0" Margin="0 0 0 10" Name="ChangeLogPanel" Visibility="Collapsed"
+                   Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}">
+            <Border BorderThickness="1"
+                    BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag.BorderBrush, TargetNullValue=White, FallbackValue=White}">
+                <WebBrowser Name="Browser"></WebBrowser>
+            </Border>
         </DockPanel>
 
         <Grid Grid.Column="1" Width="300" Margin="10 0 0 0">
@@ -52,10 +57,16 @@
             </Grid.RowDefinitions>
 
             <Image Grid.Row="0" Name="Logo" Width="150" Height="150" HorizontalAlignment="Center" />
-            <TextBlock Grid.Row="1" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Top">Yuki Theme</TextBlock>
-            <TextBlock Grid.Row="2" Name="Version" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top">version: 1.0</TextBlock>
+            <TextBlock Grid.Row="1" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Top"
+                       FontFamily="{StaticResource SAOFont}">
+                <Hyperlink NavigateUri="https://github.com/Dragon-0609/Yuki-Theme" RequestNavigate="OpenLink">Yuki Theme</Hyperlink>
+            </TextBlock>
+            <TextBlock Grid.Row="2" Name="Version" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"
+                       FontFamily="{StaticResource SAOFont}">
+                version: 1.0
+            </TextBlock>
 
-            <Grid Grid.Row="3" Margin=" 5 5 5 5">
+            <Grid Grid.Row="3" Margin=" 5 5 5 2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
@@ -66,12 +77,12 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="16" Margin="0 0 10 0">Inspired by: </TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="16">
+                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="20" Margin="0 0 10 0" FontFamily="{StaticResource SAOFont}">Inspired by: </TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" FontFamily="{StaticResource SAOFont}">
                     <Hyperlink NavigateUri="https://github.com/doki-theme/doki-theme-jetbrains" RequestNavigate="OpenLink">The Doki Theme</Hyperlink>
                 </TextBlock>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="16">Used: </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="20" FontFamily="{StaticResource SAOFont}">Used: </TextBlock>
                 <ScrollViewer Grid.Row="1" Grid.Column="1" FontSize="14" Padding="2 2 5 2" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
                         <TextBlock>
@@ -105,19 +116,21 @@
                 </ScrollViewer>
             </Grid>
 
-            <Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="10 5">
-                <Button HorizontalAlignment="Left" Click="ToggleChangelog">Changelog</Button>
-                <Button HorizontalAlignment="Right" Click="ToggleLicense">LicensePanel</Button>
+            <Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="10 2">
+                <Button HorizontalAlignment="Left" Click="ToggleChangelog" Style="{StaticResource ShadowButton}" Padding="6 2">Changelog</Button>
+                <Button HorizontalAlignment="Right" Click="ToggleLicense" Style="{StaticResource ShadowButton}" Padding="6 2">LicensePanel</Button>
             </Grid>
 
 
             <Button Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10 5 5 10" IsCancel="True">Close</Button>
         </Grid>
-        <DockPanel Grid.Column="2" Width="0" Margin="0 0 0 10" Name="LicensePanel" Visibility="Collapsed">
+        <DockPanel Grid.Column="2" Width="0" Margin="0 0 0 10" Name="LicensePanel" Visibility="Collapsed"
+                   Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}">
             <TextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Name="LicenseBox" IsReadOnly="True"
+                     BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag.BorderBrush, TargetNullValue=White, FallbackValue=White}"
                      Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Foreground, TargetNullValue=White, FallbackValue=White}"
-                     Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}"/>
+                     Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}" />
         </DockPanel>
 
     </Grid>

@@ -1,4 +1,4 @@
-﻿<Window x:Class="Yuki_Theme.Core.WPF.Windows.RenameThemeWindow"
+﻿<Window x:Class="Yuki_Theme.Core.WPF.Windows.CustomStickerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,19 +8,17 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Loaded="Initialization"
-        Title="Add Theme" Width="300" Style="{DynamicResource SLayer}">
+        Title="Select Custom Sticker" Width="320" Style="{DynamicResource SLayer}" Height="40">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
                               SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" />
     </Window.Tag>
-    
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/WindowTemplate.xaml" />
-                <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary
@@ -31,25 +29,20 @@
         </ResourceDictionary>
 
     </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid Margin="7 4">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="190" />
+            <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Copy from: " VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-        <TextBox Grid.Row="0" Grid.Column="1" Height="Auto" Text="" VerticalAlignment="Center" Margin="0 5 10 5"
-                 BorderBrush="DimGray" Padding="2 1" x:Name="FName" IsReadOnly="True" IsReadOnlyCaretVisible="False" />
-
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Copy to: " VerticalAlignment="Center" HorizontalAlignment="Center" />
-
-        <TextBox Grid.Row="1" Grid.Column="1" Height="Auto" Text="" VerticalAlignment="Center" Margin="0 5 10 5"
-                 BorderBrush="DimGray" Padding="2 1" x:Name="TName" />
+        <TextBlock VerticalAlignment="Center" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}"
+                   Margin="2">Custom Sticker: </TextBlock>
+        <TextBox Grid.Column="1" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center"
+                 BorderBrush="DimGray" Padding="2 1" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}" />
+        <Button Grid.Column="2" Name="ImagePathButton" Margin="-1 5 0 0" Width="20" Height="20" Click="SelectImage"
+                VerticalAlignment="Center" />
 
     </Grid>
 </Window>

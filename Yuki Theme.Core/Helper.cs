@@ -545,8 +545,59 @@ namespace Yuki_Theme.Core
 		}
 
 		#endregion
+
+		
+		#region HTML Zone
+
+		/// <summary>
+		/// Load HTML from memory and return as string
+		/// </summary>
+		/// <param name="name">Name of file with extension (.html)</param>
+		/// <param name="nameSpace">Namespace of resource. Default: Yuki_Theme.Core.Resources. (dot must be included)</param>
+		/// <returns></returns>
+		public static string ReadHTML (string name, string nameSpace = "Yuki_Theme.Core.Resources.")
+		{
+			Assembly a = Assembly.GetExecutingAssembly ();
+
+			Stream stm = a.GetManifestResourceStream (nameSpace + name);
+			string md = "";
+			using (StreamReader reader = new StreamReader (stm))
+			{
+				md = reader.ReadToEnd ();
+			}
+
+			stm.Dispose ();
+
+			return md;
+		}
+		
+		public static string ReplaceHTMLColors (string html)
+		{
+			html = html.Replace ("__bg__", ColorTranslator.ToHtml (bgColor));
+			html = html.Replace ("__clr__", ColorTranslator.ToHtml (fgColor));
+			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (fgHover));
+			if (html.Contains ("__border__"))
+			{
+				html = html.Replace ("__border__", ColorTranslator.ToHtml (bgBorder));
+			}
+			return html;
+		}
+
+		private static string ReplaceMDCheckbox (string md)
+		{
+			md = md.Replace ("- [x]", "<br><input disabled type='checkbox' checked='checked'>");
+			md = md.Replace ("- [ ]", "<br><input disabled type='checkbox'>");
+			return md;
+		}
+		
+		#endregion
 		
 		
+		public static string ToStringLower (this bool bol)
+		{
+			return bol.ToString ().ToLower ();
+		}
+
 		public static string GetThemeSaveName (bool asOld)
 		{
 			return "theme." + GetSaveFormat (asOld);
@@ -632,6 +683,41 @@ namespace Yuki_Theme.Core
 		public static bool Exist (this string path)
 		{
 			return File.Exists (path);
+		}
+
+		/// <summary>
+		/// Load string from resources
+		/// </summary>
+		/// <param name="target">Target file</param>
+		/// <param name="nameSpace">Namespace to be loaded. '.' (dot) must be included.
+		/// Default: Yuki_Theme.Core.Resources. </param>
+		/// <returns></returns>
+		public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
+		{
+			string result = "";
+			Assembly a = CLI.GetCore ();
+			Stream stm = a.GetManifestResourceStream (nameSpace + target);
+			if (stm != null)
+				using (StreamReader reader = new StreamReader (stm))
+				{
+					result = reader.ReadToEnd ();
+				}
+
+			return result;
+		}
+
+		public static string ReadNConvertMDToHTML (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
+		{
+			string md = ReadResource (target, nameSpace);
+			md = md.Split (new [] { "###" }, StringSplitOptions.None) [1];
+			md = ReplaceMDCheckbox (md);
+			md = CommonMark.CommonMarkConverter.Convert (md);
+
+			string html = ReadHTML ("CHANGELOG.html", nameSpace);
+			html = ReplaceHTMLColors (html);
+			html = html.Replace ("__content__", md);
+
+			return html;
 		}
 	}
 

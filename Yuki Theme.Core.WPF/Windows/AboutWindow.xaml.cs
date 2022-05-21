@@ -29,19 +29,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void AboutWindow_OnLoaded (object sender, RoutedEventArgs e)
 		{
-			Version.Text =
-				$"{CLI.Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+			Version.Text = GenerateVersionText ();
 			Logo.Source = Helper.GetYukiThemeIconImage (new Drawing.Size (Logo.Width.ToInt (), Logo.Height.ToInt ())).ToWPFImage ();
-			
-			Assembly a = CLI.GetCore ();
-			Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.LICENSE");
-			string description = "";
-			using (StreamReader reader = new StreamReader (stm))
-			{
-				description = reader.ReadToEnd ();
-			}
+			string licenseText = Helper.ReadResource ("LICENSE");
+			LicenseBox.Text = licenseText;
+			string htmlText = Helper.ReadNConvertMDToHTML ("CHANGELOG.md");
+			htmlText = htmlText.Replace ("__expand__", "none");
+			Browser.NavigateToString (htmlText);
+		}
 
-			LicenseBox.Text = description;
+		private static string GenerateVersionText ()
+		{
+			return $"{CLI.Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
 		}
 
 		private DoubleAnimation AnimateWindow (bool positive)
@@ -74,18 +73,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private DoubleAnimation CalculatePosition (bool opened)
 		{
 			DoubleAnimation positionAnimation;
-
+			double windowLeft = PointToScreen (new Point (0, 0)).X;
 			if (!opened)
 			{
-				double left = Math.Max (-150, this.Left - 300);
-				positionAnimation = new DoubleAnimation (this.Left, left, duration);
+				double left = Math.Max (-150, windowLeft - 300);
+				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
 				positionAnimation.Completed += (sender, args) => {
 				this.Left = left;
 				}; 
 			} else
 			{
-				double left = this.Left + 300;
-				positionAnimation = new DoubleAnimation (this.Left, left, duration);
+				double left = windowLeft + 300;
+				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
 				positionAnimation.Completed += (sender, args) => {
 				this.Left = left;
 				}; 
@@ -109,14 +108,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 				if (!openedChangelog){
 					ChangeLogPanel.Visibility = Visibility.Visible;
 				}
-				DoubleAnimation widthAnimation = GenerateAnimation (openedChangelog, ChangeLogPanel);
-				AddAnimation (sb, widthAnimation, ChangeLogPanel,DockPanel.WidthProperty);
+				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedChangelog, ChangeLogPanel);
+				AddAnimation (sb, panelWidthAnimation, ChangeLogPanel,DockPanel.WidthProperty);
 				
-				DoubleAnimation animateWindow = AnimateWindow (!openedChangelog);
-				AddAnimation (sb, animateWindow, this,Window.WidthProperty);
+				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedChangelog);
+				AddAnimation (sb, windowWidthAnimation, this,Window.WidthProperty);
 				
-				DoubleAnimation positionAnimation = CalculatePosition (openedChangelog);
-				AddAnimation (sb, positionAnimation, this,Window.LeftProperty);				
+				DoubleAnimation windowPositionAnimation = CalculatePosition (openedChangelog);
+				AddAnimation (sb, windowPositionAnimation, this,Window.LeftProperty);				
 			
 				openedChangelog = !openedChangelog;
 				animating = true;
@@ -132,10 +131,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 				if (!openedLicense){
 					LicensePanel.Visibility = Visibility.Visible;
 				}
-				DoubleAnimation widthAnimation = GenerateAnimation (openedLicense, LicensePanel);
-				AddAnimation (sb, widthAnimation, LicensePanel,DockPanel.WidthProperty);
-				DoubleAnimation animateWindow = AnimateWindow (!openedLicense);
-				AddAnimation (sb, animateWindow, this,Window.WidthProperty);
+				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedLicense, LicensePanel);
+				AddAnimation (sb, panelWidthAnimation, LicensePanel,DockPanel.WidthProperty);
+				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedLicense);
+				AddAnimation (sb, windowWidthAnimation, this, Window.WidthProperty);
 				openedLicense = !openedLicense;
 				animating = true;
 				sb.Begin();

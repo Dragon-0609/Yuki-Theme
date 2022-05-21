@@ -3,6 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="pack://application:,,,/Yuki_Theme.Core.WPF;component/Windows/MainWindow.xaml">
     <Application.Resources>
-        
+        <FontFamily x:Key="SAOFont">pack://application:,,,/Fonts/#SAO UI TT Regular</FontFamily>        
     </Application.Resources>
 </Application>

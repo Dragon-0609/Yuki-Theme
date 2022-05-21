@@ -163,10 +163,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void Schemes_OnSelectionChanged (object sender, SelectionChangedEventArgs e)
 		{
-			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item && item.IsGroup)
+			bool itemIsGroup = true;
+			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item)
 			{
+				itemIsGroup = item.IsGroup || DefaultThemes.isDefault (item.Content.ToString ());
+			}
+			if (itemIsGroup)
 				RemoveButton.Visibility = RenameButton.Visibility = Visibility.Hidden;
-			} else
+			else
 			{
 				RemoveButton.Visibility = RenameButton.Visibility = Visibility.Visible;
 			}
