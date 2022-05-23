@@ -208,7 +208,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void OpenSettings ()
 		{
-			AboutWindow settingsWindow = new AboutWindow
+			SettingsWindow settingsWindow = new SettingsWindow
 			{
 				Background = WPFHelper.bgBrush,
 				Foreground = WPFHelper.fgBrush,

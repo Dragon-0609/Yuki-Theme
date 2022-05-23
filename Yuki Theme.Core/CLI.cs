@@ -728,7 +728,6 @@ namespace Yuki_Theme.Core
 		/// <returns></returns>
 		public static Assembly GetCore ()
 		{
-			// return GetAssemblyByName ("Yuki Theme.Core");
 			return Assembly.GetExecutingAssembly ();
 		}
 

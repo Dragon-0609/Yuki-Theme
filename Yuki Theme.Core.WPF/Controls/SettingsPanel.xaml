@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="Yuki_Theme.Core.WPF.Controls.SettingsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+             Loaded="SettingsPanel_OnLoaded">
+    <UserControl.Tag>
+        <controls:StyleConfig BorderColor="#FF994499" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF994499"
+                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F"
+                              BackgroundClickBrush="#FF4F4F4F" />
+    </UserControl.Tag>
+    <UserControl.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/TabStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/CheckboxStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/GroupBoxStyles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+            
+            <BitmapImage x:Key="InfoImage" UriSource="" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="MainGrid">
+        <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120"
+                    Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}"
+                    Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Background}"
+                    HorizontalAlignment="Stretch"
+                    Margin="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=InnerMargin}"
+                    BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BorderBrush}">
+            <TabItem Header="General" IsSelected="True">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="Editor Mode" Margin="4 10 4 5" Style="{StaticResource CustomCheckBox}" HorizontalAlignment="Left" />
+
+                    <GroupBox Margin="4 5" Header="Sticker"
+                              Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}"
+                              BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BorderBrush}"
+                              BorderThickness="1">
+                        <CheckBox Content="Show Sticker" Margin="6 10 6 5" Style="{StaticResource CustomCheckBox}" HorizontalAlignment="Left" />
+                    </GroupBox>
+
+                    <GroupBox Margin="4 5" Header="Backgroun Image"
+                              Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}"
+                              BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BorderBrush}"
+                              BorderThickness="1">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                            <CheckBox Content="Show Background Image" Margin="4 5" Style="{StaticResource CustomCheckBox}" HorizontalAlignment="Left" />
+                            <CheckBox Content="Auto Fit Background Image by Width" Margin="4 5 4 0" Style="{StaticResource CustomCheckBox}" HorizontalAlignment="Left" />
+                            <Label Margin="22 0 4 3" FontSize="10" HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                    <Image Width="16" Height="16" Source="{DynamicResource InfoImage}" Margin="0 0 6 0" />
+                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" TextWrapping="Wrap">Background Image will be fitted by width if it's necessary</TextBlock>
+                                </StackPanel>
+                            </Label>
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="Additional">
+
+            </TabItem>
+
+            <TabItem Header="Additional">
+
+            </TabItem>
+
+            <TabItem Header="Additional">
+
+            </TabItem>
+
+            <TabItem Header="Additional">
+
+            </TabItem>
+
+            <TabItem Header="Additional">
+
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</UserControl>

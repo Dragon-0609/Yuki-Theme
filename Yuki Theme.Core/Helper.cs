@@ -537,11 +537,30 @@ namespace Yuki_Theme.Core
 				svg.Color = new SvgColourServer (clr);
 			else
 				svg.Color = new SvgColourServer (fgColor);
-
+			
 			if (!custom)
 				return svg.Draw (im.Width, im.Height);
 			else
 				return svg.Draw (cSize.Width, cSize.Height);
+		}
+
+		public static Image RenderSvg (Size  im, SvgDocument svg, Dictionary <string, Color> idColors, bool customColor = false, Color clr = default)
+		{
+			if (customColor)
+				svg.Color = new SvgColourServer (clr);
+			else
+				svg.Color = new SvgColourServer (fgColor);
+
+			if (idColors != null)
+			{
+				foreach (KeyValuePair <string, Color> idColor in idColors)
+				{
+					SvgElement element = svg.GetElementById (idColor.Key);
+					element.Fill = new SvgColourServer (idColor.Value);
+				}
+			}
+			
+			return svg.Draw (im.Width, im.Height);
 		}
 
 		#endregion

@@ -55,7 +55,7 @@
         </Grid>
 
         <GridSplitter Grid.Column="1" Width="2" HorizontalAlignment="Stretch"
-                      Background="{Binding ElementName=Window, Path=Tag.BorderColor}" />
+                      Background="{Binding ElementName=Window, Path=Tag.BorderBrush}" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>

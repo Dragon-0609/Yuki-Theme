@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -96,6 +98,13 @@ namespace Yuki_Theme.Core.WPF
 				                            customColor, color))
 					.ToWPFImage ()
 			};
+			
+		}
+		
+		public static BitmapImage GetSvg (string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
+		{
+			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true, Helper.bgBorder))
+				.ToWPFImage ();
 		}
 
 		public static BitmapImage ToWPFImage (this Drawing.Image img)
