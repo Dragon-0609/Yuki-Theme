@@ -74,26 +74,32 @@ namespace Yuki_Theme.Core.WPF
 			return new ThemeAddition (themeWindow.Themes.SelectedItem.ToString (), themeWindow.TName.Text, dialog, themeWindow.result);
 		}
 
+		#region Color Conversation
+
 		public static SWMColor ToWPFColor (this      SDColor  color) => SWMColor.FromArgb (color.A, color.R, color.G, color.B);
 		public static SDColor  ToWinformsColor (this SWMColor color) => SDColor.FromArgb (color.A, color.R, color.G, color.B);
 
+		#endregion
+
 		public static WBrush ToBrush (this SWMColor color) => new SolidColorBrush (color);
 
-		public static void SetSVGImage (Button btn, string source, bool customColor = false, Drawing.Color color = default)
+		#region SVG
+
+		public static void SetSVGImage (Button btn, string source, bool customColor = false, SDColor color = default)
 		{
 			btn.Content = new Image ()
 			{
-				Source = (Helper.RenderSvg (new Drawing.Size (System.Convert.ToInt32 (btn.Width), System.Convert.ToInt32 (btn.Height)),
+				Source = (Helper.RenderSvg (new Drawing.Size (Convert.ToInt32 (btn.Width), Convert.ToInt32 (btn.Height)),
 				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty, customColor, color))
 					.ToWPFImage ()
 			};
 		}
 
-		public static Image GetSVGImage (string source, Size size, bool customColor = false, Drawing.Color color = default)
+		public static Image GetSVGImage (string source, Size size, bool customColor = false, SDColor color = default)
 		{
 			return new Image ()
 			{
-				Source = (Helper.RenderSvg (new Drawing.Size (System.Convert.ToInt32 (size.Width), System.Convert.ToInt32 (size.Height)),
+				Source = (Helper.RenderSvg (new Drawing.Size (Convert.ToInt32 (size.Width), Convert.ToInt32 (size.Height)),
 				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty,
 				                            customColor, color))
 					.ToWPFImage ()
@@ -101,11 +107,19 @@ namespace Yuki_Theme.Core.WPF
 			
 		}
 		
-		public static BitmapImage GetSvg (string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
 		{
 			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true, Helper.bgBorder))
 				.ToWPFImage ();
 		}
+		
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, bool withCustomColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly assm = null)
+		{
+			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
+				.ToWPFImage ();
+		}
+
+		#endregion
 
 		public static BitmapImage ToWPFImage (this Drawing.Image img)
 		{
@@ -125,12 +139,17 @@ namespace Yuki_Theme.Core.WPF
 			return bi;
 		}
 
+		public static string PutLineBreaks (string st)
+		{
+			return st.Replace ("\n", "&amp;#10;");
+		}
+		
+		
 		public static int ToInt (this double d)
 		{
 			return Convert.ToInt32 (d);
 		}
 		
-
 		[DllImport ("gdi32.dll", EntryPoint = "DeleteObject")]
 		[return: MarshalAs (UnmanagedType.Bool)]
 		public static extern bool DeleteObject ([In] IntPtr hObject);

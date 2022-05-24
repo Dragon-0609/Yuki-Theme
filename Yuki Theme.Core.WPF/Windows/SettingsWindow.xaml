@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterOwner" 
+        MinWidth="360" MinHeight="253" MaxWidth="1280" MaxHeight="720"
+        Loaded="SettingsWindow_OnLoaded"
         Title="SettingsWindow" Height="400" Width="400">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
@@ -30,7 +32,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <controls:SettingsPanel InnerMargin="10 5 10 5" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag}" />
+        <controls:SettingsPanel InnerMargin="10 5 10 5" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag}" x:Name="SettingsPanelControl" />
         
         <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 5">
             <Button Content="Save" Padding="6 2" Click="SaveButtonClick" />

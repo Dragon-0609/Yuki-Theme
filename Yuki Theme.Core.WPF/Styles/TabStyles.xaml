@@ -29,7 +29,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type TabControl}">
+    <Style x:Key="TabControlDefault" TargetType="{x:Type TabControl}">
         <Setter Property="TabStripPlacement" Value="Left" />
         <Setter Property="Margin" Value="2" />
         <Setter Property="Padding" Value="2" />
@@ -61,7 +61,7 @@
                             <Border Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}">
-                                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                     <ContentPresenter Content="{TemplateBinding SelectedContent}"
                                                       ContentTemplate="{TemplateBinding SelectedContentTemplate}"
                                                       ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
@@ -77,4 +77,16 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="CustomTabControl" TargetType="{x:Type TabControl}" BasedOn="{StaticResource TabControlDefault}">
+        <Setter Property="Foreground"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" />
+        <Setter Property="Background"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Background}" />
+        <Setter Property="Margin"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=InnerMargin}" />
+        <Setter Property="BorderBrush"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BorderBrush}" />
+    </Style>
+
 </ResourceDictionary>

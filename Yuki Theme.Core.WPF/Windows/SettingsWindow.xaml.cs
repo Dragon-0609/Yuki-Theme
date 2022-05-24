@@ -18,5 +18,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			this.DialogResult = false;
 		}
+
+		private void SettingsWindow_OnLoaded (object sender, RoutedEventArgs e)
+		{
+			SettingsPanelControl.ParentWindow = this;
+		}
 	}
 }
