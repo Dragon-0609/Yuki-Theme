@@ -11,8 +11,9 @@
         Loaded="SettingsWindow_OnLoaded"
         Title="SettingsWindow" Height="400" Width="400">
     <Window.Tag>
-        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F" BackgroundClickBrush="#FF4F4F4F" />
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
     <Window.Resources>
         <ResourceDictionary>

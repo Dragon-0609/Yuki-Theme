@@ -13,9 +13,9 @@
         WindowStartupLocation="CenterOwner"
         Title="AboutWindow" Height="500" Width="300">
     <Window.Tag>
-        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F"
-                              BackgroundClickBrush="#FF4F4F4F" />
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
     <Window.Resources>
         <ResourceDictionary>
@@ -132,8 +132,7 @@
             <TextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Name="LicenseBox" IsReadOnly="True"
                      BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag.BorderBrush, TargetNullValue=White, FallbackValue=White}"
-                     Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Foreground, TargetNullValue=White, FallbackValue=White}"
-                     Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}" />
+                     Style="{StaticResource TextBoxWindow}"/>
         </DockPanel>
 
     </Grid>

@@ -64,8 +64,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				}
 			}
 
-			Dispatcher.BeginInvoke(new Action(UpdateAllCollapseButtons), DispatcherPriority.Normal);
-			
+			Dispatcher.BeginInvoke (new Action (UpdateAllCollapseButtons), DispatcherPriority.Normal);
 		}
 
 		private void ChangeDialogButtons ()
@@ -96,7 +95,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					btn.Content = new Image { Source = Expanded.Source };
 			}
 		}
-		
+
 		private void Expander_OnClick (object sender, RoutedEventArgs e)
 		{
 			Button snd = (Button)sender;
@@ -150,10 +149,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			RenameThemeWindow rename = new RenameThemeWindow ()
 			{
+				Background = WPFHelper.bgBrush,
+				Foreground = WPFHelper.fgBrush,
 				Tag = Tag,
 				Owner = this
 			};
-			rename.SetColors (WPFHelper.bgBrush, WPFHelper.fgBrush);
 			rename.FName.Text = item.Content.ToString ();
 			bool? dialog = rename.ShowDialog ();
 			WPFHelper.windowForDialogs = null;
@@ -168,6 +168,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				itemIsGroup = item.IsGroup || DefaultThemes.isDefault (item.Content.ToString ());
 			}
+
 			if (itemIsGroup)
 				RemoveButton.Visibility = RenameButton.Visibility = Visibility.Hidden;
 			else
@@ -221,7 +222,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public object afterAsk (string sel)
 		{
-			ManageableItem sifr = (ManageableItem) Schemes.SelectedItem;
+			ManageableItem sifr = (ManageableItem)Schemes.SelectedItem;
 			/*if (form.selectedItem == sel || form.schemes.SelectedItem.ToString () == sel)
 			{
 				form.schemes.SelectedIndex = 0;

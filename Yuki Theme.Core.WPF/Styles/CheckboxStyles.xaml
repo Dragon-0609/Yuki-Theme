@@ -104,11 +104,11 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
-        
+    <Style x:Key="CheckBoxWindow" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Foreground}" />
     </Style>
     
-    <Style x:Key="CustomCheckBox" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
+    <Style x:Key="CheckBoxUserControl" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" />
     </Style>
 

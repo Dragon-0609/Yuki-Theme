@@ -10,8 +10,9 @@
         Loaded="Initialization"
         Title="Select Custom Sticker" Width="320" Style="{DynamicResource SLayer}" Height="40">
     <Window.Tag>
-        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" />
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
 
     <Window.Resources>
@@ -40,7 +41,7 @@
         <TextBlock VerticalAlignment="Center" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}"
                    Margin="2">Custom Sticker: </TextBlock>
         <TextBox Grid.Column="1" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center"
-                 BorderBrush="DimGray" Padding="2 1" Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}" />
+                 BorderBrush="DimGray" Padding="2 1" Style="{StaticResource TextBoxWindow}"/>
         <Button Grid.Column="2" Name="ImagePathButton" Margin="-1 5 0 0" Width="20" Height="20" Click="SelectImage"
                 VerticalAlignment="Center" />
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -20,7 +21,7 @@ namespace Yuki_Theme.Core.WPF
 {
 	public static class WPFHelper
 	{
-		internal static Window  windowForDialogs;
+		internal static Window      windowForDialogs;
 		internal static Func <bool> checkDialog;
 		#region Colors and Brushes
 
@@ -51,7 +52,9 @@ namespace Yuki_Theme.Core.WPF
 			SelectionBrush = selectionBrush,
 			KeywordBrush = keywordBrush,
 			BackgroundClickColor = bgClickColor,
-			BackgroundClickBrush = bgClickBrush
+			BackgroundClickBrush = bgClickBrush,
+			BackgroundDefaultColor = bgdefColor,
+			BackgroundDefaultBrush = bgdefBrush
 		};
 
 		public static ThemeAddition AddTheme (Window owner, string theme = "")
@@ -63,8 +66,6 @@ namespace Yuki_Theme.Core.WPF
 				Tag = owner.Tag,
 				Owner = owner
 			};
-			themeWindow.TName.Background = WPFHelper.bgdefBrush;
-			themeWindow.TName.Foreground = WPFHelper.fgBrush;
 			
 			themeWindow.AddThemes (theme);
 
@@ -118,6 +119,12 @@ namespace Yuki_Theme.Core.WPF
 			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
 				.ToWPFImage ();
 		}
+		
+
+		public static void SetResourceSvg (this ResourceDictionary dictionary, string name, string source, Dictionary <string, SDColor> idColor, Drawing.Size size)
+		{
+			dictionary [name] = GetSvg (source, idColor, size);
+		}
 
 		#endregion
 
@@ -126,7 +133,7 @@ namespace Yuki_Theme.Core.WPF
 			BitmapImage bi = new BitmapImage ();
 			using (var ms = new MemoryStream ())
 			{
-				img.Save (ms, System.Drawing.Imaging.ImageFormat.Png);
+				img.Save (ms, ImageFormat.Png);
 				// img.Dispose ();
 				ms.Position = 0;
 
@@ -143,8 +150,21 @@ namespace Yuki_Theme.Core.WPF
 		{
 			return st.Replace ("\n", "&amp;#10;");
 		}
-		
-		
+
+
+		public static Dictionary <string, Drawing.Color> GenerateDisabledBGColors ()
+		{
+			Dictionary <string, Drawing.Color> disabledIdColors = new Dictionary <string, Drawing.Color> ()
+				{ { "bg", Helper.DarkerOrLighter (Helper.bgColor, 0.2f) } };
+			return disabledIdColors;
+		}
+
+		public static Dictionary <string, Drawing.Color> GenerateBGColors ()
+		{
+			Dictionary <string, Drawing.Color> idColors = new Dictionary <string, Drawing.Color> () { { "bg", Helper.bgColor } };
+			return idColors;
+		}
+
 		public static int ToInt (this double d)
 		{
 			return Convert.ToInt32 (d);

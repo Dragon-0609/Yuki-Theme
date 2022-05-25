@@ -14,8 +14,9 @@
         Title="Yuki Theme" Height="400" Width="680">
 
     <Window.Tag>
-        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F" BackgroundClickBrush="#FF4F4F4F" />
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F"
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
 
     <Window.Resources>
@@ -25,6 +26,8 @@
                     Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/ListViewStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/CheckboxStyles.xaml" />
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/SliderStyles.xaml" />
                 <ResourceDictionary
@@ -82,8 +85,7 @@
                 </WrapPanel.Resources>
 
                 <ComboBox Width="180" Margin="5 10 5 5" SelectionChanged="Theme_Changed" Name="Themes" VerticalAlignment="Top"
-                          Background="{Binding ElementName=Window, Path=Background}"
-                          Foreground="{Binding ElementName=Window, Path=Foreground}" Tag="{Binding ElementName=Window, Path=Tag}">
+                          Style="{StaticResource DropdownWindow}">
                 </ComboBox>
 
                 <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0"
@@ -199,7 +201,7 @@
                 </Button>
 
 
-                <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
+                <Grid Name="ColorPanel" Margin="15 5" Visibility="Visible">
                     <Grid.Resources>
                         <Style x:Key="ColorButton" TargetType="Button" BasedOn="{StaticResource ButtonSource}">
                             <Setter Property="Width" Value="32" />
@@ -220,38 +222,35 @@
                     </Grid.Resources>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition /><RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" /><ColumnDefinition />
-                        <ColumnDefinition Width="Auto" /><ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Name="BGColorPanel" Orientation="Horizontal">
-                        <TextBlock Text="Background Color:" VerticalAlignment="Center" />
+                        <TextBlock Text="Background Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
                         <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
                             <Button Name="BGButton" Margin="0" Style="{StaticResource BackButton}" />
                         </Border>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Grid.Column="0" Name="FGColorPanel" Orientation="Horizontal">
-                        <TextBlock Text="Foreground Color:" VerticalAlignment="Center" />
+                        <TextBlock Text="Foreground Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
                         <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
                             <Button Width="32" Height="16" Name="FGButton" Margin="0" Style="{StaticResource ForeButton}" />
                         </Border>
                     </StackPanel>
 
-                    <StackPanel Grid.Row="0" Grid.Column="1" Name="BoldPanel" Orientation="Horizontal">
-                        <TextBlock Text="Bold:" VerticalAlignment="Center" Margin=" 10 2" />
-                        <CheckBox VerticalAlignment="Center" Margin=" 2 2" Name="BoldCheckBox" />
-                    </StackPanel>
+                    <CheckBox VerticalAlignment="Center" Margin="10 2" Name="BoldCheckBox" Grid.Row="0" Grid.Column="1" Content="Bold"
+                              Style="{StaticResource CheckBoxWindow}" />
 
-                    <StackPanel Grid.Row="1" Grid.Column="1" Name="ItalicPanel" Orientation="Horizontal">
-                        <TextBlock Text="Italic:" VerticalAlignment="Center" Margin=" 10 2" />
-                        <CheckBox VerticalAlignment="Center" Margin=" 2 2" Name="ItalicCheckBox" />
-                    </StackPanel>
+                    <CheckBox VerticalAlignment="Center" Margin="10 2" Name="ItalicCheckBox" Grid.Row="1" Grid.Column="1" Content="Italic"
+                              Style="{StaticResource CheckBoxWindow}" />
 
                 </Grid>
 
-                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Visible">
+                <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Collapsed">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -263,7 +262,7 @@
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal">
                             <TextBox Width="120" Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text="" VerticalAlignment="Center"
-                                     BorderBrush="DimGray" Padding="2 1" Foreground="{Binding ElementName=Window, Path=Foreground}" />
+                                     BorderBrush="DimGray" Padding="2 1" Style="{StaticResource TextBoxWindow}" />
                             <Button Name="ImagePathButton" Margin="-1 5 5 0" Width="20" Height="20" />
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
@@ -302,6 +301,7 @@
                 <controls:AirspacePopup PlacementTarget="{Binding ElementName=Fstb}"
                                         FollowPlacementTarget="True"
                                         AllowOutsideScreenPlacement="True"
+                                        StaysOpen="True"
                                         ParentWindow="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                         IsOpen="True"
                                         AllowsTransparency="True"

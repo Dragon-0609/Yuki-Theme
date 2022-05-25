@@ -19,21 +19,15 @@ namespace Yuki_Theme.Core.WPF.Styles
 
 		private void LoadSVG()
 		{
-			Dictionary <string, Drawing.Color> idColors = new Dictionary <string, Drawing.Color> () { {"bg", Helper.bgColor} };
-			Dictionary <string, Drawing.Color> disabledIdColors = new Dictionary <string, Drawing.Color> ()
-				{ { "bg", Helper.DarkerOrLighter (Helper.bgColor, 0.2f) } };
+			Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
+			var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
 
-			SetResourceSvg ("checkBoxDefault", "checkBox", idColors);
-			SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors);
-			SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors);
-			SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors);
-			SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors);
-			SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors);
-		}
-
-		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor)
-		{
-			this [name] = WPFHelper.GetSvg (source, idColor, defaultSize);
+			this.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
+			this.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
+			this.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
+			this.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
+			this.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
+			this.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
 		}
 
 		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
@@ -45,6 +39,5 @@ namespace Yuki_Theme.Core.WPF.Styles
 			if (can)
 				WPFHelper.windowForDialogs.DialogResult = true;
 		}
-		
 	}
 }

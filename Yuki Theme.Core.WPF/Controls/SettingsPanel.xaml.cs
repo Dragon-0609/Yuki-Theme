@@ -68,5 +68,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			EditorSettingsPanel.Visibility = EditorMode.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
 		}
+
+		private void AskOthersCheckedChanged (object sender, RoutedEventArgs e)
+		{
+			DoActionPanel.Visibility = AskOthers.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
+		}
 	}
 }

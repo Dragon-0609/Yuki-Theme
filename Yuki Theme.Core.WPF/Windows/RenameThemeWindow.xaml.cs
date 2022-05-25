@@ -19,12 +19,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			ChangeDialogButtons ();
 		}
-
-		public void SetColors (Brush bg, Brush fg)
-		{
-			Background = FName.Background = TName.Background = bg;
-			Foreground = FName.Foreground = TName.Foreground = fg;
-		}
 		
 		private void ChangeDialogButtons ()
 		{

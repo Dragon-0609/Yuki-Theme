@@ -9,8 +9,9 @@
         WindowStartupLocation="CenterOwner"
         Title="Add Theme" Width="300" Style="{DynamicResource SLayer}">
     <Window.Tag>
-        <controls:StyleConfig BorderColor="#FF97A0A5" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF97A0A5"
-                              SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" />
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
     
     <Window.Resources>
@@ -43,16 +44,14 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Copy from: " VerticalAlignment="Center" HorizontalAlignment="Center" />
 
         <ComboBox Grid.Row="0" Grid.Column="1" Width="180" x:Name="Themes" VerticalAlignment="Center" HorizontalAlignment="Center"
-                  Margin="0 10 10 10"
-                  Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Background}"
-                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}"
-                  Tag="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag}">
+                  Margin="0 10 10 10" Style="{StaticResource DropdownWindow}">
         </ComboBox>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Copy to: " VerticalAlignment="Center" HorizontalAlignment="Center" />
 
         <TextBox Grid.Row="1" Grid.Column="1" Height="Auto" Text="" VerticalAlignment="Center" Margin="0 5 10 5"
-                 BorderBrush="DimGray" Padding="2 1" x:Name="TName" />
+                 BorderBrush="DimGray" Padding="2 1" x:Name="TName"
+                 Style="{StaticResource TextBoxWindow}"/>
 
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -7,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.WPF.Controls;
+using Application = System.Windows.Application;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -31,6 +33,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Drawing.Image img4 = null;
 		private string []     themes;
 
+		private Drawing.Size defaultSize = new Drawing.Size (20, 20);
+		
 		#region Initialization
 
 		public MainWindow ()
@@ -144,6 +148,25 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
 		}
 
+		private void ReLoadCheckBoxImages ()
+		{
+			if (Application.Current.MainWindow != null)
+			{
+				ResourceDictionary mergedDict = Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
+				if (mergedDict != null)
+				{
+					Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
+					var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
+					mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
+					mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
+					mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
+					mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
+					mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
+					mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
+				}
+			}
+		}
+		
 		#endregion
 
 		private void AddTheme ()
@@ -227,6 +250,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			SetOpacityWallpaper ();
 			LoadSticker ();
 			LoadSVG ();
+			ReLoadCheckBoxImages ();
 		}
 
 		private void SelectField ()
@@ -238,10 +262,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 				if (IsColorField ())
 				{
 					ColorPanel.Visibility = Visibility.Visible;
-					ItalicPanel.IsEnabled = BoldPanel.IsEnabled =
+					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled =
 						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
 
-					ItalicPanel.Visibility = BoldPanel.Visibility =
+					BoldCheckBox.Visibility = ItalicCheckBox.Visibility =
 						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
 
 					ThemeField dic = CLI.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
@@ -311,7 +335,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			Background = WPFHelper.bgBrush;
 			Foreground = WPFHelper.fgBrush;
-			ImagePath.Background = WPFHelper.bgdefBrush;
 			StyleConfig config = WPFHelper.GenerateTag;
 			Window.Tag = config;
 		}
@@ -530,7 +553,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Tag = Tag,
 				Owner = this
 			};
-			customStickerWindow.SetColors (WPFHelper.bgBrush, WPFHelper.fgBrush);
 			bool? dialog = customStickerWindow.ShowDialog ();
 		}
 	}

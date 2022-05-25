@@ -16,12 +16,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.windowForDialogs = this;
 			WPFHelper.checkDialog = Save;
 		}
-
-		public void SetColors (Brush bg, Brush fg)
-		{
-			Background = ImagePath.Background = bg;
-			Foreground = ImagePath.Foreground = fg;
-		}
 		
 		private bool Save ()
 		{

@@ -119,6 +119,7 @@
         <Page Include="Styles\ListViewStyles.xaml" />
         <Page Include="Styles\SliderStyles.xaml" />
         <Page Include="Styles\TabStyles.xaml" />
+        <Page Include="Styles\TextBlockStyles.xaml" />
         <Page Include="Styles\TextBoxStyles.xaml" />
         <Page Include="Styles\ToolTipStyles.xaml" />
         <Page Include="Styles\WindowTemplate.xaml" />
