@@ -75,15 +75,6 @@ namespace Yuki_Theme.Core.WPF
 			return new ThemeAddition (themeWindow.Themes.SelectedItem.ToString (), themeWindow.TName.Text, dialog, themeWindow.result);
 		}
 
-		#region Color Conversation
-
-		public static SWMColor ToWPFColor (this      SDColor  color) => SWMColor.FromArgb (color.A, color.R, color.G, color.B);
-		public static SDColor  ToWinformsColor (this SWMColor color) => SDColor.FromArgb (color.A, color.R, color.G, color.B);
-
-		#endregion
-
-		public static WBrush ToBrush (this SWMColor color) => new SolidColorBrush (color);
-
 		#region SVG
 
 		public static void SetSVGImage (Button btn, string source, bool customColor = false, SDColor color = default)
@@ -128,30 +119,11 @@ namespace Yuki_Theme.Core.WPF
 
 		#endregion
 
-		public static BitmapImage ToWPFImage (this Drawing.Image img)
-		{
-			BitmapImage bi = new BitmapImage ();
-			using (var ms = new MemoryStream ())
-			{
-				img.Save (ms, ImageFormat.Png);
-				// img.Dispose ();
-				ms.Position = 0;
-
-				bi.BeginInit ();
-				bi.CacheOption = BitmapCacheOption.OnLoad;
-				bi.StreamSource = ms;
-				bi.EndInit ();
-			}
-
-			return bi;
-		}
-
 		public static string PutLineBreaks (string st)
 		{
 			return st.Replace ("\n", "&amp;#10;");
 		}
-
-
+		
 		public static Dictionary <string, Drawing.Color> GenerateDisabledBGColors ()
 		{
 			Dictionary <string, Drawing.Color> disabledIdColors = new Dictionary <string, Drawing.Color> ()
@@ -165,11 +137,6 @@ namespace Yuki_Theme.Core.WPF
 			return idColors;
 		}
 
-		public static int ToInt (this double d)
-		{
-			return Convert.ToInt32 (d);
-		}
-		
 		[DllImport ("gdi32.dll", EntryPoint = "DeleteObject")]
 		[return: MarshalAs (UnmanagedType.Bool)]
 		public static extern bool DeleteObject ([In] IntPtr hObject);

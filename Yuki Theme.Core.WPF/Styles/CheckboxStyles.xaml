@@ -11,7 +11,6 @@
 
     <Style x:Key="CheckDefault" TargetType="CheckBox">
         <Setter Property="IsThreeState" Value="False" />
-        <Setter Property="IsChecked" Value="{Binding IsChecked ,Mode=TwoWay}" />
         <Setter Property="MaxWidth" Value="500" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">

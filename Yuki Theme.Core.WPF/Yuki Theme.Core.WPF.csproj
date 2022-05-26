@@ -83,6 +83,7 @@
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
+        <Compile Include="Converter.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
         </Compile>
@@ -147,6 +148,9 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+        <EmbeddedResource Include="Resources\SVG\back_dark.svg" />
+        <EmbeddedResource Include="Resources\SVG\forward.svg" />
+        <EmbeddedResource Include="Resources\SVG\forward_dark.svg" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
@@ -164,6 +168,7 @@
       <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
+      <EmbeddedResource Include="Resources\SVG\back.svg" />
       <EmbeddedResource Include="Resources\SVG\checkBox.svg" />
       <EmbeddedResource Include="Resources\SVG\checkBoxDisabled.svg" />
       <EmbeddedResource Include="Resources\SVG\checkBoxFocused.svg" />

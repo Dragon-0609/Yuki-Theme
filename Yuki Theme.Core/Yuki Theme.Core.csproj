@@ -360,8 +360,11 @@
     <EmbeddedResource Include="Resources\SVG\menu-saveall_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\edit.svg" />
     <EmbeddedResource Include="Resources\CHANGELOG.html" />
-    <EmbeddedResource Include="Resources\LICENSE" />
+    <EmbeddedResource Include="Resources\JetBrainsLICENSE" />
     <EmbeddedResource Include="Localization\en.lang" />
+    <EmbeddedResource Include="..\LICENSE">
+      <Link>Resources\LICENSE</Link>
+    </EmbeddedResource>
     <Content Include="Resources\center.png" />
     <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />

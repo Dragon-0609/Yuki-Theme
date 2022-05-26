@@ -1,40 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Yuki_Theme.Core.WPF.Windows;
 using Drawing = System.Drawing;
+
 namespace Yuki_Theme.Core.WPF.Controls
 {
 	public partial class SettingsPanel : UserControl
 	{
 		private Drawing.Size defaultSmallSize = new Drawing.Size (16, 16);
-
-		public Window ParentWindow = null;
+		private string       customStickerPath;
 		
+		public Window ParentWindow = null;
+
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
-			
+
 			LoadSVG ();
 		}
-		
-		
-		private void LoadSVG()
+
+
+		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
 			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CLI.GetCore ());
 		}
-		
-		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly asm = null)
+
+		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size,
+		                             string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly asm = null)
 		{
 			if (asm == null)
 				asm = Assembly.GetExecutingAssembly ();
 			this.Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
-		
-		
+
+
 		public Thickness InnerMargin
 		{
 			get { return (Thickness)GetValue (InnerMarginProperty); }
@@ -47,8 +51,166 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void SettingsPanel_OnLoaded (object sender, RoutedEventArgs e)
 		{
-			EditorSettingsPanel.Visibility = Settings.Editor ? Visibility.Visible : Visibility.Collapsed;
+			LoadSettings ();
 		}
+
+		private void LoadSettings ()
+		{
+			HideFields ();
+			FillGeneralValues ();
+			FillProgramValues ();
+			FillPluginValues ();
+		}
+
+		private void HideFields ()
+		{
+			EditorSettingsPanel.Visibility = Settings.Editor ? Visibility.Visible : Visibility.Collapsed;
+			DoActionPanel.Visibility = Settings.askChoice == true ? Visibility.Collapsed : Visibility.Visible;
+		}
+
+		private void FillGeneralValues ()
+		{
+			SCheck (EditorMode, Settings.Editor);
+			SCheck (ShowSticker, Settings.swSticker);
+			SCheck (AllowPositioning, Settings.positioning);
+			SCheck (CustomSticker, Settings.useCustomSticker);
+			SCheck (ShowBackgroundImage, Settings.bgImage);
+			SCheck (AutoFit, Settings.autoFitByWidth);
+			SCheck (AlwaysAsk, Settings.askToSave);
+			SCheck (AutoUpdate, Settings.update);
+			SCheck (CheckBeta, Settings.Beta);
+			SDrop (EditorModeDropdown, (int)Settings.settingMode);
+			customStickerPath = Settings.customSticker;
+		}
+
+		private void FillProgramValues ()
+		{
+			bool isProgram = Helper.mode == ProductMode.Program;
+			HideHeader (isProgram);
+			if (isProgram)
+			{
+				SText (PascalPath, Settings.pascalPath);
+				SCheck (AskOthers, Settings.askChoice);
+				SDrop (ActionDropdown, Settings.actionChoice);
+			}
+		}
+
+		private void FillPluginValues ()
+		{
+			bool isPlugin = Helper.mode == ProductMode.Plugin;
+			HideHeader (!isPlugin);
+			if (isPlugin)
+			{
+				SCheck (LogoStart, Settings.swLogo);
+				SCheck (NameStatusBar, Settings.swStatusbar);
+				SCheck (Preview, Settings.showPreview);
+			}
+		}
+
+		private void HideHeader (bool isProgram)
+		{
+			ProgramAdd.Visibility = isProgram ? Visibility.Visible : Visibility.Collapsed;
+			PluginAdd.Visibility = PluginTool.Visibility = isProgram ? Visibility.Collapsed : Visibility.Visible;
+		}
+
+		public void SaveSettings ()
+		{
+			SaveGeneralSettings ();
+			SaveProgramSettings ();
+			SavePluginSettings ();
+		}
+
+		private void SaveGeneralSettings ()
+		{
+			KCheck (EditorMode, ref Settings.Editor);
+			KCheck (ShowSticker, ref Settings.swSticker);
+			KCheck (AllowPositioning, ref Settings.positioning);
+			KCheck (CustomSticker, ref Settings.useCustomSticker);
+			KCheck (ShowBackgroundImage, ref Settings.bgImage);
+			KCheck (AutoFit, ref Settings.autoFitByWidth);
+			KCheck (AlwaysAsk, ref Settings.askToSave);
+			KCheck (AutoUpdate, ref Settings.update);
+			KCheck (CheckBeta, ref Settings.Beta);
+			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
+			Settings.customSticker = customStickerPath;
+		}
+
+		private void SaveProgramSettings ()
+		{
+			bool isProgram = Helper.mode == ProductMode.Program;
+			if (isProgram)
+			{
+				KText (PascalPath, ref Settings.pascalPath);
+				KCheck (AskOthers, ref Settings.askChoice);
+				KDrop (ActionDropdown, ref Settings.actionChoice);
+			}
+		}
+
+		private void SavePluginSettings ()
+		{
+			bool isPlugin = Helper.mode == ProductMode.Plugin;
+			if (isPlugin)
+			{
+				KCheck (LogoStart, ref Settings.swLogo);
+				KCheck (NameStatusBar, ref Settings.swStatusbar);
+				KCheck (Preview, ref Settings.showPreview);
+			}
+		}
+
+		#region Helper Methods
+
+		/// <summary>
+		/// Save Checkbox.IsChecked to bool
+		/// </summary>
+		/// <param name="checkBox">Checkbox to save from</param>
+		/// <param name="target">Target to set the bool</param>
+		private void KCheck (CheckBox checkBox, ref bool target)
+		{
+			target = checkBox.IsChecked == true;
+		}
+
+		/// <summary>
+		/// Save Selected Index of combobox to int
+		/// </summary>
+		private void KDrop (ComboBox dropDown, ref int value)
+		{
+			value = dropDown.SelectedIndex;
+		}
+
+		/// <summary>
+		/// Save Text of textbox to string
+		/// </summary>
+		private void KText (TextBox textBox, ref string value)
+		{
+			value = textBox.Text;
+		}
+
+		/// <summary>
+		/// Set value of combobox
+		/// </summary>
+		private void SDrop (ComboBox dropDown, int value)
+		{
+			dropDown.SelectedIndex = value;
+		}
+
+		/// <summary>
+		/// Set value of checkbox
+		/// </summary>
+		private void SCheck (CheckBox checkBox, bool value)
+		{
+			checkBox.IsChecked = value;
+		}
+
+		/// <summary>
+		/// Set value of textbox
+		/// </summary>
+		private void SText (TextBox textBox, string value)
+		{
+			textBox.Text = value;
+		}
+		
+
+		#endregion
 
 		private void AboutButton_OnClick (object sender, RoutedEventArgs e)
 		{
@@ -72,6 +234,26 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void AskOthersCheckedChanged (object sender, RoutedEventArgs e)
 		{
 			DoActionPanel.Visibility = AskOthers.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
+		}
+
+		private void AllowPositioningCheckedChanged (object sender, RoutedEventArgs e)
+		{
+			ResetMargin.IsEnabled = AllowPositioning.IsChecked == true;
+		}
+
+		private void ChooseCustomSticker (object sender, RoutedEventArgs e)
+		{
+			CustomStickerWindow customStickerWindow = new CustomStickerWindow
+			{
+				Background = WPFHelper.bgBrush,
+				Foreground = WPFHelper.fgBrush,
+				Tag = Tag
+			};
+			customStickerWindow.ImagePath.Text = customStickerPath;
+			if (ParentWindow != null) customStickerWindow.Owner = ParentWindow;
+			bool? dialog = customStickerWindow.ShowDialog ();
+			if (dialog != null && (bool)dialog)
+				customStickerPath = customStickerWindow.ImagePath.Text;
 		}
 	}
 }

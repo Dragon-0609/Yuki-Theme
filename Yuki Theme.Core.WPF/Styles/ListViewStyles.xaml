@@ -80,4 +80,16 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style x:Key="ListViewWindow" TargetType="ListView">
+        <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Tag}" />
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Background, TargetNullValue=Black, FallbackValue=Black}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}" />
+    </Style>
+    <Style x:Key="ListViewUserControl" TargetType="ListView">
+        <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}" />
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" />
+    </Style>
+    
 </ResourceDictionary>

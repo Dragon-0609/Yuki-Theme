@@ -30,6 +30,8 @@
                     Source="/Yuki_Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
                 <ResourceDictionary
                     Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/ListViewStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -38,22 +40,24 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}">
-        <TabItem Header="General">
-            <StackPanel>
-                <CheckBox Content="Editor Mode" Name="EditorMode" Margin="4 10 4 5" Style="{StaticResource CheckBoxUserControl}"
+        <TabItem Header="General" IsSelected="True">
+            <StackPanel Margin="4 5">
+                <CheckBox Content="Editor Mode" Name="EditorMode" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="EditorModeCheckChanged" Unchecked="EditorModeCheckChanged" />
 
-                <GroupBox Margin="4 5" Header="Sticker" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="Sticker" Style="{StaticResource CustomGroup}">
                     <StackPanel Margin="6 0 0 0">
                         <CheckBox Content="Show Sticker" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
-                                  HorizontalAlignment="Left" />
+                                  HorizontalAlignment="Left" Name="ShowSticker" />
 
                         <WrapPanel Margin="0 5 6 3">
                             <CheckBox Content="Allow Positioning" Style="{StaticResource CheckBoxUserControl}"
-                                      VerticalAlignment="Top" Margin="0 0 20 0" />
+                                      VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning"
+                                      Checked="AllowPositioningCheckedChanged" Unchecked="AllowPositioningCheckedChanged" />
 
                             <WrapPanel Orientation="Vertical">
-                                <Button Padding="8 2" Margin="0" Content="Reset Sticker Margin" />
+                                <Button Padding="8 2" Margin="0" Content="Reset Sticker Margin" Name="ResetMargin"
+                                        Style="{StaticResource ButtonUserControl}" />
                                 <Label Padding="0">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
@@ -68,16 +72,18 @@
 
                         <WrapPanel Margin="0 0 6 3">
                             <Button Padding="8 2" Content="Choose Image"
-                                    Margin="0 0 20 0" />
-                            <CheckBox Content="Use Custom Sticker" Style="{StaticResource CheckBoxUserControl}" />
+                                    Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}" Click="ChooseCustomSticker" />
+                            <CheckBox Content="Use Custom Sticker" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Margin="4 5" Header="Background Image" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="Background Image" Style="{StaticResource CustomGroup}">
                     <StackPanel HorizontalAlignment="Left">
-                        <CheckBox Content="Show Background Image" Margin="4 5" Style="{StaticResource CheckBoxUserControl}" />
-                        <CheckBox Content="Auto Fit Background Image by Width" Margin="4 5 4 0" Style="{StaticResource CheckBoxUserControl}" />
+                        <CheckBox Content="Show Background Image" Margin="4 5" Style="{StaticResource CheckBoxUserControl}"
+                                  Name="ShowBackgroundImage" />
+                        <CheckBox Content="Auto Fit Background Image by Width" Margin="4 5 4 0"
+                                  Style="{StaticResource CheckBoxUserControl}" Name="AutoFit" />
 
                         <Label Margin="22 0 4 3" Padding="0">
                             <StackPanel Orientation="Horizontal">
@@ -91,11 +97,11 @@
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Margin="4 5" Header="Other Settings" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="Other Settings" Style="{StaticResource CustomGroup}">
                     <StackPanel>
                         <StackPanel x:Name="EditorSettingsPanel">
                             <CheckBox Content="Always ask to save" Margin="4 5 4 0" Style="{StaticResource CheckBoxUserControl}"
-                                      HorizontalAlignment="Left" />
+                                      HorizontalAlignment="Left" Name="AlwaysAsk" />
 
                             <Label Margin="4 0 4 5" Padding="0">
                                 <StackPanel Orientation="Horizontal">
@@ -121,51 +127,52 @@
 
                         <WrapPanel Margin="4 5">
                             <CheckBox Style="{StaticResource CheckBoxUserControl}" VerticalAlignment="Top" Margin="0 0 20 0"
-                                      Content="Auto Check Updates" />
-                            <Button Padding="6 2" Margin="0 0 6 0" Content="Check" VerticalAlignment="Top" />
-                            <Button Padding="6 2" Margin="6 0">
+                                      Content="Auto Check Updates" Name="AutoUpdate" />
+                            <Button Padding="6 2" Margin="0 0 6 0" Content="Check" VerticalAlignment="Top"
+                                    Style="{StaticResource ButtonUserControl}" />
+                            <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}">
                                 <TextBlock>Update<LineBreak /> Manually</TextBlock>
                             </Button>
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5">
-                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0" Content="Check Beta Versions" />
-                            <Button Padding="6 2" Margin="0" Content="Restart for update" />
+                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0" Content="Check Beta Versions"
+                                      Name="CheckBeta" />
+                            <Button Padding="6 2" Margin="0" Content="Restart for update" Style="{StaticResource ButtonUserControl}" />
                         </WrapPanel>
                         <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="About" Name="AboutButton"
-                                Click="AboutButton_OnClick" />
+                                Click="AboutButton_OnClick" Style="{StaticResource ButtonUserControl}" />
                     </StackPanel>
                 </GroupBox>
 
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="Additional" IsSelected="True">
-            <StackPanel>
+        <TabItem Header="Additional" Name="ProgramAdd">
+            <StackPanel Margin="4 5">
 
-                <TextBlock
-                    Margin="4 10 4 5" Style="{StaticResource TextBlockUserControl}">
+                <TextBlock Margin="0 5" Style="{StaticResource TextBlockUserControl}">
                     Path to PascalABC.NET
                 </TextBlock>
-                <Grid Margin=" 5 5 20 5">
+                <Grid Margin="0 5 20 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition Width="25" />
                     </Grid.ColumnDefinitions>
-                    <TextBox Name="ImagePath" Margin="5 5 0 0" FontSize="12" Text=""
+                    <TextBox Name="PascalPath" Margin="5 5 0 0" FontSize="12" Text=""
                              BorderBrush="DimGray" Padding="2 2" VerticalAlignment="Center"
                              Style="{StaticResource TextBoxUserControl}" />
                     <Button Grid.Column="1" Margin="0 5 5 0" VerticalAlignment="Center"
-                            Width="20" Height="20">
+                            Width="20" Height="20" Style="{StaticResource ButtonUserControl}">
                         ...
                     </Button>
                 </Grid>
 
-                <CheckBox Content="Ask other themes in Pascal directory" Name="AskOthers" Margin="4 5 4 0"
+                <CheckBox Content="Ask other themes in Pascal directory" Name="AskOthers" Margin="0 5 4 0"
                           Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="AskOthersCheckedChanged" Unchecked="AskOthersCheckedChanged" />
 
-                <Label Margin="22 0 4 3" Padding="0">
+                <Label Margin="18 0 4 3" Padding="0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                Margin="0 0 6 0" />
@@ -190,20 +197,53 @@
 
         </TabItem>
 
-        <TabItem Header="Additional">
+        <TabItem Header="Additional" Name="PluginAdd">
+            <StackPanel Margin="4 10 4 5">
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Logo on Start" Name="LogoStart" />
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Name in status bar" Name="NameStatusBar" />
 
+                <CheckBox Content="Preview in switcher" Margin="0 5 4 0" Name="Preview"
+                          Style="{StaticResource CheckBoxUserControl}" />
+
+                <Label Margin="18 0 4 3" Padding="0">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
+                               Margin="0 0 6 0" />
+                        <TextBlock Style="{StaticResource TextBlockUserControl}">
+                            Preview themes in Theme Switcher
+                        </TextBlock>
+                    </StackPanel>
+                </Label>
+
+
+            </StackPanel>
         </TabItem>
 
-        <TabItem Header="Additional">
+        <TabItem Header="Tool Bar" Name="PluginTool">
+            <Grid Margin="2 4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ListView Grid.Column="0" Padding="5" Name="IconsList" SelectionMode="Single" BorderThickness="0"
+                          Style="{StaticResource ListViewUserControl}">
+                </ListView>
 
-        </TabItem>
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
 
-        <TabItem Header="Additional">
+                    <WrapPanel>
+                        <TextBlock Style="{StaticResource TextBlockUserControl}">
+                            Icon:
+                        </TextBlock>
+                        <Image Width="32" Height="32" />
+                    </WrapPanel>
 
-        </TabItem>
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Show" />
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="From right" />
 
-        <TabItem Header="Additional">
+                </StackPanel>
 
+            </Grid>
         </TabItem>
 
     </TabControl>

@@ -15,6 +15,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private bool     openedLicense   = false;
 		private bool     openedChangelog = false;
 		private bool     animating       = false;
+		private bool     secondLicense   = false;
 		private Duration duration        = new Duration (TimeSpan.FromSeconds (0.5));
 
 		public AboutWindow ()
@@ -31,22 +32,38 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Version.Text = GenerateVersionText ();
 			Logo.Source = Helper.GetYukiThemeIconImage (new Drawing.Size (Logo.Width.ToInt (), Logo.Height.ToInt ())).ToWPFImage ();
-			string licenseText = Helper.ReadResource ("LICENSE");
-			LicenseBox.Text = licenseText;
+			ShowLicense ();
+			PrepareChangelog ();
+			LoadSvg ();
+		}
+
+		private void PrepareChangelog ()
+		{
 			string htmlText = Helper.ReadNConvertMDToHTML ("CHANGELOG.md");
 			htmlText = htmlText.Replace ("__expand__", "none");
 			Browser.NavigateToString (htmlText);
 		}
 
+		private void LoadSvg ()
+		{
+			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			Drawing.Size size = new Drawing.Size (24, 24);
+			Assembly assm = Assembly.GetExecutingAssembly ();
+			BackImage.Source = WPFHelper.GetSvg ("back" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
+			ForwardImage.Source = WPFHelper.GetSvg ("forward" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
+		}
+
 		private static string GenerateVersionText ()
 		{
-			return $"{CLI.Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+			return
+				$"{CLI.Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
 		}
 
 		private DoubleAnimation AnimateWindow (bool positive)
 		{
 			DoubleAnimation widthAnimation = new DoubleAnimation (this.Width + (positive ? 300 : -300), duration);
-			widthAnimation.AccelerationRatio = 0.4; widthAnimation.DecelerationRatio = 0.6;
+			widthAnimation.AccelerationRatio = 0.4;
+			widthAnimation.DecelerationRatio = 0.6;
 			return widthAnimation;
 		}
 
@@ -60,7 +77,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				widthAnimation = new DoubleAnimation (300, 0, duration);
 			}
-			widthAnimation.AccelerationRatio = 0.4; widthAnimation.DecelerationRatio = 0.6;
+
+			widthAnimation.AccelerationRatio = 0.4;
+			widthAnimation.DecelerationRatio = 0.6;
 			widthAnimation.Completed += (o, args) =>
 			{
 				animating = false;
@@ -69,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			};
 			return widthAnimation;
 		}
-		
+
 		private DoubleAnimation CalculatePosition (bool opened)
 		{
 			DoubleAnimation positionAnimation;
@@ -78,48 +97,54 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				double left = Math.Max (-150, windowLeft - 300);
 				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
-				positionAnimation.Completed += (sender, args) => {
-				this.Left = left;
-				}; 
+				positionAnimation.Completed += (sender, args) =>
+				{
+					this.Left = left;
+				};
 			} else
 			{
 				double left = windowLeft + 300;
 				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
-				positionAnimation.Completed += (sender, args) => {
-				this.Left = left;
-				}; 
+				positionAnimation.Completed += (sender, args) =>
+				{
+					this.Left = left;
+				};
 			}
-			positionAnimation.AccelerationRatio = 0.4; positionAnimation.DecelerationRatio = 0.6;
+
+			positionAnimation.AccelerationRatio = 0.4;
+			positionAnimation.DecelerationRatio = 0.6;
 			return positionAnimation;
 		}
 
 		private void AddAnimation (Storyboard sb, DoubleAnimation animation, DependencyObject target, DependencyProperty property)
 		{
-			Storyboard.SetTarget(animation, target);
-			Storyboard.SetTargetProperty(animation, new PropertyPath(property));
-			sb.Children.Add(animation);
+			Storyboard.SetTarget (animation, target);
+			Storyboard.SetTargetProperty (animation, new PropertyPath (property));
+			sb.Children.Add (animation);
 		}
 
 		private void ToggleChangelog (object sender, RoutedEventArgs e)
 		{
 			if (!animating)
 			{
-				Storyboard sb = new Storyboard();
-				if (!openedChangelog){
+				Storyboard sb = new Storyboard ();
+				if (!openedChangelog)
+				{
 					ChangeLogPanel.Visibility = Visibility.Visible;
 				}
+
 				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedChangelog, ChangeLogPanel);
-				AddAnimation (sb, panelWidthAnimation, ChangeLogPanel,DockPanel.WidthProperty);
-				
+				AddAnimation (sb, panelWidthAnimation, ChangeLogPanel, DockPanel.WidthProperty);
+
 				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedChangelog);
-				AddAnimation (sb, windowWidthAnimation, this,Window.WidthProperty);
-				
+				AddAnimation (sb, windowWidthAnimation, this, Window.WidthProperty);
+
 				DoubleAnimation windowPositionAnimation = CalculatePosition (openedChangelog);
-				AddAnimation (sb, windowPositionAnimation, this,Window.LeftProperty);				
-			
+				AddAnimation (sb, windowPositionAnimation, this, Window.LeftProperty);
+
 				openedChangelog = !openedChangelog;
 				animating = true;
-				sb.Begin();
+				sb.Begin ();
 			}
 		}
 
@@ -127,18 +152,54 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (!animating)
 			{
-				Storyboard sb = new Storyboard();
-				if (!openedLicense){
+				Storyboard sb = new Storyboard ();
+				if (!openedLicense)
+				{
 					LicensePanel.Visibility = Visibility.Visible;
 				}
+
 				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedLicense, LicensePanel);
-				AddAnimation (sb, panelWidthAnimation, LicensePanel,DockPanel.WidthProperty);
+				AddAnimation (sb, panelWidthAnimation, LicensePanel, DockPanel.WidthProperty);
 				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedLicense);
 				AddAnimation (sb, windowWidthAnimation, this, Window.WidthProperty);
 				openedLicense = !openedLicense;
 				animating = true;
-				sb.Begin();
+				sb.Begin ();
 			}
 		}
+
+		private void BackButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			if (secondLicense)
+			{
+				secondLicense = !secondLicense;
+				ShowLicense();
+			}
+		}
+
+		private void ForwardButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			if (!secondLicense)
+			{
+				secondLicense = !secondLicense;
+				ShowLicense();
+			}
+		}
+
+		private void ShowLicense ()
+		{
+			string licensePath = secondLicense ? "JetBrainsLICENSE" : "LICENSE";
+			string licenseHeader = secondLicense ? "JetBrains" : "Dragon-LV";
+			LicenseBox.Text = Helper.ReadResource (licensePath);
+			LicenseOwner.Text = licenseHeader;
+			DisableLicenseButtons ();
+		}
+
+		private void DisableLicenseButtons ()
+		{
+			BackButton.IsEnabled = secondLicense;
+			ForwardButton.IsEnabled = !secondLicense;
+		}
+		
 	}
 }

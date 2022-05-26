@@ -26,7 +26,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void Initialize (object sender, RoutedEventArgs e)
 		{
 			ChangeDialogButtons ();
-			LoadSVG ();
+			LoadSvg ();
 
 			groupItems = new Dictionary <string, ManageableItem> ();
 
@@ -75,7 +75,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			saveBtn.Content = "Close";
 		}
 
-		private void LoadSVG ()
+		private void LoadSvg ()
 		{
 			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
 			Size size = new Size (24, 24);

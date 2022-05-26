@@ -30,7 +30,7 @@
                     </Canvas>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Fill" TargetName="Background" Value="{Binding Tag.KeywordBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" />
+                            <Setter Property="Fill" TargetName="Background" Value="{Binding Tag.SelectionBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" />
                         </Trigger>
                         <Trigger Property="IsDragging" Value="true">
                             <Setter Property="Fill" TargetName="Background" Value="{Binding Tag.BackgroundClickBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" />
