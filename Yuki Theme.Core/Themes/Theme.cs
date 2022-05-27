@@ -1,4 +1,5 @@
-﻿using System;
+﻿// #define CONSOLE_LOGS_ACTIVE
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Yuki_Theme.Core.Themes
 		[JsonProperty ("stickerOpacity")]
 		public int StickerOpacity { get; set; }
 
-		[DefaultValue("null")]
+		[DefaultValue ("null")]
 		[JsonProperty ("token", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public string Token { get; set; }
 
@@ -79,19 +80,25 @@ namespace Yuki_Theme.Core.Themes
 			isEqual = isEqual && t1.Name == t2.Name;
 			if (isEqual)
 			{
+#if CONSOLE_LOGS_ACTIVE
 				Console.WriteLine (t1.Name + " A:- " + t1.align + " | " + t2.align);
+#endif
 				isEqual = t1.WallpaperAlign == t2.WallpaperAlign;
 			}
 
 			if (isEqual)
 			{
+#if CONSOLE_LOGS_ACTIVE
 				Console.WriteLine (t1.Name + " Op:- " + t1.WallpaperOpacity + " | " + t2.WallpaperOpacity);
+#endif
 				isEqual = t1.WallpaperOpacity == t2.WallpaperOpacity;
 			}
 
 			if (isEqual)
 			{
+#if CONSOLE_LOGS_ACTIVE
 				Console.WriteLine (t1.Name + " Sop:- " + t1.StickerOpacity + " | " + t2.StickerOpacity);
+#endif
 				isEqual = t1.StickerOpacity == t2.StickerOpacity;
 			}
 
@@ -115,7 +122,6 @@ namespace Yuki_Theme.Core.Themes
 			else if (target == "center") WallpaperAlign = (int)Alignment.Center;
 			else WallpaperAlign = (int)Alignment.Right;
 		}
-
 	}
 
 	public static class ThemeFunctions
@@ -143,10 +149,10 @@ namespace Yuki_Theme.Core.Themes
 		}
 
 		public static bool ContentEquals (this Dictionary <string, ThemeField> dictionary,
-		                                                 Dictionary <string, ThemeField>      otherDictionary)
+		                                  Dictionary <string, ThemeField>      otherDictionary)
 		{
 			bool equality = true;
-			
+
 			/*
 			foreach (KeyValuePair <string, ThemeField> pair in dictionary)
 			{
@@ -168,7 +174,7 @@ namespace Yuki_Theme.Core.Themes
 			{
 				localDictionary = dictionary;
 			}
-			
+
 			foreach (KeyValuePair <string, ThemeField> pair in localDictionary)
 			{
 				if (otherDictionary.ContainsKey (pair.Key))
@@ -178,14 +184,15 @@ namespace Yuki_Theme.Core.Themes
 				{
 					equality = false;
 				}
-
-				Console.WriteLine ("{0} -> {1} == {2} => {3}", pair.Key, pair.Value, otherDictionary.ContainsKey (pair.Key) ? otherDictionary [pair.Key] : "null", equality);
+#if CONSOLE_LOGS_ACTIVE
+				Console.WriteLine ("{0} -> {1} == {2} => {3}", pair.Key, pair.Value,
+				                   otherDictionary.ContainsKey (pair.Key) ? otherDictionary [pair.Key] : "null", equality);
+#endif
 				if (!equality)
 					break;
 			}
-			
+
 			return equality;
 		}
-		
 	}
 }

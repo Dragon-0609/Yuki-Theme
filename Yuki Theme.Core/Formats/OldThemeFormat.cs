@@ -256,10 +256,10 @@ namespace Yuki_Theme.Core.Formats
 				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, themeToSave);
 			else
 				localDic = themeToSave.Fields;
-			foreach (KeyValuePair <string, ThemeField> themeField in localDic)
+			/*foreach (KeyValuePair <string, ThemeField> themeField in localDic)
 			{
 				Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
-			}
+			}*/
 			MergeThemeFieldsWithFile (localDic, doc);
 
 			MergeCommentsWithFile (themeToSave, doc);

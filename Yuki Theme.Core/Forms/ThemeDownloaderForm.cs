@@ -1,4 +1,5 @@
 ﻿// #define PRIMARLY
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,19 +23,22 @@ public partial class ThemeDownloaderForm : Form
 {
 	private const string THEME_NAMESPACE = "Yuki_Theme.Core.Resources.HTML.";
 
-	private string        branch       = "master";
-	private int           searchMode   = 0;
-	private List <string> branches     = new List <string> ();
-	private bool          isFromBranch = false;
-	private Task          loadingJSONSTask;
-	private HtmlElement   themesElement;
+	private string        branch     = "master";
+	private int           searchMode = 0;
+	private List <string> branches   = new List <string> ();
+
+	private bool        isFromBranch = false;
+	private Task        loadingJSONSTask;
+	private HtmlElement themesElement;
 
 	private double stepProgress;
 	private double currentProgress;
 	private bool   needToReset = false;
 
-	private Dictionary <string, string> themesWithUrls = new ();
-	private Dictionary <string, Theme>  themes         = new ();
+	private Dictionary <string, string> themesWithUrls    = new ();
+	private Dictionary <string, string> branchCommitDates = new ();
+	private Dictionary <string, bool>   newThemes         = new ();
+	private Dictionary <string, Theme>  themes            = new ();
 
 
 	private const string LOCAL_SERVER = "http://localhost:8000/find.json";
@@ -42,14 +46,18 @@ public partial class ThemeDownloaderForm : Form
 	private const string REMOTE_SERVER =
 		"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
 
-	private const string LOCAL_API_SERVER  = "http://localhost:8000/branches.json";
-	private const string REMOTE_API_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
+	private const string LOCAL_BRANCH_SERVER  = "http://localhost:8000/branches.json";
+	private const string REMOTE_BRANCH_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
 	private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
-	private const string STICKER_SERVER    = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
-	
-	private const string GROUP_FILE    = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
+	private const string STICKER_SERVER   = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
 
+	private const string BRANCH_COMMIT_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches/";
+
+	private const string GROUP_FILE = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
+
+	private bool needToReplaceDates = false;
+	
 	public ThemeDownloaderForm ()
 	{
 		InitializeComponent ();
@@ -68,7 +76,7 @@ public partial class ThemeDownloaderForm : Form
 		LoadGroups ();
 
 		ParseBranches ();
-		
+
 		ParseAllThemes ();
 		// LoadThemePage ();
 	}
@@ -85,7 +93,7 @@ public partial class ThemeDownloaderForm : Form
 	private async void ParseBranches ()
 	{
 		Console.WriteLine ("Requesting branch info...");
-		string search_api = REMOTE_API_SERVER;
+		string search_api = REMOTE_BRANCH_SERVER;
 		branches.Clear ();
 		using (HttpClient client = new HttpClient ())
 		{
@@ -96,6 +104,8 @@ public partial class ThemeDownloaderForm : Form
 			{
 				Console.WriteLine ("Branch info loaded.");
 				string json = await response.Content.ReadAsStringAsync ();
+				// Damn! API rate limit exceeded for <my IP address>
+				Console.WriteLine (json); 
 				JArray jresponse;
 				jresponse = JArray.Parse (json);
 
@@ -104,6 +114,45 @@ public partial class ThemeDownloaderForm : Form
 				{
 					Console.WriteLine ("Branch: {0}", s ["name"]);
 					branches.Add (s ["name"].ToString ());
+				}
+			}
+		}
+
+		ParseBranchLastCommits ();
+	}
+
+	private async void ParseBranchLastCommits ()
+	{
+		Console.WriteLine ("Requesting branch commit...");
+		int lastIndex = branches.Count - 1;
+		for (var index = 0; index < branches.Count; index++)
+		{
+			string branchName = branches [index];
+			string search_api = BRANCH_COMMIT_SERVER + branchName;
+
+			using (HttpClient client = new HttpClient ())
+			{
+				client.DefaultRequestHeaders.Add ("User-Agent",
+				                                  DownloadForm.user_agent);
+
+				var response = await client.GetAsync (search_api);
+				if (response != null)
+				{
+					Console.WriteLine ("Branch commit loaded.");
+					string json = await response.Content.ReadAsStringAsync ();
+					JObject commit = JObject.Parse (json);
+
+					Console.WriteLine ("Parsing branch commit...");
+					string date = ((JToken)commit ["commit"]? ["commit"]? ["author"]? ["date"])?.Value <DateTime> ()
+						.ToString ("MM.dd.yyyy");
+
+					Console.WriteLine ("Date: {0} => {1}", branchName, date);
+					branchCommitDates.Add (branchName, date);
+
+					if (lastIndex == index)
+					{
+						needToReplaceDates = true;
+					}
 				}
 			}
 		}
@@ -124,7 +173,7 @@ public partial class ThemeDownloaderForm : Form
 				Console.WriteLine ("Groups info loaded.");
 				string file = await response.Content.ReadAsStringAsync ();
 
-				string[] lines = file.Split ('\n');
+				string [] lines = file.Split ('\n');
 
 				Console.WriteLine ("Parsing groups info...");
 				Dictionary <string, string> namespaces = new ();
@@ -170,7 +219,7 @@ public partial class ThemeDownloaderForm : Form
 		if (target.StartsWith (starting))
 		{
 			string ctarget = target.Substring (starting.Length);
-			string[] splitted = ctarget.Split (new [] { " = " }, StringSplitOptions.None);
+			string [] splitted = ctarget.Split (new [] { " = " }, StringSplitOptions.None);
 			splitted [1] = splitted [1].Replace ("\"", "");
 			return new Tuple <string, string> (splitted [0], splitted [1]);
 		} else
@@ -230,8 +279,15 @@ public partial class ThemeDownloaderForm : Form
 			string json = multi [1];
 			doki.Parse (json, "none", "none", null, false, false, false);
 			doki.theme.link = multi [0];
+			bool isEqual = !IsEqual (doki.theme, CLI.GetTheme (doki.theme.Name));
 			themes.Add (doki.theme.Name, doki.theme);
-			LoadThemeIntoPage (doki.theme);
+			newThemes.Add (doki.theme.Name, isEqual);
+			LoadThemeIntoPage (doki.theme, isEqual);
+			if (needToReplaceDates)
+			{
+				needToReplaceDates = false;
+				ReplaceBranchDatesHTML ();
+			}
 		}
 	}
 
@@ -310,13 +366,29 @@ public partial class ThemeDownloaderForm : Form
 	private string CollectBranchesHTML ()
 	{
 		string result = "";
-
+		Console.WriteLine ("Loaded Branch HTML");
 		foreach (string branch in branches)
 		{
-			result += $"<div><a href='javascript:void(0);' onclick='LoadBranch(\"{branch}\")' class='px-3'>{branch}</a></div>";
+			result +=
+				$"<div class='d-flex'><a href='javascript:void(0);' onclick='LoadBranch(\"{branch}\")' class='px-3'>{branch}</a> <span class='ml-auto mr-3'>{branch}_DATE</span></div>";
 		}
 
 		return result;
+	}
+
+	private void ReplaceBranchDatesHTML ()
+	{
+		if (browser.Document != null && browser.Document.Body != null)
+		{
+			string html = browser.Document.Body.InnerHtml;
+			foreach (KeyValuePair <string, string> commitDate in branchCommitDates)
+			{
+
+				html = html.Replace (commitDate.Key + "_DATE", commitDate.Value);
+			}
+
+			browser.Document.Body.InnerHtml = html;
+		}
 	}
 
 	private string CollectThemesHTML ()
@@ -347,6 +419,7 @@ public partial class ThemeDownloaderForm : Form
 				return null;
 			}
 		}
+
 		return null;
 	}
 
@@ -363,8 +436,8 @@ public partial class ThemeDownloaderForm : Form
 	private void LoadJSONS ()
 	{
 		themesWithUrls = themesWithUrls.OrderBy (obj => obj.Key).ToDictionary ((obj) => obj.Key, (obj) => obj.Value);
-		int max = 10; // themesWithUrls.Count
-		stepProgress = 100.0 /  max;
+		int max = themesWithUrls.Count;
+		stepProgress = 100.0 / max;
 		currentProgress = 0;
 		needToReset = true;
 		int pars = 0;
@@ -383,7 +456,7 @@ public partial class ThemeDownloaderForm : Form
 		}*/
 	}
 
-	private void LoadThemeIntoPage (Theme theme)
+	private void LoadThemeIntoPage (Theme theme, bool isEqual)
 	{
 		if (!this.IsDisposed)
 		{
@@ -395,7 +468,7 @@ public partial class ThemeDownloaderForm : Form
 					new object []
 					{
 						theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
-						(!IsEqual (theme, CLI.GetTheme (theme.Name))).ToStringLower (),
+						isEqual.ToStringLower (),
 						theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
 						theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
 						theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background,
@@ -444,12 +517,12 @@ public partial class ThemeDownloaderForm : Form
 	{
 		string url = "";
 
-		string split = theme.link.Split (new string [] {"definitions/" }, StringSplitOptions.None)[1];
+		string split = theme.link.Split (new string [] { "definitions/" }, StringSplitOptions.None) [1];
 		split = split.Substring (0, split.LastIndexOf ("/", StringComparison.Ordinal));
 		url = STICKER_SERVER + split + "/" + theme.imagePath;
 		return url;
 	}
-	
+
 	public void DownloadTheme (string name)
 	{
 		currentProgress = 0;
@@ -460,11 +533,20 @@ public partial class ThemeDownloaderForm : Form
 
 	public void DownloadAll ()
 	{
-		Console.WriteLine ("Downloading all themes.");
-		stepProgress = 100.0 / themes.Count;
-		currentProgress = 0;
-		// Doesn't work well
-		Parallel.ForEach (themes, keyValuePair => DownloadThemeThread (new Tuple <string, bool> (keyValuePair.Key, false)));
+		Thread thread = new Thread (DownloadAllThread);
+		thread.Start ();
+	}
+
+	private void DownloadAllThread ()
+	{
+		lock (themes)
+		{
+			Console.WriteLine ("Downloading all themes.");
+			stepProgress = 100.0 / themes.Count;
+			currentProgress = 0;
+			// Doesn't work well
+			Parallel.ForEach (themes, keyValuePair => DownloadThemeThread (new Tuple <string, bool> (keyValuePair.Key, false)));
+		}
 	}
 
 	private void DownloadThemeThread (object param)
@@ -472,41 +554,53 @@ public partial class ThemeDownloaderForm : Form
 		Tuple <string, bool> typle = (Tuple <string, bool>)param;
 		string name = typle.Item1;
 		bool eachTime = typle.Item2;
-		Console.WriteLine ("Downloading theme {0}", name);
 
-		try
+		bool notEqual = false;
+		lock (newThemes)
 		{
-			if (CLI.ThemeInfos.ContainsKey (name))
+			notEqual = newThemes.ContainsKey (name) && newThemes [name];
+		}
+
+		if (notEqual)
+		{
+			Console.WriteLine ("Downloading theme {0}", name);
+			try
 			{
-				if (CLI.ThemeInfos [name].location == ThemeLocation.File &&
-				    File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+				if (CLI.ThemeInfos.ContainsKey (name))
 				{
-					File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+					if (CLI.ThemeInfos [name].location == ThemeLocation.File &&
+					    File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+					{
+						File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+					}
 				}
+
+				Theme theme = themes [name];
+
+				Image wallpaper = DownloadImage (WALLPAPER_SERVER + theme.imagePath);
+				if (eachTime)
+					AddNSetProgress ();
+				Image sticker = DownloadImage (GenerateStickerUrl (theme));
+				if (eachTime)
+					AddNSetProgress ();
+
+				theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
+				theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
+				Console.WriteLine ("Token: {0}", theme.Token);
+				CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+				CLI.saveList (theme, wallpaper, sticker);
+				wallpaper.Dispose ();
+				sticker.Dispose ();
+				AddNSetProgress ();
+				Console.WriteLine ("{0} has been saved", name);
+			} catch (Exception e)
+			{
+				Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
+				Console.WriteLine ("{0} hasn't been saved", name);
 			}
-
-			Theme theme = themes [name];
-
-			Image wallpaper = DownloadImage (WALLPAPER_SERVER + theme.imagePath);
-			if (eachTime)
-				AddNSetProgress ();
-			Image sticker = DownloadImage (GenerateStickerUrl (theme));
-			if (eachTime)
-				AddNSetProgress ();
-			
-			theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
-			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
-			Console.WriteLine ("Token: {0}", theme.Token);
-			CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-			CLI.saveList (theme, wallpaper, sticker);
-			wallpaper.Dispose ();
-			sticker.Dispose ();
-			AddNSetProgress ();
-			Console.WriteLine ("{0} has been saved", name);
-		} catch (Exception e)
+		} else
 		{
-			Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
-			Console.WriteLine ("{0} hasn't been saved", name);
+			Console.WriteLine ("Theme: {0} is up to date ", name);
 		}
 	}
 
@@ -518,7 +612,7 @@ public partial class ThemeDownloaderForm : Form
 			browser.Document.InvokeScript ("SetProgress", new object [] { currentProgress.ToString ("0.0").Replace (',', '.') });
 		});
 	}
-	
+
 	private string Base64Encode (string plainText)
 	{
 		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes (plainText);
