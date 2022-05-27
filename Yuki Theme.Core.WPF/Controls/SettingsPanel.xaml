@@ -6,7 +6,8 @@
              xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="300" MinWidth="340" MinHeight="200"
-             Loaded="SettingsPanel_OnLoaded">
+             Loaded="SettingsPanel_OnLoaded"
+             SizeChanged="SettingsPanel_OnSizeChanged">
     <UserControl.Tag>
         <controls:StyleConfig BorderColor="#FF994499" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F" BorderBrush="#FF994499"
                               SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F"
@@ -41,41 +42,84 @@
     </UserControl.Resources>
     <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}">
         <TabItem Header="General" IsSelected="True">
-            <StackPanel Margin="4 5">
+
+            <StackPanel Margin="4 5" Name="GeneralPanel">
                 <CheckBox Content="Editor Mode" Name="EditorMode" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="EditorModeCheckChanged" Unchecked="EditorModeCheckChanged" />
 
                 <GroupBox Margin="0 5" Header="Sticker" Style="{StaticResource CustomGroup}">
-                    <StackPanel Margin="6 0 0 0">
-                        <CheckBox Content="Show Sticker" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
-                                  HorizontalAlignment="Left" Name="ShowSticker" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Margin="6 0 0 0">
+                            <CheckBox Content="Show Sticker" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
+                                      HorizontalAlignment="Left" Name="ShowSticker" />
 
-                        <WrapPanel Margin="0 5 6 3">
-                            <CheckBox Content="Allow Positioning" Style="{StaticResource CheckBoxUserControl}"
-                                      VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning"
-                                      Checked="AllowPositioningCheckedChanged" Unchecked="AllowPositioningCheckedChanged" />
+                            <WrapPanel Margin="0 5 6 3" HorizontalAlignment="Left" Name="PositioningPanel">
+                                <CheckBox Content="Allow Positioning" Style="{StaticResource CheckBoxUserControl}"
+                                          VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning"
+                                          Checked="AllowPositioningCheckedChanged" Unchecked="AllowPositioningCheckedChanged" />
 
-                            <WrapPanel Orientation="Vertical">
-                                <Button Padding="8 2" Margin="0" Content="Reset Sticker Margin" Name="ResetMargin"
-                                        Style="{StaticResource ButtonUserControl}" />
-                                <Label Padding="0">
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
-                                               Margin="0 0 6 0" />
-                                        <TextBlock Style="{StaticResource TextBlockUserControl}">
-                                            Double click sticker<LineBreak /> to save current position.
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Label>
+                                <WrapPanel Orientation="Vertical">
+                                    <Button Padding="8 2" Margin="0" Content="Reset Sticker Margin" Name="ResetMargin"
+                                            Style="{StaticResource ButtonUserControl}" />
+                                    <Label Padding="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
+                                                   Margin="0 0 6 0" />
+                                            <TextBlock Style="{StaticResource TextBlockUserControl}">
+                                                Double click sticker<LineBreak /> to save current position.
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Label>
+                                </WrapPanel>
                             </WrapPanel>
-                        </WrapPanel>
 
-                        <WrapPanel Margin="0 0 6 3">
-                            <Button Padding="8 2" Content="Choose Image"
-                                    Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}" Click="ChooseCustomSticker" />
-                            <CheckBox Content="Use Custom Sticker" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
-                        </WrapPanel>
-                    </StackPanel>
+                            <WrapPanel Margin="0 0 6 3">
+                                <Button Padding="8 2" Content="Choose Image"
+                                        Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}" Click="ChooseCustomSticker" />
+                                <CheckBox Content="Use Custom Sticker" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
+                            </WrapPanel>
+
+
+                        </StackPanel>
+                        
+                        <GroupBox Grid.Row="1" Grid.Column="0" Margin="0 5" Header="Sticker Dimension Cap" Style="{StaticResource CustomGroup}" Name="DimensionCapGroup">
+                            <StackPanel HorizontalAlignment="Left" Margin="4 5" Name="DimensionCapPanel">
+                                <CheckBox Content="Enable Sticker Dimension Cap" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
+                                          Name="StickerDimensionCap" Checked="StickerDimensionCapCheckedChanged"
+                                          Unchecked="StickerDimensionCapCheckedChanged" />
+                                <WrapPanel Margin="0 5">
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center">
+                                        Max Size (px)
+                                    </TextBlock>
+                                    <controls:IntegerUpDown
+                                        FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
+                                        VerticalAlignment="Center" Width="70" Height="30"
+                                        Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
+                                        MinValue="-1" x:Name="DimensionCapMax" />
+                                </WrapPanel>
+                                <WrapPanel Margin="0 5">
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}">
+                                        Max Size by:
+                                    </TextBlock>
+                                    <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}" Name="DimensionCapBy">
+                                        <ComboBoxItem IsSelected="True">Height</ComboBoxItem>
+                                        <ComboBoxItem>Width</ComboBoxItem>
+                                    </ComboBox>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                    </Grid>
                 </GroupBox>
 
                 <GroupBox Margin="0 5" Header="Background Image" Style="{StaticResource CustomGroup}">

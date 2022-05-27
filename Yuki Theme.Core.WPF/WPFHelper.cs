@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -23,6 +24,7 @@ namespace Yuki_Theme.Core.WPF
 	{
 		internal static Window      windowForDialogs;
 		internal static Func <bool> checkDialog;
+
 		#region Colors and Brushes
 
 		public static SWMColor bgColor;
@@ -66,7 +68,7 @@ namespace Yuki_Theme.Core.WPF
 				Tag = owner.Tag,
 				Owner = owner
 			};
-			
+
 			themeWindow.AddThemes (theme);
 
 			bool? dialog = themeWindow.ShowDialog ();
@@ -96,23 +98,26 @@ namespace Yuki_Theme.Core.WPF
 				                            customColor, color))
 					.ToWPFImage ()
 			};
-			
 		}
-		
-		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
-		{
-			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true, Helper.bgBorder))
-				.ToWPFImage ();
-		}
-		
-		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, bool withCustomColor, Drawing.Size size, string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly assm = null)
-		{
-			return (Helper.RenderSvg ( size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
-				.ToWPFImage ();
-		}
-		
 
-		public static void SetResourceSvg (this ResourceDictionary dictionary, string name, string source, Dictionary <string, SDColor> idColor, Drawing.Size size)
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, Drawing.Size size,
+		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
+		{
+			return (Helper.RenderSvg (size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true,
+			                          Helper.bgBorder))
+				.ToWPFImage ();
+		}
+
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, bool withCustomColor, Drawing.Size size,
+		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly assm = null)
+		{
+			return (Helper.RenderSvg (size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
+				.ToWPFImage ();
+		}
+
+
+		public static void SetResourceSvg (this ResourceDictionary      dictionary, string       name, string source,
+		                                   Dictionary <string, SDColor> idColor,    Drawing.Size size)
 		{
 			dictionary [name] = GetSvg (source, idColor, size);
 		}
@@ -123,7 +128,7 @@ namespace Yuki_Theme.Core.WPF
 		{
 			return st.Replace ("\n", "&amp;#10;");
 		}
-		
+
 		public static Dictionary <string, Drawing.Color> GenerateDisabledBGColors ()
 		{
 			Dictionary <string, Drawing.Color> disabledIdColors = new Dictionary <string, Drawing.Color> ()
@@ -155,6 +160,77 @@ namespace Yuki_Theme.Core.WPF
 			to = t;
 			save = sv;
 			result = res;
+		}
+	}
+
+	public class MouseWheelBehavior
+	{
+		public static double GetValue (Slider slider)
+		{
+			return (double)slider.GetValue (ValueProperty);
+		}
+
+		public static void SetValue (Slider slider, double value)
+		{
+			slider.SetValue (ValueProperty, value);
+		}
+
+		public static readonly DependencyProperty ValueProperty =
+			DependencyProperty.RegisterAttached (
+				"Value",
+				typeof (double),
+				typeof (MouseWheelBehavior),
+				new UIPropertyMetadata (0.0, OnValueChanged));
+
+		public static Slider GetSlider (UIElement parentElement)
+		{
+			return (Slider)parentElement.GetValue (SliderProperty);
+		}
+
+		public static void SetSlider (UIElement parentElement, Slider value)
+		{
+			parentElement.SetValue (SliderProperty, value);
+		}
+
+		public static readonly DependencyProperty SliderProperty =
+			DependencyProperty.RegisterAttached (
+				"Slider",
+				typeof (Slider),
+				typeof (MouseWheelBehavior));
+
+
+		private static void OnValueChanged (DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			Slider slider = d as Slider;
+			slider.Loaded += (ss, ee) =>
+			{
+				Window window = Window.GetWindow (slider);
+				if (window != null)
+				{
+					SetSlider (window, slider);
+					window.PreviewMouseWheel += Window_PreviewMouseWheel;
+				}
+			};
+			slider.Unloaded += (ss, ee) =>
+			{
+				Window window = Window.GetWindow (slider);
+				if (window != null)
+				{
+					SetSlider (window, null);
+					window.PreviewMouseWheel -= Window_PreviewMouseWheel;
+				}
+			};
+		}
+
+		private static void Window_PreviewMouseWheel (object sender, MouseWheelEventArgs e)
+		{
+			Window window = sender as Window;
+			Slider slider = GetSlider (window);
+			double value = GetValue (slider);
+			if (slider != null && value != 0)
+			{
+				slider.Value += slider.SmallChange * e.Delta / value;
+			}
 		}
 	}
 }

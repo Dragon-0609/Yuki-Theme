@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.WPF.Controls;
@@ -33,6 +35,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private string []     themes;
 
 		private Drawing.Size defaultSize = new Drawing.Size (20, 20);
+
+		private bool BlockOpacity = false;
 
 		#region Initialization
 
@@ -100,10 +104,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				{
 					if (img3 != null)
 					{
-						if (CLI.currentTheme.StickerOpacity != 100)
-							img4 = Helper.SetOpacity (img3, CLI.currentTheme.StickerOpacity);
-						else
-							img4 = img3;
+						img4 = img3;
 						Sticker.Visibility = Visibility.Visible;
 					} else
 					{
@@ -314,6 +315,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					AlignPanel.Visibility = Visibility.Collapsed;
 					OpacityPanel.Visibility = Visibility.Collapsed;
 					ImagePath.Text = "";
+					BlockOpacity = true;
 					OpacitySlider.Value = 0;
 					if (IsWallpaperDefinition ())
 					{
@@ -333,6 +335,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 							ImagePath.Text = "sticker.png";
 						}
 					}
+					BlockOpacity = false;
 				}
 			}
 		}
@@ -406,6 +409,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
+
+		private void ChangeOpacityBySlider ()
+		{
+			CLI.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
+			SetOpacityWallpaper ();
+		}
 
 		#region Core Actions
 
@@ -509,14 +518,20 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Filter = "PNG (*.png)|*.png"
 			};
 			if (openFileDialog.ShowDialog () == true)
-			{
+			{ 
 				if (IsWallpaperDefinition ())
 				{
-					
+					if (openFileDialog.FileName != ImagePath.Text)
+					{
+						img2 = Drawing.Image.FromFile (openFileDialog.FileName);
+						SetOpacityWallpaper ();						
+					}
 				} else
 				{
-					
+					img3 = Drawing.Image.FromFile (openFileDialog.FileName);
+					LoadSticker ();
 				}
+				ImagePath.Text = openFileDialog.FileName;
 			}
 		}
 
@@ -663,6 +678,25 @@ namespace Yuki_Theme.Core.WPF.Windows
 			ChangeImage ();
 		}
 
+		private void OpacitySlider_OnValueChanged (object sender, RoutedPropertyChangedEventArgs <double> e)
+		{
+			if (!BlockOpacity)
+			{
+				ChangeOpacityBySlider ();
+			}
+		}
+
 		#endregion
+
+		private void OpacitySlider_OnDragStarted (object sender, DragStartedEventArgs e)
+		{
+			BlockOpacity = true;			
+		}
+
+		private void OpacitySlider_OnDragCompleted (object sender, DragCompletedEventArgs e)
+		{
+			BlockOpacity = false;
+			ChangeOpacityBySlider ();
+		}
 	}
 }

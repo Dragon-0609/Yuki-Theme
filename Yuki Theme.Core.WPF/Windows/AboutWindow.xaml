@@ -123,7 +123,10 @@
                 <Button HorizontalAlignment="Right" Click="ToggleLicense" Style="{StaticResource ShadowButton}" Padding="6 2">License</Button>
             </Grid>
             <Grid Grid.Row="5" VerticalAlignment="Bottom" Margin="10 2 5 2">
-                <TextBlock FontSize="20" Text="Developer: Dragon-LV" FontFamily="{StaticResource SAOFont}" VerticalAlignment="Bottom" />
+                <TextBlock FontSize="20" Text="" FontFamily="{StaticResource SAOFont}" VerticalAlignment="Bottom">
+                    Developer:&#160;
+                    <Hyperlink NavigateUri="https://github.com/Dragon-0609/" RequestNavigate="OpenLink">Dragon-LV</Hyperlink>
+                </TextBlock>
                 <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True">Close</Button>
             </Grid>
 

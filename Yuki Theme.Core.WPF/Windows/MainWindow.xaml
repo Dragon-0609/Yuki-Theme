@@ -9,6 +9,7 @@
         Loaded="Init"
         Background="#212121" Foreground="#DDDDDD"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+        xmlns:wpf="clr-namespace:Yuki_Theme.Core.WPF"
         Name="Window"
         Closing="MainWindow_OnClosing"
         SourceInitialized="MainWindow_OnSourceInitialized"
@@ -274,12 +275,12 @@
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
                                 <Button Name="ApplyButton" Content="Apply" Width="NaN" Padding="6 2" />
-                                <Button Name="CancelButton" Content="Cancel" Width="NaN" Padding="6 2" />
+                                <Button Name="ClearButton" Content="Clear" Width="NaN" Padding="6 2" />
                             </StackPanel>
                         </Grid>
 
                         <StackPanel Name="AlignPanel">
-                            <TextBlock Text="Algin:" Margin="7 0" Style="{StaticResource BigMargin}" />
+                            <TextBlock Text="Align:" Margin="7 0" Style="{StaticResource BigMargin}" />
                             <StackPanel Orientation="Horizontal">
                                 <controls:AlignButton Style="{StaticResource BigButton}" Margin="10 10 5 5" x:Name="LAlignButton"
                                                       Padding="0"
@@ -299,7 +300,13 @@
                             <Slider Width="120" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1"
                                     Margin="5 5 5 0" Background="{Binding ElementName=Window, Path=Background}"
                                     Foreground="{Binding ElementName=Window, Path=Foreground}"
-                                    Name="OpacitySlider" Tag="{Binding ElementName=Window, Path=Tag}" />
+                                    Name="OpacitySlider" Tag="{Binding ElementName=Window, Path=Tag}"
+                                    ValueChanged="OpacitySlider_OnValueChanged"
+                                    Thumb.DragStarted="OpacitySlider_OnDragStarted"
+                                    Thumb.DragCompleted="OpacitySlider_OnDragCompleted" 
+                                    wpf:MouseWheelBehavior.Value="120"
+                                    SmallChange="1" />
+
                         </StackPanel>
 
                     </WrapPanel>

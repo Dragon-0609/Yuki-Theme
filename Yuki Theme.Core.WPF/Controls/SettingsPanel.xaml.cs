@@ -13,7 +13,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 	{
 		private Drawing.Size defaultSmallSize = new Drawing.Size (16, 16);
 		private string       customStickerPath;
-		
+
+		private Thickness groupBoxExpanded  = new Thickness (5);
+		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
+
 		public Window ParentWindow = null;
 
 		public SettingsPanel ()
@@ -51,6 +54,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void SettingsPanel_OnLoaded (object sender, RoutedEventArgs e)
 		{
+			CheckGridSize ();
 			LoadSettings ();
 		}
 
@@ -208,7 +212,6 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			textBox.Text = value;
 		}
-		
 
 		#endregion
 
@@ -254,6 +257,40 @@ namespace Yuki_Theme.Core.WPF.Controls
 			bool? dialog = customStickerWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)
 				customStickerPath = customStickerWindow.ImagePath.Text;
+		}
+
+		private void StickerDimensionCapCheckedChanged (object sender, RoutedEventArgs e)
+		{
+			DimensionCapMax.IsEnabled = DimensionCapBy.IsEnabled = StickerDimensionCap.IsChecked == true;
+		}
+
+		private void SettingsPanel_OnSizeChanged (object sender, SizeChangedEventArgs e)
+		{
+			CheckGridSize ();
+		}
+
+		private void CheckGridSize ()
+		{
+			const int additionalMargins = 125;
+			Console.WriteLine ("GENERAL: {0:0}, POSITION: {1:0}, DIMENSION: {2:0}", this.RenderSize.Width, PositioningPanel.ActualWidth,
+			                   DimensionCapPanel.ActualWidth + additionalMargins);
+			bool canExpand = this.RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
+			CheckNSetGridLayouts (DimensionCapGroup, canExpand);
+			CheckNSetMargin (DimensionCapGroup, canExpand, groupBoxExpanded, groupBoxCollapsed);
+		}
+
+		private void CheckNSetGridLayouts (UIElement element, bool toOne)
+		{
+			if (Grid.GetColumn (element) == (toOne ? 0 : 1))
+			{
+				Grid.SetColumn (element, toOne ? 1 : 0);
+				Grid.SetRow (element, toOne ? 0 : 1);
+			}
+		}
+
+		private void CheckNSetMargin (FrameworkElement element, bool expand, Thickness expandedMargin, Thickness collapsedMargin)
+		{
+			element.Margin = expand ? expandedMargin : collapsedMargin;
 		}
 	}
 }
