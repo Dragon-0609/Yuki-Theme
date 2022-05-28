@@ -12,6 +12,7 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
@@ -35,6 +36,8 @@ public partial class ThemeDownloaderForm : Form
 	private double currentProgress;
 	private bool   needToReset = false;
 
+	private bool htmlLoaded = false;
+	
 	private Dictionary <string, string> themesWithUrls    = new ();
 	private Dictionary <string, string> branchCommitDates = new ();
 	private Dictionary <string, bool>   newThemes         = new ();
@@ -56,8 +59,6 @@ public partial class ThemeDownloaderForm : Form
 
 	private const string GROUP_FILE = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
 
-	private bool needToReplaceDates = false;
-	
 	public ThemeDownloaderForm ()
 	{
 		InitializeComponent ();
@@ -105,9 +106,19 @@ public partial class ThemeDownloaderForm : Form
 				Console.WriteLine ("Branch info loaded.");
 				string json = await response.Content.ReadAsStringAsync ();
 				// Damn! API rate limit exceeded for <my IP address>
-				Console.WriteLine (json); 
+				// Console.WriteLine (json); 
 				JArray jresponse;
-				jresponse = JArray.Parse (json);
+				try
+				{
+					jresponse = JArray.Parse (json);
+				} catch (JsonReaderException e)
+				{
+					Console.WriteLine (json);
+					MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+					                 MessageBoxIcon.Error);
+					return;
+				}
+				
 
 				Console.WriteLine ("Parsing branch info...");
 				foreach (JObject s in jresponse)
@@ -124,10 +135,8 @@ public partial class ThemeDownloaderForm : Form
 	private async void ParseBranchLastCommits ()
 	{
 		Console.WriteLine ("Requesting branch commit...");
-		int lastIndex = branches.Count - 1;
-		for (var index = 0; index < branches.Count; index++)
+		foreach (string branchName in branches)
 		{
-			string branchName = branches [index];
 			string search_api = BRANCH_COMMIT_SERVER + branchName;
 
 			using (HttpClient client = new HttpClient ())
@@ -147,12 +156,8 @@ public partial class ThemeDownloaderForm : Form
 						.ToString ("MM.dd.yyyy");
 
 					Console.WriteLine ("Date: {0} => {1}", branchName, date);
-					branchCommitDates.Add (branchName, date);
+					ReplaceBranchDatesHTML (branchName+"_DATE", date);
 
-					if (lastIndex == index)
-					{
-						needToReplaceDates = true;
-					}
 				}
 			}
 		}
@@ -273,7 +278,7 @@ public partial class ThemeDownloaderForm : Form
 	{
 		if (!this.IsDisposed)
 		{
-			DokiThemeParser doki = new DokiThemeParser ();
+			/*DokiThemeParser doki = new DokiThemeParser ();
 			doki.needToWrite = false;
 			string [] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
 			string json = multi [1];
@@ -282,20 +287,23 @@ public partial class ThemeDownloaderForm : Form
 			bool isEqual = !IsEqual (doki.theme, CLI.GetTheme (doki.theme.Name));
 			themes.Add (doki.theme.Name, doki.theme);
 			newThemes.Add (doki.theme.Name, isEqual);
-			LoadThemeIntoPage (doki.theme, isEqual);
-			if (needToReplaceDates)
-			{
-				needToReplaceDates = false;
-				ReplaceBranchDatesHTML ();
-			}
+			LoadThemeIntoPage (doki.theme, isEqual);*/
 		}
 	}
 
 	private void ParseMode0 (string json)
 	{
-		JObject jresponse = JObject.Parse (json);
-
-
+		JObject jresponse;
+		try
+		{
+			jresponse = JObject.Parse (json);
+		} catch (JsonReaderException e)
+		{
+			MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+			                 MessageBoxIcon.Error);
+			return;
+		}
+		
 		JArray jarray = JArray.FromObject (jresponse.GetValue ("items"));
 
 		foreach (JObject s in jarray)
@@ -311,8 +319,16 @@ public partial class ThemeDownloaderForm : Form
 
 	private void ParseMode1 (string json)
 	{
-		JObject jresponse = JObject.Parse (json);
-
+		JObject jresponse;
+		try
+		{
+			jresponse = JObject.Parse (json);
+		} catch (JsonReaderException e)
+		{
+			MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+			                 MessageBoxIcon.Error);
+			return;
+		}
 
 		JArray jarray = JArray.FromObject (jresponse.GetValue ("tree"));
 
@@ -376,18 +392,37 @@ public partial class ThemeDownloaderForm : Form
 		return result;
 	}
 
-	private void ReplaceBranchDatesHTML ()
+	private void ReplaceBranchDatesHTML (string from, string to)
 	{
-		if (browser.Document != null && browser.Document.Body != null)
+		// commitDate.Key + "_DATE", commitDate.Value
+		if (htmlLoaded)
 		{
-			string html = browser.Document.Body.InnerHtml;
-			foreach (KeyValuePair <string, string> commitDate in branchCommitDates)
+			lock (branchCommitDates)
 			{
-
-				html = html.Replace (commitDate.Key + "_DATE", commitDate.Value);
+				if (branchCommitDates.Count > 0)
+				{
+					foreach (KeyValuePair <string, string> pair in branchCommitDates)
+					{
+						browser.Invoke ((MethodInvoker)delegate
+						{
+							browser.Document.InvokeScript (
+								"ReplaceDate", new object [] { pair.Key, pair.Value });
+						});			
+					}
+					branchCommitDates.Clear ();
+				}	
 			}
-
-			browser.Document.Body.InnerHtml = html;
+			browser.Invoke ((MethodInvoker)delegate
+			{
+				browser.Document.InvokeScript (
+					"ReplaceDate", new object [] { from, to });
+			});
+		} else
+		{
+			lock (branchCommitDates)
+			{
+				branchCommitDates.Add (from, to);
+			}
 		}
 	}
 
@@ -500,6 +535,7 @@ public partial class ThemeDownloaderForm : Form
 				browser.Navigate ("about:blank");
 				browser.Document.OpenNew (false);
 				browser.Document.Write (html);
+				htmlLoaded = true;
 				browser.Refresh ();
 			}
 		}
