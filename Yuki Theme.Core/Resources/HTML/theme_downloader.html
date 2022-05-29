@@ -133,6 +133,10 @@
             left: 0;
             z-index: 120;
         }
+        
+        .branch_tab:hover {
+            background-color: rgba(0,0,0,0.25);
+        }
     </style>
 </head>
 <body class="p-0 m-0">
@@ -153,6 +157,12 @@
     <div id="themes" class="row mx-0 row-cols-1 row-cols-sm-2">
         __content__
     </div>
+</div>
+
+<div>
+    <a href="#content">
+        
+    </a>
 </div>
 
 <script>
@@ -263,8 +273,8 @@
         mv.classList.add("p-2");
         let btnShow = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">' +
             '<g fill-rule="evenodd">' +
-                '<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
-                '<rect width="12" height="2" x="2" y="12"/>' +
+            '<polygon points="9 7 12 7 8 11 4 7 7 7 7 2 9 2" transform="matrix(-1 0 0 1 16 0)"/>' +
+            '<rect width="12" height="2" x="2" y="12"/>' +
             '</g></svg>';
         if (canDownload !== "true") {
             mv.classList.add("deactive");
@@ -315,7 +325,7 @@
             '\t\t\t\t\t<div class="hidden-hover justify-content-end position-relative">' +
             '\t\t\t\t\t\t<div class="d-flex">' +
             '\t\t\t\t\t\t\t<a class="ml-auto p-2 svg_fill downloader" href="javascript:void(0);" onclick="DownloadTheme(\'' + nam + '\')">' +
-             btnShow +
+            btnShow +
             '\t\t\t\t\t\t\t</a>' +
             '\t\t\t\t\t\t</div>' +
             '\t\t\t\t\t</div>' +
@@ -355,7 +365,7 @@
         AddThemeHTML(syntax_2, syntax, canDownload);
     }
     
-    function ReplaceDate(fromm, too){
+    function ReplaceDate(fromm, too) {
         document.body.innerHTML = document.body.innerHTML.replace(fromm, too);
     }
 </script>

@@ -37,11 +37,13 @@ public partial class ThemeDownloaderForm : Form
 	private bool   needToReset = false;
 
 	private bool htmlLoaded = false;
-	
+
 	private Dictionary <string, string> themesWithUrls    = new ();
 	private Dictionary <string, string> branchCommitDates = new ();
 	private Dictionary <string, bool>   newThemes         = new ();
 	private Dictionary <string, Theme>  themes            = new ();
+
+	private List <string> downloadingErrors = new List <string> ();
 
 
 	private const string LOCAL_SERVER = "http://localhost:8000/find.json";
@@ -77,8 +79,7 @@ public partial class ThemeDownloaderForm : Form
 		LoadGroups ();
 
 		ParseBranches ();
-
-		ParseAllThemes ();
+		
 		// LoadThemePage ();
 	}
 
@@ -118,7 +119,7 @@ public partial class ThemeDownloaderForm : Form
 					                 MessageBoxIcon.Error);
 					return;
 				}
-				
+
 
 				Console.WriteLine ("Parsing branch info...");
 				foreach (JObject s in jresponse)
@@ -156,11 +157,15 @@ public partial class ThemeDownloaderForm : Form
 						.ToString ("MM.dd.yyyy");
 
 					Console.WriteLine ("Date: {0} => {1}", branchName, date);
-					ReplaceBranchDatesHTML (branchName+"_DATE", date);
-
+					lock (branchCommitDates)
+					{
+						branchCommitDates.Add (branchName, date);
+					}
 				}
 			}
 		}
+
+		ParseAllThemes ();
 	}
 
 	private async void LoadGroups ()
@@ -278,7 +283,7 @@ public partial class ThemeDownloaderForm : Form
 	{
 		if (!this.IsDisposed)
 		{
-			/*DokiThemeParser doki = new DokiThemeParser ();
+			DokiThemeParser doki = new DokiThemeParser ();
 			doki.needToWrite = false;
 			string [] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
 			string json = multi [1];
@@ -287,7 +292,7 @@ public partial class ThemeDownloaderForm : Form
 			bool isEqual = !IsEqual (doki.theme, CLI.GetTheme (doki.theme.Name));
 			themes.Add (doki.theme.Name, doki.theme);
 			newThemes.Add (doki.theme.Name, isEqual);
-			LoadThemeIntoPage (doki.theme, isEqual);*/
+			LoadThemeIntoPage (doki.theme, isEqual);
 		}
 	}
 
@@ -303,7 +308,7 @@ public partial class ThemeDownloaderForm : Form
 			                 MessageBoxIcon.Error);
 			return;
 		}
-		
+
 		JArray jarray = JArray.FromObject (jresponse.GetValue ("items"));
 
 		foreach (JObject s in jarray)
@@ -383,47 +388,17 @@ public partial class ThemeDownloaderForm : Form
 	{
 		string result = "";
 		Console.WriteLine ("Loaded Branch HTML");
-		foreach (string branch in branches)
+		lock (branchCommitDates)
 		{
-			result +=
-				$"<div class='d-flex'><a href='javascript:void(0);' onclick='LoadBranch(\"{branch}\")' class='px-3'>{branch}</a> <span class='ml-auto mr-3'>{branch}_DATE</span></div>";
+			foreach (string branchName in branches)
+			{
+				result +=
+					$"<div class='d-flex branch_tab'><a href='javascript:void(0);' onclick='LoadBranch(\"{branchName}\")' class='px-3'>{branchName}</a> <span class='ml-auto mr-3'>{branchCommitDates[branchName]}</span></div>";
+			}	
 		}
+		
 
 		return result;
-	}
-
-	private void ReplaceBranchDatesHTML (string from, string to)
-	{
-		// commitDate.Key + "_DATE", commitDate.Value
-		if (htmlLoaded)
-		{
-			lock (branchCommitDates)
-			{
-				if (branchCommitDates.Count > 0)
-				{
-					foreach (KeyValuePair <string, string> pair in branchCommitDates)
-					{
-						browser.Invoke ((MethodInvoker)delegate
-						{
-							browser.Document.InvokeScript (
-								"ReplaceDate", new object [] { pair.Key, pair.Value });
-						});			
-					}
-					branchCommitDates.Clear ();
-				}	
-			}
-			browser.Invoke ((MethodInvoker)delegate
-			{
-				browser.Document.InvokeScript (
-					"ReplaceDate", new object [] { from, to });
-			});
-		} else
-		{
-			lock (branchCommitDates)
-			{
-				branchCommitDates.Add (from, to);
-			}
-		}
 	}
 
 	private string CollectThemesHTML ()
@@ -496,21 +471,25 @@ public partial class ThemeDownloaderForm : Form
 		if (!this.IsDisposed)
 		{
 			currentProgress += stepProgress;
-			browser.Invoke ((MethodInvoker)delegate
+			lock (browser)
 			{
-				browser.Document.InvokeScript (
-					"AddTheme",
-					new object []
-					{
-						theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
-						isEqual.ToStringLower (),
-						theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
-						theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground, theme.Fields ["String"].Foreground,
-						theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background,
-						theme.Fields ["MarkPrevious"].Foreground
-					});
-			});
-			needToReset = false;
+				browser.Invoke ((MethodInvoker)delegate
+				{
+					browser.Document.InvokeScript (
+						"AddTheme",
+						new object []
+						{
+							theme.Name, currentProgress.ToString ("0.0").Replace (',', '.'), needToReset.ToStringLower (),
+							isEqual.ToStringLower (),
+							theme.Fields ["Default"].Background, theme.Fields ["Default"].Foreground,
+							theme.Fields ["KeyWords"].Foreground, theme.Fields ["CaretMarker"].Foreground,
+							theme.Fields ["String"].Foreground,
+							theme.Fields ["BeginEnd"].Foreground, theme.Fields ["Selection"].Background,
+							theme.Fields ["MarkPrevious"].Foreground
+						});
+				});
+				needToReset = false;
+			}
 		}
 	}
 
@@ -581,7 +560,28 @@ public partial class ThemeDownloaderForm : Form
 			stepProgress = 100.0 / themes.Count;
 			currentProgress = 0;
 			// Doesn't work well
+			lock (downloadingErrors)
+			{
+				downloadingErrors.Clear ();
+			}
 			Parallel.ForEach (themes, keyValuePair => DownloadThemeThread (new Tuple <string, bool> (keyValuePair.Key, false)));
+			MessageBox.Show ("Downloading end!");
+			lock (downloadingErrors)
+			{
+				if (downloadingErrors.Count > 0)
+				{
+					string mx = "Errors:\n";
+					foreach (string error in downloadingErrors)
+					{
+						mx += error+"\n";
+						
+					}
+
+					MessageBox.Show (mx);
+				}
+				downloadingErrors.Clear ();
+			}
+			
 		}
 	}
 
@@ -633,6 +633,10 @@ public partial class ThemeDownloaderForm : Form
 			{
 				Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
 				Console.WriteLine ("{0} hasn't been saved", name);
+				lock (downloadingErrors)
+				{
+					downloadingErrors.Add ($"{name} couldn't be saved.");
+				}
 			}
 		} else
 		{
