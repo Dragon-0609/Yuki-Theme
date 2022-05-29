@@ -296,14 +296,18 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static bool VerifyToken (string path)
+		public static Tuple <bool, string> VerifyToken (string path)
 		{
 			bool valid = false;
 			string json = loadThemeToPopulate (path, false, false, Helper.FILE_EXTENSTION_NEW);
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			string group = "";
 			if (theme != null)
+			{
 				valid = Helper.VerifyToken (theme);
-			return valid;
+				group = theme.Group;
+			}
+			return new Tuple <bool, string> (valid, group);
 		}
 	}
 }

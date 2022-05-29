@@ -285,6 +285,7 @@ public partial class ThemeDownloaderForm : Form
 		{
 			DokiThemeParser doki = new DokiThemeParser ();
 			doki.needToWrite = false;
+			doki.groupName = "Doki Theme";
 			string [] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
 			string json = multi [1];
 			doki.Parse (json, "none", "none", null, false, false, false);

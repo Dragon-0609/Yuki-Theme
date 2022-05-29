@@ -151,7 +151,7 @@ namespace Yuki_Theme.Core
 				CopyFromMemory (copyFrom, copyFrom, destination);
 			} else
 			{
-				path = pathToFile (themeName, ThemeInfos [copyFrom].isOld);
+				path = pathToFile (Helper.ConvertNameToPath (copyFrom), ThemeInfos [copyFrom].isOld);
 				File.Copy (path, destination);
 			}
 
@@ -280,7 +280,7 @@ namespace Yuki_Theme.Core
 					DeleteFiles (files);
 				}
 
-				if (currentTheme.isDefault)
+				if (currentTheme.isDefault && ThemeInfos[currentTheme.Name].location == ThemeLocation.Memory)
 				{
 					CopyFromMemory (currentTheme.path, currentTheme.Name, path, true);
 				} else
@@ -578,20 +578,20 @@ namespace Yuki_Theme.Core
 		/// <returns>Name of the theme</returns>
 		public static string GetNameOfTheme (string path)
 		{
-			Console.WriteLine ("Path to get theme name: {0}", path);
+			// Console.WriteLine ("Path to get theme name: {0}", path);
 			if (IsNewTheme (path))
 				return NewThemeFormat.GetNameOfTheme (path);
 			return OldThemeFormat.GetNameOfTheme (path);
 		}
 
 		/// <summary>
-		/// Verify theme token.
+		/// Verify theme token and get group name.
 		/// </summary>
 		/// <param name="path">Path to the theme</param>
-		/// <returns>Name of the theme</returns>
-		public static bool VerifyToken (string path)
+		/// <returns>Is Token valid and group name</returns>
+		public static Tuple<bool, string> VerifyToken (string path)
 		{
-			if (path == "" || path.Length < 5) return false;
+			if (path == "" || path.Length < 5) return new Tuple <bool, string> (false, "");
 			if (IsNewTheme (path))
 				return NewThemeFormat.VerifyToken (path);
 			return OldThemeFormat.VerifyToken (path);
@@ -876,8 +876,9 @@ namespace Yuki_Theme.Core
 			{
 				string pts = Path.GetFileNameWithoutExtension (file);
 
-				bool isValidToken = VerifyToken (file);
-				
+				Tuple <bool, string> tokenVerification = VerifyToken (file);
+				bool isValidToken = tokenVerification.Item1;
+				string groupName = tokenVerification.Item2;
 				
 				if (!DefaultThemes.isDefault (pts) || isValidToken)
 				{
@@ -901,17 +902,29 @@ namespace Yuki_Theme.Core
 						}
 					} else
 					{
-						Console.WriteLine ("Token valid");
-						ForcelyAddToDefaults (pts, file);
+						// Console.WriteLine ("Token valid");
+						ForcelyAddToDefaults (pts, file, groupName);
 					}
 				}
 			}
 		}
 
-		private static void ForcelyAddToDefaults (string name, string file)
+		private static void ForcelyAddToDefaults (string name, string file, string group)
 		{
 			if (!schemes.Contains (name))
-				schemes.Add (name);
+			{
+				int index = GetIndexForInsert (name, group);
+				if (index != -1)
+					schemes.Insert (index, name);
+				else
+					schemes.Add (name);
+				Console.WriteLine("{1} -> {0} <-> {2}", index, name, group);
+				DefaultThemes.categories.Add (name, group);
+				if (!DefaultThemes.categoriesList.Contains (group))
+				{
+					DefaultThemes.categoriesList.Add (group);
+				}
+			}
 			
 			ThemeInfo info = new ThemeInfo (true, IsOldTheme (file), ThemeLocation.File);
 			if (ThemeInfos.ContainsKey (name))
@@ -922,7 +935,9 @@ namespace Yuki_Theme.Core
 			if (!DefaultThemes.names.Contains (name))
 				DefaultThemes.names.Add (name);
 
-			Console.WriteLine ("{0}\n\n", ThemeInfos [name]);
+			
+			
+			// Console.WriteLine ("{0}\n\n", ThemeInfos [name]);
 
 		}
 
@@ -941,6 +956,54 @@ namespace Yuki_Theme.Core
 		public static void AddThemeInfo (string name, bool isDefault, bool isOld, ThemeLocation location)
 		{
 			ThemeInfos.Add (name, new ThemeInfo (isDefault, isOld, location));
+		}
+
+		private static int GetIndexForInsert (string forName, string group)
+		{
+			int result = -1;
+
+			string target = DefaultThemes.categories.Where (item => item.Value == group).Select (item => item.Key).FirstOrDefault();
+
+			if (target is { Length: > 1 })
+			{
+				result = FindIndex (forName, target);
+			}
+
+			return result;
+		}
+
+		private static int FindIndex (string forName, string target)
+		{
+			int res = -1;
+
+			if (DefaultThemes.headers.ContainsKey (target))
+			{
+				IThemeHeader header = DefaultThemes.headers [target];
+				List <string> themes = header.ThemeNames.Keys.ToList ();
+				themes.Add (forName);
+				themes.Sort ();
+				res = themes.FindIndex (tg => tg == forName);
+				if (res > 1)
+					res = res - 1;
+				else
+				{
+					if (themes.Count >= 2)
+						res = 1;
+				}
+
+				if (res != -1)
+				{
+					string targ2 = themes [res];
+					res = schemes.FindIndex (item => item == targ2);
+
+					if (res + 1 < schemes.Count)
+					{
+						res += 1;
+					}
+				}
+			}
+
+			return res;
 		}
 
 		private static string [] IdentifySyntaxHighlightings (string [] files)

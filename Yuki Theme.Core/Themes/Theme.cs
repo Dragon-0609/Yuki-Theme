@@ -146,6 +146,8 @@ namespace Yuki_Theme.Core.Themes
 			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
 			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
 			theme.Token = additionalInfo ["token"];
+			if (additionalInfo.ContainsKey ("group"))
+				theme.Group = additionalInfo ["group"];
 		}
 
 		public static bool ContentEquals (this Dictionary <string, ThemeField> dictionary,

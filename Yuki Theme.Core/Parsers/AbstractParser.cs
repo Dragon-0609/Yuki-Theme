@@ -20,7 +20,8 @@ namespace Yuki_Theme.Core.Parsers
 		public bool   ask       = false;
 		public bool   overwrite = false;
 
-		public bool needToWrite = false;
+		public bool   needToWrite = false;
+		public string groupName   = "";
 
 		public Action <string, string> defaultTheme;
 

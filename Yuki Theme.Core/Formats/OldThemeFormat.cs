@@ -11,7 +11,6 @@ namespace Yuki_Theme.Core.Formats
 {
 	public static class OldThemeFormat
 	{
-		
 		#region XML
 
 		/// <summary>
@@ -303,7 +302,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc,        string pathToTheme, bool needToDoActions, bool isDefault,
+		public static void loadThemeToPopulate (ref XmlDocument doc, string pathToTheme, bool needToDoActions, bool isDefault,
 		                                        ref Theme       themeToSet, string extension,
 		                                        bool            customNameForMemory, bool needToSetDefaultField)
 		{
@@ -359,6 +358,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHave2 != null)
 								CLI_Actions.ifDoesntHave2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
@@ -386,6 +389,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHaveSticker2 != null)
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;
@@ -426,6 +433,7 @@ namespace Yuki_Theme.Core.Formats
 								CLI.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
+
 					Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
 					if (needToDoActions)
 					{
@@ -449,6 +457,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHave2 != null)
 								CLI_Actions.ifDoesntHave2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
@@ -471,6 +483,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHaveSticker2 != null)
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;
@@ -515,24 +531,25 @@ namespace Yuki_Theme.Core.Formats
 			dictionary.Add ("opacity", "15");
 			dictionary.Add ("stickerOpacity", "100");
 			dictionary.Add ("token", "null");
+			dictionary.Add ("group", "");
 			foreach (XmlComment comm in comms)
 			{
-				if (comm.Value.StartsWith ("align"))
-				{
-					dictionary ["align"] = comm.Value.Substring (6);
-				} else if (comm.Value.StartsWith ("opacity"))
-				{
-					dictionary ["opacity"] = comm.Value.Substring (8);
-				} else if (comm.Value.StartsWith ("sopacity"))
-				{
-					dictionary ["stickerOpacity"] = comm.Value.Substring (9);
-				} else if (comm.Value.StartsWith ("token"))
-				{
-					dictionary ["token"] = comm.Value.Substring (6);
-				}
+				GetValueIfStarts (comm, dictionary, "align");
+				GetValueIfStarts (comm, dictionary, "opacity");
+				GetValueIfStarts (comm, dictionary, "stickerOpacity");
+				GetValueIfStarts (comm, dictionary, "token");
+				GetValueIfStarts (comm, dictionary, "group");
 			}
 
 			return dictionary;
+		}
+
+		private static void GetValueIfStarts (XmlComment comm, Dictionary <string, string> dictionary, string key)
+		{
+			if (comm.Value.StartsWith (key))
+			{
+				dictionary [key] = comm.Value.Substring (key.Length + 1);
+			}
 		}
 
 		public static void WriteName (string path, string name)
@@ -595,7 +612,7 @@ namespace Yuki_Theme.Core.Formats
 		{
 			bool isDef = CLI.ThemeInfos [name].isDefault;
 			bool fromAssembly = CLI.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
-			
+
 			string path = Helper.ConvertNameToPath (name);
 			Theme theme = new Theme
 			{
@@ -609,7 +626,7 @@ namespace Yuki_Theme.Core.Formats
 				                     Helper.FILE_EXTENSTION_OLD, false, false);
 			} catch (Exception e)
 			{
-				Console.WriteLine("OldTheme.Loading Theme failed");
+				Console.WriteLine ("OldTheme.Loading Theme failed");
 				Console.WriteLine ("{0}\n{1}", e.Message, e.StackTrace);
 				return null;
 			}
@@ -648,7 +665,7 @@ namespace Yuki_Theme.Core.Formats
 			CLI.currentTheme = theme;
 			if (theme == null)
 			{
-				Console.WriteLine("Theme is null");
+				Console.WriteLine ("Theme is null");
 				/*MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
 				                 MessageBoxButtons.OK, MessageBoxIcon.Error);*/
 			}
@@ -674,7 +691,7 @@ namespace Yuki_Theme.Core.Formats
 
 					foreach (var att in attrs)
 					{
-						Console.WriteLine("{0}: {1}, {2}", nms, att.Key, att.Value);
+						Console.WriteLine ("{0}: {1}, {2}", nms, att.Key, att.Value);
 						childNode.Attributes [att.Key].Value = att.Value;
 					}
 				}
@@ -739,7 +756,7 @@ namespace Yuki_Theme.Core.Formats
 				Dictionary <string, bool> comments = new Dictionary <string, bool>
 				{
 					{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
-					{ "hasImage", false }, { "hasSticker", false }, { "token", false }
+					{ "hasImage", false }, { "hasSticker", false }, { "token", false }, { "group", false }
 				};
 
 				Dictionary <string, string> commentValues = new Dictionary <string, string>
@@ -747,39 +764,20 @@ namespace Yuki_Theme.Core.Formats
 					{ "name", "name:" + themeToMerge.Name }, { "align", "align:" + ((int)themeToMerge.WallpaperAlign) },
 					{ "opacity", "opacity:" + (themeToMerge.WallpaperOpacity) },
 					{ "sopacity", "sopacity:" + (themeToMerge.StickerOpacity) },
-					{ "hasImage", "hasImage:" + themeToMerge.HasWallpaper }, { "hasSticker", "hasSticker:" + themeToMerge.HasSticker }, { "token", "token:" + themeToMerge.Token }
+					{ "hasImage", "hasImage:" + themeToMerge.HasWallpaper }, { "hasSticker", "hasSticker:" + themeToMerge.HasSticker },
+					{ "token", "token:" + themeToMerge.Token },
+					{ "group", "group:" + themeToMerge.Group }
 				};
 				foreach (XmlComment comm in comms)
 				{
-					if (comm.Value.StartsWith ("align"))
-					{
-						comm.Value = commentValues ["align"];
-						comments ["align"] = true;
-					} else if (comm.Value.StartsWith ("opacity"))
-					{
-						comm.Value = commentValues ["opacity"];
-						comments ["opacity"] = true;
-					} else if (comm.Value.StartsWith ("sopacity"))
-					{
-						comm.Value = commentValues ["sopacity"];
-						comments ["sopacity"] = true;
-					} else if (comm.Value.StartsWith ("name"))
-					{
-						comm.Value = commentValues ["name"];
-						comments ["name"] = true;
-					} else if (comm.Value.StartsWith ("hasImage"))
-					{
-						comm.Value = commentValues ["hasImage"];
-						comments ["hasImage"] = true;
-					} else if (comm.Value.StartsWith ("hasSticker"))
-					{
-						comm.Value = commentValues ["hasSticker"];
-						comments ["hasSticker"] = true;
-					} else if (comm.Value.StartsWith ("token"))
-					{
-						comm.Value = commentValues ["token"];
-						comments ["token"] = true;
-					}
+					PasteIfStarts (comm, comments, "align", commentValues ["align"]);
+					PasteIfStarts (comm, comments, "opacity", commentValues ["opacity"]);
+					PasteIfStarts (comm, comments, "sopacity", commentValues ["sopacity"]);
+					PasteIfStarts (comm, comments, "name", commentValues ["name"]);
+					PasteIfStarts (comm, comments, "hasImage", commentValues ["hasImage"]);
+					PasteIfStarts (comm, comments, "hasSticker", commentValues ["hasSticker"]);
+					PasteIfStarts (comm, comments, "token", commentValues ["token"]);
+					PasteIfStarts (comm, comments, "group", commentValues ["group"]);
 				}
 
 				foreach (KeyValuePair <string, bool> comment in comments)
@@ -791,13 +789,28 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				node.AppendChild (doc.CreateComment ("name:" + themeToMerge.Name));
-				node.AppendChild (doc.CreateComment ("align:" + ((int)themeToMerge.WallpaperAlign)));
-				node.AppendChild (doc.CreateComment ("opacity:" + (themeToMerge.WallpaperOpacity)));
-				node.AppendChild (doc.CreateComment ("sopacity:" + (themeToMerge.StickerOpacity)));
-				node.AppendChild (doc.CreateComment ("hasImage:" + themeToMerge.HasWallpaper));
-				node.AppendChild (doc.CreateComment ("hasSticker:" + themeToMerge.HasSticker));
-				node.AppendChild (doc.CreateComment ("token:" + themeToMerge.Token));
+				AddComment (doc, node, "name:" + themeToMerge.Name);
+				AddComment (doc, node, "align:" + ((int)themeToMerge.WallpaperAlign));
+				AddComment (doc, node, "opacity:" + (themeToMerge.WallpaperOpacity));
+				AddComment (doc, node, "sopacity:" + (themeToMerge.StickerOpacity));
+				AddComment (doc, node, "hasImage:" + themeToMerge.HasWallpaper);
+				AddComment (doc, node, "hasSticker:" + themeToMerge.HasSticker);
+				AddComment (doc, node, "token:" + themeToMerge.Token);
+				AddComment (doc, node, "group:" + themeToMerge.Group);
+			}
+		}
+
+		private static void AddComment (XmlDocument doc, XmlNode node, string comment)
+		{
+			node.AppendChild (doc.CreateComment (comment));
+		}
+
+		private static void PasteIfStarts (XmlComment comm, Dictionary <string, bool> comments, string key, string value)
+		{
+			if (comm.Value.StartsWith (key))
+			{
+				comm.Value = value;
+				comments [key] = true;
 			}
 		}
 
@@ -813,30 +826,31 @@ namespace Yuki_Theme.Core.Formats
 
 			return res;
 		}
-		
-		public static bool VerifyToken (string path)
+
+		public static Tuple<bool, string> VerifyToken (string path)
 		{
 			bool valid = false;
-			
+			string group = "";
 			Theme theme = new Theme ();
-			
+
 			var doc = new XmlDocument ();
 			try
 			{
-				Console.WriteLine("Loading theme: {0}", path);
+				Console.WriteLine ("Loading theme: {0}", path);
 				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
 				Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 				theme.SetAdditionalInfo (additionalInfo);
 				theme.Name = GetThemeName (doc);
-				Console.WriteLine("Theme name: {0}", theme.Name);
 				valid = Helper.VerifyToken (theme);
-				Console.WriteLine("Theme token: {0}", theme.Token);
-				Console.WriteLine("IsValid: {0}\n", valid);
+				group = theme.Group;
+				Console.WriteLine ("Theme token: {0}", theme.Token);
+				Console.WriteLine ("IsValid: {0}\n", valid);
 			} catch
 			{
 				// ignored
 			}
-			return valid;
+
+			return new Tuple <bool, string> (valid, theme.Group);
 		}
 	}
 }
