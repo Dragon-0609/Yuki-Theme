@@ -90,6 +90,9 @@
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Styles\RadioButtonStyles.xaml.cs">
+          <DependentUpon>RadioButtonStyles.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Styles\WindowTemplate.xaml.cs" />
         <Compile Include="Windows\AboutWindow.xaml.cs">
           <DependentUpon>AboutWindow.xaml</DependentUpon>
@@ -122,6 +125,7 @@
         <Page Include="Styles\GroupBoxStyles.xaml" />
         <Page Include="Styles\LinkStyles.xaml" />
         <Page Include="Styles\ListViewStyles.xaml" />
+        <Page Include="Styles\RadioButtonStyles.xaml" />
         <Page Include="Styles\SliderStyles.xaml" />
         <Page Include="Styles\TabStyles.xaml" />
         <Page Include="Styles\TextBlockStyles.xaml" />
@@ -182,6 +186,12 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Resources\SVG\balloonInformation.svg" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Resources\SVG\radioButton.svg" />
+      <EmbeddedResource Include="Resources\SVG\radioButtonFocused.svg" />
+      <EmbeddedResource Include="Resources\SVG\radioButtonSelected.svg" />
+      <EmbeddedResource Include="Resources\SVG\radioButtonSelectedFocused.svg" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -96,11 +96,12 @@ namespace Yuki_Theme.Core.WPF
 			};
 		}
 
-		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, System.Drawing.Size size,
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, System.Drawing.Size size, System.Drawing.Color customColor = default,
 		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
 		{
+			
 			return (Helper.RenderSvg (size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true,
-			                          Helper.bgBorder))
+			                          customColor))
 				.ToWPFImage ();
 		}
 
@@ -113,9 +114,13 @@ namespace Yuki_Theme.Core.WPF
 
 
 		public static void SetResourceSvg (this ResourceDictionary      dictionary, string name, string source,
-		                                   Dictionary <string, SDColor> idColor,    System.Drawing.Size size)
+		                                   Dictionary <string, SDColor> idColor,    System.Drawing.Size size, System.Drawing.Color customColor = default)
 		{
-			dictionary [name] = GetSvg (source, idColor, size);
+			if (customColor == default)
+			{
+				customColor = Helper.bgBorder;
+			}
+			dictionary [name] = GetSvg (source, idColor, size, customColor);
 		}
 
 		#endregion
@@ -134,6 +139,12 @@ namespace Yuki_Theme.Core.WPF
 		public static Dictionary <string, SDColor> GenerateBGColors ()
 		{
 			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "bg", Helper.bgColor } };
+			return idColors;
+		}
+		
+		public static Dictionary <string, SDColor> GenerateRadioButtonColors ()
+		{
+			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "center", Helper.bgBorder } };
 			return idColors;
 		}
 

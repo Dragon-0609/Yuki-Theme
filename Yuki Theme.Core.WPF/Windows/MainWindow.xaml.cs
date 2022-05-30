@@ -178,20 +178,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 					if (mergedDict != null)
 					{
-						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
-						Console.WriteLine("LINE _>> 1");
-						var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
-						Console.WriteLine("LINE _>> 2");
-						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
-						Console.WriteLine("LINE _>> 3");
-						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
-						Console.WriteLine("LINE _>> 4");
-						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
-						Console.WriteLine("LINE _>> 5");
-						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
-						Console.WriteLine("LINE _>> 6");
-						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
-						Console.WriteLine("LINE _>> 7");
+						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors (); 
+						var disabledIdColors = WPFHelper.GenerateDisabledBGColors (); 
+						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize); 
+						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize); 
+						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize); 
+						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize); 
+						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize); 
 						mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
 					}
 				}

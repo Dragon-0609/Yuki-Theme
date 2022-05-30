@@ -50,6 +50,7 @@ namespace Yuki_Theme.Core.Database
 				SetValueToDatabase (ke, Settings.USEDIMENSIONCAP, "false");
 				SetValueToDatabase (ke, Settings.DIMENSIONCAPMAX, "-1");
 				SetValueToDatabase (ke, Settings.DIMENSIONCAPUNIT, "0");
+				SetValueToDatabase (ke, Settings.COLORPICKER, "0");
 			}
 		}
 
@@ -97,6 +98,7 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.USEDIMENSIONCAP, "false");
 			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPMAX, "-1");
 			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPUNIT, "0");
+			AddToDictionary (ref dictionary, key, Settings.COLORPICKER, "0");
 
 			return dictionary;
 		}

@@ -36,6 +36,7 @@ public static class Settings
 	public static bool         useDimensionCap;
 	public static int          dimensionCapMax;
 	public static int          dimensionCapUnit;
+	public static int          colorPicker;
 
 	#endregion
 	
@@ -80,6 +81,7 @@ public static class Settings
 	public const int USEDIMENSIONCAP = 32;
 	public const int DIMENSIONCAPMAX = 33;
 	public const int DIMENSIONCAPUNIT = 34;
+	public const int COLORPICKER = 35;
 	
 	
 	public const  double current_version     = 7.0;
@@ -157,6 +159,7 @@ public static class Settings
 		useDimensionCap = bool.Parse (data [USEDIMENSIONCAP]);
 		dimensionCapMax = int.Parse (data [DIMENSIONCAPMAX]);
 		dimensionCapUnit = int.Parse (data [DIMENSIONCAPUNIT]);
+		colorPicker = int.Parse (data [COLORPICKER]);
 		localization = data [LOCALIZATION];
 
 		CLI.selectedItem = data [ACTIVE];
@@ -216,6 +219,7 @@ public static class Settings
 				{ USEDIMENSIONCAP, useDimensionCap.ToString () },
 				{ DIMENSIONCAPMAX, dimensionCapMax.ToString () },
 				{ DIMENSIONCAPUNIT, dimensionCapUnit.ToString () },
+				{ COLORPICKER, colorPicker.ToString () },
 				{ LOCALIZATION, localization }
 			};
 			return dict;

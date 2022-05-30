@@ -99,7 +99,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
 			customStickerPath = Settings.customSticker;
 			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
-			
+			bool firstSelected = Settings.colorPicker == 0;
+			WinformsPicker.IsChecked = firstSelected;
+			WPFPicker.IsChecked = !firstSelected;
 			// LanguageDropdown, Settings.localization
 		}
 
@@ -158,6 +160,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
 			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
 			Settings.customSticker = customStickerPath;
+			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
 		}
 
 		private void SaveProgramSettings ()
@@ -251,6 +254,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				WindowInteropHelper helper = new WindowInteropHelper (aboutWindow);
 				helper.Owner = ParentForm;
 			}
+
 			aboutWindow.ShowDialog ();
 		}
 
