@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 using Yuki_Theme.Core.WPF.Windows;
 using Drawing = System.Drawing;
@@ -18,27 +19,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
 
 		public Window ParentWindow = null;
+		public IntPtr ParentForm   = IntPtr.Zero;
 
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
 
 			LoadSVG ();
-		}
-
-
-		private void LoadSVG ()
-		{
-			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
-			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CLI.GetCore ());
-		}
-
-		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size,
-		                             string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly asm = null)
-		{
-			if (asm == null)
-				asm = Assembly.GetExecutingAssembly ();
-			this.Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
 
 
@@ -55,7 +42,30 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void SettingsPanel_OnLoaded (object sender, RoutedEventArgs e)
 		{
 			CheckGridSize ();
+			FillLanguageField ();
 			LoadSettings ();
+		}
+
+
+		private void FillLanguageField ()
+		{
+			LanguageDropdown.Items.Clear ();
+			
+		}
+		
+		private void LoadSVG ()
+		{
+			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
+			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CLI.GetCore ());
+		}
+
+		
+		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size,
+		                             string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly asm = null)
+		{
+			if (asm == null)
+				asm = Assembly.GetExecutingAssembly ();
+			this.Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
 
 		private void LoadSettings ()
@@ -64,6 +74,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			FillGeneralValues ();
 			FillProgramValues ();
 			FillPluginValues ();
+			StickerDimensionCapCheckedChanged (this, null);
 		}
 
 		private void HideFields ()
@@ -83,8 +94,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SCheck (AlwaysAsk, Settings.askToSave);
 			SCheck (AutoUpdate, Settings.update);
 			SCheck (CheckBeta, Settings.Beta);
+			SCheck (StickerDimensionCap, Settings.useDimensionCap);
 			SDrop (EditorModeDropdown, (int)Settings.settingMode);
+			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
 			customStickerPath = Settings.customSticker;
+			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
+			
+			// LanguageDropdown, Settings.localization
 		}
 
 		private void FillProgramValues ()
@@ -135,6 +151,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (AlwaysAsk, ref Settings.askToSave);
 			KCheck (AutoUpdate, ref Settings.update);
 			KCheck (CheckBeta, ref Settings.Beta);
+			KCheck (CheckBeta, ref Settings.Beta);
+			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
+			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
+			
+			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
 			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
 			Settings.customSticker = customStickerPath;
 		}
@@ -225,7 +246,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			};
 
 			if (ParentWindow != null) aboutWindow.Owner = ParentWindow;
-
+			else if (ParentForm != IntPtr.Zero)
+			{
+				WindowInteropHelper helper = new WindowInteropHelper (aboutWindow);
+				helper.Owner = ParentForm;
+			}
 			aboutWindow.ShowDialog ();
 		}
 
@@ -254,6 +279,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			};
 			customStickerWindow.ImagePath.Text = customStickerPath;
 			if (ParentWindow != null) customStickerWindow.Owner = ParentWindow;
+			else if (ParentForm != IntPtr.Zero)
+			{
+				WindowInteropHelper helper = new WindowInteropHelper (customStickerWindow);
+				helper.Owner = ParentForm;
+			}
 			bool? dialog = customStickerWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)
 				customStickerPath = customStickerWindow.ImagePath.Text;
@@ -272,8 +302,6 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void CheckGridSize ()
 		{
 			const int additionalMargins = 125;
-			Console.WriteLine ("GENERAL: {0:0}, POSITION: {1:0}, DIMENSION: {2:0}", this.RenderSize.Width, PositioningPanel.ActualWidth,
-			                   DimensionCapPanel.ActualWidth + additionalMargins);
 			bool canExpand = this.RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
 			CheckNSetGridLayouts (DimensionCapGroup, canExpand);
 			CheckNSetMargin (DimensionCapGroup, canExpand, groupBoxExpanded, groupBoxCollapsed);

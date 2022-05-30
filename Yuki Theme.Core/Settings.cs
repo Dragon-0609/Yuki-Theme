@@ -33,6 +33,9 @@ public static class Settings
 	public static bool         saveAsOld;
 	public static bool         showPreview;
 	public static string       localization = "";
+	public static bool         useDimensionCap;
+	public static int          dimensionCapMax;
+	public static int          dimensionCapUnit;
 
 	#endregion
 	
@@ -74,6 +77,9 @@ public static class Settings
 	public const int SAVEASOLD    = 29;
 	public const int SHOWPREVIEW  = 30;
 	public const int LOCALIZATION = 31;
+	public const int USEDIMENSIONCAP = 32;
+	public const int DIMENSIONCAPMAX = 33;
+	public const int DIMENSIONCAPUNIT = 34;
 	
 	
 	public const  double current_version     = 7.0;
@@ -148,6 +154,9 @@ public static class Settings
 		askToSave = bool.Parse (data [ASKTOSAVE]);
 		saveAsOld = bool.Parse (data [SAVEASOLD]);
 		showPreview = bool.Parse (data [SHOWPREVIEW]);
+		useDimensionCap = bool.Parse (data [USEDIMENSIONCAP]);
+		dimensionCapMax = int.Parse (data [DIMENSIONCAPMAX]);
+		dimensionCapUnit = int.Parse (data [DIMENSIONCAPUNIT]);
 		localization = data [LOCALIZATION];
 
 		CLI.selectedItem = data [ACTIVE];
@@ -204,6 +213,9 @@ public static class Settings
 				{ ASKTOSAVE, askToSave.ToString () },
 				{ SAVEASOLD, saveAsOld.ToString () },
 				{ SHOWPREVIEW, showPreview.ToString () },
+				{ USEDIMENSIONCAP, useDimensionCap.ToString () },
+				{ DIMENSIONCAPMAX, dimensionCapMax.ToString () },
+				{ DIMENSIONCAPUNIT, dimensionCapUnit.ToString () },
 				{ LOCALIZATION, localization }
 			};
 			return dict;

@@ -94,5 +94,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 				box.Text = "-1";
 			}
 		}
+
+		public int GetNumber ()
+		{
+			int res = -1;
+			if (!int.TryParse (box.Text, out res))
+			{
+				box.Text = "-1";
+			}
+
+			return res;
+		}
 	}
 }

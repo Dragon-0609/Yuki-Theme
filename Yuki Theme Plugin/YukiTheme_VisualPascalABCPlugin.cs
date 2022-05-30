@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
 using ICSharpCode.TextEditor;
@@ -23,12 +25,18 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.WPF;
+using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
+using Application = System.Windows.Forms.Application;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using CustomList = Yuki_Theme_Plugin.Controls.DockStyles.CustomList;
+using MessageBox = System.Windows.Forms.MessageBox;
+using Point = System.Drawing.Point;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
+using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Yuki_Theme_Plugin
@@ -222,6 +230,8 @@ namespace Yuki_Theme_Plugin
 			context2 = fm.MainDockPanel.ContextMenuStrip;
 			openInExplorerItem = context2.Items.Add ("Open in Explorer", null, OpenInExplorer);
 			
+			fm.Closing += FmOnClosing;
+			
 			context2.Opening += EditorContextOpening;
 			LoadImage ();
 			
@@ -288,6 +298,10 @@ namespace Yuki_Theme_Plugin
 		
 		private void InitCore ()
 		{
+			WPFHelper.InitAppForWinforms ();
+
+			MainWindow mw = new MainWindow ();
+			mw.Show ();
 			/*if (mf == null || mf.IsDisposed)
 			{
 				mf = new MForm (1);
@@ -302,7 +316,7 @@ namespace Yuki_Theme_Plugin
 			if (mf.Visible) return;
 			mf.Show();*/
 		}
-		
+
 		private void InitializeSticker ()
 		{
 			stickerControl = new CustomPicture (fm);
@@ -1756,7 +1770,7 @@ namespace Yuki_Theme_Plugin
 		{
 			var getopt = fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
-			options.AddContent (new PluginOptionsContent (this));
+			options.AddContent (new Controls.PluginOptionsContent (this));
 		}
 		
 		#region Inspection
@@ -1970,6 +1984,12 @@ namespace Yuki_Theme_Plugin
 			}
 
 			return updated;
+		}
+
+		private void FmOnClosing (object sender, CancelEventArgs e)
+		{
+			if (System.Windows.Application.Current != null)
+				System.Windows.Application.Current.Shutdown ();
 		}
 		
 		#endregion

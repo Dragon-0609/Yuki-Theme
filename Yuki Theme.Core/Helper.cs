@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core
 	{
 		public static Color bgdefColor, bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
 
-		public static ProductMode  mode;
+		public static ProductMode? mode = null;
 		public static RelativeUnit unit;
 
 		private static Size Standart32 = new Size (32, 32);

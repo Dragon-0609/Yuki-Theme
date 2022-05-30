@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
+using Image = System.Windows.Controls.Image;
 using SDColor = System.Drawing.Color;
+using Size = System.Windows.Size;
 using SWMColor = System.Windows.Media.Color;
-using Drawing = System.Drawing;
 using WBrush = System.Windows.Media.Brush;
-using Window = System.Windows.Window;
 
 namespace Yuki_Theme.Core.WPF
 {
@@ -34,13 +30,13 @@ namespace Yuki_Theme.Core.WPF
 		public static SWMColor borderColor;
 		public static SWMColor selectionColor;
 		public static SWMColor keywordColor;
-		public static Brush    bgBrush;
-		public static Brush    bgdefBrush;
-		public static Brush    bgClickBrush;
-		public static Brush    fgBrush;
-		public static Brush    borderBrush;
-		public static Brush    selectionBrush;
-		public static Brush    keywordBrush;
+		public static WBrush    bgBrush;
+		public static WBrush    bgdefBrush;
+		public static WBrush    bgClickBrush;
+		public static WBrush    fgBrush;
+		public static WBrush    borderBrush;
+		public static WBrush    selectionBrush;
+		public static WBrush    keywordBrush;
 
 		#endregion
 
@@ -63,8 +59,8 @@ namespace Yuki_Theme.Core.WPF
 		{
 			AddThemeWindow themeWindow = new AddThemeWindow
 			{
-				Background = WPFHelper.bgBrush,
-				Foreground = WPFHelper.fgBrush,
+				Background = bgBrush,
+				Foreground = fgBrush,
 				Tag = owner.Tag,
 				Owner = owner
 			};
@@ -81,26 +77,26 @@ namespace Yuki_Theme.Core.WPF
 
 		public static void SetSVGImage (Button btn, string source, bool customColor = false, SDColor color = default)
 		{
-			btn.Content = new Image ()
+			btn.Content = new Image
 			{
-				Source = (Helper.RenderSvg (new Drawing.Size (Convert.ToInt32 (btn.Width), Convert.ToInt32 (btn.Height)),
-				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty, customColor, color))
+				Source = (Helper.RenderSvg (new System.Drawing.Size (Convert.ToInt32 (btn.Width), Convert.ToInt32 (btn.Height)),
+				                            Helper.LoadSvg (source, CLI.GetCore ()), false, System.Drawing.Size.Empty, customColor, color))
 					.ToWPFImage ()
 			};
 		}
 
 		public static Image GetSVGImage (string source, Size size, bool customColor = false, SDColor color = default)
 		{
-			return new Image ()
+			return new Image
 			{
-				Source = (Helper.RenderSvg (new Drawing.Size (Convert.ToInt32 (size.Width), Convert.ToInt32 (size.Height)),
-				                            Helper.LoadSvg (source, CLI.GetCore ()), false, Drawing.Size.Empty,
+				Source = (Helper.RenderSvg (new System.Drawing.Size (Convert.ToInt32 (size.Width), Convert.ToInt32 (size.Height)),
+				                            Helper.LoadSvg (source, CLI.GetCore ()), false, System.Drawing.Size.Empty,
 				                            customColor, color))
 					.ToWPFImage ()
 			};
 		}
 
-		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, Drawing.Size size,
+		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, System.Drawing.Size size,
 		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG")
 		{
 			return (Helper.RenderSvg (size, Helper.LoadSvg (source, Assembly.GetExecutingAssembly (), nameSpace), idColor, true,
@@ -108,16 +104,16 @@ namespace Yuki_Theme.Core.WPF
 				.ToWPFImage ();
 		}
 
-		public static BitmapImage GetSvg (string source, Dictionary <string, SDColor> idColor, bool withCustomColor, Drawing.Size size,
-		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly assm = null)
+		public static BitmapImage GetSvg (string source,                                          Dictionary <string, SDColor> idColor, bool withCustomColor, System.Drawing.Size size,
+		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly                   assm = null)
 		{
 			return (Helper.RenderSvg (size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
 				.ToWPFImage ();
 		}
 
 
-		public static void SetResourceSvg (this ResourceDictionary      dictionary, string       name, string source,
-		                                   Dictionary <string, SDColor> idColor,    Drawing.Size size)
+		public static void SetResourceSvg (this ResourceDictionary      dictionary, string name, string source,
+		                                   Dictionary <string, SDColor> idColor,    System.Drawing.Size size)
 		{
 			dictionary [name] = GetSvg (source, idColor, size);
 		}
@@ -129,22 +125,62 @@ namespace Yuki_Theme.Core.WPF
 			return st.Replace ("\n", "&amp;#10;");
 		}
 
-		public static Dictionary <string, Drawing.Color> GenerateDisabledBGColors ()
+		public static Dictionary <string, SDColor> GenerateDisabledBGColors ()
 		{
-			Dictionary <string, Drawing.Color> disabledIdColors = new Dictionary <string, Drawing.Color> ()
-				{ { "bg", Helper.DarkerOrLighter (Helper.bgColor, 0.2f) } };
+			Dictionary <string, SDColor> disabledIdColors = new Dictionary <string, SDColor> { { "bg", Helper.DarkerOrLighter (Helper.bgColor, 0.2f) } };
 			return disabledIdColors;
 		}
 
-		public static Dictionary <string, Drawing.Color> GenerateBGColors ()
+		public static Dictionary <string, SDColor> GenerateBGColors ()
 		{
-			Dictionary <string, Drawing.Color> idColors = new Dictionary <string, Drawing.Color> () { { "bg", Helper.bgColor } };
+			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "bg", Helper.bgColor } };
 			return idColors;
 		}
 
 		[DllImport ("gdi32.dll", EntryPoint = "DeleteObject")]
 		[return: MarshalAs (UnmanagedType.Bool)]
 		public static extern bool DeleteObject ([In] IntPtr hObject);
+
+		public static void ConvertGUIColorsNBrushes ()
+		{
+			bgColor = Helper.bgColor.ToWPFColor ();
+			bgdefColor = Helper.bgdefColor.ToWPFColor ();
+			bgClickColor = Helper.bgClick.ToWPFColor ();
+			fgColor = Helper.fgColor.ToWPFColor ();
+			borderColor = Helper.bgBorder.ToWPFColor ();
+			selectionColor = Helper.selectionColor.ToWPFColor ();
+			keywordColor = Helper.fgKeyword.ToWPFColor ();
+			bgBrush = bgColor.ToBrush ();
+			bgdefBrush = bgdefColor.ToBrush ();
+			bgClickBrush = bgClickColor.ToBrush ();
+			fgBrush = fgColor.ToBrush ();
+			borderBrush = borderColor.ToBrush ();
+			selectionBrush = selectionColor.ToBrush ();
+			keywordBrush = keywordColor.ToBrush ();
+		}
+
+		public static void InitAppForWinforms ()
+		{
+			if (null == Application.Current)
+			{
+				Console.WriteLine ("Application Inited");
+
+				new Application ()
+				{
+					ShutdownMode = ShutdownMode.OnExplicitShutdown
+				};
+				;
+				ResourceDictionary rd = new ResourceDictionary ();
+
+				System.Windows.Media.FontFamily saoFont = new System.Windows.Media.FontFamily (
+					new Uri ("pack://application:,,,/Fonts/"), "#SAO UI TT Regular"
+				);
+				Console.WriteLine ("LINE: " + saoFont.LineSpacing);
+				rd.Add ("SAOFont", saoFont);
+				if (System.Windows.Application.Current != null) System.Windows.Application.Current.Resources = rd;
+				Console.WriteLine ("Font Added");
+			}
+		}
 	}
 
 	public struct ThemeAddition

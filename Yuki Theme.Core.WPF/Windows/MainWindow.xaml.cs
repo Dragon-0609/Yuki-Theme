@@ -56,6 +56,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			CLI_Actions.showError = ErrorExport;
 			CLI_Actions.hasProblem = hasProblem;
 
+			if (Helper.mode == null)
+				Helper.mode = ProductMode.Program;
+			
 			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
 			highlighter.InitializeSyntax ();
@@ -148,22 +151,53 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void ReLoadCheckBoxImages ()
 		{
-			if (Application.Current.MainWindow != null)
+			try
 			{
-				ResourceDictionary mergedDict =
-					Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (
-						md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
-				if (mergedDict != null)
+				if (Application.Current.MainWindow != null)
 				{
-					Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
-					var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
-					mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
-					mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
-					mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
-					mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
-					mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
-					mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
+					ResourceDictionary mergedDict = null;
+					if (Helper.mode == ProductMode.Program)
+					{
+					
+						Console.WriteLine("Getting Resource Dictionary");
+						mergedDict =
+							Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (
+								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
+								
+						Console.WriteLine("Got Resource Dictionary");
+					} else if (Helper.mode == ProductMode.Plugin)
+					{
+					
+						Console.WriteLine ("Getting Resource Dictionary");
+						mergedDict =
+							Application.Current.Resources.MergedDictionaries.FirstOrDefault (
+								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
+
+						Console.WriteLine ("Got Resource Dictionary");
+					}
+
+					if (mergedDict != null)
+					{
+						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
+						Console.WriteLine("LINE _>> 1");
+						var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
+						Console.WriteLine("LINE _>> 2");
+						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
+						Console.WriteLine("LINE _>> 3");
+						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
+						Console.WriteLine("LINE _>> 4");
+						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
+						Console.WriteLine("LINE _>> 5");
+						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
+						Console.WriteLine("LINE _>> 6");
+						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
+						Console.WriteLine("LINE _>> 7");
+						mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
+					}
 				}
+			} catch (Exception e)
+			{
+				Console.WriteLine ($"ERORR >> {e.Message}\nTRACE >> {e.StackTrace}, {e.ToString ()}");
 			}
 		}
 
@@ -343,20 +377,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void updateColors ()
 		{
-			WPFHelper.bgColor = Helper.bgColor.ToWPFColor ();
-			WPFHelper.bgdefColor = Helper.bgdefColor.ToWPFColor ();
-			WPFHelper.bgClickColor = Helper.bgClick.ToWPFColor ();
-			WPFHelper.fgColor = Helper.fgColor.ToWPFColor ();
-			WPFHelper.borderColor = Helper.bgBorder.ToWPFColor ();
-			WPFHelper.selectionColor = Helper.selectionColor.ToWPFColor ();
-			WPFHelper.keywordColor = Helper.fgKeyword.ToWPFColor ();
-			WPFHelper.bgBrush = WPFHelper.bgColor.ToBrush ();
-			WPFHelper.bgdefBrush = WPFHelper.bgdefColor.ToBrush ();
-			WPFHelper.bgClickBrush = WPFHelper.bgClickColor.ToBrush ();
-			WPFHelper.fgBrush = WPFHelper.fgColor.ToBrush ();
-			WPFHelper.borderBrush = WPFHelper.borderColor.ToBrush ();
-			WPFHelper.selectionBrush = WPFHelper.selectionColor.ToBrush ();
-			WPFHelper.keywordBrush = WPFHelper.keywordColor.ToBrush ();
+			WPFHelper.ConvertGUIColorsNBrushes ();
 
 			Background = WPFHelper.bgBrush;
 			Foreground = WPFHelper.fgBrush;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="300" MinWidth="340" MinHeight="200"
+             d:DesignHeight="700" d:DesignWidth="300" MinWidth="340" MinHeight="200"
              Loaded="SettingsPanel_OnLoaded"
              SizeChanged="SettingsPanel_OnSizeChanged">
     <UserControl.Tag>
@@ -158,7 +158,7 @@
                                 </StackPanel>
                             </Label>
                             <StackPanel Orientation="Horizontal" Margin="4 5 4 5">
-                                <TextBlock Margin="4 0 4 0" x:Name="EditorModeLabel" Style="{StaticResource TextBlockUserControl}">
+                                <TextBlock Margin="4 0 4 0" Width="100" x:Name="EditorModeLabel" Style="{StaticResource TextBlockUserControl}">
                                     Editor Mode:
                                 </TextBlock>
                                 <ComboBox Margin="5 0" Name="EditorModeDropdown" Width="120" Style="{StaticResource DropdownUserControl}">
@@ -169,6 +169,13 @@
 
                         </StackPanel>
 
+                        <WrapPanel Margin="4 5 4 5">
+                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="LanguageLabel" Style="{StaticResource TextBlockUserControl}">
+                                Language
+                            </TextBlock>
+                            <ComboBox Margin="5 0" Name="LanguageDropdown" Width="120" Style="{StaticResource DropdownUserControl}"></ComboBox>
+                        </WrapPanel>
+                        
                         <WrapPanel Margin="4 5">
                             <CheckBox Style="{StaticResource CheckBoxUserControl}" VerticalAlignment="Top" Margin="0 0 20 0"
                                       Content="Auto Check Updates" Name="AutoUpdate" />

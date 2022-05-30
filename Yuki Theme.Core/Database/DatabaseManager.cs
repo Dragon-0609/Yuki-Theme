@@ -47,6 +47,9 @@ namespace Yuki_Theme.Core.Database
 				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
 				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
 				SetValueToDatabase (ke, Settings.LOCALIZATION, "unknown");
+				SetValueToDatabase (ke, Settings.USEDIMENSIONCAP, "false");
+				SetValueToDatabase (ke, Settings.DIMENSIONCAPMAX, "-1");
+				SetValueToDatabase (ke, Settings.DIMENSIONCAPUNIT, "0");
 			}
 		}
 
@@ -91,6 +94,9 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
 			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
 			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "unknown");
+			AddToDictionary (ref dictionary, key, Settings.USEDIMENSIONCAP, "false");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPMAX, "-1");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPUNIT, "0");
 
 			return dictionary;
 		}
