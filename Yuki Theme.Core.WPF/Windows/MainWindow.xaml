@@ -208,7 +208,7 @@
                 </Button>
 
                 <WrapPanel Name="EditorPanels">
-                    <Grid Name="ColorPanel" Margin="15 5" Visibility="Collapsed">
+                    <Grid Name="ColorPanel" Margin="15 5" Visibility="Visible">
                         <Grid.Resources>
                             <Style x:Key="ColorButton" TargetType="Button" BasedOn="{StaticResource ButtonSource}">
                                 <Setter Property="Width" Value="32" />
@@ -239,13 +239,13 @@
                         <StackPanel Name="BGColorPanel" Orientation="Horizontal">
                             <TextBlock Text="Background Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
                             <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
-                                <Button Name="BGButton" Margin="0" Style="{StaticResource BackButton}" />
+                                <Button Name="BGButton" Margin="0" Style="{StaticResource BackButton}" Click="BackgroundButton_OnClick" />
                             </Border>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Name="FGColorPanel" Orientation="Horizontal">
                             <TextBlock Text="Foreground Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
                             <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
-                                <Button Width="32" Height="16" Name="FGButton" Margin="0" Style="{StaticResource ForeButton}" />
+                                <Button Width="32" Height="16" Name="FGButton" Margin="0" Style="{StaticResource ForeButton}" Click="ForegroundButton_OnClick" />
                             </Border>
                         </StackPanel>
 
@@ -258,7 +258,7 @@
 
                     </Grid>
 
-                    <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Visible">
+                    <WrapPanel Name="ImagePanel" Orientation="Horizontal" Visibility="Collapsed">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />

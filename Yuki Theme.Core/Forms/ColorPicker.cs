@@ -17,6 +17,7 @@ namespace Yuki_Theme.Core.Forms
 		private bool       lockUpdates = false;
 		private int        cbox        = 3;
 		// private MForm      form;
+		public bool allowSave = true;
 		#endregion
 		
 		public ColorPicker (/*MForm fm*/)
@@ -315,11 +316,12 @@ namespace Yuki_Theme.Core.Forms
 
 		private void OKBTN_Click (object sender, EventArgs e)
 		{
-			/*if (form.isDefault ())
+			if (!allowSave)
 			{
-				MessageBox.Show ((IWin32Window) this, CLI.Translate ("colors.default.error.full"), CLI.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}else*/
-				DialogResult = DialogResult.OK;	
+				MessageBox.Show ((IWin32Window)this, CLI.Translate ("colors.default.error.full"),
+				                 CLI.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			} else
+				DialogResult = DialogResult.OK;
 		}
 
 		private void CNBTN_Click (object sender, EventArgs e)

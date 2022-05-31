@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,10 +6,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
-using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.WPF.Controls;
+using Yuki_Theme.Core.WPF.Controls.ColorPicker;
 using Application = System.Windows.Application;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Drawing = System.Drawing;
@@ -58,7 +59,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			if (Helper.mode == null)
 				Helper.mode = ProductMode.Program;
-			
+
 			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
 			highlighter.InitializeSyntax ();
@@ -158,33 +159,27 @@ namespace Yuki_Theme.Core.WPF.Windows
 					ResourceDictionary mergedDict = null;
 					if (Helper.mode == ProductMode.Program)
 					{
-					
-						Console.WriteLine("Getting Resource Dictionary");
 						mergedDict =
 							Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (
 								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
-								
-						Console.WriteLine("Got Resource Dictionary");
+
 					} else if (Helper.mode == ProductMode.Plugin)
 					{
-					
-						Console.WriteLine ("Getting Resource Dictionary");
 						mergedDict =
 							Application.Current.Resources.MergedDictionaries.FirstOrDefault (
 								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
 
-						Console.WriteLine ("Got Resource Dictionary");
 					}
 
 					if (mergedDict != null)
 					{
-						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors (); 
-						var disabledIdColors = WPFHelper.GenerateDisabledBGColors (); 
-						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize); 
-						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize); 
-						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize); 
-						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize); 
-						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize); 
+						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
+						var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
+						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
+						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
+						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
+						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
+						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
 						mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
 					}
 				}
@@ -362,6 +357,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 							ImagePath.Text = "sticker.png";
 						}
 					}
+
 					BlockOpacity = false;
 				}
 			}
@@ -532,19 +528,20 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Filter = "PNG (*.png)|*.png"
 			};
 			if (openFileDialog.ShowDialog () == true)
-			{ 
+			{
 				if (IsWallpaperDefinition ())
 				{
 					if (openFileDialog.FileName != ImagePath.Text)
 					{
 						img2 = Drawing.Image.FromFile (openFileDialog.FileName);
-						SetOpacityWallpaper ();						
+						SetOpacityWallpaper ();
 					}
 				} else
 				{
 					img3 = Drawing.Image.FromFile (openFileDialog.FileName);
 					LoadSticker ();
 				}
+
 				ImagePath.Text = openFileDialog.FileName;
 			}
 		}
@@ -552,6 +549,68 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private bool IsWallpaperDefinition ()
 		{
 			return ShadowNames.imageNames [0] == Definitions.SelectedItem.ToString ();
+		}
+
+		private void ChangeColor (bool isBackground)
+		{
+			if (Definitions.SelectedItem != null)
+			{
+				string definition = Definitions.SelectedItem.ToString ();
+				ThemeField field = CLI.currentTheme.Fields [definition];
+				string hex = isBackground ? field.Background : field.Foreground;
+				Drawing.Color color = Drawing.ColorTranslator.FromHtml (hex);
+				Drawing.Color ncolor = Drawing.Color.Empty;
+				bool save = false;
+				if (Settings.colorPicker == 0)
+				{
+					ColorPicker picker = new ColorPicker ();
+					picker.allowSave = !CLI.currentTheme.isDefault;
+					picker.MainColor = color;
+					NativeWindow win32Parent = new NativeWindow ();
+					win32Parent.AssignHandle (new WindowInteropHelper (this).Handle);
+
+					if (picker.ShowDialog (win32Parent) == System.Windows.Forms.DialogResult.OK)
+					{
+						save = true;
+						ncolor = picker.MainColor;
+					}
+				} else
+				{
+					ColorPickerWindow picker = new ColorPickerWindow
+					{
+						allowSave = !CLI.currentTheme.isDefault,
+						MainColor = color.ToWPFColor (),
+						Owner = this,
+						Tag = Tag
+					};
+					if (picker.ShowDialog () == true)
+					{
+						save = true;
+						ncolor = picker.MainColor.ToWinformsColor ();
+					}
+				}
+
+				if (save)
+				{
+					bool changed = color != ncolor;
+					if (!CLI.isEdited) CLI.isEdited = changed;
+
+					if (isBackground)
+					{
+						field.Background = ncolor.ToHex ();
+						BGButton.Background = new SolidColorBrush(ncolor.ToWPFColor ());
+					} else
+					{
+						field.Foreground = ncolor.ToHex ();
+						FGButton.Background = new SolidColorBrush(ncolor.ToWPFColor ());
+					}
+					if (changed)
+					{
+						highlighter.updateColors ();
+						updateColors ();
+					}
+				}
+			}
 		}
 
 		#endregion
@@ -700,11 +759,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		#endregion
-
 		private void OpacitySlider_OnDragStarted (object sender, DragStartedEventArgs e)
 		{
-			BlockOpacity = true;			
+			BlockOpacity = true;
 		}
 
 		private void OpacitySlider_OnDragCompleted (object sender, DragCompletedEventArgs e)
@@ -712,5 +769,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 			BlockOpacity = false;
 			ChangeOpacityBySlider ();
 		}
+
+		private void BackgroundButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			ChangeColor (true);
+		}
+
+		private void ForegroundButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			ChangeColor (false);
+		}
+
+		#endregion
 	}
 }

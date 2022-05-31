@@ -14,6 +14,16 @@ namespace Yuki_Theme.Core.WPF
 		public static System.Drawing.Color ToWinformsColor (this Color color) =>
 			System.Drawing.Color.FromArgb (color.A, color.R, color.G, color.B);
 
+		public static string ToHex (this System.Drawing.Color color)
+		{
+			return System.Drawing.ColorTranslator.ToHtml (color);
+		}
+
+		public static string ToHex (this Color color)
+		{
+			return color.ToWinformsColor ().ToHex ();
+		}
+		
 		public static Brush ToBrush (this Color color) => new SolidColorBrush (color);
 
 		public static BitmapImage ToWPFImage (this System.Drawing.Image img)

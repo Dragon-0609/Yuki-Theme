@@ -34,6 +34,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221">
+          <HintPath>..\packages\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+        </Reference>
         <Reference Include="FastColoredTextBox, Version=2.16.26.0, Culture=neutral, PublicKeyToken=fb8aa12b994ef61b">
           <HintPath>..\packages\FastColoredTextBox.dll</HintPath>
         </Reference>
@@ -77,11 +80,20 @@
         <Compile Include="Controls\AirspacePopup.cs" />
         <Compile Include="Controls\AlignButton.cs" />
         <Compile Include="Controls\CodeTextboxHost.cs" />
+        <Compile Include="Controls\ColorPicker\CirclePanel.cs" />
+        <Compile Include="Controls\ColorPicker\ColorPicker.xaml.cs" />
+        <Compile Include="Controls\ColorPicker\ColorPickerWindow.xaml.cs">
+          <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Controls\ColorPicker\ColorToSolidColorBrushConverter.cs" />
+        <Compile Include="Controls\ColorPicker\ColorUtilities.cs" />
+        <Compile Include="Controls\ColorPicker\HsvColor.cs" />
         <Compile Include="Controls\IntegerUpDown.xaml.cs">
           <DependentUpon>IntegerUpDown.xaml</DependentUpon>
         </Compile>
         <Compile Include="Controls\Manageable.cs" />
         <Compile Include="Controls\ManageableItem.cs" />
+        <Compile Include="Controls\ScreenColorPickerHost.cs" />
         <Compile Include="Controls\SettingsPanel.xaml.cs">
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
@@ -117,6 +129,9 @@
           <DependentUpon>SettingsWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="WPFHelper.cs" />
+        <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
+        <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />
+        <Page Include="Controls\ColorPicker\Themes\Generic.xaml" />
         <Page Include="Controls\IntegerUpDown.xaml" />
         <Page Include="Controls\SettingsPanel.xaml" />
         <Page Include="Styles\ButtonStyles.xaml" />

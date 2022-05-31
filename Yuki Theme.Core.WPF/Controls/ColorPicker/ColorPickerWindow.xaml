@@ -1,0 +1,40 @@
+﻿<Window x:Class="Yuki_Theme.Core.WPF.Controls.ColorPicker.ColorPickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Controls.ColorPicker"
+        xmlns:akrcontrols="clr-namespace:akr.WPF.Controls"
+        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+        mc:Ignorable="d"
+        Title="Color Picker" Width="340" Height="550" Style="{DynamicResource SLayer}"
+        Loaded="ColorPickerWindow_OnLoaded">
+    <Window.Tag>
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F"
+                              BackgroundClickBrush="#4F4F4F"
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
+    </Window.Tag>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/WindowTemplate.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+    <akrcontrols:ColorPicker
+        x:Name="Picker"
+        Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Background}"
+        Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Tag}" />
+</Window>
