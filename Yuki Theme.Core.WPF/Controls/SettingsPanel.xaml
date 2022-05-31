@@ -18,23 +18,23 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TabStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TabStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/CheckboxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/CheckboxStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/RadioButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/RadioButtonStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/GroupBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/GroupBoxStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/ListViewStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ListViewStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

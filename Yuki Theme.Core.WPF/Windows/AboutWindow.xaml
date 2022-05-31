@@ -21,11 +21,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/LinkStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/LinkStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

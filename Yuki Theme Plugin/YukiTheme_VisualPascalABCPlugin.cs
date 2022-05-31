@@ -54,7 +54,7 @@ namespace Yuki_Theme_Plugin
 		#region IDE Controls
 
 		private          AboutBox              about;
-		private          Form1                 fm;
+		internal         Form1                 fm;
 		private          MenuStrip             menu;
 		private          Panel                 output_input;
 		private          RichTextBox           output_output;
@@ -93,14 +93,17 @@ namespace Yuki_Theme_Plugin
 
 		public static Color bg;
 		public static Color bgdef;
+		public static Color bgSelection;
 		public static Color bgClick;
 		public static Color bgClick2;
 		public static Color bgClick3;
 		public static Color bgInactive;
 		public static Color clr;
+		public static Color clrKey;
 		public static Color clrHover;
 		public static Color bgBorder;
 		public static Color bgType;
+		
 		public static Brush bgdefBrush;
 		public static Brush bgBrush;
 		public static Brush selectionBrush;
@@ -181,8 +184,9 @@ namespace Yuki_Theme_Plugin
 		public PopupFormsController popupController;
 
         public static YukiTheme_VisualPascalABCPlugin plugin;
+        private       MainWindow                      CoreWindow;
 
-		/// <summary>
+        /// <summary>
 		///     The main entry point for the application.
 		/// </summary>
 		public YukiTheme_VisualPascalABCPlugin (IWorkbench workbench)
@@ -299,9 +303,25 @@ namespace Yuki_Theme_Plugin
 		private void InitCore ()
 		{
 			WPFHelper.InitAppForWinforms ();
-
-			MainWindow mw = new MainWindow ();
-			mw.Show ();
+			if (CoreWindow == null || PresentationSource.FromVisual(CoreWindow) == null)
+			{
+				CoreWindow = new MainWindow ();
+				CoreWindow.startSettingTheme += ReleaseResources;
+				CoreWindow.setTheme += ReloadLayout;
+				CoreWindow.Closed += (_, _) =>
+				{
+					GC.Collect ();
+					GC.WaitForPendingFinalizers ();
+				};
+			} else
+			{
+				if (CoreWindow.IsVisible)
+				{
+					CoreWindow.Activate ();
+					return;
+				}
+			}
+			CoreWindow.Show ();
 			/*if (mf == null || mf.IsDisposed)
 			{
 				mf = new MForm (1);
@@ -554,9 +574,11 @@ namespace Yuki_Theme_Plugin
 			bgClick = Helper.DarkerOrLighter (bgdef, 0.25f);
 			bgClick2 = Helper.DarkerOrLighter (bgdef, 0.4f);
 			bgClick3 = Helper.DarkerOrLighter (bgdef, 0.1f);
+			bgSelection = highlighting.GetColorFor ("Selection").BackgroundColor;
 			bgInactive = Helper.ChangeColorBrightness (bgdef, -0.3f);
 			bg = Helper.bgColor = Helper.DarkerOrLighter (bgdef, 0.05f);
 			clr = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.2f);
+			clrKey = highlighting.GetColorFor ("Keywords").Color;
 			clrHover = Helper.DarkerOrLighter (highlighting.GetColorFor ("Default").Color, 0.6f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
@@ -915,7 +937,7 @@ namespace Yuki_Theme_Plugin
 		{
 			ResetBrush (ref bgdefBrush, bgdef);
 			ResetBrush (ref bgBrush, bg);
-			ResetBrush (ref selectionBrush, highlighting.GetColorFor ("Selection").BackgroundColor);
+			ResetBrush (ref selectionBrush, bgSelection);
 			ResetBrush (ref bgClickBrush, bgClick);
 			ResetBrush (ref bgClick3Brush, bgClick3);
 			ResetBrush (ref bgInactiveBrush, bgInactive);

@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
 
 		public Window ParentWindow = null;
-		public IntPtr ParentForm   = IntPtr.Zero;
+		public System.Windows.Forms.Form   ParentForm   = null;
 
 		public SettingsPanel ()
 		{
@@ -249,10 +249,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			};
 
 			if (ParentWindow != null) aboutWindow.Owner = ParentWindow;
-			else if (ParentForm != IntPtr.Zero)
+			else if (ParentForm != null)
 			{
 				WindowInteropHelper helper = new WindowInteropHelper (aboutWindow);
-				helper.Owner = ParentForm;
+				helper.Owner = ParentForm.Handle;
+
 			}
 
 			aboutWindow.ShowDialog ();
@@ -283,10 +284,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 			};
 			customStickerWindow.ImagePath.Text = customStickerPath;
 			if (ParentWindow != null) customStickerWindow.Owner = ParentWindow;
-			else if (ParentForm != IntPtr.Zero)
+			else if (ParentForm != null)
 			{
 				WindowInteropHelper helper = new WindowInteropHelper (customStickerWindow);
-				helper.Owner = ParentForm;
+				helper.Owner = ParentForm.Handle;
 			}
 			bool? dialog = customStickerWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)

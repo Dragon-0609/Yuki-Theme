@@ -2,12 +2,15 @@
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
 using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
+using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Yuki_Theme_Plugin.Controls
 {
@@ -48,22 +51,37 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private bool oldeditor = false;
 
+		public static StyleConfig GenerateTag => new StyleConfig
+		{
+			BorderColor = YukiTheme_VisualPascalABCPlugin.bgBorder.ToWPFColor (),
+			SelectionColor = YukiTheme_VisualPascalABCPlugin.bgSelection.ToWPFColor (),
+			KeywordColor = YukiTheme_VisualPascalABCPlugin.clrKey.ToWPFColor (),
+			BorderBrush = YukiTheme_VisualPascalABCPlugin.bgBorder.ToWPFColor ().ToBrush (),
+			SelectionBrush = YukiTheme_VisualPascalABCPlugin.bgSelection.ToWPFColor ().ToBrush(),
+			KeywordBrush = YukiTheme_VisualPascalABCPlugin.clrKey.ToWPFColor ().ToBrush(),
+			BackgroundClickColor = YukiTheme_VisualPascalABCPlugin.bgClick.ToWPFColor (),
+			BackgroundClickBrush = YukiTheme_VisualPascalABCPlugin.bgClick.ToWPFColor ().ToBrush (),
+			BackgroundDefaultColor = YukiTheme_VisualPascalABCPlugin.bgdef.ToWPFColor (),
+			BackgroundDefaultBrush = YukiTheme_VisualPascalABCPlugin.bgdef.ToWPFColor ().ToBrush ()
+		};
+		
 		public void Action (OptionsContentAction action)
 		{
 			switch (action)
 			{
 				case OptionsContentAction.Show :
+					WPFHelper.InitAppForWinforms ();
+					WPFHelper.ConvertGUIColorsNBrushes ();
 					if (!alreadyShown)
 					{
-						WPFHelper.InitAppForWinforms ();
-						
+						Form parentForm = ExtractOptionsParent ();
+
 						_settingsPanel = new SettingsPanel ();
-						WPFHelper.ConvertGUIColorsNBrushes ();
+						
 						_settingsPanel.Background = WPFHelper.bgBrush;
 						_settingsPanel.Foreground = WPFHelper.fgBrush;
-						_settingsPanel.Tag = WPFHelper.GenerateTag;
-						Form parentForm = this.ParentForm;
-						if (parentForm != null) _settingsPanel.ParentForm = parentForm.Handle;
+						_settingsPanel.Tag = GenerateTag;
+						if (parentForm != null) _settingsPanel.ParentForm = parentForm;
 						
 						PanelHost.Child = _settingsPanel;
 						Controls.Add (PanelHost);
@@ -188,6 +206,16 @@ namespace Yuki_Theme_Plugin.Controls
 					alreadyShown = false;
 					break;
 			}
+		}
+
+		private Form ExtractOptionsParent ()
+		{
+			FieldInfo field = typeof (Form1).GetField ("optionsContentEngine", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			OptionsContentEngine engine = (OptionsContentEngine)field.GetValue (plugin.fm);
+
+			field = typeof (OptionsContentEngine).GetField ("optionsWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+			return (OptionsForm)field.GetValue (engine);
 		}
 
 		#endregion

@@ -13,11 +13,11 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/RadioButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/RadioButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <conv:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
             <DrawingBrush x:Key="CheckerBrush" Viewport="0,0,10,10" ViewportUnits="Absolute" TileMode="Tile">

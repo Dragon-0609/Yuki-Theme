@@ -34,6 +34,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Drawing.Image img3 = null;
 		private Drawing.Image img4 = null;
 		private string []     themes;
+		
+		public event SetTheme setTheme;
+		public event SetTheme startSettingTheme;
 
 		private Drawing.Size defaultSize = new Drawing.Size (20, 20);
 
@@ -59,6 +62,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			if (Helper.mode == null)
 				Helper.mode = ProductMode.Program;
+			else if (Helper.mode == ProductMode.Plugin)
+			{
+				PluginButtons.Visibility = Visibility.Visible;
+			}
 
 			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
@@ -190,6 +197,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 
 		#endregion
+
+		
+		#region Main Methods
 
 		private void AddTheme ()
 		{
@@ -363,69 +373,29 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-
-		public void updateColors ()
+		private void Save ()
 		{
-			WPFHelper.ConvertGUIColorsNBrushes ();
-
-			Background = WPFHelper.bgBrush;
-			Foreground = WPFHelper.fgBrush;
-			StyleConfig config = WPFHelper.GenerateTag;
-			Window.Tag = config;
+			CLI.save (img2, img3);
 		}
 
-		private void bgImagePaint (object sender, PaintEventArgs e)
+		private void Export ()
 		{
-			if (img != null && Settings.bgImage)
-			{
-				if (oldV.Width != Fstb.box.ClientRectangle.Width || oldV.Height != Fstb.box.ClientRectangle.Height)
-				{
-					oldV = Helper.GetSizes (img.Size, Fstb.box.ClientRectangle.Width, Fstb.box.ClientRectangle.Height,
-					                        CLI.currentTheme.align);
-				}
-
-				e.Graphics.DrawImage (img, oldV);
-			}
+			CLI.export (img2, img3, setThemeDelegate, startSettingThemeDelegate);
 		}
 
-		private void ToggleEditor ()
+		private void ImportFile ()
 		{
-			Visibility visibility;
-			if (Settings.Editor)
-			{
-				visibility = Visibility.Visible;
-			} else
-			{
-				visibility = Visibility.Collapsed;
-			}
-
-			if (Definitions.Visibility != visibility)
-			{
-				Definitions.Visibility = DefSplitter.Visibility = visibility;
-
-				if (Settings.Editor)
-				{
-					Grid.SetColumn (EditorSide, 2);
-					Grid.SetColumnSpan (EditorSide, 1);
-
-					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Visible;
-				} else
-				{
-					Grid.SetColumn (EditorSide, 0);
-					Grid.SetColumnSpan (EditorSide, 3);
-
-					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Collapsed;
-				}
-			}
+			
 		}
 
-
-		private void ChangeOpacityBySlider ()
+		private void ImportFolder ()
 		{
-			CLI.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
-			SetOpacityWallpaper ();
+			
 		}
+		
+		#endregion
 
+		
 		#region Core Actions
 
 		public void ifHasImage (Drawing.Image imgc)
@@ -588,6 +558,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 						save = true;
 						ncolor = picker.MainColor.ToWinformsColor ();
 					}
+
+					WPFHelper.checkDialog = null;
+					WPFHelper.windowForDialogs = null;
 				}
 
 				if (save)
@@ -611,6 +584,79 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				}
 			}
+		}
+
+		
+		public void startSettingThemeDelegate ()
+		{
+			if (startSettingTheme != null) startSettingTheme ();
+		}
+
+		public void setThemeDelegate ()
+		{
+			if (setTheme != null) setTheme ();
+		}
+
+		public void updateColors ()
+		{
+			WPFHelper.ConvertGUIColorsNBrushes ();
+
+			Background = WPFHelper.bgBrush;
+			Foreground = WPFHelper.fgBrush;
+			StyleConfig config = WPFHelper.GenerateTag;
+			Window.Tag = config;
+		}
+
+		private void bgImagePaint (object sender, PaintEventArgs e)
+		{
+			if (img != null && Settings.bgImage)
+			{
+				if (oldV.Width != Fstb.box.ClientRectangle.Width || oldV.Height != Fstb.box.ClientRectangle.Height)
+				{
+					oldV = Helper.GetSizes (img.Size, Fstb.box.ClientRectangle.Width, Fstb.box.ClientRectangle.Height,
+					                        CLI.currentTheme.align);
+				}
+
+				e.Graphics.DrawImage (img, oldV);
+			}
+		}
+
+		private void ToggleEditor ()
+		{
+			Visibility visibility;
+			if (Settings.Editor)
+			{
+				visibility = Visibility.Visible;
+			} else
+			{
+				visibility = Visibility.Collapsed;
+			}
+
+			if (Definitions.Visibility != visibility)
+			{
+				Definitions.Visibility = DefSplitter.Visibility = visibility;
+
+				if (Settings.Editor)
+				{
+					Grid.SetColumn (EditorSide, 2);
+					Grid.SetColumnSpan (EditorSide, 1);
+
+					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Visible;
+				} else
+				{
+					Grid.SetColumn (EditorSide, 0);
+					Grid.SetColumnSpan (EditorSide, 3);
+
+					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Collapsed;
+				}
+			}
+		}
+
+
+		private void ChangeOpacityBySlider ()
+		{
+			CLI.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
+			SetOpacityWallpaper ();
 		}
 
 		#endregion
@@ -708,6 +754,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
 		{
+			Save ();
 		}
 
 		private void MainWindow_OnSourceInitialized (object sender, EventArgs e)
@@ -780,6 +827,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			ChangeColor (false);
 		}
 
+		private void ExportButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			Export ();
+		}
+		
 		#endregion
+
 	}
 }

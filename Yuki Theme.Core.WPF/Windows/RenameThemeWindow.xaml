@@ -19,13 +19,13 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/WindowTemplate.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/WindowTemplate.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/DropDownStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 

@@ -19,7 +19,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
-                    Source="/Yuki_Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
