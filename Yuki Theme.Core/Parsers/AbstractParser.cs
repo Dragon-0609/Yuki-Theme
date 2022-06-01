@@ -22,7 +22,7 @@ namespace Yuki_Theme.Core.Parsers
 
 		public Action <string, string> defaultTheme;
 
-		public void Parse (string path, string st, string pathToSave, /*MForm form, */bool ak = false, bool rewrite =false, bool select = true)
+		public void Parse (string path, string st, string pathToSave, bool ak = false, bool rewrite =false, bool select = true, Action <string> addToUIList = null, Action<string> selectAfterParse = null)
 		{
 			theme = ThemeFunctions.LoadDefault ();
 			theme.Fields = new Dictionary <string, ThemeField> ();
@@ -46,8 +46,9 @@ namespace Yuki_Theme.Core.Parsers
 			if (!overwrite)
 			{
 				string syt = CLI.schemes [1];
+				Console.WriteLine (syt);
 				if (DefaultThemes.isDefault (syt))
-					CLI.CopyFromMemory (syt, PathToSave, PathToSave);
+					CLI.CopyFromMemory (syt, syt, PathToSave);
 				else
 				{
 					// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
@@ -72,17 +73,20 @@ namespace Yuki_Theme.Core.Parsers
 			{
 				CLI.AddThemeToLists (flname, false, true);
 				CLI.names.Add (flname);
+				if (addToUIList != null)
+					addToUIList (flname);
 				/*if (form != null)
 					form.schemes.Items.Add (flname);*/
 			}
-			/*if(select && form != null)
+			if(select && selectAfterParse != null)
 			{
-				// If selected theme is not theme that we just parsed
+				selectAfterParse (flname);
+				/*// If selected theme is not theme that we just parsed
 				if ((string)form.schemes.SelectedItem != flname)
 					form.schemes.SelectedItem = flname;
 				else
-					form.restore_Click (form, EventArgs.Empty); // Reset
-			}*/
+					form.restore_Click (form, EventArgs.Empty); // Reset*/
+			}
 		}
 
 		public void MergeFiles (string path)

@@ -625,8 +625,15 @@ namespace Yuki_Theme.Core.Formats
 
 					foreach (var att in attrs)
 					{
-						// Console.WriteLine("{0}: {1}, {2}", nms, att.Key, att.Value);
-						childNode.Attributes [att.Key].Value = att.Value;
+						
+						try
+						{
+							childNode.Attributes [att.Key].Value = att.Value;
+						} catch (Exception e)
+						{
+							Console.WriteLine ("Couldn't set attribute to {0}: Key = {1}, Value = {2}", nms, att.Key, att.Value);
+						}
+						
 					}
 				}
 

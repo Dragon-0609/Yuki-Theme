@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			flname = ofname;
 			PathToSave = Path.Combine (CLI.currentPath, "Themes",
-			                        $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
+			                           $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
 			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
 				throw new InvalidDataException (CLI.Translate ("parser.theme.exist"));
 
@@ -77,21 +77,26 @@ namespace Yuki_Theme.Core.Parsers
 
 				foreach (var nm in name)
 				{
-					theme.Fields.Add (nm, attrs);
+					if (!theme.Fields.ContainsKey (nm))
+					{
+						theme.Fields.Add (nm, attrs);
+					} else
+					{
+						theme.Fields [nm] = attrs.MergeWithAnother (theme.Fields [nm]);
+					}
 				}
 			}
-			
-			
+
 
 			theme.Fields ["LineNumbers"].Background = theme.Fields ["Default"].Background;
-			
+
 			if (!theme.Fields.ContainsKey ("Digits"))
 				addDefaults ("constantColor");
 			addDefaults ("foregroundColor");
 			addDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
-			
+
 			// throw new Exception ("ERROR");
 			theme.Fields.Add ("FoldMarker", new ThemeField
 			{
@@ -554,83 +559,80 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override void finishParsing (string path)
 		{
-			if (!overwrite)
+			var doc = new XmlDocument ();
+			doc.Load (PathToSave);
+
+			Tuple <bool, Image> wallp = getImage (getWallpaper);
+
+			Tuple <bool, Image> stick = getImage (getSticker);
+
+			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+
+			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+			XmlNodeList comms = nod.SelectNodes ("//comment()");
+			if (comms.Count >= 3)
 			{
-				var doc = new XmlDocument ();
-				doc.Load (PathToSave);
-
-				Tuple <bool, Image> wallp = getImage (getWallpaper);
-
-				Tuple <bool, Image> stick = getImage (getSticker);
-
-				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-
-				XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
-				XmlNodeList comms = nod.SelectNodes ("//comment()");
-				if (comms.Count >= 3)
+				Dictionary <string, bool> comments = new Dictionary <string, bool> ()
 				{
-					Dictionary <string, bool> comments = new Dictionary <string, bool> ()
-					{
-						{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
-						{ "hasImage", false }, { "hasSticker", false }
-					};
+					{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
+					{ "hasImage", false }, { "hasSticker", false }
+				};
 
-					Dictionary <string, string> commentValues = new Dictionary <string, string> ()
-					{
-						{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
-						{ "opacity", "opacity:" + (10).ToString () },
-						{ "sopacity", "sopacity:" + (100).ToString () },
-						{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
-						{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
-					};
-					foreach (XmlComment comm in comms)
-					{
-						if (comm.Value.StartsWith ("align"))
-						{
-							comm.Value = commentValues ["align"];
-							comments ["align"] = true;
-						} else if (comm.Value.StartsWith ("opacity"))
-						{
-							comm.Value = commentValues ["opacity"];
-							comments ["opacity"] = true;
-						} else if (comm.Value.StartsWith ("sopacity"))
-						{
-							comm.Value = commentValues ["sopacity"];
-							comments ["sopacity"] = true;
-						} else if (comm.Value.StartsWith ("name"))
-						{
-							comm.Value = commentValues ["name"];
-							comments ["name"] = true;
-						} else if (comm.Value.StartsWith ("hasImage"))
-						{
-							comm.Value = commentValues ["hasImage"];
-							comments ["hasImage"] = true;
-						} else if (comm.Value.StartsWith ("hasSticker"))
-						{
-							comm.Value = commentValues ["hasSticker"];
-							comments ["hasSticker"] = true;
-						}
-					}
-
-					foreach (KeyValuePair <string, bool> comment in comments)
-					{
-						if (!comment.Value)
-						{
-							node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
-						}
-					}
-				} else
+				Dictionary <string, string> commentValues = new Dictionary <string, string> ()
 				{
-					node.AppendChild (doc.CreateComment ("name:" + ofname));
-					node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
-					node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
-					node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
-					node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
-					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
+					{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
+					{ "opacity", "opacity:" + (10).ToString () },
+					{ "sopacity", "sopacity:" + (100).ToString () },
+					{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
+					{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
+				};
+				foreach (XmlComment comm in comms)
+				{
+					if (comm.Value.StartsWith ("align"))
+					{
+						comm.Value = commentValues ["align"];
+						comments ["align"] = true;
+					} else if (comm.Value.StartsWith ("opacity"))
+					{
+						comm.Value = commentValues ["opacity"];
+						comments ["opacity"] = true;
+					} else if (comm.Value.StartsWith ("sopacity"))
+					{
+						comm.Value = commentValues ["sopacity"];
+						comments ["sopacity"] = true;
+					} else if (comm.Value.StartsWith ("name"))
+					{
+						comm.Value = commentValues ["name"];
+						comments ["name"] = true;
+					} else if (comm.Value.StartsWith ("hasImage"))
+					{
+						comm.Value = commentValues ["hasImage"];
+						comments ["hasImage"] = true;
+					} else if (comm.Value.StartsWith ("hasSticker"))
+					{
+						comm.Value = commentValues ["hasSticker"];
+						comments ["hasSticker"] = true;
+					}
 				}
 
-				Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
+				foreach (KeyValuePair <string, bool> comment in comments)
+				{
+					if (!comment.Value)
+					{
+						node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
+					}
+				}
+			} else
+			{
+				node.AppendChild (doc.CreateComment ("name:" + ofname));
+				node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
+				node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
+				node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
+				node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
+				node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 			}
+
+			Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 		}
 
 		private Tuple <bool, Image> getImage (string path)

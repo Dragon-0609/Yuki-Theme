@@ -12,7 +12,7 @@ namespace Yuki_Theme.Core.Parsers
 		private static JetBrainsParser jetparser;
 		private static DokiThemeParser dokiparser;
 
-		public static void Parse (string path,/* MForm form = null, */bool ask = true, bool select = true, Action<string, string> defaultTheme = null, Func <string, string, bool> exist = null)
+		public static void Parse (string path, bool ask = true, bool select = true, Action <string, string> defaultTheme = null, Func <string, string, bool> exist = null, Action <string> addToUIList = null, Action<string> selectAfterParse = null)
 		{
 			string st = Path.GetFileNameWithoutExtension (path);
 			if (isDefault (st))
@@ -41,13 +41,17 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						File.Copy (path, pathef, true);
 						// form.load_schemes ();
+						if (addToUIList != null)
+							addToUIList (st);
+						if (selectAfterParse != null)
+							selectAfterParse (st);
 					}
 						break;
 					case ".icls" :
 					{
 						bool has = checkAvailable (pathef);
 						jetparser = new JetBrainsParser ();
-						jetparser.Parse (path, st, pathToSave, /*form, */ask, has, select);
+						jetparser.Parse (path, st, pathToSave, /*form, */ask, has, select, addToUIList, selectAfterParse);
 						
 						jetparser = null;
 						GC.Collect();
@@ -60,7 +64,7 @@ namespace Yuki_Theme.Core.Parsers
 						dokiparser = new DokiThemeParser ();
 						dokiparser.defaultTheme = defaultTheme;
 						dokiparser.exist = exist;
-						dokiparser.Parse (path, st, pathToSave,/* form, */ask, has, select);
+						dokiparser.Parse (path, st, pathToSave, /* form, */ask, has, select, addToUIList, selectAfterParse);
 						
 						dokiparser = null;
 						GC.Collect();

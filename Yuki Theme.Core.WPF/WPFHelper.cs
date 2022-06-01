@@ -253,28 +253,31 @@ namespace Yuki_Theme.Core.WPF
 			Slider slider = d as Slider;
 			slider.Loaded += (ss, ee) =>
 			{
-				Window window = Window.GetWindow (slider);
+				slider.PreviewMouseWheel += Window_PreviewMouseWheel;
+				/*Window window = Window.GetWindow (slider);
 				if (window != null)
 				{
-					SetSlider (window, slider);
-					window.PreviewMouseWheel += Window_PreviewMouseWheel;
-				}
+					
+					// SetSlider (window, slider);
+					// window.PreviewMouseWheel += Window_PreviewMouseWheel;
+				}*/
 			};
 			slider.Unloaded += (ss, ee) =>
 			{
-				Window window = Window.GetWindow (slider);
+				slider.PreviewMouseWheel -= Window_PreviewMouseWheel;
+				/*Window window = Window.GetWindow (slider);
 				if (window != null)
 				{
 					SetSlider (window, null);
 					window.PreviewMouseWheel -= Window_PreviewMouseWheel;
-				}
+				}*/
 			};
 		}
 
 		private static void Window_PreviewMouseWheel (object sender, MouseWheelEventArgs e)
 		{
-			Window window = sender as Window;
-			Slider slider = GetSlider (window);
+			// Window window = sender as Window;
+			Slider slider = sender as Slider; /*GetSlider (window);*/
 			double value = GetValue (slider);
 			if (slider != null && value != 0)
 			{

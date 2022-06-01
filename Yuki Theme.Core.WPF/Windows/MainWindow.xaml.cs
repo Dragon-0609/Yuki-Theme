@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Controls.ColorPicker;
@@ -34,7 +35,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Drawing.Image img3 = null;
 		private Drawing.Image img4 = null;
 		private string []     themes;
-		
+
 		public event SetTheme setTheme;
 		public event SetTheme startSettingTheme;
 
@@ -65,6 +66,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			else if (Helper.mode == ProductMode.Plugin)
 			{
 				PluginButtons.Visibility = Visibility.Visible;
+				ExportButton.Visibility = Visibility.Hidden;
 			}
 
 			highlighter = new Highlighter (Fstb.box);
@@ -169,13 +171,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 						mergedDict =
 							Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (
 								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
-
 					} else if (Helper.mode == ProductMode.Plugin)
 					{
 						mergedDict =
 							Application.Current.Resources.MergedDictionaries.FirstOrDefault (
 								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
-
 					}
 
 					if (mergedDict != null)
@@ -198,7 +198,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		#endregion
 
-		
+
 		#region Main Methods
 
 		private void AddTheme ()
@@ -385,17 +385,24 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void ImportFile ()
 		{
-			
+			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+			{
+				Filter = CLI.Translate ("main.import.extensions.all") +
+				         " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd"
+			};
+			if (openFileDialog.ShowDialog () == true)
+			{
+				MainParser.Parse (openFileDialog.FileName, true, true, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+			}
 		}
 
 		private void ImportFolder ()
 		{
-			
 		}
-		
+
 		#endregion
 
-		
+
 		#region Core Actions
 
 		public void ifHasImage (Drawing.Image imgc)
@@ -445,6 +452,26 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void ErrorExport (string content, string title)
 		{
 			MessageBox.Show (content, title, MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		private bool AskChoiceParser (string content, string title)
+		{
+			return MessageBox.Show (content,
+			                        title,
+			                        MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+		}
+
+		private void ImportUIAddition (string fileName)
+		{
+			Themes.Items.Add (fileName);
+		}
+
+		private void ImportThemeReset (string fileName)
+		{
+			if (Themes.SelectedItem.ToString () != fileName)
+				Themes.SelectedItem = fileName;
+			else
+				Restore ();
 		}
 
 		#endregion
@@ -571,12 +598,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 					if (isBackground)
 					{
 						field.Background = ncolor.ToHex ();
-						BGButton.Background = new SolidColorBrush(ncolor.ToWPFColor ());
+						BGButton.Background = new SolidColorBrush (ncolor.ToWPFColor ());
 					} else
 					{
 						field.Foreground = ncolor.ToHex ();
-						FGButton.Background = new SolidColorBrush(ncolor.ToWPFColor ());
+						FGButton.Background = new SolidColorBrush (ncolor.ToWPFColor ());
 					}
+
 					if (changed)
 					{
 						highlighter.updateColors ();
@@ -586,7 +614,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		
+
 		public void startSettingThemeDelegate ()
 		{
 			if (startSettingTheme != null) startSettingTheme ();
@@ -680,7 +708,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					int prevSelectedField = Definitions.SelectedIndex;
 					Restore ();
 					LoadDefinitions ();
-
+					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CLI.isDefault ();
 					if (prevSelectedField != -1)
 						Definitions.SelectedIndex = prevSelectedField;
 					else
@@ -808,13 +836,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void OpacitySlider_OnDragStarted (object sender, DragStartedEventArgs e)
 		{
-			BlockOpacity = true;
+			if (sender is Slider)
+				BlockOpacity = true;
 		}
 
 		private void OpacitySlider_OnDragCompleted (object sender, DragCompletedEventArgs e)
 		{
-			BlockOpacity = false;
-			ChangeOpacityBySlider ();
+			if (sender is Slider)
+			{
+				BlockOpacity = false;
+				ChangeOpacityBySlider ();
+			}
 		}
 
 		private void BackgroundButton_OnClick (object sender, RoutedEventArgs e)
@@ -831,8 +863,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Export ();
 		}
-		
+
 		#endregion
 
+		private void ImportButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			ImportFile ();
+		}
+
+		private void ImportDirectoryButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			ImportFolder ();
+		}
 	}
 }
