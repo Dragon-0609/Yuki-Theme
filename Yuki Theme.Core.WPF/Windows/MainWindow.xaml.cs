@@ -106,6 +106,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
+		private void LoadDefinitionsWithSelection ()
+		{
+			int prevSelectedField = Definitions.SelectedIndex;
+			LoadDefinitions ();
+			Definitions.SelectedIndex = prevSelectedField != -1 ? prevSelectedField : 0;
+		}
+
 		private void LoadSticker ()
 		{
 			if (Settings.swSticker)
@@ -273,18 +280,23 @@ namespace Yuki_Theme.Core.WPF.Windows
 			};
 
 			bool? dialog = settingsWindow.ShowDialog ();
-
+			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
 			{
 				settingsWindow.SettingsPanelControl.SaveSettings ();
 				Settings.SaveData ();
 				ToggleEditor ();
+				if (currentMode != Settings.settingMode)
+				{
+					Restore ();
+				}
 			}
 		}
 
 		private void Restore ()
 		{
 			CLI.restore (false, null);
+			LoadDefinitionsWithSelection ();
 			highlighter.updateColors ();
 			updateColors ();
 			SetOpacityWallpaper ();
@@ -700,19 +712,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				if (cnd)
 				{
-					// if (CLI.isEdited) // Ask to save the changes
-					// {
-					// 	if (SaveInExport (Translate ("main.theme.edited.full"), Translate ("main.theme.edited.short")))
-					// 		save_Click (sender, e); // save before restoring
-					// }
-					int prevSelectedField = Definitions.SelectedIndex;
+					if (CLI.isEdited) // Ask to save the changes
+					{
+						if (SaveInExport (CLI.Translate ("main.theme.edited.full"), CLI.Translate ("main.theme.edited.short")))
+							Save ();
+					}
 					Restore ();
-					LoadDefinitions ();
 					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CLI.isDefault ();
-					if (prevSelectedField != -1)
-						Definitions.SelectedIndex = prevSelectedField;
-					else
-						Definitions.SelectedIndex = 0;
+					LoadDefinitionsWithSelection ();
 
 					SelectField ();
 					CLI.selectedItem = Themes.SelectedItem.ToString ();

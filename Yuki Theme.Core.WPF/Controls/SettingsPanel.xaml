@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="300" MinWidth="340" MinHeight="200"
+             d:DesignHeight="740" d:DesignWidth="300" MinWidth="340" MinHeight="200"
              Loaded="SettingsPanel_OnLoaded"
              SizeChanged="SettingsPanel_OnSizeChanged">
     <UserControl.Tag>
@@ -40,16 +41,85 @@
 
             <BitmapImage x:Key="InfoImage" UriSource="" />
             <BitmapImage x:Key="HelpImage" UriSource="" />
+            
+            <system:String x:Key="settings.general.title">General</system:String>
+            <system:String x:Key="settings.additional.title">Additional</system:String>
+            <system:String x:Key="settings.toolbar.title">ToolBar</system:String>
+            
+            <system:String x:Key="settings.general.background.title">Background Image</system:String>
+            <system:String x:Key="settings.general.background.enabled">Show Background Image</system:String>
+            <system:String x:Key="settings.general.editor">Editor Mode</system:String>
+            <system:String x:Key="settings.general.fitbywidth">Auto Fit Background Image by Width</system:String>
+            <system:String x:Key="settings.general.fitbywidth.help">Background Image will be fitted by width if&amp;#10;it's necessary</system:String>
+            <system:String x:Key="settings.general.asktosave">Always ask to save</system:String>
+            <system:String x:Key="settings.general.asktosave.help">If theme is edited, ask before changing to another</system:String>
+            <system:String x:Key="settings.general.sticker.title">Sticker</system:String>
+            <system:String x:Key="settings.general.sticker.enabled">Show Sticker</system:String>
+            <system:String x:Key="settings.general.sticker.choose">Choose Image</system:String>
+            <system:String x:Key="settings.general.sticker.custom">Use Custom Sticker</system:String>
+            <system:String x:Key="settings.general.positioning.enabled">Allow Positioning</system:String>
+            <system:String x:Key="settings.general.positioning.reset">Reset Sticker Margin</system:String>
+            <system:String x:Key="settings.general.positioning.save">Double click sticker&amp;#10;to save current position.</system:String>
+            <system:String x:Key="settings.general.dimension.title">Sticker Dimension Cap</system:String>
+            <system:String x:Key="settings.general.dimension.enable">Enable Sticker Dimension Cap</system:String>
+            <system:String x:Key="settings.general.dimension.max.px">Max Size (px)</system:String>
+            <system:String x:Key="settings.general.dimension.max.by">Max Size by:</system:String>
+            <system:String x:Key="settings.general.dimension.max.by.height">Height</system:String>
+            <system:String x:Key="settings.general.dimension.max.by.width">Width</system:String>
+            <system:String x:Key="settings.general.mode">Editor Mode:</system:String>
+            <system:String x:Key="settings.general.mode.light">Light</system:String>
+            <system:String x:Key="settings.general.mode.advanced">Advanced</system:String>
+            <system:String x:Key="settings.general.others">Other Settings</system:String>
+            <system:String x:Key="settings.general.update.auto">Auto Check Updates</system:String>
+            <system:String x:Key="settings.general.update.check">Check</system:String>
+            <system:String x:Key="settings.general.update.install">Update&amp;#10;Manually</system:String>
+            <system:String x:Key="settings.general.update.restart">Restart for update</system:String>
+            <system:String x:Key="settings.general.update.beta">Check Beta Versions</system:String>
+            <system:String x:Key="settings.general.about">About</system:String>
+            <system:String x:Key="settings.general.language">Language:</system:String>
+            <system:String x:Key="settings.general.colorpicker">Color Picker</system:String>
+
+            <system:String x:Key="settings.additional.path">Path to PascalABC.NET:</system:String>
+            <system:String x:Key="settings.additional.ask">Ask other themes are in Pascal directory</system:String>
+            <system:String x:Key="settings.additional.ask.help">Ask if there're other themes in PascalABC directory</system:String>
+            <system:String x:Key="settings.additional.action">Do Action if exist:</system:String>
+            <system:String x:Key="settings.additional.action.delete">Delete</system:String>
+            <system:String x:Key="settings.additional.action.import">Import and Delete</system:String>
+            <system:String x:Key="settings.additional.action.ignore">Ignore</system:String>
+            <system:String x:Key="settings.additional.logo">Logo on Start</system:String>
+            <system:String x:Key="settings.additional.statusbar">Name in StatusBar</system:String>
+            <system:String x:Key="settings.additional.preview">Preview in switcher</system:String>
+            <system:String x:Key="settings.additional.preview.help">Preview themes in Theme Switcher</system:String>
+
+            <system:String x:Key="settings.toolbar.icon">Icon: </system:String>
+            <system:String x:Key="settings.toolbar.show">Show:</system:String>
+            <system:String x:Key="settings.toolbar.right">From Right:</system:String>
+            <system:String x:Key="settings.toolbar.reset">Reset</system:String>
+
+            <!--<system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>
+            <system:String x:Key=""></system:String>-->
         </ResourceDictionary>
     </UserControl.Resources>
-    <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}">
-        <TabItem Header="General" IsSelected="True">
+    <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}" IsSelected="True">
+        <TabItem Header="{DynamicResource settings.general.title}" IsSelected="True">
 
             <StackPanel Margin="4 5" Name="GeneralPanel">
-                <CheckBox Content="Editor Mode" Name="EditorMode" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
+                <CheckBox Content="{DynamicResource settings.general.editor}" Name="EditorMode" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="EditorModeCheckChanged" Unchecked="EditorModeCheckChanged" />
 
-                <GroupBox Margin="0 5" Header="Sticker" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="{DynamicResource settings.general.sticker.title}" Style="{StaticResource CustomGroup}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -62,48 +132,44 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Margin="6 0 0 0">
-                            <CheckBox Content="Show Sticker" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
+                            <CheckBox Content="{DynamicResource settings.general.sticker.enabled}" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
                                       HorizontalAlignment="Left" Name="ShowSticker" />
 
                             <WrapPanel Margin="0 5 6 3" HorizontalAlignment="Left" Name="PositioningPanel">
-                                <CheckBox Content="Allow Positioning" Style="{StaticResource CheckBoxUserControl}"
+                                <CheckBox Content="{DynamicResource settings.general.positioning.enabled}" Style="{StaticResource CheckBoxUserControl}"
                                           VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning"
                                           Checked="AllowPositioningCheckedChanged" Unchecked="AllowPositioningCheckedChanged" />
 
                                 <WrapPanel Orientation="Vertical">
-                                    <Button Padding="8 2" Margin="0" Content="Reset Sticker Margin" Name="ResetMargin"
+                                    <Button Padding="8 2" Margin="0" Content="{DynamicResource settings.general.positioning.reset}" Name="ResetMargin"
                                             Style="{StaticResource ButtonUserControl}" />
                                     <Label Padding="0">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                                    Margin="0 0 6 0" />
-                                            <TextBlock Style="{StaticResource TextBlockUserControl}">
-                                                Double click sticker<LineBreak /> to save current position.
-                                            </TextBlock>
+                                            <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.positioning.save}" />
                                         </StackPanel>
                                     </Label>
                                 </WrapPanel>
                             </WrapPanel>
 
                             <WrapPanel Margin="0 0 6 3">
-                                <Button Padding="8 2" Content="Choose Image"
+                                <Button Padding="8 2" Content="{DynamicResource settings.general.sticker.choose}"
                                         Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}" Click="ChooseCustomSticker" />
-                                <CheckBox Content="Use Custom Sticker" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
+                                <CheckBox Content="{DynamicResource settings.general.sticker.custom}" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
                             </WrapPanel>
 
 
                         </StackPanel>
 
-                        <GroupBox Grid.Row="1" Grid.Column="0" Margin="0 5" Header="Sticker Dimension Cap"
+                        <GroupBox Grid.Row="1" Grid.Column="0" Margin="0 5" Header="{DynamicResource settings.general.dimension.title}"
                                   Style="{StaticResource CustomGroup}" Name="DimensionCapGroup">
                             <StackPanel HorizontalAlignment="Left" Margin="4 5" Name="DimensionCapPanel">
-                                <CheckBox Content="Enable Sticker Dimension Cap" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
+                                <CheckBox Content="{DynamicResource settings.general.dimension.enable}" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
                                           Name="StickerDimensionCap" Checked="StickerDimensionCapCheckedChanged"
                                           Unchecked="StickerDimensionCapCheckedChanged" />
                                 <WrapPanel Margin="0 5">
-                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center">
-                                        Max Size (px)
-                                    </TextBlock>
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center" Text="{DynamicResource settings.general.dimension.max.px}" />
                                     <controls:IntegerUpDown
                                         FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
                                         VerticalAlignment="Center" Width="70" Height="30"
@@ -111,12 +177,10 @@
                                         MinValue="-1" x:Name="DimensionCapMax" />
                                 </WrapPanel>
                                 <WrapPanel Margin="0 5">
-                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}">
-                                        Max Size by:
-                                    </TextBlock>
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.dimension.max.by}" />
                                     <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}" Name="DimensionCapBy">
-                                        <ComboBoxItem IsSelected="True">Height</ComboBoxItem>
-                                        <ComboBoxItem>Width</ComboBoxItem>
+                                        <ComboBoxItem IsSelected="True" Content="{DynamicResource settings.general.dimension.max.by.height}" />
+                                        <ComboBoxItem Content="{DynamicResource settings.general.dimension.max.by.width}" />
                                     </ComboBox>
                                 </WrapPanel>
                             </StackPanel>
@@ -125,29 +189,27 @@
                     </Grid>
                 </GroupBox>
 
-                <GroupBox Margin="0 5" Header="Background Image" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="{DynamicResource settings.general.background.title}" Style="{StaticResource CustomGroup}">
                     <StackPanel HorizontalAlignment="Left">
-                        <CheckBox Content="Show Background Image" Margin="4 5" Style="{StaticResource CheckBoxUserControl}"
+                        <CheckBox Content="{DynamicResource settings.general.background.enabled}" Margin="4 5" Style="{StaticResource CheckBoxUserControl}"
                                   Name="ShowBackgroundImage" />
-                        <CheckBox Content="Auto Fit Background Image by Width" Margin="4 5 4 0"
+                        <CheckBox Content="{DynamicResource settings.general.fitbywidth}" Margin="4 5 4 0"
                                   Style="{StaticResource CheckBoxUserControl}" Name="AutoFit" />
 
                         <Label Margin="22 0 4 3" Padding="0">
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                        Margin="0 0 6 0" />
-                                <TextBlock Style="{StaticResource TextBlockUserControl}">
-                                    Background Image will be fitted by width if <LineBreak /> it's necessary
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.fitbywidth.help}" />
                             </StackPanel>
                         </Label>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox Margin="0 5" Header="Other Settings" Style="{StaticResource CustomGroup}">
+                <GroupBox Margin="0 5" Header="{DynamicResource settings.general.others}" Style="{StaticResource CustomGroup}">
                     <StackPanel>
                         <StackPanel x:Name="EditorSettingsPanel">
-                            <CheckBox Content="Always ask to save" Margin="4 5 4 0" Style="{StaticResource CheckBoxUserControl}"
+                            <CheckBox Content="{DynamicResource settings.general.asktosave}" Margin="4 5 4 0" Style="{StaticResource CheckBoxUserControl}"
                                       HorizontalAlignment="Left" Name="AlwaysAsk" />
 
                             <Label Margin="4 0 4 5" Padding="0">
@@ -155,55 +217,45 @@
                                     <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource HelpImage}"
                                            Margin="0 0 6 0" />
                                     <TextBlock
-                                        TextWrapping="Wrap" Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}">
-                                        If theme is edited, ask before changing to another
-                                    </TextBlock>
+                                        TextWrapping="Wrap" Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.asktosave.help}" />
                                 </StackPanel>
                             </Label>
                             <StackPanel Orientation="Horizontal" Margin="4 5 4 5">
                                 <TextBlock Margin="4 0 4 0" Width="100" x:Name="EditorModeLabel"
-                                           Style="{StaticResource TextBlockUserControl}">
-                                    Editor Mode:
-                                </TextBlock>
+                                           Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.mode}" />
                                 <ComboBox Margin="5 0" Name="EditorModeDropdown" Width="120" Style="{StaticResource DropdownUserControl}">
-                                    <ComboBoxItem x:Name="EditorModeLight" IsSelected="True">Light</ComboBoxItem>
-                                    <ComboBoxItem x:Name="EditorModeAdvanced">Advanced</ComboBoxItem>
+                                    <ComboBoxItem IsSelected="True" Content="{DynamicResource settings.general.mode.light}" />
+                                    <ComboBoxItem Content="{DynamicResource settings.general.mode.advanced}" />
                                 </ComboBox>
                             </StackPanel>
 
                         </StackPanel>
 
                         <WrapPanel Margin="4 5 4 5">
-                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="LanguageLabel" Style="{StaticResource TextBlockUserControl}">
-                                Language
-                            </TextBlock>
-                            <ComboBox Margin="5 0" Name="LanguageDropdown" Width="120" Style="{StaticResource DropdownUserControl}"></ComboBox>
+                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="LanguageLabel" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.language}" />
+                            <ComboBox Margin="5 0" Name="LanguageDropdown" Width="120" Style="{StaticResource DropdownUserControl}" SelectionChanged="Language_Selection" />
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5 4 5">
-                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="ColorPickerLabel" Style="{StaticResource TextBlockUserControl}">
-                                Color Picker
-                            </TextBlock>
+                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="ColorPickerLabel" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.colorpicker}" />
                             <RadioButton Name="WinformsPicker" Margin="4 0" Style="{StaticResource RadioButtonUserControl}">Winforms</RadioButton>
                             <RadioButton Name="WPFPicker" Margin="4 0" Style="{StaticResource RadioButtonUserControl}">WPF (Simple)</RadioButton>
                         </WrapPanel>
-    
+
                         <WrapPanel Margin="4 5">
                             <CheckBox Style="{StaticResource CheckBoxUserControl}" VerticalAlignment="Top" Margin="0 0 20 0"
-                                      Content="Auto Check Updates" Name="AutoUpdate" />
-                            <Button Padding="6 2" Margin="0 0 6 0" Content="Check" VerticalAlignment="Top"
+                                      Content="{DynamicResource settings.general.update.auto}" Name="AutoUpdate" />
+                            <Button Padding="6 2" Margin="0 0 6 0" Content="{DynamicResource settings.general.update.check}" VerticalAlignment="Top"
                                     Style="{StaticResource ButtonUserControl}" />
-                            <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}">
-                                <TextBlock>Update<LineBreak /> Manually</TextBlock>
-                            </Button>
+                            <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}" Content="{DynamicResource settings.general.update.install}" />
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5">
-                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0" Content="Check Beta Versions"
+                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0" Content="{DynamicResource settings.general.update.beta}"
                                       Name="CheckBeta" />
-                            <Button Padding="6 2" Margin="0" Content="Restart for update" Style="{StaticResource ButtonUserControl}" />
+                            <Button Padding="6 2" Margin="0" Content="{DynamicResource settings.general.update.restart}" Style="{StaticResource ButtonUserControl}" />
                         </WrapPanel>
-                        <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="About" Name="AboutButton"
+                        <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="{DynamicResource settings.general.about}" Name="AboutButton"
                                 Click="AboutButton_OnClick" Style="{StaticResource ButtonUserControl}" />
                     </StackPanel>
                 </GroupBox>
@@ -211,12 +263,10 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="Additional" Name="ProgramAdd">
+        <TabItem Header="{DynamicResource settings.additional.title}" Name="ProgramAdd">
             <StackPanel Margin="4 5">
 
-                <TextBlock Margin="0 5" Style="{StaticResource TextBlockUserControl}">
-                    Path to PascalABC.NET
-                </TextBlock>
+                <TextBlock Margin="0 5" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.additional.path}" />
                 <Grid Margin="0 5 20 5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -231,7 +281,7 @@
                     </Button>
                 </Grid>
 
-                <CheckBox Content="Ask other themes in Pascal directory" Name="AskOthers" Margin="0 5 4 0"
+                <CheckBox Content="{DynamicResource settings.additional.ask}" Name="AskOthers" Margin="0 5 4 0"
                           Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="AskOthersCheckedChanged" Unchecked="AskOthersCheckedChanged" />
 
@@ -239,20 +289,16 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                Margin="0 0 6 0" />
-                        <TextBlock Style="{StaticResource TextBlockUserControl}">
-                            Ask if there're other themes in PascalABC directory
-                        </TextBlock>
+                        <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.additional.ask.help}" />
                     </StackPanel>
                 </Label>
 
                 <WrapPanel x:Name="DoActionPanel">
-                    <TextBlock Style="{StaticResource TextBlockUserControl}">
-                        Do Action if exist:
-                    </TextBlock>
+                    <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.additional.action}" />
                     <ComboBox Margin="5 0" Name="ActionDropdown" Style="{StaticResource DropdownUserControl}">
-                        <ComboBoxItem x:Name="ActionDropdownDelete" IsSelected="True">Delete</ComboBoxItem>
-                        <ComboBoxItem x:Name="ActionDropdownImportNDelete">Import and Delete</ComboBoxItem>
-                        <ComboBoxItem x:Name="ActionDropdownIgnore">Ignore</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True" Content="{DynamicResource settings.additional.action.delete}" />
+                        <ComboBoxItem Content="{DynamicResource settings.additional.action.import}" />
+                        <ComboBoxItem Content="{DynamicResource settings.additional.action.ignore}" />
                     </ComboBox>
                 </WrapPanel>
 
@@ -260,21 +306,19 @@
 
         </TabItem>
 
-        <TabItem Header="Additional" Name="PluginAdd">
+        <TabItem Header="{DynamicResource settings.additional.title}" Name="PluginAdd">
             <StackPanel Margin="4 10 4 5">
-                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Logo on Start" Name="LogoStart" />
-                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Name in status bar" Name="NameStatusBar" />
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.additional.logo}" Name="LogoStart" />
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.additional.statusbar}" Name="NameStatusBar" />
 
-                <CheckBox Content="Preview in switcher" Margin="0 5 4 0" Name="Preview"
+                <CheckBox Content="{DynamicResource settings.additional.preview}" Margin="0 5 4 0" Name="Preview"
                           Style="{StaticResource CheckBoxUserControl}" />
 
                 <Label Margin="18 0 4 3" Padding="0">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                Margin="0 0 6 0" />
-                        <TextBlock Style="{StaticResource TextBlockUserControl}">
-                            Preview themes in Theme Switcher
-                        </TextBlock>
+                        <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.additional.preview.help}" />
                     </StackPanel>
                 </Label>
 
@@ -282,7 +326,7 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="Tool Bar" Name="PluginTool">
+        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
             <Grid Margin="2 4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
@@ -295,15 +339,14 @@
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
 
                     <WrapPanel>
-                        <TextBlock Style="{StaticResource TextBlockUserControl}">
-                            Icon:
-                        </TextBlock>
-                        <Image Width="32" Height="32" />
+                        <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.toolbar.icon}" />
+                        <Image Width="32" Height="32" Name="ToolBarIcon" />
                     </WrapPanel>
 
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="Show" />
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="From right" />
-
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.show}" />
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.right}" />
+                    <Button Padding="8 2" Margin="0 4" Content="{DynamicResource settings.toolbar.reset}" Name="ResetToolbar"
+                            Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left" />
                 </StackPanel>
 
             </Grid>

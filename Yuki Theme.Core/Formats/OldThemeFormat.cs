@@ -629,7 +629,7 @@ namespace Yuki_Theme.Core.Formats
 						try
 						{
 							childNode.Attributes [att.Key].Value = att.Value;
-						} catch (Exception e)
+						} catch
 						{
 							Console.WriteLine ("Couldn't set attribute to {0}: Key = {1}, Value = {2}", nms, att.Key, att.Value);
 						}

@@ -223,7 +223,10 @@ namespace Yuki_Theme.Core
 			Helper.CreateThemeDirectory ();
 			// Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
 			if (!isDefault ())
+			{
 				saveList (img2, img3, wantToKeep);
+				if (isEdited) isEdited = false;
+			}
 		}
 
 		/// <summary>

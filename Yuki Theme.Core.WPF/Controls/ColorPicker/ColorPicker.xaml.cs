@@ -17,7 +17,6 @@ namespace akr.WPF.Controls
     /// </summary>
     public partial class ColorPicker : UserControl
     {
-        private bool isHSBMode = true;
         
         public ColorPicker()
         {

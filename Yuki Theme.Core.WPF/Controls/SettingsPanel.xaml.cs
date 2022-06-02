@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +22,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public Window ParentWindow = null;
 		public System.Windows.Forms.Form   ParentForm   = null;
+
+		private bool blockLanguageSelection = false;
 
 		public SettingsPanel ()
 		{
@@ -44,6 +48,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 			CheckGridSize ();
 			FillLanguageField ();
 			LoadSettings ();
+			blockLanguageSelection = true;
+			AddLanguages ();
+			blockLanguageSelection = false;
+			UpdateTranslations ();
 		}
 
 
@@ -324,6 +332,60 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void CheckNSetMargin (FrameworkElement element, bool expand, Thickness expandedMargin, Thickness collapsedMargin)
 		{
 			element.Margin = expand ? expandedMargin : collapsedMargin;
+		}
+		
+		
+		private void AddLanguages ()
+		{
+			foreach (string language in Settings.translation.GetLanguages ())
+			{
+				LanguageDropdown.Items.Add (language);
+			}
+			LanguageDropdown.SelectedIndex = Settings.translation.GetIndexOfLangShort (Settings.localization);
+		}
+
+		private void UpdateTranslations ()
+		{
+			TranslateControls ();
+			/*if (updateTranslation != null)
+				updateTranslation ();
+			ReSize ();
+			ReAddItems ();*/
+		}
+
+		private void TranslateControls ()
+		{
+			List <string> keys = new List <string> ();
+			foreach (DictionaryEntry resource in this.Resources)
+			{
+				if (resource.Key.ToString ().StartsWith ("settings."))
+				{
+					keys.Add (resource.Key.ToString ());
+				}	
+			}
+
+			foreach (string key in keys)
+			{
+				string translation = CLI.Translate (key);
+				if (translation.Contains ("\n"))
+					translation = translation.Replace ("\n", Environment.NewLine);
+				this.Resources [key] = translation;
+			}
+
+		}
+
+		private void Language_Selection (object sender, SelectionChangedEventArgs e)
+		{
+			if (!blockLanguageSelection)
+			{
+				if (Settings.localization != Settings.translation.GetLanguageISO2 ((string)LanguageDropdown.SelectedItem))
+				{
+					string language = Settings.translation.GetLanguageISO2 ((string)LanguageDropdown.SelectedItem);
+					Settings.localization = language;
+					Settings.translation.LoadLocale (language);
+					UpdateTranslations ();
+				}
+			}
 		}
 	}
 }
