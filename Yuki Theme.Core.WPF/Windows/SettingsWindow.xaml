@@ -36,8 +36,8 @@
         <controls:SettingsPanel InnerMargin="10 5 10 5" Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag}" x:Name="SettingsPanelControl" />
         
         <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0 10 5">
-            <Button Content="Save" Padding="6 2" Click="SaveButtonClick" />
-            <Button Content="Cancel" Padding="6 2" Click="CancleButtonClick" />
+            <Button Content="Save" Name="SaveButton" Padding="6 2" Click="SaveButtonClick" />
+            <Button Content="Cancel" Name="CancelButton" Padding="6 2" Click="CancleButtonClick" />
         </StackPanel>
         
     </Grid>

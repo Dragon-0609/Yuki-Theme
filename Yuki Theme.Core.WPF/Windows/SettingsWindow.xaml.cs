@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -22,6 +23,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void SettingsWindow_OnLoaded (object sender, RoutedEventArgs e)
 		{
 			SettingsPanelControl.ParentWindow = this;
+			SettingsPanelControl.UpdateExternalTranslations = TranslateDialogButtons;
+			TranslateDialogButtons ();
+		}
+		
+		private void TranslateDialogButtons ()
+		{
+			SaveButton.Content = CLI.Translate ("messages.theme.save.short");
+			CancelButton.Content = CLI.Translate ("download.cancel");
 		}
 	}
 }

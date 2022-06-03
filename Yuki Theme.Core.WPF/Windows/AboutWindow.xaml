@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Background="#212121" Foreground="#DDDDDD"
         Loaded="AboutWindow_OnLoaded"
@@ -28,6 +29,14 @@
                     Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
+
+            <system:String x:Key="about.version">version: </system:String>
+            <system:String x:Key="about.inspiration">Inspiration: </system:String>
+            <system:String x:Key="about.used">Used: </system:String>
+            <system:String x:Key="about.developer">Developer: </system:String>
+            <system:String x:Key="about.changelog">Changelog</system:String>
+            <system:String x:Key="main.license.title">License</system:String>
+            <system:String x:Key="messages.buttons.close">Close</system:String>
 
         </ResourceDictionary>
 
@@ -64,8 +73,9 @@
                 <Hyperlink NavigateUri="https://github.com/Dragon-0609/Yuki-Theme" RequestNavigate="OpenLink">Yuki Theme</Hyperlink>
             </TextBlock>
             <TextBlock Grid.Row="2" Name="Version" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top"
-                       FontFamily="{StaticResource SAOFont}">
-                version: 1.0
+                       FontFamily="{StaticResource SAOFont}" >
+                <Run Text="{DynamicResource about.version}" />&#160; 
+                <Run Name="versionNumber" Text="1.0" />
             </TextBlock>
 
             <Grid Grid.Row="3" Margin=" 5 5 5 2">
@@ -79,12 +89,12 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="20" Margin="0 0 10 0" FontFamily="{StaticResource SAOFont}">Inspired by: </TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="0" FontSize="20" Margin="0 0 10 0" FontFamily="{StaticResource SAOFont}" Text="{DynamicResource about.inspiration}" />
                 <TextBlock Grid.Row="0" Grid.Column="1" FontSize="20" FontFamily="{StaticResource SAOFont}">
                     <Hyperlink NavigateUri="https://github.com/doki-theme/doki-theme-jetbrains" RequestNavigate="OpenLink">The Doki Theme</Hyperlink>
                 </TextBlock>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="20" FontFamily="{StaticResource SAOFont}">Used: </TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" FontSize="20" FontFamily="{StaticResource SAOFont}" Text="{DynamicResource about.used}" />
                 <ScrollViewer Grid.Row="1" Grid.Column="1" FontSize="14" Padding="2 2 5 2" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
                         <TextBlock>
@@ -119,15 +129,15 @@
             </Grid>
 
             <Grid Grid.Row="4" VerticalAlignment="Bottom" Margin="10 2">
-                <Button HorizontalAlignment="Left" Click="ToggleChangelog" Style="{StaticResource ShadowButton}" Padding="6 2">Changelog</Button>
-                <Button HorizontalAlignment="Right" Click="ToggleLicense" Style="{StaticResource ShadowButton}" Padding="6 2">License</Button>
+                <Button HorizontalAlignment="Left" Click="ToggleChangelog" Style="{StaticResource ShadowButton}" Padding="6 2" Content="{DynamicResource about.changelog}" />
+                <Button HorizontalAlignment="Right" Click="ToggleLicense" Style="{StaticResource ShadowButton}" Padding="6 2" Content="{DynamicResource main.license.title}" />
             </Grid>
             <Grid Grid.Row="5" VerticalAlignment="Bottom" Margin="10 2 5 2">
                 <TextBlock FontSize="20" Text="" FontFamily="{StaticResource SAOFont}" VerticalAlignment="Bottom">
-                    Developer:&#160;
+                    <Run Text="{DynamicResource about.developer}" />&#160;
                     <Hyperlink NavigateUri="https://github.com/Dragon-0609/" RequestNavigate="OpenLink">Dragon-LV</Hyperlink>
                 </TextBlock>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True">Close</Button>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" IsCancel="True" Content="{DynamicResource messages.buttons.close}" />
             </Grid>
 
 

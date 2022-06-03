@@ -20,10 +20,17 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private Thickness groupBoxExpanded  = new Thickness (5);
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
 
-		public Window ParentWindow = null;
-		public System.Windows.Forms.Form   ParentForm   = null;
+		public Window                    ParentWindow = null;
+		public System.Windows.Forms.Form ParentForm   = null;
 
 		private bool blockLanguageSelection = false;
+
+		public Action UpdateExternalTranslations;
+
+		public Action                   ExecuteOnLoad;
+		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
+
+		public bool freezeToolBarBehaviour;
 
 		public SettingsPanel ()
 		{
@@ -52,22 +59,23 @@ namespace Yuki_Theme.Core.WPF.Controls
 			AddLanguages ();
 			blockLanguageSelection = false;
 			UpdateTranslations ();
+			if (ExecuteOnLoad != null)
+				ExecuteOnLoad ();
 		}
 
 
 		private void FillLanguageField ()
 		{
 			LanguageDropdown.Items.Clear ();
-			
 		}
-		
+
 		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
 			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CLI.GetCore ());
 		}
 
-		
+
 		private void SetResourceSvg (string name, string source, Dictionary <string, Drawing.Color> idColor, Drawing.Size size,
 		                             string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly asm = null)
 		{
@@ -164,7 +172,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (CheckBeta, ref Settings.Beta);
 			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
 			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
-			
+
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
 			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
 			Settings.customSticker = customStickerPath;
@@ -261,7 +269,6 @@ namespace Yuki_Theme.Core.WPF.Controls
 			{
 				WindowInteropHelper helper = new WindowInteropHelper (aboutWindow);
 				helper.Owner = ParentForm.Handle;
-
 			}
 
 			aboutWindow.ShowDialog ();
@@ -297,6 +304,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				WindowInteropHelper helper = new WindowInteropHelper (customStickerWindow);
 				helper.Owner = ParentForm.Handle;
 			}
+
 			bool? dialog = customStickerWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)
 				customStickerPath = customStickerWindow.ImagePath.Text;
@@ -333,45 +341,21 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			element.Margin = expand ? expandedMargin : collapsedMargin;
 		}
-		
-		
+
+
 		private void AddLanguages ()
 		{
 			foreach (string language in Settings.translation.GetLanguages ())
 			{
 				LanguageDropdown.Items.Add (language);
 			}
+
 			LanguageDropdown.SelectedIndex = Settings.translation.GetIndexOfLangShort (Settings.localization);
 		}
 
 		private void UpdateTranslations ()
 		{
-			TranslateControls ();
-			/*if (updateTranslation != null)
-				updateTranslation ();
-			ReSize ();
-			ReAddItems ();*/
-		}
-
-		private void TranslateControls ()
-		{
-			List <string> keys = new List <string> ();
-			foreach (DictionaryEntry resource in this.Resources)
-			{
-				if (resource.Key.ToString ().StartsWith ("settings."))
-				{
-					keys.Add (resource.Key.ToString ());
-				}	
-			}
-
-			foreach (string key in keys)
-			{
-				string translation = CLI.Translate (key);
-				if (translation.Contains ("\n"))
-					translation = translation.Replace ("\n", Environment.NewLine);
-				this.Resources [key] = translation;
-			}
-
+			WPFHelper.TranslateControls (this, "settings.");
 		}
 
 		private void Language_Selection (object sender, SelectionChangedEventArgs e)
@@ -384,7 +368,39 @@ namespace Yuki_Theme.Core.WPF.Controls
 					Settings.localization = language;
 					Settings.translation.LoadLocale (language);
 					UpdateTranslations ();
+					if (UpdateExternalTranslations != null)
+						UpdateExternalTranslations ();
 				}
+			}
+		}
+
+		private void IconsList_Selection (object sender, SelectionChangedEventArgs e)
+		{
+			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			{
+				if (ExecuteOnToolBarItemSelection != null)
+				{
+					freezeToolBarBehaviour = true;
+					ExecuteOnToolBarItemSelection (item);
+					freezeToolBarBehaviour = false;
+				}
+				// ToolBarItemShow.IsChecked = 
+			}
+		}
+
+		private void ToolBarItemShow_CheckedChanged (object sender, RoutedEventArgs e)
+		{
+			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			{
+				item.IsShown = ToolBarItemShow.IsChecked == true;
+			}
+		}
+
+		private void ToolBarItemRight_CheckedChanged (object sender, RoutedEventArgs e)
+		{
+			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			{
+				item.IsRight = ToolBarItemShow.IsChecked == true;
 			}
 		}
 	}

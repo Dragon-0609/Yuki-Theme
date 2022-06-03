@@ -30,7 +30,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void AboutWindow_OnLoaded (object sender, RoutedEventArgs e)
 		{
-			Version.Text = GenerateVersionText ();
+			UpdateTranslation ();
+			versionNumber.Text = GenerateVersionText ();
+			UpdateTranslation ();
 			Logo.Source = Helper.GetYukiThemeIconImage (new Drawing.Size (Logo.Width.ToInt (), Logo.Height.ToInt ())).ToWPFImage ();
 			ShowLicense ();
 			PrepareChangelog ();
@@ -55,8 +57,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private static string GenerateVersionText ()
 		{
-			return
-				$"{CLI.Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+			return $"{Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
 		}
 
 		private DoubleAnimation AnimateWindow (bool positive)
@@ -199,6 +200,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			BackButton.IsEnabled = secondLicense;
 			ForwardButton.IsEnabled = !secondLicense;
+		}
+
+		private void UpdateTranslation ()
+		{
+			WPFHelper.TranslateControls (this, "about.", "messages.", "main.");
 		}
 		
 	}

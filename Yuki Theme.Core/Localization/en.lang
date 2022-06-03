@@ -95,7 +95,7 @@
     "main.tips.add": "Add New Scheme",
     "main.tips.manage": "Manage Themes",
     "main.tips.import_directory": "Import Themes",
-    "main.license.title": "LICENSE",
+    "main.license.title": "License",
     "main.license.jetbrains": "JetBrains.Icons License",
     "main.license.accept": "Accept",
     "main.labels.foreground": "Color",
@@ -106,11 +106,11 @@
     "main.labels.italic": "Italic",
     "main.labels.bold": "Bold",
     
-    "about.version": "version",
+    "about.version": "version: ",
     "about.changelog": "Changelog",
-    "about.inspiration": "Inspiration",
-    "about.used": "Used",
-    "about.developer": "Developer",
+    "about.inspiration": "Inspiration: ",
+    "about.used": "Used: ",
+    "about.developer": "Developer: ",
     "about.title": "About",
     "changelog.title": "Changelog",
     "changelog.collapse": "Collapse",
@@ -267,8 +267,6 @@
     "cli.success.settings.export.short": "Export of settings finished",
     "cli.success.settings.export.full": "Settings have been successfully exported.",
     "cli.success.settings.import.short": "Import of settings finished",
-    "cli.success.settings.import.full": "Settings have been successfully imported.",
-    
-    "cli.": ""
+    "cli.success.settings.import.full": "Settings have been successfully imported."
   }
 }

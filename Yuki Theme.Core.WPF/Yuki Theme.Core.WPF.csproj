@@ -98,6 +98,8 @@
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
+        <Compile Include="Controls\ToolBarList.cs" />
+        <Compile Include="Controls\ToolBarListItem.cs" />
         <Compile Include="Converter.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>

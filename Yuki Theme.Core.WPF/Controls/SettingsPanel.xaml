@@ -41,11 +41,11 @@
 
             <BitmapImage x:Key="InfoImage" UriSource="" />
             <BitmapImage x:Key="HelpImage" UriSource="" />
-            
+
             <system:String x:Key="settings.general.title">General</system:String>
             <system:String x:Key="settings.additional.title">Additional</system:String>
             <system:String x:Key="settings.toolbar.title">ToolBar</system:String>
-            
+
             <system:String x:Key="settings.general.background.title">Background Image</system:String>
             <system:String x:Key="settings.general.background.enabled">Show Background Image</system:String>
             <system:String x:Key="settings.general.editor">Editor Mode</system:String>
@@ -113,10 +113,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}" IsSelected="True">
-        <TabItem Header="{DynamicResource settings.general.title}" IsSelected="True">
+        <TabItem Header="{DynamicResource settings.general.title}">
 
             <StackPanel Margin="4 5" Name="GeneralPanel">
-                <CheckBox Content="{DynamicResource settings.general.editor}" Name="EditorMode" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
+                <CheckBox Content="{DynamicResource settings.general.editor}" Name="EditorMode" Margin="0 5"
+                          Style="{StaticResource CheckBoxUserControl}"
                           HorizontalAlignment="Left" Checked="EditorModeCheckChanged" Unchecked="EditorModeCheckChanged" />
 
                 <GroupBox Margin="0 5" Header="{DynamicResource settings.general.sticker.title}" Style="{StaticResource CustomGroup}">
@@ -132,22 +133,26 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Margin="6 0 0 0">
-                            <CheckBox Content="{DynamicResource settings.general.sticker.enabled}" Margin="0 10 6 3" Style="{StaticResource CheckBoxUserControl}"
+                            <CheckBox Content="{DynamicResource settings.general.sticker.enabled}" Margin="0 10 6 3"
+                                      Style="{StaticResource CheckBoxUserControl}"
                                       HorizontalAlignment="Left" Name="ShowSticker" />
 
                             <WrapPanel Margin="0 5 6 3" HorizontalAlignment="Left" Name="PositioningPanel">
-                                <CheckBox Content="{DynamicResource settings.general.positioning.enabled}" Style="{StaticResource CheckBoxUserControl}"
+                                <CheckBox Content="{DynamicResource settings.general.positioning.enabled}"
+                                          Style="{StaticResource CheckBoxUserControl}"
                                           VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning"
                                           Checked="AllowPositioningCheckedChanged" Unchecked="AllowPositioningCheckedChanged" />
 
                                 <WrapPanel Orientation="Vertical">
-                                    <Button Padding="8 2" Margin="0" Content="{DynamicResource settings.general.positioning.reset}" Name="ResetMargin"
+                                    <Button Padding="8 2" Margin="0" Content="{DynamicResource settings.general.positioning.reset}"
+                                            Name="ResetMargin"
                                             Style="{StaticResource ButtonUserControl}" />
                                     <Label Padding="0">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                                    Margin="0 0 6 0" />
-                                            <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.positioning.save}" />
+                                            <TextBlock Style="{StaticResource TextBlockUserControl}"
+                                                       Text="{DynamicResource settings.general.positioning.save}" />
                                         </StackPanel>
                                     </Label>
                                 </WrapPanel>
@@ -156,7 +161,8 @@
                             <WrapPanel Margin="0 0 6 3">
                                 <Button Padding="8 2" Content="{DynamicResource settings.general.sticker.choose}"
                                         Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}" Click="ChooseCustomSticker" />
-                                <CheckBox Content="{DynamicResource settings.general.sticker.custom}" Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
+                                <CheckBox Content="{DynamicResource settings.general.sticker.custom}"
+                                          Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
                             </WrapPanel>
 
 
@@ -165,11 +171,13 @@
                         <GroupBox Grid.Row="1" Grid.Column="0" Margin="0 5" Header="{DynamicResource settings.general.dimension.title}"
                                   Style="{StaticResource CustomGroup}" Name="DimensionCapGroup">
                             <StackPanel HorizontalAlignment="Left" Margin="4 5" Name="DimensionCapPanel">
-                                <CheckBox Content="{DynamicResource settings.general.dimension.enable}" Margin="0 5" Style="{StaticResource CheckBoxUserControl}"
+                                <CheckBox Content="{DynamicResource settings.general.dimension.enable}" Margin="0 5"
+                                          Style="{StaticResource CheckBoxUserControl}"
                                           Name="StickerDimensionCap" Checked="StickerDimensionCapCheckedChanged"
                                           Unchecked="StickerDimensionCapCheckedChanged" />
                                 <WrapPanel Margin="0 5">
-                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center" Text="{DynamicResource settings.general.dimension.max.px}" />
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center"
+                                               Text="{DynamicResource settings.general.dimension.max.px}" />
                                     <controls:IntegerUpDown
                                         FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
                                         VerticalAlignment="Center" Width="70" Height="30"
@@ -177,9 +185,11 @@
                                         MinValue="-1" x:Name="DimensionCapMax" />
                                 </WrapPanel>
                                 <WrapPanel Margin="0 5">
-                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.dimension.max.by}" />
+                                    <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
+                                               Text="{DynamicResource settings.general.dimension.max.by}" />
                                     <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}" Name="DimensionCapBy">
-                                        <ComboBoxItem IsSelected="True" Content="{DynamicResource settings.general.dimension.max.by.height}" />
+                                        <ComboBoxItem IsSelected="True"
+                                                      Content="{DynamicResource settings.general.dimension.max.by.height}" />
                                         <ComboBoxItem Content="{DynamicResource settings.general.dimension.max.by.width}" />
                                     </ComboBox>
                                 </WrapPanel>
@@ -191,7 +201,8 @@
 
                 <GroupBox Margin="0 5" Header="{DynamicResource settings.general.background.title}" Style="{StaticResource CustomGroup}">
                     <StackPanel HorizontalAlignment="Left">
-                        <CheckBox Content="{DynamicResource settings.general.background.enabled}" Margin="4 5" Style="{StaticResource CheckBoxUserControl}"
+                        <CheckBox Content="{DynamicResource settings.general.background.enabled}" Margin="4 5"
+                                  Style="{StaticResource CheckBoxUserControl}"
                                   Name="ShowBackgroundImage" />
                         <CheckBox Content="{DynamicResource settings.general.fitbywidth}" Margin="4 5 4 0"
                                   Style="{StaticResource CheckBoxUserControl}" Name="AutoFit" />
@@ -200,7 +211,8 @@
                             <StackPanel Orientation="Horizontal">
                                 <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource InfoImage}"
                                        Margin="0 0 6 0" />
-                                <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.fitbywidth.help}" />
+                                <TextBlock Style="{StaticResource TextBlockUserControl}"
+                                           Text="{DynamicResource settings.general.fitbywidth.help}" />
                             </StackPanel>
                         </Label>
                     </StackPanel>
@@ -209,7 +221,8 @@
                 <GroupBox Margin="0 5" Header="{DynamicResource settings.general.others}" Style="{StaticResource CustomGroup}">
                     <StackPanel>
                         <StackPanel x:Name="EditorSettingsPanel">
-                            <CheckBox Content="{DynamicResource settings.general.asktosave}" Margin="4 5 4 0" Style="{StaticResource CheckBoxUserControl}"
+                            <CheckBox Content="{DynamicResource settings.general.asktosave}" Margin="4 5 4 0"
+                                      Style="{StaticResource CheckBoxUserControl}"
                                       HorizontalAlignment="Left" Name="AlwaysAsk" />
 
                             <Label Margin="4 0 4 5" Padding="0">
@@ -217,7 +230,8 @@
                                     <Image Width="16" VerticalAlignment="Center" Height="16" Source="{DynamicResource HelpImage}"
                                            Margin="0 0 6 0" />
                                     <TextBlock
-                                        TextWrapping="Wrap" Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.asktosave.help}" />
+                                        TextWrapping="Wrap" Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
+                                        Text="{DynamicResource settings.general.asktosave.help}" />
                                 </StackPanel>
                             </Label>
                             <StackPanel Orientation="Horizontal" Margin="4 5 4 5">
@@ -232,12 +246,15 @@
                         </StackPanel>
 
                         <WrapPanel Margin="4 5 4 5">
-                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="LanguageLabel" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.language}" />
-                            <ComboBox Margin="5 0" Name="LanguageDropdown" Width="120" Style="{StaticResource DropdownUserControl}" SelectionChanged="Language_Selection" />
+                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="LanguageLabel" Style="{StaticResource TextBlockUserControl}"
+                                       Text="{DynamicResource settings.general.language}" />
+                            <ComboBox Margin="5 0" Name="LanguageDropdown" Width="120" Style="{StaticResource DropdownUserControl}"
+                                      SelectionChanged="Language_Selection" />
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5 4 5">
-                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="ColorPickerLabel" Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.general.colorpicker}" />
+                            <TextBlock Margin="4 0 4 0" Width="100" x:Name="ColorPickerLabel" Style="{StaticResource TextBlockUserControl}"
+                                       Text="{DynamicResource settings.general.colorpicker}" />
                             <RadioButton Name="WinformsPicker" Margin="4 0" Style="{StaticResource RadioButtonUserControl}">Winforms</RadioButton>
                             <RadioButton Name="WPFPicker" Margin="4 0" Style="{StaticResource RadioButtonUserControl}">WPF (Simple)</RadioButton>
                         </WrapPanel>
@@ -245,17 +262,22 @@
                         <WrapPanel Margin="4 5">
                             <CheckBox Style="{StaticResource CheckBoxUserControl}" VerticalAlignment="Top" Margin="0 0 20 0"
                                       Content="{DynamicResource settings.general.update.auto}" Name="AutoUpdate" />
-                            <Button Padding="6 2" Margin="0 0 6 0" Content="{DynamicResource settings.general.update.check}" VerticalAlignment="Top"
+                            <Button Padding="6 2" Margin="0 0 6 0" Content="{DynamicResource settings.general.update.check}"
+                                    VerticalAlignment="Top"
                                     Style="{StaticResource ButtonUserControl}" />
-                            <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}" Content="{DynamicResource settings.general.update.install}" />
+                            <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}"
+                                    Content="{DynamicResource settings.general.update.install}" />
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5">
-                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0" Content="{DynamicResource settings.general.update.beta}"
+                            <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 0 20 0"
+                                      Content="{DynamicResource settings.general.update.beta}"
                                       Name="CheckBeta" />
-                            <Button Padding="6 2" Margin="0" Content="{DynamicResource settings.general.update.restart}" Style="{StaticResource ButtonUserControl}" />
+                            <Button Padding="6 2" Margin="0" Content="{DynamicResource settings.general.update.restart}"
+                                    Style="{StaticResource ButtonUserControl}" />
                         </WrapPanel>
-                        <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="{DynamicResource settings.general.about}" Name="AboutButton"
+                        <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="{DynamicResource settings.general.about}"
+                                Name="AboutButton"
                                 Click="AboutButton_OnClick" Style="{StaticResource ButtonUserControl}" />
                     </StackPanel>
                 </GroupBox>
@@ -308,8 +330,10 @@
 
         <TabItem Header="{DynamicResource settings.additional.title}" Name="PluginAdd">
             <StackPanel Margin="4 10 4 5">
-                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.additional.logo}" Name="LogoStart" />
-                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.additional.statusbar}" Name="NameStatusBar" />
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.additional.logo}"
+                          Name="LogoStart" />
+                <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5"
+                          Content="{DynamicResource settings.additional.statusbar}" Name="NameStatusBar" />
 
                 <CheckBox Content="{DynamicResource settings.additional.preview}" Margin="0 5 4 0" Name="Preview"
                           Style="{StaticResource CheckBoxUserControl}" />
@@ -326,15 +350,15 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
+        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool" IsSelected="True">
             <Grid Margin="2 4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <ListView Grid.Column="0" Padding="5" Name="IconsList" SelectionMode="Single" BorderThickness="0"
-                          Style="{StaticResource ListViewUserControl}">
-                </ListView>
+                <controls:ToolBarList Grid.Column="0" Padding="5" Name="IconsList" SelectionMode="Single" BorderThickness="0"
+                                      Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
+                                      SelectionChanged="IconsList_Selection" />
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
 
@@ -343,8 +367,13 @@
                         <Image Width="32" Height="32" Name="ToolBarIcon" />
                     </WrapPanel>
 
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.show}" />
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.right}" />
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.show}"
+                              Name="ToolBarItemShow" x:FieldModifier="public" Checked="ToolBarItemShow_CheckedChanged"
+                              Unchecked="ToolBarItemShow_CheckedChanged" />
+                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.right}"
+                              Name="ToolBarItemRight" x:FieldModifier="public" Checked="ToolBarItemRight_CheckedChanged"
+                              Unchecked="ToolBarItemRight_CheckedChanged" />
+                    
                     <Button Padding="8 2" Margin="0 4" Content="{DynamicResource settings.toolbar.reset}" Name="ResetToolbar"
                             Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left" />
                 </StackPanel>

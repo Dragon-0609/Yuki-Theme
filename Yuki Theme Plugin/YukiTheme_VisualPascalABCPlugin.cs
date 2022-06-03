@@ -207,6 +207,7 @@ namespace Yuki_Theme_Plugin
 
 			fm = (Form1) workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
+			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
 			Settings.connectAndGet ();
 
 			imagesEnabled = 0;
@@ -1758,6 +1759,10 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
+		private string GetDefaultLocalization ()
+		{
+			return PascalABCCompiler.StringResourcesLanguage.CurrentLanguageName;
+		}
 		
 		public void openUpdate ()
 		{

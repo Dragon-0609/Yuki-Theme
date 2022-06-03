@@ -18,6 +18,8 @@ public class Localization
 	private string [] languagesdisplay;
 	private int       recursionCalls = 0;
 
+	public Func <string> TryToGetLanguage;
+
 	public void SearchLocals ()
 	{
 		List <string> locales = new List <string> () { "en" , "ru" };
@@ -57,11 +59,21 @@ public class Localization
 		string locale = Settings.localization;
 		if (!externalLang.ContainsKey (locale))
 		{
-			locale = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName.ToLower ();
+			if (TryToGetLanguage != null)
+			{
+				string localea = TryToGetLanguage ();
+				if (localea != "")
+					locale = localea;
+			}
+
+			if (!externalLang.ContainsKey (locale))
+				locale = CultureInfo.InstalledUICulture.TwoLetterISOLanguageName.ToLower ();
+
 			if (!externalLang.ContainsKey (locale))
 			{
 				locale = languages [0];
 			}
+
 			Settings.localization = locale;
 		}
 

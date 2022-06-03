@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -193,6 +194,30 @@ namespace Yuki_Theme.Core.WPF
 				if (System.Windows.Application.Current != null) System.Windows.Application.Current.Resources = rd;
 				Console.WriteLine ("Font Added");
 			}
+		}
+		
+		internal static void TranslateControls (Control that, params string[] startWith)
+		{
+			List <string> keys = new List <string> ();
+			foreach (DictionaryEntry resource in that.Resources)
+			{
+				foreach (string starting in startWith)
+				{
+					if (resource.Key.ToString ().StartsWith (starting))
+					{
+						keys.Add (resource.Key.ToString ());
+					}	
+				}
+			}
+
+			foreach (string key in keys)
+			{
+				string translation = CLI.Translate (key);
+				if (translation.Contains ("\n"))
+					translation = translation.Replace ("\n", Environment.NewLine);
+				that.Resources [key] = translation;
+			}
+
 		}
 	}
 

@@ -2,6 +2,7 @@
 // This code is distributed under the GNU LGPL (for details please see \doc\license.txt)
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
@@ -57,14 +58,14 @@ namespace Yuki_Theme_Plugin.Controls
 			SelectionColor = YukiTheme_VisualPascalABCPlugin.bgSelection.ToWPFColor (),
 			KeywordColor = YukiTheme_VisualPascalABCPlugin.clrKey.ToWPFColor (),
 			BorderBrush = YukiTheme_VisualPascalABCPlugin.bgBorder.ToWPFColor ().ToBrush (),
-			SelectionBrush = YukiTheme_VisualPascalABCPlugin.bgSelection.ToWPFColor ().ToBrush(),
-			KeywordBrush = YukiTheme_VisualPascalABCPlugin.clrKey.ToWPFColor ().ToBrush(),
+			SelectionBrush = YukiTheme_VisualPascalABCPlugin.bgSelection.ToWPFColor ().ToBrush (),
+			KeywordBrush = YukiTheme_VisualPascalABCPlugin.clrKey.ToWPFColor ().ToBrush (),
 			BackgroundClickColor = YukiTheme_VisualPascalABCPlugin.bgClick.ToWPFColor (),
 			BackgroundClickBrush = YukiTheme_VisualPascalABCPlugin.bgClick.ToWPFColor ().ToBrush (),
 			BackgroundDefaultColor = YukiTheme_VisualPascalABCPlugin.bgdef.ToWPFColor (),
 			BackgroundDefaultBrush = YukiTheme_VisualPascalABCPlugin.bgdef.ToWPFColor ().ToBrush ()
 		};
-		
+
 		public void Action (OptionsContentAction action)
 		{
 			switch (action)
@@ -77,15 +78,19 @@ namespace Yuki_Theme_Plugin.Controls
 						Form parentForm = ExtractOptionsParent ();
 
 						_settingsPanel = new SettingsPanel ();
-						
+						_settingsPanel.ExecuteOnLoad = PopulateToolBarList;
+						_settingsPanel.ExecuteOnToolBarItemSelection = ToolBarItemSelection;
+						ToolBarListItem.FreezeAllBehaviour = true;
+						ToolBarListItem.OnVisibilityChanged = OnVisibilityChanged;
+						ToolBarListItem.OnRightChanged = OnRightChanged;
 						_settingsPanel.Background = WPFHelper.bgBrush;
 						_settingsPanel.Foreground = WPFHelper.fgBrush;
 						_settingsPanel.Tag = GenerateTag;
 						if (parentForm != null) _settingsPanel.ParentForm = parentForm;
-						
+
 						PanelHost.Child = _settingsPanel;
 						Controls.Add (PanelHost);
-						
+
 						/*
 						settingsPanel.button1.BackColor = settingsPanel.button4.BackColor = settingsPanel.button5.BackColor =
 							settingsPanel.button6.BackColor = settingsPanel.ActionBox.ListBackColor = settingsPanel.ActionBox.BackColor =
@@ -208,6 +213,51 @@ namespace Yuki_Theme_Plugin.Controls
 			}
 		}
 
+		private void OnVisibilityChanged (ToolBarListItem item, bool shown)
+		{
+			AddOrRemoveToList (item, ref YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide, !shown);
+			item.item.Visible = shown;
+		}
+
+		private static void AddOrRemoveToList (ToolBarListItem item, ref List<string> list,  bool add)
+		{
+			if (add)
+			{
+				if (!list.Contains (item.item.ToolTipText))
+					list.Add (item.item.ToolTipText);
+			} else
+			{
+				if (list.Contains (item.item.ToolTipText))
+					list.Remove (item.item.ToolTipText);
+			}
+		}
+
+		private void OnRightChanged (ToolBarListItem item, bool right)
+		{
+			AddOrRemoveToList (item, ref YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight, right);
+			YukiTheme_VisualPascalABCPlugin.camouflage.StartToHide ();
+		}
+
+		private void PopulateToolBarList ()
+		{
+			_settingsPanel.IconsList.Items.Clear ();
+			foreach (ToolStripItem item in YukiTheme_VisualPascalABCPlugin.camouflage.items)
+			{
+				_settingsPanel.IconsList.Items.Add (
+					new ToolBarListItem (item.ToolTipText,
+					                     YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide.Contains (item.ToolTipText),
+					                     YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.ToolTipText),
+					                     item));
+			}
+			// _settingsPanel.IconsList.Items.Add ();
+		}
+
+		private void ToolBarItemSelection (ToolBarListItem item)
+		{
+			_settingsPanel.ToolBarItemShow.IsChecked = item.IsShown;
+			_settingsPanel.ToolBarItemRight.IsChecked = item.IsRight;
+		}
+		
 		private Form ExtractOptionsParent ()
 		{
 			FieldInfo field = typeof (Form1).GetField ("optionsContentEngine", BindingFlags.Instance | BindingFlags.NonPublic);
