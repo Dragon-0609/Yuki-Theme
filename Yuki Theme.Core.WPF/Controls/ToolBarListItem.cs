@@ -6,8 +6,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class ToolBarListItem : ListViewItem
 	{
-		public static Action <ToolBarListItem, bool> OnVisibilityChanged;
-		public static Action <ToolBarListItem, bool> OnRightChanged;
+		public static Action <ToolBarListItem, bool> OnVisibilityChanged = null;
+		public static Action <ToolBarListItem, bool> OnRightChanged = null;
 
 		public static bool FreezeAllBehaviour = false;
 		
@@ -17,7 +17,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			set
 			{
 				SetValue (IsShownProperty, value);
-				if (!FreezeAllBehaviour && OnVisibilityChanged != null) OnVisibilityChanged (this, value);
+				if (!FreezeAllBehaviour && isInited && OnVisibilityChanged != null) OnVisibilityChanged (this, value);
 			}
 		}
 
@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			set
 			{
 				SetValue (IsRightProperty, value);
-				if (!FreezeAllBehaviour && OnRightChanged != null) OnRightChanged (this, value);
+				if (!FreezeAllBehaviour && isInited && OnRightChanged != null) OnRightChanged (this, value);
 			}
 		}
 
@@ -45,10 +45,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 			return (string)Content;
 		}
 
+		private bool isInited = false;
+
 		public ToolBarListItem ()
 		{
 			Content = "";
 			item = null;
+			isInited = true;
 		}
 
 		public ToolBarListItem (string text, bool isVisible, bool isRight)
@@ -57,6 +60,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			IsShown = isVisible;
 			IsRight = isRight;
 			item = null;
+			isInited = true;
 		}
 
 		public ToolBarListItem (string text, bool isVisible, bool isRight, WinForms.ToolStripItem stripItem)
@@ -65,6 +69,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			IsShown = isVisible;
 			IsRight = isRight;
 			item = stripItem;
+			isInited = true;
 		}
 		
 	}

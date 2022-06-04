@@ -356,7 +356,7 @@
                     <ColumnDefinition Width="120" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <controls:ToolBarList Grid.Column="0" Padding="5" Name="IconsList" SelectionMode="Single" BorderThickness="0"
+                <controls:ToolBarList Grid.Column="0" Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
                                       Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
                                       SelectionChanged="IconsList_Selection" />
 

@@ -76,13 +76,11 @@ namespace Yuki_Theme_Plugin.Controls
 					if (!alreadyShown)
 					{
 						Form parentForm = ExtractOptionsParent ();
-
+						ToolBarListItem.FreezeAllBehaviour = true;
+						
 						_settingsPanel = new SettingsPanel ();
 						_settingsPanel.ExecuteOnLoad = PopulateToolBarList;
 						_settingsPanel.ExecuteOnToolBarItemSelection = ToolBarItemSelection;
-						ToolBarListItem.FreezeAllBehaviour = true;
-						ToolBarListItem.OnVisibilityChanged = OnVisibilityChanged;
-						ToolBarListItem.OnRightChanged = OnRightChanged;
 						_settingsPanel.Background = WPFHelper.bgBrush;
 						_settingsPanel.Foreground = WPFHelper.fgBrush;
 						_settingsPanel.Tag = GenerateTag;
@@ -90,7 +88,10 @@ namespace Yuki_Theme_Plugin.Controls
 
 						PanelHost.Child = _settingsPanel;
 						Controls.Add (PanelHost);
+						ToolBarListItem.FreezeAllBehaviour = false;
 
+						ToolBarListItem.OnVisibilityChanged = OnVisibilityChanged;
+						ToolBarListItem.OnRightChanged = OnRightChanged;
 						/*
 						settingsPanel.button1.BackColor = settingsPanel.button4.BackColor = settingsPanel.button5.BackColor =
 							settingsPanel.button6.BackColor = settingsPanel.ActionBox.ListBackColor = settingsPanel.ActionBox.BackColor =
@@ -234,7 +235,11 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private void OnRightChanged (ToolBarListItem item, bool right)
 		{
+			/*MessageBox.Show (
+				$"{item.item.ToolTipText}: R: {YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.item.ToolTipText)}, O: {right}");*/
 			AddOrRemoveToList (item, ref YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight, right);
+			/*MessageBox.Show (
+				$"{item.item.ToolTipText}: R: {YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.item.ToolTipText)}, O: {right}");*/
 			YukiTheme_VisualPascalABCPlugin.camouflage.StartToHide ();
 		}
 
@@ -245,7 +250,7 @@ namespace Yuki_Theme_Plugin.Controls
 			{
 				_settingsPanel.IconsList.Items.Add (
 					new ToolBarListItem (item.ToolTipText,
-					                     YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide.Contains (item.ToolTipText),
+					                     !YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide.Contains (item.ToolTipText),
 					                     YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.ToolTipText),
 					                     item));
 			}
@@ -254,6 +259,7 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private void ToolBarItemSelection (ToolBarListItem item)
 		{
+			MessageBox.Show ($"{item.item.ToolTipText} => V:{item.IsShown}, R:{item.IsRight}");
 			_settingsPanel.ToolBarItemShow.IsChecked = item.IsShown;
 			_settingsPanel.ToolBarItemRight.IsChecked = item.IsRight;
 		}
