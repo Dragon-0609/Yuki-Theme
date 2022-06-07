@@ -113,7 +113,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}" IsSelected="True">
-        <TabItem Header="{DynamicResource settings.general.title}">
+        <TabItem Header="{DynamicResource settings.general.title}" IsSelected="True">
 
             <StackPanel Margin="4 5" Name="GeneralPanel">
                 <CheckBox Content="{DynamicResource settings.general.editor}" Name="EditorMode" Margin="0 5"
@@ -350,35 +350,33 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool" IsSelected="True">
-            <Grid Margin="2 4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <controls:ToolBarList Grid.Column="0" Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
+        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
+            <DockPanel Margin="2 4">
+                
+                
+                <controls:ToolBarList Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
                                       Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
-                                      SelectionChanged="IconsList_Selection" />
-
-                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+                                      SelectionChanged="IconsList_Selection" DockPanel.Dock="Left" Width="150" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl }, Path=ActualHeight}" />
+                
+                <StackPanel Orientation="Vertical" Margin="10">
 
                     <WrapPanel>
                         <TextBlock Style="{StaticResource TextBlockUserControl}" Text="{DynamicResource settings.toolbar.icon}" />
-                        <Image Width="32" Height="32" Name="ToolBarIcon" />
+                        <Image Width="32" Height="32" Name="ToolBarIcon" x:FieldModifier="public" />
                     </WrapPanel>
 
                     <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.show}"
                               Name="ToolBarItemShow" x:FieldModifier="public" Checked="ToolBarItemShow_CheckedChanged"
-                              Unchecked="ToolBarItemShow_CheckedChanged" />
+                              Unchecked="ToolBarItemShow_CheckedChanged" IsEnabled="False" />
                     <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5" Content="{DynamicResource settings.toolbar.right}"
                               Name="ToolBarItemRight" x:FieldModifier="public" Checked="ToolBarItemRight_CheckedChanged"
-                              Unchecked="ToolBarItemRight_CheckedChanged" />
+                              Unchecked="ToolBarItemRight_CheckedChanged" IsEnabled="False" />
                     
                     <Button Padding="8 2" Margin="0 4" Content="{DynamicResource settings.toolbar.reset}" Name="ResetToolbar"
-                            Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left" />
+                            Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left" Click="ResetToolbar_OnClick" />
                 </StackPanel>
 
-            </Grid>
+            </DockPanel>
         </TabItem>
 
     </TabControl>

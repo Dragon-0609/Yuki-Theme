@@ -97,6 +97,9 @@
         <Compile Include="Controls\SettingsPanel.xaml.cs">
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\SettingsPanelUtilities.cs">
+          <DependentUpon>SettingsPanel.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
         <Compile Include="Controls\ToolBarList.cs" />
         <Compile Include="Controls\ToolBarListItem.cs" />

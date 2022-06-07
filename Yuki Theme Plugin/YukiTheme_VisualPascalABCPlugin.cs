@@ -26,6 +26,7 @@ using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.WPF;
+using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
@@ -162,7 +163,7 @@ namespace Yuki_Theme_Plugin
 		private Label      lbl;
 		public  Image      tmpImage1;
 		public  Image      tmpImage2;
-		
+
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
 
@@ -514,6 +515,9 @@ namespace Yuki_Theme_Plugin
 				popupController.InitializeAllWindows ();
 				popupController.df.CheckUpdate ();
 			}
+			ToolBarListItem.camouflage = camouflage;
+			ToolBarListItem.manager = manager;
+			SettingsPanelUtilities.items = camouflage.items;
 		}
 
 		private void loadSVG ()

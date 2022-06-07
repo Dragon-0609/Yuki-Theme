@@ -38,8 +38,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 			LoadSVG ();
 		}
-
-
+		
 		public Thickness InnerMargin
 		{
 			get { return (Thickness)GetValue (InnerMarginProperty); }
@@ -378,6 +377,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
 			{
+				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = true;
 				if (ExecuteOnToolBarItemSelection != null)
 				{
 					freezeToolBarBehaviour = true;
@@ -385,6 +385,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 					freezeToolBarBehaviour = false;
 				}
 				// ToolBarItemShow.IsChecked = 
+			} else
+			{
+				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = false;
 			}
 		}
 
@@ -400,8 +403,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
 			{
-				item.IsRight = ToolBarItemShow.IsChecked == true;
+				item.IsRight = ToolBarItemRight.IsChecked == true;
 			}
+		}
+
+		private void ResetToolbar_OnClick (object sender, RoutedEventArgs e)
+		{
+			ToolBarListItem.camouflage.Reset ();
 		}
 	}
 }

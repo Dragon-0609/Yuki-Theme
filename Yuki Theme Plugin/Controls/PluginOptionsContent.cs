@@ -76,11 +76,11 @@ namespace Yuki_Theme_Plugin.Controls
 					if (!alreadyShown)
 					{
 						Form parentForm = ExtractOptionsParent ();
-						ToolBarListItem.FreezeAllBehaviour = true;
-						
 						_settingsPanel = new SettingsPanel ();
-						_settingsPanel.ExecuteOnLoad = PopulateToolBarList;
-						_settingsPanel.ExecuteOnToolBarItemSelection = ToolBarItemSelection;
+						SettingsPanelUtilities utilities = new SettingsPanelUtilities (_settingsPanel);
+						
+						_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
+						_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
 						_settingsPanel.Background = WPFHelper.bgBrush;
 						_settingsPanel.Foreground = WPFHelper.fgBrush;
 						_settingsPanel.Tag = GenerateTag;
@@ -88,10 +88,6 @@ namespace Yuki_Theme_Plugin.Controls
 
 						PanelHost.Child = _settingsPanel;
 						Controls.Add (PanelHost);
-						ToolBarListItem.FreezeAllBehaviour = false;
-
-						ToolBarListItem.OnVisibilityChanged = OnVisibilityChanged;
-						ToolBarListItem.OnRightChanged = OnRightChanged;
 						/*
 						settingsPanel.button1.BackColor = settingsPanel.button4.BackColor = settingsPanel.button5.BackColor =
 							settingsPanel.button6.BackColor = settingsPanel.ActionBox.ListBackColor = settingsPanel.ActionBox.BackColor =
@@ -205,64 +201,20 @@ namespace Yuki_Theme_Plugin.Controls
 					alreadyShown = false;
 					_settingsPanel.SaveSettings ();
 					Settings.SaveData ();
+					YukiTheme_VisualPascalABCPlugin.camouflage.SaveData ();
 					break;
 				case OptionsContentAction.Cancel :
 					/*settingsPanel.popupController = null;
 					// plugin.mf = null;*/
+					YukiTheme_VisualPascalABCPlugin.camouflage.Reset ();
+					YukiTheme_VisualPascalABCPlugin.camouflage.PopulateList ();
+					YukiTheme_VisualPascalABCPlugin.camouflage.StartToHide ();
 					alreadyShown = false;
 					break;
 			}
 		}
 
-		private void OnVisibilityChanged (ToolBarListItem item, bool shown)
-		{
-			AddOrRemoveToList (item, ref YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide, !shown);
-			item.item.Visible = shown;
-		}
-
-		private static void AddOrRemoveToList (ToolBarListItem item, ref List<string> list,  bool add)
-		{
-			if (add)
-			{
-				if (!list.Contains (item.item.ToolTipText))
-					list.Add (item.item.ToolTipText);
-			} else
-			{
-				if (list.Contains (item.item.ToolTipText))
-					list.Remove (item.item.ToolTipText);
-			}
-		}
-
-		private void OnRightChanged (ToolBarListItem item, bool right)
-		{
-			/*MessageBox.Show (
-				$"{item.item.ToolTipText}: R: {YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.item.ToolTipText)}, O: {right}");*/
-			AddOrRemoveToList (item, ref YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight, right);
-			/*MessageBox.Show (
-				$"{item.item.ToolTipText}: R: {YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.item.ToolTipText)}, O: {right}");*/
-			YukiTheme_VisualPascalABCPlugin.camouflage.StartToHide ();
-		}
-
-		private void PopulateToolBarList ()
-		{
-			_settingsPanel.IconsList.Items.Clear ();
-			foreach (ToolStripItem item in YukiTheme_VisualPascalABCPlugin.camouflage.items)
-			{
-				_settingsPanel.IconsList.Items.Add (
-					new ToolBarListItem (item.ToolTipText,
-					                     !YukiTheme_VisualPascalABCPlugin.camouflage.itemsToHide.Contains (item.ToolTipText),
-					                     YukiTheme_VisualPascalABCPlugin.camouflage.itemsToRight.Contains (item.ToolTipText),
-					                     item));
-			}
-			// _settingsPanel.IconsList.Items.Add ();
-		}
-
-		private void ToolBarItemSelection (ToolBarListItem item)
-		{
-			MessageBox.Show ($"{item.item.ToolTipText} => V:{item.IsShown}, R:{item.IsRight}");
-			_settingsPanel.ToolBarItemShow.IsChecked = item.IsShown;
-			_settingsPanel.ToolBarItemRight.IsChecked = item.IsRight;
-		}
+		
 		
 		private Form ExtractOptionsParent ()
 		{

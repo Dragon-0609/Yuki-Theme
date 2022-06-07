@@ -125,7 +125,9 @@
     <Compile Include="Formats\NewThemeFormat.cs" />
     <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
+    <Compile Include="Interfaces\ICamouflage.cs" />
     <Compile Include="Interfaces\IColorUpdatable.cs" />
+    <Compile Include="Interfaces\IIconManager.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Localization\Localization.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />

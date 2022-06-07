@@ -4,10 +4,11 @@ using System.Reflection;
 using System.Windows.Forms;
 using VisualPascalABC;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Interfaces;
 
 namespace Yuki_Theme_Plugin
 {
-	internal class IconManager
+	internal class IconManager : IIconManager
 	{
 		private const    string           IconFolder = "Yuki_Theme_Plugin.Resources.icons";
 		private readonly Form1            fm;
@@ -103,7 +104,7 @@ namespace Yuki_Theme_Plugin
 
 				if (rest.Item1 || internalchanges)
 				{
-					var a = Assembly.GetExecutingAssembly ();
+					Assembly a = Assembly.GetExecutingAssembly ();
 					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
 					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
 				}
@@ -625,6 +626,22 @@ namespace Yuki_Theme_Plugin
 			}
 
 			return new Tuple <bool, string> (asDark, sad);
+		}
+
+		public Image RenderToolBarItemImage (ToolStripItem btn)
+		{
+			bool asDark = hasDark (btn.AccessibleDescription);
+			string dark = "";
+			if (asDark)
+			{
+				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+				dark = isDark ? "" : "_dark";
+			}
+			
+			Assembly a = Assembly.GetExecutingAssembly ();
+			return Helper.RenderSvg (btn.Size, Helper.LoadSvg (btn.AccessibleDescription + dark, a, IconFolder),
+			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+
 		}
 	}
 }

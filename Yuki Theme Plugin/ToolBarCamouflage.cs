@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 
 namespace Yuki_Theme_Plugin
 {
-	public class ToolBarCamouflage
+	public class ToolBarCamouflage : ICamouflage
 	{
 		private DatabaseManager      database => Settings.database;
 		public  List <ToolItemGroup> groups;
@@ -52,7 +54,7 @@ namespace Yuki_Theme_Plugin
 
 				if (tools.Items [i] is ToolStripSeparator)
 					if (current.separator == null && !current.IsEmpty ())
-						current.separator = (ToolStripSeparator) tools.Items [i];
+						current.separator = (ToolStripSeparator)tools.Items [i];
 			}
 
 			if (!current.IsEmpty ())
@@ -80,14 +82,16 @@ namespace Yuki_Theme_Plugin
 						itemGroup.separator.Alignment = ToolStripItemAlignment.Left;
 					}
 
-				foreach (var s in itemsToHide)
+				foreach (string s in itemsToHide)
 					if (s != null && s.Length > 1)
-						foreach (var itemGroup in groups)
+						foreach (ToolItemGroup itemGroup in groups)
+						{
 							if (itemGroup.HasItem (s))
 							{
-								var res = itemGroup.GetItem (s);
+								ToolStripItem res = itemGroup.GetItem (s);
 								res.Visible = false;
 							}
+						}
 
 				foreach (var itemGroup in groups)
 					if (itemGroup.isAllHidden ())
@@ -108,7 +112,7 @@ namespace Yuki_Theme_Plugin
 						foreach (var itemGroup in groups)
 							if (itemGroup.HasItem (s))
 							{
-								var res = itemGroup.GetItem (s);
+								ToolStripItem res = itemGroup.GetItem (s);
 								res.Alignment = ToolStripItemAlignment.Right;
 							}
 
@@ -129,9 +133,9 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private void PopulateList ()
+		internal void PopulateList ()
 		{
-			var data = database.ReadData (Settings.CAMOUFLAGEHIDDEN, "");
+			string data = database.ReadData (Settings.CAMOUFLAGEHIDDEN, "");
 
 			PopulateLists (data, ref itemsToHide);
 
@@ -184,6 +188,52 @@ namespace Yuki_Theme_Plugin
 			itemsToRight = UitemsToRight;
 			SaveData ();
 			StartToHide ();
+		}
+
+		public bool IsVisible (string item)
+		{
+			return !itemsToHide.Contains (item);
+		}
+
+		public bool IsRight (string item)
+		{
+			return itemsToRight.Contains (item);
+		}
+
+		public void SetVisible (string item, bool value)
+		{
+			AddOrRemoveToList (item, ref itemsToHide, !value);
+			StartToHide ();
+		}
+
+		public void SetRight (string item, bool value)
+		{
+			AddOrRemoveToList (item, ref itemsToRight, value);
+			StartToHide ();
+		}
+
+		public void Reset ()
+		{
+			itemsToHide.Clear ();
+			itemsToRight.Clear ();
+			StartToHide ();
+		}
+
+		private void AddOrRemoveToList (string item, ref List <string> list, bool add)
+		{
+			if (add)
+			{
+				if (!list.Contains (item))
+				{
+					list.Add (item);
+				}
+			} else
+			{
+				if (list.Contains (item))
+				{
+					list.Remove (item);
+				}
+			}
 		}
 	}
 }
