@@ -14,8 +14,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private List <ManageableItem>               groups = new List <ManageableItem> ();
 		private Dictionary <string, ManageableItem> groupItems;
 
-		private Image Expanded;
-		private Image Collapsed;
+		private Image      Expanded;
+		private Image      Collapsed;
 
 		public ManageThemesWindow ()
 		{
@@ -115,7 +115,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void AddButton_OnClick (object sender, RoutedEventArgs e)
 		{
-			ThemeAddition res = WPFHelper.AddTheme (this);
+			string nm = "";
+			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item)
+				nm = item.Content.ToString ();
+			ThemeAddition res = WPFHelper.AddTheme (this, nm);
 			if (res.save != null && (bool)res.save)
 			{
 				if (res.result == 1)
@@ -190,9 +193,34 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {index}");
+				return;
+			}
+
+			Schemes.Items.Insert (indx + 1, theme);
+
+			InsertThemeToCLI (prevTheme, theme.Content.ToString ());
+		}
+
+		private void InsertThemeToCLI (ManageableItem prevTheme, string theme)
+		{
+			int indx;
+			string prevT;
+
+			if (!prevTheme.IsGroup)
+			{
+				prevT = prevTheme.Content.ToString ();
 			} else
 			{
-				Schemes.Items.Insert (indx + 1, theme);
+				prevT = groupItems ["Doki Theme"].children.Last ().Content.ToString ();
+			}
+
+			indx = CLI.schemes.IndexOf (prevT);
+			if (indx == -1)
+			{
+				MessageBox.Show ($"Index wasn't found. PrevIndx: {indx}");
+			} else
+			{
+				CLI.schemes.Insert (indx + 1, theme);
 			}
 		}
 
@@ -203,16 +231,22 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Schemes.Items.Remove (old);
 			old.Content = old.Tag = res.to;
 			group.children = group.children.OrderBy (t => t.Content.ToString ()).ToList ();
+			
 			int index = group.children.FindIndex (op => op.Content == old.Content);
 			ManageableItem prevTheme = index > 0 ? group.children [index - 1] : group;
 			int indx = Schemes.Items.IndexOf (prevTheme);
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {index}");
+				return;
 			} else
 			{
 				Schemes.Items.Insert (indx + 1, old);
 			}
+
+			CLI.schemes.Remove (res.from);
+			InsertThemeToCLI (prevTheme, res.to);
+
 		}
 
 		public bool askDelete (string content, string title)

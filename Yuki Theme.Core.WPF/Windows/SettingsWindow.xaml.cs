@@ -6,6 +6,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 {
 	public partial class SettingsWindow : Window
 	{
+
+		public SettingsPanelUtilities utilities;
+		
 		public SettingsWindow ()
 		{
 			InitializeComponent ();
@@ -37,9 +40,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void IncludeToolBarItems ()
 		{
-			SettingsPanelUtilities utilities = new SettingsPanelUtilities (SettingsPanelControl);
-			SettingsPanelControl.ExecuteOnLoad = utilities.PopulateToolBarList;
-			SettingsPanelControl.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
+			utilities = new SettingsPanelUtilities (SettingsPanelControl);
+			if (Helper.mode == ProductMode.Plugin)
+			{
+				SettingsPanelControl.ExecuteOnLoad = utilities.PopulateToolBarList;
+				SettingsPanelControl.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
+			}
+
 			SettingsPanelControl.Background = WPFHelper.bgBrush;
 			SettingsPanelControl.Foreground = WPFHelper.fgBrush;
 			SettingsPanelControl.Tag = Tag;

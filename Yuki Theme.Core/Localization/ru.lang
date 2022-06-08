@@ -31,7 +31,7 @@
     "settings.general.beta.dev": "разработка",
     "settings.general.mode": "Режим настройки:",
     "settings.general.mode.light": "Поверхностный",
-    "settings.general.mode.advanced": "Углублённый",
+    "settings.general.mode.advanced": "Продвинутый",
     "settings.general.others": "Прочие настройки",
     "settings.general.update.auto": "Авто проверка\nобновлений",
     "settings.general.update.check": "Проверить",

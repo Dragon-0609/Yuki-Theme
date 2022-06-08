@@ -12,4 +12,10 @@ public interface ICamouflage
 	void SetRight (string item, bool value);
 
 	void Reset ();
+	
+    void PopulateList ();
+    
+    void StartToHide ();
+
+    void SaveData ();
 }

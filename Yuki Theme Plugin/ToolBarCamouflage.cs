@@ -133,7 +133,7 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		internal void PopulateList ()
+		public void PopulateList ()
 		{
 			string data = database.ReadData (Settings.CAMOUFLAGEHIDDEN, "");
 

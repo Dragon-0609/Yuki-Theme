@@ -23,6 +23,8 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private SettingsPanel _settingsPanel;
 
+		SettingsPanelUtilities utilities;
+		
 		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
 		{
 			InitializeComponent ();
@@ -77,7 +79,7 @@ namespace Yuki_Theme_Plugin.Controls
 					{
 						Form parentForm = ExtractOptionsParent ();
 						_settingsPanel = new SettingsPanel ();
-						SettingsPanelUtilities utilities = new SettingsPanelUtilities (_settingsPanel);
+						utilities = new SettingsPanelUtilities (_settingsPanel);
 						
 						_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
 						_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
@@ -199,16 +201,13 @@ namespace Yuki_Theme_Plugin.Controls
 					
 					//this.Enabled = true;        */
 					alreadyShown = false;
-					_settingsPanel.SaveSettings ();
-					Settings.SaveData ();
-					YukiTheme_VisualPascalABCPlugin.camouflage.SaveData ();
+					utilities ??= new SettingsPanelUtilities (_settingsPanel);
+					utilities.SaveSettings ();
 					break;
 				case OptionsContentAction.Cancel :
-					/*settingsPanel.popupController = null;
-					// plugin.mf = null;*/
-					YukiTheme_VisualPascalABCPlugin.camouflage.Reset ();
-					YukiTheme_VisualPascalABCPlugin.camouflage.PopulateList ();
-					YukiTheme_VisualPascalABCPlugin.camouflage.StartToHide ();
+					utilities ??= new SettingsPanelUtilities (_settingsPanel);
+					utilities.ResetToolBar ();
+					
 					alreadyShown = false;
 					break;
 			}

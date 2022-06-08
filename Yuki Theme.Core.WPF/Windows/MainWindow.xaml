@@ -337,7 +337,7 @@
 
             <WrapPanel Grid.Row="2" Name="PluginButtons" HorizontalAlignment="Right" Visibility="Collapsed">
                 <Button Padding="6 2" Click="ExportButton_OnClick">Select</Button>
-                <Button Padding="6 2" IsCancel="True">Cancel</Button>
+                <Button Padding="6 2" Click="Close_OnClick">Cancel</Button>
             </WrapPanel>
         </Grid>
     </Grid>

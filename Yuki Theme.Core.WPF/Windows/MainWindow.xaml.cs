@@ -79,6 +79,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void load_schemes ()
 		{
 			CLI.load_schemes ();
+			LoadThemes ();
+		}
+
+		public void LoadThemes ()
+		{
+			blockedThemeSelector = true;
 			Themes.Items.Clear ();
 			themes = CLI.schemes.ToArray ();
 			foreach (string theme in themes)
@@ -213,38 +219,43 @@ namespace Yuki_Theme.Core.WPF.Windows
 			ThemeAddition res = WPFHelper.AddTheme (this, Themes.SelectedItem.ToString ());
 			if (res.save != null && (bool)res.save)
 			{
-				if (res.result == 1)
+				InsertTheme (res);
+			}
+		}
+
+		private void InsertTheme (ThemeAddition res)
+		{
+			if (res.result == 1)
+			{
+				List <string> customThemes = new List <string> ();
+
+				foreach (string item in themes)
 				{
-					List <string> customThemes = new List <string> ();
-
-					foreach (string item in themes)
+					if (!CLI.isDefaultTheme [item])
 					{
-						if (!CLI.isDefaultTheme [item])
-						{
-							customThemes.Add (item);
-						}
+						customThemes.Add (item);
 					}
-
-					customThemes.Add (res.to);
-					customThemes.Sort ();
-					int index = customThemes.IndexOf (res.to);
-					int index2 = 0;
-
-					if (index >= 1)
-					{
-						string prevTheme = customThemes [index - 1];
-						index2 = Array.IndexOf (themes, prevTheme) + 1;
-					} else
-					{
-						int mx = customThemes.Count > 2 ? 1 : 0;
-						string prevTheme = CLI.schemes [CLI.schemes.IndexOf (customThemes [mx]) - 1];
-						index2 = Array.IndexOf (themes, prevTheme) + 1;
-					}
-
-					Themes.Items.Insert (index2, res.to);
-					Themes.SelectedIndex = index2;
-					themes = CLI.schemes.ToArray ();
 				}
+
+				customThemes.Add (res.to);
+				customThemes.Sort ();
+				int index = customThemes.IndexOf (res.to);
+				int index2 = 0;
+
+				if (index >= 1)
+				{
+					string prevTheme = customThemes [index - 1];
+					index2 = Array.IndexOf (themes, prevTheme) + 1;
+				} else
+				{
+					int mx = customThemes.Count > 2 ? 1 : 0;
+					string prevTheme = CLI.schemes [CLI.schemes.IndexOf (customThemes [mx]) - 1];
+					index2 = Array.IndexOf (themes, prevTheme) + 1;
+				}
+
+				Themes.Items.Insert (index2, res.to);
+				Themes.SelectedIndex = index2;
+				themes = CLI.schemes.ToArray ();
 			}
 		}
 
@@ -258,14 +269,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Owner = this
 			};
 
-			bool? dialog = themesWindow.ShowDialog ();
-			if (dialog != null && (bool)dialog)
-			{
-				// MessageBox.Show (string.Format("Saved: {0} -> {1}", themesWindow.Themes.SelectedItem.ToString (), themesWindow.TName.Text));
-			} else
-			{
-				// MessageBox.Show ("Canceled");
-			}
+			themesWindow.ShowDialog ();
+			LoadThemes ();
 		}
 
 
@@ -278,18 +283,20 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Tag = Tag,
 				Owner = this
 			};
-
+			
 			bool? dialog = settingsWindow.ShowDialog ();
 			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
 			{
-				settingsWindow.SettingsPanelControl.SaveSettings ();
-				Settings.SaveData ();
+				settingsWindow.utilities.SaveSettings ();
 				ToggleEditor ();
 				if (currentMode != Settings.settingMode)
 				{
 					Restore ();
 				}
+			} else
+			{
+				settingsWindow.utilities.ResetToolBar ();
 			}
 		}
 
@@ -881,6 +888,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void ImportDirectoryButton_OnClick (object sender, RoutedEventArgs e)
 		{
 			ImportFolder ();
+		}
+
+		private void Close_OnClick (object sender, RoutedEventArgs e)
+		{
+			this.Close ();
 		}
 	}
 }

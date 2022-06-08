@@ -33,5 +33,23 @@ namespace Yuki_Theme.Core.WPF.Controls
 			_settingsPanel.ToolBarIcon.Source =
 				ToolBarListItem.manager.RenderToolBarItemImage (item.item).ToWPFImage ();
 		}
+
+		public void ResetToolBar ()
+		{
+			if (Helper.mode == ProductMode.Plugin)
+			{
+				ToolBarListItem.camouflage.Reset ();
+				ToolBarListItem.camouflage.PopulateList ();
+				ToolBarListItem.camouflage.StartToHide ();
+			}
+		}
+
+		public void SaveSettings ()
+		{
+			_settingsPanel.SaveSettings ();
+			Settings.SaveData ();
+			if (Helper.mode == ProductMode.Plugin)
+				ToolBarListItem.camouflage.SaveData ();
+		}
 	}
 }
