@@ -14,34 +14,93 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public class DokiThemeParser : AbstractParser
 	{
-		private bool                        dark   = true;
-		private string                      curd   = "";
-		private string                      fname  = "";
-		private string                      ofname = "";
-		private string                      getWallpaper => Path.Combine (curd, fname);
-		private string                      getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		private bool   dark   = true;
+		private string curd   = "";
+		private string fname  = "";
+		private string ofname = "";
+		private string getWallpaper => Path.Combine (curd, fname);
+		private string getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		
 		public  Func <string, string, bool> exist;
+
+		public static Dictionary <string, string> Groups = new Dictionary <string, string> ()
+		{
+			{ "Kill la Kill", "KillLaKill: " },
+			{ "Blend S", "BlendS: " },
+			{ "Re Zero", "Re:Zero: " },
+			{ "Love Live", "LoveLive: " },
+			{ "Literature Club", "DDLC: " },
+			{ "KonoSuba", "KonoSuba: " },
+			{ "Darling in the Franxx", "Franxx: " },
+			{ "Bunny Senpai", "BunnySenpai: " },
+			{ "Steins Gate", "SG: " },
+			{ "Gate", "Gate: " },
+			{ "Quintessential Quintuplets", "QQ: " },
+			{ "Fate", "TypeMoon: " },
+			{ "Type-Moon", "TypeMoon: " },
+			{ "Daily Life With A Monster Girl", "MonsterMusume: " },
+			{ "Vocaloid", "Vocaloid: " },
+			{ "DanganRonpa", "DR: " },
+			{ "High School DxD", "DxD: " },
+			{ "Sword Art Online", "SAO: " },
+			{ "Lucky Star", "LS: " },
+			{ "Evangelion", "EVA: " },
+			{ "EroManga Sensei", "EroManga: " },
+			{ "Miss Kobayashi's Dragon Maid", "DM: " },
+			{ "OreGairu", "OreGairu: " },
+			{ "OreImo", "OreImo: " },
+			{ "The Great Jahy Will Not Be Defeated", "JahySama: " },
+			{ "Future Diary", "FutureDiary: " },
+			{ "Kakegurui", "Kakegurui: " },
+			{ "Monogatari", "Monogatari: " },
+			{ "Don't Toy with me Miss Nagatoro", "DTWMMN: " },
+			{ "Miscellaneous", "Misc: " },
+			{ "Yuru Camp", "YuruCamp: " },
+			{ "NekoPara", "NekoPara: " },
+			{ "Azur Lane", "AzurLane: " },
+			{ "The Rising of Shield Hero", "ShieldHero: " },
+			{ "Toaru Majutsu no Index", "Railgun: " },
+			{ "Chuunibyou", "Chuunibyou: " },
+		};
 
 		public override void populateList (string path)
 		{
-			curd = Path.GetDirectoryName (path);
-			JObject json = JObject.Parse (File.ReadAllText (path));
-			fname = json ["stickers"] ["default"].ToString ();
+			string text = "";
+
+			if (needToWrite)
+			{
+				curd = Path.GetDirectoryName (path);
+				text = File.ReadAllText (path); // If it's file mode, then read from file, else read from input
+			} else
+				text = path;
+
+			JObject json = JObject.Parse (text);
+			fname = json ["stickers"] ["default"] ["name"].ToString ();
 			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
 
-			flname = ofname;
-			PathToSave = Path.Combine (CLI.currentPath, "Themes",
-			                           $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
-			if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
-				throw new InvalidDataException (CLI.Translate ("parser.theme.exist"));
+			theme.ParseWallpaperAlign (json ["stickers"] ["default"] ["anchor"].ToString ());
+			theme.WallpaperOpacity = json ["stickers"] ["default"] ["opacity"].ToObject <int> ();
+			theme.Group = groupName;
+			
+			theme.imagePath = fname;
+			
+			flname = theme.Name = ofname;
+			if (needToWrite)
+			{
+				PathToSave = Path.Combine (CLI.currentPath, "Themes",
+				                           $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
+				if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
+					throw new InvalidDataException (CLI.Translate ("parser.theme.exist"));
 
-			overwrite = File.Exists (PathToSave);
-			// Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
+				overwrite = File.Exists (PathToSave);
+				Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
+			}
+
 			dark = bool.Parse (json ["dark"].ToString ());
 
 			foreach (JProperty cl in json ["colors"])
 			{
-				var name = getName (cl.Name);
+				string [] name = getName (cl.Name);
 
 				var attrs = new ThemeField ();
 
@@ -60,7 +119,7 @@ namespace Yuki_Theme.Core.Parsers
 					}
 				}
 
-				Tuple <string, string> defaults = getDefault (cl.Name);
+				Tuple <string, string> defaults = getDefaultForeground (cl.Name);
 
 				if (defaults != null)
 				{
@@ -103,13 +162,12 @@ namespace Yuki_Theme.Core.Parsers
 				Foreground = df.Background,
 				Background = df.Background
 			});
-			ThemeField selectedF = theme.Fields ["SelectedFoldLine"].copyField ();
-			selectedF.Background = df.Background;
-			theme.Fields ["SelectedFoldLine"] = selectedF;
 			theme.Fields.Add ("FoldLine", new ThemeField
 			{
 				Foreground = df.Background
 			});
+			df.Bold = null;
+			df.Italic = null;
 
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
@@ -120,191 +178,9 @@ namespace Yuki_Theme.Core.Parsers
 
 		private string ConvertGroup (string st)
 		{
-			string res = "";
-			switch (st)
-			{
-				case "Kill la Kill" :
-				{
-					res = "KillLaKill: ";
-				}
-					break;
-				case "Blend S" :
-				{
-					res = "BlendS: ";
-				}
-					break;
-				case "Re Zero" :
-				{
-					res = "Re:Zero: ";
-				}
-					break;
-				case "Love Live" :
-				{
-					res = "LoveLive: ";
-				}
-					break;
-				case "Literature Club" :
-				{
-					res = "DDLC: ";
-				}
-					break;
-				case "KonoSuba" :
-				{
-					res = "KonoSuba: ";
-				}
-					break;
-				case "Darling in the Franxx" :
-				{
-					res = "Franxx: ";
-				}
-					break;
-				case "Bunny Senpai" :
-				{
-					res = "BunnySenpai: ";
-				}
-					break;
-				case "Steins Gate" :
-				{
-					res = "SG: ";
-				}
-					break;
-				case "Gate" :
-				{
-					res = "Gate: ";
-				}
-					break;
-				case "Quintessential Quintuplets" :
-				{
-					res = "QQ: ";
-				}
-					break;
-				case "Fate" :
-				{
-					res = "TypeMoon: ";
-				}
-					break;
-				case "Type-Moon" :
-				{
-					res = "TypeMoon: ";
-				}
-					break;
-				case "Daily Life With A Monster Girl" :
-				{
-					res = "MonsterMusume: ";
-				}
-					break;
-				case "Vocaloid" :
-				{
-					res = "Vocaloid: ";
-				}
-					break;
-				case "DanganRonpa" :
-				{
-					res = "DR: ";
-				}
-					break;
-				case "High School DxD" :
-				{
-					res = "DxD: ";
-				}
-					break;
-				case "Sword Art Online" :
-				{
-					res = "SAO: ";
-				}
-					break;
-				case "Lucky Star" :
-				{
-					res = "LS: ";
-				}
-					break;
-				case "Evangelion" :
-				{
-					res = "EVA: ";
-				}
-					break;
-				case "EroManga Sensei" :
-				{
-					res = "EroManga: ";
-				}
-					break;
-				case "Miss Kobayashi's Dragon Maid" :
-				{
-					res = "DM: ";
-				}
-					break;
-				case "OreGairu" :
-				{
-					res = "OreGairu: ";
-				}
-					break;
-				case "OreImo" :
-				{
-					res = "OreImo: ";
-				}
-					break;
-				case "The Great Jahy Will Not Be Defeated" :
-				{
-					res = "JahySama: ";
-				}
-					break;
-				case "Future Diary" :
-				{
-					res = "FutureDiary: ";
-				}
-					break;
-				case "Kakegurui" :
-				{
-					res = "Kakegurui: ";
-				}
-					break;
-				case "Monogatari" :
-				{
-					res = "Monogatari: ";
-				}
-					break;
-				case "Don't Toy with me Miss Nagatoro" :
-				{
-					res = "DTWMMN: ";
-				}
-					break;
-				case "Miscellaneous" :
-				{
-					res = "Misc: ";
-				}
-					break;
-				case "Yuru Camp" :
-				{
-					res = "YuruCamp: ";
-				}
-					break;
-				case "NekoPara" :
-				{
-					res = "NekoPara: ";
-				}
-					break;
-				case "Azur Lane" :
-				{
-					res = "AzurLane: ";
-				}
-					break;
-				case "The Rising of Shield Hero" :
-				{
-					res = "ShieldHero: ";
-				}
-					break;
-				case "Toaru Majutsu no Index" :
-				{
-					res = "Railgun: ";
-				}
-					break;
-				case "Chuunibyou" :
-				{
-					res = "Chuunibyou: ";
-				}
-					break;
-			}
-
+			string res = st;
+			if (Groups.ContainsKey (st))
+				res = Groups [st];
 			return res;
 		}
 
@@ -405,8 +281,9 @@ namespace Yuki_Theme.Core.Parsers
 
 		private void addDefaults (string st)
 		{
-			var dds = getName (st);
-			Tuple <string, string> defs = getDefault (st);
+			string[] dds = getName (st);
+			Tuple <string, string> defs = getDefaultForeground (st);
+			Tuple <string, bool> defaultBold = getDefaultBold (st);
 
 			foreach (var nm in dds)
 			{
@@ -414,9 +291,16 @@ namespace Yuki_Theme.Core.Parsers
 				{
 					ThemeField field = new ThemeField ();
 					field.SetAttributeByName (defs.Item1, defs.Item2);
+					if (defaultBold != null)
+						field.SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
 					theme.Fields.Add (nm, field);
 				} else if (theme.Fields [nm].isAttributeNull (defs.Item1))
+				{
 					theme.Fields [nm].SetAttributeByName (defs.Item1, defs.Item2);
+					
+					if (defaultBold != null && theme.Fields [nm].isAttributeNull (defaultBold.Item1))
+						theme.Fields [nm].SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
+				}
 			}
 		}
 
@@ -426,7 +310,10 @@ namespace Yuki_Theme.Core.Parsers
 		private readonly Dictionary <string, string> _defaultDarkForegroundColors = new Dictionary <string, string> ()
 			{ { "constantColor", "#86dbfd" }, { "foregroundColor", "#F8F8F2" }, { "comments", "#6272a4" } };
 
-		private Tuple <string, string> getDefault (string st)
+		private readonly Dictionary <string, bool> _defaultBold = new ()
+			{ { "comments", false }, { "constantColor", false }, { "foregroundColor", false } };
+
+		private Tuple <string, string> getDefaultForeground (string st)
 		{
 			Tuple <string, string> res = null;
 			if (_defaultForegroundColors.ContainsKey (st))
@@ -443,6 +330,17 @@ namespace Yuki_Theme.Core.Parsers
 			return res;
 		}
 
+		private Tuple <string, bool> getDefaultBold (string st)
+		{
+			Tuple <string, bool> res = null;
+			if (_defaultBold.ContainsKey (st))
+			{
+				res = new Tuple <string, bool> ("bold", _defaultBold [st]);
+			}
+
+			return res;
+		}
+
 		private bool canBold (string st)
 		{
 			bool res = false;
@@ -454,6 +352,7 @@ namespace Yuki_Theme.Core.Parsers
 				case "stringColor" :
 				case "keywordColor" :
 				case "keyColor" :
+				case "classNameColor" :
 				{
 					res = true;
 				}
@@ -559,80 +458,83 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override void finishParsing (string path)
 		{
-			var doc = new XmlDocument ();
-			doc.Load (PathToSave);
-
-			Tuple <bool, Image> wallp = getImage (getWallpaper);
-
-			Tuple <bool, Image> stick = getImage (getSticker);
-
-			var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
-
-			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
-			XmlNodeList comms = nod.SelectNodes ("//comment()");
-			if (comms.Count >= 3)
+			if (!overwrite)
 			{
-				Dictionary <string, bool> comments = new Dictionary <string, bool> ()
-				{
-					{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
-					{ "hasImage", false }, { "hasSticker", false }
-				};
+				var doc = new XmlDocument ();
+				doc.Load (PathToSave);
 
-				Dictionary <string, string> commentValues = new Dictionary <string, string> ()
+				Tuple <bool, Image> wallp = getImage (getWallpaper);
+
+				Tuple <bool, Image> stick = getImage (getSticker);
+
+				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+
+				XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
+				XmlNodeList comms = nod.SelectNodes ("//comment()");
+				if (comms.Count >= 3)
 				{
-					{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
-					{ "opacity", "opacity:" + (10).ToString () },
-					{ "sopacity", "sopacity:" + (100).ToString () },
-					{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
-					{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
-				};
-				foreach (XmlComment comm in comms)
-				{
-					if (comm.Value.StartsWith ("align"))
+					Dictionary <string, bool> comments = new Dictionary <string, bool> ()
 					{
-						comm.Value = commentValues ["align"];
-						comments ["align"] = true;
-					} else if (comm.Value.StartsWith ("opacity"))
+						{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
+						{ "hasImage", false }, { "hasSticker", false }
+					};
+
+					Dictionary <string, string> commentValues = new Dictionary <string, string> ()
 					{
-						comm.Value = commentValues ["opacity"];
-						comments ["opacity"] = true;
-					} else if (comm.Value.StartsWith ("sopacity"))
+						{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
+						{ "opacity", "opacity:" + (10).ToString () },
+						{ "sopacity", "sopacity:" + (100).ToString () },
+						{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
+						{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
+					};
+					foreach (XmlComment comm in comms)
 					{
-						comm.Value = commentValues ["sopacity"];
-						comments ["sopacity"] = true;
-					} else if (comm.Value.StartsWith ("name"))
-					{
-						comm.Value = commentValues ["name"];
-						comments ["name"] = true;
-					} else if (comm.Value.StartsWith ("hasImage"))
-					{
-						comm.Value = commentValues ["hasImage"];
-						comments ["hasImage"] = true;
-					} else if (comm.Value.StartsWith ("hasSticker"))
-					{
-						comm.Value = commentValues ["hasSticker"];
-						comments ["hasSticker"] = true;
+						if (comm.Value.StartsWith ("align"))
+						{
+							comm.Value = commentValues ["align"];
+							comments ["align"] = true;
+						} else if (comm.Value.StartsWith ("opacity"))
+						{
+							comm.Value = commentValues ["opacity"];
+							comments ["opacity"] = true;
+						} else if (comm.Value.StartsWith ("sopacity"))
+						{
+							comm.Value = commentValues ["sopacity"];
+							comments ["sopacity"] = true;
+						} else if (comm.Value.StartsWith ("name"))
+						{
+							comm.Value = commentValues ["name"];
+							comments ["name"] = true;
+						} else if (comm.Value.StartsWith ("hasImage"))
+						{
+							comm.Value = commentValues ["hasImage"];
+							comments ["hasImage"] = true;
+						} else if (comm.Value.StartsWith ("hasSticker"))
+						{
+							comm.Value = commentValues ["hasSticker"];
+							comments ["hasSticker"] = true;
+						}
 					}
+
+					foreach (KeyValuePair <string, bool> comment in comments)
+					{
+						if (!comment.Value)
+						{
+							node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
+						}
+					}
+				} else
+				{
+					node.AppendChild (doc.CreateComment ("name:" + ofname));
+					node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
+					node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
+					node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
+					node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
+					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				foreach (KeyValuePair <string, bool> comment in comments)
-				{
-					if (!comment.Value)
-					{
-						node.AppendChild (doc.CreateComment (commentValues [comment.Key]));
-					}
-				}
-			} else
-			{
-				node.AppendChild (doc.CreateComment ("name:" + ofname));
-				node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
-				node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
-				node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
-				node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
-				node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
+				Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 			}
-
-			Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 		}
 
 		private Tuple <bool, Image> getImage (string path)

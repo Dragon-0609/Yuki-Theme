@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Forms;
 
@@ -17,7 +18,7 @@ namespace Yuki_Theme
 			Application.EnableVisualStyles ();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run (new MForm ());
-			// Application.Run (new TForm ());
+			// Application.Run (new ThemeDownloaderForm ());
 		}
 		
 		[System.Runtime.InteropServices.DllImport("user32.dll")]

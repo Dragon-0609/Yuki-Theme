@@ -129,7 +129,14 @@
     <Compile Include="Interfaces\IColorUpdatable.cs" />
     <Compile Include="Interfaces\IIconManager.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
+    <Compile Include="Forms\ThemeDownloaderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ThemeDownloaderForm.Designer.cs">
+      <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
@@ -330,6 +337,9 @@
     <Resource Include="Forms\TesterForm.resx">
       <DependentUpon>TesterForm.cs</DependentUpon>
     </Resource>
+    <EmbeddedResource Include="Forms\ThemeDownloaderForm.resx">
+      <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeManager.resx">
       <DependentUpon>ThemeManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -371,6 +381,9 @@
     <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+    <EmbeddedResource Include="Resources\HTML\loading.html" />
+    <EmbeddedResource Include="Resources\HTML\theme_downloader.html" />
+    <EmbeddedResource Include="Resources\HTML\css\bootstrap.min.css" />
     <Content Include="Resources\left.png" />
     <Content Include="Resources\right.png" />
     <EmbeddedResource Include="Resources\SVG\add.svg" />
@@ -385,7 +398,6 @@
     <EmbeddedResource Include="Resources\SVG\listFiles_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\moreHorizontal.svg" />
     <EmbeddedResource Include="Resources\SVG\moreHorizontal_dark.svg" />
-    <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\refresh.svg" />
     <EmbeddedResource Include="Resources\SVG\refresh_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\remove.svg" />

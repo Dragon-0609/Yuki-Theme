@@ -1,0 +1,87 @@
+{
+  "id": "a14733d6-8e15-4e75-b6b8-509f323e5b3b",
+  "name": "Yuri Dark",
+  "displayName": "Yuri",
+  "dark": true,
+  "author": "Unthrottled",
+  "group": "Literature Club",
+  "stickers": {
+    "default": {
+      "name": "yuri_dark.png",
+      "anchor": "center",
+      "opacity": 7
+    },
+    "secondary": {
+      "name": "yuri_dark_normal.png",
+      "anchor": "center",
+      "opacity": 7
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#DC74FF",
+        "startColor": "#BC60CB"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#473466",
+    "lineNumberColor": "#6f6679",
+    "completionWindowBackground": "#32393F",
+    "baseIconColor": "#6d6b96",
+    "contrastColor": "#473960",
+    "nonProjectFileScopeColor": "#493458",
+    "secondaryBackground": "#412D62",
+    "inactiveBackground": "#3C1D55",
+    "inactiveBackgroundDarker": "#451e5f",
+    "headerColor": "#442e5c",
+    "baseBackground": "#493162",
+    "borderColor": "#4d3a63",
+    "buttonColor": "#483967",
+    "selectionInactive": "#473466",
+    "identifierHighlight": "#503b73",
+    "selectionForeground": "#CCBEFF",
+    "selectionBackground": "#663995",
+    "searchBackground": "#B24CB6",
+    "searchForeground": "#e7e5f3",
+    "buttonFont": "#9c99e3",
+    "foregroundColor": "#DADADA",
+    "startColor": "#870AD2",
+    "highlightColor": "#533668",
+    "disabledColor": "#AF9ECB",
+    "accentColorTransparent": "#AB47BC5A",
+    "accentColorLessTransparent": "#AB47BC9A",
+    "accentColorMoreTransparent": "#AB47BC2A",
+    "accentColor": "#AB47BC",
+    "accentContrastColor": "#2a1e35",
+    "infoForeground": "#9d52ab",
+    "stopColor": "#F667FF",
+    "testScopeColor": "#423658",
+    "popupMask": "#EAEAF00A",
+    "comments": "#8B79B4",
+    "codeBlock": "#3e2955",
+    "textEditorBackground": "#422D5A",
+    "foldedTextBackground": "#3C1D55",
+    "constantColor": "#86FDB6",
+    "classNameColor": "#FF9CD6",
+    "htmlTagColor": "#E7A1FA",
+    "stringColor": "#B6B3FF",
+    "keyColor": "#F1FF86",
+    "keywordColor": "#B17BFD",
+    "diff.deleted": "#453C4A",
+    "diff.inserted": "#204b21",
+    "lightEditorColor": "#453161",
+    "breakpointColor": "#523d5b",
+    "breakpointActiveColor": "#425451",
+    "fileBlue": "#3c407b",
+    "fileGray": "#4c3a60",
+    "fileRose": "#5b3063",
+    "fileOrange": "#59374b",
+    "fileViolet": "#4a3272",
+    "fileYellow": "#594555",
+    "fileRed": "#582c54",
+    "filePurple": "#4a2c6d"
+  },
+  "characterId": "e04201b5-540e-485a-a8d0-a85ecb6614e3"
+}

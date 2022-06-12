@@ -7,42 +7,28 @@ using System.Windows.Forms;
 
 namespace Yuki_Theme.Core.Forms
 {
-	[ComVisible(true)]
+	[ComVisible (true)]
 	public partial class ChangelogForm : Form
 	{
 		private bool expanded = false;
-		
+
 		public ChangelogForm ()
 		{
 			InitializeComponent ();
 			this.Text = label1.Text = CLI.Translate ("changelog.title");
+
+			string md = Helper.ReadHTML ("CHANGELOG.md");
+			string html = Helper.ReadHTML ("CHANGELOG.html");
+
+			md = md.Split (new [] { "###" }, StringSplitOptions.None) [1]
+			       .Split (new [] { "##" }, StringSplitOptions.None) [1];
 			
-			Assembly a = Assembly.GetExecutingAssembly ();
+			html = Helper.ReplaceHTMLColors (html);
 
-			Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.CHANGELOG.md");
-			string md = "";
-			using (StreamReader reader = new StreamReader (stm))
-			{
-				md = reader.ReadToEnd ();
-			}
-
-			md = md.Split (new [] {"###"}, StringSplitOptions.None) [1]
-			       .Split (new [] {"##"}, StringSplitOptions.None) [1];
-
-			stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.CHANGELOG.html");
-			string html = "";
-			using (StreamReader reader = new StreamReader (stm))
-			{
-				html = reader.ReadToEnd ();
-			}
-			stm.Dispose ();
-			html = html.Replace ("__bg__", ColorTranslator.ToHtml (Helper.bgColor));
-			html = html.Replace ("__clr__", ColorTranslator.ToHtml (Helper.fgColor));
-			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (Helper.fgHover));
 			md = ReplaceCheckbox (md);
 			string str = CommonMark.CommonMarkConverter.Convert (md);
 
-			html = html.Replace ("Expand",CLI.Translate ("changelog.expand")).Replace ("__content__", str);
+			html = html.Replace ("Expand", CLI.Translate ("changelog.expand")).Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
 			webBrowser1.ScrollBarsEnabled = true;
 			this.webBrowser1.ObjectForScripting = this;
@@ -84,9 +70,9 @@ namespace Yuki_Theme.Core.Forms
 				ntxt = CLI.Translate ("changelog.collapse");
 			} else
 			{
-				ntxt = CLI.Translate("changelog.expand");
+				ntxt = CLI.Translate ("changelog.expand");
 			}
-			
+
 			Assembly a = Assembly.GetExecutingAssembly ();
 
 			Stream stm = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.CHANGELOG.md");
@@ -96,9 +82,9 @@ namespace Yuki_Theme.Core.Forms
 				mdd = reader.ReadToEnd ();
 			}
 
-			mdd = mdd.Split (new [] {"###"}, StringSplitOptions.None) [1];
+			mdd = mdd.Split (new [] { "###" }, StringSplitOptions.None) [1];
 			if (!expanded)
-				mdd = mdd.Split (new [] {"##"}, StringSplitOptions.None) [1];
+				mdd = mdd.Split (new [] { "##" }, StringSplitOptions.None) [1];
 			mdd = ReplaceCheckbox (mdd);
 			mdd = CommonMark.CommonMarkConverter.Convert (mdd);
 			stm.Dispose ();
@@ -114,8 +100,6 @@ namespace Yuki_Theme.Core.Forms
 				webBrowser1.Height = 400;
 				ClientSize = new Size (ClientSize.Width, 429);
 			}
-			
 		}
-		
 	}
 }

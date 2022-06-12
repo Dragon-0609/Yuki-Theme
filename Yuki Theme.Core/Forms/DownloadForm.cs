@@ -21,7 +21,7 @@ namespace Yuki_Theme.Core.Forms
 		private          WebClient web;
 		private          string    github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 
-		private string user_agent =
+		public const string user_agent =
 			"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
 
 		public DownloadForm (PopupFormsController controller)
@@ -64,7 +64,9 @@ namespace Yuki_Theme.Core.Forms
 						if (response != null)
 						{
 							string json = await response.Content.ReadAsStringAsync ();
+#if CONSOLE_LOGS
 							Console.WriteLine (json);
+#endif
 							JObject jresponse;
 							if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
 							{

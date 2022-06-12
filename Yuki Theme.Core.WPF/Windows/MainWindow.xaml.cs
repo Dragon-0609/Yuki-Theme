@@ -231,7 +231,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				foreach (string item in themes)
 				{
-					if (!CLI.isDefaultTheme [item])
+					if (!CLI.ThemeInfos[item].isDefault)
 					{
 						customThemes.Add (item);
 					}

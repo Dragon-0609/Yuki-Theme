@@ -22,16 +22,16 @@ namespace Yuki_Theme.Core.Themes
 
 		public static void addHeader (IThemeHeader header)
 		{
-			names.AddRange (header.ThemeNames);
+			names.AddRange (header.ThemeNames.Keys);
 			categoriesList.Add (header.GroupName);
 			headersList.Add (header);
-			foreach (string themeName in header.ThemeNames)
+			foreach (KeyValuePair <string, bool> themeName in header.ThemeNames)
 			{
-				if(!CLI.isDefaultTheme.ContainsKey (themeName))
+				if(!CLI.ThemeInfos.ContainsKey (themeName.Key))
 				{
-					CLI.isDefaultTheme.Add (themeName, true);
-					categories.Add (themeName, header.GroupName);
-					headers.Add (themeName, header);
+					CLI.AddThemeInfo (themeName.Key, true, themeName.Value, ThemeLocation.Memory);
+					categories.Add (themeName.Key, header.GroupName);
+					headers.Add (themeName.Key, header);
 				}
 			}
 		}
@@ -41,15 +41,11 @@ namespace Yuki_Theme.Core.Themes
 			ExternalThemeManager.LoadThemes ();
 		}
 
-		public static void addOldNewThemeDifference (ref Dictionary <string, bool> list)
+		public static void InjectTheme (Theme theme)
 		{
-			foreach (string theme in names)
-			{
-				ThemeFormat extension = Helper.GetThemeFormat (true, Helper.ConvertNameToPath (theme), theme);
-				list.Add (theme, extension == ThemeFormat.Old);
-			}
+			
 		}
-
+		
 		public static Dictionary <string, string> categories     = new ();
 		public static List <string>               categoriesList = new ();
 
@@ -63,15 +59,6 @@ namespace Yuki_Theme.Core.Themes
 			if (categories.ContainsKey (st))
 				res = categories [st];
 			return res;
-		}
-
-		public static void Clear ()
-		{
-			categories.Clear ();
-			categoriesList.Clear ();
-			headers.Clear ();
-			headersList.Clear ();
-			names.Clear ();
 		}
 	}
 }

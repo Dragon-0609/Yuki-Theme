@@ -20,15 +20,19 @@ namespace Yuki_Theme.Core.Parsers
 		public bool   ask       = false;
 		public bool   overwrite = false;
 
+		public bool   needToWrite = false;
+		public string groupName   = "";
+
 		public Action <string, string> defaultTheme;
 
-		public void Parse (string path, string st, string pathToSave, bool ak = false, bool rewrite =false, bool select = true, Action <string> addToUIList = null, Action<string> selectAfterParse = null)
+		public void Parse (string path,          string fileName, string pathToSave, bool askToOverwrite = false, bool rewrite = false,
+		                   bool   select = true, Action <string> addToUIList = null, Action <string> selectAfterParse = null)
 		{
 			theme = ThemeFunctions.LoadDefault ();
 			theme.Fields = new Dictionary <string, ThemeField> ();
 			PathToSave = pathToSave;
-			flname = st;
-			ask = ak;
+			flname = fileName;
+			ask = askToOverwrite;
 			overwrite = rewrite;
 			try
 			{
@@ -38,54 +42,54 @@ namespace Yuki_Theme.Core.Parsers
 				defaultTheme (e.Message, "Error");
 				return;
 			}
-			
-			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
-			// Console.WriteLine (PathToSave);
 
-			if (!overwrite)
+			if (needToWrite)
 			{
-				string syt = CLI.schemes [1];
-				Console.WriteLine (syt);
-				if (DefaultThemes.isDefault (syt))
-					CLI.CopyFromMemory (syt, syt, PathToSave);
-				else
-				{
-					// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-					if (!CLI.schemes.Contains (flname))
-						File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
-				}
-			} else
-			{
-				if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
-				{
-					XmlDocument document = new XmlDocument ();
-					OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, flname, Helper.FILE_EXTENSTION_OLD, false);
-					Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
-					theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
-					theme.SetAdditionalInfo (additionalInfo);
-				}
-			}
+				if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
+					Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+				Console.WriteLine (PathToSave);
 
-			MergeFiles (PathToSave);
-			finishParsing (path);
-			if (!overwrite)
-			{
-				CLI.AddThemeToLists (flname, false, true);
-				CLI.names.Add (flname);
+				if (!overwrite)
+				{
+					string syt = CLI.schemes [1];
+					if (DefaultThemes.isDefault (syt))
+						CLI.CopyFromMemory (syt, PathToSave, PathToSave);
+					else
+					{
+						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
+						if (!CLI.schemes.Contains (flname))
+							File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
+					}
+				} else
+				{
+					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
+					{
+						XmlDocument document = new XmlDocument ();
+						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
+						                                    false, true);
+						Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
+						theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
+						theme.SetAdditionalInfo (additionalInfo);
+					}
+				}
+
+				MergeFiles (PathToSave);
+				finishParsing (path);
+				if (!overwrite)
+				{
+					CLI.AddThemeInfo (flname, false, true, ThemeLocation.File);
+					CLI.names.Add (flname);
 				if (addToUIList != null)
 					addToUIList (flname);
 				/*if (form != null)
 					form.schemes.Items.Add (flname);*/
-			}
-			if(select && selectAfterParse != null)
-			{
-				selectAfterParse (flname);
-				/*// If selected theme is not theme that we just parsed
-				if ((string)form.schemes.SelectedItem != flname)
-					form.schemes.SelectedItem = flname;
-				else
-					form.restore_Click (form, EventArgs.Empty); // Reset*/
+				}
+
+				if (select && selectAfterParse != null)
+				{
+					selectAfterParse (flname);
+
+				}
 			}
 		}
 
@@ -94,7 +98,7 @@ namespace Yuki_Theme.Core.Parsers
 			XmlDocument doc = new XmlDocument ();
 
 			OldThemeFormat.loadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
-			                                    ref theme, PathToSave, Helper.FILE_EXTENSTION_OLD, true);
+			                                    ref theme,Helper.FILE_EXTENSTION_OLD, true, true);
 			
 			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
 			OldThemeFormat.MergeCommentsWithFile (theme, doc);

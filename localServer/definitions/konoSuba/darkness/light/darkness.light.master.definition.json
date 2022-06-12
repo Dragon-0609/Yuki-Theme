@@ -1,0 +1,80 @@
+{
+  "id": "8474d98d-7bb1-462c-82b1-dd7c512142a6",
+  "name": "Darkness Light",
+  "displayName": "Darkness",
+  "dark": false,
+  "author": "Unthrottled",
+  "group": "KonoSuba",
+  "stickers": {
+    "default": {
+      "name": "darkness_light.png",
+      "anchor": "center",
+      "opacity": 10
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#b6323f",
+        "startColor": "#c79c19"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#FFF6E4",
+    "baseIconColor": "#979087",
+    "lineNumberColor": "#aaaaaa",
+    "infoForeground": "#aaaaaa",
+    "contrastColor": "#feffdd",
+    "nonProjectFileScopeColor": "#fffaf0",
+    "secondaryBackground": "#fffff7",
+    "selectionForeground": "#A8930A",
+    "inactiveBackground": "#FFFFBC",
+    "inactiveBackgroundDarker": "#F5F5B3",
+    "headerColor": "#FFFEF9",
+    "baseBackground": "#fefefa",
+    "borderColor": "#f1f4e0",
+    "buttonColor": "#fffef7",
+    "selectionInactive": "#FFFFBC",
+    "identifierHighlight": "#FFFFBC",
+    "selectionBackground": "#fff3b4",
+    "selectionBackgroundTransparent": "#fff3b455",
+    "searchBackground": "#C1FFBA",
+    "searchForeground": "#366906",
+    "buttonFont": "#546E7A",
+    "foregroundColor": "#000000",
+    "startColor": "#EBDA50",
+    "highlightColor": "#fff8e0",
+    "disabledColor": "#7F818F",
+    "accentColorTransparent": "#F5C83C5A",
+    "accentColorLessTransparent": "#F5C83C9A",
+    "accentColorMoreTransparent": "#F5C83C2A",
+    "accentColor": "#F5C83C",
+    "darkerAccentColor": "#dcab2b",
+    "stopColor": "#FCFFA5",
+    "testScopeColor": "#D7FFDC",
+    "popupMask": "#FFF6E430",
+    "codeBlock": "#f4f3ee",
+    "textEditorBackground": "#FFFEF9",
+    "foldedTextBackground": "#F3F2E2",
+    "classNameColor": "#c79c19",
+    "htmlTagColor": "#22863a",
+    "stringColor": "#005CC5",
+    "keyColor": "#3492b1",
+    "keywordColor": "#E36207",
+    "constantColor": "#005CC5",
+    "diff.deleted": "#E9E6DB",
+    "lightEditorColor": "#fff9ec",
+    "breakpointColor": "#fffbcb",
+    "breakpointActiveColor": "#c3feb7",
+    "fileBlue": "#d4e8fa",
+    "fileGray": "#e4e3df",
+    "fileRose": "#f3cede",
+    "fileOrange": "#f7d6b3",
+    "fileViolet": "#efdef7",
+    "fileYellow": "#f1eeba",
+    "fileRed": "#f0b9b6",
+    "filePurple": "#d2b8ec"
+  },
+  "characterId": "cb6f524e-c8b1-4c85-817d-af9f80db5ec0"
+}

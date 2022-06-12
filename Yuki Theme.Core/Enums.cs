@@ -39,6 +39,12 @@
 		New,
 		Null
 	}
+
+	public enum ThemeLocation
+	{
+		File,
+		Memory
+	}
 	
 	
 }

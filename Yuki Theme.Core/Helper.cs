@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
@@ -19,19 +22,19 @@ namespace Yuki_Theme.Core
 	{
 		public static Color bgdefColor, bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
 
-		public static ProductMode? mode = null;
+		public static ProductMode  mode;
 		public static RelativeUnit unit;
 
-		private static Size Standart32 = new Size (32, 32);
-		public static string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
+		private static Size   Standart32 = new Size (32, 32);
+		public static  string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
 			Rectangle res = new Rectangle ();
-			double rY = (double) mHeight / ima.Height;
-			res.Width = (int) (ima.Width * rY);
-			res.Height = (int) (ima.Height * rY);
-			res.X = (mWidth - res.Width) / (int) align;
+			double rY = (double)mHeight / ima.Height;
+			res.Width = (int)(ima.Width * rY);
+			res.Height = (int)(ima.Height * rY);
+			res.X = (mWidth - res.Width) / (int)align;
 
 			// If image's drawing rectangle's width is smaller than mWidth.
 
@@ -52,9 +55,9 @@ namespace Yuki_Theme.Core
 		private static Rectangle GetSizesHorizontal (Size ima, int mWidth, int mHeight)
 		{
 			Rectangle res = new Rectangle ();
-			double rY = (double) mWidth / ima.Width;
-			res.Width = (int) (ima.Width * rY);
-			res.Height = (int) (ima.Height * rY);
+			double rY = (double)mWidth / ima.Width;
+			res.Width = (int)(ima.Width * rY);
+			res.Height = (int)(ima.Height * rY);
 			res.Y = (mHeight - res.Height) / 2;
 
 			return res;
@@ -70,12 +73,11 @@ namespace Yuki_Theme.Core
 		private const string STICKER_NAME        = "sticker.png";
 		public const  string FILE_EXTENSTION_OLD = ".yukitheme";
 		public const  string FILE_EXTENSTION_NEW = ".yuki";
-		public const  string TEMPLATENAMESPACE   = "Yuki_Theme.Core.Resources.Syntax_Templates.";
-		public const  string PASCALTEMPLATE      = $"{TEMPLATENAMESPACE}Pascal.xshd";
-		
+		public const  string PASCALTEMPLATE      = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
+
 		#endregion
-		
-		
+
+
 		#region Get Image
 
 		public static Tuple <bool, Image> GetImage (string path)
@@ -155,44 +157,51 @@ namespace Yuki_Theme.Core
 				return new Tuple <bool, Image> (false, null);
 			}
 		}
-		
+
 		#endregion
 
-		
+
 		#region Get Theme
 
 		public static Tuple <bool, string> GetTheme (string path)
 		{
+			Tuple <bool, string> result;
 			try
 			{
 				using (ZipArchive zipFile = ZipFile.OpenRead (path))
 				{
 					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					else
-						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+					{
+						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
 				}
-			} catch (InvalidDataException)
+			} catch
 			{
-				return new Tuple <bool, string> (false, "");
+				Console.WriteLine("{0} - isn't zip", path);
+				result = new Tuple <bool, string> (false, "");
 			}
+			return result;
 		}
 
 		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
 		{
+			Tuple <bool, string> result;
 			try
 			{
 				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
 				{
-					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
-						return ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					else
-						return ReadThemeFromZip (zipFile, THEME_NAME_NEW);
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
+					{
+						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
 				}
 			} catch (InvalidDataException)
 			{
-				return new Tuple <bool, string> (false, "");
+				result = new Tuple <bool, string> (false, "");
 			}
+			return result;
 		}
 
 		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
@@ -244,10 +253,10 @@ namespace Yuki_Theme.Core
 				}
 			}
 		}
-		
+
 		#endregion
-		
-		
+
+
 		#region Zip
 
 		public static bool IsZip (string path)
@@ -256,7 +265,7 @@ namespace Yuki_Theme.Core
 			{
 				using (ZipArchive zipFile = ZipFile.OpenRead (path))
 				{
-					if (path.ToLower().EndsWith (FILE_EXTENSTION_OLD))
+					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
 						return IsZip (zipFile, THEME_NAME_OLD);
 					else
 						return IsZip (zipFile, THEME_NAME_NEW);
@@ -308,7 +317,7 @@ namespace Yuki_Theme.Core
 					// To be sure that there's no old theme file
 					entry = archive.GetEntry (THEME_NAME_OLD);
 					entry?.Delete ();
-					
+
 					entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
@@ -444,14 +453,14 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-		
+
 		#region Color Management
 
 		public static Color ChangeColorBrightness (Color color, float correctionFactor)
 		{
-			float red = (float) color.R;
-			float green = (float) color.G;
-			float blue = (float) color.B;
+			float red = (float)color.R;
+			float green = (float)color.G;
+			float blue = (float)color.B;
 
 			if (correctionFactor < 0)
 			{
@@ -466,7 +475,7 @@ namespace Yuki_Theme.Core
 				blue = (255 - blue) * correctionFactor + blue;
 			}
 
-			return Color.FromArgb (color.A, (int) red, (int) green, (int) blue);
+			return Color.FromArgb (color.A, (int)red, (int)green, (int)blue);
 		}
 
 		public static bool IsDark (Color clr)
@@ -482,10 +491,10 @@ namespace Yuki_Theme.Core
 			else
 				return ChangeColorBrightness (clr, -percent);
 		}
-		
+
 		#endregion
-		
-		
+
+
 		#region SVG Manager
 
 		public static SvgDocument LoadSvg (string name, Assembly a, string customName = "Yuki_Theme.Core.Resources.SVG")
@@ -516,7 +525,7 @@ namespace Yuki_Theme.Core
 		                              bool customColor = false, Color       clr = default)
 		{
 			// im.Icon?.Dispose ();
-			IntPtr ptr = ((Bitmap) RenderSvg (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
+			IntPtr ptr = ((Bitmap)RenderSvg (Standart32, svg, custom, cSize, customColor, clr)).GetHicon ();
 
 			im.Icon = Icon.FromHandle (ptr);
 			// DestroyIcon (ptr);
@@ -537,7 +546,7 @@ namespace Yuki_Theme.Core
 				svg.Color = new SvgColourServer (clr);
 			else
 				svg.Color = new SvgColourServer (fgColor);
-			
+
 			if (!custom)
 				return svg.Draw (im.Width, im.Height);
 			else
@@ -609,8 +618,23 @@ namespace Yuki_Theme.Core
 			return md;
 		}
 		
-		#endregion
 		
+		public static string ReadNConvertMDToHTML (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
+		{
+			string md = ReadResource (target, nameSpace);
+			md = md.Split (new [] { "###" }, StringSplitOptions.None) [1];
+			md = ReplaceMDCheckbox (md);
+			md = CommonMark.CommonMarkConverter.Convert (md);
+
+			string html = ReadHTML ("CHANGELOG.html", nameSpace);
+			html = ReplaceHTMLColors (html);
+			html = html.Replace ("__content__", md);
+
+			return html;
+		}
+		
+		#endregion
+
 		
 		public static string ToStringLower (this bool bol)
 		{
@@ -693,51 +717,152 @@ namespace Yuki_Theme.Core
 		{
 			return RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()));
 		}
-		
+
 		public static Icon GetYukiThemeIcon (Size size)
 		{
 			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
 		}
 
-		public static bool Exist (this string path)
+		public static string EncryptString (string key, string plainText)
 		{
-			return File.Exists (path);
-		}
-
-		/// <summary>
-		/// Load string from resources
-		/// </summary>
-		/// <param name="target">Target file</param>
-		/// <param name="nameSpace">Namespace to be loaded. '.' (dot) must be included.
-		/// Default: Yuki_Theme.Core.Resources. </param>
-		/// <returns></returns>
-		public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
-		{
-			string result = "";
-			Assembly a = CLI.GetCore ();
-			Stream stm = a.GetManifestResourceStream (nameSpace + target);
-			if (stm != null)
-				using (StreamReader reader = new StreamReader (stm))
+			byte [] iv = new byte[16];
+			byte [] array;
+			key = KeyFillerNCutter (key);
+			using (Aes aes = Aes.Create ())
+			{
+				Console.WriteLine ("Key size: {0} - {1}", Encoding.UTF8.GetBytes (key).Length, key.Length);
+				KeySizes [] ks = aes.LegalKeySizes;
+				foreach (KeySizes item in ks)
 				{
-					result = reader.ReadToEnd ();
+					Console.WriteLine ("Legal min key size = " + item.MinSize);
+					Console.WriteLine ("Legal max key size = " + item.MaxSize);
+					//Output
+					// Legal min key size = 128
+					// Legal max key size = 256
 				}
 
-			return result;
+
+				aes.Key = Encoding.UTF8.GetBytes (key);
+				aes.IV = iv;
+
+				ICryptoTransform encryptor = aes.CreateEncryptor (aes.Key, aes.IV);
+
+				using (MemoryStream memoryStream = new MemoryStream ())
+				{
+					using (CryptoStream cryptoStream = new CryptoStream ((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+					{
+						using (StreamWriter streamWriter = new StreamWriter ((Stream)cryptoStream))
+						{
+							streamWriter.Write (plainText);
+						}
+
+						array = memoryStream.ToArray ();
+					}
+				}
+			}
+
+			return Convert.ToBase64String (array);
 		}
 
-		public static string ReadNConvertMDToHTML (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
+		public static string DecryptString (string key, string cipherText)
 		{
-			string md = ReadResource (target, nameSpace);
-			md = md.Split (new [] { "###" }, StringSplitOptions.None) [1];
-			md = ReplaceMDCheckbox (md);
-			md = CommonMark.CommonMarkConverter.Convert (md);
+			byte [] iv = new byte[16];
+			byte [] buffer = Convert.FromBase64String (cipherText);
+			key = KeyFillerNCutter (key);
+			using (Aes aes = Aes.Create ())
+			{
+				aes.Key = Encoding.UTF8.GetBytes (key);
+				aes.IV = iv;
+				ICryptoTransform decryptor = aes.CreateDecryptor (aes.Key, aes.IV);
 
-			string html = ReadHTML ("CHANGELOG.html", nameSpace);
-			html = ReplaceHTMLColors (html);
-			html = html.Replace ("__content__", md);
-
-			return html;
+				using (MemoryStream memoryStream = new MemoryStream (buffer))
+				{
+					using (CryptoStream cryptoStream = new CryptoStream ((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+					{
+						using (StreamReader streamReader = new StreamReader ((Stream)cryptoStream))
+						{
+							return streamReader.ReadToEnd ();
+						}
+					}
+				}
+			}
 		}
+
+		public static string KeyFillerNCutter (string key)
+        {
+	        string res = key;
+	        if (res.Length < 16)
+	        {
+		        res += new string ('.', 16 - res.Length);
+	        }else if (res.Length > 16)
+	        {
+		        res = res.Substring (0, 16);
+	        }
+	        return res;
+        }
+        
+
+        public static string GetExtension (bool isOld)
+        {
+	        return isOld ? FILE_EXTENSTION_OLD : FILE_EXTENSTION_NEW;
+        }
+        
+        public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic,
+                                                   TKey                           fromKey, TKey toKey)
+        {
+	        TValue value = dic[fromKey];
+	        dic.Remove(fromKey);
+	        dic[toKey] = value;
+        }
+
+        public static bool VerifyToken (Theme theme)
+        {
+	        if (theme != null && theme.Token != null)
+	        {
+		        string token = theme.Token;
+		        Console.WriteLine("Name: {0}", theme.Name);
+		        if (token == "" || token.Length < 6) return false;
+		        try
+		        {
+			        string decryption = DecryptString (theme.Name, token);
+			        DateTime date = decryption.ToDateTime ("ddMMyyyy");
+			        return true;
+		        } catch (Exception e)
+		        {
+			        Console.WriteLine ("{0} -> {1}", e.Message, e.StackTrace);
+			        // ignored
+		        }
+	        }
+
+	        return false;
+        }
+        
+        
+        public static bool Exist (this string path)
+        {
+	        return File.Exists (path);
+        }
+
+        /// <summary>
+        /// Load string from resources
+        /// </summary>
+        /// <param name="target">Target file</param>
+        /// <param name="nameSpace">Namespace to be loaded. '.' (dot) must be included.
+        /// Default: Yuki_Theme.Core.Resources. </param>
+        /// <returns></returns>
+        public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
+        {
+	        string result = "";
+	        Assembly a = CLI.GetCore ();
+	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
+	        if (stm != null)
+		        using (StreamReader reader = new StreamReader (stm))
+		        {
+			        result = reader.ReadToEnd ();
+		        }
+
+	        return result;
+        }
 	}
 
 	public static class GoogleAnalyticsHelper
@@ -770,13 +895,96 @@ namespace Yuki_Theme.Core
 			}
 		}
 	}
+	
+	public static class DateTimeExtensions {
+		public static DateTime ToDateTime(this string s, 
+		                                  string      format = "ddMMyyyy", string cultureString = "tr-TR") {
+			try {
+				var r = DateTime.ParseExact(
+					s: s,
+					format: format,
+					provider: CultureInfo.GetCultureInfo(cultureString));
+				return r;
+			} catch (FormatException) {
+				throw;
+			} catch (CultureNotFoundException) {
+				throw; // Given Culture is not supported culture
+			}
+		}
 
+		public static DateTime ToDateTime(this string s, 
+		                                  string      format, CultureInfo culture) {
+			try {
+				var r = DateTime.ParseExact(s: s, format: format, 
+				                            provider: culture);
+				return r;
+			} catch (FormatException) {
+				throw;
+			} catch (CultureNotFoundException) {
+				throw; // Given Culture is not supported culture
+			}
+
+		}
+
+	}
+	
+	internal class ZipVerificator
+	{
+		private const int    ZIP_LEAD_BYTES  = 0x04034b50;
+		private const ushort GZIP_LEAD_BYTES = 0x8b1f;
+
+		internal static bool IsPkZipCompressedData(byte[] data)
+		{
+			Debug.Assert(data != null && data.Length >= 4);
+			// if the first 4 bytes of the array are the ZIP signature then it is compressed data
+			return (BitConverter.ToInt32(data, 0) == ZIP_LEAD_BYTES);
+		}
+
+		internal static bool IsGZipCompressedData(byte[] data)
+		{
+			Debug.Assert(data != null && data.Length >= 2);
+			// if the first 2 bytes of the array are theG ZIP signature then it is compressed data;
+			return (BitConverter.ToUInt16(data, 0) == GZIP_LEAD_BYTES);
+		}
+
+		public static bool IsCompressedData(byte[] data)
+		{
+			return IsPkZipCompressedData(data) || IsGZipCompressedData(data);
+		}
+
+		public static bool IsZip(Stream stream)
+		{
+			bool isZip = false;
+			Debug.Assert(stream != null);
+			Debug.Assert(stream.CanSeek);
+			stream.Seek(0, 0);
+
+			try
+			{
+				byte[] bytes = new byte[4];
+
+				stream.Read(bytes, 0, 4);
+
+				if (IsGZipCompressedData(bytes))
+					isZip = true;
+
+				if (IsPkZipCompressedData (bytes))
+					isZip = true;
+			}
+			finally
+			{
+				stream.Seek(0, 0); // set the stream back to the begining
+			}
+
+			return isZip;
+		}
+	}
 	public struct WindowProps
 	{
-		public int  Left;
-		public int  Top;
-		public int?  Width = null;
-		public int?  Height = null;
+		public int   Left;
+		public int   Top;
+		public int?  Width     = null;
+		public int?  Height    = null;
 		public bool? Maximized = null;
 
 		public static WindowProps Parse (string target)

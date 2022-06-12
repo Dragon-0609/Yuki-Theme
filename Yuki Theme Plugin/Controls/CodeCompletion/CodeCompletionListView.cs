@@ -74,7 +74,6 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 
 		private ICompletionData [] SortByGroup (ICompletionData [] compData)
 		{
-			UserDefaultCompletionData ddd = null;
 			var consts = new List <ICompletionData> ();
 			var meths = new List <ICompletionData> ();
 			var extension_meths = new List <ICompletionData> ();

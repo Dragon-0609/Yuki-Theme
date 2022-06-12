@@ -197,9 +197,6 @@ namespace Yuki_Theme.CLI
 				   if (errors.IsHelp () || errors.IsVersion ())
 				   {
 					   helpText = HelpText.AutoBuild (res);
-					   // Console.WriteLine("preOptionsHelp: {0}", GetPrivateField("preOptionsHelp", helpText).ToString());
-					   // Console.WriteLine("optionsHelp: {0}", GetPrivateField("optionsHelp", helpText).ToString());
-					   // Console.WriteLine("postOptionsHelp: {0}", GetPrivateField("postOptionsHelp", helpText).ToString());
 					   Console.WriteLine ( Translation (helpText.ToString () ));
 					   // Console.WriteLine ( helpText.ToString ());
 				   } else
@@ -519,7 +516,7 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
-					if (!Core.CLI.isDefaultTheme[o.Name])
+					if (!Core.CLI.ThemeInfos[o.Name].isDefault)
 					{
 						SetFile (o.Name);
 						Core.CLI.restore ();
@@ -649,7 +646,14 @@ namespace Yuki_Theme.CLI
 				ImportSettings (path);
 			else if (command == "print")
 				PrintSettings ();
+			else if (command == "edit")
+				ConditionalEdition (o.Commands);
 		}
+
+		#endregion
+
+		
+		#region CLI Features
 
 		private static void UpdateC (string path)
 		{
@@ -805,7 +809,17 @@ namespace Yuki_Theme.CLI
 			Console.WriteLine();
 		}
 
+		/// <summary>
+		/// Set parameter by conditional. Syntax: features edit &lt;conditional: valid, null&gt; &lt;parameter: group&gt; &lt;value&gt; <br/> Example: features edit valid && null group "Custom Theme";
+		/// </summary>
+		/// <param name="commands"></param>
+		private static void ConditionalEdition (IEnumerable <string> commands)
+		{
+			
+		}
+		
 		#endregion
+
 		
 		#region Other Methods
 
@@ -940,10 +954,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile);
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -972,10 +986,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile);
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile);
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;

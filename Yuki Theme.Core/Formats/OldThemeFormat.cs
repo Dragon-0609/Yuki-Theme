@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
 using Yuki_Theme.Core.Themes;
 
@@ -205,6 +206,13 @@ namespace Yuki_Theme.Core.Formats
 				docu.Load (path);
 			}
 
+			string nm = GetThemeName (docu);
+
+			return nm;
+		}
+
+		private static string GetThemeName (XmlDocument docu)
+		{
 			XmlNode nod = docu.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
 			string nm = "";
@@ -232,10 +240,10 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void saveList (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			var doc = new XmlDocument ();
-			string themePath = CLI.currentTheme.fullPath;
+			string themePath = themeToSave.fullPath;
 			Tuple <bool, string> content = Helper.GetTheme (themePath);
 			bool iszip = content.Item1;
 
@@ -244,16 +252,12 @@ namespace Yuki_Theme.Core.Formats
 			Dictionary <string, ThemeField> localDic;
 
 			if (Settings.settingMode == SettingMode.Light)
-				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, CLI.currentTheme);
+				localDic = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, themeToSave);
 			else
-				localDic = CLI.currentTheme.Fields;
-			/*foreach (KeyValuePair <string, ThemeField> themeField in localDic)
-			{
-				Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
-			}*/
+				localDic = themeToSave.Fields;
 			MergeThemeFieldsWithFile (localDic, doc);
 
-			MergeCommentsWithFile (CLI.currentTheme, doc);
+			MergeCommentsWithFile (themeToSave, doc);
 
 			SaveXML (img2, img3, wantToKeep, iszip, ref doc, themePath);
 		}
@@ -294,24 +298,24 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc,        string pathForFile, bool needToDoActions, bool isDefault,
-		                                        ref Theme       themeToSet, string nameToLoadForMemory, string extension,
-		                                        bool            customNameForMemory)
+		public static void loadThemeToPopulate (ref XmlDocument doc, string pathToTheme, bool needToDoActions, bool isDefault,
+		                                        ref Theme       themeToSet, string extension,
+		                                        bool            customNameForMemory, bool needToSetDefaultField)
 		{
 			if (isDefault)
 			{
 				Assembly a;
 				string pathForMemory = "";
-				string pathToLoad = Helper.ConvertNameToPath (nameToLoadForMemory);
+				string pathToLoad = Helper.ConvertNameToPath (pathToTheme);
 				if (customNameForMemory)
 				{
 					a = CLI.GetCore ();
-					pathForMemory = pathForFile;
+					pathForMemory = pathToTheme;
 				} else
 				{
-					if (DefaultThemes.names.Contains (nameToLoadForMemory))
+					if (DefaultThemes.names.Contains (pathToTheme))
 					{
-						IThemeHeader header = DefaultThemes.headers [nameToLoadForMemory];
+						IThemeHeader header = DefaultThemes.headers [pathToTheme];
 						a = header.Location;
 						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 					} else
@@ -323,7 +327,8 @@ namespace Yuki_Theme.Core.Formats
 
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
 				themeToSet.fullPath = pathForMemory;
-				themeToSet.isDefault = true;
+				if (needToSetDefaultField)
+					themeToSet.isDefault = true;
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
@@ -349,6 +354,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHave2 != null)
 								CLI_Actions.ifDoesntHave2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
@@ -376,6 +385,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHaveSticker2 != null)
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;
@@ -400,13 +413,24 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathForFile);
-				themeToSet.isDefault = false;
-				themeToSet.fullPath = pathForFile;
+				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
+				if (needToSetDefaultField)
+					themeToSet.isDefault = false;
+				themeToSet.fullPath = pathToTheme;
 				if (content.Item1)
 				{
-					doc.LoadXml (content.Item2);
-					Tuple <bool, Image> iag = Helper.GetImage (pathForFile);
+					try
+					{
+						doc.LoadXml (content.Item2);
+					} catch (XmlException)
+					{
+						if (CLI_Actions.hasProblem != null)
+							CLI_Actions.hasProblem (
+								CLI.Translate ("messages.theme.invalid.full"));
+						throw;
+					}
+
+					Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
 					if (needToDoActions)
 					{
 						if (iag.Item1)
@@ -429,11 +453,15 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHave2 != null)
 								CLI_Actions.ifDoesntHave2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
 
-					iag = Helper.GetSticker (pathForFile);
+					iag = Helper.GetSticker (pathToTheme);
 					if (needToDoActions)
 					{
 						if (iag.Item1)
@@ -451,6 +479,10 @@ namespace Yuki_Theme.Core.Formats
 							if (CLI_Actions.ifDoesntHaveSticker2 != null)
 								CLI_Actions.ifDoesntHaveSticker2 ();
 						}
+					} else
+					{
+						// Release resource
+						iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;
@@ -474,7 +506,7 @@ namespace Yuki_Theme.Core.Formats
 
 					try
 					{
-						doc.Load (pathForFile);
+						doc.Load (pathToTheme);
 					} catch (XmlException)
 					{
 						if (CLI_Actions.hasProblem != null)
@@ -494,21 +526,26 @@ namespace Yuki_Theme.Core.Formats
 			dictionary.Add ("align", ((int)Alignment.Center).ToString ());
 			dictionary.Add ("opacity", "15");
 			dictionary.Add ("stickerOpacity", "100");
+			dictionary.Add ("token", "null");
+			dictionary.Add ("group", "");
 			foreach (XmlComment comm in comms)
 			{
-				if (comm.Value.StartsWith ("align"))
-				{
-					dictionary ["align"] = comm.Value.Substring (6);
-				} else if (comm.Value.StartsWith ("opacity"))
-				{
-					dictionary ["opacity"] = comm.Value.Substring (8);
-				} else if (comm.Value.StartsWith ("sopacity"))
-				{
-					dictionary ["stickerOpacity"] = comm.Value.Substring (9);
-				}
+				GetValueIfStarts (comm, dictionary, "align");
+				GetValueIfStarts (comm, dictionary, "opacity");
+				GetValueIfStarts (comm, dictionary, "stickerOpacity");
+				GetValueIfStarts (comm, dictionary, "token");
+				GetValueIfStarts (comm, dictionary, "group");
 			}
 
 			return dictionary;
+		}
+
+		private static void GetValueIfStarts (XmlComment comm, Dictionary <string, string> dictionary, string key)
+		{
+			if (comm.Value.StartsWith (key))
+			{
+				dictionary [key] = comm.Value.Substring (key.Length + 1);
+			}
 		}
 
 		public static void WriteName (string path, string name)
@@ -562,47 +599,72 @@ namespace Yuki_Theme.Core.Formats
 		}
 
 		/// <summary>
-		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
+		/// Load Theme by name.
 		/// </summary>
-		public static void populateList ()
+		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
+		/// <param name="ToCLI">Need to load to CLI? It'll affect "CLI.names".</param>
+		/// <returns>Parsed theme</returns>
+		public static Theme populateList (string name, bool ToCLI)
 		{
-			bool isDef = CLI.isDefaultTheme [CLI.nameToLoad];
-			Theme theme = new Theme ();
-			theme.isDefault = isDef;
-			theme.Name = CLI.nameToLoad;
+			bool isDef = CLI.ThemeInfos [name].isDefault;
+			bool fromAssembly = CLI.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
+
+			string path = Helper.ConvertNameToPath (name);
+			Theme theme = new Theme
+			{
+				isDefault = isDef,
+				Name = name
+			};
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, CLI.pathToFile, true, isDef, ref theme, CLI.nameToLoad, Helper.FILE_EXTENSTION_OLD, false);
-			} catch
+				loadThemeToPopulate (ref doc, fromAssembly ? name : CLI.pathToFile (path, true), ToCLI, fromAssembly, ref theme,
+				                     Helper.FILE_EXTENSTION_OLD, false, false);
+			} catch (Exception e)
 			{
-				return;
+				Console.WriteLine ("OldTheme.Loading Theme failed");
+				Console.WriteLine ("{0}\n{1}", e.Message, e.StackTrace);
+				return null;
 			}
 
 			theme.Fields = new Dictionary <string, ThemeField> ();
-			PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
+			if (ToCLI)
+				PopulateDictionaryFromDoc (doc, ref theme, ref CLI.names);
+			else
+			{
+				List <string> localNames = new List <string> ();
+				PopulateDictionaryFromDoc (doc, ref theme, ref localNames);
+			}
 
 			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
 			if (!theme.Fields.ContainsKey (methdoName))
 			{
 				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "KeyWords";
 				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
-				CLI.names.Add (methdoName);
+				if (ToCLI)
+					CLI.names.Add (methdoName);
 			}
 
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 			theme.SetAdditionalInfo (additionalInfo);
-			theme.path = CLI.pathToLoad;
+			theme.path = path;
 
+			return theme;
+		}
+
+		/// <summary>
+		/// Load Theme directly to the CLI
+		/// </summary>
+		public static void LoadThemeToCLI ()
+		{
+			Theme theme = populateList (CLI.nameToLoad, true);
 			CLI.currentTheme = theme;
-			/*string all = "";
-			foreach (KeyValuePair <string, Dictionary <string, string>> pair in localAttributes)
+			if (theme == null)
 			{
-				all += pair.Key + "\n";
+				Console.WriteLine ("Theme is null");
+				/*MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
+				                 MessageBoxButtons.OK, MessageBoxIcon.Error);*/
 			}
-			*/
-
-			// System.Windows.Forms.Clipboard.SetText (all);
 		}
 
 		public static void MergeThemeFieldsWithFile (Dictionary <string, ThemeField> local, XmlDocument doc)
@@ -625,15 +687,8 @@ namespace Yuki_Theme.Core.Formats
 
 					foreach (var att in attrs)
 					{
-						
-						try
-						{
-							childNode.Attributes [att.Key].Value = att.Value;
-						} catch
-						{
-							Console.WriteLine ("Couldn't set attribute to {0}: Key = {1}, Value = {2}", nms, att.Key, att.Value);
-						}
-						
+						Console.WriteLine ("{0}: {1}, {2}", nms, att.Key, att.Value);
+						childNode.Attributes [att.Key].Value = att.Value;
 					}
 				}
 
@@ -697,7 +752,7 @@ namespace Yuki_Theme.Core.Formats
 				Dictionary <string, bool> comments = new Dictionary <string, bool>
 				{
 					{ "name", false }, { "align", false }, { "opacity", false }, { "sopacity", false },
-					{ "hasImage", false }, { "hasSticker", false }
+					{ "hasImage", false }, { "hasSticker", false }, { "token", false }, { "group", false }
 				};
 
 				Dictionary <string, string> commentValues = new Dictionary <string, string>
@@ -705,35 +760,20 @@ namespace Yuki_Theme.Core.Formats
 					{ "name", "name:" + themeToMerge.Name }, { "align", "align:" + ((int)themeToMerge.WallpaperAlign) },
 					{ "opacity", "opacity:" + (themeToMerge.WallpaperOpacity) },
 					{ "sopacity", "sopacity:" + (themeToMerge.StickerOpacity) },
-					{ "hasImage", "hasImage:" + themeToMerge.HasWallpaper }, { "hasSticker", "hasSticker:" + themeToMerge.HasSticker }
+					{ "hasImage", "hasImage:" + themeToMerge.HasWallpaper }, { "hasSticker", "hasSticker:" + themeToMerge.HasSticker },
+					{ "token", "token:" + themeToMerge.Token },
+					{ "group", "group:" + themeToMerge.Group }
 				};
 				foreach (XmlComment comm in comms)
 				{
-					if (comm.Value.StartsWith ("align"))
-					{
-						comm.Value = commentValues ["align"];
-						comments ["align"] = true;
-					} else if (comm.Value.StartsWith ("opacity"))
-					{
-						comm.Value = commentValues ["opacity"];
-						comments ["opacity"] = true;
-					} else if (comm.Value.StartsWith ("sopacity"))
-					{
-						comm.Value = commentValues ["sopacity"];
-						comments ["sopacity"] = true;
-					} else if (comm.Value.StartsWith ("name"))
-					{
-						comm.Value = commentValues ["name"];
-						comments ["name"] = true;
-					} else if (comm.Value.StartsWith ("hasImage"))
-					{
-						comm.Value = commentValues ["hasImage"];
-						comments ["hasImage"] = true;
-					} else if (comm.Value.StartsWith ("hasSticker"))
-					{
-						comm.Value = commentValues ["hasSticker"];
-						comments ["hasSticker"] = true;
-					}
+					PasteIfStarts (comm, comments, "align", commentValues ["align"]);
+					PasteIfStarts (comm, comments, "opacity", commentValues ["opacity"]);
+					PasteIfStarts (comm, comments, "sopacity", commentValues ["sopacity"]);
+					PasteIfStarts (comm, comments, "name", commentValues ["name"]);
+					PasteIfStarts (comm, comments, "hasImage", commentValues ["hasImage"]);
+					PasteIfStarts (comm, comments, "hasSticker", commentValues ["hasSticker"]);
+					PasteIfStarts (comm, comments, "token", commentValues ["token"]);
+					PasteIfStarts (comm, comments, "group", commentValues ["group"]);
 				}
 
 				foreach (KeyValuePair <string, bool> comment in comments)
@@ -745,12 +785,28 @@ namespace Yuki_Theme.Core.Formats
 				}
 			} else
 			{
-				node.AppendChild (doc.CreateComment ("name:" + themeToMerge.Name));
-				node.AppendChild (doc.CreateComment ("align:" + ((int)themeToMerge.WallpaperAlign)));
-				node.AppendChild (doc.CreateComment ("opacity:" + (themeToMerge.WallpaperOpacity)));
-				node.AppendChild (doc.CreateComment ("sopacity:" + (themeToMerge.StickerOpacity)));
-				node.AppendChild (doc.CreateComment ("hasImage:" + themeToMerge.HasWallpaper));
-				node.AppendChild (doc.CreateComment ("hasSticker:" + themeToMerge.HasSticker));
+				AddComment (doc, node, "name:" + themeToMerge.Name);
+				AddComment (doc, node, "align:" + ((int)themeToMerge.WallpaperAlign));
+				AddComment (doc, node, "opacity:" + (themeToMerge.WallpaperOpacity));
+				AddComment (doc, node, "sopacity:" + (themeToMerge.StickerOpacity));
+				AddComment (doc, node, "hasImage:" + themeToMerge.HasWallpaper);
+				AddComment (doc, node, "hasSticker:" + themeToMerge.HasSticker);
+				AddComment (doc, node, "token:" + themeToMerge.Token);
+				AddComment (doc, node, "group:" + themeToMerge.Group);
+			}
+		}
+
+		private static void AddComment (XmlDocument doc, XmlNode node, string comment)
+		{
+			node.AppendChild (doc.CreateComment (comment));
+		}
+
+		private static void PasteIfStarts (XmlComment comm, Dictionary <string, bool> comments, string key, string value)
+		{
+			if (comm.Value.StartsWith (key))
+			{
+				comm.Value = value;
+				comments [key] = true;
 			}
 		}
 
@@ -767,5 +823,30 @@ namespace Yuki_Theme.Core.Formats
 			return res;
 		}
 		
+		public static Tuple<bool, string> VerifyToken (string path)
+		{
+			bool valid = false;
+			string group = "";
+			Theme theme = new Theme ();
+
+			var doc = new XmlDocument ();
+			try
+			{
+				Console.WriteLine ("Loading theme: {0}", path);
+				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
+				Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+				theme.SetAdditionalInfo (additionalInfo);
+				theme.Name = GetThemeName (doc);
+				valid = Helper.VerifyToken (theme);
+				group = theme.Group;
+				Console.WriteLine ("Theme token: {0}", theme.Token);
+				Console.WriteLine ("IsValid: {0}\n", valid);
+			} catch
+			{
+				// ignored
+			}
+
+			return new Tuple <bool, string> (valid, theme.Group);
+		}
 	}
 }

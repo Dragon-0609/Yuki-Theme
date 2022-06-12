@@ -45,13 +45,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			foreach (string item in CLI.schemes)
 			{
-				if (CLI.isDefaultTheme [item])
+				if (CLI.ThemeInfos[item].isDefault)
 				{
 					ManageableItem cat = groupItems [DefaultThemes.getCategory (item)];
-					new ManageableItem (item, item, false, CLI.oldThemeList [item], cat);
+					new ManageableItem (item, item, false, CLI.ThemeInfos[item].isOld, cat);
 				} else
 				{
-					new ManageableItem (item, item, false, CLI.oldThemeList [item], custom);
+					new ManageableItem (item, item, false, CLI.ThemeInfos[item].isOld, custom);
 				}
 			}
 

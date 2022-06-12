@@ -41,6 +41,7 @@
 			this.close_btn = new System.Windows.Forms.Button ();
 			this.sBox = new FastColoredTextBoxNS.FastColoredTextBox ();
 			this.panel1 = new System.Windows.Forms.Panel ();
+			this.downloader = new System.Windows.Forms.Button ();
 			this.editorp2 = new System.Windows.Forms.Panel ();
 			this.imageEditor = new System.Windows.Forms.Panel ();
 			this.alignpanel = new System.Windows.Forms.Panel ();
@@ -142,7 +143,7 @@
 			this.bottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.bottomPanel.Location = new System.Drawing.Point (170, 423);
 			this.bottomPanel.Name = "bottomPanel";
-			this.bottomPanel.Size = new System.Drawing.Size (520, 38);
+			this.bottomPanel.Size = new System.Drawing.Size (547, 38);
 			this.bottomPanel.TabIndex = 17;
 			// 
 			// select_btn
@@ -150,7 +151,7 @@
 			this.select_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.select_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.select_btn.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.select_btn.Location = new System.Drawing.Point (365, 6);
+			this.select_btn.Location = new System.Drawing.Point (392, 6);
 			this.select_btn.Name = "select_btn";
 			this.select_btn.Size = new System.Drawing.Size (67, 23);
 			this.select_btn.TabIndex = 10;
@@ -164,7 +165,7 @@
 			this.close_btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.close_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.close_btn.Font = new System.Drawing.Font ("Microsoft Sans Serif", 8.25F);
-			this.close_btn.Location = new System.Drawing.Point (446, 6);
+			this.close_btn.Location = new System.Drawing.Point (473, 6);
 			this.close_btn.Name = "close_btn";
 			this.close_btn.Size = new System.Drawing.Size (67, 23);
 			this.close_btn.TabIndex = 9;
@@ -207,13 +208,14 @@
 			this.sBox.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject ("sBox.ServiceColors")));
 			this.sBox.ServiceLinesColor = System.Drawing.Color.Red;
 			this.sBox.ShowFoldingLines = true;
-			this.sBox.Size = new System.Drawing.Size (520, 278);
+			this.sBox.Size = new System.Drawing.Size (547, 278);
 			this.sBox.TabIndex = 5;
 			this.sBox.Text = "begin\r\nWriteln(\'Hello World\');\r\nend.";
 			this.sBox.Zoom = 100;
 			// 
 			// panel1
 			// 
+			this.panel1.Controls.Add (this.downloader);
 			this.panel1.Controls.Add (this.editorp2);
 			this.panel1.Controls.Add (this.editorpanel);
 			this.panel1.Controls.Add (this.import_directory);
@@ -224,8 +226,22 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point (170, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size (520, 142);
+			this.panel1.Size = new System.Drawing.Size (547, 142);
 			this.panel1.TabIndex = 6;
+			// 
+			// downloader
+			// 
+			this.downloader.BackColor = System.Drawing.Color.Chocolate;
+			this.downloader.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.downloader.FlatAppearance.BorderSize = 0;
+			this.downloader.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.downloader.Font = new System.Drawing.Font ("Book Antiqua", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.downloader.Location = new System.Drawing.Point (515, 10);
+			this.downloader.Name = "downloader";
+			this.downloader.Size = new System.Drawing.Size (20, 20);
+			this.downloader.TabIndex = 20;
+			this.downloader.UseVisualStyleBackColor = false;
+			this.downloader.Click += new System.EventHandler (this.downloader_Click);
 			// 
 			// editorp2
 			// 
@@ -599,7 +615,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
-			this.ClientSize = new System.Drawing.Size (690, 461);
+			this.ClientSize = new System.Drawing.Size (717, 461);
 			this.Controls.Add (this.panel1);
 			this.Controls.Add (this.sBox);
 			this.Controls.Add (this.bottomPanel);
@@ -626,6 +642,8 @@
 			this.editorpanel.ResumeLayout (false);
 			this.ResumeLayout (false);
 		}
+
+		private System.Windows.Forms.Button downloader;
 
 		private System.Windows.Forms.Panel editorp2;
 

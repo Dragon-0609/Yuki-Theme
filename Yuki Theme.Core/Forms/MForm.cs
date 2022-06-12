@@ -494,15 +494,17 @@ namespace Yuki_Theme.Core.Forms
 			{
 				ReItem litem;
 				Console.WriteLine (item);
-				if (CLI.isDefaultTheme [item])
+				ThemeInfo info = CLI.ThemeInfos [item];
+				
+				if (info.isDefault)
 				{
 					ReItem cat = groupItems [DefaultThemes.getCategory (item)];
 					Console.WriteLine (cat.Name);
-					litem = new ReItem (item, false, CLI.oldThemeList [item], cat);
+					litem = new ReItem (item, false, info.isOld, cat);
 				} else
 				{
 					Console.WriteLine (custom.Name);
-					litem = new ReItem (item, false, CLI.oldThemeList [item], custom);
+					litem = new ReItem (item, false, info.isOld, custom);
 				}
 			}
 
@@ -896,8 +898,8 @@ namespace Yuki_Theme.Core.Forms
 					}
 
 					restore_Click (sender, e);
-
-					save_button.Visible = !isDefault ();
+					if (CLI.currentTheme != null)
+						save_button.Visible = !isDefault ();
 
 					selectedItem = schemes.SelectedItem.ToString ();
 					database.UpdateData (Settings.ACTIVE, selectedItem);
@@ -1362,6 +1364,12 @@ namespace Yuki_Theme.Core.Forms
 		}
 
 		#endregion
+
+		private void downloader_Click (object sender, EventArgs e)
+		{
+			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm ();
+			downloaderForm.Show();
+		}
 	}
 
 

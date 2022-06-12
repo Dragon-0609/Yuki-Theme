@@ -75,9 +75,7 @@ namespace Yuki_Theme.Tests
 				if (copyTo != null && copyFrom != null)
 				{
 					string patsh = Path.Combine (CLI.currentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}" + (CLI.oldThemeList [copyFrom]
-						                             ? Helper.FILE_EXTENSTION_OLD
-						                             : Helper.FILE_EXTENSTION_NEW));
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (CLI.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
