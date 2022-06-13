@@ -103,10 +103,10 @@ namespace Yuki_Theme.CLI
 				CheckUpdateInslattaion ();
 				loop = true;
 				ShowLoopMessage ();
-				completion = new Completion();
+				completion = new Completion ();
 				ReadLine.AutoCompletionHandler = completion;
 				ReadLine.HistoryEnabled = true;
-				
+
 				LoadCLI (true);
 				while (!quit)
 				{
@@ -116,6 +116,7 @@ namespace Yuki_Theme.CLI
 					{
 						command = command.Substring (5);
 					}
+
 					Parse (parser, ParseArguments (command));
 				}
 			}
@@ -197,7 +198,7 @@ namespace Yuki_Theme.CLI
 				   if (errors.IsHelp () || errors.IsVersion ())
 				   {
 					   helpText = HelpText.AutoBuild (res);
-					   Console.WriteLine ( Translation (helpText.ToString () ));
+					   Console.WriteLine (Translation (helpText.ToString ()));
 					   // Console.WriteLine ( helpText.ToString ());
 				   } else
 				   {
@@ -231,7 +232,6 @@ namespace Yuki_Theme.CLI
 		}
 
 		#region Commands
-
 
 		private static void CopyC (CopyCommand o)
 		{
@@ -516,7 +516,7 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
-					if (!Core.CLI.ThemeInfos[o.Name].isDefault)
+					if (!Core.CLI.ThemeInfos [o.Name].isDefault)
 					{
 						SetFile (o.Name);
 						Core.CLI.restore ();
@@ -630,14 +630,14 @@ namespace Yuki_Theme.CLI
 				ShowError (Core.CLI.Translate ("cli.errors.cantedit", o.Name));
 			}
 		}
-		
+
 		private static void FeaturesC (FeatureCommand o)
 		{
-			string command = o.Commands.ElementAt (0).ToLower();
+			string command = o.Commands.ElementAt (0).ToLower ();
 			string path = "null";
 			if (o.Commands.Count () == 2)
 				path = o.Commands.ElementAt (1);
-			
+
 			if (command == "update")
 				UpdateC (path);
 			else if (command == "export")
@@ -652,7 +652,7 @@ namespace Yuki_Theme.CLI
 
 		#endregion
 
-		
+
 		#region CLI Features
 
 		private static void UpdateC (string path)
@@ -730,7 +730,6 @@ namespace Yuki_Theme.CLI
 				}
 			} else // Check Update
 			{
-				
 			}
 		}
 
@@ -770,7 +769,7 @@ namespace Yuki_Theme.CLI
 				try
 				{
 					string input = File.ReadAllText (path, Encoding.UTF8);
-					string[] lines = input.Split ('\n');
+					string [] lines = input.Split ('\n');
 					Dictionary <int, string> dict = new Dictionary <int, string> ();
 					foreach (string line in lines)
 					{
@@ -784,7 +783,8 @@ namespace Yuki_Theme.CLI
 
 					Settings.database.UpdateData (dict);
 					Settings.connectAndGet ();
-					ShowSuccess (Core.CLI.Translate ("cli.success.settings.import.full"), Core.CLI.Translate ("cli.success.settings.import.short"));
+					ShowSuccess (Core.CLI.Translate ("cli.success.settings.import.full"),
+					             Core.CLI.Translate ("cli.success.settings.import.short"));
 				} catch (Exception e)
 				{
 					ShowError (Core.CLI.Translate ("cli.errors.happened", e.ToString ()));
@@ -801,26 +801,29 @@ namespace Yuki_Theme.CLI
 		{
 			Settings.connectAndGet ();
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
-			Console.WriteLine();
+			Console.WriteLine ();
 			foreach (KeyValuePair <int, string> pair in dict)
 			{
 				Console.WriteLine ($"{pair.Key} => {pair.Value}");
 			}
-			Console.WriteLine();
+
+			Console.WriteLine ();
 		}
 
 		/// <summary>
-		/// Set parameter by conditional. Syntax: features edit &lt;conditional: valid, null&gt; &lt;parameter: group&gt; &lt;value&gt; <br/> Example: features edit valid && null group "Custom Theme";
+		/// Set parameter by conditional. Syntax: features edit if [parameter: group, token] [value: null, true] set &lt;parameter: group&gt; &lt;value&gt;
+		/// <br/> Example: features edit if token true && group null set group "Custom Theme"
 		/// </summary>
 		/// <param name="commands"></param>
 		private static void ConditionalEdition (IEnumerable <string> commands)
 		{
+			CollectConditionsAndFields (commands, out List <Condition> conditions, out List <Condition> fieldsToSet);
 			
 		}
-		
+
 		#endregion
 
-		
+
 		#region Other Methods
 
 		private static void AskPath (string content, string title)
@@ -954,10 +957,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
+					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -986,10 +989,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
+				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile(Core.CLI.pathToLoad, true));
+					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -1012,7 +1015,7 @@ namespace Yuki_Theme.CLI
 			return content;
 		}
 
-		
+
 		/// <summary>
 		/// If something went wrong, here we can Write it to console with Red Color.
 		/// </summary>
@@ -1035,7 +1038,7 @@ namespace Yuki_Theme.CLI
 			Console.ForegroundColor = clr;
 		}
 
-		
+
 		private static void SetImageLocation (EditCommand o)
 		{
 			if (o.Path != null)
@@ -1168,7 +1171,7 @@ namespace Yuki_Theme.CLI
 				if (cv.Length > 1)
 				{
 					translation = "";
-					int cvLength = cv.Length-1;
+					int cvLength = cv.Length - 1;
 					for (var i = 0; i < cv.Length; i++)
 					{
 						translation += cv [i];
@@ -1178,7 +1181,7 @@ namespace Yuki_Theme.CLI
 						}
 					}
 				}
-				
+
 				int cnt = 0;
 				string [] cc = translation.Split (' ');
 				if (cc.Length > 1)
@@ -1217,8 +1220,71 @@ namespace Yuki_Theme.CLI
 					ke.DeleteValue ("cli_update");
 			}
 		}
-		
+
 		#endregion
+
+		private static string [] CommandsToSkip
+		{
+			get => new [] { "edit", "if" };
+		}
+
+		private static bool ConditionalSkip (string command)
+		{
+			return CommandsToSkip.Contains (command);
+		}
+
+		private static bool IsSetMode (string command)
+		{
+			return command == "set";
+		}
 		
+		private static void CollectConditionsAndFields (IEnumerable <string> commands, out List <Condition> conditions, out List <Condition> fieldsToSet)
+		{
+			string [] coms = commands.ToArray ();
+			bool isSetMode = false;
+			conditions = new List <Condition> ();
+
+			fieldsToSet = new List <Condition> ();
+
+			Condition currentCondition = new Condition ();
+
+			foreach (string commad in coms)
+			{
+				string command = commad.ToLower ();
+
+				if (ConditionalSkip (command)) continue;
+
+				if (!isSetMode && IsSetMode (command))
+				{
+					isSetMode = true;
+					if (currentCondition.Equality != "") conditions.Add (currentCondition);
+					currentCondition = new Condition ();
+					continue;
+				}
+
+				if (isSetMode)
+				{
+					if (conditions.Count == 0)
+					{
+						ShowError (Core.CLI.Translate ("cli.errors.conditions.null"));
+						return;
+					}
+
+					if (!currentCondition.CouldSetOneOfThem (command))
+					{
+						fieldsToSet.Add (currentCondition);
+						currentCondition = new Condition ();
+					}
+				} else
+				{
+					if (!currentCondition.CouldSetOneOfThem (command))
+					{
+						conditions.Add (currentCondition);
+						currentCondition = new Condition ();
+					}
+				}
+			}
+		}
+
 	}
 }

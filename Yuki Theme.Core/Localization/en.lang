@@ -259,6 +259,7 @@
     "cli.errors.find.file": "Couldn't find the file",
     "cli.errors.export.extension": "'{0}' doesn't have extension. The path should have extension. Therefore, the path set to '{1}'",
     "cli.errors.export.null": "The path is empty. You should write the path to import settings",
+    "cli.errors.conditions.null": "You should pass condition to use this command.",
     
     "cli.success.settings.saved.short": "Saved",
     "cli.success.settings.saved.full": "Settings are saved",

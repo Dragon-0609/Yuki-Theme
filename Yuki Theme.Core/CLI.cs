@@ -12,6 +12,7 @@ using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
+using static Yuki_Theme.Core.CLI;
 using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Yuki_Theme.Core
@@ -117,8 +118,9 @@ namespace Yuki_Theme.Core
 				if (!exist)
 				{
 					schemes.Add (name);
-					
-					AddThemeInfo (name, false, ThemeInfos[copyFrom].isOld, ThemeLocation.File);
+					AddThemeInfo (
+						name,
+						new ThemeInfo (false, ThemeInfos [copyFrom].isOld, ThemeLocation.File, Translate ("messages.theme.group.custom")));
 				}
 
 				if (Helper.mode == ProductMode.CLI)
@@ -639,7 +641,7 @@ namespace Yuki_Theme.Core
 			string destination = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
 			ExtractSyntaxTemplate (syntax, destination);
 
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, currentTheme);
 			Console.WriteLine (syntax.ToString ());
 			MergeFiles (destination, localDic);
 		}
@@ -670,7 +672,7 @@ namespace Yuki_Theme.Core
 			var doc = new XmlDocument ();
 			doc.LoadXml (content);
 
-			Dictionary <string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, CLI.currentTheme);
+			Dictionary <string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, currentTheme);
 
 			MergeFiles (localFields, theme, ref doc);
 
@@ -687,7 +689,7 @@ namespace Yuki_Theme.Core
 		
 		public static Dictionary <string, ThemeField> ConvertToRealNames (SyntaxType syntax)
 		{
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, CLI.currentTheme);
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, currentTheme);
 			return localDic;
 		}
 		
@@ -914,7 +916,9 @@ namespace Yuki_Theme.Core
 						if (!has && pts.Length > 0)
 						{
 							schemes.Add (pts);
-							AddThemeInfo (pts, false, IsOldTheme (file), ThemeLocation.File);
+							AddThemeInfo (
+								pts,
+								new ThemeInfo (false, IsOldTheme (file), ThemeLocation.File, Translate ("messages.theme.group.custom")));
 						}
 					} else
 					{
@@ -941,8 +945,8 @@ namespace Yuki_Theme.Core
 					DefaultThemes.categoriesList.Add (group);
 				}
 			}
-			
-			ThemeInfo info = new ThemeInfo (true, IsOldTheme (file), ThemeLocation.File);
+
+			ThemeInfo info = new ThemeInfo (true, IsOldTheme (file), ThemeLocation.File, group, true);
 			if (ThemeInfos.ContainsKey (name))
 				ThemeInfos [name] = info;
 			else
@@ -967,9 +971,9 @@ namespace Yuki_Theme.Core
 			}
 		}
 
-		public static void AddThemeInfo (string name, bool isDefault, bool isOld, ThemeLocation location)
+		public static void AddThemeInfo (string name, ThemeInfo themeInfo)
 		{
-			ThemeInfos.Add (name, new ThemeInfo (isDefault, isOld, location));
+			ThemeInfos.Add (name, themeInfo);
 		}
 
 		private static int GetIndexForInsert (string forName, string group)

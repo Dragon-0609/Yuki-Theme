@@ -29,7 +29,7 @@ namespace Yuki_Theme.Core.Themes
 			{
 				if(!CLI.ThemeInfos.ContainsKey (themeName.Key))
 				{
-					CLI.AddThemeInfo (themeName.Key, true, themeName.Value, ThemeLocation.Memory);
+					CLI.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
 					categories.Add (themeName.Key, header.GroupName);
 					headers.Add (themeName.Key, header);
 				}

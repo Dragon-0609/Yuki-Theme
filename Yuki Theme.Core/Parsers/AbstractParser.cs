@@ -77,7 +77,8 @@ namespace Yuki_Theme.Core.Parsers
 				finishParsing (path);
 				if (!overwrite)
 				{
-					CLI.AddThemeInfo (flname, false, true, ThemeLocation.File);
+					CLI.AddThemeInfo (
+						flname, new ThemeInfo (false, true, ThemeLocation.File, CLI.Translate ("messages.theme.group.custom")));
 					CLI.names.Add (flname);
 				if (addToUIList != null)
 					addToUIList (flname);
