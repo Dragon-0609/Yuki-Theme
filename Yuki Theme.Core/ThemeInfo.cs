@@ -1,4 +1,6 @@
-﻿namespace Yuki_Theme.Core;
+﻿using Yuki_Theme.CLI;
+
+namespace Yuki_Theme.Core;
 
 public class ThemeInfo
 {
@@ -29,5 +31,17 @@ public class ThemeInfo
 	public override string ToString ()
 	{
 		return $"Default: {isDefault}, Old: {isOld}, Location: {location}";
+	}
+
+	public bool CheckCondition (string name, Condition condition)
+	{
+		bool result = false;
+		result = Condition.Conditions [condition.Target] (this, condition);
+		return result;
+	}
+
+	public ThemeInfo SetField (string name, Condition condition)
+	{
+		return Condition.Fields [condition.Target] (name, this, condition);
 	}
 }

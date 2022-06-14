@@ -52,8 +52,8 @@ namespace Yuki_Theme.Core
 		public static void load_schemes (Func <string> ifZero = null)
 		{
 			schemes.Clear ();
-
 			ThemeInfos.Clear ();
+			DefaultThemes.Clear ();
 			DefaultThemes.addDefaultThemes ();
 			DefaultThemes.addExternalThemes ();
 			schemes.AddRange (DefaultThemes.names);
@@ -211,7 +211,7 @@ namespace Yuki_Theme.Core
 			Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
 			if (!isDefault ())
 			{
-				saveList (currentTheme, img2, img3, wantToKeep);
+				SaveTheme (currentTheme, img2, img3, wantToKeep);
 				if (isEdited) isEdited = false;
 			}
 		}
@@ -613,14 +613,14 @@ namespace Yuki_Theme.Core
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
 		/// <param name="wantToKeep">Want to keep old wallpaper and sticker if file is exist</param>
-		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void SaveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			if (!isDefault ())
 			{
-				if (Settings.saveAsOld)
-					OldThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
+				if (themeToSave.IsOld)
+					OldThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
 				else
-					NewThemeFormat.saveList (themeToSave, img2, img3, wantToKeep);
+					NewThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
 			}
 		}
 
@@ -918,7 +918,8 @@ namespace Yuki_Theme.Core
 							schemes.Add (pts);
 							AddThemeInfo (
 								pts,
-								new ThemeInfo (false, IsOldTheme (file), ThemeLocation.File, Translate ("messages.theme.group.custom")));
+								new ThemeInfo (false, IsOldTheme (file), ThemeLocation.File,
+								               groupName == "" ? Translate ("messages.theme.group.custom") : groupName));
 						}
 					} else
 					{

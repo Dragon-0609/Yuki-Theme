@@ -204,6 +204,7 @@
     "cli.help.copy": "Копировать выбранные темы\ncopy <из> <в>",
     "cli.help.copy.names": "copy <из> <в>",
     "cli.help.list": "Показать список тем",
+    "cli.help.list.groups": "Показать список тем с группами",
     "cli.help.clear": "Очистить консоль",
     "cli.help.fields": "Показать основные поля",
     "cli.help.allfields": "Показать все поля",
@@ -228,9 +229,8 @@
     "cli.help.edit.opacity": "Прозрачность изображения.\n\n Например:\n yuki edit Test -d Image -o 15",
     "cli.help.edit.align": "Выравнивание изображения.\n\n Например:\n yuki edit Test -d Image -a left",
     "cli.help.edit.path": "Путь до изображения.\n\n Например:\n yuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\"",
-    "cli.help.features": "",
+    "cli.help.features": "Присвоит значение параметру при условии.Синтаксис:\nfeatures edit if <параметр: group, token> <значение: null, true, false> set <параметр: group> <значение>\nПример: features edit if token true && group null set group \"Пользовательская\"",
     "cli.help.features.update": "Установить обновление с введённого пути",
-    "cli.help.features.": "",
     
     "cli.errors.nocommand": "Команда \"{0}\" не найдена.",
     "cli.errors.nooption": "Выбор \"{0}\" не найдена.",

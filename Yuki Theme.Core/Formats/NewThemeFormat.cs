@@ -36,7 +36,7 @@ namespace Yuki_Theme.Core.Formats
 		/// <param name="img3">Sticker</param>
 		/// <param name="wantToKeep"></param>
 		/// <param name="themeToSave"></param>
-		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void saveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			string json = JsonConvert.SerializeObject (themeToSave, Formatting.Indented);
 			bool iszip = Helper.IsZip (themeToSave.fullPath);

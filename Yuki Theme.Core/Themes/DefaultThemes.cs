@@ -60,5 +60,13 @@ namespace Yuki_Theme.Core.Themes
 				res = categories [st];
 			return res;
 		}
+
+		public static void Clear ()
+		{
+			categories.Clear ();
+			categoriesList.Clear ();
+			headers.Clear ();
+			headersList.Clear ();
+		}
 	}
 }

@@ -625,7 +625,7 @@ public partial class ThemeDownloaderForm : Form
 				theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 				Console.WriteLine ("Token: {0}", theme.Token);
 				CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-				CLI.saveList (theme, wallpaper, sticker);
+				CLI.SaveTheme (theme, wallpaper, sticker);
 				wallpaper.Dispose ();
 				sticker.Dispose ();
 				AddNSetProgress ();

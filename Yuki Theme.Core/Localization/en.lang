@@ -204,6 +204,7 @@
     "cli.help.copy": "Copy the specified themes\ncopy <from> <to>",
     "cli.help.copy.names": "Copy <from> <to>",
     "cli.help.list": "Show list of themes",
+    "cli.help.list.groups": "Show list of themes with groups",
     "cli.help.clear": "Clear the CLI",
     "cli.help.fields": "Show main editable fields",
     "cli.help.allfields": "Show all editable fields",
@@ -228,9 +229,8 @@
     "cli.help.edit.opacity": "Opacity of the image.\n\n For example:\n yuki edit Test -d Image -o 15",
     "cli.help.edit.align": "Alignment of the image.\n\n For example:\n yuki edit Test -d Image -a left",
     "cli.help.edit.path": "Path to the image.\n\n For example:\n yuki edit Test -d Image -p \"C:\\Test\\wallpaper.png\"",
-    "cli.help.features": "",
+    "cli.help.features": "Set value to parameter by conditional.Syntax:\nfeatures edit if <parameter: group, token> <value: null, true, false> set <parameter: group> <value>\nExample: features edit if token true && group null set group \"Custom Theme\"",
     "cli.help.features.update": "Install update from the path",
-    "cli.help.features.": "",
     
     "cli.errors.nocommand": "There is no \"{0}\" subcommand.",
     "cli.errors.nooption": "There is no \"{0}\" option.",
@@ -260,6 +260,7 @@
     "cli.errors.export.extension": "'{0}' doesn't have extension. The path should have extension. Therefore, the path set to '{1}'",
     "cli.errors.export.null": "The path is empty. You should write the path to import settings",
     "cli.errors.conditions.null": "You should pass condition to use this command.",
+    "cli.errors.setter.null": "You should pass parameter for set to use this command.",
     
     "cli.success.settings.saved.short": "Saved",
     "cli.success.settings.saved.full": "Settings are saved",

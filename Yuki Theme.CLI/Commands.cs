@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CommandLine;
+using Yuki_Theme.Core;
 
 namespace Yuki_Theme.CLI
 {
@@ -15,6 +16,8 @@ namespace Yuki_Theme.CLI
 	[Verb("list", HelpText = "cli.help.list")]
 	public class ListCommand
 	{
+		[Option('g', "group", Default = false, Required = false, HelpText = "cli.help.list.groups")]
+		public bool ShowGroups { get; set; }
 	}
 
 	[Verb("clear", HelpText = "cli.help.clear")]
@@ -107,7 +110,7 @@ namespace Yuki_Theme.CLI
 	[Verb ("features", HelpText = "cli.help.features")]
 	public class FeatureCommand
 	{
-		[Value( 0, HelpText = "cli.help.copy.names", Min = 1, Max = 2, MetaName = "Commands")]
+		[Value( 0, HelpText = "cli.help.copy.names", Min = 1, Max = 8, MetaName = "Commands")]
 		public IEnumerable<string> Commands {get; set;}
 
 	}

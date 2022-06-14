@@ -127,7 +127,6 @@ namespace Yuki_Theme.Core.Formats
 				{
 					if (att.Name == "color" || att.Name == "bgcolor")
 					{
-						// Console.WriteLine($"{nm}: {att.Name}");
 						if (node.Name == "SelectedFoldLine")
 						{
 							if (att.Name == "color")
@@ -240,7 +239,7 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void saveList (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void saveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			var doc = new XmlDocument ();
 			string themePath = themeToSave.fullPath;
@@ -687,7 +686,6 @@ namespace Yuki_Theme.Core.Formats
 
 					foreach (var att in attrs)
 					{
-						Console.WriteLine ("{0}: {1}, {2}", nms, att.Key, att.Value);
 						childNode.Attributes [att.Key].Value = att.Value;
 					}
 				}
@@ -832,21 +830,18 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				Console.WriteLine ("Loading theme: {0}", path);
 				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
 				Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 				theme.SetAdditionalInfo (additionalInfo);
 				theme.Name = GetThemeName (doc);
 				valid = Helper.VerifyToken (theme);
 				group = theme.Group;
-				Console.WriteLine ("Theme token: {0}", theme.Token);
-				Console.WriteLine ("IsValid: {0}\n", valid);
 			} catch
 			{
 				// ignored
 			}
 
-			return new Tuple <bool, string> (valid, theme.Group);
+			return new Tuple <bool, string> (valid, group);
 		}
 	}
 }

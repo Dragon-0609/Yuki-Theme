@@ -178,7 +178,6 @@ namespace Yuki_Theme.Core
 				}
 			} catch
 			{
-				Console.WriteLine("{0} - isn't zip", path);
 				result = new Tuple <bool, string> (false, "");
 			}
 			return result;
@@ -820,7 +819,6 @@ namespace Yuki_Theme.Core
 	        if (theme != null && theme.Token != null)
 	        {
 		        string token = theme.Token;
-		        Console.WriteLine("Name: {0}", theme.Name);
 		        if (token == "" || token.Length < 6) return false;
 		        try
 		        {
