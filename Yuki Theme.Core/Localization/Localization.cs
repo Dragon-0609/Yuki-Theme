@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 
@@ -19,6 +20,8 @@ public class Localization
 	private int       recursionCalls = 0;
 
 	public Func <string> TryToGetLanguage;
+	
+	public string [] GetShortLanguageNames => languages;
 
 	public void SearchLocals ()
 	{
@@ -153,10 +156,15 @@ public class Localization
 	public string GetLanguageISO2 (string lang)
 	{
 		return languages [Array.IndexOf (languagesdisplay, lang)];
-	}
-
+	} 
+	
 	public int GetIndexOfLangShort (string lang)
 	{
 		return Array.IndexOf (languages, lang);
+	}
+
+	public bool ContainsLanguageISO2 (string lang)
+	{
+		return languages.Contains (lang);
 	}
 }

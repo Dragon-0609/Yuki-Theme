@@ -78,6 +78,9 @@ namespace Yuki_Theme.CLI
 
 		[Option ('a', "action", Required = false, HelpText = "cli.help.settings.action")]
 		public string Action { get; set; }
+
+		[Option ('l', "language", Required = false, HelpText = "cli.help.settings.language")]
+		public string Language { get; set; }
 	}
 
 	[Verb ("edit", HelpText = "cli.help.edit")]
@@ -110,7 +113,7 @@ namespace Yuki_Theme.CLI
 	[Verb ("features", HelpText = "cli.help.features")]
 	public class FeatureCommand
 	{
-		[Value( 0, HelpText = "cli.help.copy.names", Min = 1, Max = 8, MetaName = "Commands")]
+		[Value( 0, HelpText = "cli.help.copy.names", Min = 1, Max = 11, MetaName = "Commands")]
 		public IEnumerable<string> Commands {get; set;}
 
 	}

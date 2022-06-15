@@ -939,7 +939,6 @@ namespace Yuki_Theme.Core
 					schemes.Insert (index, name);
 				else
 					schemes.Add (name);
-				Console.WriteLine("{1} -> {0} <-> {2}", index, name, group);
 				DefaultThemes.categories.Add (name, group);
 				if (!DefaultThemes.categoriesList.Contains (group))
 				{

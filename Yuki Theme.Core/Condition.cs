@@ -13,7 +13,7 @@ namespace Yuki_Theme.CLI
 			{ "group", CheckGroupCondition },
 			{ "token", CheckTokenCondition }
 		};
-		
+
 		public static Dictionary <string, Func <string, ThemeInfo, Condition, ThemeInfo>> Fields = new ()
 		{
 			{ "group", SetGroup }
@@ -21,14 +21,14 @@ namespace Yuki_Theme.CLI
 
 		public static Dictionary <string, bool> NeedToLoadThemeInConditions = new ()
 		{
-			{"group", false},{"token", false},
+			{ "group", false }, { "token", false },
 		};
 
 		public static Dictionary <string, bool> NeedToLoadThemeInFields = new ()
 		{
-			{"group", false}
+			{ "group", false }
 		};
-		
+
 		public string Target   = "";
 		public string Equality = "";
 
@@ -40,6 +40,7 @@ namespace Yuki_Theme.CLI
 					Target = value;
 			} else if (Equality == "") Equality = value;
 			else return false;
+
 			return true;
 		}
 
@@ -50,14 +51,12 @@ namespace Yuki_Theme.CLI
 			else return false;
 			return true;
 		}
-		
-		
-		
+
 
 		private static bool CheckGroupCondition (ThemeInfo info, Condition condition)
 		{
 			Console.WriteLine ($"GROUP: {info.group} | {condition.Equality}");
-			if (condition.Equality.ToLower() == "null")
+			if (condition.Equality.ToLower () == "null")
 				return info.group == "";
 			else
 				return info.group == condition.Equality;
@@ -75,9 +74,65 @@ namespace Yuki_Theme.CLI
 			info.group = value.Equality;
 			Theme theme = Core.CLI.GetTheme (name);
 			theme.Group = info.group;
-			Console.WriteLine (theme.Group);
 			Core.CLI.SaveTheme (theme, null, null, true);
 			return info;
 		}
+		
+		
+		/*private Condition toCheckAnd  = null;
+		private Condition toCheckAnd2 = null;
+
+		private Condition toCheckOr  = null;
+		private Condition toCheckOr2 = null;
+
+		public Condition ToCheckAnd
+		{
+			get => toCheckAnd;
+			set
+			{
+				toCheckAnd = value;
+				if (value != null){
+					value.toCheckAnd = this;
+				}
+			}
+		}
+
+		public Condition ToCheckAnd2
+		{
+			get => toCheckAnd2;
+			set
+			{
+				toCheckAnd2 = value;
+				if (value != null){
+					value.toCheckAnd2 = this;
+				}
+			}
+		}
+
+		public Condition ToCheckOr
+		{
+			get => toCheckOr;
+			set
+			{
+				toCheckOr = value;
+				if (value != null){
+					value.toCheckOr = this;
+				}
+			}
+		}
+
+		public Condition ToCheckOr2
+		{
+			get => toCheckOr2;
+			set
+			{
+				toCheckOr2 = value;
+				if (value != null){
+					value.toCheckOr2 = this;
+				}
+			}
+		
+		}*/
+
 	}
 }

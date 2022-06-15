@@ -10,7 +10,7 @@ namespace CLITools
 		// characters to start completion from
 		public char [] Separators { get; set; }
 
-		private  Dictionary <string, string []> commands;
+		internal Dictionary <string, string []> commands;
 		internal Dictionary <string, string []> themes;
 
 		internal string [] definitions;
@@ -21,6 +21,8 @@ namespace CLITools
 		// index - The index of the terminal cursor within {text}
 		public string [] GetSuggestions (string text, int index)
 		{
+			if (text.StartsWith (" ")) text = text.TrimStart ();
+			
 			string [] clx = null;
 			
 			if (CheckDictionary (text, commands, false, out string [] strings)) return strings;
@@ -115,13 +117,20 @@ namespace CLITools
 			Separators = new [] { ' ', '.', '/' };
 			commands = new Dictionary <string, string []>
 			{
-				{ "features", new [] { "export", "import", "print", "update" } },
-				{ "settings", new [] { "--path", "--quiet", "--mode", "--action" } }
+				{ "features edit if token", new [] { "true", "false" } },
+				{ "features edit if group", new [] { "null" } },
+				{ "features edit if", new [] { "group", "token" } },
+				{ "features edit", new [] { "if" } },
+				{ "features", new [] { "export", "import", "print", "update", "edit" } },
+				{ "settings", new [] { "--path", "--quiet", "--mode", "--action", "--language" } },
+				{ "list", new [] { "--group" } }
 			};
+			
 			defaultCompletion = new []
 			{
 				"copy", "list", "clear", "fields", "allfields", "export", "import", "delete", "rename", "settings", "edit", "features"
 			};
+			
 			themes = new Dictionary <string, string []> ();
 			definitions = new string[0];
 		}

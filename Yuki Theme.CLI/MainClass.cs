@@ -21,6 +21,8 @@ namespace Yuki_Theme.CLI
 		internal      bool loop      = false;
 		private const int  MAX_WIDTH = 80;
 
+		private Dictionary <string, string> ToReplaceTranslationWithVariable = new ();
+
 		internal Completion completion;
 
 		/// <summary>
@@ -43,6 +45,7 @@ namespace Yuki_Theme.CLI
 				Core.CLI.load_schemes ();
 				AddThemeCompletion ();
 				AddDefinitionCompletion ();
+				AddLanguageCompletion ();
 			} else if (refreshSchemes)
 			{
 				Core.CLI.load_schemes ();
@@ -72,6 +75,18 @@ namespace Yuki_Theme.CLI
 			completion.definitions = list.ToArray ();
 		}
 
+		private void AddLanguageCompletion ()
+		{
+			completion.commands = new Dictionary <string, string []>
+			                      {
+				                      { "settings --language", Settings.translation.GetShortLanguageNames },
+				                      { "settings -l", Settings.translation.GetShortLanguageNames }
+			                      }
+			                      .Concat (completion.commands).ToDictionary (k => k.Key, v => v.Value);
+			string valueToReplace = string.Join (", ", Settings.translation.GetShortLanguageNames);
+			ToReplaceTranslationWithVariable.Add ("cli.help.settings.language", valueToReplace);
+		}
+
 		/// <summary>
 		/// Set current theme to process it. For example export it.
 		/// </summary>
@@ -99,7 +114,9 @@ namespace Yuki_Theme.CLI
 					parmChars [index] = '\n';
 			}
 
-			return (new string (parmChars)).Split ('\n');
+			string[] arguments = (new string (parmChars)).Split ('\n');
+			arguments [0] = arguments [0].ToLower ();
+			return arguments;
 		}
 
 		/// <summary>
@@ -463,6 +480,22 @@ namespace Yuki_Theme.CLI
 					ShowError (Core.CLI.Translate ("cli.errors.action.invalid"));
 				}
 			}
+			
+			if (!isNull (o.Language))
+			{
+				string lower = o.Language.ToLower();
+				if (Settings.translation.ContainsLanguageISO2 (lower))
+				{
+					Settings.localization = lower;
+					Settings.translation.LoadLocale (lower);
+					changed = true;
+				} else
+				{
+					string languages = string.Join (", ", Settings.translation.GetShortLanguageNames);
+					ShowError (Core.CLI.Translate ("cli.errors.language.invalid", languages));
+				}
+			}
+			
 
 			if (changed)
 			{
@@ -974,6 +1007,7 @@ namespace Yuki_Theme.CLI
 
 		private bool isColor (string definition)
 		{
+			bool result = false;
 			definition = definition.ToLower ();
 			switch (definition)
 			{
@@ -1031,19 +1065,25 @@ namespace Yuki_Theme.CLI
 				case "specialdirecivenames" :
 				case "direcivevalues" :
 				{
-					return true;
+					result = true;
 				}
 					break;
 
 				case "image" :
 				case "sticker" :
 				{
-					return false;
+					result = false;
 				}
 					break;
+
+				default :
+				{
+					throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
+				}
+				break;
 			}
 
-			throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
+			return result;
 		}
 
 		private string Translation (string help)
@@ -1064,6 +1104,8 @@ namespace Yuki_Theme.CLI
 			foreach (Match match in matches)
 			{
 				string translation = Core.CLI.Translate (match.Value);
+				if (translation.Contains ("{0}") && ToReplaceTranslationWithVariable.ContainsKey (match.Value))
+					translation = translation.Replace ("{0}", ToReplaceTranslationWithVariable [match.Value]);
 				string [] cv = translation.Split ('\n');
 				if (cv.Length > 1)
 				{

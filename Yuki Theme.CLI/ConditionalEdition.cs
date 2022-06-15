@@ -41,12 +41,22 @@ namespace Yuki_Theme.CLI
  
 				if (ConditionalSkip (command)) continue;
 
-				if (!isSetMode && IsSetMode (command))
+				if (!isSetMode)
 				{
-					isSetMode = true;
-					if (currentCondition.Equality != "") conditions.Add (currentCondition);
-					currentCondition = new Condition ();
-					continue;
+					if (IsAndOperator (command))
+					{
+						if (currentCondition.Equality != "") conditions.Add (currentCondition);
+						currentCondition = new Condition ();
+						continue;
+					}
+					
+					if (IsSetMode (command))
+					{
+						isSetMode = true;
+						if (currentCondition.Equality != "") conditions.Add (currentCondition);
+						currentCondition = new Condition ();
+						continue;
+					}
 				}
 
 				if (isSetMode)
@@ -98,6 +108,11 @@ namespace Yuki_Theme.CLI
 		private bool IsSetMode (string command)
 		{
 			return command == "set";
+		}
+
+		private bool IsAndOperator (string command)
+		{
+			return command == "&&";
 		}
 
 		private void CheckAndSet (ConditionSet set)

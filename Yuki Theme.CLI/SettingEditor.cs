@@ -21,6 +21,7 @@ namespace Yuki_Theme.CLI
 				destination = Path.Combine (Core.CLI.currentPath, "settings.syuki");
 				if (!Path.HasExtension (path)) ShowError (Core.CLI.Translate ("cli.errors.export.extension", path, destination));
 			}
+
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
 			string output = "";
 			int o = dict.Count - 1;
@@ -31,9 +32,11 @@ namespace Yuki_Theme.CLI
 			}
 
 			string outdir = Path.GetDirectoryName (destination);
-			if (outdir != null) Directory.CreateDirectory (outdir);
+			
+			if (!string.IsNullOrEmpty (outdir)) Directory.CreateDirectory (outdir);
 			File.WriteAllText (destination, output, Encoding.UTF8);
-			ShowSuccess (Core.CLI.Translate ("cli.success.settings.export.full"), Core.CLI.Translate ("cli.success.settings.export.short"));
+			ShowSuccess (Core.CLI.Translate ("cli.success.settings.export.full"),
+			             Core.CLI.Translate ("cli.success.settings.export.short"));
 		}
 
 		internal void ImportSettings (string path)
@@ -85,8 +88,8 @@ namespace Yuki_Theme.CLI
 			Console.WriteLine ();
 		}
 
-		private void ShowError (string   text) => Program.program.ShowError (text);
-		private void ShowSuccess (string text) => Program.program.ShowError (text);
+		private void ShowError (string   text)               => Program.program.ShowError (text);
+		private void ShowSuccess (string text)               => Program.program.ShowError (text);
 		private void ShowSuccess (string body, string title) => Program.program.ShowError (body, title);
 	}
 }

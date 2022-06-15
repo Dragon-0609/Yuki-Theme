@@ -42,7 +42,8 @@ namespace Yuki_Theme.CLI
 					{
 						command = command.Substring (5);
 					}
-
+					if (command.StartsWith (" ")) command = command.TrimStart ();
+					if (command.ToLower().StartsWith ("exit")) break;
 					program.Parse (parser, program.ParseArguments (command));
 				}
 			}
