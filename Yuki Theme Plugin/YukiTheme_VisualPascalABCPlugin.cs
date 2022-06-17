@@ -72,7 +72,7 @@ namespace Yuki_Theme_Plugin
 		private          ToolStrip             tools;
 		private          Panel                 toolsPanel;
 		private readonly IWorkbench            workbench;
-		private          TextArea              textArea;
+		internal         TextArea              textArea;
 		private          ContextMenuStrip      context;
 		private          ContextMenuStrip      context2;
 		private          MenuRenderer          renderer;
@@ -81,12 +81,11 @@ namespace Yuki_Theme_Plugin
 		private          ListView              errorsList;
 		private          TextBox               compilerConsole;
 		
-		private IVisualEnvironmentCompiler                  compiler;
-		private CodeFileDocumentTextEditorControl           textEditor;
-		private Dictionary <ICodeFileDocument, RichTextBox> OutputTextBoxs;
+		private  IVisualEnvironmentCompiler                  compiler;
+		internal CodeFileDocumentTextEditorControl           textEditor;
+		private  Dictionary <ICodeFileDocument, RichTextBox> OutputTextBoxs;
 
 		private RichTextBox oldInputPanel;
-		private Hashtable   ht;
 
 		#endregion
 
@@ -158,14 +157,13 @@ namespace Yuki_Theme_Plugin
 		#endregion
 		
 		private Size       defaultSize;
-		private Panel      panel_bg;
-		private CustomList themeList;
-		private Label      lbl;
 		public  Image      tmpImage1;
 		public  Image      tmpImage2;
 
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
+		private       ThemeSwitcher     switcher;
+		private       EditorInspector   inspector;
 
 		private bool      bgImage => Settings.bgImage;
 		private Rectangle oldSizeOfTextEditor = Rectangle.Empty;
@@ -176,11 +174,6 @@ namespace Yuki_Theme_Plugin
 		private ToolStripItem openInExplorerItem;
 		const   string        yukiThemeUpdate          = "Yuki Theme Update";
 		private int           lastFocused              = -1;
-		private bool          needToReturnTheme        = false;
-		private bool          needToFullExportTheme        = false;
-		private string        oldThemeNameForPreExport = "";
-		private DateTime      prevPreExportTime;
-		private bool          hideBG = false;
 
 		public PopupFormsController popupController;
 
@@ -248,7 +241,8 @@ namespace Yuki_Theme_Plugin
 			textEditor.Parent.BackColor = bg;
 			textEditor.Controls [1].Paint += CtrlOnPaint;
 			textEditor.Controls [1].Invalidate();
-			InspectBrackets ();
+			inspector = new EditorInspector (this);
+			inspector.InspectBrackets ();
 
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 			textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
@@ -273,6 +267,7 @@ namespace Yuki_Theme_Plugin
 			context2.Renderer = renderer;
 			manager = new IconManager (tools, menu, context, context2, fm);
 			camouflage = new ToolBarCamouflage (tools);
+			switcher = new ThemeSwitcher (this);
 			
 			UpdateColors ();
 			
@@ -506,7 +501,7 @@ namespace Yuki_Theme_Plugin
 			((CompilerConsoleWindowForm) workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
 				"Yuki Theme: Initialization finished.\n");
 			
-			InjectCodeCompletion ();
+			inspector.InjectCodeCompletion ();
 			/*MForm.showLicense (bg, clr, bgClick, fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, fm);
 			MForm.TrackInstall ();*/
@@ -730,80 +725,7 @@ namespace Yuki_Theme_Plugin
 
 		private void SwitchTheme (object sender, EventArgs e)
 		{
-			if(!fm.Controls.ContainsKey ("Custom Panel Switcher"))
-			{
-				// if (mf == null || mf.IsDisposed)
-				// {
-					RememberCurrentEditor ();
-					 
-					panel_bg = new CustomPanel (0);
-					panel_bg.Name = "Custom Panel Switcher";
-					needToReturnTheme = true;
-					needToFullExportTheme = false;
-					prevPreExportTime = DateTime.Now;
-					Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
-					
-					lbl = new Label ();
-					lbl.BackColor = bg;
-					lbl.ForeColor = clr;
-					lbl.Font = fnt;
-					lbl.Text = CLI.Translate ("plugin.themes");
-					lbl.TextAlign = ContentAlignment.MiddleCenter;
-					lbl.Size = new Size (200, 25);
-
-					themeList = new CustomList ();
-					themeList.BackColor = bgdef;
-					themeList.ForeColor = clr;
-					themeList.BorderStyle = BorderStyle.None;
-					themeList.list = CLI.schemes.ToArray ();
-					themeList.SearchText ("");
-					themeList.BorderStyle = BorderStyle.None;
-					themeList.Font = fnt;
-					themeList.ItemHeight = themeList.Font.Height;
-					themeList.Size = new Size (200, 300);
-					themeList.MouseMove += ThemeListMouseHover;
-					themeList.InitSearchBar ();
-					
-					themeList.searchBar.Size = new Size (themeList.Size.Width, themeList.searchBar.Size.Height);
-					themeList.Size = new Size (themeList.Size.Width, themeList.Size.Height - (themeList.searchBar.Size.Height + 2));
-
-					panel_bg.Location = Point.Empty;
-					panel_bg.Size = fm.ClientSize;
-					themeList.DrawMode = DrawMode.OwnerDrawFixed;
-					themeList.DrawItem += list_1_DrawItem;
-					int x = (panel_bg.Width / 2) - (themeList.Width / 2);
-					int y = (panel_bg.Height / 2) - ((themeList.Height + themeList.searchBar.Size.Height + lbl.Size.Height + 8) / 2);
-
-					lbl.Location = new Point (x, y - 33);
-					themeList.searchBar.Location = new Point (x, lbl.Location.Y + lbl.Size.Height + 2);
-
-					themeList.Location = new Point (x, themeList.searchBar.Location.Y + themeList.searchBar.Size.Height + 4);
-					
-					if (themeList.Items.Contains (Helper.currentTheme))
-						themeList.SelectedItem = Helper.currentTheme;
-					else
-						themeList.SelectedIndex = 0;
-					themeList.selectionindex = themeList.SelectedIndex;
-					themeList.SelectedIndexChanged += ThemeListOnSelectedIndexChanged;
-					themeList.AccessibleName = themeList.SelectedItem.ToString ();
-					panel_bg.Click += CloseOnClick;
-					oldThemeNameForPreExport = themeList.AccessibleName;
-
-					panel_bg.Controls.Add (themeList);
-					panel_bg.Controls.Add (lbl);
-					panel_bg.Controls.Add (themeList.searchBar);
-
-					setBorder (themeList, lbl, themeList.searchBar);
-
-					fm.Controls.Add (panel_bg);
-					panel_bg.BringToFront ();
-					themeList.searchBar.Focus ();
-					
-				// } else
-				// {
-				// 	MessageBox.Show (CLI.Translate ("plugin.close"));
-				// }
-			}
+			switcher.SwitchTheme ();
 		}
 		
 		private void stickersPositioning (object sender, EventArgs e)
@@ -980,7 +902,7 @@ namespace Yuki_Theme_Plugin
 			if (textEditor != fm.CurrentCodeFileDocument.TextEditor)
 			{
 				textArea.Paint -= PaintBG;
-				StopInspectBrackets ();
+				inspector.StopInspectBrackets ();
 				
 				try
 				{
@@ -997,7 +919,7 @@ namespace Yuki_Theme_Plugin
 				textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretPositionChangedEventHandler;
 				textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += CaretOnPositionChanged;
 				setMargin ();
-				InspectBrackets ();
+				inspector.InspectBrackets ();
 				textEditor.Parent.BackColor = bg;
 				try
 				{
@@ -1013,13 +935,7 @@ namespace Yuki_Theme_Plugin
 				textArea.Refresh ();
 				UpdateBottomTextPanel ();
 
-				if (Unsubscribe (ht [textEditor]))
-				{
-					SubscribeCompletion ();
-				} else
-				{
-					// Console.WriteLine ("Couldn't Unsubscribe");
-				}
+				inspector.Unsubscribe ();
 			}
 		}
 
@@ -1044,19 +960,14 @@ namespace Yuki_Theme_Plugin
 		public void ReloadLayoutLight ()
 		{
 			ReloadLayoutAll (true);
-			panel_bg.Visible = false;
+			switcher.panel_bg.Visible = false;
 			
 			Timer tim = new Timer ();
 			tim.Interval = 5;
 			tim.Tick += (sender, args) =>
 			{
 				tim.Stop ();
-				if (panel_bg != null && !panel_bg.IsDisposed)
-				{
-					panel_bg.Visible = true;
-					panel_bg.BringToFront ();
-					themeList.searchBar.Focus ();
-				}
+				switcher.SetFocus ();
 			};
 			tim.Start ();
 		}
@@ -1220,10 +1131,7 @@ namespace Yuki_Theme_Plugin
 		
 		private void FmOnResize (object sender, EventArgs e)
 		{
-			if (panel_bg != null)
-			{
-				CloseOnClick (sender, e);
-			}
+			switcher.CloseOnClick (sender, e);
 		}
 		
 		private void WaitAndUpdateMenuColors ()
@@ -1346,7 +1254,7 @@ namespace Yuki_Theme_Plugin
 				                     foldmargin.DrawingPosition.Height);
 			}
 
-			if (img != null && bgImage && !hideBG)
+			if (img != null && bgImage && !switcher.hideBG)
 			{
 				Size vm = textEditor.ClientSize;
 				// bool chnd = false;
@@ -1442,172 +1350,8 @@ namespace Yuki_Theme_Plugin
 
 		#endregion
 
-		
-		#region Methods For Theme Switcher
 
-		private void list_1_DrawItem (object sender, DrawItemEventArgs e)
-		{
-			if (e.Index < 0) return;
-			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-			{
-				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
-				                           e.Index, e.State ^ DrawItemState.Selected,
-				                           e.ForeColor, bgClick2);
-			} else if (e.Index == themeList.selectionindex)
-			{
-				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
-				                           e.Index, e.State,
-				                           e.ForeColor, bgClick);
-			}
-
-			e.DrawBackground ();
-			e.Graphics.DrawString (((ListBox) sender).Items [e.Index].ToString (), e.Font, clrBrush, e.Bounds);
-
-			e.DrawFocusRectangle ();
-		}
-
-		private void CloseOnClick (object sender, EventArgs e)
-		{
-			if (Settings.showPreview)
-			{
-				if (needToReturnTheme)
-				{
-					needToFullExportTheme = true;
-					PreviewTheme (themeList.AccessibleName, oldThemeNameForPreExport);
-					needToReturnTheme = false;
-					needToFullExportTheme = false;
-				} else
-				{
-					hideBG = !CLI.currentTheme.HasWallpaper;
-					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
-				}
-			}
-
-			fm.Controls.Remove (panel_bg);
-			panel_bg?.Dispose ();
-			themeList?.searchBar.Dispose ();
-			themeList?.Dispose ();
-			panel_bg = null;
-			if (tmpImage1 != null)
-			{
-				tmpImage1.Dispose ();
-				tmpImage1 = null;
-			}
-
-			if (tmpImage2 != null)
-			{
-				tmpImage2.Dispose ();
-				tmpImage2 = null;
-			}
-
-			ReFocusCurrentEditor ();
-		}
-		
-		private void ThemeListOnSelectedIndexChanged (object sender, EventArgs e)
-		{
-			if(themeList.SelectedIndex >= 0)
-			{
-				if(themeList.SelectedItem.ToString () != themeList.AccessibleName)
-				{
-					bool cnd = CLI.SelectTheme (themeList.SelectedItem.ToString ());
-
-					if (cnd)
-					{
-						CLI.selectedItem = CLI.nameToLoad;
-						CLI_Actions.ifHasImage2 = ifHsImage;
-						CLI_Actions.ifHasSticker2 = ifHsSticker;
-						CLI_Actions.ifDoesntHave2 = ifDNIMG;
-						CLI_Actions.ifDoesntHaveSticker2 = ifDNSTCK;
-						CLI.restore (false, null);
-						CLI.export (tmpImage1, tmpImage2, ReloadLayout, ReleaseResources);
-
-						CLI_Actions.ifHasImage2 = null;
-						CLI_Actions.ifHasSticker2 = null;
-						CLI_Actions.ifDoesntHave2 = null;
-						CLI_Actions.ifDoesntHaveSticker2 = null;
-					}
-				}
-				needToReturnTheme = false;
-				CloseOnClick (sender, e);
-			}
-		}
-		
-		private void ThemeListMouseHover(object sender, EventArgs e)
-		{
-			InvalidateItem ();
-			if (Settings.showPreview)
-			{
-				string nm = themeList.Items [themeList.selectionindex].ToString ();
-				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25 && nm != oldThemeNameForPreExport) // Preview Theme if delay is more than 25 milliseconds
-				{
-					prevPreExportTime = DateTime.Now;
-					PreviewTheme (nm, oldThemeNameForPreExport);
-					lbl.BackColor = bg;
-					lbl.ForeColor = clr;
-					themeList.BackColor = bgdef;
-					themeList.ForeColor = clr;
-					oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
-				}
-			}
-		}
-
-		private void PreviewTheme (string name, string oldName)
-		{
-			if(name != oldName)
-			{
-				if(CLI.SelectTheme (name))
-				{
-					CLI.restore ();
-					hideBG = !CLI.currentTheme.HasWallpaper;
-					stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
-					if (needToFullExportTheme)
-					{
-						CLI.preview (SyntaxType.NULL, true, ReloadLayoutLight);
-					} else
-					{
-						SyntaxType type = ShadowNames.GetSyntaxByExtension (Path.GetExtension (fm.CurrentCodeFileDocument.FileName));
-						if (type != SyntaxType.Pascal)
-						{
-							CLI.preview (type, true, null); // Not to reload layout
-							CLI.preview (SyntaxType.Pascal, false, ReloadLayoutLight); // Pascal theme is necessary for UI
-						} else
-						{
-							CLI.preview (type, true, ReloadLayoutLight);
-						}
-					}
-				}
-			}
-		}
-
-		private void InvalidateItem ()
-		{
-			Point point = themeList.PointToClient (Cursor.Position);
-			int index = themeList.IndexFromPoint (point);
-			//Do any action with the item
-			themeList.UpdateHighlighting (index);
-		}
-
-		void setBorder(Control ctl, Control ctl2, Control ctl3)
-		{
-			Panel pan = new Panel();
-			pan.BorderStyle = BorderStyle.None;
-			pan.Size = new Size (ctl.ClientRectangle.Width + 2,
-			                     ctl.ClientRectangle.Height + ctl2.ClientRectangle.Height + ctl3.ClientRectangle.Height + 6);
-			pan.Location = new Point(ctl.Left - 1, ctl.Top - 1);
-			pan.BackColor = YukiTheme_VisualPascalABCPlugin.bgInactive;
-			pan.Parent = ctl.Parent;
-			ctl.Parent = pan;
-			ctl2.Parent = pan;
-			ctl3.Parent = pan;
-
-			ctl3.Location = new Point (1, Math.Abs (ctl2.Top - ctl3.Top));
-			ctl2.Location = new Point (1, 1);
-			ctl.Location = new Point (1, ctl3.Bottom + 1);
-		}
-		
-		#endregion
-
-		private void RememberCurrentEditor ()
+		internal void RememberCurrentEditor ()
 		{
 			if (fm.ActiveControl is UpdatePageControl)
 			{
@@ -1619,7 +1363,7 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private void ReFocusCurrentEditor ()
+		internal void ReFocusCurrentEditor ()
 		{
 			IDockContent [] docs = fm.MainDockPanel.DocumentsToArray ();			
 			IDockContent doc = docs [lastFocused];
@@ -1803,166 +1547,22 @@ namespace Yuki_Theme_Plugin
 			OptionsContentEngine options = (OptionsContentEngine) getopt.GetValue (fm);
 			options.AddContent (new Controls.PluginOptionsContent (this));
 		}
-		
-		#region Inspection
 
-		private void SubscribeCompletion ()
+		internal void SettingsChanged (bool customStickerChanged, bool dimensionChanged)
 		{
-			// Console.WriteLine ("Unsubscribed");
-			CodeCompletionKeyHandler handler = new CodeCompletionKeyHandler (textEditor);
-			ht [textEditor] = handler;
-
-			textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
-			textEditor.Disposed += handler.CloseCodeCompletionWindow;
-			ChangeEditorShortcutForCompletition ();
-
-			EventAdd (typeof (Form1), "TextArea_KeyEventHandler", fm, typeof (TextArea), "KeyEventHandler",
-			          textEditor.ActiveTextAreaControl.TextArea);
-		}
-		
-		private bool Unsubscribe (object target)
-		{
-			// Console.WriteLine (target.GetType ().Name);
-			MethodInfo handler = target.GetType ().GetMethod ("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
-			if (handler == null)
+			if (customStickerChanged)
 			{
-				return false;
-			}
-
-			handler = null;
-			
-			EventRemove (target.GetType (), "TextAreaKeyEventHandler", target, typeof (TextArea), "KeyEventHandler",
-			             textEditor.ActiveTextAreaControl.TextArea);
-			
-			EventRemove (typeof (Form1), "TextArea_KeyEventHandler", fm, typeof (TextArea), "KeyEventHandler",
-			             textEditor.ActiveTextAreaControl.TextArea);
-
-			EventRemove (target.GetType (), "CloseCodeCompletionWindow", target, typeof (TextEditorControl), "Disposed",
-			             textEditor.ActiveTextAreaControl.TextArea);
-			
-			return true;
-		}
-		
-		private void ChangeEditorShortcutForCompletition ()
-		{
-			ChangeShortcut (Keys.Space | Keys.Control, new CodeCompletionAllNames ());
-		}
-		
-		void InspectBrackets ()
-		{
-			textArea.Paint += InspectBracketsPaint;
-		}
-
-		void StopInspectBrackets ()
-		{
-			textArea.Paint -= InspectBracketsPaint;
-		}
-
-		private void InspectBracketsPaint (object sender, PaintEventArgs e)
-		{
-			Graphics g = e.Graphics;
-			if (textArea.TextView.Highlight != null && textArea.TextView.Highlight.OpenBrace != null &&
-			    textArea.TextView.Highlight.CloseBrace != null)
+				LoadSticker ();
+			}else if (dimensionChanged)
 			{
-				int lineNumber = textArea.Caret.Line;
-				LineSegment currentLine    = textArea.Document.GetLineSegment(lineNumber);
-				int currentWordOffset = 0;
-				int startColumn = 0;
-
-				if (textEditor.TextEditorProperties.EnableFolding)
-				{
-					List<FoldMarker> starts = textArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
-					if (starts != null && starts.Count > 0) {
-						FoldMarker firstFolding = (FoldMarker)starts[0];
-						foreach (FoldMarker fm in starts) {
-							if (fm.StartColumn < firstFolding.StartColumn) {
-								firstFolding = fm;
-							}
-						}
-						startColumn     = firstFolding.EndColumn;
-					}
-				}
-
-				MethodInfo draw = typeof (TextView).GetMethod ("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
-				
-				TextWord currentWord;
-				int drawingX = textArea.TextView.DrawingPosition.X - textArea.VirtualTop.X;
-				for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
-				{
-					currentWord = currentLine.Words[wordIdx];
-					
-					if (currentWordOffset < startColumn) {
-						currentWordOffset += currentWord.Length;
-						continue;
-					}
-					if (textArea.TextView.Highlight.OpenBrace.Y == lineNumber && textArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
-					    textArea.TextView.Highlight.CloseBrace.Y == lineNumber && textArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
-					{
-						int xpos = textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
-						int liny = textArea.TextView.DrawingPosition.Top + (lineNumber - textArea.TextView.FirstVisibleLine) * textArea.TextView.FontHeight - textArea.TextView.VisibleLineDrawingRemainder;
-						draw.Invoke (textArea.TextView, new object []
-						{
-							g,
-							currentWord.Word,
-							new Point (xpos, liny),
-							currentWord.GetFont (textArea.TextView.TextEditorProperties.FontContainer),
-							currentWord.Color,
-							typeBrush
-						});
-					}
-					currentWordOffset += currentWord.Length;
-				}
-
+				if (stickerControl.Image != null)
+					stickerControl.ReCalculatePositionNSize ();
 			}
 		}
 		
-		private void InjectCodeCompletion ()
-		{
-			var assembly = typeof (Form1).Assembly;
-			Type type = assembly.GetType ("VisualPascalABC.CodeCompletionKeyHandler");
-			ht = (Hashtable)type.GetField ("ht",
-			                               BindingFlags.NonPublic | BindingFlags.Static).GetValue (null);
-			// Console.WriteLine ("Unsubscribing: ");
-			Unsubscribe (ht [textEditor]);
-			SubscribeCompletion ();
-		}
-		
-		#endregion
 		
 		#region Helper Methods
 
-		private void ChangeShortcut (Keys key, IEditAction val)
-		{
-			var fdactions = textEditor.GetType ()
-			                          .GetField ("editactions", BindingFlags.NonPublic | BindingFlags.Instance);
-			Dictionary <Keys, IEditAction> actions = (Dictionary <Keys, IEditAction>)fdactions.GetValue (textEditor);
-			actions [key] = val;
-		}
-		
-		private void EventAdd (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
-		{
-			MethodInfo keyEventHandler = typeForMethod.GetMethod (nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
-			EventInfo evt = typeForEvent.GetEvent (nameOfEvent, BindingFlags.Instance | BindingFlags.Public);
-			MethodInfo addMethod = evt.GetAddMethod (false);
-
-			addMethod.Invoke (objectOfEvent, new object []
-			{
-				Delegate.CreateDelegate (evt.EventHandlerType, objectOfMethod, keyEventHandler)
-			});
-		}
-
-		private void EventRemove (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
-		{
-			MethodInfo keyEventHandler = typeForMethod.GetMethod (nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
-			EventInfo evt = typeForEvent.GetEvent (nameOfEvent, BindingFlags.Instance | BindingFlags.Public);
-			MethodInfo addMethod = evt.GetRemoveMethod (false);
-
-			addMethod.Invoke (objectOfEvent, new object []
-			{
-				Delegate.CreateDelegate (evt.EventHandlerType, objectOfMethod, keyEventHandler)
-			});
-		}
-		
 		private void ResetBrush (ref Brush brush, Color color)
 		{
 			if (brush != null) brush.Dispose ();

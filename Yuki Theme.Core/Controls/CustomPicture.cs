@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Database;
@@ -13,8 +14,8 @@ namespace Yuki_Theme.Core.Controls
 		public  Point           margin;
 		public  PointF          relativePosition;
 		private AnchorStyles    align;
-		private RelativeUnit    unit => Settings.unit;
-		private DatabaseManager database;
+		private RelativeUnit    unit     => Settings.unit;
+		private DatabaseManager database => Settings.database;
 		public  CustomPanel     pnl;
 		public  int             width;
 		public  int             width3;
@@ -25,6 +26,8 @@ namespace Yuki_Theme.Core.Controls
 		private float           unitx;
 		private float           unity;
 		private Form            tmp_form;
+		private Image           originalImage;
+		private Image           resizedImage;
 
 		public CustomPicture (Form fm) : base ()
 		{
@@ -33,7 +36,6 @@ namespace Yuki_Theme.Core.Controls
 			align = AnchorStyles.Bottom | AnchorStyles.Right;
 			tmp_form = fm;
 			// align = Content;
-			database = new DatabaseManager ();
 			ReadData ();
 			MouseDown += On_MouseDown;
 			MouseMove += On_MouseMove;
@@ -42,7 +44,8 @@ namespace Yuki_Theme.Core.Controls
 			                                                  | BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                  this, new object [] {true});
 			ParentChanged += OnParentChanged;
-			
+			SizeMode = PictureBoxSizeMode.Zoom;
+
 		}
 
 		private void OnParentChanged (object sender, EventArgs e)
@@ -62,22 +65,64 @@ namespace Yuki_Theme.Core.Controls
 			get { return Image; }
 			set
 			{
-				Image = value;
-				if (Image != null)
+				if (originalImage != value)
 				{
-					Size = value.Size;
-					width = Parent.ClientSize.Width / 2;
-					width3 = Parent.ClientSize.Width / 3;
-					width32 = width3 * 2;
-					height = Parent.ClientSize.Height / 2;
-					height3 = Parent.ClientSize.Height / 3;
-					height32 = height3 * 2;
-					UpdateLocation ();
-					CreateRegion ();
+					ClearImages ();
+				}
+				originalImage = value;
+				if (originalImage != null)
+				{
+					ReCalculatePositionNSize ();
 				} else
 				{
 					Region = null;
+					ClearImages ();
 				}
+			}
+		}
+
+		private void ClearImages ()
+		{
+			Image = null;
+			if (originalImage != null)
+				originalImage.Dispose ();
+			if (resizedImage != null)
+				resizedImage.Dispose ();
+		}
+
+		public void ReCalculatePositionNSize ()
+		{
+			if (originalImage != null)
+			{
+				Size size = Helper.CalculateDimension (originalImage.Size);
+				if (Helper.IsDimensionAvailable ())
+				{
+					if (resizedImage != null)
+						resizedImage.Dispose ();
+
+					resizedImage = ResizeImage (originalImage, size.Width, size.Height);
+					Image = resizedImage;
+				} else
+				{
+					if (resizedImage != null)
+						resizedImage.Dispose ();
+
+					Image = originalImage;
+				}
+
+				Size = size;
+				width = Parent.ClientSize.Width / 2;
+				width3 = Parent.ClientSize.Width / 3;
+				width32 = width3 * 2;
+				height = Parent.ClientSize.Height / 2;
+				height3 = Parent.ClientSize.Height / 3;
+				height32 = height3 * 2;
+				UpdateLocation ();
+				CreateRegion ();
+			} else
+			{
+				Region = null;
+				ClearImages ();
 			}
 		}
 
@@ -370,6 +415,38 @@ namespace Yuki_Theme.Core.Controls
 		private void SaveData ()
 		{
 			database.UpdateData (Settings.STICKERPOSITION, ConvertLocationToSave ());
+		}
+		
+		/// <summary>
+		/// Resize the image to the specified width and height.
+		/// </summary>
+		/// <param name="image">The image to resize.</param>
+		/// <param name="width">The width to resize to.</param>
+		/// <param name="height">The height to resize to.</param>
+		/// <returns>The resized image.</returns>
+		public static Bitmap ResizeImage(Image image, int width, int height)
+		{
+			var destRect = new Rectangle(0, 0, width, height);
+			var destImage = new Bitmap(width, height);
+
+			destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+			using (var graphics = Graphics.FromImage(destImage))
+			{
+				graphics.CompositingMode = CompositingMode.SourceCopy;
+				graphics.CompositingQuality = CompositingQuality.HighQuality;
+				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				graphics.SmoothingMode = SmoothingMode.HighQuality;
+				graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+				using (var wrapMode = new ImageAttributes())
+				{
+					wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+					graphics.DrawImage(image, destRect, 0, 0, image.Width,image.Height, GraphicsUnit.Pixel, wrapMode);
+				}
+			}
+
+			return destImage;
 		}
 	}
 }

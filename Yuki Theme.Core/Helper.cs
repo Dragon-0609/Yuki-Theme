@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using CommonMark;
 using Svg;
 using Yuki_Theme.Core.Themes;
 
@@ -22,7 +23,7 @@ namespace Yuki_Theme.Core
 	{
 		public static Color bgdefColor, bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
 
-		public static ProductMode  mode;
+		public static ProductMode?  mode;
 		public static RelativeUnit unit;
 
 		private static Size   Standart32 = new Size (32, 32);
@@ -552,7 +553,7 @@ namespace Yuki_Theme.Core
 				return svg.Draw (cSize.Width, cSize.Height);
 		}
 
-		public static Image RenderSvg (Size  im, SvgDocument svg, Dictionary <string, Color> idColors, bool customColor = false, Color clr = default)
+		public static Image RenderSvg (Size im, SvgDocument svg, Dictionary <string, Color> idColors, bool customColor = false, Color clr = default)
 		{
 			if (customColor)
 				svg.Color = new SvgColourServer (clr);
@@ -623,7 +624,7 @@ namespace Yuki_Theme.Core
 			string md = ReadResource (target, nameSpace);
 			md = md.Split (new [] { "###" }, StringSplitOptions.None) [1];
 			md = ReplaceMDCheckbox (md);
-			md = CommonMark.CommonMarkConverter.Convert (md);
+			md = CommonMarkConverter.Convert (md);
 
 			string html = ReadHTML ("CHANGELOG.html", nameSpace);
 			html = ReplaceHTMLColors (html);
@@ -806,8 +807,8 @@ namespace Yuki_Theme.Core
 	        return isOld ? FILE_EXTENSTION_OLD : FILE_EXTENSTION_NEW;
         }
         
-        public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic,
-                                                   TKey                           fromKey, TKey toKey)
+        public static void RenameKey<TKey, TValue>(this IDictionary <TKey, TValue> dic,
+                                                   TKey                            fromKey, TKey toKey)
         {
 	        TValue value = dic[fromKey];
 	        dic.Remove(fromKey);
@@ -861,6 +862,41 @@ namespace Yuki_Theme.Core
 
 	        return result;
         }
+
+        public static Size CalculateDimension (Size value)
+        {
+	        Size size = value;
+	        int capMax = Settings.dimensionCapMax;
+	        double aspect = 0;
+	        if (IsDimensionAvailable ())
+	        {
+		        if ((DimensionCapUnit)Settings.dimensionCapUnit == DimensionCapUnit.Height)
+		        {
+			        if (size.Height > capMax)
+			        {
+				        aspect= (size.Width + 0.0) / size.Height;
+				        size.Height = capMax;
+				        size.Width = Convert.ToInt32 (Math.Round (aspect * capMax));
+			        }
+		        } else
+		        {
+			        if (size.Width > capMax)
+			        {
+				        aspect = (size.Height + 0.0) / size.Width;
+				        size.Width = capMax;
+				        size.Height = Convert.ToInt32 (Math.Round (aspect * capMax));
+			        }
+		        }
+	        }
+
+	        // MessageBox.Show ( $"Dimension: {Settings.dimensionCapUnit}, max: {capMax}, aspect: {aspect}, Size: {size}, Original: {value}");
+	        return size;
+        }
+
+        internal static bool IsDimensionAvailable ()
+        {
+	        return Settings.useDimensionCap && Settings.dimensionCapMax > 20;
+        }
 	}
 
 	public static class GoogleAnalyticsHelper
@@ -871,9 +907,7 @@ namespace Yuki_Theme.Core
 		private static readonly string googleClientId   = "555";
 
 		/// <summary>
-		/// By this method I'll track installs. I won't abuse. I'll track just installs and that's all. You may ask: why?
-		/// Well, I'll switch to passive development on 1st April of 2022. By this I mean I'll work on the project rarely.
-		/// After passing some months or years, I'll be back. In that moment I'll be glad to know that many people use the app. 
+		/// By this method I'll track installs. I won't abuse. I'll track just installs and that's all. 
 		/// </summary>
 		/// <returns></returns>
 		public static async Task <HttpResponseMessage> TrackEvent ()

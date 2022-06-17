@@ -359,6 +359,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\positionLeft.svg" />

@@ -6,16 +6,21 @@ namespace Yuki_Theme.Core.WPF.Windows
 {
 	public partial class SettingsWindow : Window
 	{
-
-		public SettingsPanelUtilities utilities;
+		public  SettingsPanelUtilities utilities;
+		
+		internal bool dimensionCap  = false;
+		internal bool customSticker = false;
 		
 		public SettingsWindow ()
 		{
 			InitializeComponent ();
+			dimensionCap = Settings.useDimensionCap;
+			customSticker = Settings.useCustomSticker;
 		}
 
 		private void SaveButtonClick (object sender, RoutedEventArgs e)
 		{
+			
 			this.DialogResult = true;
 		}
 

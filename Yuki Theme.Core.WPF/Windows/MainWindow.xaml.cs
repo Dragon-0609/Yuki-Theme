@@ -52,6 +52,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void Init (object sender, RoutedEventArgs e)
 		{
+			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
 			CLI_Actions.ifHasImage = ifHasImage;
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
 			CLI_Actions.ifHasSticker = ifHasSticker;
@@ -141,8 +142,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				if (img4 != null)
 				{
-					Popup.Width = Sticker.Width = img4.Width;
-					Popup.Height = Sticker.Height = img4.Height;
+					SetStickerSize ();
 					Sticker.Source = img4.ToWPFImage ();
 					Popup.UpdatePopupPosition ();
 				} else
@@ -281,6 +281,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Background = WPFHelper.bgBrush,
 				Foreground = WPFHelper.fgBrush,
 				Tag = Tag,
+				Icon = Icon,
 				Owner = this
 			};
 			
@@ -293,6 +294,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 				if (currentMode != Settings.settingMode)
 				{
 					Restore ();
+				}
+
+				if (settingsWindow.customSticker)
+				{
+					LoadSticker ();
+				}else if (settingsWindow.dimensionCap)
+				{
+					SetStickerSize ();
 				}
 			} else
 			{
@@ -706,6 +715,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 			SetOpacityWallpaper ();
 		}
 
+		private void SetStickerSize ()
+		{
+			Drawing.Size dimensionSize = Helper.CalculateDimension (img4.Size);
+			Popup.Width = Sticker.Width = dimensionSize.Width;
+			Popup.Height = Sticker.Height = dimensionSize.Height;
+		}
+		
 		#endregion
 
 

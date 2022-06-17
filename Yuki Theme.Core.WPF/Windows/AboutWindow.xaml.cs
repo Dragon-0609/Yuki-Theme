@@ -53,6 +53,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Assembly assm = Assembly.GetExecutingAssembly ();
 			BackImage.Source = WPFHelper.GetSvg ("back" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
 			ForwardImage.Source = WPFHelper.GetSvg ("forward" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
+			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
 		}
 
 		private static string GenerateVersionText ()
