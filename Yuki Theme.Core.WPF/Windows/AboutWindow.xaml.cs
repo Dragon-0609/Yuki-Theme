@@ -32,9 +32,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			UpdateTranslation ();
 			versionNumber.Text = GenerateVersionText ();
-			UpdateTranslation ();
 			Logo.Source = Helper.GetYukiThemeIconImage (new Drawing.Size (Logo.Width.ToInt (), Logo.Height.ToInt ())).ToWPFImage ();
-			ShowLicense ();
+			LicensePanel.ShowLicense ();
 			PrepareChangelog ();
 			LoadSvg ();
 		}
@@ -48,11 +47,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void LoadSvg ()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			Drawing.Size size = new Drawing.Size (24, 24);
-			Assembly assm = Assembly.GetExecutingAssembly ();
-			BackImage.Source = WPFHelper.GetSvg ("back" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
-			ForwardImage.Source = WPFHelper.GetSvg ("forward" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);
+			LicensePanel.LoadSvg();
 			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
 		}
 
@@ -69,7 +64,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return widthAnimation;
 		}
 
-		private DoubleAnimation GenerateAnimation (bool opened, DockPanel target)
+		private DoubleAnimation GenerateAnimation (bool opened, FrameworkElement target)
 		{
 			DoubleAnimation widthAnimation;
 			if (!opened)
@@ -168,39 +163,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 				animating = true;
 				sb.Begin ();
 			}
-		}
-
-		private void BackButton_OnClick (object sender, RoutedEventArgs e)
-		{
-			if (secondLicense)
-			{
-				secondLicense = !secondLicense;
-				ShowLicense();
-			}
-		}
-
-		private void ForwardButton_OnClick (object sender, RoutedEventArgs e)
-		{
-			if (!secondLicense)
-			{
-				secondLicense = !secondLicense;
-				ShowLicense();
-			}
-		}
-
-		private void ShowLicense ()
-		{
-			string licensePath = secondLicense ? "JetBrainsLICENSE" : "LICENSE";
-			string licenseHeader = secondLicense ? "JetBrains" : "Dragon-LV";
-			LicenseBox.Text = Helper.ReadResource (licensePath);
-			LicenseOwner.Text = licenseHeader;
-			DisableLicenseButtons ();
-		}
-
-		private void DisableLicenseButtons ()
-		{
-			BackButton.IsEnabled = secondLicense;
-			ForwardButton.IsEnabled = !secondLicense;
 		}
 
 		private void UpdateTranslation ()

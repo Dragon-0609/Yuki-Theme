@@ -142,31 +142,8 @@
 
 
         </Grid>
-        <DockPanel Grid.Column="2" Width="0" Margin="0 0 0 10" Name="LicensePanel" Visibility="Collapsed"
-                   Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}">
-            <Grid DockPanel.Dock="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="1" Name="LicenseOwner" FontSize="20">
-                    Dragon-LV
-                </TextBlock>
-                <WrapPanel Grid.Column="2" HorizontalAlignment="Right">
-                    <Button Padding="4" Margin="4 2" Name="BackButton" Click="BackButton_OnClick" Width="20" Height="24">
-                        <Image Source="" Name="BackImage" />
-                    </Button>
-                    <Button Padding="4" Margin="4 2" Name="ForwardButton" Click="ForwardButton_OnClick" Width="20" Height="24">
-                        <Image Source="" Name="ForwardImage" />
-                    </Button>
-                </WrapPanel>
-            </Grid>
-            <TextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     Name="LicenseBox" IsReadOnly="True" ContextMenu="{x:Null}"
-                     BorderBrush="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag.BorderBrush, TargetNullValue=White, FallbackValue=White}"
-                     Style="{StaticResource TextBoxWindow}" />
-        </DockPanel>
-
+        <controls:LicenseBox Grid.Column="2" Width="0" Margin="0 0 0 10" x:Name="LicensePanel" Visibility="Collapsed"
+                             Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Background, TargetNullValue=Black, FallbackValue=Black}" />
+        
     </Grid>
 </Window>

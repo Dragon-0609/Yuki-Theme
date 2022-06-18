@@ -51,10 +51,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void SettingsPanel_OnLoaded (object sender, RoutedEventArgs e)
 		{
+			blockLanguageSelection = true;
 			CheckGridSize ();
 			FillLanguageField ();
 			LoadSettings ();
-			blockLanguageSelection = true;
 			AddLanguages ();
 			blockLanguageSelection = false;
 			UpdateTranslations ();
@@ -410,6 +410,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void ResetToolbar_OnClick (object sender, RoutedEventArgs e)
 		{
 			ToolBarListItem.camouflage.Reset ();
+		}
+
+		private void SetToolBarHeight ()
+		{
+			
 		}
 	}
 }

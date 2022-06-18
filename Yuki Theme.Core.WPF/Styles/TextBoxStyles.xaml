@@ -11,7 +11,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="templateBorder" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.BorderBrush}" />
+                            <Setter TargetName="templateBorder" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.BorderBrush}" />
                             <Setter Property="BorderThickness" Value="3" />
                         </Trigger>
                     </ControlTemplate.Triggers>

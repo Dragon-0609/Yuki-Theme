@@ -75,6 +75,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			highlighter.InitializeSyntax ();
 			Fstb.box.Paint += bgImagePaint;
 			ToggleEditor ();
+			ShowLicense ();
 		}
 
 		private void load_schemes ()
@@ -659,8 +660,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			Background = WPFHelper.bgBrush;
 			Foreground = WPFHelper.fgBrush;
-			StyleConfig config = WPFHelper.GenerateTag;
-			Window.Tag = config;
+			Window.Tag = WPFHelper.GenerateTag;
 		}
 
 		private void bgImagePaint (object sender, PaintEventArgs e)
@@ -893,9 +893,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Export ();
 		}
-
-		#endregion
-
+		
 		private void ImportButton_OnClick (object sender, RoutedEventArgs e)
 		{
 			ImportFile ();
@@ -909,6 +907,33 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void Close_OnClick (object sender, RoutedEventArgs e)
 		{
 			this.Close ();
+		}
+		
+		#endregion
+
+		private void ShowLicense ()
+		{
+			if (!Settings.license)
+			{
+				LicenseWindow licenseWindow = new LicenseWindow ()
+				{
+					Background = WPFHelper.bgBrush,
+					Foreground = WPFHelper.fgBrush,
+					BorderBrush = WPFHelper.borderBrush,
+					Tag = Tag
+				};
+				licenseWindow.Owner = this;
+				licenseWindow.Closed += (a, b) =>
+				{
+					GC.Collect ();
+					GC.WaitForPendingFinalizers ();
+				};
+
+				licenseWindow.ShowDialog ();
+				
+				Settings.license = true;
+				Settings.database.UpdateData (Settings.LICENSE, "True");
+			}
 		}
 	}
 }

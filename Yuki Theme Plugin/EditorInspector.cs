@@ -26,20 +26,20 @@ namespace Yuki_Theme_Plugin
 		internal void SubscribeCompletion ()
 		{
 			// Console.WriteLine ("Unsubscribed");
-			CodeCompletionKeyHandler handler = new CodeCompletionKeyHandler (plugin.textEditor);
-			ht [plugin.textEditor] = handler;
+			CodeCompletionKeyHandler handler = new CodeCompletionKeyHandler (plugin.ideComponents.textEditor);
+			ht [plugin.ideComponents.textEditor] = handler;
 
-			plugin.textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
-			plugin.textEditor.Disposed += handler.CloseCodeCompletionWindow;
+			plugin.ideComponents.textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
+			plugin.ideComponents.textEditor.Disposed += handler.CloseCodeCompletionWindow;
 			ChangeEditorShortcutForCompletition ();
 
-			EventAdd (typeof (Form1), "TextArea_KeyEventHandler", plugin.fm, typeof (TextArea), "KeyEventHandler",
-			          plugin.textEditor.ActiveTextAreaControl.TextArea);
+			EventAdd (typeof (Form1), "TextArea_KeyEventHandler", plugin.ideComponents.fm, typeof (TextArea), "KeyEventHandler",
+			          plugin.ideComponents.textEditor.ActiveTextAreaControl.TextArea);
 		}
 
 		internal void Unsubscribe ()
 		{
-			if (Unsubscribe (ht [plugin.textEditor]))
+			if (Unsubscribe (ht [plugin.ideComponents.textEditor]))
 			{
 				SubscribeCompletion ();
 			} else
@@ -60,13 +60,13 @@ namespace Yuki_Theme_Plugin
 			handler = null;
 			
 			EventRemove (target.GetType (), "TextAreaKeyEventHandler", target, typeof (TextArea), "KeyEventHandler",
-			             plugin.textEditor.ActiveTextAreaControl.TextArea);
+			             plugin.ideComponents.textEditor.ActiveTextAreaControl.TextArea);
 			
-			EventRemove (typeof (Form1), "TextArea_KeyEventHandler", plugin.fm, typeof (TextArea), "KeyEventHandler",
-			             plugin.textEditor.ActiveTextAreaControl.TextArea);
+			EventRemove (typeof (Form1), "TextArea_KeyEventHandler", plugin.ideComponents.fm, typeof (TextArea), "KeyEventHandler",
+			             plugin.ideComponents.textEditor.ActiveTextAreaControl.TextArea);
 
 			EventRemove (target.GetType (), "CloseCodeCompletionWindow", target, typeof (TextEditorControl), "Disposed",
-			             plugin.textEditor.ActiveTextAreaControl.TextArea);
+			             plugin.ideComponents.textEditor.ActiveTextAreaControl.TextArea);
 			
 			return true;
 		}
@@ -78,28 +78,28 @@ namespace Yuki_Theme_Plugin
 
 		internal void InspectBrackets ()
 		{
-			plugin.textArea.Paint += InspectBracketsPaint;
+			plugin.ideComponents.textArea.Paint += InspectBracketsPaint;
 		}
 
 		internal void StopInspectBrackets ()
 		{
-			plugin.textArea.Paint -= InspectBracketsPaint;
+			plugin.ideComponents.textArea.Paint -= InspectBracketsPaint;
 		}
 
 		internal void InspectBracketsPaint (object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
-			if (plugin.textArea.TextView.Highlight != null && plugin.textArea.TextView.Highlight.OpenBrace != null &&
-			    plugin.textArea.TextView.Highlight.CloseBrace != null)
+			if (plugin.ideComponents.textArea.TextView.Highlight != null && plugin.ideComponents.textArea.TextView.Highlight.OpenBrace != null &&
+			    plugin.ideComponents.textArea.TextView.Highlight.CloseBrace != null)
 			{
-				int lineNumber = plugin.textArea.Caret.Line;
-				LineSegment currentLine    = plugin.textArea.Document.GetLineSegment(lineNumber);
+				int lineNumber = plugin.ideComponents.textArea.Caret.Line;
+				LineSegment currentLine    = plugin.ideComponents.textArea.Document.GetLineSegment(lineNumber);
 				int currentWordOffset = 0;
 				int startColumn = 0;
 
-				if (plugin.textEditor.TextEditorProperties.EnableFolding)
+				if (plugin.ideComponents.textEditor.TextEditorProperties.EnableFolding)
 				{
-					List<FoldMarker> starts = plugin.textArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
+					List<FoldMarker> starts = plugin.ideComponents.textArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
 					if (starts != null && starts.Count > 0) {
 						FoldMarker firstFolding = (FoldMarker)starts[0];
 						foreach (FoldMarker fm in starts) {
@@ -114,7 +114,7 @@ namespace Yuki_Theme_Plugin
 				MethodInfo draw = typeof (TextView).GetMethod ("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
 				
 				TextWord currentWord;
-				int drawingX = plugin.textArea.TextView.DrawingPosition.X - plugin.textArea.VirtualTop.X;
+				int drawingX = plugin.ideComponents.textArea.TextView.DrawingPosition.X - plugin.ideComponents.textArea.VirtualTop.X;
 				for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
 				{
 					currentWord = currentLine.Words[wordIdx];
@@ -123,17 +123,17 @@ namespace Yuki_Theme_Plugin
 						currentWordOffset += currentWord.Length;
 						continue;
 					}
-					if (plugin.textArea.TextView.Highlight.OpenBrace.Y == lineNumber && plugin.textArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
-					    plugin.textArea.TextView.Highlight.CloseBrace.Y == lineNumber && plugin.textArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
+					if (plugin.ideComponents.textArea.TextView.Highlight.OpenBrace.Y == lineNumber && plugin.ideComponents.textArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
+					    plugin.ideComponents.textArea.TextView.Highlight.CloseBrace.Y == lineNumber && plugin.ideComponents.textArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
 					{
-						int xpos = plugin.textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
-						int liny = plugin.textArea.TextView.DrawingPosition.Top + (lineNumber - plugin.textArea.TextView.FirstVisibleLine) * plugin.textArea.TextView.FontHeight - plugin.textArea.TextView.VisibleLineDrawingRemainder;
-						draw.Invoke (plugin.textArea.TextView, new object []
+						int xpos = plugin.ideComponents.textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
+						int liny = plugin.ideComponents.textArea.TextView.DrawingPosition.Top + (lineNumber - plugin.ideComponents.textArea.TextView.FirstVisibleLine) * plugin.ideComponents.textArea.TextView.FontHeight - plugin.ideComponents.textArea.TextView.VisibleLineDrawingRemainder;
+						draw.Invoke (plugin.ideComponents.textArea.TextView, new object []
 						{
 							g,
 							currentWord.Word,
 							new Point (xpos, liny),
-							currentWord.GetFont (plugin.textArea.TextView.TextEditorProperties.FontContainer),
+							currentWord.GetFont (plugin.ideComponents.textArea.TextView.TextEditorProperties.FontContainer),
 							currentWord.Color,
 							YukiTheme_VisualPascalABCPlugin.typeBrush
 						});
@@ -151,16 +151,16 @@ namespace Yuki_Theme_Plugin
 			ht = (Hashtable)type.GetField ("ht",
 			                               BindingFlags.NonPublic | BindingFlags.Static).GetValue (null);
 			// Console.WriteLine ("Unsubscribing: ");
-			Unsubscribe (ht [plugin.textEditor]);
+			Unsubscribe (ht [plugin.ideComponents.textEditor]);
 			SubscribeCompletion ();
 		}
 		
 		
 		private void ChangeShortcut (Keys key, IEditAction val)
 		{
-			var fdactions = plugin.textEditor.GetType ()
+			var fdactions = plugin.ideComponents.textEditor.GetType ()
 			                          .GetField ("editactions", BindingFlags.NonPublic | BindingFlags.Instance);
-			Dictionary <Keys, IEditAction> actions = (Dictionary <Keys, IEditAction>)fdactions.GetValue (plugin.textEditor);
+			Dictionary <Keys, IEditAction> actions = (Dictionary <Keys, IEditAction>)fdactions.GetValue (plugin.ideComponents.textEditor);
 			actions [key] = val;
 		}
 		

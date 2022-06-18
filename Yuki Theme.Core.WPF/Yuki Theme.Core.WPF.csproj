@@ -91,6 +91,9 @@
         <Compile Include="Controls\IntegerUpDown.xaml.cs">
           <DependentUpon>IntegerUpDown.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\LicenseBox.xaml.cs">
+          <DependentUpon>LicenseBox.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Controls\Manageable.cs" />
         <Compile Include="Controls\ManageableItem.cs" />
         <Compile Include="Controls\ScreenColorPickerHost.cs" />
@@ -120,6 +123,9 @@
         <Compile Include="Windows\CustomStickerWindow.xaml.cs">
           <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\LicenseWindow.xaml.cs">
+          <DependentUpon>LicenseWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Windows\MainWindow.xaml.cs">
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
@@ -138,6 +144,7 @@
         <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />
         <Page Include="Controls\ColorPicker\Themes\Generic.xaml" />
         <Page Include="Controls\IntegerUpDown.xaml" />
+        <Page Include="Controls\LicenseBox.xaml" />
         <Page Include="Controls\SettingsPanel.xaml" />
         <Page Include="Styles\ButtonStyles.xaml" />
         <Page Include="Styles\CheckboxStyles.xaml" />
@@ -155,6 +162,7 @@
         <Page Include="Windows\AboutWindow.xaml" />
         <Page Include="Windows\AddThemeWindow.xaml" />
         <Page Include="Windows\CustomStickerWindow.xaml" />
+        <Page Include="Windows\LicenseWindow.xaml" />
         <Page Include="Windows\MainWindow.xaml">
           <Generator>MSBuild:Compile</Generator>
           <SubType>Designer</SubType>

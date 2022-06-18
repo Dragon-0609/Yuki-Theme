@@ -125,6 +125,7 @@
     <Compile Include="Controls\Win32\NativeMethods.cs" />
     <Compile Include="EditorInspector.cs" />
     <Compile Include="IconManager.cs" />
+    <Compile Include="IdeComponents.cs" />
     <Compile Include="MenuRenderer.cs" />
     <Compile Include="Props.cs">
       <SubType>Form</SubType>

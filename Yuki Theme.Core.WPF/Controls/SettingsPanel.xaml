@@ -112,7 +112,7 @@
             <system:String x:Key=""></system:String>-->
         </ResourceDictionary>
     </UserControl.Resources>
-    <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}" IsSelected="True">
+    <TabControl Name="Tabs1" TabStripPlacement="Top" MinHeight="120" Style="{StaticResource CustomTabControl}">
         <TabItem Header="{DynamicResource settings.general.title}" IsSelected="True">
 
             <StackPanel Margin="4 5" Name="GeneralPanel">
@@ -350,13 +350,12 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
-            <DockPanel Margin="2 4">
-                
+        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool" IsSelected="True">
+            <DockPanel Margin="2 4" Name="ToolBarDockPanel">
                 
                 <controls:ToolBarList Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
                                       Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
-                                      SelectionChanged="IconsList_Selection" DockPanel.Dock="Left" Width="150" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl }, Path=ActualHeight}" />
+                                      SelectionChanged="IconsList_Selection" DockPanel.Dock="Left" Width="150" Height="{Binding ElementName=ToolBarDockPanel, Path=ActualHeight}" />
                 
                 <StackPanel Orientation="Vertical" Margin="10">
 
