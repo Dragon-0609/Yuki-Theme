@@ -217,6 +217,9 @@ Also, you can import your favourite color scheme from any JetBrains IDE. Click t
 Was inspired by [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
 Project uses [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET), [JetBrains Icons](https://jetbrains.design/intellij/resources/icons_list/).
 
+Developed using JetBrains Rider
+
+![Rider logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Rider.svg)
 
 ---
 
@@ -445,6 +448,9 @@ Help make this plugin better!
 Был вдохновлён [Doki Theme](https://github.com/doki-theme/doki-theme-jetbrains) <br>
 Проект использует [Fast Colored Text Box](https://github.com/PavelTorgashov/FastColoredTextBox), [Cyotek ColorPicker](https://github.com/cyotek/Cyotek.Windows.Forms.ColorPicker), [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json), [RJ ComboBox](https://github.com/RJCodeAdvance/Custom-ComboBox), [SVG.NET](https://github.com/svg-net/SVG), [Color Slider](https://github.com/fabricelacharme/ColorSlider), [WindowsAPICodePack](https://www.nuget.org/packages/WindowsAPICodePack), [FlatNumericUpDown](https://github.com/r-aghaei/FlatNumericUpDownExample), [MechanikaDesign.WinForms.UI.ColorPicker](https://www.mechanikadesign.com/software/colorpicker-controls-for-windows-forms/), [CommonMark.NET](https://github.com/Knagis/CommonMark.NET), [JetBrains Icons](https://jetbrains.design/intellij/resources/icons_list/).
 
+Разработан с использованием JetBrains Rider
+
+![Rider logo](https://resources.jetbrains.com/storage/products/company/brand/logos/Rider.svg)
 
 ---
 

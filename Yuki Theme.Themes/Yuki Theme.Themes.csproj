@@ -64,8 +64,6 @@
       <EmbeddedResource Include="Themes\DR__Mioda Ibuki Dark.yukitheme" />
       <EmbeddedResource Include="Themes\DR__Mioda Ibuki Light.yukitheme" />
       <EmbeddedResource Include="Themes\DTWMMN__Hayase Nagatoro.yukitheme" />
-      <EmbeddedResource Include="Themes\DxD__Rias Crimson.yukitheme" />
-      <EmbeddedResource Include="Themes\DxD__Rias Onyx.yukitheme" />
       <EmbeddedResource Include="Themes\EroManga__Sagiri.yukitheme" />
       <EmbeddedResource Include="Themes\EVA__Katsuragi Misato.yukitheme" />
       <EmbeddedResource Include="Themes\EVA__Rei.yukitheme" />
@@ -120,6 +118,20 @@
       <EmbeddedResource Include="Themes\Vocaloid__Hatsune Miku.yukitheme" />
       <EmbeddedResource Include="Themes\YuruCamp__Nadeshiko.yukitheme" />
       <EmbeddedResource Include="Themes\YuruCamp__Shima Rin.yukitheme" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Themes\Charlotte__Tomori Nao.yukitheme" />
+      <EmbeddedResource Include="Themes\CodeGeass__C.C..yukitheme" />
+      <EmbeddedResource Include="Themes\DxD__Rias__Crimson.yukitheme" />
+      <EmbeddedResource Include="Themes\DxD__Rias__Onyx.yukitheme" />
+      <EmbeddedResource Include="Themes\GuiltyCrown__Yuzuriha Inori.yukitheme" />
+      <EmbeddedResource Include="Themes\Haikyu__Hinata Shoyo.yukitheme" />
+      <EmbeddedResource Include="Themes\OPM__Genos.yukitheme" />
+      <EmbeddedResource Include="Themes\QQ__Nakano Ichika.yukitheme" />
+      <EmbeddedResource Include="Themes\QQ__Nakano Itsuki.yukitheme" />
+      <EmbeddedResource Include="Themes\Senko-san__Senko.yukitheme" />
+      <EmbeddedResource Include="Themes\Shokugeki__Yukihira Soma.yukitheme" />
+      <EmbeddedResource Include="Themes\Slime__Rimiru Tempest.yukitheme" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

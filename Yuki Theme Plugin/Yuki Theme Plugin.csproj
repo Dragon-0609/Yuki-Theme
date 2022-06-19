@@ -35,27 +35,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CodeCompletion, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\CodeCompletion.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\CodeCompletion.dll</HintPath>
     </Reference>
     <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
       <HintPath>..\packages\Fizzler.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.TextEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ICSharpCode.TextEditor.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>
     <Reference Include="Localization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\Localization.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\Localization.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="ParserTools, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\ParserTools.dll</HintPath>
+    <Reference Include="ParserTools, Version=3.8.3.3104, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\ParserTools.dll</HintPath>
     </Reference>
-    <Reference Include="PascalABCNET, Version=3.8.2.3033, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PascalABCNET.exe</HintPath>
+    <Reference Include="PascalABCNET, Version=3.8.3.3104, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\PascalABCNET.exe</HintPath>
     </Reference>
     <Reference Include="PluginsSupport, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\PluginsSupport.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\PluginsSupport.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -88,7 +88,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.7423.21162, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET_3.8.2\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />

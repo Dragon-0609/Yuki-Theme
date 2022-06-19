@@ -52,8 +52,8 @@ namespace Yuki_Theme.Core.Parsers
 				if (!overwrite)
 				{
 					string syt = CLI.schemes [1];
-					if (DefaultThemes.isDefault (syt))
-						CLI.CopyFromMemory (syt, PathToSave, PathToSave);
+					if (CLI.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
+						CLI.CopyFromMemory (syt, syt, PathToSave);
 					else
 					{
 						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
@@ -89,7 +89,6 @@ namespace Yuki_Theme.Core.Parsers
 				if (select && selectAfterParse != null)
 				{
 					selectAfterParse (flname);
-
 				}
 			}
 		}

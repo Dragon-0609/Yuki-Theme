@@ -1,5 +1,28 @@
 ﻿### Changelog
 
+## 8.0
+
+Added to `CLI`:
+1. Command Completion
+2. Some new commands
+
+Added to both:
+1. English and Russian languages
+2. Upgrade Main Graphics from Winforms to WPF
+3. Sticker Dimension Cap
+4. Theme Downloader
+5. 10 new themes:
+   * Tomori Nao
+   * C.C.
+   * Yuzuriha Inori
+   * Hinata Shoyo
+   * Genos
+   * Nakano Ichika
+   * Nakano Itsuki
+   * Senko
+   * Yukihira Soma
+   * Rimiru Tempest
+
 ## 7.0
 
 Added to `Plugin`:

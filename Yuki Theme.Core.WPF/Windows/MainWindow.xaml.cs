@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
@@ -76,6 +78,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Fstb.box.Paint += bgImagePaint;
 			ToggleEditor ();
 			ShowLicense ();
+			UpdateTranslations ();
 		}
 
 		private void load_schemes ()
@@ -165,12 +168,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.SetSVGImage (RestoreButton, "refresh" + add);
 			WPFHelper.SetSVGImage (ExportButton, "export" + add);
 			WPFHelper.SetSVGImage (ImportButton, "import" + add);
-			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add);
+			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add, true, Helper.bgBorder);
 			WPFHelper.SetSVGImage (SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage (DownloaderButton, "smartStepInto" + add, true, Helper.bgBorder);
 			WPFHelper.SetSVGImage (ImagePathButton, "moreHorizontal" + add);
 			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
 			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
 			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
+		}
+
+		private void UpdateTranslations ()
+		{
+			WPFHelper.TranslateControls (this, "ui.tooltips.", "main.labels.");
 		}
 
 		private void ReLoadCheckBoxImages ()
@@ -285,7 +294,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Icon = Icon,
 				Owner = this
 			};
-			
+			string lang = Settings.localization;
 			bool? dialog = settingsWindow.ShowDialog ();
 			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
@@ -297,6 +306,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					Restore ();
 				}
 
+				
 				if (settingsWindow.customSticker)
 				{
 					LoadSticker ();
@@ -306,7 +316,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				}
 			} else
 			{
+				Settings.localization = lang;
+				Settings.translation.LoadLocale (lang);
 				settingsWindow.utilities.ResetToolBar ();
+			}
+			if (lang != Settings.localization)
+			{
+				UpdateTranslations ();
 			}
 		}
 
@@ -427,6 +443,33 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void ImportFolder ()
 		{
+			CommonOpenFileDialog co = new CommonOpenFileDialog ();
+			co.IsFolderPicker = true;
+			co.Multiselect = false;
+			CommonFileDialogResult res = co.ShowDialog ();
+			if (res == CommonFileDialogResult.Ok)
+			{
+				MessageBox.Show (CLI.Translate ("main.import.directory"));
+				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
+				foreach (string fl in fls)
+				{
+					MainParser.Parse (fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+				}
+
+				fls = Directory.GetFiles (co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
+				foreach (string fl in fls)
+				{
+					MainParser.Parse (fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+				}
+
+				Themes.SelectedIndex = Themes.Items.Count - 1;
+			}
+		}
+
+		private void OpenDownloader ()
+		{
+			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm ();
+			downloaderForm.Show();
 		}
 
 		#endregion
@@ -907,6 +950,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void Close_OnClick (object sender, RoutedEventArgs e)
 		{
 			this.Close ();
+		}
+		
+		private void DownloadButton_OnClick (object sender, RoutedEventArgs e)
+		{
+			OpenDownloader ();
 		}
 		
 		#endregion

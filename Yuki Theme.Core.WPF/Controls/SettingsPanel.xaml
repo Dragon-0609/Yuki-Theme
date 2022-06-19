@@ -350,7 +350,7 @@
             </StackPanel>
         </TabItem>
 
-        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool" IsSelected="True">
+        <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
             <DockPanel Margin="2 4" Name="ToolBarDockPanel">
                 
                 <controls:ToolBarList Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"

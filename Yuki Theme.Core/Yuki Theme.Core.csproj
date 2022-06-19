@@ -259,12 +259,6 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TesterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TesterForm.Designer.cs">
-      <DependentUpon>TesterForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ThemeManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -335,9 +329,6 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Resource Include="Forms\TesterForm.resx">
-      <DependentUpon>TesterForm.cs</DependentUpon>
-    </Resource>
     <EmbeddedResource Include="Forms\ThemeDownloaderForm.resx">
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -404,6 +395,8 @@
     <EmbeddedResource Include="Resources\SVG\refresh_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\remove.svg" />
     <EmbeddedResource Include="Resources\SVG\remove_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\smartStepInto.svg" />
+    <EmbeddedResource Include="Resources\SVG\smartStepInto_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\traceInto.svg" />
     <EmbeddedResource Include="Resources\SVG\traceInto_dark.svg" />
     <EmbeddedResource Include="Database\files.txt" />

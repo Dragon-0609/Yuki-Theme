@@ -25,9 +25,22 @@ namespace Yuki_Theme.Core.Parsers
 
 		public static Dictionary <string, string> Groups = new Dictionary <string, string> ()
 		{
+			
+			{ "Azur Lane", "AzurLane: " },
 			{ "Kill la Kill", "KillLaKill: " },
 			{ "Blend S", "BlendS: " },
+            {"Guilty Crown", "GuiltyCrown: "},
+            { "Code Geass", "CodeGeass: "},
+            { "Helpful Fox Senko-san", "Senko-san: "},
+            { "Charlotte", "Charlotte: "},
+			{ "Toaru Majutsu no Index", "Railgun: " },
+			{ "The Rising of Shield Hero", "ShieldHero: " },
+			{ "Chuunibyou", "Chuunibyou: " },
 			{ "Re Zero", "Re:Zero: " },
+            { "One Punch Man", "OPM: "},
+            { "Shokugeki no Soma", "Shokugeki: "},
+            { "Haikyu!!", "Haikyu: "},
+            { "That Time I Get ReIncarnated As A Slime", "Slime: "},
 			{ "Love Live", "LoveLive: " },
 			{ "Literature Club", "DDLC: " },
 			{ "KonoSuba", "KonoSuba: " },
@@ -57,10 +70,6 @@ namespace Yuki_Theme.Core.Parsers
 			{ "Miscellaneous", "Misc: " },
 			{ "Yuru Camp", "YuruCamp: " },
 			{ "NekoPara", "NekoPara: " },
-			{ "Azur Lane", "AzurLane: " },
-			{ "The Rising of Shield Hero", "ShieldHero: " },
-			{ "Toaru Majutsu no Index", "Railgun: " },
-			{ "Chuunibyou", "Chuunibyou: " },
 		};
 
 		public override void populateList (string path)
@@ -168,7 +177,9 @@ namespace Yuki_Theme.Core.Parsers
 			});
 			df.Bold = null;
 			df.Italic = null;
-
+			
+			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
+			
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 

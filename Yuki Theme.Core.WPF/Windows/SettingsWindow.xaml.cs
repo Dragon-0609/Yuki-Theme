@@ -20,7 +20,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void SaveButtonClick (object sender, RoutedEventArgs e)
 		{
-			
 			this.DialogResult = true;
 		}
 

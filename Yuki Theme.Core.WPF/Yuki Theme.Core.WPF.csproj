@@ -43,6 +43,9 @@
         <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110">
           <HintPath>..\packages\Fizzler.dll</HintPath>
         </Reference>
+        <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+          <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+        </Reference>
         <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
           <HintPath>..\packages\Svg.dll</HintPath>
         </Reference>

@@ -43,7 +43,7 @@ namespace Yuki_Theme.Core.Parsers
 						// form.load_schemes ();
 						if (addToUIList != null)
 							addToUIList (fileName);
-						if (selectAfterParse != null)
+						if (select && selectAfterParse != null)
 							selectAfterParse (fileName);
 					}
 						break;

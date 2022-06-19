@@ -10,6 +10,7 @@
         Background="#212121" Foreground="#DDDDDD"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         xmlns:wpf="clr-namespace:Yuki_Theme.Core.WPF"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Name="Window"
         Closing="MainWindow_OnClosing"
         SourceInitialized="MainWindow_OnSourceInitialized"
@@ -42,6 +43,33 @@
 
             </ResourceDictionary.MergedDictionaries>
 
+            <system:String x:Key="ui.tooltips.add.title">Add Theme</system:String>
+            <system:String x:Key="ui.tooltips.add.message">Add theme by copying from another\ntheme.</system:String>
+            <system:String x:Key="ui.tooltips.manage.title">Manage Themes</system:String>
+            <system:String x:Key="ui.tooltips.manage.message">Open Theme Manager to manage themes.\nTo Add, Remove, Rename themes.</system:String>
+            <system:String x:Key="ui.tooltips.save.title">Save the Theme</system:String>
+            <system:String x:Key="ui.tooltips.save.message">Save current theme.</system:String>
+            <system:String x:Key="ui.tooltips.restore.title">Restore the Theme</system:String>
+            <system:String x:Key="ui.tooltips.restore.message">Restore the Theme to default\ncase. You can use it if you\nchanged wrong field.</system:String>
+            <system:String x:Key="ui.tooltips.export.title">Export the Theme</system:String>
+            <system:String x:Key="ui.tooltips.export.message">Export the Theme to PascalABC.NET.</system:String>
+            <system:String x:Key="ui.tooltips.import.title">Import Theme</system:String>
+            <system:String x:Key="ui.tooltips.import.message">Import theme from file.\nAcceptable extensions:\n.yukitheme, .json, .xshd</system:String>
+            <system:String x:Key="ui.tooltips.import_directory.title">Import Theme Directory</system:String>
+            <system:String x:Key="ui.tooltips.import_directory.message">Same as Import Theme, but\nimport from the directory.</system:String>
+            <system:String x:Key="ui.tooltips.settings.title">Settings</system:String>
+            <system:String x:Key="ui.tooltips.settings.message">Change Settings.</system:String>
+            <system:String x:Key="ui.tooltips.downloader.title">Theme Downloader</system:String>
+            <system:String x:Key="ui.tooltips.downloader.message">Download new themes\nof The Doki Theme.</system:String>
+
+            <system:String x:Key="main.labels.foreground">Foreground Color:</system:String>
+            <system:String x:Key="main.labels.background">Background Color:</system:String>
+            <system:String x:Key="main.labels.opacity">Opacity:</system:String>
+            <system:String x:Key="main.labels.align">Align:</system:String>
+            <system:String x:Key="main.labels.clear">Clear</system:String>
+            <system:String x:Key="main.labels.apply">Apply</system:String>
+            <system:String x:Key="main.labels.italic">Italic</system:String>
+            <system:String x:Key="main.labels.bold">Bold</system:String>
         </ResourceDictionary>
 
     </Window.Resources>
@@ -93,117 +121,96 @@
 
                 <WrapPanel Name="EditorButtons1">
 
-                    <Button Name="AddButton" Style="{StaticResource MarginButton}" VerticalAlignment="Top" BorderThickness="0"
-                            Click="AddButton_OnClick" ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button Name="AddButton" Style="{StaticResource ToolTipMarginButton}" VerticalAlignment="Top" BorderThickness="0"
+                            Click="AddButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Add Theme</TextBlock>
-                                <TextBlock>
-                                    Add theme by copying from another
-                                    <LineBreak />
-                                    theme.
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.add.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.add.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
 
-                    <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                            Click="ManageButton_OnClick" ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button Name="ManageButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                            Click="ManageButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Manage Themes</TextBlock>
-                                <TextBlock>
-                                    Open Theme Manager to manage themes.
-                                    <LineBreak />
-                                    To Add, Remove, Rename themes.
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.manage.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.manage.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
 
-                    <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                            Click="SaveButton_OnClick"
-                            ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750">
+                    <Button Name="SaveButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                            Click="SaveButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Save the Theme</TextBlock>
-                                <TextBlock>
-                                    Save current theme.
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.save.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.save.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
 
-                    <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                            ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750"
+                    <Button Name="RestoreButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
                             Click="RestoreButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Restore the Theme</TextBlock>
-                                <TextBlock>
-                                    Restore the Theme to default
-                                    <LineBreak />
-                                    case. You can use it if you
-                                    <LineBreak />
-                                    changed wrong field.
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.restore.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.restore.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
 
                 </WrapPanel>
 
-                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750" Click="ExportButton_OnClick">
+                <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                        Click="ExportButton_OnClick">
                     <Button.ToolTip>
                         <StackPanel>
-                            <TextBlock Style="{StaticResource ToolTipBlocks}">Export the Theme</TextBlock>
-                            <TextBlock>
-                                Export the Theme to PascalABC.NET.
-                            </TextBlock>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.export.title}" />
+                            <TextBlock Text="{DynamicResource ui.tooltips.export.message}" />
                         </StackPanel>
                     </Button.ToolTip>
                 </Button>
 
                 <WrapPanel Name="EditorButtons2">
-                    <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                            ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750" Click="ImportButton_OnClick" >
+                    <Button Name="ImportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                            Click="ImportButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Import Theme</TextBlock>
-                                <TextBlock>
-                                    Import theme from file.
-                                    <LineBreak />
-                                    Acceptable extensions:
-                                    <LineBreak />
-                                    .yukitheme, .json, .xshd
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.import.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.import.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
 
-                    <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                            ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750" Click="ImportDirectoryButton_OnClick">
+                    <Button Name="ImportDirectoryButton" VerticalAlignment="Top" BorderThickness="0"
+                            Style="{StaticResource ToolTipButton24}" Click="ImportDirectoryButton_OnClick">
                         <Button.ToolTip>
                             <StackPanel>
-                                <TextBlock Style="{StaticResource ToolTipBlocks}">Import Theme Directory</TextBlock>
-                                <TextBlock>
-                                    Same as Import Theme, but
-                                    <LineBreak />
-                                    import from the directory.
-                                </TextBlock>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}"
+                                           Text="{DynamicResource ui.tooltips.import_directory.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.import_directory.message}" />
                             </StackPanel>
                         </Button.ToolTip>
                     </Button>
                 </WrapPanel>
-                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource Button24}"
-                        ToolTipService.ShowDuration="5000" ToolTipService.InitialShowDelay="750" Click="SettingsButton_OnClick">
+                <Button Name="SettingsButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                        Click="SettingsButton_OnClick">
                     <Button.ToolTip>
                         <StackPanel>
-                            <TextBlock Style="{StaticResource ToolTipBlocks}">Settings</TextBlock>
-                            <TextBlock>
-                                Change Settings.
-                            </TextBlock>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.settings.title}" />
+                            <TextBlock Text="{DynamicResource ui.tooltips.settings.message}" />
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="DownloaderButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                        Click="DownloadButton_OnClick">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.downloader.title}" />
+                            <TextBlock Text="{DynamicResource ui.tooltips.downloader.message}" />
                         </StackPanel>
                     </Button.ToolTip>
                 </Button>
@@ -238,24 +245,24 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Name="BGColorPanel" Orientation="Horizontal">
-                            <TextBlock Text="Background Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
+                            <TextBlock Text="{DynamicResource main.labels.background}" VerticalAlignment="Center" Margin="5 2 8 2" />
                             <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
                                 <Button Name="BGButton" Margin="0" Style="{StaticResource BackButton}" Click="BackgroundButton_OnClick" />
                             </Border>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="0" Name="FGColorPanel" Orientation="Horizontal">
-                            <TextBlock Text="Foreground Color:" VerticalAlignment="Center" Margin="5 2 8 2" />
+                            <TextBlock Text="{DynamicResource main.labels.foreground}" VerticalAlignment="Center" Margin="5 2 8 2" />
                             <Border BorderBrush="Gray" BorderThickness="1" Style="{StaticResource SmallMargin}">
-                                <Button Width="32" Height="16" Name="FGButton" Margin="0" Style="{StaticResource ForeButton}" Click="ForegroundButton_OnClick" />
+                                <Button Width="32" Height="16" Name="FGButton" Margin="0" Style="{StaticResource ForeButton}"
+                                        Click="ForegroundButton_OnClick" />
                             </Border>
                         </StackPanel>
 
-                        <CheckBox VerticalAlignment="Center" Margin="10 2" Name="BoldCheckBox" Grid.Row="0" Grid.Column="1" Content="Bold"
-                                  Style="{StaticResource CheckBoxWindow}" />
+                        <CheckBox VerticalAlignment="Center" Margin="10 2" Name="BoldCheckBox" Grid.Row="0" Grid.Column="1"
+                                  Content="{DynamicResource main.labels.bold}" Style="{StaticResource CheckBoxWindow}" />
 
                         <CheckBox VerticalAlignment="Center" Margin="10 2" Name="ItalicCheckBox" Grid.Row="1" Grid.Column="1"
-                                  Content="Italic"
-                                  Style="{StaticResource CheckBoxWindow}" />
+                                  Content="{DynamicResource main.labels.italic}" Style="{StaticResource CheckBoxWindow}" />
 
                     </Grid>
 
@@ -275,13 +282,13 @@
                                 <Button Name="ImagePathButton" Margin="-1 5 5 0" Width="20" Height="20" Click="ImagePathButton_OnClick" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                                <Button Name="ApplyButton" Content="Apply" Width="NaN" Padding="6 2" />
-                                <Button Name="ClearButton" Content="Clear" Width="NaN" Padding="6 2" />
+                                <Button Name="ApplyButton" Content="{DynamicResource main.labels.apply}" Width="NaN" Padding="6 2" />
+                                <Button Name="ClearButton" Content="{DynamicResource main.labels.clear}" Width="NaN" Padding="6 2" />
                             </StackPanel>
                         </Grid>
 
                         <StackPanel Name="AlignPanel">
-                            <TextBlock Text="Align:" Margin="7 0" Style="{StaticResource BigMargin}" />
+                            <TextBlock Text="{DynamicResource main.labels.align}" Margin="7 0" Style="{StaticResource BigMargin}" />
                             <StackPanel Orientation="Horizontal">
                                 <controls:AlignButton Style="{StaticResource BigButton}" Margin="10 10 5 5" x:Name="LAlignButton"
                                                       Padding="0"
@@ -296,7 +303,7 @@
                         </StackPanel>
 
                         <StackPanel Name="OpacityPanel">
-                            <TextBlock Text="Opacity:" Margin="7 0" />
+                            <TextBlock Text="{DynamicResource main.labels.opacity}" Margin="7 0" />
 
                             <Slider Width="120" Maximum="100" IsSnapToTickEnabled="True" TickFrequency="1"
                                     Margin="5 5 5 0" Background="{Binding ElementName=Window, Path=Background}"
@@ -304,7 +311,7 @@
                                     Name="OpacitySlider" Tag="{Binding ElementName=Window, Path=Tag}"
                                     ValueChanged="OpacitySlider_OnValueChanged"
                                     Thumb.DragStarted="OpacitySlider_OnDragStarted"
-                                    Thumb.DragCompleted="OpacitySlider_OnDragCompleted" 
+                                    Thumb.DragCompleted="OpacitySlider_OnDragCompleted"
                                     wpf:MouseWheelBehavior.Value="120"
                                     SmallChange="1" />
 
@@ -332,7 +339,7 @@
                 </controls:AirspacePopup>
 
                 <controls:CodeTextboxHost x:Name="Fstb"></controls:CodeTextboxHost>
-                
+
             </Grid>
 
             <WrapPanel Grid.Row="2" Name="PluginButtons" HorizontalAlignment="Right" Visibility="Collapsed">

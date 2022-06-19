@@ -356,7 +356,8 @@ namespace Yuki_Theme.Core.Formats
 					} else
 					{
 						// Release resource
-						iag.Item2.Dispose ();
+						if (iag.Item2 != null)
+							iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
@@ -387,7 +388,8 @@ namespace Yuki_Theme.Core.Formats
 					} else
 					{
 						// Release resource
-						iag.Item2.Dispose ();
+						if (iag.Item2 != null)
+							iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;
@@ -455,7 +457,8 @@ namespace Yuki_Theme.Core.Formats
 					} else
 					{
 						// Release resource
-						iag.Item2.Dispose ();
+						if (iag.Item2 != null)
+							iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasWallpaper = iag.Item1;
@@ -481,7 +484,8 @@ namespace Yuki_Theme.Core.Formats
 					} else
 					{
 						// Release resource
-						iag.Item2.Dispose ();
+						if (iag.Item2 != null)
+							iag.Item2.Dispose ();
 					}
 
 					themeToSet.HasSticker = iag.Item1;

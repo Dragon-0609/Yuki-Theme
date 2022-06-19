@@ -256,7 +256,7 @@ namespace Yuki_Theme.CLI
 			{
 				foreach (string scheme in Core.CLI.schemes)
 				{
-					Console.WriteLine (scheme);
+					Console.WriteLine ("\t{0}", scheme);
 				}
 			}
 		}

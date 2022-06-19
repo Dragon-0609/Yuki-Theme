@@ -14,7 +14,9 @@ namespace Yuki_Theme.Themes
 			{ "BlendS: Maika", true },
 			{ "BunnySenpai: Mai Dark", true },
 			{ "BunnySenpai: Mai Light", true },
+			{ "Charlotte: Tomori Nao", true },
 			{ "Chuunibyou: Takanashi Rikka", true },
+			{ "CodeGeass: C.C.", true },
 			{ "DDLC: Monika Dark", true },
 			{ "DDLC: Monika Light", true },
 			{ "DDLC: Natsuki Dark", true },
@@ -28,8 +30,8 @@ namespace Yuki_Theme.Themes
 			{ "DR: Mioda Ibuki Dark", true },
 			{ "DR: Mioda Ibuki Light", true },
 			{ "DTWMMN: Hayase Nagatoro", true },
-			{ "DxD: Rias Crimson", true },
-			{ "DxD: Rias Onyx", true },
+			{ "DxD: Rias: Crimson", true },
+			{ "DxD: Rias: Onyx", true },
 			{ "EroManga: Sagiri", true },
 			{ "EVA: Katsuragi Misato", true },
 			{ "EVA: Rei", true },
@@ -37,6 +39,8 @@ namespace Yuki_Theme.Themes
 			{ "Franxx: Zero Two Light", true },
 			{ "FutureDiary: Gasai Yuno", true },
 			{ "Gate: Rory Mercury", true },
+			{ "GuiltyCrown: Yuzuriha Inori", true },
+			{ "Haikyu: Hinata Shoyo", true },
 			{ "JahySama: Jahy", true },
 			{ "Kakegurui: Jabami Yumeko", true },
 			{ "KillLaKill: Ryuko Dark", true },
@@ -60,8 +64,11 @@ namespace Yuki_Theme.Themes
 			{ "NekoPara: Maple Light", true },
 			{ "NekoPara: Shigure", true },
 			{ "NekoPara: Vanilla", true },
+			{ "OPM: Genos", true },
 			{ "OreGairu: Yukinoshita Yukino", true },
 			{ "OreImo: Kirino", true },
+			{ "QQ: Nakano Ichika", true },
+			{ "QQ: Nakano Itsuki", true },
 			{ "QQ: Nakano Miku", true },
 			{ "QQ: Nakano Nino", true },
 			{ "QQ: Nakano Yotsuba", true },
@@ -74,8 +81,11 @@ namespace Yuki_Theme.Themes
 			{ "Re:Zero: Rem", true },
 			{ "SAO: Asuna Dark", true },
 			{ "SAO: Asuna Light", true },
+			{ "Senko-san: Senko", true },
 			{ "SG: Makise Kurisu", true },
 			{ "ShieldHero: Raphtalia", true },
+			{ "Shokugeki: Yukihira Soma", true },
+			{ "Slime: Rimiru Tempest", true },
 			{ "TypeMoon: Astolfo", true },
 			{ "TypeMoon: Gray", true },
 			{ "TypeMoon: Ishtar Dark", true },
@@ -85,7 +95,8 @@ namespace Yuki_Theme.Themes
 			{ "YuruCamp: Nadeshiko", true },
 			{ "YuruCamp: Shima Rin", true }
 		};
-		public string    ResourceHeader => "Yuki_Theme.Themes";
+
+		public string ResourceHeader => "Yuki_Theme.Themes";
 
 		public Assembly Location => Assembly.GetExecutingAssembly ();
 

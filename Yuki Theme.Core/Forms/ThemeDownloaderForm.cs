@@ -52,6 +52,7 @@ public partial class ThemeDownloaderForm : Form
 		"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
 
 	private const string LOCAL_BRANCH_SERVER  = "http://localhost:8000/branches.json";
+	
 	private const string REMOTE_BRANCH_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
 	private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
@@ -177,45 +178,51 @@ public partial class ThemeDownloaderForm : Form
 		{
 			client.DefaultRequestHeaders.Add ("User-Agent",
 			                                  DownloadForm.user_agent);
-			var response = await client.GetAsync (search_api);
-			if (response != null)
+			try
 			{
-				Console.WriteLine ("Groups info loaded.");
-				string file = await response.Content.ReadAsStringAsync ();
-
-				string [] lines = file.Split ('\n');
-
-				Console.WriteLine ("Parsing groups info...");
-				Dictionary <string, string> namespaces = new ();
-
-				foreach (string line in lines)
+				var response = await client.GetAsync (search_api);
+				if (response != null)
 				{
-					if (line.Contains (" val "))
-					{
-						Tuple <string, string> res = ParseNamespace (line);
-						if (res != null)
-							namespaces.Add (res.Item1, res.Item2);
-					} else if (line.Contains (" to "))
-					{
-						string cline = line.TrimStart ();
-						cline = cline.Replace (",", "");
-						string [] splitted = cline.Split (new [] { " to " }, StringSplitOptions.None);
-						string name = splitted [0].Replace ("\"", "");
-						string converted = "";
-						if (!splitted [1].Contains ("\""))
-						{
-							if (namespaces.ContainsKey (splitted [1]))
-								converted = namespaces [splitted [1]];
-							else
-								converted = splitted [1];
-						} else
-						{
-							converted = splitted [1].Replace ("\"", "");
-						}
+					Console.WriteLine ("Groups info loaded.");
+					string file = await response.Content.ReadAsStringAsync ();
 
-						groups.Add (name, converted);
+					string [] lines = file.Split ('\n');
+
+					Console.WriteLine ("Parsing groups info...");
+					Dictionary <string, string> namespaces = new ();
+
+					foreach (string line in lines)
+					{
+						if (line.Contains (" val "))
+						{
+							Tuple <string, string> res = ParseNamespace (line);
+							if (res != null)
+								namespaces.Add (res.Item1, res.Item2);
+						} else if (line.Contains (" to "))
+						{
+							string cline = line.TrimStart ();
+							cline = cline.Replace (",", "");
+							string [] splitted = cline.Split (new [] { " to " }, StringSplitOptions.None);
+							string name = splitted [0].Replace ("\"", "");
+							string converted = "";
+							if (!splitted [1].Contains ("\""))
+							{
+								if (namespaces.ContainsKey (splitted [1]))
+									converted = namespaces [splitted [1]];
+								else
+									converted = splitted [1];
+							} else
+							{
+								converted = splitted [1].Replace ("\"", "");
+							}
+
+							groups.Add (name, converted);
+						}
 					}
 				}
+			} catch (Exception exception)
+			{
+				MessageBox.Show ($"{exception.Message}\n{exception.StackTrace}");
 			}
 		}
 
