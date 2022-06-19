@@ -21,12 +21,13 @@ namespace Yuki_Theme.Core.Forms
 		private          WebClient web;
 		private          string    github_url = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 
-		private string user_agent =
+		public const string user_agent =
 			"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
 
 		public DownloadForm (PopupFormsController controller)
 		{
 			InitializeComponent ();
+			button1.Text = Translate ("download.cancel");
 			popupController = controller;
 			popupController.colorUpdatable.OnColorUpdate += (bg, fg, clicked) => {
 				BackColor = button1.BackColor = button1.FlatAppearance.MouseDownBackColor = bg;
@@ -40,7 +41,7 @@ namespace Yuki_Theme.Core.Forms
 			if (IsValidUpdate (null))
 			{
 				QuestionForm quform = new QuestionForm ();
-				quform.EditMessage ("New version is already downloaded", "New version is already downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
+				quform.EditMessage (Translate ("download.downloaded.already"), Translate ("download.downloaded.already.restarttoinstall"), Translate ("download.buttons.install"), Translate ("download.buttons.later"));
 				if (quform.ShowDialog(popupController.form) == DialogResult.Yes)
 				{
 					startUpdating ();
@@ -63,7 +64,9 @@ namespace Yuki_Theme.Core.Forms
 						if (response != null)
 						{
 							string json = await response.Content.ReadAsStringAsync ();
+#if CONSOLE_LOGS
 							Console.WriteLine (json);
+#endif
 							JObject jresponse;
 							if (Settings.Beta) // If can get beta, parse latest release (even pre-release)
 							{
@@ -120,11 +123,11 @@ namespace Yuki_Theme.Core.Forms
 								
 								popupController.nf.onClick = startUpdate;
 								popupController.nf.onClick2 = openInGithub;
-								popupController.nf.button1.Text = "Update";
-								popupController.nf.button3.Text = "Open in Github";
+								popupController.nf.button1.Text = Translate ("download.buttons.update");
+								popupController.nf.button3.Text = Translate ("download.buttons.github");
 								string sw = jresponse ["name"].ToString ();
 								if (sw.StartsWith ("v")) sw = sw.Substring (1);
-								popupController.nf.changeContent ("New version is available", $"Yuki theme {sw}      Size: {size}");
+								popupController.nf.changeContent (Translate ("download.available"), $"Yuki theme {sw}      {Translate ("download.size")}: {size}");
 
 								popupController.nf.button1.Visible = true;
 								popupController.nf.button3.Visible = true;
@@ -140,7 +143,7 @@ namespace Yuki_Theme.Core.Forms
 								size = $"{double.Parse (size) / 1024 / 1024:0.0}";
 							} else
 							{
-								popupController.ShowNotification ("Up to date", "Your version is the latest.");
+								popupController.ShowNotification (Translate ("download.uptodate"), Translate ("download.latest"));
 								popupController.nf.button1.Visible = false;
 								popupController.nf.button3.Visible = false;
 								popupController.changeNotificationLocation ();
@@ -216,15 +219,15 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (e.Error != null)
 			{
-				string title = "Error";
+				string title = Translate ("download.refused.error");
 				string message = e.Error.Message;
 				
 				if(e.Error.InnerException != null)
 				{
 					if (e.Error.InnerException is SocketException)
 					{
-						title = "Refused";
-						message = "Downloading is canceled, because server refused the request";
+						title = Translate ("download.refused.title");
+						message = Translate ("download.refused.message");
 					} else
 					{
 						message = e.Error.InnerException.Message;
@@ -236,7 +239,7 @@ namespace Yuki_Theme.Core.Forms
 					popupController.ShowNotification (title, message);
 					popupController.nf.onClick = openInGithub;
 					popupController.nf.onClick2 = null;
-					popupController.nf.button1.Text = "Open in Github";
+					popupController.nf.button1.Text = Translate ("download.buttons.github");
 					popupController.nf.button1.Visible = true;
 					
 					popupController.changeNotificationLocation ();
@@ -249,14 +252,15 @@ namespace Yuki_Theme.Core.Forms
 				// Console.WriteLine(e.Error.Message);
 				if (e.Cancelled)
 				{
-					popupController.ShowNotification ("Canceled", $"Downloading is canceled");
+					popupController.ShowNotification (Translate ("download.canceled.title"), Translate ("download.canceled.message"));
 					popupController.nf.button1.Visible = false;
 					popupController.changeNotificationLocation ();
 					popupController.CloseDownloader ();
 				} else
 				{
 					QuestionForm quform = new QuestionForm ();
-					quform.EditMessage ("New version is downloaded", "New version is downloaded. You need to restart the app to install update. If you want to install later, there's 'Restart for update' button in settings.", "Install", "Later");
+					quform.EditMessage (Translate ("download.downloaded.short"), Translate ("download.downloaded.full"),
+					                    Translate ("download.buttons.install"), Translate ("download.buttons.later"));
 					if (quform.ShowDialog(popupController.form) == DialogResult.Yes)
 					{
 						startUpdating ();
@@ -271,7 +275,7 @@ namespace Yuki_Theme.Core.Forms
 		public void startUpdating ()
 		{
 			Preparer prep = new Preparer ();
-			prep.prepare ();
+			prep.prepare (true);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -329,6 +333,11 @@ namespace Yuki_Theme.Core.Forms
 				Console.WriteLine (lng);
 			}
 			return lng > 1;
+		}
+
+		private string Translate (string key)
+		{
+			return CLI.Translate (key);
 		}
 
 		private static string GetUpdatePath ()

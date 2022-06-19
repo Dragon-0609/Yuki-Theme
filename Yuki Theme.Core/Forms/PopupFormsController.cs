@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Interfaces;
 
 namespace Yuki_Theme.Core.Forms;
 

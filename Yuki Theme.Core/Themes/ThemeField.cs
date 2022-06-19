@@ -71,8 +71,13 @@ public class ThemeField
 	{
 		if (name == "color")
 			Foreground = value;
-		else
+		else if (name == "bgcolor")
 			Background = value;
+		else if (name == "bold")
+		{
+			Bold = bool.Parse (value);
+			Italic = bool.Parse (value);
+		}
 	}
 
 	public Dictionary <string, string> GetAttributes ()
@@ -126,7 +131,13 @@ public class ThemeField
 
 			case "bgcolor" :
 			{
-				res = Foreground == null;
+				res = Background == null;
+			}
+				break;
+
+			case "bold" :
+			{
+				res = Bold == null;
 			}
 				break;
 		}
@@ -169,4 +180,77 @@ public class ThemeField
 		if (fiel.Italic != null)
 			Italic = fiel.Italic;
 	}
+	
+	public ThemeField MergeWithAnother (ThemeField target)
+	{
+		if (this.Background == null && target.Background != null)
+		{
+			this.Background = target.Background;
+		}
+
+		if (this.Foreground == null && target.Foreground != null)
+		{
+			this.Foreground = target.Foreground;
+		}
+		
+		if (this.Bold == null && target.Bold != null)
+		{
+			this.Bold = target.Bold;
+		}
+		
+		if (this.Italic == null && target.Italic != null)
+		{
+			this.Italic = target.Italic;
+		}
+		
+		return this;
+	}
+
+	public bool IsEqual (ThemeField field)
+	{
+		bool equal = true;
+		if (Background != null)
+		{
+			equal = field.Background != null && Background == field.Background;
+		}else if (field.Background != null)
+		{
+			equal = false;
+		}
+
+		if (equal)
+		{
+			if (Foreground != null)
+			{
+				equal = field.Foreground != null && Foreground == field.Foreground;
+			}else if (field.Foreground != null)
+			{
+				equal = false;
+			}	
+		}
+
+		if (equal)
+		{
+			if (Bold != null)
+			{
+				equal = field.Bold != null && Bold == field.Bold;
+			}else if (field.Bold != null)
+			{
+				equal = false;
+			}	
+		}
+
+		if (equal)
+		{
+			if (Italic != null)
+			{
+				equal = field.Italic != null && Italic == field.Italic;
+			}else if (field.Italic != null)
+			{
+				equal = false;
+			}	
+		}
+		
+		return equal;
+	}
+	
 }

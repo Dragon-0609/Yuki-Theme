@@ -191,107 +191,33 @@ namespace Yuki_Theme.Core
 			return res;
 		}
 
+		public static Dictionary <string, string> changedNames = new ()
+		{
+			{ "Default", "Default" },
+			{ "Selection", "Selection" },
+			{ "LineNumbers", "LineNumber" },
+			{ "CaretMarker", "Caret" },
+			{ "VRuler", "VRuler" },
+			{ "FoldLine", "Fold" },
+			{ "FoldMarker", "FoldMarker" },
+			{ "SelectedFoldLine", "SelectedFold" },
+			{ "Digits", "Digit" },
+			{ "LineBigComment", "Comment" },
+			{ "String", "String" },
+			{ "KeyWords", "Keyword" },
+			{ "BeginEnd", "Begin, End" },
+			{ "Punctuation", "Punctuation" },
+			{ "OperatorKeywords", "Operator" },
+			{ "InternalConstant", "Constant" },
+			{ "Wallpaper", "Image" },
+			{ "Sticker", "Sticker" }
+		};
+
 		public static string getChangedName (string str)
 		{
 			string res = "";
-			switch (str)
-			{
-				case "Default" :
-				{
-					res = "Default";
-				}
-					break;
-				case "Selection" :
-				{
-					res = "Selection";
-				}
-					break;
-				case "LineNumbers" :
-				{
-					res = "LineNumber";
-				}
-					break;
-				case "CaretMarker" :
-				{
-					res = "Caret";
-				}
-					break;
-				case "VRuler" :
-				{
-					res = "VRuler";
-				}
-					break;
-				case "FoldLine" :
-				{
-					res = "Fold";
-				}
-					break;
-				case "FoldMarker" :
-				{
-					res = "FoldMarker";
-				}
-					break;
-				case "SelectedFoldLine" :
-				{
-					res = "SelectedFold";
-				}
-					break;
-				case "Digits" :
-				{
-					res = "Digit";
-				}
-					break;
-				case "LineBigComment" :
-				{
-					res = "Comment";
-				}
-					break;
-				case "String" :
-				{
-					res = "String";
-				}
-					break;
-				case "KeyWords" :
-				{
-					res = "Keyword";
-				}
-					break;
-				case "BeginEnd" :
-				{
-					res = "BeginEnd";
-				}
-					break;
-				case "Punctuation" :
-				{
-					res = "Punctuation";
-				}
-					break;
-				case "OperatorKeywords" :
-				{
-					res = "Operator";
-				}
-					break;
-				case "InternalConstant" :
-				{
-					res = "Constant";
-				}
-					break;
-				case "Wallpaper" :
-				{
-					res = "Image";
-				}
-					break;
-				case "Sticker" :
-				{
-					res = "Sticker";
-				}
-					break;
-				default :
-				{
-					res = str;
-				}
-					break;
-			}
+			if (changedNames.ContainsKey (str))
+				res = changedNames [str];
 
 			return res;
 		}

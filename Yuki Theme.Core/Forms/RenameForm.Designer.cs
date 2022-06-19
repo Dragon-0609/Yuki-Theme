@@ -41,14 +41,14 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button1
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.AutoSize = true;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.button1.Location = new System.Drawing.Point (215, 91);
+			this.button1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.button1.Location = new System.Drawing.Point (198, 91);
 			this.button1.Margin = new System.Windows.Forms.Padding (5);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size (80, 30);
+			this.button1.Size = new System.Drawing.Size (86, 30);
 			this.button1.TabIndex = 0;
 			this.button1.Text = "Save";
 			this.button1.UseVisualStyleBackColor = true;
@@ -56,15 +56,15 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button2
 			// 
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.AutoSize = true;
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.button2.Location = new System.Drawing.Point (305, 91);
+			this.button2.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.button2.Location = new System.Drawing.Point (300, 91);
 			this.button2.Margin = new System.Windows.Forms.Padding (5);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size (79, 30);
+			this.button2.Size = new System.Drawing.Size (86, 30);
 			this.button2.TabIndex = 1;
 			this.button2.Text = "Cancel";
 			this.button2.UseVisualStyleBackColor = true;
@@ -72,7 +72,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label1
 			// 
-			this.label1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label1.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label1.Location = new System.Drawing.Point (11, 13);
 			this.label1.Margin = new System.Windows.Forms.Padding (5, 0, 5, 0);
 			this.label1.Name = "label1";
@@ -82,7 +82,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// label2
 			// 
-			this.label2.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.label2.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label2.Location = new System.Drawing.Point (11, 53);
 			this.label2.Margin = new System.Windows.Forms.Padding (5, 0, 5, 0);
 			this.label2.Name = "label2";
@@ -93,7 +93,7 @@ namespace Yuki_Theme.Core.Forms
 			// toTBox
 			// 
 			this.toTBox.BorderColor = System.Drawing.Color.Blue;
-			this.toTBox.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.toTBox.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.toTBox.Location = new System.Drawing.Point (138, 53);
 			this.toTBox.Margin = new System.Windows.Forms.Padding (5);
 			this.toTBox.MaxLength = 35;
@@ -105,7 +105,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.fromTBox.BorderColor = System.Drawing.Color.Blue;
 			this.fromTBox.Enabled = false;
-			this.fromTBox.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.fromTBox.Font = new System.Drawing.Font ("Calibri", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.fromTBox.Location = new System.Drawing.Point (138, 13);
 			this.fromTBox.Margin = new System.Windows.Forms.Padding (5);
 			this.fromTBox.MaxLength = 35;

@@ -39,5 +39,17 @@
 		New,
 		Null
 	}
+
+	public enum ThemeLocation
+	{
+		File,
+		Memory
+	}
+
+	public enum DimensionCapUnit : int
+	{
+		Height = 0,
+		Width = 1
+	}
 	
 }

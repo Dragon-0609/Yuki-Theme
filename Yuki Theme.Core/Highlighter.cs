@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Themes;
 using static System.Drawing.Brushes;
 using TextStyle = FastColoredTextBoxNS.TextStyle;
@@ -35,22 +36,20 @@ namespace Yuki_Theme.Core
 
 		//styles
 
-		private MForm form;
-
 		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
 
 		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
-
+		
 		private string [] names =
-		{
+		{ 
 			"linebigcomment", "linecomment", "blockcomment", "blockcomment2", "string", "digits", "beginend",
 			"keywords", "programsections", "punctuation", "nonreserved1", "operatorkeywords", "selectionstatements",
 			"iterationstatements", "exceptionhandlingstatements", "raisestatement", "jumpstatements", "jumpprocedures",
 			"internalconstant", "internaltypes", "referencetypes", "modifiers", "accessmodifiers", "accesskeywords1",
 			"errorwords", "warningwords", "direcivenames", "specialdirecivenames", "direcivevalues", "markprevious"
 		};
-
+		
 		private Regex currentRegex;
 
 		private EllipseStyle ellipseStyle = new EllipseStyle ();
@@ -58,7 +57,7 @@ namespace Yuki_Theme.Core
 		public static RegexOptions RegexCompiledOption
 		{
 			get
-			{
+		{
 				if (platformType == Platform.X86)
 					return RegexOptions.Compiled;
 				return RegexOptions.None;
@@ -69,9 +68,8 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
-		public Highlighter (FastColoredTextBox fs, MForm fm)
+		public Highlighter (FastColoredTextBox fs)
 		{
-			form = fm;
 			sBox = fs;
 			sBox.Clear ();
 			sBox.TextChanged += PascalSyntaxHighlight;
@@ -85,7 +83,7 @@ namespace Yuki_Theme.Core
 			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
 			{
 				if (isInNames (style.Key))
-				{
+			{
 					// Console.WriteLine(style.Key);
 					string [] key = new string [] { style.Key.ToLower () };
 					if (isLight)
@@ -116,36 +114,35 @@ namespace Yuki_Theme.Core
 				} else
 				{
 					// Console.WriteLine (style.Key);
-					switch (style.Key)
+				switch (style.Key)
+				{
+					case "Default" :
+					case "Default Text" :
 					{
-						case "Default" :
-						case "Default Text" :
-						{
 							sBox.BackColor = Parse (style.Value.Background);
 							sBox.ForeColor = Parse (style.Value.Foreground);
+							Helper.bgdefColor = sBox.BackColor;
 							Helper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
 							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
 							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
 							Helper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
-
-							// sBox.WhitespaceColor = sBox.BackColor;
-							form.updateBackgroundColors ();
-						}
-							break;
-						case "Selection" :
-						{
-							sBox.SelectionColor = Color.FromArgb (100, Parse (style.Value.Background));
+					}
+						break;
+					case "Selection" :
+					{
+						Helper.selectionColor = Parse (style.Value.Background);
+							sBox.SelectionColor = Color.FromArgb (100, Helper.selectionColor);
 						}
 							break;
 						case "VRuler" :
 						case "Vertical Ruler" :
 						{
 							sBox.ServiceLinesColor = Parse (style.Value.Foreground);
-						}
-							break;
-						case "CaretMarker" :
-						case "Caret" :
-						{
+					}
+						break;
+					case "CaretMarker" :
+					case "Caret" :
+					{
 							sBox.CaretColor = Parse (style.Value.Foreground);
 							Helper.bgBorder = sBox.CaretColor;
 						}
@@ -177,12 +174,12 @@ namespace Yuki_Theme.Core
 						case "EOLMarkers" :
 						{
 							sBox.BracketsStyle.BackgroundBrush = new SolidBrush (Color.FromArgb (100, Parse(style.Value.Foreground)));
-						}
-							break;
 					}
+						break;
 				}
 			}
-
+		}
+		
 			sBox.Refresh ();
 		}
 
@@ -394,7 +391,7 @@ namespace Yuki_Theme.Core
 			else
 			{
 				return str != "Special Character" && ShadowNames.PascalFields_raw.ContainsKey (str);
-			}
+		}
 		}
 
 

@@ -1,0 +1,84 @@
+{
+  "id": "cb8ef4b7-0844-4a04-b08b-754086598de4",
+  "name": "Sayori Light",
+  "displayName": "Sayori",
+  "dark": false,
+  "author": "Unthrottled",
+  "group": "Literature Club",
+  "stickers": {
+    "default": {
+      "name": "sayori.png",
+      "anchor": "center",
+      "opacity": 10
+    },
+    "secondary": {
+      "name": "sayori_joy.png",
+      "anchor": "center",
+      "opacity": 10
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#2e7093"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#dceef7",
+    "lineNumberColor": "#aaaaaa",
+    "completionWindowBackground": "#e7e5ea",
+    "baseIconColor": "#838a8b",
+    "contrastColor": "#cfeef6",
+    "nonProjectFileScopeColor": "#f0fbf4",
+    "secondaryBackground": "#ecfbff",
+    "selectionForeground": "#393d45",
+    "inactiveBackground": "#e4ebee",
+    "inactiveBackgroundDarker": "#e1e8ed",
+    "headerColor": "#f0faff",
+    "baseBackground": "#f3faff",
+    "borderColor": "#e2eaee",
+    "buttonColor": "#d8e6ee",
+    "selectionInactive": "#d7e3f1",
+    "identifierHighlight": "#e4f1fb",
+    "selectionBackground": "#a9c8ec",
+    "selectionBackgroundTransparent": "#a0bbd233",
+    "searchBackground": "#BDB9F1",
+    "searchForeground": "#393d45",
+    "buttonFont": "#252427",
+    "foregroundColor": "#252427",
+    "startColor": "#0d96f1",
+    "highlightColor": "#e0f2ff",
+    "disabledColor": "#A2B6CB",
+    "accentColorTransparent": "#00bcd45A",
+    "accentColorLessTransparent": "#00bcd49A",
+    "accentColorMoreTransparent": "#00bcd42A",
+    "accentColor": "#00bcd4",
+    "infoForeground": "#64a6ac",
+    "stopColor": "#3DFFF3",
+    "testScopeColor": "#f1fdeb",
+    "popupMask": "#f0faff30",
+    "codeBlock": "#eaf0f6",
+    "textEditorBackground": "#f0faff",
+    "foldedTextBackground": "#e9f5fd",
+    "comments": "#7790AF",
+    "classNameColor": "#EF5D99",
+    "htmlTagColor": "#167BBA",
+    "stringColor": "#E59584",
+    "keyColor": "#9f69dc",
+    "constantColor": "#4C94D6",
+    "keywordColor": "#3F77EF",
+    "lightEditorColor": "#e4f3fa",
+    "breakpointColor": "#f5f8cf",
+    "breakpointActiveColor": "#b9fcbc",
+    "fileBlue": "#c8e5ff",
+    "fileGray": "#d8e0e4",
+    "fileRose": "#e7cbe3",
+    "fileOrange": "#edd3b7",
+    "fileViolet": "#e2dbfc",
+    "fileYellow": "#e7ebbe",
+    "fileRed": "#e6b6ba",
+    "filePurple": "#c8b5f0"
+  },
+  "characterId": "19326648-3b6a-450c-b741-ca67f39ed691"
+}

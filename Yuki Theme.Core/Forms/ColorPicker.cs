@@ -16,13 +16,14 @@ namespace Yuki_Theme.Core.Forms
 		public  Color      colorRgb    = Color.Empty;
 		private bool       lockUpdates = false;
 		private int        cbox        = 3;
-		private MForm      form;
+		// private MForm      form;
+		public bool allowSave = true;
 		#endregion
 		
-		public ColorPicker (MForm fm)
+		public ColorPicker (/*MForm fm*/)
 		{
 			InitializeComponent ();
-			form = fm;
+			// form = fm;
 			this.colorBox2D.ColorMode = this.colorMode;
 			this.colorSlider.ColorMode = this.colorMode;
 			this.StartPosition = FormStartPosition.CenterParent;
@@ -30,7 +31,8 @@ namespace Yuki_Theme.Core.Forms
 			tabHexagon.Enter += TabHexagonOnEnter;
 			tabWheel.Enter += TabWheelOnEnter;
 			tabColorBox.Enter += TabColorBoxOnEnter;
-			
+			OKBTN.Text = CLI.Translate ("messages.buttons.select");
+			CNBTN.Text = CLI.Translate ("download.cancel");
 		}
 
 		public Color MainColor
@@ -295,11 +297,6 @@ namespace Yuki_Theme.Core.Forms
 			textboxHexColor.Text = ColorTranslator.ToHtml(colorWheel.Color);
 		}
 
-		public void UpdateText(int lang)
-		{
-			Text = "Color Switcher";
-		}
-
 		private void TabHexagonOnEnter (object sender, EventArgs e)
 		{
 				cbox=1;
@@ -319,11 +316,12 @@ namespace Yuki_Theme.Core.Forms
 
 		private void OKBTN_Click (object sender, EventArgs e)
 		{
-			if (form.isDefault ())
+			if (!allowSave)
 			{
-				MessageBox.Show ((IWin32Window) this, "This theme is default theme, so it's readonly! It can't be changed. You can just copy this and after that you can change it.", "This theme is readonly", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}else
-				DialogResult = DialogResult.OK;	
+				MessageBox.Show ((IWin32Window)this, CLI.Translate ("colors.default.error.full"),
+				                 CLI.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			} else
+				DialogResult = DialogResult.OK;
 		}
 
 		private void CNBTN_Click (object sender, EventArgs e)

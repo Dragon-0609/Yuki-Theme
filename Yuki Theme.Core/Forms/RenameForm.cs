@@ -9,6 +9,11 @@ namespace Yuki_Theme.Core.Forms
 		{
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
+			button1.Text = CLI.Translate ("main.tips.save");
+			button2.Text = CLI.Translate ("download.cancel");
+			label1.Text = CLI.Translate ("messages.rename.from") + ":";
+			label2.Text = CLI.Translate ("messages.rename.to") + ":";
+			Text = CLI.Translate ("messages.rename.title");
 		}
 		private void button1_Click (object sender, EventArgs e)
 		{

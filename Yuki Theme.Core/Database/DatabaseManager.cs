@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.Database
 		{
 			// CreateConnection ();
 			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			if (ke.GetValue ("1") == null)
+			if (ke.GetValue (Settings.PASCALPATH.ToString ()) == null)
 			{
 				SetValueToDatabase (ke, Settings.PASCALPATH, "empty");
 				SetValueToDatabase (ke, Settings.ACTIVE, "empty");
@@ -46,6 +46,11 @@ namespace Yuki_Theme.Core.Database
 				SetValueToDatabase (ke, Settings.ASKTOSAVE, "true");
 				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
 				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
+				SetValueToDatabase (ke, Settings.LOCALIZATION, "unknown");
+				SetValueToDatabase (ke, Settings.USEDIMENSIONCAP, "false");
+				SetValueToDatabase (ke, Settings.DIMENSIONCAPMAX, "-1");
+				SetValueToDatabase (ke, Settings.DIMENSIONCAPUNIT, "0");
+				SetValueToDatabase (ke, Settings.COLORPICKER, "0");
 			}
 		}
 
@@ -62,7 +67,7 @@ namespace Yuki_Theme.Core.Database
 		public Dictionary <int, string> ReadData ()
 		{
 			Dictionary <int, string> dictionary = new Dictionary <int, string> ();
-			
+
 			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
 			AddToDictionary (ref dictionary, key, Settings.PASCALPATH, "empty");
 			AddToDictionary (ref dictionary, key, Settings.ACTIVE, "empty");
@@ -81,7 +86,7 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.ALLOWPOSITIONING, "false");
 			AddToDictionary (ref dictionary, key, Settings.SHOWGRIDS, "false");
 			AddToDictionary (ref dictionary, key, Settings.USECUSTOMSTICKER, "false");
-			AddToDictionary (ref dictionary, key, Settings.CUSTOMSTICKER,  "");
+			AddToDictionary (ref dictionary, key, Settings.CUSTOMSTICKER, "");
 			AddToDictionary (ref dictionary, key, Settings.LICENSE, "false");
 			AddToDictionary (ref dictionary, key, Settings.GOOGLEANALYTICS, "false");
 			AddToDictionary (ref dictionary, key, Settings.DONTTRACK, "false");
@@ -89,11 +94,16 @@ namespace Yuki_Theme.Core.Database
 			AddToDictionary (ref dictionary, key, Settings.ASKTOSAVE, "true");
 			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
 			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
+			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "unknown");
+			AddToDictionary (ref dictionary, key, Settings.USEDIMENSIONCAP, "false");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPMAX, "-1");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPUNIT, "0");
+			AddToDictionary (ref dictionary, key, Settings.COLORPICKER, "0");
 
 			return dictionary;
 		}
 
-		
+
 		public string ReadData (int key, string defaultValue = "")
 		{
 			RegistryKey kes = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
@@ -126,21 +136,32 @@ namespace Yuki_Theme.Core.Database
 			}
 		}
 
-		public Point ReadLocation ()
+		public WindowProps ReadLocation ()
 		{
-			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
-			string sp = key.GetValue (Settings.LOCATION.ToString (), "0:0").ToString ();
-			if (!sp.Contains (":"))
-				sp = "0:0";
-			string [] spp = sp.Split (':');
-			Console.WriteLine (sp);
-			return new Point (int.Parse (spp [0]), int.Parse (spp [1]));
+			string sp = GetLocation ();
+			WindowProps props = WindowProps.Parse (sp);
+
+			return props;
 		}
 
-		public void SaveLocation (Point loc)
+		internal static string GetLocation ()
+		{
+			string sp = "0:0";
+			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadSubTree);
+			if (key != null)
+			{
+				sp = key.GetValue (Settings.LOCATION.ToString (), "0:0").ToString ();
+				if (!sp.Contains (":"))
+					sp = "0:0";
+			}
+
+			return sp;
+		}
+
+		public void SaveLocation (WindowProps loc)
 		{
 			RegistryKey kes = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			kes.SetValue (Settings.LOCATION.ToString (), $"{loc.X}:{loc.Y}");
+			kes.SetValue (Settings.LOCATION.ToString (), loc.ToString ());
 		}
 	}
 }

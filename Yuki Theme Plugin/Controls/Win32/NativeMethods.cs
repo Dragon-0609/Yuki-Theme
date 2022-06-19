@@ -67,9 +67,7 @@ namespace Yuki_Theme_Plugin.Controls.Helper
 		public static extern int ShowScrollBar(IntPtr hWnd, int wBar, int bShow);
 
 		[DllImport("user32.dll", CharSet=CharSet.Auto)]
-        //*********************************
-        // FxCop bug, suppress the message
-        //*********************************
+
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "0")]
 		public static extern IntPtr WindowFromPoint(Point point);
 

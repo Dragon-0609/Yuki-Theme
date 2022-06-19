@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Yuki_Theme.Core.Database;
-using Yuki_Theme.Core.Forms;
 
 namespace Yuki_Theme.Core;
 
@@ -33,7 +32,12 @@ public static class Settings
 	public static bool         askToSave;
 	public static bool         saveAsOld;
 	public static bool         showPreview;
-	
+	public static string       localization = "";
+	public static bool         useDimensionCap;
+	public static int          dimensionCapMax;
+	public static int          dimensionCapUnit;
+	public static int          colorPicker;
+
 	#endregion
 	
 	#region CONST
@@ -71,17 +75,24 @@ public static class Settings
 	/// </summary>
 	public const int ASKTOSAVE = 28;
 
-	public const int SAVEASOLD = 29;
-	public const int SHOWPREVIEW = 30;
+	public const int SAVEASOLD    = 29;
+	public const int SHOWPREVIEW  = 30;
+	public const int LOCALIZATION = 31;
+	public const int USEDIMENSIONCAP = 32;
+	public const int DIMENSIONCAPMAX = 33;
+	public const int DIMENSIONCAPUNIT = 34;
+	public const int COLORPICKER = 35;
 	
 	
-	public const  double current_version     = 7.0;
-	public const  string current_version_add = "";
+	public const  double current_version     = 8.0;
+	public const  string current_version_add = "beta";
 	public static string next_version        = "";
 
 	#endregion
-	
+
 	public static DatabaseManager database = new DatabaseManager ();
+
+	public static Localization.Localization translation = new Localization.Localization ();
 
 	/// <summary>
 	/// Get settings
@@ -145,6 +156,11 @@ public static class Settings
 		askToSave = bool.Parse (data [ASKTOSAVE]);
 		saveAsOld = bool.Parse (data [SAVEASOLD]);
 		showPreview = bool.Parse (data [SHOWPREVIEW]);
+		useDimensionCap = bool.Parse (data [USEDIMENSIONCAP]);
+		dimensionCapMax = int.Parse (data [DIMENSIONCAPMAX]);
+		dimensionCapUnit = int.Parse (data [DIMENSIONCAPUNIT]);
+		colorPicker = int.Parse (data [COLORPICKER]);
+		localization = data [LOCALIZATION];
 
 		CLI.selectedItem = data [ACTIVE];
 		var os = 0;
@@ -154,42 +170,73 @@ public static class Settings
 		settingMode = (SettingMode) os;
 		int.TryParse (data [STICKERPOSITIONUNIT], out os);
 		unit = (RelativeUnit) os;
+		
+		translation.LoadLocalization ();
 	}
 
 	/// <summary>
 	/// Save current settings
 	/// </summary>
-	public static void saveData ()
+	public static void SaveData ()
 	{
-		var dict = new Dictionary <int, string> ();
-		dict.Add (PASCALPATH, pascalPath);
-		dict.Add (ACTIVE, CLI.selectedItem);
-		dict.Add (ASKCHOICE, askChoice.ToString ());
-		dict.Add (CHOICEINDEX, actionChoice.ToString ());
-		dict.Add (SETTINGMODE, ((int)settingMode).ToString ());
-		dict.Add (AUTOUPDATE, update.ToString ());
-		dict.Add (BGIMAGE, bgImage.ToString ());
-		dict.Add (STICKER, swSticker.ToString ());
-		dict.Add (STATUSBAR, swStatusbar.ToString ());
-		dict.Add (LOGO, swLogo.ToString ());
-		dict.Add (EDITOR, Editor.ToString ());
-		dict.Add (BETA, Beta.ToString ());
-		dict.Add (ALLOWPOSITIONING, positioning.ToString ());
-		dict.Add (SHOWGRIDS, showGrids.ToString ());
-		dict.Add (STICKERPOSITIONUNIT, ((int)unit).ToString ());
-		dict.Add (USECUSTOMSTICKER, useCustomSticker.ToString ());
-		dict.Add (CUSTOMSTICKER, customSticker);
-		dict.Add (LICENSE, license.ToString ());
-		dict.Add (GOOGLEANALYTICS, googleAnalytics.ToString ());
-		dict.Add (DONTTRACK, dontTrack.ToString ());
-		dict.Add (AUTOFITWIDTH, autoFitByWidth.ToString ());
-		dict.Add (ASKTOSAVE, askToSave.ToString ());
-		dict.Add (SAVEASOLD, saveAsOld.ToString ());
-		dict.Add (SHOWPREVIEW, showPreview.ToString ());
+		Dictionary <int, string> dict = PrepareToSave;
 		database.UpdateData (dict);
 		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
 		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();
 		if (CLI_Actions.onSTATUSChange != null) CLI_Actions.onSTATUSChange ();
 	}
 
+	private static Dictionary <int, string> PrepareToSave
+	{
+		get
+		{
+			Dictionary <int, string> dict = new Dictionary <int, string>
+			{
+				{ PASCALPATH, pascalPath },
+				{ ACTIVE, CLI.selectedItem },
+				{ ASKCHOICE, askChoice.ToString () },
+				{ CHOICEINDEX, actionChoice.ToString () },
+				{ SETTINGMODE, ((int)settingMode).ToString () },
+				{ AUTOUPDATE, update.ToString () },
+				{ BGIMAGE, bgImage.ToString () },
+				{ STICKER, swSticker.ToString () },
+				{ STATUSBAR, swStatusbar.ToString () },
+				{ LOGO, swLogo.ToString () },
+				{ EDITOR, Editor.ToString () },
+				{ BETA, Beta.ToString () },
+				{ ALLOWPOSITIONING, positioning.ToString () },
+				{ SHOWGRIDS, showGrids.ToString () },
+				{ STICKERPOSITIONUNIT, ((int)unit).ToString () },
+				{ USECUSTOMSTICKER, useCustomSticker.ToString () },
+				{ CUSTOMSTICKER, customSticker },
+				{ LICENSE, license.ToString () },
+				{ GOOGLEANALYTICS, googleAnalytics.ToString () },
+				{ DONTTRACK, dontTrack.ToString () },
+				{ AUTOFITWIDTH, autoFitByWidth.ToString () },
+				{ ASKTOSAVE, askToSave.ToString () },
+				{ SAVEASOLD, saveAsOld.ToString () },
+				{ SHOWPREVIEW, showPreview.ToString () },
+				{ USEDIMENSIONCAP, useDimensionCap.ToString () },
+				{ DIMENSIONCAPMAX, dimensionCapMax.ToString () },
+				{ DIMENSIONCAPUNIT, dimensionCapUnit.ToString () },
+				{ COLORPICKER, colorPicker.ToString () },
+				{ LOCALIZATION, localization }
+			};
+			return dict;
+		}
+	}
+
+	public static SortedDictionary <int, string> PrepareAll
+	{
+		get
+		{
+			Dictionary <int, string> dict = PrepareToSave;
+			dict.Add (LOCATION, DatabaseManager.GetLocation ());
+			dict.Add (CAMOUFLAGEHIDDEN, database.ReadData (CAMOUFLAGEHIDDEN, ""));
+			dict.Add (LOGIN, Logged.ToString ());
+			SortedDictionary <int, string> sorted = new SortedDictionary <int, string> (dict);
+			
+			return sorted;
+		}
+	}
 }

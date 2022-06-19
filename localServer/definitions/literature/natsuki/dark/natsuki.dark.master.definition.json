@@ -1,0 +1,87 @@
+{
+  "id": "a7e0aa28-739a-4671-80ae-3980997e6b71",
+  "name": "Natsuki Dark",
+  "displayName": "Natsuki",
+  "dark": true,
+  "author": "Unthrottled",
+  "group": "Literature Club",
+  "stickers": {
+    "default": {
+      "name": "natsuki_dark.png",
+      "anchor": "right",
+      "opacity": 8
+    },
+    "secondary": {
+      "name": "natsuki_dark_normal.png",
+      "anchor": "center",
+      "opacity": 7
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#441539",
+    "lineNumberColor": "#796675",
+    "completionWindowBackground": "#32393F",
+    "baseIconColor": "#7F707A",
+    "contrastColor": "#56324C",
+    "nonProjectFileScopeColor": "#2f1125",
+    "secondaryBackground": "#330A2B",
+    "selectionForeground": "#e6afca",
+    "inactiveBackground": "#6b3550",
+    "inactiveBackgroundDarker": "#66334b",
+    "headerColor": "#2f0a27",
+    "baseBackground": "#310a29",
+    "borderColor": "#381927",
+    "buttonColor": "#561b3e",
+    "selectionInactive": "#6F3654",
+    "selectionInactiveTransparent": "#6F365455",
+    "identifierHighlight": "#482A58",
+    "selectionBackground": "#602b50",
+    "selectionBackgroundTransparent": "#602b506c",
+    "searchBackground": "#6d4cb9",
+    "searchForeground": "#ffffff",
+    "buttonFont": "#BBBBBB",
+    "foregroundColor": "#bbbbbb",
+    "startColor": "#BB0A69",
+    "highlightColor": "#3c0c33",
+    "disabledColor": "#505050",
+    "accentColorTransparent": "#E946865A",
+    "accentColorLessTransparent": "#E946869A",
+    "accentColorMoreTransparent": "#E946862A",
+    "accentColor": "#E94686",
+    "accentContrastColor": "#251923",
+    "infoForeground": "#b74170",
+    "stopColor": "#F650FF",
+    "testScopeColor": "#182613",
+    "popupMask": "#EAEAF00A",
+    "codeBlock": "#3d1c31",
+    "textEditorBackground": "#35102c",
+    "foldedTextBackground": "#441a35",
+    "comments": "#A179A7",
+    "constantColor": "#9286FD",
+    "classNameColor": "#FF9CD6",
+    "htmlTagColor": "#EBABFD",
+    "stringColor": "#F6E9CB",
+    "keyColor": "#9DC0FF",
+    "keywordColor": "#FF9CD6",
+    "diff.deleted": "#362B31",
+    "diff.inserted": "#1B3B1C",
+    "lightEditorColor": "#3e1334",
+    "breakpointColor": "#462331",
+    "breakpointActiveColor": "#373c2b",
+    "fileBlue": "#2b2250",
+    "fileGray": "#3b1d35",
+    "fileRose": "#4a1338",
+    "fileOrange": "#471a20",
+    "fileViolet": "#391447",
+    "fileYellow": "#472628",
+    "fileRed": "#460d26",
+    "filePurple": "#380d40"
+  },
+  "characterId": "fad9c309-22c2-4a06-8275-1bb3ccdbda21"
+}

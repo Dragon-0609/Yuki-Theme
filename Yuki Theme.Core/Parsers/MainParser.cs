@@ -12,22 +12,23 @@ namespace Yuki_Theme.Core.Parsers
 		private static JetBrainsParser jetparser;
 		private static DokiThemeParser dokiparser;
 
-		public static void Parse (string path, MForm form = null, bool ask = true, bool select = true, Action<string, string> defaultTheme = null, Func <string, string, bool> exist = null)
+		public static void Parse (string path, bool ask = true, bool select = true, Action <string, string> defaultTheme = null, Func <string, string, bool> exist = null, Action <string> addToUIList = null, Action<string> selectAfterParse = null)
 		{
-			string st = Path.GetFileNameWithoutExtension (path);
-			if (isDefault (st))
+			string fileName = Path.GetFileNameWithoutExtension (path);
+			if (isDefault (fileName))
 			{
-				if (defaultTheme != null) defaultTheme ("The theme is default! You can't import it!", "Default Theme");
+				if (defaultTheme != null)
+					defaultTheme (CLI.Translate ("parser.theme.default"), CLI.Translate ("messages.theme.default.short"));
 				return;
 			}
 
-			string pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yukitheme");
-			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yukitheme");
+			string pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{fileName}.yukitheme");
+			string pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (fileName)}.yukitheme");
 
-			if (st.EndsWith (".yuki"))
+			if (fileName.EndsWith (".yuki"))
 			{
-				pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{st}.yuki");
-                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (st)}.yuki");
+				pathToSave =Path.Combine (CLI.currentPath,  $"Themes/{fileName}.yuki");
+                pathef =Path.Combine (CLI.currentPath,  $"Themes/{Helper.ConvertNameToPath (fileName)}.yuki");
 			}
 			
 			if (checkAvailableAndAsk ( pathef, ask, exist))
@@ -39,14 +40,19 @@ namespace Yuki_Theme.Core.Parsers
 					case ".yuki" :
 					{
 						File.Copy (path, pathef, true);
-						form.load_schemes ();
+						// form.load_schemes ();
+						if (addToUIList != null)
+							addToUIList (fileName);
+						if (select && selectAfterParse != null)
+							selectAfterParse (fileName);
 					}
 						break;
 					case ".icls" :
 					{
 						bool has = checkAvailable (pathef);
 						jetparser = new JetBrainsParser ();
-						jetparser.Parse (path, st, pathToSave, form, ask, has, select);
+						jetparser.needToWrite = true;
+						jetparser.Parse (path, fileName, pathToSave, ask, has, select, addToUIList, selectAfterParse);
 						
 						jetparser = null;
 						GC.Collect();
@@ -57,9 +63,10 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						bool has = checkAvailable (pathef);
 						dokiparser = new DokiThemeParser ();
+						dokiparser.needToWrite = true;
 						dokiparser.defaultTheme = defaultTheme;
 						dokiparser.exist = exist;
-						dokiparser.Parse (path, st, pathToSave, form, ask, has, select);
+						dokiparser.Parse (path, fileName, pathToSave, ask, has, select, addToUIList, selectAfterParse);
 						
 						dokiparser = null;
 						GC.Collect();
@@ -95,7 +102,6 @@ namespace Yuki_Theme.Core.Parsers
 						{
 							File.Copy (path, pathef, true);							
 						}
-						form.load_schemes ();
 					}
 						break;
 				}

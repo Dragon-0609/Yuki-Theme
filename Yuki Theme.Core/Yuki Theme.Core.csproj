@@ -121,10 +121,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLI.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Formats\NewThemeFormat.cs" />
     <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
-    <Compile Include="IColorUpdatable.cs" />
+    <Compile Include="Interfaces\ICamouflage.cs" />
+    <Compile Include="Interfaces\IColorUpdatable.cs" />
+    <Compile Include="Interfaces\IIconManager.cs" />
+    <Compile Include="Interfaces\IUpdatable.cs" />
+    <Compile Include="Forms\ThemeDownloaderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ThemeDownloaderForm.Designer.cs">
+      <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Localization\Localization.cs" />
+    <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
@@ -198,12 +211,12 @@
     <Compile Include="Forms\MessageForm.Designer.cs">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MForm.cs">
+    <None Include="Forms\MForm.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MForm.Designer.cs">
+    </None>
+    <None Include="Forms\MForm.Designer.cs">
       <DependentUpon>MForm.cs</DependentUpon>
-    </Compile>
+    </None>
     <Compile Include="Forms\NotificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -246,12 +259,6 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TesterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TesterForm.Designer.cs">
-      <DependentUpon>TesterForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ThemeManager.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -280,6 +287,8 @@
     <EmbeddedResource Include="Controls\SettingsPanel.resx">
       <DependentUpon>SettingsPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Database\files_plugin.txt" />
+    <EmbeddedResource Include="Database\files_program.txt" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -296,9 +305,9 @@
     <EmbeddedResource Include="Forms\MessageForm.resx">
       <DependentUpon>MessageForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MForm.resx">
+    <None Include="Forms\MForm.resx">
       <DependentUpon>MForm.cs</DependentUpon>
-    </EmbeddedResource>
+    </None>
     <EmbeddedResource Include="Forms\NotificationForm.resx">
       <DependentUpon>NotificationForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -320,12 +329,13 @@
     <EmbeddedResource Include="Forms\SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Resource Include="Forms\TesterForm.resx">
-      <DependentUpon>TesterForm.cs</DependentUpon>
-    </Resource>
+    <EmbeddedResource Include="Forms\ThemeDownloaderForm.resx">
+      <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeManager.resx">
       <DependentUpon>ThemeManager.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Localization\ru.lang" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -340,6 +350,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionCenter.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionCenter_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionLeft.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionLeft_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\positionRight.svg" />
     <EmbeddedResource Include="Resources\SVG\help.svg" />
     <EmbeddedResource Include="..\changelog\CHANGELOG.md">
       <Link>Resources\CHANGELOG.md</Link>
@@ -349,11 +365,18 @@
     <EmbeddedResource Include="Resources\SVG\menu-saveall_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\edit.svg" />
     <EmbeddedResource Include="Resources\CHANGELOG.html" />
-    <EmbeddedResource Include="Resources\LICENSE" />
+    <EmbeddedResource Include="Resources\JetBrainsLICENSE" />
+    <EmbeddedResource Include="Localization\en.lang" />
+    <EmbeddedResource Include="..\LICENSE">
+      <Link>Resources\LICENSE</Link>
+    </EmbeddedResource>
     <Content Include="Resources\center.png" />
     <None Include="Resources\Fonts\SAOWelcomeTT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SAOUITT-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
+    <EmbeddedResource Include="Resources\HTML\loading.html" />
+    <EmbeddedResource Include="Resources\HTML\theme_downloader.html" />
+    <EmbeddedResource Include="Resources\HTML\css\bootstrap.min.css" />
     <Content Include="Resources\left.png" />
     <Content Include="Resources\right.png" />
     <EmbeddedResource Include="Resources\SVG\add.svg" />
@@ -372,6 +395,8 @@
     <EmbeddedResource Include="Resources\SVG\refresh_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\remove.svg" />
     <EmbeddedResource Include="Resources\SVG\remove_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\smartStepInto.svg" />
+    <EmbeddedResource Include="Resources\SVG\smartStepInto_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\traceInto.svg" />
     <EmbeddedResource Include="Resources\SVG\traceInto_dark.svg" />
     <EmbeddedResource Include="Database\files.txt" />

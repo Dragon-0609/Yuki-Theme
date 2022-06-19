@@ -1,0 +1,87 @@
+{
+  "id": "0527c6fc-316a-4f80-9459-d92ced0e6492",
+  "name": "Mai Dark",
+  "displayName": "Mai",
+  "dark": true,
+  "author": "Unthrottled",
+  "group": "Bunny Senpai",
+  "stickers": {
+    "default": {
+      "name": "mai_dark.png",
+      "anchor": "right",
+      "opacity": 8
+    },
+    "secondary": {
+      "name": "mai_dark_spicy.png",
+      "anchor": "right",
+      "opacity": 10
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#b772de"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#2d2d52",
+    "lineNumberColor": "#61647b",
+    "infoForeground": "#7cab9c",
+    "completionWindowBackground": "#32393F",
+    "baseIconColor": "#62677b",
+    "contrastColor": "#4f5287",
+    "nonProjectFileScopeColor": "#2f2f4e",
+    "secondaryBackground": "#272750",
+    "selectionForeground": "#fbfbfb",
+    "inactiveBackground": "#2a272e",
+    "inactiveBackgroundDarker": "#333037",
+    "headerColor": "#25254e",
+    "baseBackground": "#25254B",
+    "borderColor": "#2b2c57",
+    "buttonColor": "#2f3357",
+    "selectionInactive": "#233b53",
+    "identifierHighlight": "#223955",
+    "selectionBackground": "#235161",
+    "selectionBackgroundTransparent": "#235161AA",
+    "searchBackground": "#4a3a71",
+    "searchForeground": "#fef4ff",
+    "buttonFont": "#838daa",
+    "foregroundColor": "#bbbbbb",
+    "startColor": "#595959",
+    "highlightColor": "#2d2d52",
+    "disabledColor": "#576f6a",
+    "accentColorTransparent": "#fee3cf5A",
+    "accentColorLessTransparent": "#fee3cf9A",
+    "accentColorMoreTransparent": "#fee3cf2A",
+    "accentColor": "#fee3cf",
+    "accentContrastColor": "#271c21",
+    "stopColor": "#757cca",
+    "testScopeColor": "#252f4e",
+    "popupMask": "#EAEAF00A",
+    "codeBlock": "#2d3049",
+    "textEditorBackground": "#242448",
+    "foldedTextBackground": "#2e3149",
+    "comments": "#6C7EA5",
+    "classNameColor": "#61dba0",
+    "constantColor": "#FFEEA6",
+    "htmlTagColor": "#AFC8F5",
+    "stringColor": "#EFA554",
+    "keyColor": "#F9B2FF",
+    "keywordColor": "#50cefb",
+    "diff.deleted": "#383845",
+    "secondaryAccentColor": "#00c69a",
+    "lightEditorColor": "#29294e",
+    "breakpointColor": "#36354a",
+    "breakpointActiveColor": "#294c42",
+    "fileBlue": "#23386f",
+    "fileGray": "#333354",
+    "fileRose": "#422957",
+    "fileOrange": "#3f303f",
+    "fileViolet": "#312a66",
+    "fileYellow": "#3e3d4a",
+    "fileRed": "#3e2548",
+    "filePurple": "#302461"
+  },
+  "characterId": "1de4498f-a162-4418-b764-55b141c5478b"
+}

@@ -115,7 +115,7 @@ namespace Yuki_Theme.Core.Forms
 			this.closeButton.Font = new System.Drawing.Font ("Calibri", 10F);
 			this.closeButton.Location = new System.Drawing.Point (249, 391);
 			this.closeButton.Name = "closeButton";
-			this.closeButton.Size = new System.Drawing.Size (71, 29);
+			this.closeButton.Size = new System.Drawing.Size (81, 29);
 			this.closeButton.TabIndex = 13;
 			this.closeButton.Text = "Close";
 			this.closeButton.UseVisualStyleBackColor = true;
@@ -196,7 +196,7 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			this.label1.Location = new System.Drawing.Point (167, 382);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size (63, 20);
+			this.label1.Size = new System.Drawing.Size (76, 20);
 			this.label1.TabIndex = 18;
 			this.label1.Text = "Old Theme";
 			// 

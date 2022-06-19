@@ -39,7 +39,7 @@ namespace Yuki_Theme.Core.Forms
 			// Message
 			// 
 			this.Message.Dock = System.Windows.Forms.DockStyle.Top;
-			this.Message.Font = new System.Drawing.Font ("Calibri", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+			this.Message.Font = new System.Drawing.Font ("Calibri", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.Message.Location = new System.Drawing.Point (0, 0);
 			this.Message.Name = "Message";
 			this.Message.Size = new System.Drawing.Size (404, 72);
@@ -49,12 +49,13 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button1
 			// 
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button1.AutoSize = true;
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button1.Font = new System.Drawing.Font ("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.button1.Location = new System.Drawing.Point (318, 77);
+			this.button1.Font = new System.Drawing.Font ("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.button1.Location = new System.Drawing.Point (296, 77);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size (74, 34);
+			this.button1.Size = new System.Drawing.Size (87, 34);
 			this.button1.TabIndex = 1;
 			this.button1.Text = "Decline";
 			this.button1.UseVisualStyleBackColor = true;
@@ -62,12 +63,13 @@ namespace Yuki_Theme.Core.Forms
 			// 
 			// button2
 			// 
-			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.AutoSize = true;
 			this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.button2.Font = new System.Drawing.Font ("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-			this.button2.Location = new System.Drawing.Point (238, 77);
+			this.button2.Font = new System.Drawing.Font ("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.button2.Location = new System.Drawing.Point (192, 77);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size (74, 34);
+			this.button2.Size = new System.Drawing.Size (87, 34);
 			this.button2.TabIndex = 2;
 			this.button2.Text = "Accept";
 			this.button2.UseVisualStyleBackColor = true;
@@ -86,6 +88,7 @@ namespace Yuki_Theme.Core.Forms
 			this.Name = "QuestionForm_2";
 			this.Text = "Google Analytics";
 			this.ResumeLayout (false);
+			this.PerformLayout ();
 		}
 
 		private System.Windows.Forms.Button button2;

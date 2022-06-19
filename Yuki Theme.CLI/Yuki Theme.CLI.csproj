@@ -38,8 +38,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="ConditionalEdition.cs" />
+    <Compile Include="ConditionSet.cs" />
+    <Compile Include="MainClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadLine\Abstractions\Console2.cs" />
+    <Compile Include="ReadLine\Abstractions\IConsole.cs" />
+    <Compile Include="ReadLine\Completion.cs" />
+    <Compile Include="ReadLine\IAutoCompleteHandler.cs" />
+    <Compile Include="ReadLine\KeyHandler.cs" />
+    <Compile Include="ReadLine\ReadLine.cs" />
+    <Compile Include="SettingEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">

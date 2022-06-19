@@ -36,28 +36,47 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj">
+      <Project>{2ab7513f-70fb-4ffa-88ff-b133f20dd7dc}</Project>
+      <Name>Yuki Theme.Core.WPF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
       <Project>{c12b1851-e2ae-4a31-95dc-1daafcdcb108}</Project>
       <Name>Yuki Theme.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Yuki Theme.Themes\Yuki Theme.Themes.csproj">
-      <Project>{902af0e8-81ee-445c-a1b3-4d8283d88a16}</Project>
-      <Name>Yuki Theme.Themes</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="..\Yuki Theme.Core\Resources\Fonts\SAOUITT-Regular.ttf">
+      <Link>Fonts\SAOUITT-Regular.ttf</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
