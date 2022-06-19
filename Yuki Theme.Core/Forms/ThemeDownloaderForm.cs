@@ -46,12 +46,8 @@ public partial class ThemeDownloaderForm : Form
 	private List <string> downloadingErrors = new List <string> ();
 
 
-	private const string LOCAL_SERVER = "http://localhost:8000/find.json";
-
 	private const string REMOTE_SERVER =
 		"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
-
-	private const string LOCAL_BRANCH_SERVER  = "http://localhost:8000/branches.json";
 	
 	private const string REMOTE_BRANCH_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
