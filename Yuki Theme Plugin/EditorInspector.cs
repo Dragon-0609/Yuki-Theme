@@ -96,7 +96,7 @@ namespace Yuki_Theme_Plugin
 				LineSegment currentLine    = plugin.ideComponents.textArea.Document.GetLineSegment(lineNumber);
 				int currentWordOffset = 0;
 				int startColumn = 0;
-
+				
 				if (plugin.ideComponents.textEditor.TextEditorProperties.EnableFolding)
 				{
 					List<FoldMarker> starts = plugin.ideComponents.textArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
@@ -114,20 +114,22 @@ namespace Yuki_Theme_Plugin
 				MethodInfo draw = typeof (TextView).GetMethod ("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
 				
 				TextWord currentWord;
-				int drawingX = plugin.ideComponents.textArea.TextView.DrawingPosition.X - plugin.ideComponents.textArea.VirtualTop.X;
+				int drawingX = plugin.ideComponents.textArea.TextView.DrawingPosition.X;
+
 				for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
 				{
 					currentWord = currentLine.Words[wordIdx];
-					
-					if (currentWordOffset < startColumn) {
+					int realPosX = plugin.ideComponents.textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
+					if (currentWordOffset < startColumn || realPosX < drawingX) {
 						currentWordOffset += currentWord.Length;
 						continue;
 					}
 					if (plugin.ideComponents.textArea.TextView.Highlight.OpenBrace.Y == lineNumber && plugin.ideComponents.textArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
 					    plugin.ideComponents.textArea.TextView.Highlight.CloseBrace.Y == lineNumber && plugin.ideComponents.textArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
 					{
-						int xpos = plugin.ideComponents.textArea.TextView.GetDrawingXPos (lineNumber, currentWordOffset) + drawingX;
+						int xpos = realPosX;
 						int liny = plugin.ideComponents.textArea.TextView.DrawingPosition.Top + (lineNumber - plugin.ideComponents.textArea.TextView.FirstVisibleLine) * plugin.ideComponents.textArea.TextView.FontHeight - plugin.ideComponents.textArea.TextView.VisibleLineDrawingRemainder;
+						
 						draw.Invoke (plugin.ideComponents.textArea.TextView, new object []
 						{
 							g,

@@ -12,6 +12,7 @@ using VisualPascalABC;
 using VisualPascalABCPlugins;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Database;
+using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 
@@ -47,6 +48,9 @@ namespace Yuki_Theme_Plugin
 		internal ListView              errorsList;
 		internal TextBox               compilerConsole;
 
+		internal ProjectExplorerForm projectExplorer;
+		internal ToolBoxForm         toolbox;
+		
 		internal IVisualEnvironmentCompiler                  compiler;
 		internal CodeFileDocumentTextEditorControl           textEditor;
 		internal Dictionary <ICodeFileDocument, RichTextBox> OutputTextBoxs;
@@ -58,7 +62,9 @@ namespace Yuki_Theme_Plugin
 		
 		internal Rectangle oldSizeOfTextEditor = Rectangle.Empty;
 
-		bool toggled = false; // is toggle activated
+		private bool toggled = false; // is toggle activated
+
+		internal bool supportProject = false; 
 
 		private Size  defaultSize;
 		private Timer documentUpdator;
@@ -214,6 +220,28 @@ namespace Yuki_Theme_Plugin
 			FieldInfo fp = typeof (Form1).GetField ("OutputTextBoxs", BindingFlags.Instance | BindingFlags.NonPublic);
 
 			OutputTextBoxs = (Dictionary <ICodeFileDocument, RichTextBox>)fp.GetValue (fm);
+
+			try
+			{
+				FieldInfo field = typeof (Form1).GetField ("ProjectExplorerWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+				if (field != null)
+				{
+					projectExplorer = (ProjectExplorerForm)field.GetValue (fm);
+					if (projectExplorer != null)
+					{
+						supportProject = true;
+						field = typeof (ProjectExplorerForm).GetField ("tvProjectExplorer", BindingFlags.Instance | BindingFlags.NonPublic);
+						CustomTreeView view = new CustomTreeView ();
+						if (field != null) view.AddCustomTreeViewEvents ((TreeView)field.GetValue (projectExplorer));
+
+						toolbox = fm.ToolBoxWindow;
+					}
+				}
+			} catch (Exception) {
+				projectExplorer = null;	
+				supportProject = false;
+			}
+			
 		}
 		
 		internal void AddMenuItems ()
@@ -395,6 +423,7 @@ namespace Yuki_Theme_Plugin
 			UpdateMenuColors ();
 			errorsList.Refresh ();
 			UpdateBottomTextPanel ();
+			UpdateProjectColors ();
 		}
 
 		private void UpdateMenuColors ()
@@ -609,7 +638,48 @@ namespace Yuki_Theme_Plugin
 			CodeCompletionHighlighter.UpdateMarkers (textEditor.ActiveTextAreaControl.TextArea);
 		}
 
-		
+		private void UpdateProjectColors ()
+		{
+			if (supportProject && projectExplorer != null)
+			{
+				SetColors (projectExplorer);
+				// SetColors (toolbox);
+
+				UpdateDesignerPageColors ();
+			}
+		}
+
+		private void SetColors (Form target)
+		{
+			target.BackColor = bg;
+			target.ForeColor = clr;
+			foreach (Control targetControl in target.Controls)
+			{
+				targetControl.BackColor = bg;
+				targetControl.ForeColor = clr;
+			}
+		}
+
+		private void UpdateDesignerPageColors ()
+		{
+			if (supportProject && fm.CurrentCodeFileDocument.DesignerAndCodeTabs != null)
+			{
+				foreach (TabPage tabPage in fm.CurrentCodeFileDocument.DesignerAndCodeTabs.TabPages)
+				{
+					tabPage.BackColor = bgdef;
+					tabPage.ForeColor = clr;
+					foreach (Control pageControl in tabPage.Controls)
+					{
+						pageControl.BackColor = bgdef;
+						pageControl.ForeColor = clr;
+					}
+				}
+
+				GC.Collect ();
+				GC.WaitForPendingFinalizers ();
+			}
+		}
+
 		#endregion
 
 		
@@ -695,6 +765,8 @@ namespace Yuki_Theme_Plugin
 				UpdateBottomTextPanel ();
 
 				plugin.inspector.Unsubscribe ();
+				
+				UpdateDesignerPageColors ();
 			}
 		}
 		
@@ -739,7 +811,11 @@ namespace Yuki_Theme_Plugin
 		{
 			ErrorLineBookmarkNew.Remove ();
 		}
-		
+
+		public void WriteToConsole (string text)
+		{
+			fm.AddTextToCompilerMessages (text + Environment.NewLine);
+		}
 
 		#region Methods_For_Menu
 

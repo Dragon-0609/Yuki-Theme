@@ -101,6 +101,7 @@
     <Compile Include="Controls\CodeCompletion\CodeCompletionKeyHandler.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionListView.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionWindow.cs" />
+    <Compile Include="Controls\CustomTreeView.cs" />
     <Compile Include="Controls\DockStyles\Bookmarks.cs" />
     <Compile Include="Controls\DockStyles\CodeCompletionHighlighter.cs" />
     <Compile Include="Controls\DockStyles\CustomList.cs" />

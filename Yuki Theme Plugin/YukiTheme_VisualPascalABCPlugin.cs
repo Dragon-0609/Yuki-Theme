@@ -139,6 +139,9 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nameInStatusBar = Settings.swStatusbar;
+			
+			ideComponents.WriteToConsole ("Yuki Theme: Initialization started.");
+			
 			loadWithWaiting ();
 			Initialize ();
 		}
@@ -257,8 +260,7 @@ namespace Yuki_Theme_Plugin
 
 			ideComponents.AddMenuItems ();
 
-			((CompilerConsoleWindowForm)ideComponents.workbench.CompilerConsoleWindow).AddTextToCompilerMessages (
-				"Yuki Theme: Initialization finished.\n");
+			ideComponents.WriteToConsole ("Yuki Theme: Initialization finished.");
 
 			inspector.InjectCodeCompletion ();
 			
