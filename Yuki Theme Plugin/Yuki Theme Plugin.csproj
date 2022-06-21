@@ -41,6 +41,12 @@
       <HintPath>..\packages\Fizzler.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ICSharpCode.SharpDevelop, Version=4.2.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\ICSharpCode.SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpDevelop.Widgets, Version=4.2.1.0, Culture=neutral, PublicKeyToken=f829da5c02be14ee">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\ICSharpCode.SharpDevelop.Widgets.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.TextEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\ICSharpCode.TextEditor.dll</HintPath>
     </Reference>

@@ -6,6 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using ICSharpCode.FormsDesigner;
+using ICSharpCode.FormsDesigner.Gui;
+using ICSharpCode.SharpDevelop.Gui;
+using ICSharpCode.SharpDevelop.Widgets.SideBar;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
@@ -15,6 +19,7 @@ using Yuki_Theme.Core.Database;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
+using IWorkbench = VisualPascalABCPlugins.IWorkbench;
 
 namespace Yuki_Theme_Plugin
 {
@@ -50,6 +55,10 @@ namespace Yuki_Theme_Plugin
 
 		internal ProjectExplorerForm projectExplorer;
 		internal ToolBoxForm         toolbox;
+		internal PropertiesForm      properties;
+		internal ComboBox            PropertiesTitle;
+
+		// internal SharpDevelopSideBar sideTabDesigner;
 		
 		internal IVisualEnvironmentCompiler                  compiler;
 		internal CodeFileDocumentTextEditorControl           textEditor;
@@ -75,8 +84,10 @@ namespace Yuki_Theme_Plugin
 		private Color bgdef    => YukiTheme_VisualPascalABCPlugin.bgdef;
 		private Color bgBorder => YukiTheme_VisualPascalABCPlugin.bgBorder;
 		private Color bgClick  => YukiTheme_VisualPascalABCPlugin.bgClick;
+		private Color bgSelection  => YukiTheme_VisualPascalABCPlugin.bgSelection;
 		private Color clr      => YukiTheme_VisualPascalABCPlugin.clr;
 		private Color clrHover => YukiTheme_VisualPascalABCPlugin.clrHover;
+		private Color clrKey => YukiTheme_VisualPascalABCPlugin.clrKey;
 
 		private Pen separatorPen => YukiTheme_VisualPascalABCPlugin.separatorPen;
 
@@ -235,6 +246,9 @@ namespace Yuki_Theme_Plugin
 						if (field != null) view.AddCustomTreeViewEvents ((TreeView)field.GetValue (projectExplorer));
 
 						toolbox = fm.ToolBoxWindow;
+						properties = fm.PropertiesWindow;
+						SetColorsToPropertyGridTitle ();
+						// sideTabDesigner = ToolboxProvider.FormsDesignerSideBar;
 					}
 				}
 			} catch (Exception) {
@@ -643,43 +657,30 @@ namespace Yuki_Theme_Plugin
 			if (supportProject && projectExplorer != null)
 			{
 				SetColors (projectExplorer);
-				// SetColors (toolbox);
+				SetColors (properties);
+				
+				SetColorsToPropertyGrid ();
+				
+				/* Won't work. Because in SideTabItem class in DrawItem, text is drawn with SystemBrushes.HighlightText.
+				SetColors (toolbox, true);
 
+				sideTabDesigner.BackColor = bg;
+				sideTabDesigner.ForeColor = clr;
+
+				foreach (SideTab sideTab in sideTabDesigner.Tabs)
+				{
+					if (sideTab is SideTabDesigner item)
+					{
+
+					}
+				}*/
+
+				SetParentBackColor (toolbox, 2, bgdef);
+				SetParentBackColor (properties, 2, bgdef);
 				UpdateDesignerPageColors ();
 			}
 		}
-
-		private void SetColors (Form target)
-		{
-			target.BackColor = bg;
-			target.ForeColor = clr;
-			foreach (Control targetControl in target.Controls)
-			{
-				targetControl.BackColor = bg;
-				targetControl.ForeColor = clr;
-			}
-		}
-
-		private void UpdateDesignerPageColors ()
-		{
-			if (supportProject && fm.CurrentCodeFileDocument.DesignerAndCodeTabs != null)
-			{
-				foreach (TabPage tabPage in fm.CurrentCodeFileDocument.DesignerAndCodeTabs.TabPages)
-				{
-					tabPage.BackColor = bgdef;
-					tabPage.ForeColor = clr;
-					foreach (Control pageControl in tabPage.Controls)
-					{
-						pageControl.BackColor = bgdef;
-						pageControl.ForeColor = clr;
-					}
-				}
-
-				GC.Collect ();
-				GC.WaitForPendingFinalizers ();
-			}
-		}
-
+		
 		#endregion
 
 		
@@ -724,7 +725,131 @@ namespace Yuki_Theme_Plugin
 		}
 		
 		#endregion
+
+
+		#region Color Setting
+
+		private void SetColors (Control target, bool to1Layer = false)
+		{
+			target.BackColor = bg;
+			target.ForeColor = clr;
+			foreach (Control targetControl in target.Controls)
+			{
+				if (to1Layer)
+				{
+					SetColors (targetControl);
+				} else
+				{
+					targetControl.BackColor = bg;
+					targetControl.ForeColor = clr;
+				}
+			}
+		}
+
+		private void SetColorsToPropertyGrid ()
+		{
+			PropertyPad.Grid.BackColor = bg;
+			PropertyPad.Grid.ForeColor = clr;
+			PropertyPad.Grid.SelectedItemWithFocusBackColor = bgSelection;
+			PropertyPad.Grid.SelectedItemWithFocusForeColor = clr;
+			PropertyPad.Grid.CategoryForeColor = clrKey;
+			PropertyPad.Grid.HelpBackColor = bgdef;
+			PropertyPad.Grid.HelpBorderColor = bgBorder;
+			PropertyPad.Grid.HelpForeColor = clr;
+			PropertyPad.Grid.LineColor = bgBorder;
+			PropertyPad.Grid.ViewBackColor = bg;
+			PropertyPad.Grid.ViewForeColor = clr;
+			if (PropertiesTitle != null)
+				PropertiesTitle.BackColor = clr;
+		}
+
+		private void SetColorsToPropertyGridTitle ()
+		{
+			try
+			{
+				FieldInfo field = typeof (PropertyPad).GetField ("instance", BindingFlags.NonPublic | BindingFlags.Static);
+				PropertyPad pad = (PropertyPad)field.GetValue (null);
+				field = typeof (PropertyPad).GetField ("comboBox", BindingFlags.NonPublic | BindingFlags.Instance);
+				PropertiesTitle = (ComboBox)field.GetValue (pad);
+
+				EditorInspector.EventRemove (typeof (PropertyPad), "ComboBoxDrawItem", pad, typeof (ComboBox), "DrawItem",
+				                             PropertiesTitle);
+
+				PropertiesTitle.DrawItem += PropertiesTitleDrawItem;
+				PropertiesTitle.FlatStyle = FlatStyle.Flat;
+			} catch (Exception e)
+			{
+				// Well, I tried, but smth went wrong and now you should see default colors on the 
+				// Title of PropertyGrid
+				Console.WriteLine ($"Smth went wrong:\n{e.Message}\n{e.StackTrace}");
+			}
+		}
 		
+		void PropertiesTitleDrawItem(object sender, DrawItemEventArgs dea)
+		{
+			if (dea.Index < 0 || dea.Index >= PropertiesTitle.Items.Count) {
+				return;
+			}
+			Graphics g = dea.Graphics;
+			Brush stringColor = YukiTheme_VisualPascalABCPlugin.clrBrush;
+			Brush backColor = YukiTheme_VisualPascalABCPlugin.bgBrush;
+			
+			if ((dea.State & DrawItemState.Selected) == DrawItemState.Selected) {
+				if ((dea.State & DrawItemState.Focus) == DrawItemState.Focus)
+				{
+					backColor = YukiTheme_VisualPascalABCPlugin.selectionBrush;
+					g.FillRectangle(backColor, dea.Bounds);
+				} else {
+					g.FillRectangle(backColor, dea.Bounds);
+				}
+			} else {
+				g.FillRectangle(backColor, dea.Bounds);
+			}
+			
+			object item = PropertiesTitle.Items[dea.Index];
+			int   xPos  = dea.Bounds.X;
+			
+			if (item is IComponent) {
+				ISite site = ((IComponent)item).Site;
+				if (site != null) {
+					string name = site.Name;
+					using (Font f = new Font(PropertiesTitle.Font, FontStyle.Bold)) {
+						g.DrawString(name, f, stringColor, xPos, dea.Bounds.Y);
+						xPos += (int)g.MeasureString(name + "-", f).Width;
+					}
+				}
+			}
+			
+			string typeString = item.GetType().ToString();
+			g.DrawString(typeString, PropertiesTitle.Font, stringColor, xPos, dea.Bounds.Y);
+		}
+		
+		private void SetParentBackColor (Control target, int layer, Color backColor)
+		{
+			if (layer > 0 && target.Parent != null)
+			{
+				layer--;
+				target.Parent.BackColor = backColor;
+				SetParentBackColor (target.Parent, layer, backColor);
+			}
+		}
+		
+		private void UpdateDesignerPageColors ()
+		{
+			if (supportProject && fm.CurrentCodeFileDocument.DesignerAndCodeTabs != null)
+			{
+				foreach (TabPage tabPage in fm.CurrentCodeFileDocument.DesignerAndCodeTabs.TabPages)
+				{
+					SetColors (tabPage, true);
+				}
+
+				GC.Collect ();
+				GC.WaitForPendingFinalizers ();
+			}
+		}
+
+		#endregion
+
 		
 		internal void ReSetTextEditor ()
 		{
@@ -817,6 +942,17 @@ namespace Yuki_Theme_Plugin
 			fm.AddTextToCompilerMessages (text + Environment.NewLine);
 		}
 
+		private void GetProperities ()
+		{
+			if (supportProject && projectExplorer != null)
+			{
+				Props prop = new Props ();
+				prop.root = toolbox;
+				prop.propertyGrid1.SelectedObject = toolbox;
+				prop.Show ();
+			}
+		}
+		
 		#region Methods_For_Menu
 
 		internal void updateQuietImage ()
@@ -831,7 +967,8 @@ namespace Yuki_Theme_Plugin
 		
 		private void ToggleQuiet (object sender, EventArgs e)
 		{
-			if (!toggled)
+			GetProperities ();
+			/*if (!toggled)
 			{
 				Settings.bgImage = false;
 				Settings.swSticker = false;
@@ -851,7 +988,7 @@ namespace Yuki_Theme_Plugin
 			plugin.LoadSticker ();
 			updateQuietImage ();
 			UpdateMenuWallpaperImage ();
-			UpdateMenuStickerImage ();
+			UpdateMenuStickerImage ();*/
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)

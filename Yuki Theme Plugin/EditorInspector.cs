@@ -166,7 +166,7 @@ namespace Yuki_Theme_Plugin
 			actions [key] = val;
 		}
 		
-		private void EventAdd (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
+		internal static void EventAdd (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
 		{
 			MethodInfo keyEventHandler = typeForMethod.GetMethod (nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
 			EventInfo evt = typeForEvent.GetEvent (nameOfEvent, BindingFlags.Instance | BindingFlags.Public);
@@ -178,7 +178,7 @@ namespace Yuki_Theme_Plugin
 			});
 		}
 
-		private void EventRemove (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
+		internal static void EventRemove (Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
 		{
 			MethodInfo keyEventHandler = typeForMethod.GetMethod (nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
 			EventInfo evt = typeForEvent.GetEvent (nameOfEvent, BindingFlags.Instance | BindingFlags.Public);
