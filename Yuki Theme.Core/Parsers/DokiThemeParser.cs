@@ -18,12 +18,12 @@ namespace Yuki_Theme.Core.Parsers
 		private string curd   = "";
 		private string fname  = "";
 		private string ofname = "";
-		private string getWallpaper => Path.Combine (curd, fname);
-		private string getSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		private string GetWallpaper => Path.Combine (curd, fname);
+		private string GetSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
 		
 		public  Func <string, string, bool> exist;
 
-		public static Dictionary <string, string> Groups = new Dictionary <string, string> ()
+		public static Dictionary <string, string> groups = new ()
 		{
 			
 			{ "Azur Lane", "AzurLane: " },
@@ -72,6 +72,19 @@ namespace Yuki_Theme.Core.Parsers
 			{ "NekoPara", "NekoPara: " },
 		};
 
+		private string [] BoldStrings => new []
+		{
+			"foregroundColor",
+			"constantColor",
+			"comments",
+			"stringColor",
+			"keywordColor",
+			"keyColor",
+			"classNameColor"
+		};
+
+		private string [] ForegroundStrings => Concat (BoldStrings, new [] { "accentColor", "lineNumberColor" });
+
 		public override void populateList (string path)
 		{
 			string text = "";
@@ -113,7 +126,7 @@ namespace Yuki_Theme.Core.Parsers
 
 				var attrs = new ThemeField ();
 
-				bool fore = canGetForeground (cl.Name);
+				bool fore = CanGetForeground (cl.Name);
 				if (fore)
 					attrs.Foreground = cl.Value.ToString ();
 				bool back = canGetBackground (cl.Name);
@@ -128,7 +141,7 @@ namespace Yuki_Theme.Core.Parsers
 					}
 				}
 
-				Tuple <string, string> defaults = getDefaultForeground (cl.Name);
+				Tuple <string, string> defaults = GetDefaultForeground (cl.Name);
 
 				if (defaults != null)
 				{
@@ -136,7 +149,7 @@ namespace Yuki_Theme.Core.Parsers
 						attrs.SetAttributeByName (defaults.Item1, defaults.Item2);
 				}
 
-				if (canBold (cl.Name))
+				if (CanBold (cl.Name))
 				{
 					attrs.Bold = false;
 					attrs.Italic = false;
@@ -159,9 +172,9 @@ namespace Yuki_Theme.Core.Parsers
 			theme.Fields ["LineNumbers"].Background = theme.Fields ["Default"].Background;
 
 			if (!theme.Fields.ContainsKey ("Digits"))
-				addDefaults ("constantColor");
-			addDefaults ("foregroundColor");
-			addDefaults ("comments");
+				AddDefaults ("constantColor");
+			AddDefaults ("foregroundColor");
+			AddDefaults ("comments");
 
 			ThemeField df = theme.Fields ["Default"];
 
@@ -190,8 +203,8 @@ namespace Yuki_Theme.Core.Parsers
 		private string ConvertGroup (string st)
 		{
 			string res = st;
-			if (Groups.ContainsKey (st))
-				res = Groups [st];
+			if (groups.ContainsKey (st))
+				res = groups [st];
 			return res;
 		}
 
@@ -209,92 +222,35 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override bool isNecessaryAttribute (string name)
 		{
-			bool rs = false;
-			switch (name)
-			{
-				case "FOREGROUND" :
-				case "BACKGROUND" :
-				{
-					rs = true;
-				}
-					break;
-			}
-
-			return rs;
+			return name is "FOREGROUND" or "BACKGROUND";
 		}
 
 		private bool canGetBackground (string st)
 		{
-			bool res = false;
-			switch (st)
-			{
-				case "textEditorBackground" :
-				case "selectionBackground" :
-				case "identifierHighlight" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return st is "textEditorBackground" or "selectionBackground" or "identifierHighlight";
 		}
 
 		private bool needToChange (string st)
 		{
-			bool res = false;
-			switch (st)
-			{
-				case "identifierHighlight" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return st == "identifierHighlight";
 		}
 
 		private void ChangedWayOfSetting (string nameOfField, string color, ref ThemeField field)
 		{
-			switch (nameOfField)
-			{
-				case "identifierHighlight" :
-				{
-					field.Foreground = color;
-				}
-					break;
-			}
+			if (nameOfField == "identifierHighlight")
+				field.Foreground = color;
 		}
 
-		private bool canGetForeground (string st)
+		private bool CanGetForeground (string st)
 		{
-			bool res = false;
-			switch (st)
-			{
-				case "foregroundColor" :
-				case "constantColor" :
-				case "comments" :
-				case "stringColor" :
-				case "keywordColor" :
-				case "classNameColor" :
-				case "accentColor" :
-				case "lineNumberColor" :
-				case "keyColor" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return ForegroundStrings.Contains (st);
 		}
 
-		private void addDefaults (string st)
+		private void AddDefaults (string st)
 		{
 			string[] dds = getName (st);
-			Tuple <string, string> defs = getDefaultForeground (st);
-			Tuple <string, bool> defaultBold = getDefaultBold (st);
+			Tuple <string, string> defs = GetDefaultForeground (st);
+			Tuple <string, bool> defaultBold = GetDefaultBold (st);
 
 			foreach (var nm in dds)
 			{
@@ -324,7 +280,7 @@ namespace Yuki_Theme.Core.Parsers
 		private readonly Dictionary <string, bool> _defaultBold = new ()
 			{ { "comments", false }, { "constantColor", false }, { "foregroundColor", false } };
 
-		private Tuple <string, string> getDefaultForeground (string st)
+		private Tuple <string, string> GetDefaultForeground (string st)
 		{
 			Tuple <string, string> res = null;
 			if (_defaultForegroundColors.ContainsKey (st))
@@ -341,7 +297,7 @@ namespace Yuki_Theme.Core.Parsers
 			return res;
 		}
 
-		private Tuple <string, bool> getDefaultBold (string st)
+		private Tuple <string, bool> GetDefaultBold (string st)
 		{
 			Tuple <string, bool> res = null;
 			if (_defaultBold.ContainsKey (st))
@@ -352,118 +308,41 @@ namespace Yuki_Theme.Core.Parsers
 			return res;
 		}
 
-		private bool canBold (string st)
+		private bool CanBold (string st)
 		{
-			bool res = false;
-			switch (st)
-			{
-				case "foregroundColor" :
-				case "constantColor" :
-				case "comments" :
-				case "stringColor" :
-				case "keywordColor" :
-				case "keyColor" :
-				case "classNameColor" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return BoldStrings.Contains (st);
 		}
+
+		private Dictionary <string, string []> TranslatedNames = new ()
+		{
+			{ "textEditorBackground", new [] { "Default" } },
+			{ "foregroundColor", new [] { "Default", "Punctuation" } },
+			{ "selectionBackground", new [] { "Selection" } },
+			{ "constantColor", new [] { "Digits" } },
+			{ "comments", new [] { "LineBigComment", "LineComment", "BlockComment", "BlockComment2" } },
+			{ "stringColor", new [] { "String" } },
+			{
+				"keywordColor", new []
+				{
+					"KeyWords", "ProgramSections", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords",
+					"SelectionStatements", "IterationStatements", "ExceptionHandlingStatements", "RaiseStatement",
+					"JumpStatements", "JumpProcedures", "InternalConstant", "InternalTypes", "ReferenceTypes",
+					"Modifiers", "AccessModifiers", "ErrorWords", "WarningWords", "DireciveNames",
+					"SpecialDireciveNames", "DireciveValues"
+				}
+			},
+			{ "classNameColor", new [] { "MarkPrevious" } },
+			{ "keyColor", new [] { "BeginEnd" } },
+			{ "accentColor", new [] { "CaretMarker", "SelectedFoldLine" } },
+			{ "lineNumberColor", new [] { "LineNumbers" } },
+			{ "identifierHighlight", new [] { "EOLMarkers", "SpaceMarkers", "TabMarkers" } },
+		};
 
 		public override string [] getName (string st)
 		{
-			string [] res = new string [] { };
-			switch (st)
-			{
-				case "textEditorBackground" :
-				{
-					res = new [] { "Default" };
-				}
-					break;
-
-				case "foregroundColor" :
-				{
-					res = new [] { "Default", "Punctuation" };
-				}
-					break;
-
-				case "selectionBackground" :
-				{
-					res = new [] { "Selection" };
-				}
-					break;
-
-				case "constantColor" :
-				{
-					res = new [] { "Digits" };
-				}
-					break;
-
-				case "comments" :
-				{
-					res = new [] { "LineBigComment", "LineComment", "BlockComment", "BlockComment2" };
-				}
-					break;
-
-				case "stringColor" :
-				{
-					res = new [] { "String" };
-				}
-					break;
-
-				case "keywordColor" :
-				{
-					res = new []
-					{
-						"KeyWords", "ProgramSections", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords",
-						"SelectionStatements", "IterationStatements", "ExceptionHandlingStatements", "RaiseStatement",
-						"JumpStatements", "JumpProcedures", "InternalConstant", "InternalTypes", "ReferenceTypes",
-						"Modifiers", "AccessModifiers", "ErrorWords", "WarningWords", "DireciveNames",
-						"SpecialDireciveNames", "DireciveValues"
-					};
-				}
-					break;
-
-				case "classNameColor" :
-				{
-					res = new []
-					{
-						"MarkPrevious"
-					};
-				}
-					break;
-
-				case "keyColor" :
-				{
-					res = new []
-					{
-						"BeginEnd"
-					};
-				}
-					break;
-
-				case "accentColor" :
-				{
-					res = new [] { "CaretMarker", "SelectedFoldLine" };
-				}
-					break;
-
-				case "lineNumberColor" :
-				{
-					res = new [] { "LineNumbers" };
-				}
-					break;
-
-				case "identifierHighlight" :
-				{
-					res = new [] { "EOLMarkers", "SpaceMarkers", "TabMarkers" };
-				}
-					break;
-			}
-
+			string [] res = { };
+			if (TranslatedNames.ContainsKey (st))
+				res = TranslatedNames [st];
 			return res;
 		}
 
@@ -474,9 +353,9 @@ namespace Yuki_Theme.Core.Parsers
 				var doc = new XmlDocument ();
 				doc.Load (PathToSave);
 
-				Tuple <bool, Image> wallp = getImage (getWallpaper);
+				Tuple <bool, Image> wallp = getImage (GetWallpaper);
 
-				Tuple <bool, Image> stick = getImage (getSticker);
+				Tuple <bool, Image> stick = getImage (GetSticker);
 
 				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
 
@@ -554,6 +433,16 @@ namespace Yuki_Theme.Core.Parsers
 				return new Tuple <bool, Image> (true, Image.FromFile (path));
 			else
 				return new Tuple <bool, Image> (false, null);
+		}
+
+		private static T[] Concat<T>(T[] x, T[] y)
+		{
+			if (x == null) throw new ArgumentNullException("x");
+			if (y == null) throw new ArgumentNullException("y");
+			T [] z = new T [x.Length + y.Length];
+			x.CopyTo(z, 0);
+			y.CopyTo(z, x.Length);
+			return z;
 		}
 	}
 }

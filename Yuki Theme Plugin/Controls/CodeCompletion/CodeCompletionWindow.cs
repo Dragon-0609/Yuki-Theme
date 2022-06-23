@@ -128,7 +128,7 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 			if (declarationViewWindow == null) {
 				declarationViewWindow = new DeclarationWindow(parentForm);
 				declarationViewWindow.in_completion_list = true;
-                declarationViewWindow.Font = new Font(VisualPascalABC.Constants.CompletionWindowDeclarationViewWindowFontName, declarationViewWindow.Font.Size);
+				declarationViewWindow.Font = new Font(VisualPascalABC.Constants.CompletionWindowDeclarationViewWindowFontName, declarationViewWindow.Font.Size);
 			}            
 			SetDeclarationViewLocation();
             //DS закоментил, это желтый квадрат при старте

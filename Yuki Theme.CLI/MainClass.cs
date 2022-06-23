@@ -21,6 +21,12 @@ namespace Yuki_Theme.CLI
 		internal      bool loop      = false;
 		private const int  MAX_WIDTH = 80;
 
+		private const string SettingModeLight    = "light";
+		private const string SettingModeAdvanced = "advanced";
+		private const string ActionDelete        = "delete";
+		private const string ActionImport        = "import";
+		private const string ActionIgnore        = "ignore";
+
 		private Dictionary <string, string> ToReplaceTranslationWithVariable = new ();
 
 		internal Completion completion;
@@ -421,23 +427,12 @@ namespace Yuki_Theme.CLI
 			if (!isNull (o.Mode))
 			{
 				bool isValid = false;
-				switch (o.Mode.ToLower ())
-				{
-					case "light" :
-					{
-						isValid = true;
-					}
-						break;
-					case "advanced" :
-					{
-						isValid = true;
-					}
-						break;
-				}
+				string modeInLower = o.Mode.ToLower();
+				isValid = modeInLower == SettingModeLight || modeInLower == SettingModeAdvanced;
 
 				if (isValid)
 				{
-					Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
+					Settings.settingMode = modeInLower == SettingModeLight ? SettingMode.Light : SettingMode.Advanced;
 					changed = true;
 				} else
 				{
@@ -447,33 +442,13 @@ namespace Yuki_Theme.CLI
 
 			if (!isNull (o.Action))
 			{
-				bool isValid = false;
-				int act = 0;
-				switch (o.Action.ToLower ())
-				{
-					case "delete" :
-					{
-						isValid = true;
-						act = 0;
-					}
-						break;
-					case "import" :
-					{
-						isValid = true;
-						act = 1;
-					}
-						break;
-					case "ignore" :
-					{
-						isValid = true;
-						act = 2;
-					}
-						break;
-				}
+				string actionLower = o.Action.ToLower();
+				bool isValid = actionLower is ActionDelete or ActionImport or ActionIgnore;
+				int actionNumber = GetThemeFoundActionNumber (actionLower);
 
 				if (isValid)
 				{
-					Settings.actionChoice = act;
+					Settings.actionChoice = actionNumber;
 					changed = true;
 				} else
 				{
@@ -508,6 +483,11 @@ namespace Yuki_Theme.CLI
 			}
 		}
 
+		private static int GetThemeFoundActionNumber (string actionLower)
+		{
+			return actionLower == ActionDelete ? 0 : actionLower == ActionImport ? 1 : 2;
+		}
+
 		private void EditC (EditCommand o)
 		{
 			bool showerror = false;
@@ -528,7 +508,7 @@ namespace Yuki_Theme.CLI
 							string err_txt = "";
 							try
 							{
-								color = isColor (o.Definition);
+								color = IsColor (o.Definition);
 							} catch (ArgumentException e)
 							{
 								error = true;
@@ -1005,84 +985,9 @@ namespace Yuki_Theme.CLI
 				dic.Background = ColorTranslator.ToHtml (bgcolor);
 		}
 
-		private bool isColor (string definition)
+		private bool IsColor (string definition)
 		{
-			bool result = false;
-			definition = definition.ToLower ();
-			switch (definition)
-			{
-				case "default" :
-				case "linenumber" :
-				case "fold" :
-				case "foldmarker" :
-				case "selectedfold" :
-				case "digit" :
-				case "comment" :
-				case "string" :
-				case "keyword" :
-				case "beginend" :
-				case "punctuation" :
-				case "operator" :
-				case "constant" :
-				case "selection" :
-				case "vruler" :
-				case "invalidlines" :
-				case "caretmarker" :
-				case "linenumbers" :
-				case "foldline" :
-				case "method" :
-				case "markprevious" :
-				case "selectedfoldline" :
-				case "eolmarkers" :
-				case "spacemarkers" :
-				case "tabmarkers" :
-				case "digits" :
-				case "linebigcomment" :
-				case "linecomment" :
-				case "blockcomment" :
-				case "blockcomment2" :
-				case "keywords" :
-				case "programsections" :
-				case "special" :
-				case "async" :
-				case "accesskeywords1" :
-				case "nonreserved1" :
-				case "operatorkeywords" :
-				case "selectionstatements" :
-				case "iterationstatements" :
-				case "exceptionhandlingstatements" :
-				case "raisestatement" :
-				case "jumpstatements" :
-				case "jumpprocedures" :
-				case "internalconstant" :
-				case "internaltypes" :
-				case "referencetypes" :
-				case "modifiers" :
-				case "accessmodifiers" :
-				case "errorwords" :
-				case "warningwords" :
-				case "direcivenames" :
-				case "specialdirecivenames" :
-				case "direcivevalues" :
-				{
-					result = true;
-				}
-					break;
-
-				case "image" :
-				case "sticker" :
-				{
-					result = false;
-				}
-					break;
-
-				default :
-				{
-					throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
-				}
-				break;
-			}
-
+			bool result = Highlighter.IsInColors (definition);
 			return result;
 		}
 

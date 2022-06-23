@@ -330,7 +330,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			CLI.restore (false, null);
 			LoadDefinitionsWithSelection ();
-			highlighter.updateColors ();
+			highlighter.UpdateColors ();
 			updateColors ();
 			SetOpacityWallpaper ();
 			LoadSticker ();
@@ -348,10 +348,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 				{
 					ColorPanel.Visibility = Visibility.Visible;
 					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled =
-						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
+						Highlighter.IsInColors (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
 
 					BoldCheckBox.Visibility = ItalicCheckBox.Visibility =
-						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
+						Highlighter.IsInColors (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
 
 					ThemeField dic = CLI.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
 
@@ -679,7 +679,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 					if (changed)
 					{
-						highlighter.updateColors ();
+						highlighter.UpdateColors ();
 						updateColors ();
 					}
 				}

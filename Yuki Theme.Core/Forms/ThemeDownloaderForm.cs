@@ -223,7 +223,7 @@ public partial class ThemeDownloaderForm : Form
 		}
 
 		if (groups.Count > 0)
-			DokiThemeParser.Groups = groups;
+			DokiThemeParser.groups = groups;
 	}
 
 	private Tuple <string, string> ParseNamespace (string target)

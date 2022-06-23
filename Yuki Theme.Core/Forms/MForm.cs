@@ -1242,7 +1242,7 @@ namespace Yuki_Theme.Core.Forms
 		}
 
 		/// <summary>
-		/// The app will track install via Google Analytics. This is necessary for me to be kept inspired. I'll switch to passive development on 1st April of 2022, but it doesn't mean that I'll close project. The installs are necessary to make me inspired for continue the development. 
+		/// The app will track install via Google Analytics. 
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

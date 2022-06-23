@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugIDE|AnyCPU' ">
+    <OutputPath>bin\DebugIDE\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CodeCompletion, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\PascalABC.NET\CodeCompletion.dll</HintPath>

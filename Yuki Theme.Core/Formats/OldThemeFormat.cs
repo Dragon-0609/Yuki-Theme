@@ -60,7 +60,7 @@ namespace Yuki_Theme.Core.Formats
 						}
 					}
 
-					if (Highlighter.isInNames (nm, true))
+					if (Highlighter.IsInColors (nm, true))
 					{
 						if (!attrs.Bold == null) attrs.Bold = false;
 
@@ -137,7 +137,7 @@ namespace Yuki_Theme.Core.Formats
 						}
 					}
 
-					if (Highlighter.isInNames (nm, true))
+					if (Highlighter.IsInColors (nm, true))
 					{
 						if (!attrs.Bold == null) attrs.Bold = false;
 
