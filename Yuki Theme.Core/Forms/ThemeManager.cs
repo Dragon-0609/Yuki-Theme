@@ -42,11 +42,11 @@ namespace Yuki_Theme.Core.Forms
 			groups = new List <ReItem> ();
 			fdef = new Font (new FontFamily ("Lucida Fax"), 9.75f, FontStyle.Regular, GraphicsUnit.Point);
 			fcat = new Font (new FontFamily ("Lucida Fax"), 11f, FontStyle.Bold, GraphicsUnit.Point);
-			CLI_Actions.onRename = onRename;
+			API_Actions.onRename = onRename;
 			scheme.MouseClick += CheckFolding;
-			label1.Text = CLI.Translate ("theme.manager.old");
-			label2.Text = CLI.Translate ("theme.manager.new");
-			closeButton.Text = CLI.Translate ("messages.buttons.close");
+			label1.Text = API.Translate ("theme.manager.old");
+			label2.Text = API.Translate ("theme.manager.new");
+			closeButton.Text = API.Translate ("messages.buttons.close");
 			// scheme.Columns [0].TextAlign = HorizontalAlignment.Center;
 		}
 
@@ -127,7 +127,7 @@ namespace Yuki_Theme.Core.Forms
 				string to = form.selform.textBox1.Text;
 				if (from != to)
 				{
-					if (!CLI.add (from, to))
+					if (!API.add (from, to))
 					{
 						form.schemes.Items.Add (to);
 						form.schemes.SelectedItem = to;
@@ -136,7 +136,7 @@ namespace Yuki_Theme.Core.Forms
 					DialogResult = DialogResult.OK;
 				} else
 				{
-					CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
+					API_Actions.showError (API.Translate ("messages.name.equal.message"), API.Translate ("messages.name.equal.title"));
 				}
 			}*/
 		}
@@ -146,7 +146,7 @@ namespace Yuki_Theme.Core.Forms
 			if (scheme.SelectedItems.Count > 0 && scheme.SelectedItems [0] is ReItem)
 			{
 				ReItem item = (ReItem)scheme.SelectedItems [0];
-				CLI.remove (item.Name, askDelete, afterAsk, afterDelete);
+				API.Remove (item.Name, askDelete, afterAsk, afterDelete);
 			}
 		}
 
@@ -162,15 +162,15 @@ namespace Yuki_Theme.Core.Forms
 					{
 						if (rf.toTBox.Text != rf.fromTBox.Text)
 						{
-							CLI.rename (rf.fromTBox.Text, rf.toTBox.Text);
+							API.Rename (rf.fromTBox.Text, rf.toTBox.Text);
 						} else
 						{
-							MessageBox.Show (CLI.Translate ("messages.name.notchanged"), CLI.Translate ("download.canceled.title"),
+							MessageBox.Show (API.Translate ("messages.name.notchanged"), API.Translate ("download.canceled.title"),
 							                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						}
 					} else
 					{
-						MessageBox.Show (CLI.Translate ("messages.name.invalid"), CLI.Translate ("messages.name.invalid.short"),
+						MessageBox.Show (API.Translate ("messages.name.invalid"), API.Translate ("messages.name.invalid.short"),
 						                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
@@ -188,26 +188,26 @@ namespace Yuki_Theme.Core.Forms
 			string npath = "";
 			string format = "";
 
-			bool isOldExists = File.Exists (CLI.pathToFile (namep, true)); 
-			pth = CLI.pathToFile (namep, isOldExists);
-			npath = CLI.pathToFile (namep, !isOldExists);
+			bool isOldExists = File.Exists (PathGenerator.PathToFile (namep, true)); 
+			pth = PathGenerator.PathToFile (namep, isOldExists);
+			npath = PathGenerator.PathToFile (namep, !isOldExists);
 			format = isOldExists ? "old" : "new";
 			
 
-			CLI.CopyTheme (name, namep, npath, out pth2, false);
-			CLI.ReGenerateTheme (npath, pth, name, name, true);
+			API.CopyTheme (name, namep, npath, out pth2, false);
+			API_Actions.ReGenerateTheme (npath, pth, name, name, true);
 			File.Delete (pth);
-			CLI.ThemeInfos [name].isOld = CLI.IsOldTheme (pth);
-			((ReItem)scheme.SelectedItems [0]).isOld = CLI.ThemeInfos [name].isOld;
+			API.themeInfos [name].isOld = API_Actions.IsOldTheme (pth);
+			((ReItem)scheme.SelectedItems [0]).isOld = API.themeInfos [name].isOld;
 			scheme.Invalidate ();
 
 			// if ((string)form.schemes.SelectedItem == name) // Reload theme (extension, path)
 			// {
-				CLI.SelectTheme (name);
+				API.SelectTheme (name);
 			// }
 
-			MessageBox.Show (CLI.Translate ("messages.regeneration.completed.fromto", name, format),
-			                 CLI.Translate ("messages.regeneration.completed.title"));
+			MessageBox.Show (API.Translate ("messages.regeneration.completed.fromto", name, format),
+			                 API.Translate ("messages.regeneration.completed.title"));
 		}
 
 		private void scheme_SelectedIndexChanged (object sender, EventArgs e)
@@ -225,7 +225,7 @@ namespace Yuki_Theme.Core.Forms
 				oldIndex = scheme.SelectedIndices [0];
 				ReItem re = (ReItem)scheme.SelectedItems [0];
 				re.BackColor = cbgclick;
-				if (re.ParentGroup != null && !re.ParentGroup.Name.Equals (CLI.Translate ("Default"))
+				if (re.ParentGroup != null && !re.ParentGroup.Name.Equals (API.Translate ("Default"))
 				                           && !re.ParentGroup.Name.Equals (
 					                              "doki theme", StringComparison.OrdinalIgnoreCase))
 				{

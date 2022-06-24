@@ -27,7 +27,7 @@ namespace Yuki_Theme.Core
 		public static RelativeUnit unit;
 
 		private static Size   Standart32 = new Size (32, 32);
-		public static  string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
+		public static  string CustomThemesBegin => Path.Combine (API.currentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
@@ -396,9 +396,9 @@ namespace Yuki_Theme.Core
 			{
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
-					if (CLI_Actions.showError != null)
-						CLI_Actions.showError (CLI.Translate ("messages.file.notexist.withname.param", filename),
-						                       CLI.Translate ("messages.file.notexist.withname", filename));
+					if (API_Actions.showError != null)
+						API_Actions.showError (API.Translate ("messages.file.notexist.withname.param", filename),
+						                       API.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -672,19 +672,19 @@ namespace Yuki_Theme.Core
 
 		public static void LoadCurrent ()
 		{
-			CLI.load_schemes ();
+			API.LoadSchemes ();
 			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{
 				foreach (string s in files)
 				{
-					string sp = CLI.GetNameOfTheme (s);
-					if (CLI.schemes.Contains (sp))
+					string sp = API.GetNameOfTheme (s);
+					if (API.schemes.Contains (sp))
 					{
 						// Console.WriteLine(nod.Attributes ["name"].Value);
 						currentTheme = sp;
-						CLI.selectedItem = currentTheme;
+						API.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -702,8 +702,8 @@ namespace Yuki_Theme.Core
 
 		public static void CreateThemeDirectory ()
 		{
-			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+			if (!Directory.Exists (Path.Combine (API.currentPath, "Themes")))
+				Directory.CreateDirectory (Path.Combine (API.currentPath, "Themes"));
 		}
 
 		public static T GetRandomElement <T> (List <T> list)
@@ -852,7 +852,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = CLI.GetCore ();
+	        Assembly a = API_Actions.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))

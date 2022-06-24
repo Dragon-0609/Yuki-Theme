@@ -5,75 +5,67 @@ namespace Yuki_Theme.Core.Themes;
 
 public class ThemeField
 {
+	private const string FOREGROUND_ATTRIBUTE = "color";
+	private const string BACKGROUND_ATTRIBUTE = "bgcolor";
+	private const string BOLD_ATTRIBUTE       = "bold";
+	private const string ITALIC_ATTRIBUTE     = "italic";
+
 	[JsonProperty ("background", Required = Required.AllowNull)]
 	public string Background { get; set; }
 
 	[JsonProperty ("foreground", Required = Required.AllowNull)]
 	public string Foreground { get; set; }
 
-	[JsonProperty ("bold", Required = Required.AllowNull)]
+	[JsonProperty (BOLD_ATTRIBUTE, Required = Required.AllowNull)]
 	public bool? Bold { get; set; }
 
-	[JsonProperty ("italic", Required = Required.AllowNull)]
+	[JsonProperty (ITALIC_ATTRIBUTE, Required = Required.AllowNull)]
 	public bool? Italic { get; set; }
 
 	public static ThemeField GetFieldFromDictionary (Dictionary <string, string> field)
 	{
-		var themeField = new ThemeField { Bold = null, Italic = null };
-		foreach (var pair in field)
-			switch (pair.Key)
-			{
-				case "color" :
-				{
-					themeField.Foreground = pair.Value;
-				}
-					break;
-				case "bgcolor" :
-				{
-					themeField.Background = pair.Value;
-				}
-					break;
-				case "bold" :
-				{
-					themeField.Bold = bool.Parse (pair.Value);
-				}
-					break;
-				case "italic" :
-				{
-					themeField.Italic = bool.Parse (pair.Value);
-				}
-					break;
-			}
+		ThemeField themeField = new ThemeField { Bold = null, Italic = null };
+		foreach (KeyValuePair <string, string> pair in field)
+		{
+			if (pair.Key == FOREGROUND_ATTRIBUTE)
+				themeField.Foreground = pair.Value;
+			else if (pair.Key == BACKGROUND_ATTRIBUTE)
+				themeField.Background = pair.Value;
+			else if (pair.Key == BOLD_ATTRIBUTE)
+				themeField.Bold = bool.Parse (pair.Value);
+			else if (pair.Key == ITALIC_ATTRIBUTE)
+				themeField.Italic = bool.Parse (pair.Value);
+		}
 
 		return themeField;
 	}
 
 	public Dictionary <string, string> ConvertToDictionary ()
 	{
-		var dictionary = new Dictionary <string, string> ();
+		Dictionary <string, string> dictionary = new Dictionary <string, string> ();
 
 		if (Background != null)
-			dictionary.Add ("bgcolor", Background);
+			dictionary.Add (BACKGROUND_ATTRIBUTE, Background);
 
 		if (Foreground != null)
-			dictionary.Add ("color", Foreground);
+			dictionary.Add (FOREGROUND_ATTRIBUTE, Foreground);
 
 		if (Bold != null)
-			dictionary.Add ("bold", Bold.ToString ().ToLower ());
+			dictionary.Add (BOLD_ATTRIBUTE, Bold.ToString ().ToLower ());
 
 		if (Italic != null)
-			dictionary.Add ("italic", Italic.ToString ().ToLower ());
+			dictionary.Add (ITALIC_ATTRIBUTE, Italic.ToString ().ToLower ());
 
 		return dictionary;
 	}
 
 	public void SetAttributeByName (string name, string value)
 	{
-		if (name == "color")
+		if (name == FOREGROUND_ATTRIBUTE)
 			Foreground = value;
-		else if (name == "bgcolor")
+		else if (name == BACKGROUND_ATTRIBUTE)
 			Background = value;
-		else if (name == "bold")
+		else if (name is BOLD_ATTRIBUTE or ITALIC_ATTRIBUTE)
 		{
 			Bold = bool.Parse (value);
 			Italic = bool.Parse (value);
@@ -82,13 +74,13 @@ public class ThemeField
 
 	public Dictionary <string, string> GetAttributes ()
 	{
-		var dictionay = new Dictionary <string, string> ();
+		Dictionary <string, string> dictionary = new Dictionary <string, string> ();
 
-		if (Background != null) dictionay.Add ("bgcolor", Background);
-		if (Foreground != null) dictionay.Add ("color", Foreground);
-		if (Bold != null) dictionay.Add ("bold", Bold.ToString ().ToLower ());
-		if (Italic != null) dictionay.Add ("italic", Italic.ToString ().ToLower ());
-		return dictionay;
+		if (Background != null) dictionary.Add (BACKGROUND_ATTRIBUTE, Background);
+		if (Foreground != null) dictionary.Add (FOREGROUND_ATTRIBUTE, Foreground);
+		if (Bold != null) dictionary.Add (BOLD_ATTRIBUTE, Bold.ToString ().ToLower ());
+		if (Italic != null) dictionary.Add (ITALIC_ATTRIBUTE, Italic.ToString ().ToLower ());
+		return dictionary;
 	}
 
 	public static Dictionary <string, ThemeField> GetThemeFieldsWithRealNames (SyntaxType syntax, Theme theme)
@@ -96,19 +88,20 @@ public class ThemeField
 		return GetThemeFieldsWithRealNames (syntax, theme.Fields);
 	}
 
-	public static Dictionary <string, ThemeField> GetThemeFieldsWithRealNames (SyntaxType syntax, Dictionary <string, ThemeField> themeFields)
+	public static Dictionary <string, ThemeField> GetThemeFieldsWithRealNames (SyntaxType                      syntax,
+	                                                                           Dictionary <string, ThemeField> themeFields)
 	{
-		var localDic = new Dictionary <string, ThemeField> ();
-		var shadowNames = new List <string> (); // This is necessary not to repeat fields
-		foreach (var pair in themeFields)
+		Dictionary <string, ThemeField> localDic = new Dictionary <string, ThemeField> ();
+		List <string> shadowNames = new List <string> (); // This is necessary not to repeat fields
+		foreach (KeyValuePair <string, ThemeField> pair in themeFields)
 		{
-			var shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
+			string shadowName = ShadowNames.GetShadowName (pair.Key, syntax, true);
 			// Console.WriteLine (shadowName);
 			if (shadowName != null && !shadowNames.Contains (shadowName) && ShadowNames.HasRealName (shadowName, syntax))
 			{
-				var realName = ShadowNames.GetRealName (shadowName, syntax);
+				string [] realName = ShadowNames.GetRealName (shadowName, syntax);
 				if (realName != null)
-					foreach (var st in realName)
+					foreach (string st in realName)
 						localDic.Add (st, pair.Value);
 
 				shadowNames.Add (shadowName);
@@ -118,54 +111,42 @@ public class ThemeField
 		return localDic;
 	}
 
-	public bool isAttributeNull (string name)
+	public bool IsAttributeNull (string name)
 	{
-		var res = false;
-		switch (name)
-		{
-			case "color" :
-			{
-				res = Foreground == null;
-			}
-				break;
-
-			case "bgcolor" :
-			{
-				res = Background == null;
-			}
-				break;
-
-			case "bold" :
-			{
-				res = Bold == null;
-			}
-				break;
-		}
+		bool res = false;
+		if (name == BACKGROUND_ATTRIBUTE)
+			res = Background == null;
+		else if (name == FOREGROUND_ATTRIBUTE)
+			res = Foreground == null;
+		else if (name == BOLD_ATTRIBUTE)
+			res = Bold == null;
 
 		return res;
 	}
 
-	public bool isNull ()
+	public bool IsNull ()
 	{
 		return Background == null && Foreground == null;
 	}
 
 	public override string ToString ()
 	{
-		var bg = Background == null ? "null" : Background;
-		var fg = Foreground == null ? "null" : Foreground;
-		var bd = Bold == null ? "null" : Bold.ToString ();
-		var it = Italic == null ? "null" : Italic.ToString ();
-		return string.Format ("Background: {0}, Foreground: {1}, Bold: {2}, Italic: {3}", bg, fg, bd, it);
+		string bg = Background ?? "null";
+		string fg = Foreground ?? "null";
+		string bd = Bold == null ? "null" : Bold.ToString ();
+		string it = Italic == null ? "null" : Italic.ToString ();
+		return $"Background: {bg}, Foreground: {fg}, Bold: {bd}, Italic: {it}";
 	}
 
-	public ThemeField copyField ()
+	public ThemeField CopyField ()
 	{
-		var field = new ThemeField ();
-		field.Background = Background;
-		field.Foreground = Foreground;
-		field.Bold = Bold;
-		field.Italic = Italic;
+		ThemeField field = new ThemeField
+		{
+			Background = Background,
+			Foreground = Foreground,
+			Bold = Bold,
+			Italic = Italic
+		};
 		return field;
 	}
 
@@ -180,7 +161,7 @@ public class ThemeField
 		if (fiel.Italic != null)
 			Italic = fiel.Italic;
 	}
-	
+
 	public ThemeField MergeWithAnother (ThemeField target)
 	{
 		if (this.Background == null && target.Background != null)
@@ -192,17 +173,17 @@ public class ThemeField
 		{
 			this.Foreground = target.Foreground;
 		}
-		
+
 		if (this.Bold == null && target.Bold != null)
 		{
 			this.Bold = target.Bold;
 		}
-		
+
 		if (this.Italic == null && target.Italic != null)
 		{
 			this.Italic = target.Italic;
 		}
-		
+
 		return this;
 	}
 
@@ -212,7 +193,7 @@ public class ThemeField
 		if (Background != null)
 		{
 			equal = field.Background != null && Background == field.Background;
-		}else if (field.Background != null)
+		} else if (field.Background != null)
 		{
 			equal = false;
 		}
@@ -222,10 +203,10 @@ public class ThemeField
 			if (Foreground != null)
 			{
 				equal = field.Foreground != null && Foreground == field.Foreground;
-			}else if (field.Foreground != null)
+			} else if (field.Foreground != null)
 			{
 				equal = false;
-			}	
+			}
 		}
 
 		if (equal)
@@ -233,10 +214,10 @@ public class ThemeField
 			if (Bold != null)
 			{
 				equal = field.Bold != null && Bold == field.Bold;
-			}else if (field.Bold != null)
+			} else if (field.Bold != null)
 			{
 				equal = false;
-			}	
+			}
 		}
 
 		if (equal)
@@ -244,13 +225,12 @@ public class ThemeField
 			if (Italic != null)
 			{
 				equal = field.Italic != null && Italic == field.Italic;
-			}else if (field.Italic != null)
+			} else if (field.Italic != null)
 			{
 				equal = false;
-			}	
+			}
 		}
-		
+
 		return equal;
 	}
-	
 }

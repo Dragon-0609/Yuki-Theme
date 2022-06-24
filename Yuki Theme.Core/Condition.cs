@@ -72,9 +72,9 @@ namespace Yuki_Theme.CLI
 		private static ThemeInfo SetGroup (string name, ThemeInfo info, Condition value)
 		{
 			info.group = value.Equality;
-			Theme theme = Core.CLI.GetTheme (name);
+			Theme theme = Core.API_Actions.GetTheme (name);
 			theme.Group = info.group;
-			Core.CLI.SaveTheme (theme, null, null, true);
+			Core.API.SaveTheme (theme, null, null, true);
 			return info;
 		}
 		

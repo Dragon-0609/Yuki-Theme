@@ -293,7 +293,7 @@ public partial class ThemeDownloaderForm : Form
 			string json = multi [1];
 			doki.Parse (json, "none", "none", false, false, false);
 			doki.theme.link = multi [0];
-			bool isEqual = !IsEqual (doki.theme, CLI.GetTheme (doki.theme.Name));
+			bool isEqual = !IsEqual (doki.theme, API_Actions.GetTheme (doki.theme.Name));
 			themes.Add (doki.theme.Name, doki.theme);
 			newThemes.Add (doki.theme.Name, isEqual);
 			LoadThemeIntoPage (doki.theme, isEqual);
@@ -606,12 +606,12 @@ public partial class ThemeDownloaderForm : Form
 			Console.WriteLine ("Downloading theme {0}", name);
 			try
 			{
-				if (CLI.ThemeInfos.ContainsKey (name))
+				if (API.themeInfos.ContainsKey (name))
 				{
-					if (CLI.ThemeInfos [name].location == ThemeLocation.File &&
-					    File.Exists (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld)))
+					if (API.themeInfos [name].location == ThemeLocation.File &&
+					    File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.themeInfos [name].isOld)))
 					{
-						File.Delete (CLI.pathToFile (Helper.ConvertNameToPath (name), CLI.ThemeInfos [name].isOld));
+						File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.themeInfos [name].isOld));
 					}
 				}
 
@@ -624,11 +624,11 @@ public partial class ThemeDownloaderForm : Form
 				if (eachTime)
 					AddNSetProgress ();
 
-				theme.fullPath = CLI.pathToFile (Helper.ConvertNameToPath (name), true);
+				theme.fullPath = PathGenerator.PathToFile (Helper.ConvertNameToPath (name), true);
 				theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 				Console.WriteLine ("Token: {0}", theme.Token);
-				CLI.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-				CLI.SaveTheme (theme, wallpaper, sticker);
+				API_Actions.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+				API.SaveTheme (theme, wallpaper, sticker);
 				wallpaper.Dispose ();
 				sticker.Dispose ();
 				AddNSetProgress ();

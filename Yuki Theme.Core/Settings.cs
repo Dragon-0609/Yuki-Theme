@@ -71,7 +71,7 @@ public static class Settings
 
 	/// <summary>
 	/// It's useful, when app asks to save, if you change to another theme without saving previous one. But, it also can be annoying.
-	/// I set isEdited in CLI , so it won't ask you each time. It'll ask when a theme is edited, and you're gonna change to another theme.
+	/// I set isEdited in API , so it won't ask you each time. It'll ask when a theme is edited, and you're gonna change to another theme.
 	/// </summary>
 	public const int ASKTOSAVE = 28;
 
@@ -103,7 +103,7 @@ public static class Settings
 		pascalPath = data [PASCALPATH] == "empty" ? null : data [PASCALPATH];
 		if (Helper.mode == ProductMode.Plugin)
 		{
-			pascalPath = CLI.currentPath;
+			pascalPath = API.currentPath;
 		}
 
 		if (pascalPath == null)
@@ -112,13 +112,13 @@ public static class Settings
 			if (Environment.Is64BitOperatingSystem)
 			{
 				defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-				if (CLI.isPasalDirectory (defpas))
+				if (API.IsPasalDirectory (defpas))
 				{
 					pascalPath = defpas;
 				} else
 				{
 					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
-					if (CLI.isPasalDirectory (defpas))
+					if (API.IsPasalDirectory (defpas))
 					{
 						pascalPath = defpas;
 					}
@@ -126,7 +126,7 @@ public static class Settings
 			} else
 			{
 				defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-				if (CLI.isPasalDirectory (defpas))
+				if (API.IsPasalDirectory (defpas))
 				{
 					pascalPath = defpas;
 				}
@@ -162,7 +162,7 @@ public static class Settings
 		colorPicker = int.Parse (data [COLORPICKER]);
 		localization = data [LOCALIZATION];
 
-		CLI.selectedItem = data [ACTIVE];
+		API.selectedItem = data [ACTIVE];
 		var os = 0;
 		int.TryParse (data [CHOICEINDEX], out os);
 		actionChoice = os;
@@ -181,9 +181,9 @@ public static class Settings
 	{
 		Dictionary <int, string> dict = PrepareToSave;
 		database.UpdateData (dict);
-		if (CLI_Actions.onBGIMAGEChange != null) CLI_Actions.onBGIMAGEChange ();
-		if (CLI_Actions.onSTICKERChange != null) CLI_Actions.onSTICKERChange ();
-		if (CLI_Actions.onSTATUSChange != null) CLI_Actions.onSTATUSChange ();
+		if (API_Actions.onBGIMAGEChange != null) API_Actions.onBGIMAGEChange ();
+		if (API_Actions.onSTICKERChange != null) API_Actions.onSTICKERChange ();
+		if (API_Actions.onSTATUSChange != null) API_Actions.onSTATUSChange ();
 	}
 
 	private static Dictionary <int, string> PrepareToSave
@@ -193,7 +193,7 @@ public static class Settings
 			Dictionary <int, string> dict = new Dictionary <int, string>
 			{
 				{ PASCALPATH, pascalPath },
-				{ ACTIVE, CLI.selectedItem },
+				{ ACTIVE, API.selectedItem },
 				{ ASKCHOICE, askChoice.ToString () },
 				{ CHOICEINDEX, actionChoice.ToString () },
 				{ SETTINGMODE, ((int)settingMode).ToString () },

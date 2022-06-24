@@ -28,7 +28,7 @@ public class Localization
 		List <string> locales = new List <string> () { "en" , "ru" };
 		List <string> languagesdisplayFull = new List <string> () { "English" , "Русский" };
 		Dictionary <string, bool> external = new Dictionary <string, bool> () { { "en", false } , { "ru", false } };
-		string pth = Path.Combine (CLI.currentPath, "Langs");
+		string pth = Path.Combine (API.currentPath, "Langs");
 		if (Directory.Exists (pth))
 		{
 			string [] files = Directory.GetFiles (pth, "*.lang");
@@ -46,7 +46,7 @@ public class Localization
 					}
 				} catch (Exception e)
 				{
-					CLI_Actions.showError (e.Message, "Something went wrong");
+					API_Actions.showError (e.Message, "Something went wrong");
 				}
 			}
 		}
@@ -96,12 +96,12 @@ public class Localization
 
 	public void LoadLocaleFromFile (string lang)
 	{
-		string file = Path.Combine (CLI.currentPath, "Langs", lang + ".lang");
+		string file = Path.Combine (API.currentPath, "Langs", lang + ".lang");
 		if (File.Exists (file))
 			LoadTranslation (File.ReadAllText (file));
 		else
 		{
-			CLI_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
+			API_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
 			LoadLocaleFromMemory (languages [0]);
 		}
 	}
@@ -129,13 +129,13 @@ public class Localization
 		} else if (recursionCalls < 5)
 		{
 			recursionCalls++;
-			CLI_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
+			API_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
 			string fallback = languages [0];
 			if (lang == fallback) fallback = languages [1];
 			LoadLocaleFromMemory (fallback);
 		} else
 		{
-			CLI_Actions.showError ("Infinite Recursion happened... Damn! I won't be able to translate.", "Infinite Recursion");
+			API_Actions.showError ("Infinite Recursion happened... Damn! I won't be able to translate.", "Infinite Recursion");
 			translation.Clear ();
 		}
 	}

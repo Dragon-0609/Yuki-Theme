@@ -46,7 +46,7 @@ namespace Yuki_Theme_Plugin
 				lbl.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
 				lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				lbl.Font = fnt;
-				lbl.Text = CLI.Translate ("plugin.themes");
+				lbl.Text = API.Translate ("plugin.themes");
 				lbl.TextAlign = ContentAlignment.MiddleCenter;
 				lbl.Size = new Size (200, 25);
 
@@ -54,7 +54,7 @@ namespace Yuki_Theme_Plugin
 				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
 				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				themeList.BorderStyle = BorderStyle.None;
-				themeList.list = CLI.schemes.ToArray ();
+				themeList.list = API.schemes.ToArray ();
 				themeList.SearchText ("");
 				themeList.BorderStyle = BorderStyle.None;
 				themeList.Font = fnt;
@@ -100,7 +100,7 @@ namespace Yuki_Theme_Plugin
 
 				// } else
 				// {
-				// 	MessageBox.Show (CLI.Translate ("plugin.close"));
+				// 	MessageBox.Show (API.Translate ("plugin.close"));
 				// }
 			}
 		}
@@ -143,8 +143,8 @@ namespace Yuki_Theme_Plugin
 						needToFullExportTheme = false;
 					} else
 					{
-						hideBG = !CLI.currentTheme.HasWallpaper;
-						plugin.stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+						hideBG = !API.currentTheme.HasWallpaper;
+						plugin.stickerControl.Visible = Settings.swSticker && API.currentTheme.HasSticker;
 					}
 				}
 
@@ -175,22 +175,22 @@ namespace Yuki_Theme_Plugin
 			{
 				if (themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
-					bool cnd = CLI.SelectTheme (themeList.SelectedItem.ToString ());
+					bool cnd = API.SelectTheme (themeList.SelectedItem.ToString ());
 
 					if (cnd)
 					{
-						CLI.selectedItem = CLI.nameToLoad;
-						CLI_Actions.ifHasImage2 = plugin.ifHsImage;
-						CLI_Actions.ifHasSticker2 = plugin.ifHsSticker;
-						CLI_Actions.ifDoesntHave2 = plugin.ifDNIMG;
-						CLI_Actions.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
-						CLI.restore (false, null);
-						CLI.export (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
+						API.selectedItem = API.nameToLoad;
+						API_Actions.ifHasImage2 = plugin.ifHsImage;
+						API_Actions.ifHasSticker2 = plugin.ifHsSticker;
+						API_Actions.ifDoesntHave2 = plugin.ifDNIMG;
+						API_Actions.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
+						API.Restore (false, null);
+						API.Export (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
 
-						CLI_Actions.ifHasImage2 = null;
-						CLI_Actions.ifHasSticker2 = null;
-						CLI_Actions.ifDoesntHave2 = null;
-						CLI_Actions.ifDoesntHaveSticker2 = null;
+						API_Actions.ifHasImage2 = null;
+						API_Actions.ifHasSticker2 = null;
+						API_Actions.ifDoesntHave2 = null;
+						API_Actions.ifDoesntHaveSticker2 = null;
 					}
 				}
 
@@ -223,25 +223,25 @@ namespace Yuki_Theme_Plugin
 		{
 			if (name != oldName)
 			{
-				if (CLI.SelectTheme (name))
+				if (API.SelectTheme (name))
 				{
-					CLI.restore ();
-					hideBG = !CLI.currentTheme.HasWallpaper;
-					plugin.stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+					API.Restore ();
+					hideBG = !API.currentTheme.HasWallpaper;
+					plugin.stickerControl.Visible = Settings.swSticker && API.currentTheme.HasSticker;
 					if (needToFullExportTheme)
 					{
-						CLI.preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+						API.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
 					} else
 					{
 						SyntaxType type =
 							ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
 						if (type != SyntaxType.Pascal)
 						{
-							CLI.preview (type, true, null);                                   // Not to reload layout
-							CLI.preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
+							API.Preview (type, true, null);                                   // Not to reload layout
+							API.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
 						} else
 						{
-							CLI.preview (type, true, plugin.ReloadLayoutLight);
+							API.Preview (type, true, plugin.ReloadLayoutLight);
 						}
 					}
 				}

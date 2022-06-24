@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using System.Xml;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core.Parsers
 {
 	public class DokiThemeParser : AbstractParser
 	{
-		private bool   dark   = true;
-		private string curd   = "";
-		private string fname  = "";
-		private string ofname = "";
-		private string GetWallpaper => Path.Combine (curd, fname);
-		private string GetSticker   => Path.Combine (curd, fname.Replace (".png", "_sticker.png"));
+		private bool   _dark   = true;
+		private string _currentDirectory   = "";
+		private string _fileName  = "";
+		private string _originalFileName = "";
+		private string GetWallpaper => Path.Combine (_currentDirectory, _fileName);
+		private string GetSticker   => Path.Combine (_currentDirectory, _fileName.Replace (".png", "_sticker.png"));
 		
 		public  Func <string, string, bool> exist;
 
@@ -87,85 +84,47 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override void populateList (string path)
 		{
-			string text = "";
+			string text;
 
 			if (needToWrite)
 			{
-				curd = Path.GetDirectoryName (path);
+				_currentDirectory = Path.GetDirectoryName (path);
 				text = File.ReadAllText (path); // If it's file mode, then read from file, else read from input
 			} else
 				text = path;
 
 			JObject json = JObject.Parse (text);
-			fname = json ["stickers"] ["default"] ["name"].ToString ();
-			ofname = ConvertGroup (json ["group"].ToString ()) + json ["name"];
+			JToken stickersToken = json ["stickers"];
+			if (stickersToken != null)
+			{
+				SetStickerInfo (stickersToken, json);
+			}
 
-			theme.ParseWallpaperAlign (json ["stickers"] ["default"] ["anchor"].ToString ());
-			theme.WallpaperOpacity = json ["stickers"] ["default"] ["opacity"].ToObject <int> ();
 			theme.Group = groupName;
 			
-			theme.imagePath = fname;
+			theme.imagePath = _fileName;
 			
-			flname = theme.Name = ofname;
+			flname = theme.Name = _originalFileName;
+			
 			if (needToWrite)
 			{
-				PathToSave = Path.Combine (CLI.currentPath, "Themes",
-				                           $"{Helper.ConvertNameToPath (ofname)}.yukitheme");
-				if (!MainParser.checkAvailableAndAsk (PathToSave, ask, exist))
-					throw new InvalidDataException (CLI.Translate ("parser.theme.exist"));
+				PathToSave = Path.Combine (API.currentPath, "Themes",
+				                           $"{Helper.ConvertNameToPath (_originalFileName)}.yukitheme");
+				if (!MainParser.CheckAvailableAndAsk (PathToSave, ask, exist))
+					throw new InvalidDataException (API.Translate ("parser.theme.exist"));
 
 				overwrite = File.Exists (PathToSave);
 				Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
 			}
 
-			dark = bool.Parse (json ["dark"].ToString ());
+			if (json ["dark"] != null)
+				_dark = bool.Parse (json ["dark"].ToString ());
 
-			foreach (JProperty cl in json ["colors"])
+			JToken colorsToken = json ["colors"];
+			if (colorsToken == null) throw new InvalidDataException (API.Translate ("parser.theme.colors"));
+			foreach (JToken colorToken in colorsToken)
 			{
-				string [] name = getName (cl.Name);
-
-				var attrs = new ThemeField ();
-
-				bool fore = CanGetForeground (cl.Name);
-				if (fore)
-					attrs.Foreground = cl.Value.ToString ();
-				bool back = canGetBackground (cl.Name);
-				if (back)
-				{
-					if (needToChange (cl.Name))
-					{
-						ChangedWayOfSetting (cl.Name, cl.Value.ToString (), ref attrs);
-					} else
-					{
-						attrs.Background = cl.Value.ToString ();
-					}
-				}
-
-				Tuple <string, string> defaults = GetDefaultForeground (cl.Name);
-
-				if (defaults != null)
-				{
-					if (attrs.isAttributeNull (defaults.Item1))
-						attrs.SetAttributeByName (defaults.Item1, defaults.Item2);
-				}
-
-				if (CanBold (cl.Name))
-				{
-					attrs.Bold = false;
-					attrs.Italic = false;
-				}
-
-
-				foreach (var nm in name)
-				{
-					if (!theme.Fields.ContainsKey (nm))
-					{
-						theme.Fields.Add (nm, attrs);
-					} else
-					{
-						theme.Fields [nm] = attrs.MergeWithAnother (theme.Fields [nm]);
-					}
-				}
+				ParseColor (colorToken);
 			}
 
 
@@ -196,6 +155,92 @@ namespace Yuki_Theme.Core.Parsers
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
 
+		private void ParseColor (JToken colorToken)
+		{
+			JProperty color = (JProperty)colorToken;
+			string [] name = getName (color.Name);
+
+			ThemeField attrs = new ThemeField ();
+
+			attrs = SetForegroundAndBackground (color, attrs);
+
+			AddDefaults (color, attrs);
+
+			SetFontStyle (color, attrs);
+
+
+			AddToThemeFields (name, attrs);
+		}
+
+		private ThemeField SetForegroundAndBackground (JProperty color, ThemeField attrs)
+		{
+			bool fore = CanGetForeground (color.Name);
+			if (fore)
+				attrs.Foreground = color.Value.ToString ();
+			bool back = canGetBackground (color.Name);
+			if (back)
+			{
+				if (needToChange (color.Name))
+				{
+					ChangedWayOfSetting (color.Name, color.Value.ToString (), ref attrs);
+				} else
+				{
+					attrs.Background = color.Value.ToString ();
+				}
+			}
+
+			return attrs;
+		}
+
+		private void AddDefaults (JProperty color, ThemeField attrs)
+		{
+			Tuple <string, string> defaults = GetDefaultForeground (color.Name);
+
+			if (defaults != null)
+			{
+				if (attrs.IsAttributeNull (defaults.Item1))
+					attrs.SetAttributeByName (defaults.Item1, defaults.Item2);
+			}
+		}
+
+		private void SetFontStyle (JProperty color, ThemeField attrs)
+		{
+			if (CanBold (color.Name))
+			{
+				attrs.Bold = false;
+				attrs.Italic = false;
+			}
+		}
+
+		private void AddToThemeFields (string [] name, ThemeField attrs)
+		{
+			foreach (string nm in name)
+			{
+				if (!theme.Fields.ContainsKey (nm))
+				{
+					theme.Fields.Add (nm, attrs);
+				} else
+				{
+					theme.Fields [nm] = attrs.MergeWithAnother (theme.Fields [nm]);
+				}
+			}
+		}
+
+		private void SetStickerInfo (JToken stickersToken, JObject json)
+		{
+			JToken stickerTreeToken = stickersToken ["default"];
+			if (stickerTreeToken != null)
+			{
+				_fileName = stickerTreeToken ["name"]?.ToString ();
+				_originalFileName = ConvertGroup (json ["group"]?.ToString ()) + json ["name"];
+
+				theme.ParseWallpaperAlign (stickerTreeToken ["anchor"]?.ToString ());
+
+				if (stickerTreeToken ["opacity"] != null)
+					theme.WallpaperOpacity = stickerTreeToken ["opacity"].ToObject <int> ();
+			}
+		}
+
 		public override void PopulateByXMLNodeTreeType (XmlNode node)
 		{
 		}
@@ -210,9 +255,12 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override string GetValue (XmlNode child)
 		{
-			var attr_value = child.Attributes ["value"].Value;
-
-			return attr_value;
+			string attrValue = "";
+			if (child.Attributes != null)
+			{
+				attrValue = child.Attributes ["value"].Value;
+			}
+			return attrValue;
 		}
 
 		public override ThemeField populateDefaultAttributes (string name)
@@ -252,7 +300,7 @@ namespace Yuki_Theme.Core.Parsers
 			Tuple <string, string> defs = GetDefaultForeground (st);
 			Tuple <string, bool> defaultBold = GetDefaultBold (st);
 
-			foreach (var nm in dds)
+			foreach (string nm in dds)
 			{
 				if (!theme.Fields.ContainsKey (nm))
 				{
@@ -261,11 +309,11 @@ namespace Yuki_Theme.Core.Parsers
 					if (defaultBold != null)
 						field.SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
 					theme.Fields.Add (nm, field);
-				} else if (theme.Fields [nm].isAttributeNull (defs.Item1))
+				} else if (theme.Fields [nm].IsAttributeNull (defs.Item1))
 				{
 					theme.Fields [nm].SetAttributeByName (defs.Item1, defs.Item2);
 					
-					if (defaultBold != null && theme.Fields [nm].isAttributeNull (defaultBold.Item1))
+					if (defaultBold != null && theme.Fields [nm].IsAttributeNull (defaultBold.Item1))
 						theme.Fields [nm].SetAttributeByName (defaultBold.Item1, defaultBold.Item2.ToString());
 				}
 			}
@@ -285,7 +333,7 @@ namespace Yuki_Theme.Core.Parsers
 			Tuple <string, string> res = null;
 			if (_defaultForegroundColors.ContainsKey (st))
 			{
-				if (dark)
+				if (_dark)
 				{
 					res = new Tuple <string, string> ("color", _defaultDarkForegroundColors [st]);
 				} else
@@ -350,14 +398,14 @@ namespace Yuki_Theme.Core.Parsers
 		{
 			if (!overwrite)
 			{
-				var doc = new XmlDocument ();
+				XmlDocument doc = new XmlDocument ();
 				doc.Load (PathToSave);
 
 				Tuple <bool, Image> wallp = getImage (GetWallpaper);
 
 				Tuple <bool, Image> stick = getImage (GetSticker);
 
-				var node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
+				XmlNode node = doc.SelectSingleNode ("/SyntaxDefinition/Environment");
 
 				XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 				XmlNodeList comms = nod.SelectNodes ("//comment()");
@@ -371,7 +419,7 @@ namespace Yuki_Theme.Core.Parsers
 
 					Dictionary <string, string> commentValues = new Dictionary <string, string> ()
 					{
-						{ "name", "name:" + ofname }, { "align", "align:" + ((int)Alignment.Center).ToString () },
+						{ "name", "name:" + _originalFileName }, { "align", "align:" + ((int)Alignment.Center).ToString () },
 						{ "opacity", "opacity:" + (10).ToString () },
 						{ "sopacity", "sopacity:" + (100).ToString () },
 						{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
@@ -415,7 +463,7 @@ namespace Yuki_Theme.Core.Parsers
 					}
 				} else
 				{
-					node.AppendChild (doc.CreateComment ("name:" + ofname));
+					node.AppendChild (doc.CreateComment ("name:" + _originalFileName));
 					node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
 					node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
 					node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));

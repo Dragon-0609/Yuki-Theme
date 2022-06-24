@@ -11,6 +11,6 @@ public class ExtendedDropItem
 
 	public override string ToString ()
 	{
-		return CLI.Translate (name);
+		return API.Translate (name);
 	}
 }

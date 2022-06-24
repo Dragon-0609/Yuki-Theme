@@ -35,16 +35,16 @@ namespace Yuki_Theme.Tests
 				if (!isInitialized)
 				{
 					SetDefaultActions ();
-					Core.CLI.currentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+					Core.API.currentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 					ResetForTests ();
 					ClearTestThemes ();
 					Settings.connectAndGet ();
-					Core.CLI.load_schemes ();
-					bool cnd = Core.CLI.SelectTheme (Helper.GetRandomElement (Core.CLI.schemes));
+					Core.API.LoadSchemes ();
+					bool cnd = Core.API.SelectTheme (Helper.GetRandomElement (Core.API.schemes));
 
 					Assert.IsTrue (cnd);
 
-					Core.CLI.restore (false);
+					Core.API.Restore (false);
 					isInitialized = true;
 				}
 			} catch (Exception e)
@@ -64,18 +64,18 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeAdded)
 				{
-					copyFrom = Helper.GetRandomElement (Core.CLI.schemes);
+					copyFrom = Helper.GetRandomElement (Core.API.schemes);
 					copyTo = $"{copyFrom}_Test";
-					Core.CLI.add (copyFrom, copyTo);
-					Core.CLI.SelectTheme (copyTo);
+					Core.API.Add (copyFrom, copyTo);
+					Core.API.SelectTheme (copyTo);
 					isThemeAdded = true;
 				}
 			} catch (Exception e)
 			{
 				if (copyTo != null && copyFrom != null)
 				{
-					string patsh = Path.Combine (Core.CLI.currentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.CLI.ThemeInfos [copyFrom].isOld)}");
+					string patsh = Path.Combine (Core.API.currentPath,
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API.themeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
@@ -97,13 +97,13 @@ namespace Yuki_Theme.Tests
 						values = FieldValues;
 					else
 						values = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, FieldValues);
-					Core.CLI.restore (false, onFieldsLoaded);
+					Core.API.Restore (false, onFieldsLoaded);
 					foreach (string field in fields)
 					{
 						if (values.ContainsKey (field))
 						{
 							ThemeField fiel = values [field];
-							Core.CLI.currentTheme.Fields [field].SetValues (fiel);
+							Core.API.currentTheme.Fields [field].SetValues (fiel);
 						}
 					}
 
@@ -130,7 +130,7 @@ namespace Yuki_Theme.Tests
 						if (FieldValues.ContainsKey (field))
 						{
 							ThemeField fiel = FieldValues [field];
-							ThemeField fiel2 = Core.CLI.currentTheme.Fields [field];
+							ThemeField fiel2 = Core.API.currentTheme.Fields [field];
 							if (fiel.Background != null)
 								equal = equal && fiel.Background == fiel2.Background;
 
@@ -158,14 +158,14 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeSaved)
 				{
-					foreach (KeyValuePair <string, ThemeField> themeField in Core.CLI.currentTheme.Fields)
+					foreach (KeyValuePair <string, ThemeField> themeField in Core.API.currentTheme.Fields)
 					{
 						Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
 					}
 
-					// Console.WriteLine(Core.CLI.currentTheme.Fields ["Default Text"].Background);
-					// Console.WriteLine(Core.CLI.currentTheme.Fields ["Default Text"].Foreground);
-					Core.CLI.save (img2, img3);
+					// Console.WriteLine(Core.API.currentTheme.Fields ["Default Text"].Background);
+					// Console.WriteLine(Core.API.currentTheme.Fields ["Default Text"].Foreground);
+					Core.API.Save (img2, img3);
 
 					isThemeSaved = true;
 				}
@@ -184,7 +184,7 @@ namespace Yuki_Theme.Tests
 			{
 				if (isThemeRemoved)
 				{
-					Core.CLI.remove (Core.CLI.nameToLoad, (s, s1) => true, null, null);
+					Core.API.Remove (Core.API.nameToLoad, (s, s1) => true, null, null);
 					
 					isThemeRemoved = true;
 				}
@@ -196,12 +196,12 @@ namespace Yuki_Theme.Tests
 
 		private void onFieldsLoaded ()
 		{
-			fields = Core.CLI.names.ToArray ();
+			fields = Core.API.names.ToArray ();
 		}
 
 		private void ResetForTests ()
 		{
-			Core.CLI.schemes.Clear ();
+			Core.API.schemes.Clear ();
 			DefaultThemes.categories.Clear ();
 			DefaultThemes.headers.Clear ();
 			DefaultThemes.names.Clear ();
@@ -211,19 +211,19 @@ namespace Yuki_Theme.Tests
 
 		private void SetDefaultActions ()
 		{
-			Core.CLI_Actions.showError = (s,    s1) => { Console.WriteLine ($"{s1}: {s}"); };
-			Core.CLI_Actions.SaveInExport = (s, s1) => true;
-			Core.CLI_Actions.ifHasImage = image => { img2 = image; };
-			Core.CLI_Actions.ifHasSticker = image => { img3 = image; };
-			Core.CLI_Actions.ifDoesntHave = () => { img2 = null; };
-			Core.CLI_Actions.ifDoesntHaveSticker = () => { img3 = null; };
+			Core.API_Actions.showError = (s,    s1) => { Console.WriteLine ($"{s1}: {s}"); };
+			Core.API_Actions.SaveInExport = (s, s1) => true;
+			Core.API_Actions.ifHasImage = image => { img2 = image; };
+			Core.API_Actions.ifHasSticker = image => { img3 = image; };
+			Core.API_Actions.ifDoesntHave = () => { img2 = null; };
+			Core.API_Actions.ifDoesntHaveSticker = () => { img3 = null; };
 		}
 
 		private void ClearTestThemes ()
 		{
-			if (Directory.Exists (Path.Combine (Core.CLI.currentPath, "Themes")))
+			if (Directory.Exists (Path.Combine (Core.API.currentPath, "Themes")))
 			{
-				string [] files = Directory.GetFiles (Path.Combine (Core.CLI.currentPath, "Themes"), "*_Test.yukitheme");
+				string [] files = Directory.GetFiles (Path.Combine (Core.API.currentPath, "Themes"), "*_Test.yukitheme");
 				foreach (string file in files)
 				{
 					File.Delete (file);

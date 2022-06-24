@@ -11,6 +11,15 @@ namespace Yuki_Theme.Core
 
 	public static class ShadowNames
 	{
+		private const string EXTENSION_CSHARP  = ".cs";
+		private const string EXTENSION_HASKELL = ".hs";
+		private const string EXTENSION_KUMIR   = ".alg";
+		private const string EXTENSION_KUMIR00 = ".alg00";
+		private const string EXTENSION_PASCAL  = ".pas";
+		private const string EXTENSION_PASCAL2 = ".paspart_";
+		private const string EXTENSION_PYTHON  = ".py";
+		private const string EXTENSION_VBNET   = ".vb";
+
 		public static string [] names = new []
 		{
 			"Default Text",
@@ -51,35 +60,63 @@ namespace Yuki_Theme.Core
 		public static string [] GetFields (SyntaxType type)
 		{
 			string [] res = null;
-
-			switch (type)
-			{
-				case SyntaxType.Pascal :
-					res = GetPascalFields ();
-					break;
-				case SyntaxType.CSharp :
-					res = GetCSharpFields ();
-					break;
-				case SyntaxType.Haskell :
-					res = GetHaskellFields ();
-					break;
-				case SyntaxType.KuMir :
-					res = GetKuMirFields ();
-					break;
-				case SyntaxType.KuMir00 :
-					res = GetKuMir00Fields ();
-					break;
-				case SyntaxType.Python :
-					res = GetPythonFields ();
-					break;
-				case SyntaxType.VBNET :
-					res = GetVBNETFields ();
-					break;
-			}
-
+			if (type == SyntaxType.Pascal)
+				res = GetPascalFields ();
+			else if (type == SyntaxType.CSharp)
+				res = GetCSharpFields ();
+			else if (type == SyntaxType.Haskell)
+				res = GetHaskellFields ();
+			else if (type == SyntaxType.KuMir)
+				res = GetKuMirFields ();
+			else if (type == SyntaxType.KuMir00)
+				res = GetKuMir00Fields ();
+			else if (type == SyntaxType.Python)
+				res = GetPythonFields ();
+			else if (type == SyntaxType.VBNET)
+				res = GetVBNETFields ();
 			return res;
 		}
 
+		public static Dictionary<string, string[]> GetDictionaryFields (SyntaxType type)
+		{
+			Dictionary<string, string[]> res = null;
+			if (type == SyntaxType.Pascal)
+				res = PascalFields;
+			else if (type == SyntaxType.CSharp)
+				res = CSharpFields;
+			else if (type == SyntaxType.Haskell)
+				res = HaskellFields;
+			else if (type == SyntaxType.KuMir)
+				res = KuMirFields;
+			else if (type == SyntaxType.KuMir00)
+				res = KuMir00Fields;
+			else if (type == SyntaxType.Python)
+				res = PythonFields;
+			else if (type == SyntaxType.VBNET)
+				res = VBNETFields;
+			return res;
+		}
+		
+		private static Dictionary <string, string> GetRevertedFields (SyntaxType type) 
+		{
+			Dictionary <string, string> fields = null;
+			if (type == SyntaxType.Pascal)
+				fields = PascalFields_Reverted;
+			else if (type == SyntaxType.CSharp)
+				fields = CSharpFields_Reverted;
+			else if (type == SyntaxType.Haskell)
+				fields = HaskellFields_Reverted;
+			else if (type == SyntaxType.KuMir)
+				fields = KuMirFields_Reverted;
+			else if (type == SyntaxType.KuMir00)
+				fields = KuMir00Fields_Reverted;
+			else if (type == SyntaxType.Python)
+				fields = PythonFields_Reverted;
+			else if (type == SyntaxType.VBNET)
+				fields = VBNETFields_Reverted;
+			return fields;
+		}
+		
 		public static string [] GetEnvironmentFields ()
 		{
 			string [] res =
@@ -334,62 +371,19 @@ namespace Yuki_Theme.Core
 		public static string [] GetRealName (string shadow, SyntaxType type)
 		{
 			string [] res = null;
-			switch (type)
-			{
-				case SyntaxType.Pascal :
-					res = PascalFields [shadow];
-					break;
-				case SyntaxType.CSharp :
-					res = CSharpFields [shadow];
-					break;
-				case SyntaxType.Haskell :
-					res = HaskellFields [shadow];
-					break;
-				case SyntaxType.KuMir :
-					res = KuMirFields [shadow];
-					break;
-				case SyntaxType.KuMir00 :
-					res = KuMir00Fields [shadow];
-					break;
-				case SyntaxType.Python :
-					res = PythonFields [shadow];
-					break;
-				case SyntaxType.VBNET :
-					res = VBNETFields [shadow];
-					break;
-			}
-
+			Dictionary <string, string []> fields = GetDictionaryFields (type);
+			if (fields != null)
+				res = fields [shadow];
 			return res;
 		}
 
 		public static bool HasRealName (string shadow, SyntaxType type)
 		{
 			bool res = false;
-			switch (type)
-			{
-				case SyntaxType.Pascal :
-					res = PascalFields.ContainsKey (shadow);
-					break;
-				case SyntaxType.CSharp :
-					res = CSharpFields.ContainsKey (shadow);
-					break;
-				case SyntaxType.Haskell :
-					res = HaskellFields.ContainsKey (shadow);
-					break;
-				case SyntaxType.KuMir :
-					res = KuMirFields.ContainsKey (shadow);
-					break;
-				case SyntaxType.KuMir00 :
-					res = KuMir00Fields.ContainsKey (shadow);
-					break;
-				case SyntaxType.Python :
-					res = PythonFields.ContainsKey (shadow);
-					break;
-				case SyntaxType.VBNET :
-					res = VBNETFields.ContainsKey (shadow);
-					break;
-			}
-
+			Dictionary <string, string []> fields = GetDictionaryFields (type);
+			if (fields != null)
+				res = fields.ContainsKey (shadow);
+			
 			return res;
 		}
 
@@ -411,37 +405,10 @@ namespace Yuki_Theme.Core
 					res = real;
 			} else
 			{
-				switch (type)
-				{
-					case SyntaxType.Pascal :
-						if (PascalFields_Reverted.ContainsKey (real))
-							res = PascalFields_Reverted [real];
-						break;
-					case SyntaxType.CSharp :
-						if (CSharpFields_Reverted.ContainsKey (real))
-							res = CSharpFields_Reverted [real];
-						break;
-					case SyntaxType.Haskell :
-						if (HaskellFields_Reverted.ContainsKey (real))
-							res = HaskellFields_Reverted [real];
-						break;
-					case SyntaxType.KuMir :
-						if (KuMirFields_Reverted.ContainsKey (real))
-							res = KuMirFields_Reverted [real];
-						break;
-					case SyntaxType.KuMir00 :
-						if (KuMir00Fields_Reverted.ContainsKey (real))
-							res = KuMir00Fields_Reverted [real];
-						break;
-					case SyntaxType.Python :
-						if (PythonFields_Reverted.ContainsKey (real))
-							res = PythonFields_Reverted [real];
-						break;
-					case SyntaxType.VBNET :
-						if (VBNETFields_Reverted.ContainsKey (real))
-							res = VBNETFields_Reverted [real];
-						break;
-				}
+				Dictionary<string,string> fields = GetRevertedFields (type);
+
+				if (fields != null && fields.ContainsKey (real))
+					res = fields [real];
 			}
 
 			return res;
@@ -855,50 +822,24 @@ namespace Yuki_Theme.Core
 			return me;
 		}
 
+		private static readonly Dictionary <string, SyntaxType> SyntaxTypes = new ()
+		{
+			{"EXTENSION_CSHARP", SyntaxType.CSharp},
+			{"EXTENSION_HASKELL", SyntaxType.Haskell},
+			{"EXTENSION_KUMIR", SyntaxType.KuMir},
+			{"EXTENSION_KUMIR00", SyntaxType.KuMir00},
+			{"EXTENSION_PASCAL", SyntaxType.Pascal},
+			{"EXTENSION_PASCAL2", SyntaxType.Pascal},
+			{"EXTENSION_PYTHON", SyntaxType.Python},
+			{"EXTENSION_VBNET", SyntaxType.VBNET},
+		};
+
 		public static SyntaxType GetSyntaxByExtension (string str)
 		{
 			SyntaxType type = SyntaxType.Pascal;
-			if (str != null)
+			if (str != null && SyntaxTypes.ContainsKey (str))
 			{
-				switch (str)
-				{
-					case ".cs" :
-					{
-						type = SyntaxType.CSharp;
-					}
-						break;
-					case ".hs" :
-					{
-						type = SyntaxType.Haskell;
-					}
-						break;
-					case ".alg" :
-					{
-						type = SyntaxType.KuMir;
-					}
-						break;
-					case ".alg00" :
-					{
-						type = SyntaxType.KuMir00;
-					}
-						break;
-					case ".pas" :
-					case ".paspart_" :
-					{
-						type = SyntaxType.Pascal;
-					}
-						break;
-					case ".py" :
-					{
-						type = SyntaxType.Python;
-					}
-						break;
-					case ".vb" :
-					{
-						type = SyntaxType.VBNET;
-					}
-						break;
-				}
+				type = SyntaxTypes [str];
 			}
 
 			return type;

@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return CLI.Translate (key);
+			return API.Translate (key);
 		}
 
 		private void button1_Click (object sender, EventArgs e)

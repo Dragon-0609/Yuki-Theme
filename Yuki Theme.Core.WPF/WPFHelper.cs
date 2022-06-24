@@ -81,7 +81,7 @@ namespace Yuki_Theme.Core.WPF
 			btn.Content = new Image
 			{
 				Source = (Helper.RenderSvg (new System.Drawing.Size (Convert.ToInt32 (btn.Width), Convert.ToInt32 (btn.Height)),
-				                            Helper.LoadSvg (source, CLI.GetCore ()), false, System.Drawing.Size.Empty, customColor, color))
+				                            Helper.LoadSvg (source, API_Actions.GetCore ()), false, System.Drawing.Size.Empty, customColor, color))
 					.ToWPFImage ()
 			};
 		}
@@ -91,7 +91,7 @@ namespace Yuki_Theme.Core.WPF
 			return new Image
 			{
 				Source = (Helper.RenderSvg (new System.Drawing.Size (Convert.ToInt32 (size.Width), Convert.ToInt32 (size.Height)),
-				                            Helper.LoadSvg (source, CLI.GetCore ()), false, System.Drawing.Size.Empty,
+				                            Helper.LoadSvg (source, API_Actions.GetCore ()), false, System.Drawing.Size.Empty,
 				                            customColor, color))
 					.ToWPFImage ()
 			};
@@ -212,7 +212,7 @@ namespace Yuki_Theme.Core.WPF
 
 			foreach (string key in keys)
 			{
-				string translation = CLI.Translate (key);
+				string translation = API.Translate (key);
 				if (translation.Contains ("\n"))
 					translation = translation.Replace ("\n", Environment.NewLine);
 				that.Resources [key] = translation;

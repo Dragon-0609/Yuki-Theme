@@ -65,7 +65,7 @@ namespace Yuki_Theme.Core.Formats
 				IThemeHeader header = DefaultThemes.headers [pathToTheme];
 				Assembly a = header.Location;
 				string pathToMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
-				// var a = CLI.GetCore ();
+				// var a = API.GetCore ();
 
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, a);
 				if (content.Item1)
@@ -78,21 +78,21 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI_Actions.ifHasImage != null)
+							if (API_Actions.ifHasImage != null)
 							{
-								CLI_Actions.ifHasImage (iag.Item2);
+								API_Actions.ifHasImage (iag.Item2);
 							}
 
-							if (CLI_Actions.ifHasImage2 != null)
+							if (API_Actions.ifHasImage2 != null)
 							{
-								CLI_Actions.ifHasImage2 (iag.Item2);
+								API_Actions.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI_Actions.ifDoesntHave != null)
-								CLI_Actions.ifDoesntHave ();
-							if (CLI_Actions.ifDoesntHave2 != null)
-								CLI_Actions.ifDoesntHave2 ();
+							if (API_Actions.ifDoesntHave != null)
+								API_Actions.ifDoesntHave ();
+							if (API_Actions.ifDoesntHave2 != null)
+								API_Actions.ifDoesntHave2 ();
 						}
 
 						iag = null;
@@ -100,38 +100,38 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI_Actions.ifHasSticker != null)
+							if (API_Actions.ifHasSticker != null)
 							{
-								CLI_Actions.ifHasSticker (iag.Item2);
+								API_Actions.ifHasSticker (iag.Item2);
 							}
 
-							if (CLI_Actions.ifHasSticker2 != null)
+							if (API_Actions.ifHasSticker2 != null)
 							{
-								CLI_Actions.ifHasSticker2 (iag.Item2);
+								API_Actions.ifHasSticker2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI_Actions.ifDoesntHaveSticker != null)
-								CLI_Actions.ifDoesntHaveSticker ();
-							if (CLI_Actions.ifDoesntHaveSticker2 != null)
-								CLI_Actions.ifDoesntHaveSticker2 ();
+							if (API_Actions.ifDoesntHaveSticker != null)
+								API_Actions.ifDoesntHaveSticker ();
+							if (API_Actions.ifDoesntHaveSticker2 != null)
+								API_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (CLI_Actions.ifDoesntHave != null)
-							CLI_Actions.ifDoesntHave ();
+						if (API_Actions.ifDoesntHave != null)
+							API_Actions.ifDoesntHave ();
 
-						if (CLI_Actions.ifDoesntHaveSticker != null)
-							CLI_Actions.ifDoesntHaveSticker ();
+						if (API_Actions.ifDoesntHaveSticker != null)
+							API_Actions.ifDoesntHaveSticker ();
 
-						if (CLI_Actions.ifDoesntHave2 != null)
-							CLI_Actions.ifDoesntHave2 ();
+						if (API_Actions.ifDoesntHave2 != null)
+							API_Actions.ifDoesntHave2 ();
 
-						if (CLI_Actions.ifDoesntHaveSticker2 != null)
-							CLI_Actions.ifDoesntHaveSticker2 ();
+						if (API_Actions.ifDoesntHaveSticker2 != null)
+							API_Actions.ifDoesntHaveSticker2 ();
 					}
 
 					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
@@ -149,54 +149,54 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI_Actions.ifHasImage != null)
+							if (API_Actions.ifHasImage != null)
 							{
-								CLI_Actions.ifHasImage (iag.Item2);
+								API_Actions.ifHasImage (iag.Item2);
 							}
 
-							if (CLI_Actions.ifHasImage2 != null)
+							if (API_Actions.ifHasImage2 != null)
 							{
-								CLI_Actions.ifHasImage2 (iag.Item2);
+								API_Actions.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (CLI_Actions.ifDoesntHave != null)
-								CLI_Actions.ifDoesntHave ();
+							if (API_Actions.ifDoesntHave != null)
+								API_Actions.ifDoesntHave ();
 
-							if (CLI_Actions.ifDoesntHave2 != null)
-								CLI_Actions.ifDoesntHave2 ();
+							if (API_Actions.ifDoesntHave2 != null)
+								API_Actions.ifDoesntHave2 ();
 						}
 
 						iag = Helper.GetSticker (pathToTheme);
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (CLI_Actions.ifHasSticker != null)
+							if (API_Actions.ifHasSticker != null)
 							{
-								CLI_Actions.ifHasSticker (iag.Item2);
+								API_Actions.ifHasSticker (iag.Item2);
 							}
 						} else
 						{
-							if (CLI_Actions.ifDoesntHaveSticker != null)
-								CLI_Actions.ifDoesntHaveSticker ();
+							if (API_Actions.ifDoesntHaveSticker != null)
+								API_Actions.ifDoesntHaveSticker ();
 
-							if (CLI_Actions.ifDoesntHaveSticker2 != null)
-								CLI_Actions.ifDoesntHaveSticker2 ();
+							if (API_Actions.ifDoesntHaveSticker2 != null)
+								API_Actions.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (CLI_Actions.ifDoesntHave != null)
-							CLI_Actions.ifDoesntHave ();
-						if (CLI_Actions.ifDoesntHaveSticker != null)
-							CLI_Actions.ifDoesntHaveSticker ();
+						if (API_Actions.ifDoesntHave != null)
+							API_Actions.ifDoesntHave ();
+						if (API_Actions.ifDoesntHaveSticker != null)
+							API_Actions.ifDoesntHaveSticker ();
 
-						if (CLI_Actions.ifDoesntHave2 != null)
-							CLI_Actions.ifDoesntHave2 ();
-						if (CLI_Actions.ifDoesntHaveSticker2 != null)
-							CLI_Actions.ifDoesntHaveSticker2 ();
+						if (API_Actions.ifDoesntHave2 != null)
+							API_Actions.ifDoesntHave2 ();
+						if (API_Actions.ifDoesntHaveSticker2 != null)
+							API_Actions.ifDoesntHaveSticker2 ();
 					}
 
 					json = File.ReadAllText (pathToTheme);
@@ -268,31 +268,31 @@ namespace Yuki_Theme.Core.Formats
 		{
 			Console.WriteLine (name);
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = CLI.ThemeInfos [name].isDefault;
-			string json = loadThemeToPopulate (isDef ? name : CLI.pathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
+			bool isDef = API.themeInfos [name].isDefault;
+			string json = loadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
 			theme.isDefault = isDef;
-			theme.fullPath = isDef ? CLI.pathToMemory (path) : CLI.pathToFile (path, false);
+			theme.fullPath = isDef ? PathGenerator.PathToMemory (path) : PathGenerator.PathToFile (path, false);
 			theme.path = path;
 			return theme;
 		}
 
 		/// <summary>
-		/// Load Theme directly to the CLI
+		/// Load Theme directly to the API
 		/// </summary>
 		public static void LoadThemeToCLI ()
 		{
-			Theme theme = populateList (CLI.nameToLoad, true);
-			CLI.currentTheme = theme;
+			Theme theme = populateList (API.nameToLoad, true);
+			API.currentTheme = theme;
 			if (theme == null)
 			{
-				MessageBox.Show (CLI.Translate ("messages.theme.invalid.full"), CLI.Translate ("messages.theme.invalid.short"),
+				MessageBox.Show (API.Translate ("messages.theme.invalid.full"), API.Translate ("messages.theme.invalid.short"),
 				                 MessageBoxButtons.OK, MessageBoxIcon.Error);
 			} else
 			{
-				CLI.names.AddRange (theme.Fields.Keys);
-				CLI.names.InsertRange (1, ShadowNames.imageNames);
+				API.names.AddRange (theme.Fields.Keys);
+				API.names.InsertRange (1, ShadowNames.imageNames);
 			}
 		}
 

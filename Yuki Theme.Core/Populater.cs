@@ -5,189 +5,86 @@ using System.Windows.Forms;
 
 namespace Yuki_Theme.Core
 {
-	public class Populater
+	public static class Populater
 	{
-		public static bool isInList (string str, ListBox.ObjectCollection coll)
+		private static readonly Dictionary <string, string> _shadowNames = new ()
 		{
-			return isInList (str, coll.Cast <String> ().ToList ());
+			{ "SpaceMarkers", "Punctuation" },
+			{ "TabMarkers", "Punctuation" },
+			{ "LineComment", "LineBigComment" },
+			{ "BlockComment", "LineBigComment" },
+			{ "BlockComment2", "LineBigComment" },
+			{ "ProgramSections", "KeyWords" },
+			{ "Async", "KeyWords" },
+			{ "RaiseStatement", "KeyWords" },
+			{ "JumpStatements", "KeyWords" },
+			{ "JumpProcedures", "KeyWords" },
+			{ "Modifiers", "KeyWords" },
+			{ "AccessModifiers", "KeyWords" },
+			{ "NonReserved1", "KeyWords" },
+			{ "ExceptionHandlingStatements", "KeyWords" },
+			{ "ReferenceTypes", "KeyWords" },
+			{ "DireciveNames", "KeyWords" },
+			{ "SpecialDireciveNames", "KeyWords" },
+			{ "DireciveValues", "KeyWords" },
+			{ "SelectionStatements", "OperatorKeywords" },
+			{ "IterationStatements", "OperatorKeywords" },
+		};
+
+		private static readonly string [] EnvironmentColors = { "SpaceMarkers", "TabMarkers", "EOLMarkers", };
+
+		private static readonly Dictionary <string, string> NormalizedNames = new ()
+		{
+			{ "default", "Default Text" },
+			{ "selection", "Selection" },
+			{ "linenumber", "Line Number" },
+			{ "caret", "Caret" },
+			{ "vruler", "Vertical Ruler" },
+			{ "fold", "Fold's Line" },
+			{ "foldmarker", "Fold's Rectangle" },
+			{ "selectedfold", "Selected Fold's Line" },
+			{ "digit", "Number" },
+			{ "comment", "Comment" },
+			{ "string", "String" },
+			{ "keyword", "Keyword" },
+			{ "beginend", "Begin, End" },
+			{ "punctuation", "Punctuation" },
+			{ "operator", "Keyword" },
+			{ "constant", "Constants" },
+			{ "image", "Wallpaper" },
+			{ "sticker", "Sticker" },
+		};
+
+		public static bool IsInList (string str, ListBox.ObjectCollection coll)
+		{
+			return IsInList (str, coll.Cast <String> ().ToList ());
 		}
 
-		public static bool isInList (string str, List <string> coll)
+		public static bool IsInList (string str, List <string> coll)
 		{
 			bool res = false;
-			switch (str)
-			{
-				case "SpaceMarkers" :
-				case "TabMarkers" :
-				{
-					res = coll.Contains ("Punctuation");
-				}
-					break;
-				case "LineComment" :
-				case "BlockComment" :
-				case "BlockComment2" :
-				{
-					res = coll.Contains ("LineBigComment");
-				}
-					break;
-
-				case "ProgramSections" :
-				case "Async" :
-				case "RaiseStatement" :
-				case "JumpStatements" :
-				case "JumpProcedures" :
-				case "Modifiers" :
-				case "AccessModifiers" :
-				case "NonReserved1" :
-				case "ExceptionHandlingStatements" :
-				case "ReferenceTypes" :
-				case "DireciveNames" :
-				case "SpecialDireciveNames" :
-				case "DireciveValues" :
-				{
-					res = coll.Contains ("KeyWords");
-				}
-					break;
-
-				case "SelectionStatements" :
-				case "IterationStatements" :
-				{
-					res = coll.Contains ("OperatorKeywords");
-				}
-					break;
-			}
-
+			if (_shadowNames.ContainsKey (str))
+				res = coll.Contains (_shadowNames [str]);
 			return res;
 		}
 
-		public static bool isEnvironmentColor (string str)
+		public static bool IsEnvironmentColor (string str)
 		{
-			bool res = false;
-			switch (str)
-			{
-				case "SpaceMarkers" :
-				case "TabMarkers" :
-				case "EOLMarkers" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return EnvironmentColors.Contains (str);
 		}
 
-		public static string [] getDependencies (string str)
+		public static string [] GetDependencies (string str)
 		{
 			if (ShadowNames.PascalFields.ContainsKey (str))
 				return ShadowNames.PascalFields [str];
-			else
-				return null;
+			return null;
 		}
 
-		public static string getNormalizedName (string str)
+		public static string GetNormalizedName (string str)
 		{
 			str = str.ToLower ();
-			string res = "";
-			switch (str)
-			{
-				case "default" :
-				{
-					res = "Default Text";
-				}
-					break;
-				case "selection" :
-				{
-					res = "Selection";
-				}
-					break;
-				case "linenumber" :
-				{
-					res = "Line Number";
-				}
-					break;
-				case "caret" :
-				{
-					res = "Caret";
-				}
-					break;
-				case "vruler" :
-				{
-					res = "Vertical Ruler";
-				}
-					break;
-				case "fold" :
-				{
-					res = "Fold's Line";
-				}
-					break;
-				case "foldmarker" :
-				{
-					res = "Fold's Rectangle";
-				}
-					break;
-				case "selectedfold" :
-				{
-					res = "Selected Fold's Line";
-				}
-					break;
-				case "digit" :
-				{
-					res = "Number";
-				}
-					break;
-				case "comment" :
-				{
-					res = "Comment";
-				}
-					break;
-				case "string" :
-				{
-					res = "String";
-				}
-					break;
-				case "keyword" :
-				{
-					res = "Keyword";
-				}
-					break;
-				case "beginend" :
-				{
-					res = "Begin, End";
-				}
-					break;
-				case "punctuation" :
-				{
-					res = "Punctuation";
-				}
-					break;
-				case "operator" :
-				{
-					res = "Keyword";
-				}
-					break;
-				case "constant" :
-				{
-					res = "Constants";
-				}
-					break;
-				case "image" :
-				{
-					res = "Wallpaper";
-				}
-					break;
-				case "sticker" :
-				{
-					res = "Sticker";
-				}
-					break;
-				default :
-				{
-					res = str;
-				}
-					break;
-			}
-
+			string res;
+			res = NormalizedNames.ContainsKey (str) ? NormalizedNames [str] : str;
 			return res;
 		}
 
@@ -213,7 +110,7 @@ namespace Yuki_Theme.Core
 			{ "Sticker", "Sticker" }
 		};
 
-		public static string getChangedName (string str)
+		public static string GetChangedName (string str)
 		{
 			string res = "";
 			if (changedNames.ContainsKey (str))

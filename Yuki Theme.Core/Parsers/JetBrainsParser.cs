@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
@@ -9,10 +10,38 @@ namespace Yuki_Theme.Core.Parsers
 {
 	public class JetBrainsParser : AbstractParser
 	{
-		
+		private readonly Dictionary <string, ThemeField> _defaultAttributes = new ()
+		{
+			{ "DEFAULT_COMMA", new ThemeField { Foreground = "#FFFFFF" } }
+		};
+
+		private readonly string [] _necessaryAttributes = new [] { "FOREGROUND", "BACKGROUND" };
+
+		private readonly Dictionary <string, string []> _convertedNames = new ()
+		{
+			{ "TEXT", new [] { "Default" } },
+			{ "DEFAULT_NUMBER", new [] { "Digits" } },
+			{ "DEFAULT_LINE_COMMENT", new [] { "LineBigComment", "LineComment" } },
+			{ "DEFAULT_BLOCK_COMMENT", new [] { "BlockComment", "BlockComment2" } },
+			{ "DEFAULT_STRING", new [] { "String" } },
+			{
+				"DEFAULT_KEYWORD", new []
+				{
+					"KeyWords", "ProgramSections", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords",
+					"SelectionStatements", "IterationStatements", "ExceptionHandlingStatements", "RaiseStatement",
+					"JumpStatements", "JumpProcedures", "InternalConstant", "InternalTypes", "ReferenceTypes",
+					"Modifiers", "AccessModifiers", "ErrorWords", "WarningWords", "DireciveNames",
+					"SpecialDireciveNames", "DireciveValues"
+				}
+			},
+			{ "DEFAULT_FUNCTION_DECLARATION", new [] { "BeginEnd" } },
+			{ "DEFAULT_COMMA", new [] { "Punctuation" } },
+
+		};
+
 		public override void populateList (string path)
 		{
-			var doc = new XmlDocument ();
+			XmlDocument doc = new XmlDocument ();
 
 			if (needToWrite)
 				doc.Load (path);
@@ -57,11 +86,11 @@ namespace Yuki_Theme.Core.Parsers
 		public override void PopulateByXMLNodeTreeType (XmlNode node)
 		{
 			
-			var name = getName (node.Attributes ["name"].Value);
+			string[] names = getName (node.Attributes ["name"].Value);
 
-			var attrs = new ThemeField ();
+			ThemeField attrs = new ThemeField ();
 
-			var child = node.SelectSingleNode ("value/option[@name='FOREGROUND']");
+			XmlNode child = node.SelectSingleNode ("value/option[@name='FOREGROUND']");
 
 			if (child != null) attrs.Foreground = "#" + GetValue (child);
 
@@ -78,9 +107,9 @@ namespace Yuki_Theme.Core.Parsers
 				attrs.Italic = ds == "2" || ds == "3";
 			}
 
-			if (attrs.isNull ()) attrs = populateDefaultAttributes (name [0]);
+			if (attrs.IsNull ()) attrs = populateDefaultAttributes (names [0]);
 
-			foreach (var nm in name)
+			foreach (string nm in names)
 			{
 				theme.Fields.Add (nm, attrs);
 			}
@@ -91,106 +120,35 @@ namespace Yuki_Theme.Core.Parsers
 
 		public override string GetValue (XmlNode child)
 		{
-			var attr_value = child.Attributes ["value"].Value;
-
-			return attr_value;
+			string attrValue = "";
+			if (child.Attributes != null)
+			{
+				attrValue = child.Attributes ["value"].Value;
+			}
+			return attrValue;
 		}
 
 		public override ThemeField populateDefaultAttributes (string name)
 		{
-			var att = new ThemeField ();
-			switch (name)
-			{
-				case "DEFAULT_COMMA" :
-				{
-					att.Foreground = "#FFFFFF";
-				}
-					break;
-			}
-
+			ThemeField att = new ThemeField ();
+			if (_defaultAttributes.ContainsKey (name))
+				att = _defaultAttributes [name];
+			
 			return att;
 		}
 
 		public override bool isNecessaryAttribute (string name)
 		{
-			bool rs = false;
-			switch (name)
-			{
-				case "FOREGROUND" :
-				case "BACKGROUND" :
-				{
-					rs = true;
-				}
-					break;
-			}
-
-			return rs;
+			return _necessaryAttributes.Contains (name);
 		}
 
 		public override string [] getName (string st)
 		{
-			string [] res = new string[] { };
-			switch (st)
-			{
-				case "TEXT" :
-				{
-					res = new [] {"Default"};
-				}
-					break;
-
-				case "DEFAULT_NUMBER" :
-				{
-					res = new [] {"Digits"};
-				}
-					break;
-
-				case "DEFAULT_LINE_COMMENT" :
-				{
-					res = new [] {"LineBigComment", "LineComment"};
-				}
-					break;
-
-				case "DEFAULT_BLOCK_COMMENT" :
-				{
-					res = new [] {"BlockComment", "BlockComment2"};
-				}
-					break;
-				
-				case "DEFAULT_STRING" :
-				{
-					res = new [] {"String"};
-				}
-					break;
-
-				case "DEFAULT_KEYWORD" :
-				{
-					res = new []
-					{
-						"KeyWords", "ProgramSections", "Async", "AccessKeywords1", "NonReserved1", "OperatorKeywords",
-						"SelectionStatements", "IterationStatements", "ExceptionHandlingStatements", "RaiseStatement",
-						"JumpStatements", "JumpProcedures", "InternalConstant", "InternalTypes", "ReferenceTypes",
-						"Modifiers", "AccessModifiers", "ErrorWords", "WarningWords", "DireciveNames",
-						"SpecialDireciveNames", "DireciveValues"
-					};
-				}
-					break;
-
-				case "DEFAULT_FUNCTION_DECLARATION" :
-				{
-					res = new []
-					{
-						"BeginEnd"
-					};
-				}
-					break;
-
-				case "DEFAULT_COMMA" :
-				{
-					res = new [] {"Punctuation"};
-				}
-					break;
-			}
-
+			string [] res;
+			if (_convertedNames.ContainsKey (st))
+				res = _convertedNames [st];
+			else
+				res = new string[0];
 			return res;
 		}
 

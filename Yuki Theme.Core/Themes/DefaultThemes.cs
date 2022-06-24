@@ -27,9 +27,9 @@ namespace Yuki_Theme.Core.Themes
 			headersList.Add (header);
 			foreach (KeyValuePair <string, bool> themeName in header.ThemeNames)
 			{
-				if(!CLI.ThemeInfos.ContainsKey (themeName.Key))
+				if(!API.themeInfos.ContainsKey (themeName.Key))
 				{
-					CLI.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
+					API_Actions.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
 					categories.Add (themeName.Key, header.GroupName);
 					headers.Add (themeName.Key, header);
 				}

@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void AddThemes (string themeToSelect)
 		{
 			Themes.Items.Clear ();
-			foreach (string theme in CLI.schemes.ToArray ())
+			foreach (string theme in API.schemes.ToArray ())
 			{
 				Themes.Items.Add (theme);
 			}
@@ -41,12 +41,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			if (from != to)
 			{
-				result = CLI.add (from, to);
+				result = API.Add (from, to);
 
 				canReturn = result != 0;
 			} else
 			{
-				CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
+				API_Actions.showError (API.Translate ("messages.name.equal.message"), API.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

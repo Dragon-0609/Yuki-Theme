@@ -36,7 +36,7 @@ namespace Yuki_Theme.Core
 
 		//styles
 
-		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
+		private Dictionary <string, ThemeField> localAttributes => API.currentTheme.Fields;
 
 		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
@@ -298,7 +298,7 @@ namespace Yuki_Theme.Core
 			{
 				if (Settings.settingMode == SettingMode.Light)
 				{
-					string [] srt = Populater.getDependencies (str);
+					string [] srt = Populater.GetDependencies (str);
 					if (srt != null)
 					{
 						string rgx = "";
@@ -312,7 +312,7 @@ namespace Yuki_Theme.Core
 								{
 									rgx = $"{regexes [dependency.ToLower ()]}";
 									ik++;
-								} else if (!Populater.isEnvironmentColor (dependency))
+								} else if (!Populater.IsEnvironmentColor (dependency))
 								{
 									rgx += $"|{regexes [dependency.ToLower ()]}";
 								}

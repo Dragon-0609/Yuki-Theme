@@ -8,16 +8,16 @@ using Yuki_Theme.Core.Forms;
 
 namespace Yuki_Theme.Core
 {
-	public class Preparer
+	public class InstallationPreparer
 	{
 		public const string FileNamespace = "Yuki_Theme.Core.Database.";
 
-		public void prepare (bool forceExit)
+		public void Prepare (bool forceExit)
 		{
 			string path = Path.Combine (
 				Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 				"Yuki Installer.exe");
-			File.Copy (Path.Combine (CLI.currentPath, "Yuki Installer.exe"), path, true);
+			File.Copy (Path.Combine (API.currentPath, "Yuki Installer.exe"), path, true);
 			RegistryKey ke =
 				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
 			if (ke != null) ke.SetValue ("mode", ((int)Helper.mode).ToString ());

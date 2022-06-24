@@ -15,10 +15,10 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			this.StartPosition = FormStartPosition.CenterParent;
 			loadSVG ();
-			button1.Text = CLI.Translate ("messages.theme.save.short");
-			button2.Text = CLI.Translate ("download.cancel");
-			label1.Text = CLI.Translate ("custom_sticker.title");
-			this.Text = CLI.Translate ("custom_sticker.form.title");
+			button1.Text = API.Translate ("messages.theme.save.short");
+			button2.Text = API.Translate ("download.cancel");
+			label1.Text = API.Translate ("custom_sticker.title");
+			this.Text = API.Translate ("custom_sticker.form.title");
 			sp = s;
 		}
 

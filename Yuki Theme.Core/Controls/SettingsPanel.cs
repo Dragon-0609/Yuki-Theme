@@ -140,8 +140,8 @@ namespace Yuki_Theme.Core.Controls
 					popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (CLI.Translate ("messages.update.invalid"),
-					                 CLI.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show (API.Translate ("messages.update.invalid"),
+					                 API.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -456,7 +456,7 @@ namespace Yuki_Theme.Core.Controls
 				popupController.df.startUpdating ();
 			} else
 			{
-				CLI_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
+				API_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
 			}
 		}
 
@@ -500,7 +500,7 @@ namespace Yuki_Theme.Core.Controls
 			foreach (Control control in parent.Controls)
 			{
 				if (control.AccessibleName != null)
-					control.Text = CLI.Translate (control.AccessibleName);
+					control.Text = API.Translate (control.AccessibleName);
 				if (control.Controls.Count > 0)
 				{
 					TranslateControls (control);

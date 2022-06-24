@@ -133,6 +133,7 @@
     "theme.manager.new": "Новая",
     "parser.theme.exist": "Эта тема уже существует...отмена...",
     "parser.theme.default": "Эта тема встроенная! Вы не можете импортировать её!",
+    "parser.theme.colors": "Не удалось получить цвета темы...отмена...",
     
     "plugin.explorer.open": "Открыть в проводнике",
     "plugin.menu.settings": "Показать Настройки",

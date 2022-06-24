@@ -88,25 +88,25 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 		}
 
 		public void SetTheme(string theme) {
-			bool cnd = CLI.SelectTheme (theme);
+			bool cnd = API.SelectTheme (theme);
 
 			if (cnd)
 			{
-				CLI.selectedItem = CLI.nameToLoad;
-				CLI_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
-				CLI_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
-				CLI_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
-				CLI_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
-				CLI.restore (false);
-				CLI.export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
+				API.selectedItem = API.nameToLoad;
+				API_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
+				API_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
+				API_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
+				API_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
+				API.Restore (false);
+				API.Export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);
 
-				CLI_Actions.ifHasImage2 = null;
-				CLI_Actions.ifHasSticker2 = null;
-				CLI_Actions.ifDoesntHave2 = null;
-				CLI_Actions.ifDoesntHaveSticker2 = null;
+				API_Actions.ifHasImage2 = null;
+				API_Actions.ifHasSticker2 = null;
+				API_Actions.ifDoesntHave2 = null;
+				API_Actions.ifDoesntHaveSticker2 = null;
 			}
 		}
 

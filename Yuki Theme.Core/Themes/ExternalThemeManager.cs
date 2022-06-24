@@ -12,10 +12,10 @@ public static class ExternalThemeManager
 
 	public static void LoadThemes ()
 	{
-		string [] files = Directory.GetFiles (CLI.currentPath, "*Themes.dll");
+		string [] files = Directory.GetFiles (API.currentPath, "*Themes.dll");
 		if (files.Length > 0)
 			AddThemesToDB (files);
-		string path = Path.Combine (CLI.currentPath, "Themes");
+		string path = Path.Combine (API.currentPath, "Themes");
 		if (Directory.Exists (path))
 		{
 			files = Directory.GetFiles (path, "*.dll");

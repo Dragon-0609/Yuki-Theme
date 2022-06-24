@@ -274,8 +274,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public void startUpdating ()
 		{
-			Preparer prep = new Preparer ();
-			prep.prepare (true);
+			InstallationPreparer prep = new InstallationPreparer ();
+			prep.Prepare (true);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -337,7 +337,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return CLI.Translate (key);
+			return API.Translate (key);
 		}
 
 		private static string GetUpdatePath ()

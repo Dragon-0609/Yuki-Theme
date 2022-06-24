@@ -168,9 +168,9 @@ namespace Yuki_Theme_Plugin
 			UpdateColors ();
 
 			WaitAndUpdateMenuColors ();
-			CLI_Actions.onBGIMAGEChange = RefreshEditor;
-			CLI_Actions.onSTICKERChange = ReloadSticker;
-			CLI_Actions.onSTATUSChange = RefreshStatusBar;
+			API_Actions.onBGIMAGEChange = RefreshEditor;
+			API_Actions.onSTICKERChange = ReloadSticker;
+			API_Actions.onSTATUSChange = RefreshStatusBar;
 
 			Helper.LoadCurrent ();
 
@@ -419,9 +419,9 @@ namespace Yuki_Theme_Plugin
 						Image stckr = Image.FromFile (pth);
 
 
-						if (CLI.currentTheme.StickerOpacity != 100)
+						if (API.currentTheme.StickerOpacity != 100)
 						{
-							sticker = Helper.SetOpacity (stckr, CLI.currentTheme.StickerOpacity);
+							sticker = Helper.SetOpacity (stckr, API.currentTheme.StickerOpacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -748,7 +748,7 @@ namespace Yuki_Theme_Plugin
 				tp.Activate ();
 			} else
 			{
-				MessageBox.Show (CLI.Translate ("plugin.browser.error"));
+				MessageBox.Show (API.Translate ("plugin.browser.error"));
 			}
 		}
 

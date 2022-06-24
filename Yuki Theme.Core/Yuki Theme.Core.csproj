@@ -120,7 +120,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLI.cs" />
+    <Compile Include="API.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Formats\NewThemeFormat.cs" />
@@ -137,6 +137,7 @@
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="PathGenerator.cs" />
     <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
@@ -144,7 +145,7 @@
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeField.cs" />
     <None Include="Controls\CustomB.cs" />
-    <Compile Include="CLI_Actions.cs" />
+    <Compile Include="API_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorModes.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\Controls\ColorBox2D.cs" />
@@ -271,10 +272,9 @@
     <Compile Include="Parsers\DokiThemeParser.cs" />
     <Compile Include="Parsers\JetBrainsParser.cs" />
     <Compile Include="Parsers\MainParser.cs" />
-    <None Include="Parsers\VisualStudioParser.cs" />
     <Compile Include="Placeholder.cs" />
     <Compile Include="Populater.cs" />
-    <Compile Include="Preparer.cs" />
+    <Compile Include="InstallationPreparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ShadowNames.cs" />

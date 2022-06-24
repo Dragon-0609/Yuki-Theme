@@ -38,8 +38,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void TranslateDialogButtons ()
 		{
-			SaveButton.Content = CLI.Translate ("messages.theme.save.short");
-			CancelButton.Content = CLI.Translate ("download.cancel");
+			SaveButton.Content = API.Translate ("messages.theme.save.short");
+			CancelButton.Content = API.Translate ("download.cancel");
 		}
 
 		private void IncludeToolBarItems ()

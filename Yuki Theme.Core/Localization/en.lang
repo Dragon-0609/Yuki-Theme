@@ -133,6 +133,7 @@
     "theme.manager.new": "New Theme",
     "parser.theme.exist": "The theme is exist...canceling...",
     "parser.theme.default": "The theme is default! You can't import it!",
+    "parser.theme.colors": "Couldn't get theme colors...cancelling...",
     
     "plugin.explorer.open": "Open in Explorer",
     "plugin.menu.settings": "Show Settings",

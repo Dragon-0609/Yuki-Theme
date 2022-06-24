@@ -32,78 +32,74 @@ namespace Yuki_Theme_Plugin.Controls
 		{
 			InitializeComponent ();
 			plugin = plug;
-			/*settingsPanel.isFromPascal = true; // To recognize
-			settingsPanel.SettingsPanel_Load ();*/
 		}
 
 		private bool alreadyShown;
 
 		#region IOptionsContent Members
 
-		public string ContentName
-		{
-			get { return "Yuki Theme"; }
-		}
+		public string ContentName => "Yuki Theme";
 
-		public string Description
-		{
-			get { return "Yuki Theme Settings"; }
-		}
+		public string Description => "Yuki Theme Settings";
 
-		public UserControl Content
-		{
-			get { return this; }
-		}
+		public UserControl Content => this;
 
 		private bool oldeditor = false;
 
 		public void Action (OptionsContentAction action)
 		{
-			switch (action)
+			if (action == OptionsContentAction.Show)
+				InitSettingsPanel ();
+			else if (action == OptionsContentAction.Ok)
+				SaveSettings ();
+			else if (action == OptionsContentAction.Cancel)
+				CancelChanges ();
+		}
+
+		private void InitSettingsPanel ()
+		{
+			WPFHelper.InitAppForWinforms ();
+			WPFHelper.ConvertGUIColorsNBrushes ();
+			dimensionCap = Settings.useDimensionCap;
+			customSticker = Settings.useCustomSticker;
+			if (!alreadyShown)
 			{
-				case OptionsContentAction.Show :
-					WPFHelper.InitAppForWinforms ();
-					WPFHelper.ConvertGUIColorsNBrushes ();
-					dimensionCap = Settings.useDimensionCap;
-					customSticker = Settings.useCustomSticker;
-					if (!alreadyShown)
-					{
-						Form parentForm = ExtractOptionsParent ();
-						_settingsPanel = new SettingsPanel ();
-						utilities = new SettingsPanelUtilities (_settingsPanel);
-						
-						_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
-						_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
-						_settingsPanel.Background = WPFHelper.bgBrush;
-						_settingsPanel.Foreground = WPFHelper.fgBrush;
-						_settingsPanel.Tag = WPFHelper.GenerateTag;
-						if (parentForm != null) _settingsPanel.ParentForm = parentForm;
+				Form parentForm = ExtractOptionsParent ();
+				_settingsPanel = new SettingsPanel ();
+				utilities = new SettingsPanelUtilities (_settingsPanel);
 
-						PanelHost.Child = _settingsPanel;
-						Controls.Add (PanelHost);
-						alreadyShown = true;
-					}
+				_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
+				_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
+				_settingsPanel.Background = WPFHelper.bgBrush;
+				_settingsPanel.Foreground = WPFHelper.fgBrush;
+				_settingsPanel.Tag = WPFHelper.GenerateTag;
+				if (parentForm != null) _settingsPanel.ParentForm = parentForm;
 
-					break;
-				case OptionsContentAction.Ok :
-					alreadyShown = false;
-					utilities ??= new SettingsPanelUtilities (_settingsPanel);
-					utilities.SaveSettings ();
-					if (dimensionCap)
-					{
-						plugin.SettingsChanged (customSticker, dimensionCap);
-					}
-					break;
-				case OptionsContentAction.Cancel :
-					utilities ??= new SettingsPanelUtilities (_settingsPanel);
-					utilities.ResetToolBar ();
-					alreadyShown = false;
-					break;
+				PanelHost.Child = _settingsPanel;
+				Controls.Add (PanelHost);
+				alreadyShown = true;
 			}
 		}
 
-		
-		
+		private void SaveSettings ()
+		{
+			alreadyShown = false;
+			utilities ??= new SettingsPanelUtilities (_settingsPanel);
+			utilities.SaveSettings ();
+			if (dimensionCap)
+			{
+				plugin.SettingsChanged (customSticker, dimensionCap);
+			}
+		}
+
+		private void CancelChanges ()
+		{
+			utilities ??= new SettingsPanelUtilities (_settingsPanel);
+			utilities.ResetToolBar ();
+			alreadyShown = false;
+		}
+
+
 		private Form ExtractOptionsParent ()
 		{
 			FieldInfo field = typeof (Form1).GetField ("optionsContentEngine", BindingFlags.Instance | BindingFlags.NonPublic);
