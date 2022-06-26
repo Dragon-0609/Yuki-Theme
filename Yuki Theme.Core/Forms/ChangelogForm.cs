@@ -15,7 +15,7 @@ namespace Yuki_Theme.Core.Forms
 		public ChangelogForm ()
 		{
 			InitializeComponent ();
-			this.Text = label1.Text = API.Translate ("changelog.title");
+			Text = label1.Text = API.Translate ("changelog.title");
 
 			string md = Helper.ReadHTML ("CHANGELOG.md");
 			string html = Helper.ReadHTML ("CHANGELOG.html");
@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.Forms
 			html = html.Replace ("Expand", API.Translate ("changelog.expand")).Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
 			webBrowser1.ScrollBarsEnabled = true;
-			this.webBrowser1.ObjectForScripting = this;
+			webBrowser1.ObjectForScripting = this;
 		}
 
 		private static string ReplaceCheckbox (string md)
@@ -52,7 +52,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private void button1_Click (object sender, EventArgs e)
 		{
-			this.Close ();
+			Close ();
 		}
 
 		private void webBrowser1_DocumentCompleted (object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -89,8 +89,8 @@ namespace Yuki_Theme.Core.Forms
 			mdd = CommonMark.CommonMarkConverter.Convert (mdd);
 			stm.Dispose ();
 			// Load SVG
-			this.webBrowser1.Document.GetElementById ("content").InnerHtml = mdd;
-			this.webBrowser1.Document.GetElementById ("expander_button").InnerHtml = ntxt;
+			webBrowser1.Document.GetElementById ("content").InnerHtml = mdd;
+			webBrowser1.Document.GetElementById ("expander_button").InnerHtml = ntxt;
 			if (!expanded)
 			{
 				webBrowser1.Height = webBrowser1.Document.Body.ClientRectangle.Height + 35;

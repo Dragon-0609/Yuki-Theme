@@ -5,6 +5,7 @@ using System.IO;
 using NUnit.Framework;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Tests
 {
@@ -40,7 +41,7 @@ namespace Yuki_Theme.Tests
 					ClearTestThemes ();
 					Settings.connectAndGet ();
 					Core.API.LoadSchemes ();
-					bool cnd = Core.API.SelectTheme (Helper.GetRandomElement (Core.API.schemes));
+					bool cnd = Core.API.SelectTheme (Helper.GetRandomElement (Core.API.Schemes));
 
 					Assert.IsTrue (cnd);
 
@@ -64,7 +65,7 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeAdded)
 				{
-					copyFrom = Helper.GetRandomElement (Core.API.schemes);
+					copyFrom = Helper.GetRandomElement (Core.API.Schemes);
 					copyTo = $"{copyFrom}_Test";
 					Core.API.Add (copyFrom, copyTo);
 					Core.API.SelectTheme (copyTo);
@@ -75,7 +76,7 @@ namespace Yuki_Theme.Tests
 				if (copyTo != null && copyFrom != null)
 				{
 					string patsh = Path.Combine (Core.API.currentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API.themeInfos [copyFrom].isOld)}");
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
@@ -201,7 +202,7 @@ namespace Yuki_Theme.Tests
 
 		private void ResetForTests ()
 		{
-			Core.API.schemes.Clear ();
+			Core.API.Schemes.Clear ();
 			DefaultThemes.categories.Clear ();
 			DefaultThemes.headers.Clear ();
 			DefaultThemes.names.Clear ();
@@ -211,12 +212,12 @@ namespace Yuki_Theme.Tests
 
 		private void SetDefaultActions ()
 		{
-			Core.API_Actions.showError = (s,    s1) => { Console.WriteLine ($"{s1}: {s}"); };
-			Core.API_Actions.SaveInExport = (s, s1) => true;
-			Core.API_Actions.ifHasImage = image => { img2 = image; };
-			Core.API_Actions.ifHasSticker = image => { img3 = image; };
-			Core.API_Actions.ifDoesntHave = () => { img2 = null; };
-			Core.API_Actions.ifDoesntHaveSticker = () => { img3 = null; };
+			API_Events.showError = (s,    s1) => { Console.WriteLine ($"{s1}: {s}"); };
+			API_Events.SaveInExport = (s, s1) => true;
+			API_Events.ifHasImage = image => { img2 = image; };
+			API_Events.ifHasSticker = image => { img3 = image; };
+			API_Events.ifDoesntHave = () => { img2 = null; };
+			API_Events.ifDoesntHaveSticker = () => { img3 = null; };
 		}
 
 		private void ClearTestThemes ()

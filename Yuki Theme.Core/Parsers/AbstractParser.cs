@@ -6,6 +6,7 @@ using System.Xml;
 using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Parsers
 {
@@ -51,13 +52,13 @@ namespace Yuki_Theme.Core.Parsers
 
 				if (!overwrite)
 				{
-					string syt = API.schemes [1];
-					if (API.themeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
-						API_Actions.CopyFromMemory (syt, syt, PathToSave);
+					string syt = API.Schemes [1];
+					if (API.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
+						API.CopyFromMemory (syt, syt, PathToSave);
 					else
 					{
 						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-						if (!API.schemes.Contains (flname))
+						if (!API.Schemes.Contains (flname))
 							File.Copy (Path.Combine (API.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
 					}
 				} else
@@ -77,7 +78,7 @@ namespace Yuki_Theme.Core.Parsers
 				finishParsing (path);
 				if (!overwrite)
 				{
-					API_Actions.AddThemeInfo (
+					API.AddThemeInfo (
 						flname, new ThemeInfo (false, true, ThemeLocation.File, API.Translate ("messages.theme.group.custom")));
 					API.names.Add (flname);
 				if (addToUIList != null)

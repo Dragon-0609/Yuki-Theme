@@ -32,11 +32,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                if (this.selectedHexagonIndex < 0)
+                if (selectedHexagonIndex < 0)
                 {
                     return Color.Empty;
                 }
-                return this.hexagonElements[this.selectedHexagonIndex].CurrentColor;
+                return hexagonElements[selectedHexagonIndex].CurrentColor;
             }
         }
         #endregion
@@ -44,15 +44,15 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         #region Constructors
         public ColorHexagon()
         {
-            base.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            base.SetStyle(ControlStyles.UserPaint, true);
-            base.SetStyle(ControlStyles.Opaque, true);
-            base.SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            base.SetStyle(ControlStyles.ResizeRedraw, true);
-            base.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            for (int i = 0; i < this.hexagonElements.Length; i++)
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.Opaque, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            for (int i = 0; i < hexagonElements.Length; i++)
             {
-                this.hexagonElements[i] = new ColorHexagonElement();
+                hexagonElements[i] = new ColorHexagonElement();
             }
 
             InitializeComponent();
@@ -62,27 +62,27 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         #region Methods/Functions
         private void DrawHexagonHighlighter(int selectedHexagonIndex)
         {
-            if (selectedHexagonIndex != this.oldSelectedHexagonIndex)
+            if (selectedHexagonIndex != oldSelectedHexagonIndex)
             {
-                if (this.oldSelectedHexagonIndex >= 0)
+                if (oldSelectedHexagonIndex >= 0)
                 {
-                    this.hexagonElements[this.oldSelectedHexagonIndex].IsHovered = false;
-                    base.Invalidate(this.hexagonElements[this.oldSelectedHexagonIndex].BoundingRectangle);
+                    hexagonElements[oldSelectedHexagonIndex].IsHovered = false;
+                    Invalidate(hexagonElements[oldSelectedHexagonIndex].BoundingRectangle);
                 }
-                this.oldSelectedHexagonIndex = selectedHexagonIndex;
-                if (this.oldSelectedHexagonIndex >= 0)
+                oldSelectedHexagonIndex = selectedHexagonIndex;
+                if (oldSelectedHexagonIndex >= 0)
                 {
-                    this.hexagonElements[this.oldSelectedHexagonIndex].IsHovered = true;
-                    base.Invalidate(this.hexagonElements[this.oldSelectedHexagonIndex].BoundingRectangle);
+                    hexagonElements[oldSelectedHexagonIndex].IsHovered = true;
+                    Invalidate(hexagonElements[oldSelectedHexagonIndex].BoundingRectangle);
                 }
             }
         }
 
         private int GetHexagonIndexFromCoordinates(int xCoordinate, int yCoordinate)
         {
-            for (int i = 0; i < this.hexagonElements.Length; i++)
+            for (int i = 0; i < hexagonElements.Length; i++)
             {
-                if (this.hexagonElements[i].BoundingRectangle.Contains(xCoordinate, yCoordinate))
+                if (hexagonElements[i].BoundingRectangle.Contains(xCoordinate, yCoordinate))
                 {
                     return i;
                 }
@@ -92,7 +92,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         private int GetHexgaonWidth(int availableHeight)
         {
-            int num = availableHeight / (2 * this.sectorMaximum);
+            int num = availableHeight / (2 * sectorMaximum);
             if ((((int) Math.Floor((double) (((double) num) / 2.0))) * 2) < num)
             {
                 num--;
@@ -113,8 +113,8 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             centerOfMiddleHexagonY = clientRectangle.Bottom;
             for (int i = 0; i < num3; i++)
             {
-                this.hexagonElements[index].CurrentColor = Color.FromArgb(red, red, red);
-                this.hexagonElements[index].SetHexagonPoints((float)centerOfMiddleHexagonX, (float)centerOfMiddleHexagonY, hexagonWidth);
+                hexagonElements[index].CurrentColor = Color.FromArgb(red, red, red);
+                hexagonElements[index].SetHexagonPoints((float)centerOfMiddleHexagonX, (float)centerOfMiddleHexagonY, hexagonWidth);
                 centerOfMiddleHexagonX += hexagonWidth;
                 index++;
                 if (i == 7)
@@ -128,7 +128,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         private void InitializeHexagons()
         {
-            Rectangle clientRectangle = base.ClientRectangle;
+            Rectangle clientRectangle = ClientRectangle;
             clientRectangle.Offset(0, -8);
             if (clientRectangle.Height < clientRectangle.Width)
             {
@@ -139,28 +139,28 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 clientRectangle.Inflate(0, -(clientRectangle.Height - clientRectangle.Width) / 2);
             }
 
-            int hexagonWidth = this.GetHexgaonWidth(Math.Min(clientRectangle.Height, clientRectangle.Width));
+            int hexagonWidth = GetHexgaonWidth(Math.Min(clientRectangle.Height, clientRectangle.Width));
             int centerOfMiddleHexagonX = (clientRectangle.Left + clientRectangle.Right) / 2;
             int centerOfMiddleHexagonY = (clientRectangle.Top + clientRectangle.Bottom) / 2;
          
             centerOfMiddleHexagonY -= hexagonWidth;
-            this.hexagonElements[0].CurrentColor = Color.White;
-            this.hexagonElements[0].SetHexagonPoints((float)centerOfMiddleHexagonX, (float)centerOfMiddleHexagonY, hexagonWidth);
+            hexagonElements[0].CurrentColor = Color.White;
+            hexagonElements[0].SetHexagonPoints((float)centerOfMiddleHexagonX, (float)centerOfMiddleHexagonY, hexagonWidth);
             int index = 1;
-            for (int i = 1; i < this.sectorMaximum; i++)
+            for (int i = 1; i < sectorMaximum; i++)
             {
                 float yCoordinate = centerOfMiddleHexagonY;
                 float xCoordinate = centerOfMiddleHexagonX + (hexagonWidth * i);
-                for (int j = 0; j < (this.sectorMaximum - 1); j++)
+                for (int j = 0; j < (sectorMaximum - 1); j++)
                 {
-                    int num9 = (int)(hexagonWidth * this.matrix2[j]);
-                    int num10 = (int)(hexagonWidth * this.matrix1[j]);
+                    int num9 = (int)(hexagonWidth * matrix2[j]);
+                    int num10 = (int)(hexagonWidth * matrix1[j]);
                     for (int k = 0; k < i; k++)
                     {
-                        double num12 = ((0.936 * (this.sectorMaximum - i)) / ((double)this.sectorMaximum)) + 0.12;
+                        double num12 = ((0.936 * (sectorMaximum - i)) / ((double)sectorMaximum)) + 0.12;
                         float colorQuotient = GetColorQuotient(xCoordinate - centerOfMiddleHexagonX, yCoordinate - centerOfMiddleHexagonY);
-                        this.hexagonElements[index].SetHexagonPoints(xCoordinate, yCoordinate, hexagonWidth);
-                        this.hexagonElements[index].CurrentColor = ColorFromRGBRatios((double)colorQuotient, num12, 1.0);
+                        hexagonElements[index].SetHexagonPoints(xCoordinate, yCoordinate, hexagonWidth);
+                        hexagonElements[index].CurrentColor = ColorFromRGBRatios((double)colorQuotient, num12, 1.0);
                         yCoordinate += num9;
                         xCoordinate += num10;
                         index++;
@@ -168,7 +168,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 }
             }
             clientRectangle.Y -= hexagonWidth + (hexagonWidth / 2);
-            this.InitializeGrayscaleHexagons(ref clientRectangle, hexagonWidth, ref centerOfMiddleHexagonX, ref centerOfMiddleHexagonY, ref index);
+            InitializeGrayscaleHexagons(ref clientRectangle, hexagonWidth, ref centerOfMiddleHexagonX, ref centerOfMiddleHexagonY, ref index);
         }
 
         #endregion
@@ -179,21 +179,21 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (this.selectedHexagonIndex >= 0)
+                if (selectedHexagonIndex >= 0)
                 {
-                    this.hexagonElements[this.selectedHexagonIndex].IsSelected = false;
-                    base.Invalidate(this.hexagonElements[this.selectedHexagonIndex].BoundingRectangle);
+                    hexagonElements[selectedHexagonIndex].IsSelected = false;
+                    Invalidate(hexagonElements[selectedHexagonIndex].BoundingRectangle);
                 }
-                this.selectedHexagonIndex = -1;
-                if (this.oldSelectedHexagonIndex >= 0)
+                selectedHexagonIndex = -1;
+                if (oldSelectedHexagonIndex >= 0)
                 {
-                    this.selectedHexagonIndex = this.oldSelectedHexagonIndex;
-                    this.hexagonElements[this.selectedHexagonIndex].IsSelected = true;
-                    if (this.ColorChanged != null)
+                    selectedHexagonIndex = oldSelectedHexagonIndex;
+                    hexagonElements[selectedHexagonIndex].IsSelected = true;
+                    if (ColorChanged != null)
                     {
-                        this.ColorChanged(this, new ColorChangedEventArgs(this.SelectedColor));
+                        ColorChanged(this, new ColorChangedEventArgs(SelectedColor));
                     }
-                    base.Invalidate(this.hexagonElements[this.selectedHexagonIndex].BoundingRectangle);
+                    Invalidate(hexagonElements[selectedHexagonIndex].BoundingRectangle);
                 }
             }
             base.OnMouseDown(e);
@@ -202,48 +202,48 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
-            this.DrawHexagonHighlighter(-1);
+            DrawHexagonHighlighter(-1);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            this.DrawHexagonHighlighter(this.GetHexagonIndexFromCoordinates(e.X, e.Y));
+            DrawHexagonHighlighter(GetHexagonIndexFromCoordinates(e.X, e.Y));
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (this.BackColor == Color.Transparent)
+            if (BackColor == Color.Transparent)
             {
                 base.OnPaintBackground(e);
             }
 
             Graphics g = e.Graphics;
-            using (SolidBrush brush = new SolidBrush(this.BackColor))
+            using (SolidBrush brush = new SolidBrush(BackColor))
             {
-                g.FillRectangle(brush, base.ClientRectangle);
+                g.FillRectangle(brush, ClientRectangle);
             }
 
             g.SmoothingMode = SmoothingMode.AntiAlias;
-            foreach (ColorHexagonElement element in this.hexagonElements)
+            foreach (ColorHexagonElement element in hexagonElements)
             {
                 element.Paint(g);
             }
            
-            if (this.oldSelectedHexagonIndex >= 0)
+            if (oldSelectedHexagonIndex >= 0)
             {
-                this.hexagonElements[this.oldSelectedHexagonIndex].Paint(g);
+                hexagonElements[oldSelectedHexagonIndex].Paint(g);
             }
-            if (this.selectedHexagonIndex >= 0)
+            if (selectedHexagonIndex >= 0)
             {
-                this.hexagonElements[this.selectedHexagonIndex].Paint(g);
+                hexagonElements[selectedHexagonIndex].Paint(g);
             }
             base.OnPaint(e);
         }
 
         protected override void OnResize(EventArgs e)
         {
-            this.InitializeHexagons();
+            InitializeHexagons();
             base.OnResize(e);
         }
 
@@ -329,13 +329,13 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         public void Paint(Graphics g)
         {
             GraphicsPath path = new GraphicsPath();
-            path.AddPolygon(this.hexagonPoints);
+            path.AddPolygon(hexagonPoints);
             path.CloseAllFigures();
-            using (SolidBrush brush = new SolidBrush(this.hexagonColor))
+            using (SolidBrush brush = new SolidBrush(hexagonColor))
             {
                 g.FillPath(brush, path);
             }
-            if (this.isHovered || this.isSelected)
+            if (isHovered || isSelected)
             {
                 SmoothingMode smoothingMode = g.SmoothingMode;
                 g.SmoothingMode = SmoothingMode.AntiAlias;
@@ -355,17 +355,17 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         public void SetHexagonPoints(float xCoordinate, float yCoordinate, int hexagonWidth)
         {
             float num = hexagonWidth * 0.5773503f;
-            this.hexagonPoints[0] = new Point((int)Math.Floor((double)(xCoordinate - (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate - (num / 2f)))) - 1);
-            this.hexagonPoints[1] = new Point((int)Math.Floor((double)xCoordinate), ((int)Math.Floor((double)(yCoordinate - (hexagonWidth / 2)))) - 1);
-            this.hexagonPoints[2] = new Point((int)Math.Floor((double)(xCoordinate + (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate - (num / 2f)))) - 1);
-            this.hexagonPoints[3] = new Point((int)Math.Floor((double)(xCoordinate + (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate + (num / 2f)))) + 1);
-            this.hexagonPoints[4] = new Point((int)Math.Floor((double)xCoordinate), ((int)Math.Floor((double)(yCoordinate + (hexagonWidth / 2)))) + 1);
-            this.hexagonPoints[5] = new Point((int)Math.Floor((double)(xCoordinate - (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate + (num / 2f)))) + 1);
+            hexagonPoints[0] = new Point((int)Math.Floor((double)(xCoordinate - (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate - (num / 2f)))) - 1);
+            hexagonPoints[1] = new Point((int)Math.Floor((double)xCoordinate), ((int)Math.Floor((double)(yCoordinate - (hexagonWidth / 2)))) - 1);
+            hexagonPoints[2] = new Point((int)Math.Floor((double)(xCoordinate + (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate - (num / 2f)))) - 1);
+            hexagonPoints[3] = new Point((int)Math.Floor((double)(xCoordinate + (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate + (num / 2f)))) + 1);
+            hexagonPoints[4] = new Point((int)Math.Floor((double)xCoordinate), ((int)Math.Floor((double)(yCoordinate + (hexagonWidth / 2)))) + 1);
+            hexagonPoints[5] = new Point((int)Math.Floor((double)(xCoordinate - (hexagonWidth / 2))), ((int)Math.Floor((double)(yCoordinate + (num / 2f)))) + 1);
             using (GraphicsPath path = new GraphicsPath())
             {
-                path.AddPolygon(this.hexagonPoints);
-                this.boundingRect = Rectangle.Round(path.GetBounds());
-                this.boundingRect.Inflate(2, 2);
+                path.AddPolygon(hexagonPoints);
+                boundingRect = Rectangle.Round(path.GetBounds());
+                boundingRect.Inflate(2, 2);
             }
         }
 
@@ -375,25 +375,25 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         public Rectangle BoundingRectangle
         {
-            get { return this.boundingRect; }
+            get { return boundingRect; }
         }
 
         public Color CurrentColor
         {
-            get { return this.hexagonColor; }
-            set { this.hexagonColor = value; }
+            get { return hexagonColor; }
+            set { hexagonColor = value; }
         }
 
         public bool IsHovered
         {
-            get { return this.isHovered; }
-            set { this.isHovered = value; }
+            get { return isHovered; }
+            set { isHovered = value; }
         }
 
         public bool IsSelected
         {
-            get { return this.isSelected; }
-            set { this.isSelected = value; }
+            get { return isSelected; }
+            set { isSelected = value; }
         }
 
         #endregion

@@ -13,6 +13,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Controls.ColorPicker;
 using Application = System.Windows.Application;
@@ -55,16 +56,16 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void Init (object sender, RoutedEventArgs e)
 		{
 			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
-			API_Actions.ifHasImage = ifHasImage;
-			API_Actions.ifDoesntHave = ifDoesntHave;
-			API_Actions.ifHasSticker = ifHasSticker;
-			API_Actions.ifDoesntHaveSticker = ifDoesntHaveSticker;
-			API_Actions.AskChoice = AskActionChoice;
-			API_Actions.SaveInExport = SaveInExport;
-			API_Actions.showSuccess = FinishExport;
-			API_Actions.showError = ErrorExport;
-			API_Actions.hasProblem = hasProblem;
-			API_Actions.setPath = SetPath;
+			API_Events.ifHasImage = ifHasImage;
+			API_Events.ifDoesntHave = ifDoesntHave;
+			API_Events.ifHasSticker = ifHasSticker;
+			API_Events.ifDoesntHaveSticker = ifDoesntHaveSticker;
+			API_Events.AskChoice = AskActionChoice;
+			API_Events.SaveInExport = SaveInExport;
+			API_Events.showSuccess = FinishExport;
+			API_Events.showError = ErrorExport;
+			API_Events.hasProblem = hasProblem;
+			API_Events.setPath = SetPath;
 
 			if (Helper.mode == null)
 				Helper.mode = ProductMode.Program;
@@ -93,7 +94,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			blockedThemeSelector = true;
 			Themes.Items.Clear ();
-			themes = API.schemes.ToArray ();
+			themes = API.Schemes.ToArray ();
 			foreach (string theme in themes)
 			{
 				Themes.Items.Add (theme);
@@ -243,7 +244,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				foreach (string item in themes)
 				{
-					if (!API.themeInfos[item].isDefault)
+					if (!API.ThemeInfos[item].isDefault)
 					{
 						customThemes.Add (item);
 					}
@@ -261,13 +262,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				} else
 				{
 					int mx = customThemes.Count > 2 ? 1 : 0;
-					string prevTheme = API.schemes [API.schemes.IndexOf (customThemes [mx]) - 1];
+					string prevTheme = API.Schemes [API.Schemes.IndexOf (customThemes [mx]) - 1];
 					index2 = Array.IndexOf (themes, prevTheme) + 1;
 				}
 
 				Themes.Items.Insert (index2, res.to);
 				Themes.SelectedIndex = index2;
-				themes = API.schemes.ToArray ();
+				themes = API.Schemes.ToArray ();
 			}
 		}
 
@@ -797,7 +798,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 							Save ();
 					}
 					Restore ();
-					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !API_Actions.IsDefault ();
+					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !API.IsDefault ();
 					LoadDefinitionsWithSelection ();
 
 					SelectField ();

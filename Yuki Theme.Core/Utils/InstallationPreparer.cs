@@ -4,9 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Win32;
-using Yuki_Theme.Core.Forms;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Utils
 {
 	public class InstallationPreparer
 	{
@@ -52,7 +51,7 @@ namespace Yuki_Theme.Core
 				if (Helper.mode == ProductMode.Program)
 					Application.Exit ();
 				else if (Helper.mode == ProductMode.Plugin)
-					System.Environment.Exit (1);
+					Environment.Exit (1);
 			}
 		}
 	}

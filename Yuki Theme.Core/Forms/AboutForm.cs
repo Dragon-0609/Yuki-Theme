@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -14,7 +15,7 @@ namespace Yuki_Theme.Core.Forms
 		public AboutForm (SettingsPanel s)
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
 				$"{Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
 

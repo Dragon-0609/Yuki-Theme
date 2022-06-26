@@ -8,7 +8,7 @@ namespace Yuki_Theme.Core.Controls
 		public StickerPicture ()
 		{
 			SetStyle (ControlStyles.SupportsTransparentBackColor | ControlStyles.Opaque, true);
-			this.BackColor = Color.Transparent;
+			BackColor = Color.Transparent;
 		} //TransparentControl
 
 
@@ -37,8 +37,8 @@ namespace Yuki_Theme.Core.Controls
 			{
 				image = value;
 				if (image == null) return;
-				this.Width = image.Width;
-				this.Height = image.Height;
+				Width = image.Width;
+				Height = image.Height;
 				if (Parent != null)
 				{
 					Location = new Point (Parent.ClientSize.Width - Width - 10, Parent.ClientSize.Height - Height - 10);

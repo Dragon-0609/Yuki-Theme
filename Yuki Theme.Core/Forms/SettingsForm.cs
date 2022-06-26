@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -58,13 +59,13 @@ namespace Yuki_Theme.Core.Forms
 		{
 			InitializeComponent ();
 			// form = mf;
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			settingsPanel.SettingsPanel_Load ();
 			// settingsPanel.popupController = mf.popupController;
 			settingsPanel.updateTranslation = UpdateTranslation;
 			UpdateTranslation ();
-			FontManager.SetAllControlsFont (this.Controls, 0);
+			FontManager.SetAllControlsFont (Controls, 0);
 		}
 
 		private void button2_Click (object sender, EventArgs e)
@@ -139,7 +140,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			button2.Text = API.Translate ("main.tips.save");
 			button3.Text = API.Translate ("download.cancel");
-			this.Text = API.Translate ("main.tips.settings");
+			Text = API.Translate ("main.tips.settings");
 		}
 	}
 }

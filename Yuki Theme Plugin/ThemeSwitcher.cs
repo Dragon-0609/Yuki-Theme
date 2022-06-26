@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 
 namespace Yuki_Theme_Plugin
@@ -54,7 +55,7 @@ namespace Yuki_Theme_Plugin
 				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
 				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				themeList.BorderStyle = BorderStyle.None;
-				themeList.list = API.schemes.ToArray ();
+				themeList.list = API.Schemes.ToArray ();
 				themeList.SearchText ("");
 				themeList.BorderStyle = BorderStyle.None;
 				themeList.Font = fnt;
@@ -180,17 +181,17 @@ namespace Yuki_Theme_Plugin
 					if (cnd)
 					{
 						API.selectedItem = API.nameToLoad;
-						API_Actions.ifHasImage2 = plugin.ifHsImage;
-						API_Actions.ifHasSticker2 = plugin.ifHsSticker;
-						API_Actions.ifDoesntHave2 = plugin.ifDNIMG;
-						API_Actions.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
+						API_Events.ifHasImage2 = plugin.ifHsImage;
+						API_Events.ifHasSticker2 = plugin.ifHsSticker;
+						API_Events.ifDoesntHave2 = plugin.ifDNIMG;
+						API_Events.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
 						API.Restore (false, null);
 						API.Export (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
 
-						API_Actions.ifHasImage2 = null;
-						API_Actions.ifHasSticker2 = null;
-						API_Actions.ifDoesntHave2 = null;
-						API_Actions.ifDoesntHaveSticker2 = null;
+						API_Events.ifHasImage2 = null;
+						API_Events.ifHasSticker2 = null;
+						API_Events.ifDoesntHave2 = null;
+						API_Events.ifDoesntHaveSticker2 = null;
 					}
 				}
 

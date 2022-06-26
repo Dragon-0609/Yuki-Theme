@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms;
 
@@ -284,7 +285,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private void ParseTheme (string jsonMulti)
 	{
-		if (!this.IsDisposed)
+		if (!IsDisposed)
 		{
 			DokiThemeParser doki = new DokiThemeParser ();
 			doki.needToWrite = false;
@@ -293,7 +294,7 @@ public partial class ThemeDownloaderForm : Form
 			string json = multi [1];
 			doki.Parse (json, "none", "none", false, false, false);
 			doki.theme.link = multi [0];
-			bool isEqual = !IsEqual (doki.theme, API_Actions.GetTheme (doki.theme.Name));
+			bool isEqual = !IsEqual (doki.theme, API.GetTheme (doki.theme.Name));
 			themes.Add (doki.theme.Name, doki.theme);
 			newThemes.Add (doki.theme.Name, isEqual);
 			LoadThemeIntoPage (doki.theme, isEqual);
@@ -419,7 +420,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private string downloadFile (string url)
 	{
-		if (!this.IsDisposed)
+		if (!IsDisposed)
 		{
 			try
 			{
@@ -472,7 +473,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private void LoadThemeIntoPage (Theme theme, bool isEqual)
 	{
-		if (!this.IsDisposed)
+		if (!IsDisposed)
 		{
 			currentProgress += stepProgress;
 			lock (browser)
@@ -499,7 +500,7 @@ public partial class ThemeDownloaderForm : Form
 
 	private void LoadThemePage ()
 	{
-		if (!this.IsDisposed)
+		if (!IsDisposed)
 		{
 			if (isFromBranch)
 			{
@@ -606,12 +607,12 @@ public partial class ThemeDownloaderForm : Form
 			Console.WriteLine ("Downloading theme {0}", name);
 			try
 			{
-				if (API.themeInfos.ContainsKey (name))
+				if (API.ThemeInfos.ContainsKey (name))
 				{
-					if (API.themeInfos [name].location == ThemeLocation.File &&
-					    File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.themeInfos [name].isOld)))
+					if (API.ThemeInfos [name].location == ThemeLocation.File &&
+					    File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.ThemeInfos [name].isOld)))
 					{
-						File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.themeInfos [name].isOld));
+						File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.ThemeInfos [name].isOld));
 					}
 				}
 
@@ -627,7 +628,7 @@ public partial class ThemeDownloaderForm : Form
 				theme.fullPath = PathGenerator.PathToFile (Helper.ConvertNameToPath (name), true);
 				theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 				Console.WriteLine ("Token: {0}", theme.Token);
-				API_Actions.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+				API.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
 				API.SaveTheme (theme, wallpaper, sticker);
 				wallpaper.Dispose ();
 				sticker.Dispose ();
@@ -660,7 +661,7 @@ public partial class ThemeDownloaderForm : Form
 	private string Base64Encode (string plainText)
 	{
 		var plainTextBytes = System.Text.Encoding.UTF8.GetBytes (plainText);
-		return System.Convert.ToBase64String (plainTextBytes);
+		return Convert.ToBase64String (plainTextBytes);
 	}
 
 	private string LoadCSS (string css)

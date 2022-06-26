@@ -18,8 +18,8 @@ namespace Yuki_Theme.CLI
 				destination = path;
 			} else
 			{
-				destination = Path.Combine (Core.API.currentPath, "settings.syuki");
-				if (!Path.HasExtension (path)) ShowError (Core.API.Translate ("cli.errors.export.extension", path, destination));
+				destination = Path.Combine (API.currentPath, "settings.syuki");
+				if (!Path.HasExtension (path)) ShowError (API.Translate ("cli.errors.export.extension", path, destination));
 			}
 
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
@@ -35,8 +35,8 @@ namespace Yuki_Theme.CLI
 			
 			if (!string.IsNullOrEmpty (outdir)) Directory.CreateDirectory (outdir);
 			File.WriteAllText (destination, output, Encoding.UTF8);
-			ShowSuccess (Core.API.Translate ("cli.success.settings.export.full"),
-			             Core.API.Translate ("cli.success.settings.export.short"));
+			ShowSuccess (API.Translate ("cli.success.settings.export.full"),
+			             API.Translate ("cli.success.settings.export.short"));
 		}
 
 		internal void ImportSettings (string path)
@@ -61,17 +61,17 @@ namespace Yuki_Theme.CLI
 
 					Settings.database.UpdateData (dict);
 					Settings.connectAndGet ();
-					ShowSuccess (Core.API.Translate ("cli.success.settings.import.full"),
-					             Core.API.Translate ("cli.success.settings.import.short"));
+					ShowSuccess (API.Translate ("cli.success.settings.import.full"),
+					             API.Translate ("cli.success.settings.import.short"));
 				} catch (Exception e)
 				{
-					ShowError (Core.API.Translate ("cli.errors.happened", e.ToString ()));
+					ShowError (API.Translate ("cli.errors.happened", e.ToString ()));
 				}
 			} else
 			{
 				ShowError (path == "null"
-					           ? Core.API.Translate ("cli.errors.export.null")
-					           : Core.API.Translate ("messages.file.notexist.full2"));
+					           ? API.Translate ("cli.errors.export.null")
+					           : API.Translate ("messages.file.notexist.full2"));
 			}
 		}
 

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Yuki_Theme.Core.Controls
 {
-	public class CustomTab : System.Windows.Forms.TabControl
+	public class CustomTab : TabControl
 	{
 		public Brush bg = SystemBrushes.Control;
 		public Brush bgClick = SystemBrushes.ControlDark;
@@ -15,8 +15,8 @@ namespace Yuki_Theme.Core.Controls
 		public CustomTab () : base ()
 		{
 			// this.SetStyle(ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor, true);
-			this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor, true);
-			this.DoubleBuffered = this.ResizeRedraw = true;
+			SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.UserPaint | ControlStyles.SupportsTransparentBackColor, true);
+			DoubleBuffered = ResizeRedraw = true;
 			Click += _Click;
 			// DrawMode = TabDrawMode.OwnerDrawFixed;
 			// DrawItem += DrawingItem;
@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.Controls
 		protected virtual void DrawTabRectangle (Graphics g, int index, Rectangle r)
 		{
 			if (index == 0) r = new Rectangle (r.Left - 2, r.Top, r.Width + 2, r.Height);
-			if (index != this.SelectedIndex) r = new Rectangle (r.Left, r.Top + 2, r.Width, r.Height - 2);
+			if (index != SelectedIndex) r = new Rectangle (r.Left, r.Top + 2, r.Width, r.Height - 2);
 			if (index == SelectedIndex)
 			{
 				g.FillRectangle (bgClick, r);
@@ -43,7 +43,7 @@ namespace Yuki_Theme.Core.Controls
 
 		protected virtual void DrawTab(Graphics g, int index, Rectangle r) {
 			r.Inflate(-1, -1);
-			TextRenderer.DrawText(g, this.TabPages[index].Text, this.Font,
+			TextRenderer.DrawText(g, TabPages[index].Text, Font,
 			                      r, ForeColor, 
 			                      TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 		}
@@ -52,14 +52,14 @@ namespace Yuki_Theme.Core.Controls
 			if (TabCount <= 0) return;
 			// Draw tabpage area
 			Rectangle r = ClientRectangle;
-			var top = this.GetTabRect(0).Bottom;
+			var top = GetTabRect(0).Bottom;
 				e.Graphics.FillRectangle(bg, new Rectangle(r.Left, top, r.Width, r.Height - top));
 			// Draw tabs
 			for (int index = 0; index < TabCount; index++) {
 				r = GetTabRect(index);
 				DrawTabRectangle(e.Graphics, index, r);
 				DrawTab(e.Graphics, index, r);
-				if (index == this.SelectedIndex) {
+				if (index == SelectedIndex) {
 					r.Inflate(-1, -1);
 					ControlPaint.DrawFocusRectangle(e.Graphics, r);
 				}

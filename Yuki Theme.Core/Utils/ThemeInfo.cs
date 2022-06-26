@@ -1,7 +1,4 @@
-﻿using System;
-using Yuki_Theme.CLI;
-
-namespace Yuki_Theme.Core;
+﻿namespace Yuki_Theme.Core.Utils;
 
 public class ThemeInfo
 {

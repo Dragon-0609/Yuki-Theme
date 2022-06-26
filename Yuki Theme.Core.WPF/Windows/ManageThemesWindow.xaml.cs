@@ -43,15 +43,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			groups.Add (custom);
 			groupItems.Add ("custom", custom);
 
-			foreach (string item in API.schemes)
+			foreach (string item in API.Schemes)
 			{
-				if (API.themeInfos[item].isDefault)
+				if (API.ThemeInfos[item].isDefault)
 				{
 					ManageableItem cat = groupItems [DefaultThemes.getCategory (item)];
-					new ManageableItem (item, item, false, API.themeInfos[item].isOld, cat);
+					new ManageableItem (item, item, false, API.ThemeInfos[item].isOld, cat);
 				} else
 				{
-					new ManageableItem (item, item, false, API.themeInfos[item].isOld, custom);
+					new ManageableItem (item, item, false, API.ThemeInfos[item].isOld, custom);
 				}
 			}
 
@@ -214,13 +214,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				prevT = groupItems ["Doki Theme"].children.Last ().Content.ToString ();
 			}
 
-			indx = API.schemes.IndexOf (prevT);
+			indx = API.Schemes.IndexOf (prevT);
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {indx}");
 			} else
 			{
-				API.schemes.Insert (indx + 1, theme);
+				API.Schemes.Insert (indx + 1, theme);
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Schemes.Items.Insert (indx + 1, old);
 			}
 
-			API.schemes.Remove (res.from);
+			API.Schemes.Remove (res.from);
 			InsertThemeToCLI (prevTheme, res.to);
 
 		}

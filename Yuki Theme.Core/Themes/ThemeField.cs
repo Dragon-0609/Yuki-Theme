@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes;
 
@@ -164,24 +165,24 @@ public class ThemeField
 
 	public ThemeField MergeWithAnother (ThemeField target)
 	{
-		if (this.Background == null && target.Background != null)
+		if (Background == null && target.Background != null)
 		{
-			this.Background = target.Background;
+			Background = target.Background;
 		}
 
-		if (this.Foreground == null && target.Foreground != null)
+		if (Foreground == null && target.Foreground != null)
 		{
-			this.Foreground = target.Foreground;
+			Foreground = target.Foreground;
 		}
 
-		if (this.Bold == null && target.Bold != null)
+		if (Bold == null && target.Bold != null)
 		{
-			this.Bold = target.Bold;
+			Bold = target.Bold;
 		}
 
-		if (this.Italic == null && target.Italic != null)
+		if (Italic == null && target.Italic != null)
 		{
-			this.Italic = target.Italic;
+			Italic = target.Italic;
 		}
 
 		return this;

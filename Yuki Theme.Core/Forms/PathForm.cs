@@ -13,12 +13,12 @@ namespace Yuki_Theme.Core.Forms
 		public PathForm (SettingsPanel s)
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			loadSVG ();
 			button1.Text = API.Translate ("messages.theme.save.short");
 			button2.Text = API.Translate ("download.cancel");
 			label1.Text = API.Translate ("custom_sticker.title");
-			this.Text = API.Translate ("custom_sticker.form.title");
+			Text = API.Translate ("custom_sticker.form.title");
 			sp = s;
 		}
 

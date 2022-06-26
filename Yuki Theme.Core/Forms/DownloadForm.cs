@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -304,8 +305,8 @@ namespace Yuki_Theme.Core.Forms
 		private void DownloadForm_FormClosing (object sender, FormClosingEventArgs e)
 		{
 			e.Cancel = true;
-			this.Hide();
-			this.Parent = null;
+			Hide();
+			Parent = null;
 		}
 
 		private void DownloadForm_Shown (object sender, EventArgs e)

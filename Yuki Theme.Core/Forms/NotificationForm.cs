@@ -24,21 +24,21 @@ namespace Yuki_Theme.Core.Forms
 
 		private void button2_Click (object sender, EventArgs e)
 		{
-			this.Close ();
+			Close ();
 		}
 
 		private void button1_Click (object sender, EventArgs e)
 		{
 			if (onClick != null)
 				onClick ();
-			this.Close ();
+			Close ();
 		}
 
 		private void NotificationForm_FormClosing (object sender, FormClosingEventArgs e)
 		{
 			e.Cancel = true;
-			this.Hide();
-			this.Parent = null;
+			Hide();
+			Parent = null;
 		}
 
 		public void NotificationForm_Shown (object sender, EventArgs e)
@@ -71,7 +71,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (onClick2 != null)
 				onClick2 ();
-			this.Close ();
+			Close ();
 		}
 	}
 }

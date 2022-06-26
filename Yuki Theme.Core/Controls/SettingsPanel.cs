@@ -9,6 +9,7 @@ using CustomControls.RJControls;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Controls
 {
@@ -87,7 +88,7 @@ namespace Yuki_Theme.Core.Controls
 			{
 				if (Directory.Exists (co.FileName))
 				{
-					if (Directory.Exists (System.IO.Path.Combine (co.FileName, "Highlighting")))
+					if (Directory.Exists (Path.Combine (co.FileName, "Highlighting")))
 					{
 						textBox1.Text = co.FileName;
 					} else
@@ -456,7 +457,7 @@ namespace Yuki_Theme.Core.Controls
 				popupController.df.startUpdating ();
 			} else
 			{
-				API_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
+				API_Events.showError ("Update isn't downloaded!", "Update isn't downloaded");
 			}
 		}
 

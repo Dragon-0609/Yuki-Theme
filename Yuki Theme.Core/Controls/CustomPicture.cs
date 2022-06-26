@@ -241,7 +241,7 @@ namespace Yuki_Theme.Core.Controls
 
 					if (left + Width > Parent.ClientSize.Width - margin.X)
 					{
-						left = Parent.ClientSize.Width - margin.X - this.Width;
+						left = Parent.ClientSize.Width - margin.X - Width;
 					} else if (left < margin.X)
 					{
 						left = margin.X;

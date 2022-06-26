@@ -112,13 +112,13 @@ public static class Settings
 			if (Environment.Is64BitOperatingSystem)
 			{
 				defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-				if (API.IsPasalDirectory (defpas))
+				if (API.IsPascalDirectory (defpas))
 				{
 					pascalPath = defpas;
 				} else
 				{
 					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
-					if (API.IsPasalDirectory (defpas))
+					if (API.IsPascalDirectory (defpas))
 					{
 						pascalPath = defpas;
 					}
@@ -126,7 +126,7 @@ public static class Settings
 			} else
 			{
 				defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-				if (API.IsPasalDirectory (defpas))
+				if (API.IsPascalDirectory (defpas))
 				{
 					pascalPath = defpas;
 				}
@@ -181,9 +181,9 @@ public static class Settings
 	{
 		Dictionary <int, string> dict = PrepareToSave;
 		database.UpdateData (dict);
-		if (API_Actions.onBGIMAGEChange != null) API_Actions.onBGIMAGEChange ();
-		if (API_Actions.onSTICKERChange != null) API_Actions.onSTICKERChange ();
-		if (API_Actions.onSTATUSChange != null) API_Actions.onSTATUSChange ();
+		if (API_Events.onBGIMAGEChange != null) API_Events.onBGIMAGEChange ();
+		if (API_Events.onSTICKERChange != null) API_Events.onSTICKERChange ();
+		if (API_Events.onSTATUSChange != null) API_Events.onSTATUSChange ();
 	}
 
 	private static Dictionary <int, string> PrepareToSave

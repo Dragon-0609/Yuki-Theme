@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core;
+namespace Yuki_Theme.Core.Utils;
 
 public class PathGenerator
 {
@@ -19,6 +19,6 @@ public class PathGenerator
 			file = Helper.ConvertNameToPath (file);
 		}
 
-		return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.themeInfos[name].isOld)}";
+		return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.ThemeInfos[name].isOld)}";
 	}
 }

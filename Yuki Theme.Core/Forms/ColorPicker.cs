@@ -24,9 +24,9 @@ namespace Yuki_Theme.Core.Forms
 		{
 			InitializeComponent ();
 			// form = fm;
-			this.colorBox2D.ColorMode = this.colorMode;
-			this.colorSlider.ColorMode = this.colorMode;
-			this.StartPosition = FormStartPosition.CenterParent;
+			colorBox2D.ColorMode = colorMode;
+			colorSlider.ColorMode = colorMode;
+			StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			tabHexagon.Enter += TabHexagonOnEnter;
 			tabWheel.Enter += TabWheelOnEnter;
@@ -66,16 +66,16 @@ namespace Yuki_Theme.Core.Forms
 
         private void colorSlider_ColorChanged(object sender, ColorChangedEventArgs args)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                HslColor colorHSL = this.colorSlider.ColorHSL;
-                this.colorHsl = colorHSL;
-                this.colorRgb = this.colorHsl.RgbValue;
-                this.lockUpdates = true;
-                this.colorBox2D.ColorHSL = this.colorHsl;
-                this.lockUpdates = false;
-                labelCurrentColor.BackColor = this.colorRgb;
-                textboxHexColor.Text = ColorTranslator.ToHtml(this.colorRgb);
+                HslColor colorHSL = colorSlider.ColorHSL;
+                colorHsl = colorHSL;
+                colorRgb = colorHsl.RgbValue;
+                lockUpdates = true;
+                colorBox2D.ColorHSL = colorHsl;
+                lockUpdates = false;
+                labelCurrentColor.BackColor = colorRgb;
+                textboxHexColor.Text = ColorTranslator.ToHtml(colorRgb);
 //				Dragon.ColorEd.NsQ=colorRgb;
                 UpdateColorFields();
             }  
@@ -83,97 +83,97 @@ namespace Yuki_Theme.Core.Forms
 
         private void colorBox2D_ColorChanged(object sender, ColorChangedEventArgs args)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                HslColor colorHSL = this.colorBox2D.ColorHSL;
-                this.colorHsl = colorHSL;
-                this.colorRgb = this.colorHsl.RgbValue;
-                this.lockUpdates = true;
-                this.colorSlider.ColorHSL = this.colorHsl;
-                this.lockUpdates = false;
-                labelCurrentColor.BackColor = this.colorRgb;
-                textboxHexColor.Text = ColorTranslator.ToHtml(this.colorRgb);
+                HslColor colorHSL = colorBox2D.ColorHSL;
+                colorHsl = colorHSL;
+                colorRgb = colorHsl.RgbValue;
+                lockUpdates = true;
+                colorSlider.ColorHSL = colorHsl;
+                lockUpdates = false;
+                labelCurrentColor.BackColor = colorRgb;
+                textboxHexColor.Text = ColorTranslator.ToHtml(colorRgb);
                 UpdateColorFields();
             }    
         }
 
         private void ColorModeChangedHandler(object sender, EventArgs e)
         {
-            if (sender == this.radioRed)
+            if (sender == radioRed)
             {
-                this.colorMode = ColorModes.Red;
+                colorMode = ColorModes.Red;
             }
-            else if (sender == this.radioGreen)
+            else if (sender == radioGreen)
             {
-                this.colorMode = ColorModes.Green;
+                colorMode = ColorModes.Green;
             }
-            else if (sender == this.radioBlue)
+            else if (sender == radioBlue)
             {
-                this.colorMode = ColorModes.Blue;
+                colorMode = ColorModes.Blue;
             }
-            else if (sender == this.radioHue)
+            else if (sender == radioHue)
             {
-                this.colorMode = ColorModes.Hue;
+                colorMode = ColorModes.Hue;
             }
-            else if (sender == this.radioSaturation)
+            else if (sender == radioSaturation)
             {
-                this.colorMode = ColorModes.Saturation;
+                colorMode = ColorModes.Saturation;
             }
-            else if (sender == this.radioLuminance)
+            else if (sender == radioLuminance)
             {
-                this.colorMode = ColorModes.Luminance;
+                colorMode = ColorModes.Luminance;
             }
-            this.colorSlider.ColorMode = this.colorMode;
-            this.colorBox2D.ColorMode = this.colorMode;        
+            colorSlider.ColorMode = colorMode;
+            colorBox2D.ColorMode = colorMode;        
         }
 
         private void UpdateColorFields()
         {
-            this.lockUpdates = true;
-            this.numRed.Value = this.colorRgb.R;
-            this.numGreen.Value = this.colorRgb.G;
-            this.numBlue.Value = this.colorRgb.B;
-			int val = (int)(((decimal)this.colorHsl.H) * 360M);
+            lockUpdates = true;
+            numRed.Value = colorRgb.R;
+            numGreen.Value = colorRgb.G;
+            numBlue.Value = colorRgb.B;
+			int val = (int)(((decimal)colorHsl.H) * 360M);
 			if (val >= 360) {
 				val = 359;
 			}
 			if (val < 0) {
 				val = 0;
 			}
-			this.numHue.Value = val;
-            this.numSaturation.Value = (int)(((decimal)this.colorHsl.S) * 100M);
-            this.numLuminance.Value = (int)(((decimal)this.colorHsl.L) * 100M);
-            this.lockUpdates = false;
+			numHue.Value = val;
+            numSaturation.Value = (int)(((decimal)colorHsl.S) * 100M);
+            numLuminance.Value = (int)(((decimal)colorHsl.L) * 100M);
+            lockUpdates = false;
         }
 
         private void UpdateRgbFields(Color newColor)
         {
-            this.colorHsl = HslColor.FromColor(newColor);
-            this.colorRgb = newColor;
-            this.lockUpdates = true;
-            this.numHue.Value = (int)(((decimal)this.colorHsl.H) * 360M);
-            this.numSaturation.Value = (int)(((decimal)this.colorHsl.S) * 100M);
-            this.numLuminance.Value = (int)(((decimal)this.colorHsl.L) * 100M);
-            this.lockUpdates = false;
-            this.colorSlider.ColorHSL = this.colorHsl;
-            this.colorBox2D.ColorHSL = this.colorHsl;
-			textboxHexColor.Text = ColorTranslator.ToHtml(this.colorRgb);
+            colorHsl = HslColor.FromColor(newColor);
+            colorRgb = newColor;
+            lockUpdates = true;
+            numHue.Value = (int)(((decimal)colorHsl.H) * 360M);
+            numSaturation.Value = (int)(((decimal)colorHsl.S) * 100M);
+            numLuminance.Value = (int)(((decimal)colorHsl.L) * 100M);
+            lockUpdates = false;
+            colorSlider.ColorHSL = colorHsl;
+            colorBox2D.ColorHSL = colorHsl;
+			textboxHexColor.Text = ColorTranslator.ToHtml(colorRgb);
 			labelCurrentColor.BackColor = colorRgb;
 //			Dragon.ColorEd.NsQ=colorRgb;
         }
 
         private void UpdateHslFields(HslColor newColor)
         {
-            this.colorHsl = newColor;
-            this.colorRgb = newColor.RgbValue;
-            this.lockUpdates = true;
-            this.numRed.Value = this.colorRgb.R;
-            this.numGreen.Value = this.colorRgb.G;
-            this.numBlue.Value = this.colorRgb.B;
-            this.lockUpdates = false;
-            this.colorSlider.ColorHSL = this.colorHsl;
-            this.colorBox2D.ColorHSL = this.colorHsl;
-			textboxHexColor.Text = ColorTranslator.ToHtml(this.colorRgb);
+            colorHsl = newColor;
+            colorRgb = newColor.RgbValue;
+            lockUpdates = true;
+            numRed.Value = colorRgb.R;
+            numGreen.Value = colorRgb.G;
+            numBlue.Value = colorRgb.B;
+            lockUpdates = false;
+            colorSlider.ColorHSL = colorHsl;
+            colorBox2D.ColorHSL = colorHsl;
+			textboxHexColor.Text = ColorTranslator.ToHtml(colorRgb);
 			labelCurrentColor.BackColor = colorRgb;
 //			Dragon.ColorEd.NsQ=colorRgb;
 		//	UpdateRgbFields (colorRgb);
@@ -181,54 +181,54 @@ namespace Yuki_Theme.Core.Forms
 
         private void numRed_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                UpdateRgbFields(Color.FromArgb((int)this.numRed.Value, (int)this.numGreen.Value, (int)this.numBlue.Value));
+                UpdateRgbFields(Color.FromArgb((int)numRed.Value, (int)numGreen.Value, (int)numBlue.Value));
 
             }
         }
 
         private void numGreen_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                UpdateRgbFields(Color.FromArgb((int)this.numRed.Value, (int)this.numGreen.Value, (int)this.numBlue.Value));
+                UpdateRgbFields(Color.FromArgb((int)numRed.Value, (int)numGreen.Value, (int)numBlue.Value));
             }
         }
 
         private void numBlue_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                UpdateRgbFields(Color.FromArgb((int)this.numRed.Value, (int)this.numGreen.Value, (int)this.numBlue.Value));
+                UpdateRgbFields(Color.FromArgb((int)numRed.Value, (int)numGreen.Value, (int)numBlue.Value));
             }
         }
 
         private void numHue_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-                HslColor newColor = HslColor.FromAhsl((double)(((float)((int)this.numHue.Value)) / 360f), this.colorHsl.S, this.colorHsl.L);
-                this.UpdateHslFields(newColor);
+                HslColor newColor = HslColor.FromAhsl((double)(((float)((int)numHue.Value)) / 360f), colorHsl.S, colorHsl.L);
+                UpdateHslFields(newColor);
             }
         }
 
         private void numSaturation_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-				HslColor newColor = HslColor.FromAhsl(this.colorHsl.A, this.colorHsl.H, (double)(((float)((int)this.numSaturation.Value)) / 100f), (double)(((float)((int)this.numLuminance.Value)) / 100f));
-                this.UpdateHslFields(newColor);
+				HslColor newColor = HslColor.FromAhsl(colorHsl.A, colorHsl.H, (double)(((float)((int)numSaturation.Value)) / 100f), (double)(((float)((int)numLuminance.Value)) / 100f));
+                UpdateHslFields(newColor);
             }
             
         }
 		
         private void numLuminance_ValueChanged(object sender, EventArgs e)
         {
-            if (!this.lockUpdates)
+            if (!lockUpdates)
             {
-				HslColor newColor = HslColor.FromAhsl(this.colorHsl.A, this.colorHsl.H, (double)(((float)((int)this.numSaturation.Value)) / 100f), (double)(((float)((int)this.numLuminance.Value)) / 100f));
-                this.UpdateHslFields(newColor);
+				HslColor newColor = HslColor.FromAhsl(colorHsl.A, colorHsl.H, (double)(((float)((int)numSaturation.Value)) / 100f), (double)(((float)((int)numLuminance.Value)) / 100f));
+                UpdateHslFields(newColor);
             }
         }
 

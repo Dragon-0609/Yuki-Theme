@@ -36,39 +36,39 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         public Color ColorRGB
         {
-            get { return this.colorRGB; }
+            get { return colorRGB; }
             set
             {
-                this.colorRGB = value;
-                if (!this.setHueSilently)
+                colorRGB = value;
+                if (!setHueSilently)
                 {
-                    this.colorHSL = HslColor.FromColor(this.ColorRGB);
+                    colorHSL = HslColor.FromColor(ColorRGB);
                 }
-                this.ResetSlider();
-                this.Refresh();
+                ResetSlider();
+                Refresh();
             }
         }
 
         public HslColor ColorHSL
         {
-            get { return this.colorHSL; }
+            get { return colorHSL; }
             set
             {
-                this.colorHSL = value;
-                this.colorRGB = this.colorHSL.RgbValue;
-                this.ResetSlider();
-                this.Refresh();
+                colorHSL = value;
+                colorRGB = colorHSL.RgbValue;
+                ResetSlider();
+                Refresh();
             }
         }
 
         public ColorModes ColorMode
         {
-            get { return this.colorMode; }
+            get { return colorMode; }
             set
             {
-                this.colorMode = value;
-                this.ResetSlider();
-                this.Refresh();
+                colorMode = value;
+                ResetSlider();
+                Refresh();
             }
         }
 
@@ -82,8 +82,8 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         [DefaultValue(typeof(Color), "Black")]
         public Color NubColor
         {
-            get { return this.nubColor; }
-            set { this.nubColor = value; }
+            get { return nubColor; }
+            set { nubColor = value; }
         }
 
         /// <summary>
@@ -94,19 +94,19 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         /// </value>
         public int Position
         {
-            get { return this.position; }
+            get { return position; }
             set
             {
                 int num = value;
-                num = MathExtensions.LimitToRange(num, 0, base.Height - 9);
-                if (num != this.position)
+                num = MathExtensions.LimitToRange(num, 0, Height - 9);
+                if (num != position)
                 {
-                    this.position = num;
-                    this.ResetHSLRGB();
-                    this.Refresh();
-                    if (this.ColorChanged != null)
+                    position = num;
+                    ResetHSLRGB();
+                    Refresh();
+                    if (ColorChanged != null)
                     {
-                        this.ColorChanged(this, new ColorChangedEventArgs(this.colorRGB));
+                        ColorChanged(this, new ColorChangedEventArgs(colorRGB));
                     }
                 }
             }
@@ -119,11 +119,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         public ColorSliderVertical()
         {
             InitializeComponent();
-            base.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
 
-            this.colorHSL = HslColor.FromAhsl(1.0, 1.0, 1.0);
-            this.colorRGB = this.colorHSL.RgbValue;
-            this.colorMode = ColorModes.Hue;
+            colorHSL = HslColor.FromAhsl(1.0, 1.0, 1.0);
+            colorRGB = colorHSL.RgbValue;
+            colorMode = ColorModes.Hue;
         }
 
         #endregion
@@ -133,22 +133,22 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            this.mouseMoving = true;
-            this.Position = e.Y - 4;
+            mouseMoving = true;
+            Position = e.Y - 4;
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            this.mouseMoving = false;
+            mouseMoving = false;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (this.mouseMoving)
+            if (mouseMoving)
             {
-                this.Position = e.Y - 4;
+                Position = e.Y - 4;
             }
         }
 
@@ -156,46 +156,46 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnPaint(e);
             HslColor color = HslColor.FromAhsl(0xff);
-            switch (this.ColorMode)
+            switch (ColorMode)
             {
                 case ColorModes.Hue:
                     color.L = color.S = 1.0;
                     break;
 
                 case ColorModes.Saturation:
-                    color.H = this.ColorHSL.H;
-                    color.L = this.ColorHSL.L;
+                    color.H = ColorHSL.H;
+                    color.L = ColorHSL.L;
                     break;
 
                 case ColorModes.Luminance:
-                    color.H = this.ColorHSL.H;
-                    color.S = this.ColorHSL.S;
+                    color.H = ColorHSL.H;
+                    color.S = ColorHSL.S;
                     break;
             }
-            for (int i = 0; i < (base.Height - 8); i++)
+            for (int i = 0; i < (Height - 8); i++)
             {
                 double num2 = 0.0;
-                if (this.ColorMode < ColorModes.Hue)
+                if (ColorMode < ColorModes.Hue)
                 {
-                    num2 = 255.0 - MathExtensions.Round((255.0 * i) / (base.Height - 8.0));
+                    num2 = 255.0 - MathExtensions.Round((255.0 * i) / (Height - 8.0));
                 }
                 else
                 {
-                    num2 = 1.0 - (((double)i) / ((double)(base.Height - 8)));
+                    num2 = 1.0 - (((double)i) / ((double)(Height - 8)));
                 }
                 Color empty = Color.Empty;
-                switch (this.ColorMode)
+                switch (ColorMode)
                 {
                     case ColorModes.Red:
-                        empty = Color.FromArgb((int)num2, this.ColorRGB.G, this.ColorRGB.B);
+                        empty = Color.FromArgb((int)num2, ColorRGB.G, ColorRGB.B);
                         break;
 
                     case ColorModes.Green:
-                        empty = Color.FromArgb(this.ColorRGB.R, (int)num2, this.ColorRGB.B);
+                        empty = Color.FromArgb(ColorRGB.R, (int)num2, ColorRGB.B);
                         break;
 
                     case ColorModes.Blue:
-                        empty = Color.FromArgb(this.ColorRGB.R, this.ColorRGB.G, (int)num2);
+                        empty = Color.FromArgb(ColorRGB.R, ColorRGB.G, (int)num2);
                         break;
 
                     case ColorModes.Hue:
@@ -216,10 +216,10 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
                 using (Pen pen = new Pen(empty))
                 {
-                    e.Graphics.DrawLine(pen, 11, i + 4, base.Width - 11, i + 4);
+                    e.Graphics.DrawLine(pen, 11, i + 4, Width - 11, i + 4);
                 }
             }
-            this.DrawSlider(e.Graphics);
+            DrawSlider(e.Graphics);
         }
 
 
@@ -231,18 +231,18 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             using (Pen pen = new Pen(Color.FromArgb(0x74, 0x72, 0x6a)))
             {
-                SolidBrush fill = new SolidBrush(this.nubColor);
-                Point[] points = new Point[] { new Point(1, this.position), new Point(3, this.position), new Point(7, this.position + 4), new Point(3, this.position + 8), new Point(1, this.position + 8), new Point(0, this.position + 7), new Point(0, this.position + 1) };
+                SolidBrush fill = new SolidBrush(nubColor);
+                Point[] points = new Point[] { new Point(1, position), new Point(3, position), new Point(7, position + 4), new Point(3, position + 8), new Point(1, position + 8), new Point(0, position + 7), new Point(0, position + 1) };
                 g.FillPolygon(fill, points);
                 g.DrawPolygon(pen, points);
                 
-                points[0] = new Point(base.Width - 2, this.position);
-                points[1] = new Point(base.Width - 4, this.position);
-                points[2] = new Point(base.Width - 8, this.position + 4);
-                points[3] = new Point(base.Width - 4, this.position + 8);
-                points[4] = new Point(base.Width - 2, this.position + 8);
-                points[5] = new Point(base.Width - 1, this.position + 7);
-                points[6] = new Point(base.Width - 1, this.position + 1);
+                points[0] = new Point(Width - 2, position);
+                points[1] = new Point(Width - 4, position);
+                points[2] = new Point(Width - 8, position + 4);
+                points[3] = new Point(Width - 4, position + 8);
+                points[4] = new Point(Width - 2, position + 8);
+                points[5] = new Point(Width - 1, position + 7);
+                points[6] = new Point(Width - 1, position + 1);
                 
                 g.FillPolygon(fill, points);
                 g.DrawPolygon(pen, points);
@@ -252,71 +252,71 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         private void ResetSlider()
         {
             double h = 0.0;
-            switch (this.ColorMode)
+            switch (ColorMode)
             {
                 case ColorModes.Red:
-                    h = ((double)this.colorRGB.R) / 255.0;
+                    h = ((double)colorRGB.R) / 255.0;
                     break;
 
                 case ColorModes.Green:
-                    h = ((double)this.colorRGB.G) / 255.0;
+                    h = ((double)colorRGB.G) / 255.0;
                     break;
 
                 case ColorModes.Blue:
-                    h = ((double)this.colorRGB.B) / 255.0;
+                    h = ((double)colorRGB.B) / 255.0;
                     break;
 
                 case ColorModes.Hue:
-                    h = this.colorHSL.H;
+                    h = colorHSL.H;
                     break;
 
                 case ColorModes.Saturation:
-                    h = this.colorHSL.S;
+                    h = colorHSL.S;
                     break;
 
                 case ColorModes.Luminance:
-                    h = this.colorHSL.L;
+                    h = colorHSL.L;
                     break;
             }
-            this.position = (base.Height - 8) - MathExtensions.Round((base.Height - 8) * h);
+            position = (Height - 8) - MathExtensions.Round((Height - 8) * h);
         }
 
         private void ResetHSLRGB()
         {
-            this.setHueSilently = true;
-            switch (this.ColorMode)
+            setHueSilently = true;
+            switch (ColorMode)
             {
                 case ColorModes.Red:
-                    this.ColorRGB = Color.FromArgb(0xff - MathExtensions.Round((255.0 * this.position) / ((double)(base.Height - 9))), this.ColorRGB.G, this.ColorRGB.B);
-                    this.ColorHSL = HslColor.FromColor(this.ColorRGB);
+                    ColorRGB = Color.FromArgb(0xff - MathExtensions.Round((255.0 * position) / ((double)(Height - 9))), ColorRGB.G, ColorRGB.B);
+                    ColorHSL = HslColor.FromColor(ColorRGB);
                     break;
 
                 case ColorModes.Green:
-                    this.ColorRGB = Color.FromArgb(this.ColorRGB.R, 0xff - MathExtensions.Round((255.0 * this.position) / ((double)(base.Height - 9))), this.ColorRGB.B);
-                    this.ColorHSL = HslColor.FromColor(this.ColorRGB);
+                    ColorRGB = Color.FromArgb(ColorRGB.R, 0xff - MathExtensions.Round((255.0 * position) / ((double)(Height - 9))), ColorRGB.B);
+                    ColorHSL = HslColor.FromColor(ColorRGB);
                     break;
 
                 case ColorModes.Blue:
-                    this.ColorRGB = Color.FromArgb(this.ColorRGB.R, this.ColorRGB.G, 0xff - MathExtensions.Round((255.0 * this.position) / ((double)(base.Height - 9))));
-                    this.ColorHSL = HslColor.FromColor(this.ColorRGB);
+                    ColorRGB = Color.FromArgb(ColorRGB.R, ColorRGB.G, 0xff - MathExtensions.Round((255.0 * position) / ((double)(Height - 9))));
+                    ColorHSL = HslColor.FromColor(ColorRGB);
                     break;
 
                 case ColorModes.Hue:
-                    this.colorHSL.H = 1.0 - (((double)this.position) / ((double)(base.Height - 9)));
-                    this.ColorRGB = this.ColorHSL.RgbValue;
+                    colorHSL.H = 1.0 - (((double)position) / ((double)(Height - 9)));
+                    ColorRGB = ColorHSL.RgbValue;
                     break;
 
                 case ColorModes.Saturation:
-                    this.colorHSL.S = 1.0 - (((double)this.position) / ((double)(base.Height - 9)));
-                    this.ColorRGB = this.ColorHSL.RgbValue;
+                    colorHSL.S = 1.0 - (((double)position) / ((double)(Height - 9)));
+                    ColorRGB = ColorHSL.RgbValue;
                     break;
 
                 case ColorModes.Luminance:
-                    this.colorHSL.L = 1.0 - (((double)this.position) / ((double)(base.Height - 9)));
-                    this.ColorRGB = this.ColorHSL.RgbValue;
+                    colorHSL.L = 1.0 - (((double)position) / ((double)(Height - 9)));
+                    ColorRGB = ColorHSL.RgbValue;
                     break;
             }
-            this.setHueSilently = false;
+            setHueSilently = false;
         }
 
         #endregion

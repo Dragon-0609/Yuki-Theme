@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Utils
 {
 	public static class Populater
 	{

@@ -105,11 +105,11 @@ namespace Yuki_Theme.Core.Controls
 
             public UpDownButtonRenderer (Control c)
             {
-                this.updown = c;
+                updown = c;
                 if (updown.IsHandleCreated)
-                    this.AssignHandle (updown.Handle);
+                    AssignHandle (updown.Handle);
                 else
-                    updown.HandleCreated += (s, e) => this.AssignHandle (updown.Handle);
+                    updown.HandleCreated += (s, e) => AssignHandle (updown.Handle);
             }
 
             private Point [] GetDownArrow (Rectangle r)

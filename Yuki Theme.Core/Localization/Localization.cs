@@ -46,7 +46,7 @@ public class Localization
 					}
 				} catch (Exception e)
 				{
-					API_Actions.showError (e.Message, "Something went wrong");
+					API_Events.showError (e.Message, "Something went wrong");
 				}
 			}
 		}
@@ -101,7 +101,7 @@ public class Localization
 			LoadTranslation (File.ReadAllText (file));
 		else
 		{
-			API_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
+			API_Events.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
 			LoadLocaleFromMemory (languages [0]);
 		}
 	}
@@ -129,13 +129,13 @@ public class Localization
 		} else if (recursionCalls < 5)
 		{
 			recursionCalls++;
-			API_Actions.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
+			API_Events.showError ("Couldn't read language file! Retrieving to the default language...", "Couldn't read language file");
 			string fallback = languages [0];
 			if (lang == fallback) fallback = languages [1];
 			LoadLocaleFromMemory (fallback);
 		} else
 		{
-			API_Actions.showError ("Infinite Recursion happened... Damn! I won't be able to translate.", "Infinite Recursion");
+			API_Events.showError ("Infinite Recursion happened... Damn! I won't be able to translate.", "Infinite Recursion");
 			translation.Clear ();
 		}
 	}

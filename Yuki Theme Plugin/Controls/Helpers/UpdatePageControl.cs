@@ -93,20 +93,20 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 			if (cnd)
 			{
 				API.selectedItem = API.nameToLoad;
-				API_Actions.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
-				API_Actions.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
-				API_Actions.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
-				API_Actions.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
+				API_Events.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
+				API_Events.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
+				API_Events.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
+				API_Events.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
 				API.Restore (false);
 				API.Export (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);
 
-				API_Actions.ifHasImage2 = null;
-				API_Actions.ifHasSticker2 = null;
-				API_Actions.ifDoesntHave2 = null;
-				API_Actions.ifDoesntHaveSticker2 = null;
+				API_Events.ifHasImage2 = null;
+				API_Events.ifHasSticker2 = null;
+				API_Events.ifDoesntHave2 = null;
+				API_Events.ifDoesntHaveSticker2 = null;
 			}
 		}
 

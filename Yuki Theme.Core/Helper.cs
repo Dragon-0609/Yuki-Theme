@@ -396,9 +396,9 @@ namespace Yuki_Theme.Core
 			{
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
-					if (API_Actions.showError != null)
-						API_Actions.showError (API.Translate ("messages.file.notexist.withname.param", filename),
-						                       API.Translate ("messages.file.notexist.withname", filename));
+					if (API_Events.showError != null)
+						API_Events.showError (API.Translate ("messages.file.notexist.withname.param", filename),
+						                      API.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -680,7 +680,7 @@ namespace Yuki_Theme.Core
 				foreach (string s in files)
 				{
 					string sp = API.GetNameOfTheme (s);
-					if (API.schemes.Contains (sp))
+					if (API.Schemes.Contains (sp))
 					{
 						// Console.WriteLine(nod.Attributes ["name"].Value);
 						currentTheme = sp;
@@ -852,7 +852,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = API_Actions.GetCore ();
+	        Assembly a = API.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))

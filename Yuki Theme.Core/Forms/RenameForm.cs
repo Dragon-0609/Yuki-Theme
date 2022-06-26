@@ -8,7 +8,7 @@ namespace Yuki_Theme.Core.Forms
 		public RenameForm ()
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			button1.Text = API.Translate ("main.tips.save");
 			button2.Text = API.Translate ("download.cancel");
 			label1.Text = API.Translate ("messages.rename.from") + ":";

@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
-    <Compile Include="Condition.cs" />
+    <Compile Include="API_Events.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Formats\NewThemeFormat.cs" />
     <Compile Include="Formats\OldThemeFormat.cs" />
@@ -137,13 +137,21 @@
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\Localization.cs" />
-    <Compile Include="PathGenerator.cs" />
-    <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeField.cs" />
+    <Compile Include="Utils\Condition.cs" />
+    <Compile Include="Utils\FontManager.cs" />
+    <Compile Include="Utils\InstallationPreparer.cs" />
+    <Compile Include="Utils\PathGenerator.cs" />
+    <Compile Include="Utils\Placeholder.cs" />
+    <Compile Include="Utils\Populater.cs" />
+    <Compile Include="Utils\ShadowNames.cs" />
+    <Compile Include="Utils\SmallDocumentation.cs" />
+    <Compile Include="Utils\ThemeInfo.cs" />
+    <Compile Include="Utils\ThemeManager.cs" />
     <None Include="Controls\CustomB.cs" />
     <Compile Include="API_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
@@ -179,7 +187,6 @@
     <Compile Include="Controls\StickerPicture.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="FontManager.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,25 +267,14 @@
     <Compile Include="Forms\SettingsForm.Designer.cs">
       <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ThemeManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ThemeManager.Designer.cs">
-      <DependentUpon>ThemeManager.cs</DependentUpon>
-    </Compile>
     <Compile Include="Helper.cs" />
     <Compile Include="Highlighter.cs" />
     <Compile Include="Parsers\AbstractParser.cs" />
     <Compile Include="Parsers\DokiThemeParser.cs" />
     <Compile Include="Parsers\JetBrainsParser.cs" />
     <Compile Include="Parsers\MainParser.cs" />
-    <Compile Include="Placeholder.cs" />
-    <Compile Include="Populater.cs" />
-    <Compile Include="InstallationPreparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="ShadowNames.cs" />
-    <Compile Include="SmallDocumentation.cs" />
     <Compile Include="Themes\DefaultThemes.cs" />
     <EmbeddedResource Include="Controls\ColorEditor\ColorPicker\Controls\ColorSliderVertical.resx" />
     <EmbeddedResource Include="Controls\RJComboBox.resx">
@@ -331,9 +327,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThemeDownloaderForm.resx">
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ThemeManager.resx">
-      <DependentUpon>ThemeManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Localization\ru.lang" />
     <EmbeddedResource Include="Properties\Resources.resx">

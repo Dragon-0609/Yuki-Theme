@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Utils
 {
 	public enum SyntaxType
 	{

@@ -6,6 +6,7 @@ using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 using static System.Drawing.Brushes;
 using TextStyle = FastColoredTextBoxNS.TextStyle;
 

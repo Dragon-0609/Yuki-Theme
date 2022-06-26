@@ -10,7 +10,7 @@ namespace Yuki_Theme.Core.Forms
 		public QuestionForm_2 ()
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
 			Message.Text = API.Translate ("messages.google.analytics");
 			button2.Text = API.Translate ("messages.buttons.accept");

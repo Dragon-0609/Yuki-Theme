@@ -1,4 +1,4 @@
-﻿namespace Yuki_Theme.Core
+﻿namespace Yuki_Theme.Core.Utils
 {
   class Placeholder
   {

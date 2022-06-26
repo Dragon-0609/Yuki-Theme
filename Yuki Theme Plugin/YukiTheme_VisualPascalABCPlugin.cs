@@ -168,9 +168,9 @@ namespace Yuki_Theme_Plugin
 			UpdateColors ();
 
 			WaitAndUpdateMenuColors ();
-			API_Actions.onBGIMAGEChange = RefreshEditor;
-			API_Actions.onSTICKERChange = ReloadSticker;
-			API_Actions.onSTATUSChange = RefreshStatusBar;
+			API_Events.onBGIMAGEChange = RefreshEditor;
+			API_Events.onSTICKERChange = ReloadSticker;
+			API_Events.onSTATUSChange = RefreshStatusBar;
 
 			Helper.LoadCurrent ();
 

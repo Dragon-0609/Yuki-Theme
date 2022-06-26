@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Formats
 {
@@ -78,21 +79,21 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (API_Actions.ifHasImage != null)
+							if (API_Events.ifHasImage != null)
 							{
-								API_Actions.ifHasImage (iag.Item2);
+								API_Events.ifHasImage (iag.Item2);
 							}
 
-							if (API_Actions.ifHasImage2 != null)
+							if (API_Events.ifHasImage2 != null)
 							{
-								API_Actions.ifHasImage2 (iag.Item2);
+								API_Events.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (API_Actions.ifDoesntHave != null)
-								API_Actions.ifDoesntHave ();
-							if (API_Actions.ifDoesntHave2 != null)
-								API_Actions.ifDoesntHave2 ();
+							if (API_Events.ifDoesntHave != null)
+								API_Events.ifDoesntHave ();
+							if (API_Events.ifDoesntHave2 != null)
+								API_Events.ifDoesntHave2 ();
 						}
 
 						iag = null;
@@ -100,38 +101,38 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (API_Actions.ifHasSticker != null)
+							if (API_Events.ifHasSticker != null)
 							{
-								API_Actions.ifHasSticker (iag.Item2);
+								API_Events.ifHasSticker (iag.Item2);
 							}
 
-							if (API_Actions.ifHasSticker2 != null)
+							if (API_Events.ifHasSticker2 != null)
 							{
-								API_Actions.ifHasSticker2 (iag.Item2);
+								API_Events.ifHasSticker2 (iag.Item2);
 							}
 						} else
 						{
-							if (API_Actions.ifDoesntHaveSticker != null)
-								API_Actions.ifDoesntHaveSticker ();
-							if (API_Actions.ifDoesntHaveSticker2 != null)
-								API_Actions.ifDoesntHaveSticker2 ();
+							if (API_Events.ifDoesntHaveSticker != null)
+								API_Events.ifDoesntHaveSticker ();
+							if (API_Events.ifDoesntHaveSticker2 != null)
+								API_Events.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (API_Actions.ifDoesntHave != null)
-							API_Actions.ifDoesntHave ();
+						if (API_Events.ifDoesntHave != null)
+							API_Events.ifDoesntHave ();
 
-						if (API_Actions.ifDoesntHaveSticker != null)
-							API_Actions.ifDoesntHaveSticker ();
+						if (API_Events.ifDoesntHaveSticker != null)
+							API_Events.ifDoesntHaveSticker ();
 
-						if (API_Actions.ifDoesntHave2 != null)
-							API_Actions.ifDoesntHave2 ();
+						if (API_Events.ifDoesntHave2 != null)
+							API_Events.ifDoesntHave2 ();
 
-						if (API_Actions.ifDoesntHaveSticker2 != null)
-							API_Actions.ifDoesntHaveSticker2 ();
+						if (API_Events.ifDoesntHaveSticker2 != null)
+							API_Events.ifDoesntHaveSticker2 ();
 					}
 
 					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
@@ -149,54 +150,54 @@ namespace Yuki_Theme.Core.Formats
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (API_Actions.ifHasImage != null)
+							if (API_Events.ifHasImage != null)
 							{
-								API_Actions.ifHasImage (iag.Item2);
+								API_Events.ifHasImage (iag.Item2);
 							}
 
-							if (API_Actions.ifHasImage2 != null)
+							if (API_Events.ifHasImage2 != null)
 							{
-								API_Actions.ifHasImage2 (iag.Item2);
+								API_Events.ifHasImage2 (iag.Item2);
 							}
 						} else
 						{
-							if (API_Actions.ifDoesntHave != null)
-								API_Actions.ifDoesntHave ();
+							if (API_Events.ifDoesntHave != null)
+								API_Events.ifDoesntHave ();
 
-							if (API_Actions.ifDoesntHave2 != null)
-								API_Actions.ifDoesntHave2 ();
+							if (API_Events.ifDoesntHave2 != null)
+								API_Events.ifDoesntHave2 ();
 						}
 
 						iag = Helper.GetSticker (pathToTheme);
 						if (iag.Item1)
 						{
 							// img = iag.Item2;
-							if (API_Actions.ifHasSticker != null)
+							if (API_Events.ifHasSticker != null)
 							{
-								API_Actions.ifHasSticker (iag.Item2);
+								API_Events.ifHasSticker (iag.Item2);
 							}
 						} else
 						{
-							if (API_Actions.ifDoesntHaveSticker != null)
-								API_Actions.ifDoesntHaveSticker ();
+							if (API_Events.ifDoesntHaveSticker != null)
+								API_Events.ifDoesntHaveSticker ();
 
-							if (API_Actions.ifDoesntHaveSticker2 != null)
-								API_Actions.ifDoesntHaveSticker2 ();
+							if (API_Events.ifDoesntHaveSticker2 != null)
+								API_Events.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
 				{
 					if (needToGetImages)
 					{
-						if (API_Actions.ifDoesntHave != null)
-							API_Actions.ifDoesntHave ();
-						if (API_Actions.ifDoesntHaveSticker != null)
-							API_Actions.ifDoesntHaveSticker ();
+						if (API_Events.ifDoesntHave != null)
+							API_Events.ifDoesntHave ();
+						if (API_Events.ifDoesntHaveSticker != null)
+							API_Events.ifDoesntHaveSticker ();
 
-						if (API_Actions.ifDoesntHave2 != null)
-							API_Actions.ifDoesntHave2 ();
-						if (API_Actions.ifDoesntHaveSticker2 != null)
-							API_Actions.ifDoesntHaveSticker2 ();
+						if (API_Events.ifDoesntHave2 != null)
+							API_Events.ifDoesntHave2 ();
+						if (API_Events.ifDoesntHaveSticker2 != null)
+							API_Events.ifDoesntHaveSticker2 ();
 					}
 
 					json = File.ReadAllText (pathToTheme);
@@ -268,7 +269,7 @@ namespace Yuki_Theme.Core.Formats
 		{
 			Console.WriteLine (name);
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = API.themeInfos [name].isDefault;
+			bool isDef = API.ThemeInfos [name].isDefault;
 			string json = loadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);

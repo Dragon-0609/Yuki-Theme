@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Yuki_Theme.Core;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.CLI
+namespace Yuki_Theme.Core.Utils
 {
 	public class Condition
 	{
@@ -72,9 +70,9 @@ namespace Yuki_Theme.CLI
 		private static ThemeInfo SetGroup (string name, ThemeInfo info, Condition value)
 		{
 			info.group = value.Equality;
-			Theme theme = Core.API_Actions.GetTheme (name);
+			Theme theme = API.GetTheme (name);
 			theme.Group = info.group;
-			Core.API.SaveTheme (theme, null, null, true);
+			API.SaveTheme (theme, null, null, true);
 			return info;
 		}
 		

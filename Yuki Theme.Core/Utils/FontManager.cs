@@ -6,13 +6,13 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.Utils
 {
 	public static class FontManager
 	{
-		[System.Runtime.InteropServices.DllImport ("gdi32.dll")]
+		[DllImport ("gdi32.dll")]
 		private static extern IntPtr AddFontMemResourceEx (IntPtr pbFont, uint                                         cbFont,
-		                                                   IntPtr pdv,    [System.Runtime.InteropServices.In] ref uint pcFonts);
+		                                                   IntPtr pdv,    [In] ref uint pcFonts);
 
 		private static PrivateFontCollection _fonts = new PrivateFontCollection ();
 
@@ -24,7 +24,7 @@ namespace Yuki_Theme.Core
 			Stream fontStream = Assembly.GetExecutingAssembly ().GetManifestResourceStream (resource);
 
 			// create an unsafe memory block for the font data
-			System.IntPtr data = Marshal.AllocCoTaskMem ((int) fontStream.Length);
+			IntPtr data = Marshal.AllocCoTaskMem ((int) fontStream.Length);
 
 			// create a buffer to read in to
 			byte [] fontdata = new byte[fontStream.Length];

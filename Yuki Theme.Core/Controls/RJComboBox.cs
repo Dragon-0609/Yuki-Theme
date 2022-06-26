@@ -38,13 +38,13 @@ namespace CustomControls.RJControls
             cmbList = new ComboBox();
             lblText = new Label();
             btnIcon = new Button();
-            this.SuspendLayout();
+            SuspendLayout();
             
             //ComboBox: Dropdown list
             cmbList.BackColor = listBackColor;
             cmbList.DrawItem += CmbListOnDrawItem;
             cmbList.DrawMode = DrawMode.OwnerDrawFixed;
-            cmbList.Font = new Font(this.Font.Name, 10F);
+            cmbList.Font = new Font(Font.Name, 10F);
             cmbList.ForeColor = listTextColor;
             cmbList.SelectedIndexChanged += new EventHandler(ComboBox_SelectedIndexChanged);//Default event
             cmbList.TextChanged += new EventHandler(ComboBox_TextChanged);//Refresh text
@@ -65,23 +65,23 @@ namespace CustomControls.RJControls
             lblText.BackColor = backColor;
             lblText.TextAlign = ContentAlignment.MiddleLeft;
             lblText.Padding = new Padding(8, 0, 0, 0);
-            lblText.Font = new Font(this.Font.Name, 10F);
+            lblText.Font = new Font(Font.Name, 10F);
             //->Attach label events to user control event
             lblText.Click += new EventHandler(Surface_Click);//Select combo box
             lblText.MouseEnter += new EventHandler(Surface_MouseEnter);
             lblText.MouseLeave += new EventHandler(Surface_MouseLeave);
 
             //User Control
-            this.Controls.Add(lblText);//2
-            this.Controls.Add(btnIcon);//1
-            this.Controls.Add(cmbList);//0
-            this.MinimumSize = new Size(100, 30);
-            this.Size = new Size(100, 30);
-            this.ForeColor = Color.DimGray;
-            this.Padding = new Padding(borderSize);//Border Size
-            this.Font = new Font(this.Font.Name, 10F);
+            Controls.Add(lblText);//2
+            Controls.Add(btnIcon);//1
+            Controls.Add(cmbList);//0
+            MinimumSize = new Size(100, 30);
+            Size = new Size(100, 30);
+            ForeColor = Color.DimGray;
+            Padding = new Padding(borderSize);//Border Size
+            Font = new Font(Font.Name, 10F);
             base.BackColor = borderColor; //Border Color
-            this.ResumeLayout();
+            ResumeLayout();
             AdjustComboBoxDimensions();
         }
 
@@ -166,7 +166,7 @@ namespace CustomControls.RJControls
             set
             {
                 borderSize = value;
-                this.Padding = new Padding(borderSize);//Border Size
+                Padding = new Padding(borderSize);//Border Size
                 AdjustComboBoxDimensions();
             }
         }
@@ -308,7 +308,7 @@ namespace CustomControls.RJControls
             cmbList.Width = lblText.Width + 10;
             cmbList.Location = new Point()
             {
-                X = this.Width - this.Padding.Right - cmbList.Width,
+                X = Width - Padding.Right - cmbList.Width,
                 Y = lblText.Bottom - cmbList.Height
             };
         }
@@ -354,7 +354,7 @@ namespace CustomControls.RJControls
         private void Surface_Click(object sender, EventArgs e)
         {
             //Attach label click to user control click
-            this.OnClick(e);
+            OnClick(e);
             //Select combo box
             cmbList.Select();
             if (cmbList.DropDownStyle == ComboBoxStyle.DropDownList)
@@ -369,12 +369,12 @@ namespace CustomControls.RJControls
         //->Attach label events to user control event
         private void Surface_MouseLeave(object sender, EventArgs e)
         {
-            this.OnMouseLeave(e);
+            OnMouseLeave(e);
         }
 
         private void Surface_MouseEnter(object sender, EventArgs e)
         {
-            this.OnMouseEnter(e);
+            OnMouseEnter(e);
         }
         //::::+
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -27,9 +28,9 @@ namespace Yuki_Theme.Core.Themes
 			headersList.Add (header);
 			foreach (KeyValuePair <string, bool> themeName in header.ThemeNames)
 			{
-				if(!API.themeInfos.ContainsKey (themeName.Key))
+				if(!API.ThemeInfos.ContainsKey (themeName.Key))
 				{
-					API_Actions.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
+					API.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
 					categories.Add (themeName.Key, header.GroupName);
 					headers.Add (themeName.Key, header);
 				}
