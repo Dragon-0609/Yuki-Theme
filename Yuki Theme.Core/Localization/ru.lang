@@ -211,6 +211,10 @@
     "messages.buttons.accept": "Принять",
     "messages.buttons.decline": "Отказать",
     "messages.buttons.close": "Закрыть",
+
+    "theme.downloader.errors.group.request": "Не удалось получить информацию о группах",
+    "theme.downloader.errors.github.exceed.title": "Github API лимит",
+    "theme.downloader.errors.github.exceed.message": "Github API лимит достигнут для вашего адреса. Попробуйте позже!",
     
     "cli.help.copy": "Копировать выбранные темы\ncopy <из> <в>",
     "cli.help.copy.names": "copy <из> <в>",

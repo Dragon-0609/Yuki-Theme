@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Threading;
@@ -103,9 +104,7 @@ public partial class ThemeDownloaderForm : Form
 			if (response != null)
 			{
 				Console.WriteLine ("Branch info loaded.");
-				string json = await response.Content.ReadAsStringAsync ();
-				// Damn! API rate limit exceeded for <my IP address>
-				// Console.WriteLine (json); 
+				string json = await response.Content.ReadAsStringAsync (); 
 				JArray jresponse;
 				try
 				{
@@ -113,7 +112,7 @@ public partial class ThemeDownloaderForm : Form
 				} catch (JsonReaderException e)
 				{
 					Console.WriteLine (json);
-					MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+					MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					                 MessageBoxIcon.Error);
 					return;
 				}
@@ -178,7 +177,12 @@ public partial class ThemeDownloaderForm : Form
 			try
 			{
 				var response = await client.GetAsync (search_api);
-				if (response != null)
+				
+				if (!response.IsSuccessStatusCode)
+				{
+					HttpStatusCode statusCode = response.StatusCode;
+					MessageBox.Show ($"Couldn't get group info. Status code: {statusCode}");
+				} else if (response != null)
 				{
 					Console.WriteLine ("Groups info loaded.");
 					string file = await response.Content.ReadAsStringAsync ();
@@ -217,14 +221,48 @@ public partial class ThemeDownloaderForm : Form
 						}
 					}
 				}
-			} catch (Exception exception)
+				
+			} catch (HttpRequestException exception)
 			{
-				MessageBox.Show ($"{exception.Message}\n{exception.StackTrace}");
+				ShowRequestError (exception);
+			}
+			catch
+			{
+				ShowRequestError ();
 			}
 		}
 
 		if (groups.Count > 0)
 			DokiThemeParser.groups = groups;
+	}
+
+	private static void ShowRequestError ()
+	{
+		string message = API.Translate ("theme.downloader.errors.group.request");
+		string wrong = API.Translate ("theme.downloader.errors.group.wrong");
+		MessageBox.Show ($"{message}\n{wrong}", message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+	}
+
+	private static void ShowRequestError (HttpRequestException exception)
+	{
+		string exceptionHeader = exception.Message;
+		string innerMessage = "";
+		string lowestMessage = "";
+		Exception inner = exception.InnerException;
+		if (inner != null)
+		{
+			innerMessage = inner.Message;
+
+			Exception doubleInner = inner.InnerException;
+			if (doubleInner != null)
+			{
+				lowestMessage = doubleInner.Message;
+			}
+		}
+
+		string message = API.Translate ("theme.downloader.errors.group.request");
+		MessageBox.Show ($"{message}\n{exceptionHeader}\n{innerMessage}\n{lowestMessage}", message, MessageBoxButtons.OK,
+		                 MessageBoxIcon.Error);
 	}
 
 	private Tuple <string, string> ParseNamespace (string target)
@@ -309,7 +347,7 @@ public partial class ThemeDownloaderForm : Form
 			jresponse = JObject.Parse (json);
 		} catch (JsonReaderException e)
 		{
-			MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+			MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 			                 MessageBoxIcon.Error);
 			return;
 		}
@@ -335,7 +373,7 @@ public partial class ThemeDownloaderForm : Form
 			jresponse = JObject.Parse (json);
 		} catch (JsonReaderException e)
 		{
-			MessageBox.Show ("Github API Limit exceeded for your address. Try later!", "API Limit", MessageBoxButtons.OK,
+			MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 			                 MessageBoxIcon.Error);
 			return;
 		}

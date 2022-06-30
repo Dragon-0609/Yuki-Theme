@@ -73,6 +73,7 @@ namespace Yuki_Theme_Plugin.Controls
 				_settingsPanel.Background = WPFHelper.bgBrush;
 				_settingsPanel.Foreground = WPFHelper.fgBrush;
 				_settingsPanel.Tag = WPFHelper.GenerateTag;
+				_settingsPanel.popupController = plugin.popupController;
 				if (parentForm != null) _settingsPanel.ParentForm = parentForm;
 
 				PanelHost.Child = _settingsPanel;

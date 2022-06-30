@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Controls;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -10,6 +11,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		internal bool dimensionCap  = false;
 		internal bool customSticker = false;
+		
+		public   PopupFormsController popupController;
 		
 		public SettingsWindow ()
 		{
@@ -32,6 +35,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			SettingsPanelControl.ParentWindow = this;
 			SettingsPanelControl.UpdateExternalTranslations = TranslateDialogButtons;
+			SettingsPanelControl.popupController = popupController;
 			TranslateDialogButtons ();
 			IncludeToolBarItems ();
 		}

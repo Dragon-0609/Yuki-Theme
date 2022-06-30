@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
+using CheckBox = System.Windows.Controls.CheckBox;
+using ComboBox = System.Windows.Controls.ComboBox;
 using Drawing = System.Drawing;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Yuki_Theme.Core.WPF.Controls
 {
@@ -31,6 +39,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
 
 		public bool freezeToolBarBehaviour;
+
+		public PopupFormsController popupController;
 
 		public SettingsPanel ()
 		{
@@ -57,9 +67,15 @@ namespace Yuki_Theme.Core.WPF.Controls
 			LoadSettings ();
 			AddLanguages ();
 			blockLanguageSelection = false;
+			EnableRestartButton ();
 			UpdateTranslations ();
 			if (ExecuteOnLoad != null)
 				ExecuteOnLoad ();
+		}
+
+		private void EnableRestartButton ()
+		{
+			RestartForUpdate.IsEnabled = DownloadForm.IsUpdateDownloaded ();
 		}
 
 
@@ -415,6 +431,49 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void SetToolBarHeight ()
 		{
 			
+		}
+
+		private void RestartForUpdate_OnClick (object sender, RoutedEventArgs e)
+		{
+			if (DownloadForm.IsUpdateDownloaded ())
+			{
+				
+			} else
+			{
+				API_Events.showError ("Update isn't downloaded!", "Update isn't downloaded");
+			}
+		}
+
+		private void CheckUpdate (object sender, RoutedEventArgs e)
+		{
+			popupController.InitializeAllWindows ();
+			popupController.df.CheckUpdate ();			
+		}
+
+		private void UpdateManually (object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog of = new OpenFileDialog ();
+			of.DefaultExt = "zip";
+			of.Filter = "Yuki Theme(*.zip)|*.zip";
+			of.Multiselect = false;
+			if (of.ShowDialog () == DialogResult.OK)
+			{
+				bool has = DownloadForm.IsValidUpdate (of.FileName);
+
+				if (has)
+				{
+					File.Copy (of.FileName, Path.Combine (
+						           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+						           "Yuki Theme",
+						           "yuki_theme.zip"), true);
+					popupController.InitializeAllWindows ();
+					popupController.df.InstallManually ();
+				} else
+				{
+					MessageBox.Show (API.Translate ("messages.update.invalid"), API.Translate ("messages.update.wrong"),
+					                 MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
 		}
 	}
 }

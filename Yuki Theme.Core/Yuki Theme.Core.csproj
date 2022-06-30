@@ -123,8 +123,6 @@
     <Compile Include="API.cs" />
     <Compile Include="API_Events.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
-    <Compile Include="Formats\NewThemeFormat.cs" />
-    <Compile Include="Formats\OldThemeFormat.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
     <Compile Include="Interfaces\ICamouflage.cs" />
     <Compile Include="Interfaces\IColorUpdatable.cs" />
@@ -140,8 +138,13 @@
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
+    <Compile Include="Themes\NewThemeFormat.cs" />
+    <Compile Include="Themes\OldThemeFormat.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeField.cs" />
+    <Compile Include="Themes\ThemeFormatBase.cs" />
+    <Compile Include="Themes\ThemeInfo.cs" />
+    <Compile Include="Themes\ThemeManager.cs" />
     <Compile Include="Utils\Condition.cs" />
     <Compile Include="Utils\FontManager.cs" />
     <Compile Include="Utils\InstallationPreparer.cs" />
@@ -150,8 +153,6 @@
     <Compile Include="Utils\Populater.cs" />
     <Compile Include="Utils\ShadowNames.cs" />
     <Compile Include="Utils\SmallDocumentation.cs" />
-    <Compile Include="Utils\ThemeInfo.cs" />
-    <Compile Include="Utils\ThemeManager.cs" />
     <None Include="Controls\CustomB.cs" />
     <Compile Include="API_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
@@ -407,15 +408,15 @@
     <EmbeddedResource Include="Resources\SVG\findAndShowNextMatches_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches.svg" />
     <EmbeddedResource Include="Resources\SVG\findAndShowPrevMatches_dark.svg" />
-    <EmbeddedResource Include="Themes\Darcula.yukitheme" />
-    <EmbeddedResource Include="Themes\Dracula.yukitheme" />
-    <EmbeddedResource Include="Themes\Github Dark.yukitheme" />
-    <EmbeddedResource Include="Themes\Github Light.yukitheme" />
-    <EmbeddedResource Include="Themes\Monokai Dark.yukitheme" />
-    <EmbeddedResource Include="Themes\Monokai Light.yukitheme" />
-    <EmbeddedResource Include="Themes\Nightshade.yukitheme" />
-    <EmbeddedResource Include="Themes\Oblivion.yukitheme" />
-    <EmbeddedResource Include="Themes\Shades of Purple.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Darcula.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Dracula.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Github Dark.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Github Light.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Monokai Dark.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Monokai Light.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Nightshade.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Oblivion.yukitheme" />
+    <EmbeddedResource Include="Resources\Themes\Shades of Purple.yukitheme" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

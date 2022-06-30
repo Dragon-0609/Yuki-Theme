@@ -3,42 +3,42 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Windows.Forms;
 using System.Xml;
-using Yuki_Theme.Core.Themes;
+using Newtonsoft.Json;
 using Yuki_Theme.Core.Utils;
+using Formatting = System.Xml.Formatting;
 
-namespace Yuki_Theme.Core.Formats
+namespace Yuki_Theme.Core.Themes
 {
-	public static class OldThemeFormat
+	internal class OldThemeFormat : ThemeFormatBase
 	{
 		#region XML
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeParent (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNodeParent (XmlNode           node, ref Theme theme,
 		                                            ref List <string> namesExtra)
 		{
 			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNode (xne, ref theme, ref namesExtra);
 		}
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNode (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNode (XmlNode           node, ref Theme theme,
 		                                      ref List <string> namesExtra)
 		{
 			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingular (xn, ref theme, ref namesExtra);
 		}
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeSingular (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNodeSingular (XmlNode           node, ref Theme theme,
 		                                              ref List <string> namesExtra)
 		{
 			var attrs = new ThemeField ();
@@ -91,30 +91,30 @@ namespace Yuki_Theme.Core.Formats
 
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeParentForLight (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNodeParentForLight (XmlNode           node, ref Theme theme,
 		                                                    ref List <string> namesExtra)
 		{
 			foreach (XmlNode xne in node.ChildNodes) PopulateByXMLNodeForLight (xne, ref theme, ref namesExtra);
 		}
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeForLight (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNodeForLight (XmlNode           node, ref Theme theme,
 		                                              ref List <string> namesExtra)
 		{
 			foreach (XmlNode xn in node.ChildNodes) PopulateByXMLNodeSingularForLight (xn, ref theme, ref namesExtra);
 		}
 
 		/// <summary>
-		/// Populate list by XML. Don't worry about it. It is already used in <code>populateList</code>
+		/// Populate list by XML. Don't worry about it. It is already used in <code>PopulateList</code>
 		/// </summary>
 		/// <param name="node"></param>
-		public static void PopulateByXMLNodeSingularForLight (XmlNode           node, ref Theme theme,
+		public void PopulateByXMLNodeSingularForLight (XmlNode           node, ref Theme theme,
 		                                                      ref List <string> namesExtra)
 		{
 			// Console.WriteLine("TEST");
@@ -171,7 +171,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		private static void PasteWallpaperAndSticker (ref List <string> namesExtra, string shadowName)
+		private void PasteWallpaperAndSticker (ref List <string> namesExtra, string shadowName)
 		{
 			if (shadowName.Equals ("selection", StringComparison.OrdinalIgnoreCase))
 			{
@@ -193,7 +193,7 @@ namespace Yuki_Theme.Core.Formats
 
 		#endregion
 
-		public static string GetNameOfTheme (string path)
+		public override string GetNameOfTheme (string path)
 		{
 			XmlDocument docu = new XmlDocument ();
 
@@ -211,7 +211,7 @@ namespace Yuki_Theme.Core.Formats
 			return nm;
 		}
 
-		private static string GetThemeName (XmlDocument docu)
+		private string GetThemeName (XmlDocument docu)
 		{
 			XmlNode nod = docu.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
@@ -240,7 +240,7 @@ namespace Yuki_Theme.Core.Formats
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void saveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public override void SaveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			var doc = new XmlDocument ();
 			string themePath = themeToSave.fullPath;
@@ -262,7 +262,7 @@ namespace Yuki_Theme.Core.Formats
 			SaveXML (img2, img3, wantToKeep, iszip, ref doc, themePath);
 		}
 
-		public static void SaveXML (Image img2, Image img3, bool wantToKeep, bool iszip, ref XmlDocument doc, string themePath)
+		public void SaveXML (Image img2, Image img3, bool wantToKeep, bool iszip, ref XmlDocument doc, string themePath)
 		{
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
 				doc.Save (themePath);
@@ -279,7 +279,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void PopulateDictionaryFromDoc (XmlDocument       doc, ref Theme theme,
+		public void PopulateDictionaryFromDoc (XmlDocument       doc, ref Theme theme,
 		                                              ref List <string> namesExtra)
 		{
 			if (Settings.settingMode == SettingMode.Light) // It's for better performance
@@ -298,7 +298,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void loadThemeToPopulate (ref XmlDocument doc, string pathToTheme, bool needToDoActions, bool isDefault,
+		public void LoadThemeToPopulate (ref XmlDocument doc, string pathToTheme, bool needToDoActions, bool isDefault,
 		                                        ref Theme       themeToSet, string extension,
 		                                        bool            customNameForMemory, bool needToSetDefaultField)
 		{
@@ -522,7 +522,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static Dictionary <string, string> GetAdditionalInfoFromDoc (XmlDocument doc)
+		public Dictionary <string, string> GetAdditionalInfoFromDoc (XmlDocument doc)
 		{
 			XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
 			XmlNodeList comms = nod.SelectNodes ("//comment()");
@@ -544,7 +544,7 @@ namespace Yuki_Theme.Core.Formats
 			return dictionary;
 		}
 
-		private static void GetValueIfStarts (XmlComment comm, Dictionary <string, string> dictionary, string key)
+		private void GetValueIfStarts (XmlComment comm, Dictionary <string, string> dictionary, string key)
 		{
 			if (comm.Value.StartsWith (key))
 			{
@@ -552,7 +552,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		public static void WriteName (string path, string name)
+		public override void WriteName (string path, string name)
 		{
 			var doc = new XmlDocument ();
 			bool iszip = false;
@@ -602,13 +602,72 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
+		public override void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions)
+		{
+			Theme theme = new Theme
+			{
+				Fields = new Dictionary <string, ThemeField> ()
+			};
+			XmlDocument doc = new XmlDocument ();
+			try
+			{
+				bool isDef = DefaultThemes.isDefault (oldName);
+				LoadThemeToPopulate (ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
+				                                     false, true);
+			} catch
+			{
+				return;
+			}
+
+			List <string> namesList = new List <string> ();
+
+			PopulateDictionaryFromDoc (doc, ref theme, ref namesList);
+
+			string methodName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
+			if (!theme.Fields.ContainsKey (methodName))
+			{
+				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "Keywords";
+				theme.Fields.Add (methodName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
+			}
+
+			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
+			string al = additionalInfo ["align"];
+			string op = additionalInfo ["opacity"];
+			string sop = additionalInfo ["stickerOpacity"];
+			theme.Name = name;
+			theme.Group = "";
+			theme.Version = Convert.ToInt32 (Settings.current_version);
+			theme.WallpaperOpacity = int.Parse (op);
+			theme.StickerOpacity = int.Parse (sop);
+			theme.WallpaperAlign = int.Parse (al);
+			string json = JsonConvert.SerializeObject (theme, Newtonsoft.Json.Formatting.Indented);
+			bool isZip;
+
+			if (DefaultThemes.isDefault (oldName))
+			{
+				Stream stream = API._themeManager.GetStreamFromMemory (oldName, oldName);
+				isZip = Helper.IsZip (stream);
+				stream.Dispose ();
+			} else
+			{
+				isZip = Helper.IsZip (oldPath);
+			}
+
+			if (!isZip)
+				File.WriteAllText (path, json);
+			else
+			{
+				Helper.UpdateZip (path, json, null, true, null, true, "", false);
+			}
+		}
+
 		/// <summary>
 		/// Load Theme by name.
 		/// </summary>
 		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
 		/// <param name="ToCLI">Need to load to API? It'll affect "API.names".</param>
 		/// <returns>Parsed theme</returns>
-		public static Theme populateList (string name, bool ToCLI)
+		public override Theme PopulateList (string name, bool ToCLI)
 		{
 			bool isDef = API.ThemeInfos [name].isDefault;
 			bool fromAssembly = API.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
@@ -622,7 +681,7 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, fromAssembly ? name : PathGenerator.PathToFile (path, true), ToCLI, fromAssembly, ref theme,
+				LoadThemeToPopulate (ref doc, fromAssembly ? name : PathGenerator.PathToFile (path, true), ToCLI, fromAssembly, ref theme,
 				                     Helper.FILE_EXTENSTION_OLD, false, false);
 			} catch (Exception e)
 			{
@@ -656,22 +715,10 @@ namespace Yuki_Theme.Core.Formats
 			return theme;
 		}
 
-		/// <summary>
-		/// Load Theme directly to the API
-		/// </summary>
-		public static void LoadThemeToCLI ()
-		{
-			Theme theme = populateList (API.nameToLoad, true);
-			API.currentTheme = theme;
-			if (theme == null)
-			{
-				Console.WriteLine ("Theme is null");
-				/*MessageBox.Show (API.Translate ("messages.theme.invalid.full"), API.Translate ("messages.theme.invalid.short"),
-				                 MessageBoxButtons.OK, MessageBoxIcon.Error);*/
-			}
-		}
+		public override void ProcessAfterParsing (Theme theme) {  }
 
-		public static void MergeThemeFieldsWithFile (Dictionary <string, ThemeField> local, XmlDocument doc)
+
+		public void MergeThemeFieldsWithFile (Dictionary <string, ThemeField> local, XmlDocument doc)
 		{
 			#region Environment
 
@@ -744,7 +791,7 @@ namespace Yuki_Theme.Core.Formats
 			#endregion
 		}
 
-		public static void MergeCommentsWithFile (Theme themeToMerge, XmlDocument doc)
+		public void MergeCommentsWithFile (Theme themeToMerge, XmlDocument doc)
 		{
 			XmlNode node = doc.SelectSingleNode ("/SyntaxDefinition");
 
@@ -799,12 +846,12 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		private static void AddComment (XmlDocument doc, XmlNode node, string comment)
+		private void AddComment (XmlDocument doc, XmlNode node, string comment)
 		{
 			node.AppendChild (doc.CreateComment (comment));
 		}
 
-		private static void PasteIfStarts (XmlComment comm, Dictionary <string, bool> comments, string key, string value)
+		private void PasteIfStarts (XmlComment comm, Dictionary <string, bool> comments, string key, string value)
 		{
 			if (comm.Value.StartsWith (key))
 			{
@@ -813,7 +860,7 @@ namespace Yuki_Theme.Core.Formats
 			}
 		}
 
-		private static string ReadThemeTemplate ()
+		private string ReadThemeTemplate ()
 		{
 			string res = "";
 			var a = API.GetCore ();
@@ -826,7 +873,7 @@ namespace Yuki_Theme.Core.Formats
 			return res;
 		}
 		
-		public static Tuple<bool, string> VerifyToken (string path)
+		public override Tuple<bool, string> VerifyToken (string path)
 		{
 			bool valid = false;
 			string group = "";
@@ -835,7 +882,7 @@ namespace Yuki_Theme.Core.Formats
 			var doc = new XmlDocument ();
 			try
 			{
-				loadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
+				LoadThemeToPopulate (ref doc, path, false, false, ref theme, Helper.FILE_EXTENSTION_OLD, false, false);
 				Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
 				theme.SetAdditionalInfo (additionalInfo);
 				theme.Name = GetThemeName (doc);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
@@ -33,8 +32,11 @@ namespace Yuki_Theme.Core
 		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
 		public static bool   isEdited;
 
-		private static ThemeManager _themeManager = new ();
-		private static API_Actions  _actions      = new (_themeManager);
+
+		internal static ThemeFormatBase _newThemeFormat = new NewThemeFormat ();
+		internal static ThemeFormatBase _oldThemeFormat = new OldThemeFormat ();
+		internal static ThemeManager    _themeManager   = new ();
+		private static  API_Actions     _actions        = new ();
 
 		public static List <string> Schemes => _schemes;
 
@@ -377,8 +379,8 @@ namespace Yuki_Theme.Core
 		{
 			// Console.WriteLine ("Path to get theme name: {0}", path);
 			if (_actions.IsNewTheme (path))
-				return NewThemeFormat.GetNameOfTheme (path);
-			return OldThemeFormat.GetNameOfTheme (path);
+				return _newThemeFormat.GetNameOfTheme (path);
+			return _oldThemeFormat.GetNameOfTheme (path);
 		}
 
 
@@ -394,9 +396,9 @@ namespace Yuki_Theme.Core
 			if (!IsDefault ())
 			{
 				if (themeToSave.IsOld)
-					OldThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
+					_oldThemeFormat.SaveTheme (themeToSave, img2, img3, wantToKeep);
 				else
-					NewThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
+					_newThemeFormat.SaveTheme (themeToSave, img2, img3, wantToKeep);
 			}
 		}
 

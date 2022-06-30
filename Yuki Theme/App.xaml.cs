@@ -14,15 +14,19 @@ namespace Yuki_Theme
 		public App ()
 		{
 			Helper.mode = ProductMode.Program;
-			
-			IntPtr handle = GetConsoleWindow();
-			// Hide
-			ShowWindow(handle, SW_HIDE);
-			InitializeComponent ();
 
+			// HideConsole ();
+			InitializeComponent ();
 		}
-		
-		
+
+		private void HideConsole ()
+		{
+			IntPtr handle = GetConsoleWindow ();
+			// Hide
+			ShowWindow (handle, SW_HIDE);
+		}
+
+
 		private void ErrorRaise (object sender, DispatcherUnhandledExceptionEventArgs e)
 		{
 			MessageBox.Show (e.Exception.Message);

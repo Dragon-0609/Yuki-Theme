@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using Newtonsoft.Json;
-using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
 using Formatting = Newtonsoft.Json.Formatting;
@@ -15,12 +14,18 @@ namespace Yuki_Theme.Core;
 
 internal sealed class API_Actions
 {
-	private readonly ThemeManager _themeManager;
+	private readonly ThemeManager _themeManager; 
+	private readonly ThemeFormatBase _newThemeFormat; 
+	private readonly OldThemeFormat _oldThemeFormat; 
 
-	internal API_Actions (ThemeManager manager)
+	internal API_Actions ()
 	{
-		_themeManager = manager;
-		_themeManager.SetActionsAPI = this;
+		_themeManager = API._themeManager;
+		_newThemeFormat = API._newThemeFormat;
+		_oldThemeFormat = (OldThemeFormat)API._oldThemeFormat;
+		_themeManager.SetActionsAPI (this);
+		_themeManager.SetNewThemeFormat (_newThemeFormat);
+		_themeManager.SetOldThemeFormat (_oldThemeFormat);
 	}
 
 	#region Merge with Template
@@ -61,12 +66,12 @@ internal sealed class API_Actions
 
 	private void MergeFiles (Dictionary <string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
 	{
-		OldThemeFormat.MergeThemeFieldsWithFile (fields, doc);
+		_oldThemeFormat.MergeThemeFieldsWithFile (fields, doc);
 
-		OldThemeFormat.MergeCommentsWithFile (themeToMerge, doc);
+		_oldThemeFormat.MergeCommentsWithFile (themeToMerge, doc);
 	}
-	
-	private void LoadFieldsAndMergeFiles (string content, string path, Theme theme)
+
+	public void LoadFieldsAndMergeFiles (string content, string path, Theme theme)
 	{
 		XmlDocument doc = new XmlDocument ();
 		doc.LoadXml (content);
@@ -75,7 +80,7 @@ internal sealed class API_Actions
 
 		MergeFiles (localFields, theme, ref doc);
 
-		OldThemeFormat.SaveXML (null, null, true, theme.IsZip (), ref doc, path);
+		_oldThemeFormat.SaveXML (null, null, true, theme.IsZip (), ref doc, path);
 	}
 
 	#endregion
@@ -142,92 +147,10 @@ internal sealed class API_Actions
 		if ((IsOldTheme (path) && IsOldTheme (oldPath)) || (!IsOldTheme (path) && !IsOldTheme (oldPath)))
 			return false;
 		if (!IsOldTheme (oldPath) && (Settings.saveAsOld || forceRegenerate))
-			ReGenerateFromNew (path, oldPath, name, oldName);
+			_newThemeFormat.ReGenerate (path, oldPath, name, oldName, this);
 		else
-			ReGenerateFromOld (path, oldPath, name, oldName);
+			_oldThemeFormat.ReGenerate (path, oldPath, name, oldName, this);
 		return true;
-	}
-
-	private void ReGenerateFromOld (string path, string oldPath, string name, string oldName)
-	{
-		Theme theme = new Theme
-		{
-			Fields = new Dictionary <string, ThemeField> ()
-		};
-		XmlDocument doc = new XmlDocument ();
-		try
-		{
-			bool isDef = DefaultThemes.isDefault (oldName);
-			OldThemeFormat.loadThemeToPopulate (ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
-			                                    false, true);
-		} catch
-		{
-			return;
-		}
-
-		List <string> namesList = new List <string> ();
-
-		OldThemeFormat.PopulateDictionaryFromDoc (doc, ref theme, ref namesList);
-
-		string methodName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
-		if (!theme.Fields.ContainsKey (methodName))
-		{
-			string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "Keywords";
-			theme.Fields.Add (methodName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
-		}
-
-		Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (doc);
-		string al = additionalInfo ["align"];
-		string op = additionalInfo ["opacity"];
-		string sop = additionalInfo ["stickerOpacity"];
-		theme.Name = name;
-		theme.Group = "";
-		theme.Version = Convert.ToInt32 (Settings.current_version);
-		theme.WallpaperOpacity = int.Parse (op);
-		theme.StickerOpacity = int.Parse (sop);
-		theme.WallpaperAlign = int.Parse (al);
-		string json = JsonConvert.SerializeObject (theme, Formatting.Indented);
-		bool isZip;
-
-		if (DefaultThemes.isDefault (oldName))
-		{
-			Stream stream = _themeManager.GetStreamFromMemory (oldName, oldName);
-			isZip = Helper.IsZip (stream);
-			stream.Dispose ();
-		} else
-		{
-			isZip = Helper.IsZip (oldPath);
-		}
-
-		if (!isZip)
-			File.WriteAllText (path, json);
-		else
-		{
-			Helper.UpdateZip (path, json, null, true, null, true, "", false);
-		}
-	}
-
-	private void ReGenerateFromNew (string path, string oldPath, string name, string oldName)
-	{
-		Assembly a = API.GetCore ();
-		string str;
-
-		Stream resourceStream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
-		if (resourceStream == null) return;
-		using (StreamReader reader = new StreamReader (resourceStream))
-		{
-			str = reader.ReadToEnd ();
-		}
-		bool isDefaultTheme = DefaultThemes.isDefault (oldName);
-		string json = NewThemeFormat.loadThemeToPopulate (isDefaultTheme ? oldName : oldPath, false, isDefaultTheme, Helper.FILE_EXTENSTION_NEW);
-		Theme theme = JsonConvert.DeserializeObject <Theme> (json);
-		if (theme != null)
-		{
-			theme.Name = name;
-			theme.Group = "";
-			// Console.WriteLine ("REGENERATION...");
-			LoadFieldsAndMergeFiles (str, path, theme);
-		}
 	}
 
 	#endregion
@@ -315,10 +238,10 @@ internal sealed class API_Actions
 	{
 		if (API.ThemeInfos [API.nameToLoad].isOld)
 		{
-			OldThemeFormat.LoadThemeToCLI ();
+			_oldThemeFormat.LoadThemeToCLI ();
 		} else
 		{
-			NewThemeFormat.LoadThemeToCLI ();
+			_newThemeFormat.LoadThemeToCLI ();
 		}
 
 		if (onSelect != null)
@@ -461,8 +384,8 @@ internal sealed class API_Actions
 	{
 		if (path == "" || path.Length < 5) return new Tuple <bool, string> (false, "");
 		if (IsNewTheme (path))
-			return NewThemeFormat.VerifyToken (path);
-		return OldThemeFormat.VerifyToken (path);
+			return _newThemeFormat.VerifyToken (path);
+		return _oldThemeFormat.VerifyToken (path);
 	}
 
 	internal void AddThemeInfo (string name, ThemeInfo themeInfo)

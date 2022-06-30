@@ -212,6 +212,11 @@
     "messages.buttons.decline": "Decline",
     "messages.buttons.close": "Close",
     
+    "theme.downloader.errors.group.request": "Couldn't get info about groups",
+    "theme.downloader.errors.group.wrong": "Something went wrong.",
+    "theme.downloader.errors.github.exceed.title": "Github API Limit",
+    "theme.downloader.errors.github.exceed.message": "Github API Limit exceeded for your address. Try later!",
+    
     "cli.help.copy": "Copy the specified themes\ncopy <from> <to>",
     "cli.help.copy.names": "Copy <from> <to>",
     "cli.help.list": "Show list of themes",

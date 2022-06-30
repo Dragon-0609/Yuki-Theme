@@ -152,7 +152,7 @@ namespace Yuki_Theme_Plugin
 		private void Initialize ()
 		{
 			ideComponents.fm.AllowTransparency = true;
-			popupController = new PopupFormsController (ideComponents.fm, 0, this);
+			popupController = new PopupFormsController (ideComponents.fm, this);
 			LoadColors ();
 			LoadImage ();
 
@@ -268,6 +268,9 @@ namespace Yuki_Theme_Plugin
 			/*MForm.showLicense (bg, clr, bgClick, ideComponents.fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, ideComponents.fm);
 			MForm.TrackInstall ();*/
+			AdditionalTools.ShowLicense (WPFHelper.GenerateTag, null, ideComponents.fm);
+			
+			AdditionalTools.TrackInstall ();
 			if (!IsUpdated () && Settings.update)
 			{
 				popupController.InitializeAllWindows ();
@@ -756,18 +759,12 @@ namespace Yuki_Theme_Plugin
 		private bool IsUpdated ()
 		{
 			bool updated = false;
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-
-			if ((string)ke?.GetValue ("cli_update", "null") != "null")
-				ke.DeleteValue ("cli_update");
-
-			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			int inst = Helper.RecognizeInstallationStatus ();
 			if (inst == 1)
 			{
 				openUpdate ();
-				ke?.DeleteValue ("install");
 				updated = true;
+				Helper.DeleteInstallationStatus ();
 			}
 
 			return updated;

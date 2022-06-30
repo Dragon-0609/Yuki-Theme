@@ -264,9 +264,9 @@
                                       Content="{DynamicResource settings.general.update.auto}" Name="AutoUpdate" />
                             <Button Padding="6 2" Margin="0 0 6 0" Content="{DynamicResource settings.general.update.check}"
                                     VerticalAlignment="Top"
-                                    Style="{StaticResource ButtonUserControl}" />
+                                    Style="{StaticResource ButtonUserControl}" Click="CheckUpdate" />
                             <Button Padding="6 2" Margin="6 0" Style="{StaticResource ButtonUserControl}"
-                                    Content="{DynamicResource settings.general.update.install}" />
+                                    Content="{DynamicResource settings.general.update.install}" Click="UpdateManually" />
                         </WrapPanel>
 
                         <WrapPanel Margin="4 5">
@@ -274,7 +274,7 @@
                                       Content="{DynamicResource settings.general.update.beta}"
                                       Name="CheckBeta" />
                             <Button Padding="6 2" Margin="0" Content="{DynamicResource settings.general.update.restart}"
-                                    Style="{StaticResource ButtonUserControl}" />
+                                    Style="{StaticResource ButtonUserControl}" Name="RestartForUpdate" Click="RestartForUpdate_OnClick" />
                         </WrapPanel>
                         <Button Padding="6 2" Margin="4 5" HorizontalAlignment="Left" Content="{DynamicResource settings.general.about}"
                                 Name="AboutButton"

@@ -11,6 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
@@ -23,11 +24,14 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
-	public partial class MainWindow
+	public partial class MainWindow : IColorUpdatable
 	{
 		private bool blockedThemeSelector = true;
 
-		private Highlighter       highlighter;
+		private Highlighter          highlighter;
+		
+		private PopupFormsController popupController;
+		
 		private Drawing.Rectangle oldV = Drawing.Rectangle.Empty;
 
 		private Thickness minMargin  = new Thickness (0);
@@ -56,16 +60,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void Init (object sender, RoutedEventArgs e)
 		{
 			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
-			API_Events.ifHasImage = ifHasImage;
-			API_Events.ifDoesntHave = ifDoesntHave;
-			API_Events.ifHasSticker = ifHasSticker;
-			API_Events.ifDoesntHaveSticker = ifDoesntHaveSticker;
-			API_Events.AskChoice = AskActionChoice;
-			API_Events.SaveInExport = SaveInExport;
-			API_Events.showSuccess = FinishExport;
-			API_Events.showError = ErrorExport;
-			API_Events.hasProblem = hasProblem;
-			API_Events.setPath = SetPath;
+			SetAPIActions ();
 
 			if (Helper.mode == null)
 				Helper.mode = ProductMode.Program;
@@ -80,8 +75,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			highlighter.InitializeSyntax ();
 			Fstb.box.Paint += bgImagePaint;
 			ToggleEditor ();
-			ShowLicense ();
 			UpdateTranslations ();
+			
+			InitAdditionalComponents ();
 		}
 
 		private void load_schemes ()
@@ -295,7 +291,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Foreground = WPFHelper.fgBrush,
 				Tag = Tag,
 				Icon = Icon,
-				Owner = this
+				Owner = this,
+				popupController = popupController
 			};
 			string lang = Settings.localization;
 			bool? dialog = settingsWindow.ShowDialog ();
@@ -479,7 +476,21 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 
 		#region Core Actions
-
+		
+		private void SetAPIActions ()
+		{
+			API_Events.ifHasImage = ifHasImage;
+			API_Events.ifDoesntHave = ifDoesntHave;
+			API_Events.ifHasSticker = ifHasSticker;
+			API_Events.ifDoesntHaveSticker = ifDoesntHaveSticker;
+			API_Events.AskChoice = AskActionChoice;
+			API_Events.SaveInExport = SaveInExport;
+			API_Events.showSuccess = FinishExport;
+			API_Events.showError = ErrorExport;
+			API_Events.hasProblem = hasProblem;
+			API_Events.setPath = SetPath;
+		}
+		
 		public void ifHasImage (Drawing.Image imgc)
 		{
 			img2 = imgc;
@@ -718,6 +729,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Background = WPFHelper.bgBrush;
 			Foreground = WPFHelper.fgBrush;
 			Window.Tag = WPFHelper.GenerateTag;
+
+			if (OnColorUpdate != null)
+				OnColorUpdate (Helper.bgColor, Helper.fgColor, Helper.bgClick);
 		}
 
 		private void bgImagePaint (object sender, PaintEventArgs e)
@@ -973,29 +987,36 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		#endregion
 
-		private void ShowLicense ()
-		{
-			if (!Settings.license)
-			{
-				LicenseWindow licenseWindow = new LicenseWindow ()
-				{
-					Background = WPFHelper.bgBrush,
-					Foreground = WPFHelper.fgBrush,
-					BorderBrush = WPFHelper.borderBrush,
-					Tag = Tag
-				};
-				licenseWindow.Owner = this;
-				licenseWindow.Closed += (a, b) =>
-				{
-					GC.Collect ();
-					GC.WaitForPendingFinalizers ();
-				};
 
-				licenseWindow.ShowDialog ();
-				
-				Settings.license = true;
-				Settings.database.UpdateData (Settings.LICENSE, "True");
+		private void InitAdditionalComponents ()
+		{
+			popupController = new PopupFormsController (this, this);
+			AdditionalTools.ShowLicense (Tag, this);
+			IsUpdated ();
+			CheckUpdate ();
+			AdditionalTools.TrackInstall ();
+		}
+		
+		
+		private void CheckUpdate ()
+		{
+			if (Settings.update && Helper.mode != ProductMode.Plugin)
+			{
+				popupController.InitializeAllWindows ();
+				popupController.df.CheckUpdate ();
 			}
 		}
+
+		private void IsUpdated ()
+		{
+			int inst = Helper.RecognizeInstallationStatus ();
+			if (inst == 1)
+			{
+				new ChangelogForm ().Show (this.ToNativeWindow ());
+				Helper.DeleteInstallationStatus ();
+			}
+		}
+		
+		public event ColorUpdate OnColorUpdate;
 	}
 }

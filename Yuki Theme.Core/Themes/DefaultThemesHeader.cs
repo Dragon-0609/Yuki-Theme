@@ -5,7 +5,7 @@ namespace Yuki_Theme.Core.Themes;
 
 public class DefaultThemesHeader : IThemeHeader
 {
-	public static string CoreThemeHeader = "Yuki_Theme.Core.Themes";
+	public static string CoreThemeHeader = "Yuki_Theme.Core.Resources.Themes";
 	
 	public string GroupName => "Default";
 

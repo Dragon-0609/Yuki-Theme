@@ -1,4 +1,6 @@
-﻿namespace Yuki_Theme.Core.Utils;
+﻿using Yuki_Theme.Core.Utils;
+
+namespace Yuki_Theme.Core.Themes;
 
 public class ThemeInfo
 {

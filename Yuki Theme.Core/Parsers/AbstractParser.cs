@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
@@ -66,10 +65,11 @@ namespace Yuki_Theme.Core.Parsers
 					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
 					{
 						XmlDocument document = new XmlDocument ();
-						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
+						OldThemeFormat oldThemeFormat = (OldThemeFormat)API._oldThemeFormat;
+						oldThemeFormat.LoadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
 						                                    false, true);
-						Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
-						theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
+						Dictionary <string, string> additionalInfo = oldThemeFormat.GetAdditionalInfoFromDoc (document);
+						theme.Name = oldThemeFormat.GetNameOfTheme (PathToSave);
 						theme.SetAdditionalInfo (additionalInfo);
 					}
 				}
@@ -98,13 +98,15 @@ namespace Yuki_Theme.Core.Parsers
 		{
 			XmlDocument doc = new XmlDocument ();
 
-			OldThemeFormat.loadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
-			                                    ref theme,Helper.FILE_EXTENSTION_OLD, true, true);
+			OldThemeFormat oldThemeFormat = (OldThemeFormat)API._oldThemeFormat;
 			
-			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
-			OldThemeFormat.MergeCommentsWithFile (theme, doc);
+			oldThemeFormat.LoadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
+			                                     ref theme,Helper.FILE_EXTENSTION_OLD, true, true);
+			
+			oldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
+			oldThemeFormat.MergeCommentsWithFile (theme, doc);
 
-			OldThemeFormat.SaveXML (null, null, true, Helper.IsZip (PathToSave), ref doc, PathToSave);
+			oldThemeFormat.SaveXML (null, null, true, Helper.IsZip (PathToSave), ref doc, PathToSave);
 		}
 
 		public abstract void populateList (string path);

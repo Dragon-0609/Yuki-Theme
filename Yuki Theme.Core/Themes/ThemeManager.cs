@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using Yuki_Theme.Core.Formats;
-using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core.Utils;
+namespace Yuki_Theme.Core.Themes;
 
 internal class ThemeManager
 {
-	private API_Actions _actions;
+	private API_Actions    _actions;
+	private ThemeFormatBase _newThemeFormat;
+	private ThemeFormatBase _oldThemeFormat;
+	
 
-	internal API_Actions SetActionsAPI
-	{
-		set => _actions = value;
-	}
+	internal void SetActionsAPI (API_Actions value) => _actions = value;
+	
+	internal void SetNewThemeFormat (ThemeFormatBase value) => _newThemeFormat = value;
+	
+	internal void SetOldThemeFormat (ThemeFormatBase value) => _oldThemeFormat = value;
+	
 	
 	public Theme GetTheme (string name)
 	{
 		if (API.ThemeInfos.ContainsKey (name))
 		{
 			Theme theme = API.ThemeInfos [name].isOld
-				? OldThemeFormat.populateList (name, false)
-				: NewThemeFormat.populateList (name, false);
+				? _oldThemeFormat.PopulateList (name, false)
+				: _newThemeFormat.PopulateList (name, false);
 
 			return theme;
 		} else
@@ -113,10 +116,10 @@ internal class ThemeManager
 	{
 		if (_actions.IsOldTheme (path))
 		{
-			OldThemeFormat.WriteName (path, name);
+			_oldThemeFormat.WriteName (path, name);
 		} else
 		{
-			NewThemeFormat.WriteName (path, name);
+			_newThemeFormat.WriteName (path, name);
 		}
 	}
 
@@ -191,7 +194,7 @@ internal class ThemeManager
 		List <string> unknownThemes = new List <string> ();
 		foreach (string file in files)
 		{
-			string name = OldThemeFormat.GetNameOfTheme (file);
+			string name = _oldThemeFormat.GetNameOfTheme (file);
 			if (name.Length > 0)
 			{
 				if (!API.Schemes.Contains (name))

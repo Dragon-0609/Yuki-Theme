@@ -11,11 +11,15 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Xml;
 using CommonMark;
+using Microsoft.Win32;
 using Svg;
 using Yuki_Theme.Core.Themes;
+using Size = System.Drawing.Size;
 
 namespace Yuki_Theme.Core
 {
@@ -896,6 +900,31 @@ namespace Yuki_Theme.Core
         internal static bool IsDimensionAvailable ()
         {
 	        return Settings.useDimensionCap && Settings.dimensionCapMax > 20;
+        }
+
+        public static int RecognizeInstallationStatus ()
+        {
+	        RegistryKey ke =
+		        Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+			
+	        if ((string)ke?.GetValue ("cli_update", "null") != "null")
+		        ke.DeleteValue ("cli_update");
+
+	        return ke.GetValue ("install") != null ? 1 : 0;
+        }
+
+        public static void DeleteInstallationStatus ()
+        {
+	        RegistryKey ke =
+		        Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
+	        if (ke != null) ke.DeleteValue ("install");
+        }
+
+        public static NativeWindow ToNativeWindow (this Window window)
+        {
+	        NativeWindow win32Parent = new NativeWindow ();
+	        win32Parent.AssignHandle (new WindowInteropHelper (window).Handle);
+	        return win32Parent;
         }
 	}
 
