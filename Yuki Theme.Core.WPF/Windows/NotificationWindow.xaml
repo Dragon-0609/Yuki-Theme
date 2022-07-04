@@ -6,7 +6,8 @@
             xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
             mc:Ignorable="d"
-            Title="NotificationWindow" Height="100" Width="340" SizeToContent="Height" ResizeMode="NoResize">
+            Title="NotificationWindow" Height="100" Width="260" SizeToContent="Height" ResizeMode="NoResize"
+            BorderThickness="1">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
                               SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F"
@@ -21,7 +22,7 @@
                 <ResourceDictionary
                     Source="/Yuki Theme.Core.WPF;component/Styles/LinkStyles.xaml" />
                 <ResourceDictionary
-                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBoxStyles.xaml" />
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -39,18 +40,22 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Header" FontWeight="Bold" FontSize="14" />
-            <Button Grid.Column="1" Content="x" Padding="6 2" Margin="0" />
+            <TextBlock Text="Header" FontWeight="Bold" FontSize="14" Name="HeaderBlock" Style="{StaticResource TextBlockWindow}" />
+            <Button Grid.Column="1" Content="x" Padding="6 2" Margin="0" Click="OnCloseClicked" />
         </Grid>
 
-        <TextBlock Grid.Row="1" Text="Header" />
+        <TextBlock Grid.Row="1" Text="Header" Name="ContentBlock" Style="{StaticResource TextBlockWindow}" />
 
         <UniformGrid Grid.Row="2" Columns="2" Margin="0 4">
-            <TextBlock >
-                <Hyperlink NavigateUri="https://github.com/Dragon-0609/Yuki-Theme">Update</Hyperlink>
+            <TextBlock Name="Button1">
+                <Hyperlink Name="Button1Hyper">
+                    <TextBlock Name="Button1Text" />
+                </Hyperlink>
             </TextBlock>
-            <TextBlock >
-                <Hyperlink NavigateUri="https://github.com/Dragon-0609/Yuki-Theme">Open in github</Hyperlink>
+            <TextBlock Name="Button2">
+                <Hyperlink Name="Button2Hyper">
+                    <TextBlock Name="Button2Text" />
+                </Hyperlink>
             </TextBlock>
         </UniformGrid>
 

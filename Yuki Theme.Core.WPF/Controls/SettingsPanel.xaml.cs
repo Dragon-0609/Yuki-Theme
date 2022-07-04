@@ -28,8 +28,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private Thickness groupBoxExpanded  = new Thickness (5);
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
 
-		public Window                    ParentWindow = null;
-		public System.Windows.Forms.Form ParentForm   = null;
+		public Window ParentWindow = null;
+		public Form   ParentForm   = null;
 
 		private bool blockLanguageSelection = false;
 
@@ -40,7 +40,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public bool freezeToolBarBehaviour;
 
-		public PopupFormsController popupController;
+		public PopupController popupController;
 
 		public SettingsPanel ()
 		{
@@ -446,8 +446,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void CheckUpdate (object sender, RoutedEventArgs e)
 		{
-			popupController.InitializeAllWindows ();
-			popupController.df.CheckUpdate ();			
+			// popupController.InitializeAllWindows ();
+			// popupController.df.CheckUpdate ();			
 		}
 
 		private void UpdateManually (object sender, RoutedEventArgs e)
@@ -466,8 +466,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 						           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
 						           "Yuki Theme",
 						           "yuki_theme.zip"), true);
-					popupController.InitializeAllWindows ();
-					popupController.df.InstallManually ();
+					// popupController.InitializeAllWindows ();
+					// popupController.df.InstallManually ();
 				} else
 				{
 					MessageBox.Show (API.Translate ("messages.update.invalid"), API.Translate ("messages.update.wrong"),

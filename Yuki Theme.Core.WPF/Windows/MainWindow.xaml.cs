@@ -30,7 +30,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private Highlighter          highlighter;
 		
-		private PopupFormsController popupController;
+		private PopupController popupController;
 		
 		private Drawing.Rectangle oldV = Drawing.Rectangle.Empty;
 
@@ -294,6 +294,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Owner = this,
 				popupController = popupController
 			};
+			
 			string lang = Settings.localization;
 			bool? dialog = settingsWindow.ShowDialog ();
 			SettingMode currentMode = Settings.settingMode;
@@ -990,7 +991,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void InitAdditionalComponents ()
 		{
-			popupController = new PopupFormsController (this, this);
+			popupController = new PopupController (this, this);
 			AdditionalTools.ShowLicense (Tag, this);
 			IsUpdated ();
 			CheckUpdate ();
@@ -1000,11 +1001,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void CheckUpdate ()
 		{
-			if (Settings.update && Helper.mode != ProductMode.Plugin)
+			popupController.ShowNotification ("Everything is ok", "You should do more tests", null, null);
+			/*if (Settings.update && Helper.mode != ProductMode.Plugin)
 			{
-				popupController.InitializeAllWindows ();
-				popupController.df.CheckUpdate ();
-			}
+				// popupController.df.CheckUpdate ();
+			}*/
 		}
 
 		private void IsUpdated ()

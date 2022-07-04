@@ -108,13 +108,14 @@
         <Compile Include="Controls\SettingsPanelUtilities.cs">
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Controls\SnapWindow.xaml.cs">
+        <Compile Include="Controls\SnapWindow.cs">
           <DependentUpon>SnapWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
         <Compile Include="Controls\ToolBarList.cs" />
         <Compile Include="Controls\ToolBarListItem.cs" />
         <Compile Include="Converter.cs" />
+        <Compile Include="PopupController.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
         </Compile>
@@ -160,7 +161,6 @@
         <Page Include="Controls\IntegerUpDown.xaml" />
         <Page Include="Controls\LicenseBox.xaml" />
         <Page Include="Controls\SettingsPanel.xaml" />
-        <Page Include="Controls\SnapWindow.xaml" />
         <Page Include="Styles\ButtonStyles.xaml" />
         <Page Include="Styles\CheckboxStyles.xaml" />
         <Page Include="Styles\DropDownStyles.xaml" />

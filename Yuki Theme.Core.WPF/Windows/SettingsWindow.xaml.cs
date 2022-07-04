@@ -12,7 +12,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		internal bool dimensionCap  = false;
 		internal bool customSticker = false;
 		
-		public   PopupFormsController popupController;
+		public   PopupController popupController;
 		
 		public SettingsWindow ()
 		{
