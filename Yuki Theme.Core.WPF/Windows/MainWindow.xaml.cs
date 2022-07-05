@@ -28,7 +28,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 	{
 		private bool blockedThemeSelector = true;
 
-		private Highlighter          highlighter;
+		private Highlighter   highlighter;
+		private StickerWindow _stickerWindow;
 		
 		private PopupController popupController;
 		
@@ -70,6 +71,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				ExportButton.Visibility = Visibility.Hidden;
 			}
 
+			InitSticker ();
 			highlighter = new Highlighter (Fstb.box);
 			load_schemes ();
 			highlighter.InitializeSyntax ();
@@ -78,6 +80,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			UpdateTranslations ();
 			
 			InitAdditionalComponents ();
+		}
+
+		private void InitSticker ()
+		{
+			_stickerWindow = StickerWindow.CreateStickerControl (this);
+			_stickerWindow.Show ();
 		}
 
 		private void load_schemes ()
@@ -123,41 +131,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Definitions.SelectedIndex = prevSelectedField != -1 ? prevSelectedField : 0;
 		}
 
-		private void LoadSticker ()
-		{
-			if (Settings.swSticker)
-			{
-				if (Settings.useCustomSticker && Settings.customSticker.Exist ())
-				{
-					img4 = Drawing.Image.FromFile (Settings.customSticker);
-				} else
-				{
-					if (img3 != null)
-					{
-						img4 = img3;
-						Sticker.Visibility = Visibility.Visible;
-					} else
-					{
-						img4 = null;
-						Sticker.Visibility = Visibility.Hidden;
-					}
-				}
-
-				if (img4 != null)
-				{
-					SetStickerSize ();
-					Sticker.Source = img4.ToWPFImage ();
-					Popup.UpdatePopupPosition ();
-				} else
-				{
-					Popup.Visibility = Visibility.Hidden;
-				}
-			} else
-			{
-				Popup.Visibility = Visibility.Hidden;
-			}
-		}
-
 		private void LoadSVG ()
 		{
 			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
@@ -176,6 +149,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
 		}
 
+
+		private void LoadStickerImage ()
+		{
+			_stickerWindow.LoadImage (img3);
+		}
+		
 		private void UpdateTranslations ()
 		{
 			WPFHelper.TranslateControls (this, "ui.tooltips.", "main.labels.");
@@ -296,25 +275,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			};
 			
 			string lang = Settings.localization;
+			bool customSticker = Settings.useCustomSticker;
+			bool dimensionCap = Settings.useDimensionCap;
+			int dimensionCapMax = Settings.dimensionCapMax;
 			bool? dialog = settingsWindow.ShowDialog ();
 			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
 			{
 				settingsWindow.utilities.SaveSettings ();
-				ToggleEditor ();
-				if (currentMode != Settings.settingMode)
-				{
-					Restore ();
-				}
-
-				
-				if (settingsWindow.customSticker)
-				{
-					LoadSticker ();
-				}else if (settingsWindow.dimensionCap)
-				{
-					SetStickerSize ();
-				}
+				ApplySettingsChanges (currentMode, settingsWindow, customSticker, dimensionCap, dimensionCapMax);
 			} else
 			{
 				Settings.localization = lang;
@@ -334,7 +303,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			highlighter.UpdateColors ();
 			updateColors ();
 			SetOpacityWallpaper ();
-			LoadSticker ();
+			LoadStickerImage ();
 			LoadSVG ();
 			ReLoadCheckBoxImages ();
 		}
@@ -620,7 +589,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
 			{
-				Filter = "PNG (*.png)|*.png"
+				Filter = "PNG, GIF (*.png,*.gif)|*.png;*.gif|PNG (*.png)|*.png|GIF (*.gif)|*.gif"
 			};
 			if (openFileDialog.ShowDialog () == true)
 			{
@@ -633,8 +602,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				} else
 				{
-					img3 = Drawing.Image.FromFile (openFileDialog.FileName);
-					LoadSticker ();
+					_stickerWindow.LoadImage (Drawing.Image.FromFile (openFileDialog.FileName));
 				}
 
 				ImagePath.Text = openFileDialog.FileName;
@@ -786,12 +754,31 @@ namespace Yuki_Theme.Core.WPF.Windows
 			API.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
 			SetOpacityWallpaper ();
 		}
-
-		private void SetStickerSize ()
+		
+		private void ApplySettingsChanges (SettingMode currentMode, SettingsWindow settingsWindow, bool customSticker, bool dimensionCap, int dimensionCapMax)
 		{
-			Drawing.Size dimensionSize = Helper.CalculateDimension (img4.Size);
-			Popup.Width = Sticker.Width = dimensionSize.Width;
-			Popup.Height = Sticker.Height = dimensionSize.Height;
+			ToggleEditor ();
+			if (currentMode != Settings.settingMode)
+			{
+				Restore ();
+			}
+
+			if (customSticker != settingsWindow.customSticker)
+			{
+				if (settingsWindow.customSticker)
+				{
+					_stickerWindow.LoadSticker ();	
+				} else
+				{
+					_stickerWindow.LoadImage (img3);
+				}
+			}
+			
+			if (dimensionCap != settingsWindow.dimensionCap || Settings.dimensionCapMax != dimensionCapMax)
+			{
+				_stickerWindow.SetStickerSize ();
+				_stickerWindow.ResetPosition ();
+			}
 		}
 		
 		#endregion
@@ -1001,7 +988,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void CheckUpdate ()
 		{
-			popupController.ShowNotification ("Everything is ok", "You should do more tests", null, null);
+			popupController.ShowNotification ("Everything is ok", "You should do more tests", new NotificationButtonData ("OK","", true,
+				                                  (sender, args) => { MessageBox.Show ("Clicked!"); }), null);
 			/*if (Settings.update && Helper.mode != ProductMode.Plugin)
 			{
 				// popupController.df.CheckUpdate ();

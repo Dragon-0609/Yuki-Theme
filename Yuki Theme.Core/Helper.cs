@@ -821,7 +821,7 @@ namespace Yuki_Theme.Core
 
         public static bool VerifyToken (Theme theme)
         {
-	        if (theme != null && theme.Token != null)
+	        if (theme != null && theme.Token != null && theme.Token != "null")
 	        {
 		        string token = theme.Token;
 		        if (token == "" || token.Length < 6) return false;

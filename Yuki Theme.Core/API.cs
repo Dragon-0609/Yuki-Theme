@@ -139,6 +139,14 @@ namespace Yuki_Theme.Core
 				File.Copy (path, destination);
 			}
 
+			if (destination.EndsWith (Helper.FILE_EXTENSTION_OLD))
+			{
+				_oldThemeFormat.WriteNameAndResetToken (destination, themeName);
+			} else
+			{
+				_newThemeFormat.WriteNameAndResetToken (destination, themeName);
+			}
+			
 			return false;
 		}
 

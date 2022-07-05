@@ -554,18 +554,15 @@ namespace Yuki_Theme.Core.Themes
 
 		public override void WriteName (string path, string name)
 		{
-			var doc = new XmlDocument ();
-			bool iszip = false;
-			Tuple <bool, string> content = Helper.GetTheme (path);
-			if (content.Item1)
-			{
-				doc.LoadXml (content.Item2);
-				iszip = true;
-			} else
-			{
-				doc.Load (path);
-			}
+			XmlDocument doc = LoadTheme (path, out bool iszip);
 
+			WriteName (name, doc);
+
+			SaveModifiedTheme (path, iszip, doc);
+		}
+
+		private static void WriteName (string name, XmlDocument doc)
+		{
 			XmlNode node = doc.SelectSingleNode ("/SyntaxDefinition");
 
 			XmlNodeList comms = node.SelectNodes ("//comment()");
@@ -589,9 +586,68 @@ namespace Yuki_Theme.Core.Themes
 				}
 			} else
 			{
-				node.AppendChild (doc.CreateComment ("name:" + API.nameToLoad));
+				node.AppendChild (doc.CreateComment ("name:" + name));
+			}
+		}
+
+		private static void ResetToken (XmlDocument doc)
+		{
+			XmlNode node = doc.SelectSingleNode ("/SyntaxDefinition");
+
+			XmlNodeList comms = node.SelectNodes ("//comment()");
+			if (comms.Count >= 3)
+			{
+				bool hasToken = false;
+
+				string nl = "token:null";
+				foreach (XmlComment comm in comms)
+				{
+					if (comm.Value.StartsWith ("token"))
+					{
+						comm.Value = nl;
+						hasToken = true;
+					}
+				}
+
+				if (!hasToken)
+				{
+					node.AppendChild (doc.CreateComment (nl));
+				}
+			} else
+			{
+				node.AppendChild (doc.CreateComment ("token:null"));
+			}
+		}
+
+		private static XmlDocument LoadTheme (string path, out bool iszip)
+		{
+			XmlDocument doc = new XmlDocument ();
+			iszip = false;
+			Tuple <bool, string> content = Helper.GetTheme (path);
+			if (content.Item1)
+			{
+				doc.LoadXml (content.Item2);
+				iszip = true;
+			} else
+			{
+				doc.Load (path);
 			}
 
+			return doc;
+		}
+
+		public override void WriteNameAndResetToken (string path, string name)
+		{
+			XmlDocument doc = LoadTheme (path, out bool iszip);
+
+			WriteName (name, doc);
+			ResetToken (doc);
+			
+			SaveModifiedTheme (path, iszip, doc);
+		}
+
+		private static void SaveModifiedTheme (string path, bool iszip, XmlDocument doc)
+		{
 			if (!iszip)
 				doc.Save (path);
 			else

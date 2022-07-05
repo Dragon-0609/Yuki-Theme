@@ -1,0 +1,11 @@
+﻿<controls:SnapWindow x:Class="Yuki_Theme.Core.WPF.Windows.StickerWindow"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+            mc:Ignorable="d" Background="Transparent" BorderThickness="0" WindowStyle="None" ResizeMode="NoResize"
+            AllowsTransparency="True"
+            Title="StickerWindow" Height="200" Width="200">
+    <Image Name="Sticker" MouseDown="FocusBack" />
+</controls:SnapWindow>

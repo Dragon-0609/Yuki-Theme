@@ -75,6 +75,9 @@
         <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
         <Reference Include="WindowsFormsIntegration" />
+        <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc">
+          <HintPath>..\packages\WpfAnimatedGif.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AdditionalTools.cs" />
@@ -154,6 +157,9 @@
         <Compile Include="Windows\SettingsWindow.xaml.cs">
           <DependentUpon>SettingsWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\StickerWindow.xaml.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="WPFHelper.cs" />
         <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
         <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />
@@ -187,6 +193,7 @@
         <Page Include="Windows\QuestionWindow.xaml" />
         <Page Include="Windows\RenameThemeWindow.xaml" />
         <Page Include="Windows\SettingsWindow.xaml" />
+        <Page Include="Windows\StickerWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">

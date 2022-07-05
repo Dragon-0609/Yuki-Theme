@@ -35,5 +35,7 @@ internal abstract class ThemeFormatBase
 
 	public abstract void WriteName (string path, string name);
 
+	public abstract void WriteNameAndResetToken (string path, string name);
+
 	public abstract void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions);
 }

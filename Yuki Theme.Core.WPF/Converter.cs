@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core.WPF
 		public static BitmapImage ToWPFImage (this System.Drawing.Image img)
 		{
 			BitmapImage bi = new BitmapImage ();
-			using (var ms = new MemoryStream ())
+			using (MemoryStream ms = new MemoryStream ())
 			{
 				img.Save (ms, ImageFormat.Png);
 				// img.Dispose ();
@@ -42,6 +42,22 @@ namespace Yuki_Theme.Core.WPF
 				bi.StreamSource = ms;
 				bi.EndInit ();
 			}
+
+			return bi;
+		}
+
+		public static BitmapImage ToWPFGIFImage (this System.Drawing.Image img)
+		{
+			BitmapImage bi = new BitmapImage ();
+			MemoryStream ms = new MemoryStream ();
+			img.Save (ms, ImageFormat.Gif);
+			// img.Dispose ();
+			ms.Position = 0;
+
+			bi.BeginInit ();
+			bi.CacheOption = BitmapCacheOption.OnLoad;
+			bi.StreamSource = ms;
+			bi.EndInit ();
 
 			return bi;
 		}
@@ -59,6 +75,24 @@ namespace Yuki_Theme.Core.WPF
 		public static int ToInt (this double d)
 		{
 			return Convert.ToInt32 (d);
+		}
+
+		public static AlignmentX ConvertToX (this AnchorStyles anchorStyles)
+		{
+			if (anchorStyles.HasFlag (AnchorStyles.Left))
+				return AlignmentX.Left;
+			if (anchorStyles.HasFlag (AnchorStyles.Right))
+				return AlignmentX.Right;
+			return AlignmentX.Center;
+		}
+
+		public static AlignmentY ConvertToY (this AnchorStyles anchorStyles)
+		{
+			if (anchorStyles.HasFlag (AnchorStyles.Top))
+				return AlignmentY.Top;
+			if (anchorStyles.HasFlag (AnchorStyles.Bottom))
+				return AlignmentY.Bottom;
+			return AlignmentY.Center;
 		}
 	}
 }

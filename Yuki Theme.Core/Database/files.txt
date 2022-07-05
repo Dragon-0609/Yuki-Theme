@@ -19,3 +19,4 @@ Yuki Theme.Core.dll
 Yuki Installer.exe
 yuki.exe
 Yuki Theme.Themes.dll
+WpfAnimatedGif.dll

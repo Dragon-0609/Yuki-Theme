@@ -105,7 +105,7 @@ namespace Yuki_Theme_Plugin
 		const    string yukiThemeUpdate = "Yuki Theme Update";
 		private  int    lastFocused     = -1;
 
-		public PopupFormsController popupController;
+		public PopupController popupController;
 
 		public static YukiTheme_VisualPascalABCPlugin plugin;
 		private       MainWindow                      CoreWindow;
@@ -152,7 +152,8 @@ namespace Yuki_Theme_Plugin
 		private void Initialize ()
 		{
 			ideComponents.fm.AllowTransparency = true;
-			popupController = new PopupFormsController (ideComponents.fm, this);
+			popupController = new PopupController (ideComponents.fm, this);
+			// popupController = new PopupFormsController (ideComponents.fm, this);
 			LoadColors ();
 			LoadImage ();
 
@@ -273,8 +274,10 @@ namespace Yuki_Theme_Plugin
 			AdditionalTools.TrackInstall ();
 			if (!IsUpdated () && Settings.update)
 			{
-				popupController.InitializeAllWindows ();
-				popupController.df.CheckUpdate ();
+				/*popupController.InitializeAllWindows ();
+				popupController.df.CheckUpdate ();*/
+				popupController.ShowNotification ("Everything is ok", "You should do more tests", new NotificationButtonData ("OK","", true,
+					                                  (sender, args) => { MessageBox.Show ("Clicked!"); }), null);
 			}
 
 			ToolBarListItem.camouflage = camouflage;
@@ -407,8 +410,7 @@ namespace Yuki_Theme_Plugin
 				sticker.Dispose ();
 				sticker = null;
 			}
-
-			;
+			
 			if (Settings.swSticker)
 			{
 				if (Settings.useCustomSticker && File.Exists (Settings.customSticker))
@@ -452,9 +454,10 @@ namespace Yuki_Theme_Plugin
 
 		private void UpdateColors ()
 		{
+			WPFHelper.ConvertGUIColorsNBrushes ();
 			if (OnColorUpdate != null)
 				OnColorUpdate (bgdef, clr, bgClick);
-			popupController.TryToUpdateNotificationWindow ();
+			// popupController.TryToUpdateNotificationWindow ();
 			WaitAndUpdateMenuColors ();
 
 			manager.UpdateColors ();
@@ -775,7 +778,6 @@ namespace Yuki_Theme_Plugin
 			if (!Settings.license)
 			{
 				WPFHelper.InitAppForWinforms ();
-				WPFHelper.ConvertGUIColorsNBrushes ();
 				
 				LicenseWindow licenseWindow = new LicenseWindow ()
 				{

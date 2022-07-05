@@ -214,23 +214,47 @@ namespace Yuki_Theme.Core.Themes
 			return theme;
 		}
 
-		public override void WriteName (string path, string name)
+
+		private static Theme LoadTheme (string path, out bool iszip)
 		{
 			string json = "";
 
 			Tuple <bool, string> content = Helper.GetTheme (path);
-			bool iszip = content.Item1;
+			iszip = content.Item1;
 
 			if (content.Item1)
 				json = content.Item2;
 			else
 				json = File.ReadAllText (path);
-			Console.WriteLine (json);
+
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+			return theme;
+		}
+
+		public override void WriteName (string path, string name)
+		{
+			string json;
+			Theme theme = LoadTheme (path, out bool iszip);
+
 			theme.Name = name;
 			json = JsonConvert.SerializeObject (theme, Formatting.Indented);
+			
+			SaveModifiedTheme (path, iszip, json);
+		}
+		public override void WriteNameAndResetToken (string path, string name)
+		{
+			string json;
+			Theme theme = LoadTheme (path, out bool iszip);
 
+			theme.Name = name;
+			theme.Token = "null";
+			json = JsonConvert.SerializeObject (theme, Formatting.Indented);
+			
+			SaveModifiedTheme (path, iszip, json);
+		}
 
+		private static void SaveModifiedTheme (string path, bool iszip, string json)
+		{
 			if (!iszip)
 				File.WriteAllText (path, json);
 			else
@@ -238,7 +262,7 @@ namespace Yuki_Theme.Core.Themes
 				Helper.UpdateZip (path, json, null, true, null, true, "", false);
 			}
 		}
-
+		
 		public override void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions)
 		{
 			Assembly a = API.GetCore ();

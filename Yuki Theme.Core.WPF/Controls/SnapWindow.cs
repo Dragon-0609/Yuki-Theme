@@ -9,15 +9,21 @@ namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class SnapWindow : Window
 	{
-		private const int    BORDER_OUTLINE = 10;
-		public        Window target;
-		public        Form   targetForm;
+		public const int BORDER_OUTLINE = 10;
+			
+		public float borderOutlineX = BORDER_OUTLINE;
+		public float borderOutlineY = BORDER_OUTLINE;
+		
+		public Window target;
+		public Form   targetForm;
 		
 		public AlignmentX AlignX = AlignmentX.Left;
 		public AlignmentY AlignY = AlignmentY.Top;
 		
 		private FormWindowState _formWindowState = FormWindowState.Normal;
 
+		private bool lockState = false;
+		
 		public void ResetPosition ()
 		{
 			if (target != null || targetForm != null)
@@ -44,16 +50,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 			double left = GetLeft ();
 			if (AlignX == AlignmentX.Left)
 			{
-				res = left + BORDER_OUTLINE;
+				res = left + borderOutlineX;
 			}else
 			{
 				double width = GetWidth ();
 				if (AlignX == AlignmentX.Center)
 				{
-					res = left + (width / 2);
+					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE ? 0 : borderOutlineX);
 				} else
 				{
-					res = left + width - RenderSize.Width - BORDER_OUTLINE;
+					res = left + width - RenderSize.Width - borderOutlineX;
 				}
 			}
 
@@ -66,16 +72,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 			double top = GetTop ();
 			if (AlignY == AlignmentY.Top)
 			{
-				res = top + BORDER_OUTLINE;
+				res = top + borderOutlineY;
 			}else
 			{
 				double height = GetHeight ();
 				if (AlignY == AlignmentY.Center)
 				{
-					res = top + (height / 2);
+					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE ? 0 : borderOutlineY);
 				} else
 				{
-					res = top + height - RenderSize.Height - BORDER_OUTLINE;
+					res = top + height - RenderSize.Height - borderOutlineY;
 				}
 			}
 
@@ -143,6 +149,17 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void OnStateChanged (object sender, EventArgs e)
 		{
+			if (!lockState)
+			{
+				if (target != null)
+					OnWindowStateChanged (sender, e);
+				else
+					OnFormStateChanged (sender, e);
+			}
+		}
+
+		private void OnWindowStateChanged (object sender, EventArgs e)
+		{
 			if (target.WindowState == WindowState.Minimized)
 				WindowState = WindowState.Minimized;
 			else
@@ -150,14 +167,37 @@ namespace Yuki_Theme.Core.WPF.Controls
 				WindowState = WindowState.Normal;
 				if (target.WindowState == WindowState.Maximized)
 				{
+					ShowWindowOverWindow ();
+				}
+			}
+			
+			PositionChanged (sender, e);
+		}
+
+		private void ShowWindowOverWindow ()
+		{
+			lockState = true;
+			target.WindowState = WindowState.Minimized;
+			WindowState = WindowState.Minimized;
+			target.WindowState = WindowState.Maximized;
+			WindowState = WindowState.Normal;
+			lockState = false;
+		}
+
+		private void OnFormStateChanged (object sender, EventArgs e)
+		{
+			if (targetForm.WindowState == FormWindowState.Minimized)
+				WindowState = WindowState.Minimized;
+			else
+			{
+				WindowState = WindowState.Normal;
+				if (targetForm.WindowState == FormWindowState.Maximized)
+				{
 					
 				}
 			}
-				
 
-			Console.WriteLine ($"BEFORE: LEFT: {Left}, TOP: {Top}");
 			PositionChanged (sender, e);
-			Console.WriteLine ($"AFTER:   LEFT: {Left}, TOP: {Top}");
 		}
 
 		private void PositionChanged (object sender, EventArgs e)

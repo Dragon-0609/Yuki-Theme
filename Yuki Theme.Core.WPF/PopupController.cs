@@ -78,6 +78,7 @@ namespace Yuki_Theme.Core.WPF
 				_notificationWindow.SetAlign (new SnapWindowAlign (AlignmentX.Right, AlignmentY.Bottom));
 				_notificationWindow.SetButtons (button1Data, button2Data);
 				_notificationWindow.Show ();
+				_notificationWindow.ResetPosition ();
 			}
 		}
 
@@ -101,6 +102,7 @@ namespace Yuki_Theme.Core.WPF
 
 		public void ShowUpdateDownloader ()
 		{
+		
 		}
 	}
 }

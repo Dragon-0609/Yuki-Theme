@@ -185,7 +185,6 @@
       <DependentUpon>SettingsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Slider.cs" />
-    <Compile Include="Controls\StickerPicture.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Forms\AboutForm.cs">
