@@ -18,6 +18,8 @@ using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Controls.ColorPicker;
 using Application = System.Windows.Application;
+using DataFormats = System.Windows.DataFormats;
+using DragEventArgs = System.Windows.DragEventArgs;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using Drawing = System.Drawing;
 using MessageBox = System.Windows.MessageBox;
@@ -41,7 +43,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Drawing.Image img  = null;
 		private Drawing.Image img2 = null;
 		private Drawing.Image img3 = null;
-		private Drawing.Image img4 = null;
 		private string []     themes;
 
 		public event SetTheme setTheme;
@@ -483,7 +484,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void ifDoesntHaveSticker ()
 		{
 			img3 = null;
-			img4 = null;
 			// sttext = "";
 		}
 
@@ -770,6 +770,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					_stickerWindow.LoadSticker ();	
 				} else
 				{
+					
 					_stickerWindow.LoadImage (img3);
 				}
 			}
@@ -1005,7 +1006,64 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Helper.DeleteInstallationStatus ();
 			}
 		}
-		
+
+
 		public event ColorUpdate OnColorUpdate;
+
+		private void MainWindow_OnDrop (object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				if (files != null && files.Length > 0)
+				{
+					if (files.Length == 1)
+					{
+						CheckFile (files [0]);
+					}else
+					{
+						foreach (string file in files)
+						{
+
+						}
+					}
+				}
+			}
+		}
+
+		private void CheckFile (string file)
+		{
+			if (File.Exists (file))
+			{
+				if (IsImage (file))
+				{
+					
+				}else if (IsTheme (file))
+				{
+					MainParser.Parse (file, true, true, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+				} else
+				{
+					API.ShowError (API.Translate ("main.dragndrop.format"), API.Translate ("main.sticker.select.invalid.short"));
+				}
+			}
+		}
+
+		private bool IsImage (string file)
+		{
+			string ext = Path.GetExtension (file).ToLower();
+			return FileExtensions.ImageExtensions.Contains (ext);
+		}
+
+		private bool IsTheme (string file)
+		{
+			string ext = Path.GetExtension (file).ToLower();
+			return FileExtensions.ThemeExtensions.Contains (ext);
+		}
+
+		public void SelectDefaultTheme ()
+		{
+			Themes.SelectedIndex = 0;
+		}
+
 	}
 }

@@ -6,19 +6,24 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using WpfAnimatedGif;
 using Yuki_Theme.Core.WPF.Controls;
+using Yuki_Theme.Core.WPF.Interfaces;
 using Drawing = System.Drawing;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
-	public partial class StickerWindow : SnapWindow
+	public partial class StickerWindow : SnapWindow, Sticker.IView
 	{
-		private Drawing.Image  originalImage = null;
-		private Drawing.Image  renderImage   = null;
 		private Drawing.PointF _relativePosition;
+
+		private Sticker.IModel _model;
+
+		private Sticker.IPresenter _presenter;
 
 		public StickerWindow ()
 		{
 			InitializeComponent ();
+			_model = new StickerModel ();
+			_presenter = new StickerPresenter (_model, this);
 		}
 		
 		
@@ -47,71 +52,27 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return stickerWindow;
 		}
 
-		public void LoadSticker ()
-		{
-			if (renderImage != null)
-			{
-				renderImage.Dispose ();
-				renderImage = null;
-			}
-			
-			if (Settings.swSticker)
-			{
-				if (Settings.useCustomSticker && Settings.customSticker.Exist ())
-				{
-					renderImage = Drawing.Image.FromFile (Settings.customSticker);
-				} else
-				{
-					if (originalImage != null)
-					{
-						if (API.currentTheme.StickerOpacity != 100)
-						{
-							renderImage = Helper.SetOpacity (originalImage, API.currentTheme.StickerOpacity);
-							originalImage.Dispose ();
-						} else
-							renderImage = originalImage;
-						Visibility = Visibility.Visible;
-					} else
-					{
-						renderImage = null;
-						Visibility = Visibility.Hidden;
-					}
-				}
-
-				if (renderImage != null)
-				{
-					SetStickerSize ();
-					ChangeImage (renderImage);
-					UpdatePosition ();
-				} else
-				{
-					Visibility = Visibility.Hidden;
-				}
-			} else
-			{
-				Visibility = Visibility.Hidden;
-			}
-		}
-
-		public void LoadImage (Drawing.Image image)
-		{
-			originalImage = image;
-			LoadSticker ();
-		}
-
-		private void UpdatePosition ()
-		{
-			ResetPosition ();
-		}
+		public void LoadSticker () => _presenter.LoadSticker ();
 
 		public void SetStickerSize ()
 		{
-			if (renderImage != null)
-			{
-				Drawing.Size dimensionSize = Helper.CalculateDimension (renderImage.Size);
-				Width = dimensionSize.Width;
-				Height = dimensionSize.Height;
-			}
+			
+		}
+
+		public void ChangeVisibility (Visibility visibility)
+		{
+			Visibility = visibility;
+		}
+
+		void Sticker.IView.ChangeImage (Drawing.Image image)
+		{
+			ChangeImage (image);
+		}
+
+		public void SetSize (Drawing.Size size)
+		{
+			Width = size.Width;
+			Height = size.Height;
 		}
 
 		private void ChangeImage (Drawing.Image image)
@@ -192,5 +153,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				borderOutlineX = borderOutlineY = BORDER_OUTLINE;
 			}
 		}
+
+		public void LoadImage (Drawing.Image image) => _presenter.LoadImage (image);
 	}
 }

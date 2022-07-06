@@ -15,7 +15,8 @@
         Closing="MainWindow_OnClosing"
         SourceInitialized="MainWindow_OnSourceInitialized"
         SizeChanged="MainWindow_OnSizeChanged"
-        Title="Yuki Theme" Height="400" Width="680">
+        Title="Yuki Theme" Height="400" Width="680"
+        AllowDrop="True" Drop="MainWindow_OnDrop">
 
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"

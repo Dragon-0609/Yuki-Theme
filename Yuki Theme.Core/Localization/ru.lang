@@ -96,6 +96,7 @@
     "main.labels.apply": "Применить",
     "main.labels.italic": "Курсив",
     "main.labels.bold": "Жирный",
+    "main.dragndrop.format": "Формат файла может быть только .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",
 
     "ui.tooltips.add.title": "Добавить тему",
     "ui.tooltips.add.message": "Добавить тему путём копирования из\nдругой темы.",

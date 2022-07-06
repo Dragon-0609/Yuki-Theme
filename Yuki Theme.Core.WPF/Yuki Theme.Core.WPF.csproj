@@ -118,6 +118,9 @@
         <Compile Include="Controls\ToolBarList.cs" />
         <Compile Include="Controls\ToolBarListItem.cs" />
         <Compile Include="Converter.cs" />
+        <Compile Include="FileExtensions.cs" />
+        <Compile Include="Interfaces\Main.cs" />
+        <Compile Include="Interfaces\Sticker.cs" />
         <Compile Include="PopupController.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
@@ -138,6 +141,10 @@
         <Compile Include="Windows\LicenseWindow.xaml.cs">
           <DependentUpon>LicenseWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\MainModel.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\MainPresenter.cs" />
         <Compile Include="Windows\MainWindow.xaml.cs">
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
@@ -156,6 +163,12 @@
         </Compile>
         <Compile Include="Windows\SettingsWindow.xaml.cs">
           <DependentUpon>SettingsWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\StickerModel.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\StickerPresenter.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Windows\StickerWindow.xaml.cs">
           <DependentUpon>StickerWindow.xaml</DependentUpon>

@@ -307,7 +307,7 @@ namespace Yuki_Theme.Core
 
 				if (!File.Exists (fromPath))
 				{
-					_actions.ShowError (canShowError, "messages.theme.notexist.full", "messages.theme.notexist.short");
+					ShowError (canShowError, "messages.theme.notexist.full", "messages.theme.notexist.short");
 					return 0;
 				}
 
@@ -324,14 +324,14 @@ namespace Yuki_Theme.Core
 						return 1;
 					}
 
-					_actions.ShowError (canShowError, "messages.name.default.full", "messages.name.default.short");
+					ShowError (canShowError, "messages.name.default.full", "messages.name.default.short");
 				} else
 				{
-					_actions.ShowError (canShowError, "messages.name.exist.full", "messages.name.exist.short");
+					ShowError (canShowError, "messages.name.exist.full", "messages.name.exist.short");
 				}
 			} else
 			{
-				_actions.ShowError (canShowError, "messages.theme.default.full", "messages.theme.default.short");
+				ShowError (canShowError, "messages.theme.default.full", "messages.theme.default.short");
 			}
 
 			return 0;
@@ -467,5 +467,14 @@ namespace Yuki_Theme.Core
 
 		#endregion
 
+		public static void ShowError (string message, string title)
+		{
+			_actions.ShowError (true, message, title);
+		}
+		
+		public static void ShowError (bool canShowError, string message, string title)
+		{
+			_actions.ShowError (canShowError, message, title);
+		}
 	}
 }

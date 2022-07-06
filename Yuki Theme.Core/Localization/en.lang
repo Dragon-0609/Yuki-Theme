@@ -96,6 +96,7 @@
     "main.labels.apply": "Apply",
     "main.labels.italic": "Italic",
     "main.labels.bold": "Bold",
+    "main.dragndrop.format": "File format can be just .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",
     
     "ui.tooltips.add.title": "Add Theme",
     "ui.tooltips.add.message": "Add theme by copying from another\ntheme.",

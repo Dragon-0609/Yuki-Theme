@@ -33,7 +33,7 @@ namespace Yuki_Theme.Core.Parsers
 
 			if (CheckAvailableAndAsk (pathToSaveEncoded, ask, exist))
 			{
-				string ext = Path.GetExtension (path);
+				string ext = Path.GetExtension (path).ToLower();
 				switch (ext)
 				{
 					case ".yukitheme" :
