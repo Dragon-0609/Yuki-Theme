@@ -1048,6 +1048,12 @@ namespace Yuki_Theme.Core
 		public int?  Height    = null;
 		public bool? Maximized = null;
 
+		public WindowProps()
+		{
+			Left = 0;
+			Top = 0;
+		}
+
 		public static WindowProps Parse (string target)
 		{
 			string [] spp = target.Split (':');

@@ -200,8 +200,9 @@ namespace Yuki_Theme_Plugin
 			if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
 			{
 				CoreWindow = new MainWindow ();
-				CoreWindow.startSettingTheme += ReleaseResources;
-				CoreWindow.setTheme += ReloadLayout;
+				CoreWindow.Model.StartSettingTheme += ReleaseResources;
+				CoreWindow.Model.SetTheme += ReloadLayout;
+				
 				CoreWindow.Closed += (_, _) =>
 				{
 					GC.Collect ();
