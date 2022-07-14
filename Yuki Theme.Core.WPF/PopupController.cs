@@ -13,7 +13,8 @@ namespace Yuki_Theme.Core.WPF
 		public Form   TargetForm;
 		public Window Target;
 
-		private NotificationWindow _notificationWindow;
+		private NotificationWindow     _notificationWindow;
+		private UpdateDownloaderWindow _downloaderWindow;
 
 		private IColorUpdatable _colorUpdatable;
 
@@ -65,6 +66,11 @@ namespace Yuki_Theme.Core.WPF
 			return _notificationWindow == null || PresentationSource.FromVisual (_notificationWindow) == null;
 		}
 
+		private bool IsDownloaderNull ()
+		{
+			return _downloaderWindow == null || PresentationSource.FromVisual (_downloaderWindow) == null;
+		}
+
 		private void CreateAndShowNotification (string title,
 		                                        string content, NotificationButtonData button1Data, NotificationButtonData button2Data)
 		{
@@ -95,6 +101,11 @@ namespace Yuki_Theme.Core.WPF
 			if (!IsNotificationNull ())
 			{
 				_notificationWindow.UpdateColors ();
+			}
+
+			if (!IsDownloaderNull ())
+			{
+				_downloaderWindow.UpdateColors ();
 			}
 		}
 

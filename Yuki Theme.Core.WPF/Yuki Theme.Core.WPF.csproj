@@ -13,6 +13,7 @@
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <WarningLevel>4</WarningLevel>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,9 @@
         <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
           <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
         </Reference>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+        </Reference>
         <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
           <HintPath>..\packages\Svg.dll</HintPath>
         </Reference>
@@ -59,6 +63,8 @@
         <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Drawing.Common.dll</HintPath>
         </Reference>
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.IO.Compression.FileSystem" />
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Memory.dll</HintPath>
         </Reference>
@@ -121,6 +127,7 @@
         <Compile Include="FileExtensions.cs" />
         <Compile Include="Interfaces\Main.cs" />
         <Compile Include="Interfaces\Sticker.cs" />
+        <Compile Include="Interfaces\UpdateDownloader.cs" />
         <Compile Include="PopupController.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
@@ -175,6 +182,15 @@
         <Compile Include="Windows\StickerWindow.xaml.cs">
           <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\UpdateDownloaderModel.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\UpdateDownloaderPresenter.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\UpdateDownloaderWindow.xaml.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="WPFHelper.cs" />
         <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
         <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />
@@ -209,6 +225,7 @@
         <Page Include="Windows\RenameThemeWindow.xaml" />
         <Page Include="Windows\SettingsWindow.xaml" />
         <Page Include="Windows\StickerWindow.xaml" />
+        <Page Include="Windows\UpdateDownloaderWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">

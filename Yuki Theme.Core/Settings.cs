@@ -86,7 +86,6 @@ public static class Settings
 	
 	public const  double current_version     = 8.0;
 	public const  string current_version_add = "beta";
-	public static string next_version        = "";
 
 	#endregion
 

@@ -14,12 +14,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			InitializeComponent ();
 		}
 
-		private void SetTitle (string text)
+		internal void SetTitle (string text)
 		{
 			Question.Text = text;
 		}
 
-		private void SetButtonContents (string t1, string t2, string t3)
+		internal void SetButtonContents (string t1, string t2, string t3)
 		{
 			B1.Content = t1;
 			B2.Content = t2;

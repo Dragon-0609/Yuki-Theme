@@ -139,6 +139,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public RequestNavigateEventHandler NavigateEventArgs;
 
+		public NotificationButtonData (string text, bool closeAfterClick, RequestNavigateEventHandler navigateEventArgs)
+		{
+			Text = text;
+			Link = "";
+			CloseAfterClick = closeAfterClick;
+			NavigateEventArgs = navigateEventArgs;
+		}
+
 		public NotificationButtonData (string text, string link, RequestNavigateEventHandler navigateEventArgs)
 		{
 			Text = text;

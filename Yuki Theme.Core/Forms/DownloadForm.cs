@@ -134,10 +134,7 @@ namespace Yuki_Theme.Core.Forms
 								popupController.nf.button3.Visible = true;
 
 								popupController.nf.Show (popupController.form);
-								lock (Settings.next_version)
-								{
-									Settings.next_version = $"{ver} | {size}";
-								}
+								
 
 								popupController.changeNotificationLocation ();
 								size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -178,8 +175,7 @@ namespace Yuki_Theme.Core.Forms
 			popupController.showDownloader ();
 			popupController.df.downloadlink = downloadlink;
 			popupController.df.size = size;
-			if (!File.Exists(Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
-			                               "yuki_theme.zip")))
+			if (!File.Exists(GetUpdatePath ()))
 			{
 				popupController.df.downl.ClickHere (EventArgs.Empty);
 			} else

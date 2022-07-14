@@ -44,6 +44,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CColorSlider_002Dmaster_005CColorSlider_002Dmaster_005Cbin_005CDebug_005CColorSlider_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CBinary_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CUsers_005CUser_005CDownloads_005CCompressed_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_002Dmaster_005CFastColoredTextBox_005Cbin_005CDebug_005CFastColoredTextBox_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=E_003A_005CDocuments_005CCSharp_005CYuki_002DTheme_005Cpackages_005CNewtonsoft_002EJson_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=C12B1851_002DE2AE_002D4A31_002D95DC_002D1DAAFCDCB108_002Fd_003AForms_002Ff_003ATesterForm_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=C12B1851_002DE2AE_002D4A31_002D95DC_002D1DAAFCDCB108_002Ff_003AThemeField_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">INFO</s:String>
