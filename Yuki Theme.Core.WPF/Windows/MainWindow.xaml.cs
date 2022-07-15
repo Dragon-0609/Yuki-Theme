@@ -723,12 +723,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void CheckUpdate ()
 		{
-			_popupController.ShowNotification ("Everything is ok", "You should do more tests", new NotificationButtonData ("OK","", true,
-				                                  (sender, args) => { MessageBox.Show ("Clicked!"); }), null);
-			/*if (Settings.update && Helper.mode != ProductMode.Plugin)
+			if (Settings.update && Helper.mode != ProductMode.Plugin)
 			{
-				// popupController.df.CheckUpdate ();
-			}*/
+				_popupController.CheckUpdate ();
+			}
 		}
 
 		private void IsUpdated ()

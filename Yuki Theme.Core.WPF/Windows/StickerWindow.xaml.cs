@@ -102,7 +102,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_relativePosition = Drawing.PointF.Empty;
 			AnchorStyles align;
 			RelativeUnit unit = Settings.unit;
-			string data = Settings.database.ReadData (Settings.STICKERPOSITION, "");
+			string data = Settings.database.ReadData (Settings.STICKER_POSITION, "");
 			if (data != "")
 			{
 				try

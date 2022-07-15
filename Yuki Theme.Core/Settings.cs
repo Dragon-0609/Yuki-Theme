@@ -42,50 +42,50 @@ public static class Settings
 	
 	#region CONST
 
-	public const int PASCALPATH          = 1;
+	public const int PASCAL_PATH          = 1;
 	public const int ACTIVE              = 2;
-	public const int ASKCHOICE           = 4;
-	public const int CHOICEINDEX         = 5;
-	public const int SETTINGMODE         = 6;
-	public const int AUTOUPDATE          = 7;
-	public const int BGIMAGE             = 8;
+	public const int ASK_CHOICE           = 4;
+	public const int CHOICE_INDEX         = 5;
+	public const int SETTING_MODE         = 6;
+	public const int AUTO_UPDATE          = 7;
+	public const int BG_IMAGE             = 8;
 	public const int STICKER             = 9;
-	public const int STATUSBAR           = 10;
+	public const int STATUS_BAR           = 10;
 	public const int LOGO                = 11;
 	public const int LOCATION            = 12;
 	public const int EDITOR              = 13;
 	public const int BETA                = 14;
 	public const int LOGIN               = 15;
-	public const int CAMOUFLAGEHIDDEN    = 16;
-	public const int STICKERPOSITION     = 17;
-	public const int CAMOUFLAGEPOSITIONS = 18;
-	public const int STICKERPOSITIONUNIT = 19;
-	public const int ALLOWPOSITIONING    = 20;
-	public const int SHOWGRIDS           = 21;
-	public const int USECUSTOMSTICKER    = 22;
-	public const int CUSTOMSTICKER       = 23;
+	public const int CAMOUFLAGE_HIDDEN    = 16;
+	public const int STICKER_POSITION     = 17;
+	public const int CAMOUFLAGE_POSITIONS = 18;
+	public const int STICKER_POSITION_UNIT = 19;
+	public const int ALLOW_POSITIONING    = 20;
+	public const int SHOW_GRIDS           = 21;
+	public const int USE_CUSTOM_STICKER    = 22;
+	public const int CUSTOM_STICKER_PATH       = 23;
 	public const int LICENSE             = 24;
-	public const int GOOGLEANALYTICS     = 25;
-	public const int DONTTRACK           = 26;
-	public const int AUTOFITWIDTH        = 27;
+	public const int GOOGLE_ANALYTICS     = 25;
+	public const int DON_T_TRACK           = 26;
+	public const int AUTO_FIT_WIDTH        = 27;
 
 	/// <summary>
 	/// It's useful, when app asks to save, if you change to another theme without saving previous one. But, it also can be annoying.
 	/// I set isEdited in API , so it won't ask you each time. It'll ask when a theme is edited, and you're gonna change to another theme.
 	/// </summary>
-	public const int ASKTOSAVE = 28;
+	public const int ASK_TO_SAVE = 28;
 
-	public const int SAVEASOLD    = 29;
-	public const int SHOWPREVIEW  = 30;
+	public const int SAVE_AS_OLD    = 29;
+	public const int SHOW_PREVIEW  = 30;
 	public const int LOCALIZATION = 31;
-	public const int USEDIMENSIONCAP = 32;
-	public const int DIMENSIONCAPMAX = 33;
-	public const int DIMENSIONCAPUNIT = 34;
-	public const int COLORPICKER = 35;
+	public const int USE_DIMENSION_CAP = 32;
+	public const int DIMENSION_CAP_MAX = 33;
+	public const int DIMENSION_CAP_UNIT = 34;
+	public const int COLOR_PICKER = 35;
 	
 	
-	public const  double current_version     = 8.0;
-	public const  string current_version_add = "beta";
+	public const  double CURRENT_VERSION     = 7.0;
+	public const  string CURRENT_VERSION_ADD = "beta";
 
 	#endregion
 
@@ -99,7 +99,7 @@ public static class Settings
 	public static void connectAndGet ()
 	{
 		var data = database.ReadData ();
-		pascalPath = data [PASCALPATH] == "empty" ? null : data [PASCALPATH];
+		pascalPath = data [PASCAL_PATH] == "empty" ? null : data [PASCAL_PATH];
 		if (Helper.mode == ProductMode.Plugin)
 		{
 			pascalPath = API.currentPath;
@@ -134,40 +134,40 @@ public static class Settings
 
 		if (pascalPath == null) pascalPath = "";
 
-		askChoice = bool.Parse (data [ASKCHOICE]);
-		update = bool.Parse (data [AUTOUPDATE]);
-		bgImage = bool.Parse (data [BGIMAGE]);
+		askChoice = bool.Parse (data [ASK_CHOICE]);
+		update = bool.Parse (data [AUTO_UPDATE]);
+		bgImage = bool.Parse (data [BG_IMAGE]);
 		swSticker = bool.Parse (data [STICKER]);
-		swStatusbar = bool.Parse (data [STATUSBAR]);
+		swStatusbar = bool.Parse (data [STATUS_BAR]);
 		swLogo = bool.Parse (data [LOGO]);
 		Editor = bool.Parse (data [EDITOR]);
 		Beta = bool.Parse (data [BETA]);
 		Logged = bool.Parse (data [LOGIN]);
-		positioning = bool.Parse (data [ALLOWPOSITIONING]);
-		showGrids = bool.Parse (data [SHOWGRIDS]);
-		useCustomSticker = bool.Parse (data [USECUSTOMSTICKER]);
-		customSticker = data [CUSTOMSTICKER];
+		positioning = bool.Parse (data [ALLOW_POSITIONING]);
+		showGrids = bool.Parse (data [SHOW_GRIDS]);
+		useCustomSticker = bool.Parse (data [USE_CUSTOM_STICKER]);
+		customSticker = data [CUSTOM_STICKER_PATH];
 
 		license = bool.Parse (data [LICENSE]);
-		googleAnalytics = bool.Parse (data [GOOGLEANALYTICS]);
-		dontTrack = bool.Parse (data [DONTTRACK]);
-		autoFitByWidth = bool.Parse (data [AUTOFITWIDTH]);
-		askToSave = bool.Parse (data [ASKTOSAVE]);
-		saveAsOld = bool.Parse (data [SAVEASOLD]);
-		showPreview = bool.Parse (data [SHOWPREVIEW]);
-		useDimensionCap = bool.Parse (data [USEDIMENSIONCAP]);
-		dimensionCapMax = int.Parse (data [DIMENSIONCAPMAX]);
-		dimensionCapUnit = int.Parse (data [DIMENSIONCAPUNIT]);
-		colorPicker = int.Parse (data [COLORPICKER]);
+		googleAnalytics = bool.Parse (data [GOOGLE_ANALYTICS]);
+		dontTrack = bool.Parse (data [DON_T_TRACK]);
+		autoFitByWidth = bool.Parse (data [AUTO_FIT_WIDTH]);
+		askToSave = bool.Parse (data [ASK_TO_SAVE]);
+		saveAsOld = bool.Parse (data [SAVE_AS_OLD]);
+		showPreview = bool.Parse (data [SHOW_PREVIEW]);
+		useDimensionCap = bool.Parse (data [USE_DIMENSION_CAP]);
+		dimensionCapMax = int.Parse (data [DIMENSION_CAP_MAX]);
+		dimensionCapUnit = int.Parse (data [DIMENSION_CAP_UNIT]);
+		colorPicker = int.Parse (data [COLOR_PICKER]);
 		localization = data [LOCALIZATION];
 
 		API.selectedItem = data [ACTIVE];
 		var os = 0;
-		int.TryParse (data [CHOICEINDEX], out os);
+		int.TryParse (data [CHOICE_INDEX], out os);
 		actionChoice = os;
-		int.TryParse (data [SETTINGMODE], out os);
+		int.TryParse (data [SETTING_MODE], out os);
 		settingMode = (SettingMode) os;
-		int.TryParse (data [STICKERPOSITIONUNIT], out os);
+		int.TryParse (data [STICKER_POSITION_UNIT], out os);
 		unit = (RelativeUnit) os;
 		
 		translation.LoadLocalization ();
@@ -191,34 +191,34 @@ public static class Settings
 		{
 			Dictionary <int, string> dict = new Dictionary <int, string>
 			{
-				{ PASCALPATH, pascalPath },
+				{ PASCAL_PATH, pascalPath },
 				{ ACTIVE, API.selectedItem },
-				{ ASKCHOICE, askChoice.ToString () },
-				{ CHOICEINDEX, actionChoice.ToString () },
-				{ SETTINGMODE, ((int)settingMode).ToString () },
-				{ AUTOUPDATE, update.ToString () },
-				{ BGIMAGE, bgImage.ToString () },
+				{ ASK_CHOICE, askChoice.ToString () },
+				{ CHOICE_INDEX, actionChoice.ToString () },
+				{ SETTING_MODE, ((int)settingMode).ToString () },
+				{ AUTO_UPDATE, update.ToString () },
+				{ BG_IMAGE, bgImage.ToString () },
 				{ STICKER, swSticker.ToString () },
-				{ STATUSBAR, swStatusbar.ToString () },
+				{ STATUS_BAR, swStatusbar.ToString () },
 				{ LOGO, swLogo.ToString () },
 				{ EDITOR, Editor.ToString () },
 				{ BETA, Beta.ToString () },
-				{ ALLOWPOSITIONING, positioning.ToString () },
-				{ SHOWGRIDS, showGrids.ToString () },
-				{ STICKERPOSITIONUNIT, ((int)unit).ToString () },
-				{ USECUSTOMSTICKER, useCustomSticker.ToString () },
-				{ CUSTOMSTICKER, customSticker },
+				{ ALLOW_POSITIONING, positioning.ToString () },
+				{ SHOW_GRIDS, showGrids.ToString () },
+				{ STICKER_POSITION_UNIT, ((int)unit).ToString () },
+				{ USE_CUSTOM_STICKER, useCustomSticker.ToString () },
+				{ CUSTOM_STICKER_PATH, customSticker },
 				{ LICENSE, license.ToString () },
-				{ GOOGLEANALYTICS, googleAnalytics.ToString () },
-				{ DONTTRACK, dontTrack.ToString () },
-				{ AUTOFITWIDTH, autoFitByWidth.ToString () },
-				{ ASKTOSAVE, askToSave.ToString () },
-				{ SAVEASOLD, saveAsOld.ToString () },
-				{ SHOWPREVIEW, showPreview.ToString () },
-				{ USEDIMENSIONCAP, useDimensionCap.ToString () },
-				{ DIMENSIONCAPMAX, dimensionCapMax.ToString () },
-				{ DIMENSIONCAPUNIT, dimensionCapUnit.ToString () },
-				{ COLORPICKER, colorPicker.ToString () },
+				{ GOOGLE_ANALYTICS, googleAnalytics.ToString () },
+				{ DON_T_TRACK, dontTrack.ToString () },
+				{ AUTO_FIT_WIDTH, autoFitByWidth.ToString () },
+				{ ASK_TO_SAVE, askToSave.ToString () },
+				{ SAVE_AS_OLD, saveAsOld.ToString () },
+				{ SHOW_PREVIEW, showPreview.ToString () },
+				{ USE_DIMENSION_CAP, useDimensionCap.ToString () },
+				{ DIMENSION_CAP_MAX, dimensionCapMax.ToString () },
+				{ DIMENSION_CAP_UNIT, dimensionCapUnit.ToString () },
+				{ COLOR_PICKER, colorPicker.ToString () },
 				{ LOCALIZATION, localization }
 			};
 			return dict;
@@ -231,7 +231,7 @@ public static class Settings
 		{
 			Dictionary <int, string> dict = PrepareToSave;
 			dict.Add (LOCATION, DatabaseManager.GetLocation ());
-			dict.Add (CAMOUFLAGEHIDDEN, database.ReadData (CAMOUFLAGEHIDDEN, ""));
+			dict.Add (CAMOUFLAGE_HIDDEN, database.ReadData (CAMOUFLAGE_HIDDEN, ""));
 			dict.Add (LOGIN, Logged.ToString ());
 			SortedDictionary <int, string> sorted = new SortedDictionary <int, string> (dict);
 			

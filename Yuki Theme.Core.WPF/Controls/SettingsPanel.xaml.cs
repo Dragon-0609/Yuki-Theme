@@ -38,7 +38,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Action                   ExecuteOnLoad;
 		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
 
-		public bool freezeToolBarBehaviour;
+		private bool _freezeToolBarBehaviour;
 
 		public PopupController popupController;
 
@@ -396,9 +396,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = true;
 				if (ExecuteOnToolBarItemSelection != null)
 				{
-					freezeToolBarBehaviour = true;
+					_freezeToolBarBehaviour = true;
 					ExecuteOnToolBarItemSelection (item);
-					freezeToolBarBehaviour = false;
+					_freezeToolBarBehaviour = false;
 				}
 				// ToolBarItemShow.IsChecked = 
 			} else
@@ -446,6 +446,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void CheckUpdate (object sender, RoutedEventArgs e)
 		{
+			
+			popupController.CheckUpdate ();
 			// popupController.InitializeAllWindows ();
 			// popupController.df.CheckUpdate ();			
 		}

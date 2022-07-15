@@ -45,7 +45,7 @@ namespace Yuki_Theme_Plugin
 		public string Name => "Yuki Theme";
 
 		public string Version =>
-			Settings.current_version.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
+			Settings.CURRENT_VERSION.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
 
 		public string Copyright => "Dragon-LV";
 
@@ -275,10 +275,7 @@ namespace Yuki_Theme_Plugin
 			AdditionalTools.TrackInstall ();
 			if (!IsUpdated () && Settings.update)
 			{
-				/*popupController.InitializeAllWindows ();
-				popupController.df.CheckUpdate ();*/
-				popupController.ShowNotification ("Everything is ok", "You should do more tests", new NotificationButtonData ("OK","", true,
-					                                  (sender, args) => { MessageBox.Show ("Clicked!"); }), null);
+				popupController.CheckUpdate ();
 			}
 
 			ToolBarListItem.camouflage = camouflage;
@@ -690,9 +687,9 @@ namespace Yuki_Theme_Plugin
 
 		public void openUpdate ()
 		{
-			string version = Settings.current_version.ToString ("0.0").Replace (',', '.');
-			if (Settings.current_version_add != null && Settings.current_version_add.Length > 1)
-				version += "-" + Settings.current_version_add;
+			string version = Settings.CURRENT_VERSION.ToString ("0.0").Replace (',', '.');
+			if (Settings.CURRENT_VERSION_ADD != null && Settings.CURRENT_VERSION_ADD.Length > 1)
+				version += "-" + Settings.CURRENT_VERSION_ADD;
 			AddTabWithUrl (ideComponents.fm.MainDockPanel, yukiThemeUpdate, $"https://dragon-0609.github.io/Yuki-Theme/updates/{version}");
 		}
 

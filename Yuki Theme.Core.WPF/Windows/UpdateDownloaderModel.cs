@@ -23,13 +23,16 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private string _version         = "";
 
 		private WebClient _downloader;
+		private bool      startedDownloading = false;
 		
-		public async void CheckVersion (string url, Action<bool> afterParsing)
+		public async void CheckVersion (PopupController controller, string url, Action<bool> afterParsing)
 		{
+			// try
+			// {
 			using (var client = new HttpClient ())
 			{
 				client.DefaultRequestHeaders.Add ("User-Agent", user_agent);
-				var response = await client.GetAsync (url);
+				HttpResponseMessage response = await client.GetAsync (url);
 				if (response != null)
 				{
 					string json = await response.Content.ReadAsStringAsync ();
@@ -52,8 +55,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 					nextVersion = ParseVersion (hasBeta, tg);
 
 					double nextVer = double.Parse (nextVersion, CultureInfo.InvariantCulture);
-					bool available = Settings.current_version < nextVer || (Math.Abs (Settings.current_version - nextVer) >= 0.1 &&
-																		Settings.current_version_add.Length != 0 && !hasBeta);
+					bool available = Settings.CURRENT_VERSION < nextVer || (Math.Abs (Settings.CURRENT_VERSION - nextVer) >= 0.1 &&
+																		Settings.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
 					if (available)
 					{
 						PrepareForDownloading (jresponse);
@@ -62,11 +65,27 @@ namespace Yuki_Theme.Core.WPF.Windows
 					afterParsing (available);
 				}
 			}
+
+			// } catch (Exception e)
+			// {
+			// 	controller.ShowNotification (API.Translate ("theme.downloader.errors.group.wrong"), e.Message, null, null);
+			// }
 		}
 
 		public string GetVersion () => _version;
 		public string GetSize () => _formattedSize;
+		public string GetSizeVar () => _approximateSize;
+
 		public string GetGithubUrl () => _githubUrl;
+		public void CancelDownloading ()
+		{
+			if (startedDownloading && _downloader != null)
+			{
+				startedDownloading = false;
+				_downloader.CancelAsync ();
+				_downloader = null;
+			}
+		}
 
 		private static string ParseVersion (bool hasBeta, string tg)
 		{
@@ -98,7 +117,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			int md = (int)Helper.mode;
 			_formattedSize = jresponse["assets"]?[md]?["size"]?.ToString ();
-			_formattedSize = string.Format ("{0:0.0} MB", double.Parse (_formattedSize) / 1024 / 1024);
+			_formattedSize = $"{double.Parse (_formattedSize) / 1024 / 1024:0.0} MB";
 			_downloadUrl = jresponse["assets"][md]["browser_download_url"].ToString ();
 
 			_version = jresponse["name"].ToString ();
@@ -154,6 +173,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				user_agent);
 			_downloader.DownloadFileCompleted += downloadingCompleted;
 			_downloader.DownloadProgressChanged += progressChanged;
+			startedDownloading = true;
 			_downloader.DownloadFileAsync (new Uri (_downloadUrl), destination);
 		}
 
@@ -204,18 +224,24 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			return valid;
 		}
-		
-		public static bool ZipHasFile (string fileFullName, string zipFullPath)
+
+		private static bool ZipHasFile (string fileFullName, string zipFullPath)
 		{
-			using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
+			try
 			{
-				foreach (ZipArchiveEntry entry in archive.Entries)
+				using (ZipArchive archive = ZipFile.OpenRead (zipFullPath))
 				{
-					if (entry.FullName.EndsWith (fileFullName, StringComparison.Ordinal))
+					foreach (ZipArchiveEntry entry in archive.Entries)
 					{
-						return true;
+						if (entry.FullName.EndsWith (fileFullName, StringComparison.Ordinal))
+						{
+							return true;
+						}
 					}
 				}
+			} catch (Exception e)
+			{
+				// ignored
 			}
 
 			return false;

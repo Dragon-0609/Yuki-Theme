@@ -6,7 +6,7 @@
             xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
             mc:Ignorable="d"
-            Title="NotificationWindow" Height="80" Width="260" SizeToContent="Height" ResizeMode="NoResize"
+            Title="NotificationWindow" Height="70" Width="260" SizeToContent="Height" ResizeMode="NoResize" WindowStyle="None"
             BorderThickness="1">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
@@ -41,13 +41,19 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Text="Header" FontWeight="Bold" FontSize="14" Name="HeaderBlock" Style="{StaticResource TextBlockWindow}" />
-            <!-- <Button Grid.Column="1" Content="x" Padding="6 2" Margin="0" Click="OnCloseClicked" /> -->
+            
         </Grid>
 
-        <ProgressBar Grid.Row="1" MaxHeight="20" Value="50" Name="Progress" />
+        <ProgressBar Grid.Row="1" MaxHeight="20" Value="50" Name="Progress" Margin="0 2" />
         
+        <UniformGrid Grid.Row="2" Columns="2" Margin="2 4">
+            <TextBlock Text="0.15MB/15MB" Name="SizeText" Style="{StaticResource TextBlockWindow}" />
+            <WrapPanel HorizontalAlignment="Right">
+            <TextBlock Text="01%" Name="ProgressText" Style="{StaticResource TextBlockWindow}" TextAlignment="Right" />
+            <Button Content="Cancel" HorizontalAlignment="Right" Margin="7 0 0 0" Padding="4 0" Name="CancelButton" Click="CancelDownloading" />
+            </WrapPanel>
+        </UniformGrid>
         
-        <TextBlock Grid.Row="2" Text="Header" Name="ContentBlock" Style="{StaticResource TextBlockWindow}" />
 
     </Grid>
 </controls:SnapWindow>

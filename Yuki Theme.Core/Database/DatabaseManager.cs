@@ -19,38 +19,38 @@ namespace Yuki_Theme.Core.Database
 		{
 			// CreateConnection ();
 			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			if (ke.GetValue (Settings.PASCALPATH.ToString ()) == null)
+			if (ke.GetValue (Settings.PASCAL_PATH.ToString ()) == null)
 			{
-				SetValueToDatabase (ke, Settings.PASCALPATH, "empty");
+				SetValueToDatabase (ke, Settings.PASCAL_PATH, "empty");
 				SetValueToDatabase (ke, Settings.ACTIVE, "empty");
-				SetValueToDatabase (ke, Settings.ASKCHOICE, "true");
-				SetValueToDatabase (ke, Settings.CHOICEINDEX, "0");
-				SetValueToDatabase (ke, Settings.SETTINGMODE, "0");
-				SetValueToDatabase (ke, Settings.AUTOUPDATE, "true");
-				SetValueToDatabase (ke, Settings.BGIMAGE, "true");
+				SetValueToDatabase (ke, Settings.ASK_CHOICE, "true");
+				SetValueToDatabase (ke, Settings.CHOICE_INDEX, "0");
+				SetValueToDatabase (ke, Settings.SETTING_MODE, "0");
+				SetValueToDatabase (ke, Settings.AUTO_UPDATE, "true");
+				SetValueToDatabase (ke, Settings.BG_IMAGE, "true");
 				SetValueToDatabase (ke, Settings.STICKER, "true");
-				SetValueToDatabase (ke, Settings.STATUSBAR, "true");
+				SetValueToDatabase (ke, Settings.STATUS_BAR, "true");
 				SetValueToDatabase (ke, Settings.LOGO, "true");
 				SetValueToDatabase (ke, Settings.EDITOR, "false");
 				SetValueToDatabase (ke, Settings.BETA, "true");
 				SetValueToDatabase (ke, Settings.LOGIN, "false");
-				SetValueToDatabase (ke, Settings.STICKERPOSITIONUNIT, "1");
-				SetValueToDatabase (ke, Settings.ALLOWPOSITIONING, "false");
-				SetValueToDatabase (ke, Settings.SHOWGRIDS, "false");
-				SetValueToDatabase (ke, Settings.USECUSTOMSTICKER, "false");
-				SetValueToDatabase (ke, Settings.CUSTOMSTICKER, "");
+				SetValueToDatabase (ke, Settings.STICKER_POSITION_UNIT, "1");
+				SetValueToDatabase (ke, Settings.ALLOW_POSITIONING, "false");
+				SetValueToDatabase (ke, Settings.SHOW_GRIDS, "false");
+				SetValueToDatabase (ke, Settings.USE_CUSTOM_STICKER, "false");
+				SetValueToDatabase (ke, Settings.CUSTOM_STICKER_PATH, "");
 				SetValueToDatabase (ke, Settings.LICENSE, "false");
-				SetValueToDatabase (ke, Settings.GOOGLEANALYTICS, "false");
-				SetValueToDatabase (ke, Settings.DONTTRACK, "false");
-				SetValueToDatabase (ke, Settings.AUTOFITWIDTH, "true");
-				SetValueToDatabase (ke, Settings.ASKTOSAVE, "true");
-				SetValueToDatabase (ke, Settings.SAVEASOLD, "true");
-				SetValueToDatabase (ke, Settings.SHOWPREVIEW, "true");
+				SetValueToDatabase (ke, Settings.GOOGLE_ANALYTICS, "false");
+				SetValueToDatabase (ke, Settings.DON_T_TRACK, "false");
+				SetValueToDatabase (ke, Settings.AUTO_FIT_WIDTH, "true");
+				SetValueToDatabase (ke, Settings.ASK_TO_SAVE, "true");
+				SetValueToDatabase (ke, Settings.SAVE_AS_OLD, "true");
+				SetValueToDatabase (ke, Settings.SHOW_PREVIEW, "true");
 				SetValueToDatabase (ke, Settings.LOCALIZATION, "unknown");
-				SetValueToDatabase (ke, Settings.USEDIMENSIONCAP, "false");
-				SetValueToDatabase (ke, Settings.DIMENSIONCAPMAX, "-1");
-				SetValueToDatabase (ke, Settings.DIMENSIONCAPUNIT, "0");
-				SetValueToDatabase (ke, Settings.COLORPICKER, "0");
+				SetValueToDatabase (ke, Settings.USE_DIMENSION_CAP, "false");
+				SetValueToDatabase (ke, Settings.DIMENSION_CAP_MAX, "-1");
+				SetValueToDatabase (ke, Settings.DIMENSION_CAP_UNIT, "0");
+				SetValueToDatabase (ke, Settings.COLOR_PICKER, "0");
 			}
 		}
 
@@ -69,36 +69,36 @@ namespace Yuki_Theme.Core.Database
 			Dictionary <int, string> dictionary = new Dictionary <int, string> ();
 
 			RegistryKey key = Registry.CurrentUser.OpenSubKey (@"SOFTWARE\YukiTheme");
-			AddToDictionary (ref dictionary, key, Settings.PASCALPATH, "empty");
+			AddToDictionary (ref dictionary, key, Settings.PASCAL_PATH, "empty");
 			AddToDictionary (ref dictionary, key, Settings.ACTIVE, "empty");
-			AddToDictionary (ref dictionary, key, Settings.ASKCHOICE, "true");
-			AddToDictionary (ref dictionary, key, Settings.CHOICEINDEX, "0");
-			AddToDictionary (ref dictionary, key, Settings.SETTINGMODE, "0");
-			AddToDictionary (ref dictionary, key, Settings.AUTOUPDATE, "true");
-			AddToDictionary (ref dictionary, key, Settings.BGIMAGE, "true");
+			AddToDictionary (ref dictionary, key, Settings.ASK_CHOICE, "true");
+			AddToDictionary (ref dictionary, key, Settings.CHOICE_INDEX, "0");
+			AddToDictionary (ref dictionary, key, Settings.SETTING_MODE, "0");
+			AddToDictionary (ref dictionary, key, Settings.AUTO_UPDATE, "true");
+			AddToDictionary (ref dictionary, key, Settings.BG_IMAGE, "true");
 			AddToDictionary (ref dictionary, key, Settings.STICKER, "true");
-			AddToDictionary (ref dictionary, key, Settings.STATUSBAR, "true");
+			AddToDictionary (ref dictionary, key, Settings.STATUS_BAR, "true");
 			AddToDictionary (ref dictionary, key, Settings.LOGO, "true");
 			AddToDictionary (ref dictionary, key, Settings.EDITOR, "false");
 			AddToDictionary (ref dictionary, key, Settings.BETA, "true");
 			AddToDictionary (ref dictionary, key, Settings.LOGIN, "false");
-			AddToDictionary (ref dictionary, key, Settings.STICKERPOSITIONUNIT, "1");
-			AddToDictionary (ref dictionary, key, Settings.ALLOWPOSITIONING, "false");
-			AddToDictionary (ref dictionary, key, Settings.SHOWGRIDS, "false");
-			AddToDictionary (ref dictionary, key, Settings.USECUSTOMSTICKER, "false");
-			AddToDictionary (ref dictionary, key, Settings.CUSTOMSTICKER, "");
+			AddToDictionary (ref dictionary, key, Settings.STICKER_POSITION_UNIT, "1");
+			AddToDictionary (ref dictionary, key, Settings.ALLOW_POSITIONING, "false");
+			AddToDictionary (ref dictionary, key, Settings.SHOW_GRIDS, "false");
+			AddToDictionary (ref dictionary, key, Settings.USE_CUSTOM_STICKER, "false");
+			AddToDictionary (ref dictionary, key, Settings.CUSTOM_STICKER_PATH, "");
 			AddToDictionary (ref dictionary, key, Settings.LICENSE, "false");
-			AddToDictionary (ref dictionary, key, Settings.GOOGLEANALYTICS, "false");
-			AddToDictionary (ref dictionary, key, Settings.DONTTRACK, "false");
-			AddToDictionary (ref dictionary, key, Settings.AUTOFITWIDTH, "true");
-			AddToDictionary (ref dictionary, key, Settings.ASKTOSAVE, "true");
-			AddToDictionary (ref dictionary, key, Settings.SAVEASOLD, "true");
-			AddToDictionary (ref dictionary, key, Settings.SHOWPREVIEW, "true");
+			AddToDictionary (ref dictionary, key, Settings.GOOGLE_ANALYTICS, "false");
+			AddToDictionary (ref dictionary, key, Settings.DON_T_TRACK, "false");
+			AddToDictionary (ref dictionary, key, Settings.AUTO_FIT_WIDTH, "true");
+			AddToDictionary (ref dictionary, key, Settings.ASK_TO_SAVE, "true");
+			AddToDictionary (ref dictionary, key, Settings.SAVE_AS_OLD, "true");
+			AddToDictionary (ref dictionary, key, Settings.SHOW_PREVIEW, "true");
 			AddToDictionary (ref dictionary, key, Settings.LOCALIZATION, "unknown");
-			AddToDictionary (ref dictionary, key, Settings.USEDIMENSIONCAP, "false");
-			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPMAX, "-1");
-			AddToDictionary (ref dictionary, key, Settings.DIMENSIONCAPUNIT, "0");
-			AddToDictionary (ref dictionary, key, Settings.COLORPICKER, "0");
+			AddToDictionary (ref dictionary, key, Settings.USE_DIMENSION_CAP, "false");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSION_CAP_MAX, "-1");
+			AddToDictionary (ref dictionary, key, Settings.DIMENSION_CAP_UNIT, "0");
+			AddToDictionary (ref dictionary, key, Settings.COLOR_PICKER, "0");
 
 			return dictionary;
 		}

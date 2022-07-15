@@ -102,7 +102,10 @@ namespace Yuki_Theme.Core.WPF
 			{
 				_notificationWindow.UpdateColors ();
 			}
+		}
 
+		private void UpdateDownloaderColor ()
+		{
 			if (!IsDownloaderNull ())
 			{
 				_downloaderWindow.UpdateColors ();
@@ -111,9 +114,26 @@ namespace Yuki_Theme.Core.WPF
 
 		#endregion
 
-		public void ShowUpdateDownloader ()
+		public void CheckUpdate ()
 		{
-		
+			if (Target != null || TargetForm != null)
+			{
+				
+				if (!IsDownloaderNull ())
+				{
+					_downloaderWindow.Close ();
+					_downloaderWindow = null;
+				}
+
+				UpdateDownloaderWindow.IsShown = false;
+				if (Target != null)
+					_downloaderWindow = UpdateDownloaderWindow.CreateUpdateDownloader (Target);
+				else if (TargetForm != null)
+					_downloaderWindow = UpdateDownloaderWindow.CreateUpdateDownloader (TargetForm);
+				
+				UpdateDownloaderColor ();
+				_downloaderWindow.CheckVersion (this);
+			}
 		}
 	}
 }

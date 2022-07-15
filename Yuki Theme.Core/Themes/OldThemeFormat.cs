@@ -692,7 +692,7 @@ namespace Yuki_Theme.Core.Themes
 			string sop = additionalInfo ["stickerOpacity"];
 			theme.Name = name;
 			theme.Group = "";
-			theme.Version = Convert.ToInt32 (Settings.current_version);
+			theme.Version = Convert.ToInt32 (Settings.CURRENT_VERSION);
 			theme.WallpaperOpacity = int.Parse (op);
 			theme.StickerOpacity = int.Parse (sop);
 			theme.WallpaperAlign = int.Parse (al);

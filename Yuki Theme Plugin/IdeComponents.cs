@@ -1012,7 +1012,7 @@ namespace Yuki_Theme_Plugin
 
 		private void ResetStickerPosition (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
+			DatabaseManager.DeleteData (Settings.STICKER_POSITION);
 			plugin.stickerControl.ReadData ();
 			plugin.stickerControl.UpdateLocation ();
 		}

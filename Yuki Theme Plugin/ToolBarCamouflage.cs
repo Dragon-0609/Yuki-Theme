@@ -135,11 +135,11 @@ namespace Yuki_Theme_Plugin
 
 		public void PopulateList ()
 		{
-			string data = database.ReadData (Settings.CAMOUFLAGEHIDDEN, "");
+			string data = database.ReadData (Settings.CAMOUFLAGE_HIDDEN, "");
 
 			PopulateLists (data, ref itemsToHide);
 
-			data = database.ReadData (Settings.CAMOUFLAGEPOSITIONS);
+			data = database.ReadData (Settings.CAMOUFLAGE_POSITIONS);
 			PopulateLists (data, ref itemsToRight);
 		}
 
@@ -165,11 +165,11 @@ namespace Yuki_Theme_Plugin
 		{
 			var output = "";
 			if (itemsToHide.Count > 0) output = CollectString (itemsToHide);
-			database.UpdateData (Settings.CAMOUFLAGEHIDDEN, output);
+			database.UpdateData (Settings.CAMOUFLAGE_HIDDEN, output);
 			output = "";
 			if (itemsToRight.Count > 0) output = CollectString (itemsToRight);
 
-			database.UpdateData (Settings.CAMOUFLAGEPOSITIONS, output);
+			database.UpdateData (Settings.CAMOUFLAGE_POSITIONS, output);
 		}
 
 		private string CollectString (List <string> list)

@@ -214,6 +214,7 @@
     "messages.buttons.close": "Закрыть",
 
     "theme.downloader.errors.group.request": "Не удалось получить информацию о группах",
+    "theme.downloader.errors.group.wrong": "Что-то пошло не так.",
     "theme.downloader.errors.github.exceed.title": "Github API лимит",
     "theme.downloader.errors.github.exceed.message": "Github API лимит достигнут для вашего адреса. Попробуйте позже!",
     

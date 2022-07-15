@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
-using System.Windows.Navigation;
+using System.Windows.Media;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Interfaces;
 
@@ -14,6 +12,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private UpdateDownloader.IModel     _model;
 		private UpdateDownloader.IPresenter _presenter;
 
+		public static bool IsShown = false;
+
 		public UpdateDownloaderWindow ()
 		{
 			InitializeComponent ();
@@ -21,25 +21,20 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_presenter = new UpdateDownloaderPresenter (_model, this);
 		}
 
-		public void SetContent (string title, string content)
-		{
-			HeaderBlock.Text = title;
-			ContentBlock.Text = content;
-		}
-
-		public static UpdateDownloaderWindow CreateUpdateDownloader (Window parent, string title, string content)
+		public static UpdateDownloaderWindow CreateUpdateDownloader (Window parent)
 		{
 			UpdateDownloaderWindow downloaderWindow = new UpdateDownloaderWindow
 			{
 				target = parent,
 				Owner = parent
 			};
-			downloaderWindow.SetContent (title, content);
+			downloaderWindow.AlignX = AlignmentX.Right;
+			downloaderWindow.AlignY = AlignmentY.Bottom;
 
 			return downloaderWindow;
 		}
 
-		public static UpdateDownloaderWindow CreateUpdateDownloader (Form parentForm, string title, string content)
+		public static UpdateDownloaderWindow CreateUpdateDownloader (Form parentForm)
 		{
 			UpdateDownloaderWindow downloaderWindow = new UpdateDownloaderWindow
 			{
@@ -49,8 +44,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Owner = parentForm.Handle
 			};
-
-			downloaderWindow.SetContent (title, content);
+			downloaderWindow.AlignX = AlignmentX.Right;
+			downloaderWindow.AlignY = AlignmentY.Bottom;
 
 			return downloaderWindow;
 		}
@@ -66,9 +61,38 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		}
 
-		public void CheckVersion (string url, PopupController controller)
+		public void CheckVersion (PopupController controller)
 		{
+			const string stableUrl = "https://api.github.com/repos/dragon-0609/yuki-theme/releases";
+			const string betaUrl = "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+			string url = Settings.Beta ? stableUrl : betaUrl;
 			_presenter.CheckVersion (url, controller);
+		}
+
+		public void NoteAsShown ()
+		{
+			IsShown = true;
+		}
+
+		public void UpdateProgressBar (int percent)
+		{
+			Progress.Value = percent;
+			ProgressText.Text = $"{percent:00}%";
+		}
+
+		public void UpdateSizeText (double size)
+		{
+			SizeText.Text = $"{size:0.0}MB/{_model.GetSizeVar ()}MB";
+		}
+
+		public void ChangeHeader (string text)
+		{
+			
+		}
+
+		private void CancelDownloading (object sender, RoutedEventArgs e)
+		{
+			_model.CancelDownloading ();
 		}
 	}
 }

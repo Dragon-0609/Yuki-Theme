@@ -377,7 +377,7 @@ namespace Yuki_Theme.Core.Controls
 
 		public void ReadData ()
 		{
-			string data = database.ReadData (Settings.STICKERPOSITION, "");
+			string data = database.ReadData (Settings.STICKER_POSITION, "");
 			if (data != "")
 			{
 				try
@@ -414,7 +414,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void SaveData ()
 		{
-			database.UpdateData (Settings.STICKERPOSITION, ConvertLocationToSave ());
+			database.UpdateData (Settings.STICKER_POSITION, ConvertLocationToSave ());
 		}
 		
 		/// <summary>

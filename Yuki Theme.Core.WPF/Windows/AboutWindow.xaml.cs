@@ -53,7 +53,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private static string GenerateVersionText ()
 		{
-			return $"{Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+			return $"{Settings.CURRENT_VERSION.ToString ("0.0").Replace (',', '.')} {Settings.CURRENT_VERSION_ADD}";
 		}
 
 		private DoubleAnimation AnimateWindow (bool positive)
