@@ -39,6 +39,7 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 
 			void ResetPosition ();
 			void ChangeHeader (string text);
+			void ChangeSize ();
 		}
 	}
 }

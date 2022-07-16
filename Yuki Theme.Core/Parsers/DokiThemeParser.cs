@@ -108,7 +108,7 @@ namespace Yuki_Theme.Core.Parsers
 			
 			if (needToWrite)
 			{
-				PathToSave = Path.Combine (API.currentPath, "Themes",
+				PathToSave = Path.Combine (SettingsConst.CurrentPath, "Themes",
 				                           $"{Helper.ConvertNameToPath (_originalFileName)}.yukitheme");
 				if (!MainParser.CheckAvailableAndAsk (PathToSave, ask, exist))
 					throw new InvalidDataException (API.Translate ("parser.theme.exist"));

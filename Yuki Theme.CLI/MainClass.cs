@@ -46,7 +46,7 @@ namespace Yuki_Theme.CLI
 				API_Events.showError = ShowError;
 				API_Events.onRename = ShowInvertSuccess;
 				API_Events.SaveInExport = AskToDelete;
-				Settings.connectAndGet ();
+				Settings.ConnectAndGet ();
 				Settings.settingMode = SettingMode.Light;
 				Settings.saveAsOld = true;
 				API.LoadSchemes ();
@@ -98,9 +98,11 @@ namespace Yuki_Theme.CLI
 		/// Set current theme to process it. For example export it.
 		/// </summary>
 		/// <param name="theme">Theme name</param>
-		public void SetFile (string theme)
+		private void SetFile (string theme)
 		{
 			API.SelectTheme (theme);
+			if (theme != "N|L")
+				API.Restore ();
 		}
 
 		internal void ShowLoopMessage ()
@@ -278,7 +280,6 @@ namespace Yuki_Theme.CLI
 		{
 			LoadCLI (true);
 			SetFile ("Darcula");
-			API.Restore ();
 			Console.WriteLine ($"There're {API.names.Count} fields:");
 			foreach (string name in API.names)
 			{
@@ -293,7 +294,6 @@ namespace Yuki_Theme.CLI
 			LoadCLI (true);
 			Settings.settingMode = SettingMode.Advanced;
 			SetFile ("Darcula");
-			API.Restore ();
 			Console.WriteLine ($"There're {API.currentTheme.Fields.Keys.Count} fields:");
 			foreach (string name in API.currentTheme.Fields.Keys)
 			{
@@ -309,11 +309,11 @@ namespace Yuki_Theme.CLI
 			if (o.Name != null)
 			{
 				o.Name = ConvertToText (o.Name);
+				
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
 					SetFile (o.Name);
-
 					API.Export (null, null, null, null, true);
 				} else
 				{
@@ -501,7 +501,6 @@ namespace Yuki_Theme.CLI
 					if (!API.ThemeInfos [o.Name].isDefault)
 					{
 						SetFile (o.Name);
-						API.Restore ();
 						if (o.Definition != null)
 						{
 							bool color = false;
@@ -664,14 +663,14 @@ namespace Yuki_Theme.CLI
 					bool found = false;
 					while (!found)
 					{
-						string pth = InstallationPreparer.FileNamespace +
+						string pth = InstallationPreparer.FILE_NAMESPACE +
 						             (md == 0 ? "files_program.txt" : "files_plugin.txt");
 						Stream str = a.GetManifestResourceStream (pth);
 						if (str != null)
 						{
 							using StreamReader reader = new StreamReader (str);
 							string cx = reader.ReadLine ();
-							string ph = Path.Combine (API.currentPath, cx);
+							string ph = Path.Combine (SettingsConst.CurrentPath, cx);
 							Console.WriteLine (ph);
 							if (ph.Exist ())
 							{
@@ -706,9 +705,8 @@ namespace Yuki_Theme.CLI
 						Helper.mode = md == 0 ? ProductMode.Program : ProductMode.Plugin;
 						InstallationPreparer prep = new InstallationPreparer ();
 						prep.Prepare (false);
-						RegistryKey ke =
-							Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-						if (ke != null) ke.SetValue ("cli_update", "true");
+						Settings.database.SetValue ("cli_update", "true");
+						
 
 						quit = true;
 					} else
@@ -988,7 +986,7 @@ namespace Yuki_Theme.CLI
 
 		private bool IsColor (string definition)
 		{
-			bool result = Highlighter.IsInColors (definition);
+			bool result = HighlitherUtil.IsInColors (definition);
 			return result;
 		}
 
@@ -1053,16 +1051,13 @@ namespace Yuki_Theme.CLI
 
 		internal void CheckUpdateInslattaion ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-
-			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			int inst = Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
 			if (inst == 1)
 			{
 				ShowSuccess (API.Translate ("cli.success.update.full"), API.Translate ("cli.success.update.short"));
-				ke?.DeleteValue ("install");
-				if ((string)ke?.GetValue ("cli_update", "null") != "null")
-					ke.DeleteValue ("cli_update");
+				Settings.database.DeleteValue ("install");
+				if (Settings.database.GetValue ("cli_update", "null") != "null")
+					Settings.database.DeleteValue ("cli_update");
 			}
 		}
 

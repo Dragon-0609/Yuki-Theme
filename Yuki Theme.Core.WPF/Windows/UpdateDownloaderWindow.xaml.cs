@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -58,6 +60,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			BorderBrush = WPFHelper.borderBrush;
 			Progress.Foreground = WPFHelper.borderBrush;
 			Progress.Background = WPFHelper.bgBrush;
+			Progress.BorderBrush = WPFHelper.bgClickBrush;
 
 		}
 
@@ -82,17 +85,29 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void UpdateSizeText (double size)
 		{
-			SizeText.Text = $"{size:0.0}MB/{_model.GetSizeVar ()}MB";
+			SizeText.Text = $"{size:0.0} MB/{_model.GetSizeVar ()} MB";
 		}
 
 		public void ChangeHeader (string text)
 		{
-			
+			HeaderBlock.Text = text;
+		}
+
+		public void ChangeSize ()
+		{
+			SizeText.Text = $"0 MB/{_model.GetSizeVar ()} MB";
 		}
 
 		private void CancelDownloading (object sender, RoutedEventArgs e)
 		{
 			_model.CancelDownloading ();
+		}
+
+		private void UpdateDownloaderWindow_OnClosing (object sender, CancelEventArgs e)
+		{
+			IsShown = false;
+			_model.CancelDownloading ();
+			
 		}
 	}
 }

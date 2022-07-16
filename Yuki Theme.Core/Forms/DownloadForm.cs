@@ -112,8 +112,8 @@ namespace Yuki_Theme.Core.Forms
 							Console.WriteLine (nv);
 							Console.WriteLine (ver);
 #endif
-							if (Settings.CURRENT_VERSION < ver ||
-							    (Settings.CURRENT_VERSION == ver && Settings.CURRENT_VERSION_ADD.Length != 0 && !hasBeta))
+							if (SettingsConst.CURRENT_VERSION < ver ||
+							    (SettingsConst.CURRENT_VERSION == ver && SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta))
 							{
 								int md = (int)Helper.mode;
 								size = jresponse ["assets"] [md] ["size"].ToString ();

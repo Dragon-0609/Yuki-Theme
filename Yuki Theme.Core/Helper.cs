@@ -31,7 +31,7 @@ namespace Yuki_Theme.Core
 		public static RelativeUnit unit;
 
 		private static Size   Standart32 = new Size (32, 32);
-		public static  string CustomThemesBegin => Path.Combine (API.currentPath, "Themes");
+		public static  string CustomThemesBegin => Path.Combine (SettingsConst.CurrentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
@@ -235,8 +235,6 @@ namespace Yuki_Theme.Core
 				IThemeHeader header = DefaultThemes.headers [name];
 				assembly = header.Location;
 				pathHeader = header.ResourceHeader;
-				// Console.WriteLine(pathHeader);
-				// Console.WriteLine (path);
 				if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_OLD}") != null)
 					return ThemeFormat.Old;
 				else if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_NEW}") != null)
@@ -686,7 +684,6 @@ namespace Yuki_Theme.Core
 					string sp = API.GetNameOfTheme (s);
 					if (API.Schemes.Contains (sp))
 					{
-						// Console.WriteLine(nod.Attributes ["name"].Value);
 						currentTheme = sp;
 						API.selectedItem = currentTheme;
 						sett = true;
@@ -706,8 +703,8 @@ namespace Yuki_Theme.Core
 
 		public static void CreateThemeDirectory ()
 		{
-			if (!Directory.Exists (Path.Combine (API.currentPath, "Themes")))
-				Directory.CreateDirectory (Path.Combine (API.currentPath, "Themes"));
+			if (!Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+				Directory.CreateDirectory (Path.Combine (SettingsConst.CurrentPath, "Themes"));
 		}
 
 		public static T GetRandomElement <T> (List <T> list)
@@ -734,18 +731,8 @@ namespace Yuki_Theme.Core
 			key = KeyFillerNCutter (key);
 			using (Aes aes = Aes.Create ())
 			{
-				Console.WriteLine ("Key size: {0} - {1}", Encoding.UTF8.GetBytes (key).Length, key.Length);
 				KeySizes [] ks = aes.LegalKeySizes;
-				foreach (KeySizes item in ks)
-				{
-					Console.WriteLine ("Legal min key size = " + item.MinSize);
-					Console.WriteLine ("Legal max key size = " + item.MaxSize);
-					//Output
-					// Legal min key size = 128
-					// Legal max key size = 256
-				}
-
-
+				
 				aes.Key = Encoding.UTF8.GetBytes (key);
 				aes.IV = iv;
 
@@ -904,20 +891,15 @@ namespace Yuki_Theme.Core
 
         public static int RecognizeInstallationStatus ()
         {
-	        RegistryKey ke =
-		        Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			
-	        if ((string)ke?.GetValue ("cli_update", "null") != "null")
-		        ke.DeleteValue ("cli_update");
+			if (Settings.database.GetValue ("cli_update", "null") != "null")
+				Settings.database.DeleteValue ("cli_update");
 
-	        return ke.GetValue ("install") != null ? 1 : 0;
+	        return Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
         }
 
         public static void DeleteInstallationStatus ()
         {
-	        RegistryKey ke =
-		        Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-	        if (ke != null) ke.DeleteValue ("install");
+			Settings.database.DeleteValue ("install");
         }
 
         public static NativeWindow ToNativeWindow (this Window window)
@@ -1038,56 +1020,6 @@ namespace Yuki_Theme.Core
 			}
 
 			return isZip;
-		}
-	}
-	public struct WindowProps
-	{
-		public int   Left;
-		public int   Top;
-		public int?  Width     = null;
-		public int?  Height    = null;
-		public bool? Maximized = null;
-
-		public WindowProps()
-		{
-			Left = 0;
-			Top = 0;
-		}
-
-		public static WindowProps Parse (string target)
-		{
-			string [] spp = target.Split (':');
-			
-			if (spp.Length < 2) return new WindowProps {Left = 0, Top = 0};
-			
-			WindowProps props = new WindowProps
-			{
-				Left = int.Parse (spp [0]),
-				Top = int.Parse (spp [1])
-			};
-			try
-			{
-				if (spp.Length > 2)
-				{
-					props.Width = int.Parse (spp [2]);
-					if (spp.Length > 3)
-					{
-						props.Height = int.Parse (spp [3]);
-						if (spp.Length == 5)
-							props.Maximized = bool.Parse (spp [4]);
-					}
-				}
-			} catch
-			{
-				// ignored
-			}
-
-			return props;
-		}
-		
-		public override string ToString ()
-		{
-			return $"{Left}:{Top}:{Width}:{Height}:{Maximized}";
 		}
 	}
 }

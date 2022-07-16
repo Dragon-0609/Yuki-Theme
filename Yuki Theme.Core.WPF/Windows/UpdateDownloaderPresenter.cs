@@ -14,7 +14,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private UpdateDownloader.IModel _model;
 		private UpdateDownloader.IView  _view;
 		private PopupController         _controller;
-
+		
 		private int    _progress = 0;
 		private double _recieved = 0;
 
@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (hasUpdate)
 			{
 				title = API.Translate ("download.available");
-				content = GetVersionFormatted ();
+				content = GetVersionFormatted (true);
 				
 				button1Data = new NotificationButtonData (API.Translate ("download.buttons.update"), true, StartUpdate);
 
@@ -58,16 +58,23 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_controller.ShowNotification (title, content, button1Data, button2Data);
 		}
 
-		private string GetVersionFormatted ()
+		private string GetVersionFormatted (bool withSize)
 		{
-			return $"Yuki Theme {_model.GetVersion ()}   {API.Translate ("download.size")}: {_model.GetSize ()}";
+			return $"Yuki Theme {_model.GetVersion ()}" + GetFormattedSize (withSize);
+		}
+
+		private string GetFormattedSize (bool withSize)
+		{
+			return !withSize ? "" : $"{Environment.NewLine}{API.Translate ("download.size")}: {_model.GetSize ()}";
 		}
 
 		private void StartUpdate (object sender, RequestNavigateEventArgs e)
 		{
 			_view.UpdateColors ();
 			_view.NoteAsShown ();
-			_view.ChangeHeader (GetVersionFormatted ());
+			_view.ChangeHeader (GetVersionFormatted (false));
+			_view.UpdateProgressBar (0);
+			_view.ChangeSize ();
 			_view.Show ();
 			_view.ResetPosition ();
 			_model.StartUpdating (ProgressChanged, DownloadingCompleted);
@@ -76,7 +83,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void ProgressChanged (object sender, DownloadProgressChangedEventArgs e)
 		{
 			_progress = e.ProgressPercentage;
-			_recieved = e.BytesReceived / 1024 / 1024.0;
+			_recieved = e.BytesReceived / 1024.0 / 1024.0;
 			UpdateProgress ();
 		}
 

@@ -39,7 +39,7 @@ namespace Yuki_Theme.Core.WPF
 				licenseWindow.ShowDialog ();
 				
 				Settings.license = true;
-				Settings.database.UpdateData (Settings.LICENSE, "True");
+				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
 			}
 		}
 		
@@ -53,7 +53,7 @@ namespace Yuki_Theme.Core.WPF
 					// Maybe internet isn't available
 				} else
 				{
-					Settings.database.UpdateData (Settings.LOGIN, "true");
+					Settings.database.UpdateData (SettingsConst.LOGIN, "true");
 					Settings.Logged = true;
 				}
 			}

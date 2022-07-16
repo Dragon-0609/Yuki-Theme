@@ -45,7 +45,7 @@ namespace Yuki_Theme_Plugin
 		public string Name => "Yuki Theme";
 
 		public string Version =>
-			Settings.CURRENT_VERSION.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
+			SettingsConst.CURRENT_VERSION.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
 
 		public string Copyright => "Dragon-LV";
 
@@ -133,7 +133,7 @@ namespace Yuki_Theme_Plugin
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
-			Settings.connectAndGet ();
+			Settings.ConnectAndGet ();
 
 			imagesEnabled = 0;
 			imagesEnabled += Settings.bgImage ? 1 : 0;
@@ -687,9 +687,9 @@ namespace Yuki_Theme_Plugin
 
 		public void openUpdate ()
 		{
-			string version = Settings.CURRENT_VERSION.ToString ("0.0").Replace (',', '.');
-			if (Settings.CURRENT_VERSION_ADD != null && Settings.CURRENT_VERSION_ADD.Length > 1)
-				version += "-" + Settings.CURRENT_VERSION_ADD;
+			string version = SettingsConst.CURRENT_VERSION.ToString ("0.0").Replace (',', '.');
+			if (SettingsConst.CURRENT_VERSION_ADD != null && SettingsConst.CURRENT_VERSION_ADD.Length > 1)
+				version += "-" + SettingsConst.CURRENT_VERSION_ADD;
 			AddTabWithUrl (ideComponents.fm.MainDockPanel, yukiThemeUpdate, $"https://dragon-0609.github.io/Yuki-Theme/updates/{version}");
 		}
 
@@ -796,7 +796,7 @@ namespace Yuki_Theme_Plugin
 				licenseWindow.ShowDialog ();
 				
 				Settings.license = true;
-				Settings.database.UpdateData (Settings.LICENSE, "True");
+				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
 			}
 		}
 		

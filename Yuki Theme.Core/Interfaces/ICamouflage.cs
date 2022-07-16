@@ -1,21 +1,22 @@
-﻿namespace Yuki_Theme.Core.Interfaces;
-
-public interface ICamouflage
+﻿namespace Yuki_Theme.Core.Interfaces
 {
+	public interface ICamouflage
+	{
 
-	bool IsVisible (string item);
+		bool IsVisible (string item);
 	
-	bool IsRight (string   item);
+		bool IsRight (string   item);
 
-	void SetVisible (string item, bool value);
+		void SetVisible (string item, bool value);
 
-	void SetRight (string item, bool value);
+		void SetRight (string item, bool value);
 
-	void Reset ();
+		void Reset ();
 	
-    void PopulateList ();
+		void PopulateList ();
     
-    void StartToHide ();
+		void StartToHide ();
 
-    void SaveData ();
+		void SaveData ();
+	}
 }

@@ -18,8 +18,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private string _githubUrl      = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 		private string _downloadUrl    = "";
-		private string _formattedSize   = "";
-		private string _approximateSize = "";
+		private string _formattedSize   = "0.0";
+		private string _approximateSize = "0.0";
 		private string _version         = "";
 
 		private WebClient _downloader;
@@ -55,8 +55,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 					nextVersion = ParseVersion (hasBeta, tg);
 
 					double nextVer = double.Parse (nextVersion, CultureInfo.InvariantCulture);
-					bool available = Settings.CURRENT_VERSION < nextVer || (Math.Abs (Settings.CURRENT_VERSION - nextVer) >= 0.1 &&
-																		Settings.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
+					bool available = SettingsConst.CURRENT_VERSION < nextVer || (Math.Abs (SettingsConst.CURRENT_VERSION - nextVer) >= 0.1 &&
+																				 SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
 					if (available)
 					{
 						PrepareForDownloading (jresponse);
@@ -117,14 +117,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			int md = (int)Helper.mode;
 			_formattedSize = jresponse["assets"]?[md]?["size"]?.ToString ();
-			_formattedSize = $"{double.Parse (_formattedSize) / 1024 / 1024:0.0} MB";
-			_downloadUrl = jresponse["assets"][md]["browser_download_url"].ToString ();
+			_formattedSize = $"{double.Parse (_formattedSize ?? string.Empty) / 1024 / 1024:0.0} MB";
+			_downloadUrl = jresponse["assets"][md]?["browser_download_url"]?.ToString ();
 
 			_version = jresponse["name"].ToString ();
 			if (_version.StartsWith ("v")) _version = _version.Substring (1);
 
-			_approximateSize = jresponse["assets"][md]["size"].ToString ();
-			_approximateSize = $"{double.Parse (_approximateSize) / 1024 / 1024:0.0}";
+			_approximateSize = jresponse["assets"][md]?["size"]?.ToString ();
+			_approximateSize = $"{double.Parse (_approximateSize ?? string.Empty) / 1024 / 1024:0.0}";
 		}
 		
 		public void StartUpdating (DownloadProgressChangedEventHandler progressChanged, AsyncCompletedEventHandler downloadingCompleted)
@@ -145,7 +145,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			} else
 			{
 				FileInfo fi = new FileInfo (GetUpdatePath ());
-				string siz = $"{fi.Length / 1024 / 1024.0:0.0}";
+				string siz = $"{fi.Length / 1024.0 / 1024.0:0.0}";
 				if (siz != _approximateSize)
 				{
 					StartDownloading (progressChanged, downloadingCompleted);
@@ -156,7 +156,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		private void StartUpdating ()
+		internal static void StartUpdating ()
 		{
 			InstallationPreparer prep = new ();
 			prep.Prepare (true);
@@ -197,8 +197,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			return Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme");
 		}
-		
-		private static string GetUpdatePath ()
+
+		internal static string GetUpdatePath ()
 		{
 			return Path.Combine (GetUpdateDirectory (), "yuki_theme.zip");
 		}

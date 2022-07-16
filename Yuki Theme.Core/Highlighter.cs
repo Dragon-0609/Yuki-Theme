@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
@@ -42,14 +43,6 @@ namespace Yuki_Theme.Core
 		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
 
-		private string [] names =
-		{
-			"linebigcomment", "linecomment", "blockcomment", "blockcomment2", "string", "digits", "beginend",
-			"keywords", "programsections", "punctuation", "nonreserved1", "operatorkeywords", "selectionstatements",
-			"iterationstatements", "exceptionhandlingstatements", "raisestatement", "jumpstatements", "jumpprocedures",
-			"internalconstant", "internaltypes", "referencetypes", "modifiers", "accessmodifiers", "accesskeywords1",
-			"errorwords", "warningwords", "direcivenames", "specialdirecivenames", "direcivevalues", "markprevious"
-		};
 
 		private Regex currentRegex;
 
@@ -83,9 +76,8 @@ namespace Yuki_Theme.Core
 			bool isLight = Settings.settingMode == SettingMode.Light;
 			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
 			{
-				if (IsInColors (style.Key))
+				if (HighlitherUtil.IsInColors (style.Key))
 				{
-					// Console.WriteLine(style.Key);
 					string [] key = new string [] { style.Key.ToLower () };
 					if (isLight)
 						key = ShadowNames.PascalFields [style.Key];
@@ -110,11 +102,8 @@ namespace Yuki_Theme.Core
 						}
 					}
 
-					// else
-					// Console.WriteLine($"BL {key}");
 				} else
 				{
-					// Console.WriteLine (style.Key);
 					switch (style.Key)
 					{
 						case "Default" :
@@ -285,7 +274,6 @@ namespace Yuki_Theme.Core
 
 			if (currentRegex != null)
 			{
-				// Console.WriteLine("TEST");
 				sBox.Range.SetStyle (ellipseStyle, currentRegex);
 			}
 		}
@@ -357,7 +345,7 @@ namespace Yuki_Theme.Core
 			if (regexes == null)
 				InitPascalRegex ();
 
-			foreach (string name in names)
+			foreach (string name in HighlitherUtil.names)
 			{
 				e.ChangedRange.SetStyle (styles [name], regexes [name]);
 			}
@@ -384,23 +372,6 @@ namespace Yuki_Theme.Core
 		{
 			return ColorTranslator.ToHtml (clr);
 		}
-
-		public static bool IsInColors (string str, bool forceAdvanced = false)
-		{
-			return IsInColors (str, SettingMode.Advanced, forceAdvanced);
-		}
-
-		public static bool IsInColors (string str, SettingMode mode, bool forceAdvanced)
-		{
-			if (styles == null)
-				InitStyles ();
-			if (Settings.settingMode == mode || forceAdvanced)
-				return styles.ContainsKey (str.ToLower ());
-
-			return str != "Special Character" && ShadowNames.PascalFields_raw.ContainsKey (str);
-
-		}
-
 
 
 		private FontStyle addFontStyle (FontStyle font, FontStyle f2, bool ts)

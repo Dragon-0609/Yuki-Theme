@@ -1172,17 +1172,14 @@ namespace Yuki_Theme.Core.Forms
 
 		private void isUpdated ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			
-			if ((string)ke?.GetValue ("cli_update", "null") != "null")
-				ke.DeleteValue ("cli_update");
+			if (Settings.database.GetValue ("cli_update", "null") != "null")
+				Settings.database.DeleteValue ("cli_update");
 
-			int inst = ke.GetValue ("install") != null ? 1 : 0;
+			int inst = Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
 			if (inst == 1)
 			{
 				new ChangelogForm ().Show (this);
-				ke.DeleteValue ("install");
+				Settings.database.DeleteValue ("install");
 			}
 		}
 

@@ -1,24 +1,25 @@
 ﻿using System.IO;
 using Yuki_Theme.Core.Themes;
 
-namespace Yuki_Theme.Core.Utils;
-
-public class PathGenerator
+namespace Yuki_Theme.Core.Utils
 {
-	public static string PathToFile (string pathLoad, bool old)
+	public class PathGenerator
 	{
-		return Path.Combine (API.currentPath, "Themes", $"{pathLoad}{Helper.GetExtension (old)}");
-	}
-
-	public static string PathToMemory (string name)
-	{
-		IThemeHeader header = DefaultThemes.headers [name];
-		string file = name;
-		if (file.Contains (":"))
+		public static string PathToFile (string pathLoad, bool old)
 		{
-			file = Helper.ConvertNameToPath (file);
+			return Path.Combine (SettingsConst.CurrentPath, "Themes", $"{pathLoad}{Helper.GetExtension (old)}");
 		}
 
-		return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.ThemeInfos[name].isOld)}";
+		public static string PathToMemory (string name)
+		{
+			IThemeHeader header = DefaultThemes.headers [name];
+			string file = name;
+			if (file.Contains (":"))
+			{
+				file = Helper.ConvertNameToPath (file);
+			}
+
+			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.ThemeInfos[name].isOld)}";
+		}
 	}
 }

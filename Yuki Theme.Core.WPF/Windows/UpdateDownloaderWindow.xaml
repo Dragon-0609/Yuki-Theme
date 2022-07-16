@@ -7,7 +7,7 @@
             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
             mc:Ignorable="d"
             Title="NotificationWindow" Height="70" Width="260" SizeToContent="Height" ResizeMode="NoResize" WindowStyle="None"
-            BorderThickness="1">
+            BorderThickness="1" Closing="UpdateDownloaderWindow_OnClosing">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
                               SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F"
@@ -31,7 +31,7 @@
     <Grid Margin="10 2">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -44,12 +44,12 @@
             
         </Grid>
 
-        <ProgressBar Grid.Row="1" MaxHeight="20" Value="50" Name="Progress" Margin="0 2" />
+        <ProgressBar Grid.Row="1" MaxHeight="20" MinHeight="10" Value="0" Name="Progress" Margin="0 2" />
         
         <UniformGrid Grid.Row="2" Columns="2" Margin="2 4">
             <TextBlock Text="0.15MB/15MB" Name="SizeText" Style="{StaticResource TextBlockWindow}" />
             <WrapPanel HorizontalAlignment="Right">
-            <TextBlock Text="01%" Name="ProgressText" Style="{StaticResource TextBlockWindow}" TextAlignment="Right" />
+            <TextBlock Text="00%" Name="ProgressText" Style="{StaticResource TextBlockWindow}" TextAlignment="Right" />
             <Button Content="Cancel" HorizontalAlignment="Right" Margin="7 0 0 0" Padding="4 0" Name="CancelButton" Click="CancelDownloading" />
             </WrapPanel>
         </UniformGrid>

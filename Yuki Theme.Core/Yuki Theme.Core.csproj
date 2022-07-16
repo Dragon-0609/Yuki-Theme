@@ -123,9 +123,12 @@
     <Compile Include="API.cs" />
     <Compile Include="API_Events.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
+    <Compile Include="Database\FileDatabase.cs" />
+    <Compile Include="Database\WindowsRegistryDatabase.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
     <Compile Include="Interfaces\ICamouflage.cs" />
     <Compile Include="Interfaces\IColorUpdatable.cs" />
+    <Compile Include="Interfaces\IDatabase.cs" />
     <Compile Include="Interfaces\IIconManager.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Forms\ThemeDownloaderForm.cs">
@@ -135,6 +138,7 @@
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="SettingsConst.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
     <Compile Include="Themes\IThemeHeader.cs" />
@@ -147,12 +151,14 @@
     <Compile Include="Themes\ThemeManager.cs" />
     <Compile Include="Utils\Condition.cs" />
     <Compile Include="Utils\FontManager.cs" />
+    <Compile Include="Utils\HighlitherUtil.cs" />
     <Compile Include="Utils\InstallationPreparer.cs" />
     <Compile Include="Utils\PathGenerator.cs" />
     <Compile Include="Utils\Placeholder.cs" />
     <Compile Include="Utils\Populater.cs" />
     <Compile Include="Utils\ShadowNames.cs" />
     <Compile Include="Utils\SmallDocumentation.cs" />
+    <Compile Include="Utils\WindowProps.cs" />
     <None Include="Controls\CustomB.cs" />
     <Compile Include="API_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />

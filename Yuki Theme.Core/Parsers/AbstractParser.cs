@@ -45,8 +45,8 @@ namespace Yuki_Theme.Core.Parsers
 
 			if (needToWrite)
 			{
-				if (!Directory.Exists (Path.Combine (API.currentPath, "Themes")))
-					Directory.CreateDirectory (Path.Combine (API.currentPath, "Themes"));
+				if (!Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+					Directory.CreateDirectory (Path.Combine (SettingsConst.CurrentPath, "Themes"));
 				Console.WriteLine (PathToSave);
 
 				if (!overwrite)
@@ -58,7 +58,7 @@ namespace Yuki_Theme.Core.Parsers
 					{
 						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
 						if (!API.Schemes.Contains (flname))
-							File.Copy (Path.Combine (API.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
+							File.Copy (Path.Combine (SettingsConst.CurrentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
 					}
 				} else
 				{

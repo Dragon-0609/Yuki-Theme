@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Yuki_Theme.Core.Interfaces;
@@ -37,6 +38,7 @@ namespace Yuki_Theme.Core.WPF
 		private void AddUpdates ()
 		{
 			_colorUpdatable.OnColorUpdate += UpdateNotificationColor;
+			_colorUpdatable.OnColorUpdate += UpdateDownloaderColor;
 		}
 
 
@@ -68,7 +70,7 @@ namespace Yuki_Theme.Core.WPF
 
 		private bool IsDownloaderNull ()
 		{
-			return _downloaderWindow == null || PresentationSource.FromVisual (_downloaderWindow) == null;
+			return _downloaderWindow == null;
 		}
 
 		private void CreateAndShowNotification (string title,
@@ -96,17 +98,17 @@ namespace Yuki_Theme.Core.WPF
 			_notificationWindow.SetButtons (button1Data, button2Data);
 		}
 
-		private void UpdateNotificationColor (Color bg, Color fg, Color bgclick)
+		private void UpdateNotificationColor (Color bg, Color fg, Color bgClick)
 		{
 			if (!IsNotificationNull ())
 			{
 				_notificationWindow.UpdateColors ();
 			}
 		}
-
-		private void UpdateDownloaderColor ()
+		
+		private void UpdateDownloaderColor (Color bg, Color fg, Color bgClick)
 		{
-			if (!IsDownloaderNull ())
+			if (!IsDownloaderNull () && UpdateDownloaderWindow.IsShown)
 			{
 				_downloaderWindow.UpdateColors ();
 			}
@@ -118,8 +120,7 @@ namespace Yuki_Theme.Core.WPF
 		{
 			if (Target != null || TargetForm != null)
 			{
-				
-				if (!IsDownloaderNull ())
+				if (!IsDownloaderNull () && UpdateDownloaderWindow.IsShown)
 				{
 					_downloaderWindow.Close ();
 					_downloaderWindow = null;
@@ -130,10 +131,29 @@ namespace Yuki_Theme.Core.WPF
 					_downloaderWindow = UpdateDownloaderWindow.CreateUpdateDownloader (Target);
 				else if (TargetForm != null)
 					_downloaderWindow = UpdateDownloaderWindow.CreateUpdateDownloader (TargetForm);
-				
-				UpdateDownloaderColor ();
+
+				UpdateDownloaderColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
 				_downloaderWindow.CheckVersion (this);
 			}
 		}
+
+		public void InstallUpdate (string file)
+		{
+			if (Path.GetExtension (file).ToLower ().EndsWith (".zip") && UpdateDownloaderModel.IsValidUpdate (file))
+			{
+				if (UpdateDownloaderModel.IsUpdateDownloaded ())
+					File.Delete (UpdateDownloaderModel.GetUpdatePath ());
+
+				File.Copy (file, UpdateDownloaderModel.GetUpdatePath ());
+				
+				UpdateDownloaderModel.StartUpdating ();
+			} else
+			{
+				if (API_Events.showError != null)
+					API_Events.showError (API.Translate ("messages.update.invalid"), API.Translate ("messages.update.wrong"));
+			}
+			
+		}
+		
 	}
 }

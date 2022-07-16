@@ -61,7 +61,7 @@ namespace Yuki_Theme.Core.Themes
 						}
 					}
 
-					if (Highlighter.IsInColors (nm, true))
+					if (HighlitherUtil.IsInColors (nm, true))
 					{
 						if (!attrs.Bold == null) attrs.Bold = false;
 
@@ -117,7 +117,6 @@ namespace Yuki_Theme.Core.Themes
 		public void PopulateByXMLNodeSingularForLight (XmlNode           node, ref Theme theme,
 		                                                      ref List <string> namesExtra)
 		{
-			// Console.WriteLine("TEST");
 			var attrs = new ThemeField ();
 			if (node.Attributes != null && !string.Equals (node.Name, "Delimiters", StringComparison.Ordinal))
 			{
@@ -138,7 +137,7 @@ namespace Yuki_Theme.Core.Themes
 						}
 					}
 
-					if (Highlighter.IsInColors (nm, true))
+					if (HighlitherUtil.IsInColors (nm, true))
 					{
 						if (!attrs.Bold == null) attrs.Bold = false;
 
@@ -160,8 +159,7 @@ namespace Yuki_Theme.Core.Themes
 				if (!namesExtra.Contains (shadowName))
 				{
 					if (!theme.Fields.ContainsKey (shadowName))
-					{
-						// Console.WriteLine ( $"InList: {nm}|{attributes.ContainsKey (nm)}");		
+					{		
 						theme.Fields.Add (shadowName, attrs);
 						if (!Populater.IsInList (shadowName, namesExtra)) namesExtra.Add (shadowName);
 					}
@@ -692,7 +690,7 @@ namespace Yuki_Theme.Core.Themes
 			string sop = additionalInfo ["stickerOpacity"];
 			theme.Name = name;
 			theme.Group = "";
-			theme.Version = Convert.ToInt32 (Settings.CURRENT_VERSION);
+			theme.Version = Convert.ToInt32 (SettingsConst.CURRENT_VERSION);
 			theme.WallpaperOpacity = int.Parse (op);
 			theme.StickerOpacity = int.Parse (sop);
 			theme.WallpaperAlign = int.Parse (al);

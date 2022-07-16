@@ -224,10 +224,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 				{
 					ColorPanel.Visibility = Visibility.Visible;
 					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled =
-						Highlighter.IsInColors (Definitions.SelectedItem.ToString ()) && !API.currentTheme.isDefault;
+						HighlitherUtil.IsInColors (Definitions.SelectedItem.ToString ()) && !API.currentTheme.isDefault;
 
 					BoldCheckBox.Visibility = ItalicCheckBox.Visibility =
-						Highlighter.IsInColors (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
+						HighlitherUtil.IsInColors (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
 
 					ThemeField dic = API.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
 
@@ -554,7 +554,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 					SelectField ();
 					API.selectedItem = Themes.SelectedItem.ToString ();
-					Settings.database.UpdateData (Settings.ACTIVE, API.selectedItem);
+					Settings.database.UpdateData (SettingsConst.ACTIVE, API.selectedItem);
 				}
 			}
 		}
@@ -612,7 +612,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void MainWindow_OnSourceInitialized (object sender, EventArgs e)
 		{
 			if (Helper.mode != ProductMode.Plugin)
-				Settings.connectAndGet ();
+				Settings.ConnectAndGet ();
 
 			WindowStartupLocation = WindowStartupLocation.Manual;
 			WindowProps props = Settings.database.ReadLocation ();

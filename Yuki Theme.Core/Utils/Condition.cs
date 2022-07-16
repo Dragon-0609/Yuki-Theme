@@ -53,7 +53,6 @@ namespace Yuki_Theme.Core.Utils
 
 		private static bool CheckGroupCondition (ThemeInfo info, Condition condition)
 		{
-			Console.WriteLine ($"GROUP: {info.group} | {condition.Equality}");
 			if (condition.Equality.ToLower () == "null")
 				return info.group == "";
 			else

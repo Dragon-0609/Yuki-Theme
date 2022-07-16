@@ -4,37 +4,38 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Yuki_Theme.Core.Themes;
-
-public static class ExternalThemeManager
+namespace Yuki_Theme.Core.Themes
 {
-
-
-	public static void LoadThemes ()
+	public static class ExternalThemeManager
 	{
-		string [] files = Directory.GetFiles (API.currentPath, "*Themes.dll");
-		if (files.Length > 0)
-			AddThemesToDB (files);
-		string path = Path.Combine (API.currentPath, "Themes");
-		if (Directory.Exists (path))
+
+
+		public static void LoadThemes ()
 		{
-			files = Directory.GetFiles (path, "*.dll");
+			string [] files = Directory.GetFiles (SettingsConst.CurrentPath, "*Themes.dll");
 			if (files.Length > 0)
 				AddThemesToDB (files);
-		}	
-	}
-
-	private static void AddThemesToDB (string [] files)
-	{
-		foreach (string file in files)
-		{
-			Assembly assembly = Assembly.LoadFile (file);
-			Type [] types = assembly.GetTypes ();
-			Type themeHeader = types.FirstOrDefault (i => typeof (IThemeHeader).IsAssignableFrom (i) && i.IsClass);
-			if (themeHeader != null)
+			string path = Path.Combine (SettingsConst.CurrentPath, "Themes");
+			if (Directory.Exists (path))
 			{
-				IThemeHeader header = (IThemeHeader)Activator.CreateInstance (themeHeader);
-				DefaultThemes.addHeader (header);
+				files = Directory.GetFiles (path, "*.dll");
+				if (files.Length > 0)
+					AddThemesToDB (files);
+			}	
+		}
+
+		private static void AddThemesToDB (string [] files)
+		{
+			foreach (string file in files)
+			{
+				Assembly assembly = Assembly.LoadFile (file);
+				Type [] types = assembly.GetTypes ();
+				Type themeHeader = types.FirstOrDefault (i => typeof (IThemeHeader).IsAssignableFrom (i) && i.IsClass);
+				if (themeHeader != null)
+				{
+					IThemeHeader header = (IThemeHeader)Activator.CreateInstance (themeHeader);
+					DefaultThemes.addHeader (header);
+				}
 			}
 		}
 	}

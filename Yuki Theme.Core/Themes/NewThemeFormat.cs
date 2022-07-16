@@ -281,7 +281,6 @@ namespace Yuki_Theme.Core.Themes
 			{
 				theme.Name = name;
 				theme.Group = "";
-				// Console.WriteLine ("REGENERATION...");
 				apiActions.LoadFieldsAndMergeFiles (str, path, theme);
 			}
 		}
@@ -306,7 +305,6 @@ namespace Yuki_Theme.Core.Themes
 		/// <returns>Parsed theme</returns>
 		public override Theme PopulateList (string name, bool loadImages)
 		{
-			Console.WriteLine (name);
 			string path = Helper.ConvertNameToPath (name);
 			bool isDef = API.ThemeInfos [name].isDefault;
 			string json = LoadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);

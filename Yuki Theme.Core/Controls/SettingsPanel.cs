@@ -344,7 +344,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void reset_margin_Click (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (Settings.STICKER_POSITION);
+			Settings.database.DeleteData (SettingsConst.STICKER_POSITION);
 			for (int i = 0; i < stickerToUpdate.Count; i++)
 			{
 				try

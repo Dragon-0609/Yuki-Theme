@@ -4,16 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using Microsoft.Win32;
+using Yuki_Theme.Core;
+using Yuki_Theme.Core.Database;
 
 namespace Yuki_Installer
 {
-	
-	public enum ProductMode : int
-	{
-		Program = 0,
-		Plugin  = 1,
-		CLI     = 2
-	}
 	
 	internal class Program
 	{
@@ -27,6 +22,8 @@ namespace Yuki_Installer
 		private const string CLI_FULL_NAME       = "yuki.exe";
 
 		private const string APP_NAME = "Yuki Theme";
+
+		private static DatabaseManager _databaseManager = new DatabaseManager (false);
 
 		private static string GetPathToInstallationZip =>
 			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), APP_NAME, "yuki_theme.zip");
@@ -85,6 +82,14 @@ namespace Yuki_Installer
 
 						ReturnThemesToApp (appDirectory, tempDirectory);
 
+						if (DatabaseManager.IsLinux)
+						{
+							if (File.Exists (FileDatabase.GetSettingsPath ()))
+							{
+								File.Copy (FileDatabase.GetSettingsPath (), Path.Combine (appDirectory, FileDatabase.YUKI_SETTINGS));
+							}
+						}
+						
 						string installerPath = Path.Combine (appDirectory, INSTALLER_FULL_NAME);
 						Process.Start (installerPath, $"\"{appDirectory}_tmp\" \"{GetPathToInstallationZip}\"");
 					}
@@ -133,10 +138,7 @@ namespace Yuki_Installer
 		
 		private static void RecordInstallation ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme",
-				                                   RegistryKeyPermissionCheck.ReadWriteSubTree);
-			ke.SetValue ("install", "1");
+			_databaseManager.SetValue ("install", "1");
 		}
 
 		
@@ -147,8 +149,10 @@ namespace Yuki_Installer
 
 		private static bool IsUpdateFromCLI ()
 		{
-			RegistryKey ke = Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			return bool.Parse (ke.GetValue ("cli_update", "false").ToString ());
+			string value = _databaseManager.GetValue ("cli_update", "false");
+			if (value.Length == 0)
+				value = "false";
+			return bool.Parse (value);
 		}
 		
 		private static bool CheckAppPath (string [] args, out string path)
@@ -260,8 +264,10 @@ namespace Yuki_Installer
 		
 		private static ProductMode GetMode ()
 		{
-			RegistryKey ke = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			return (ProductMode) int.Parse (ke.GetValue ("mode").ToString ());
+			string value = _databaseManager.GetValue ("cli_update", "false");
+			if (value.Length == 0)
+				value = "0";
+			return (ProductMode) int.Parse (value);
 		}
 		
 

@@ -22,13 +22,13 @@ namespace Yuki_Theme.Core.Parsers
 				return;
 			}
 
-			string pathToSave = Path.Combine (API.currentPath, $"Themes/{fileName}.yukitheme");
-			string pathToSaveEncoded = Path.Combine (API.currentPath, $"Themes/{Helper.ConvertNameToPath (fileName)}.yukitheme");
+			string pathToSave = Path.Combine (SettingsConst.CurrentPath, $"Themes/{fileName}.yukitheme");
+			string pathToSaveEncoded = Path.Combine (SettingsConst.CurrentPath, $"Themes/{Helper.ConvertNameToPath (fileName)}.yukitheme");
 
 			if (fileName.EndsWith (".yuki"))
 			{
-				pathToSave = Path.Combine (API.currentPath, $"Themes/{fileName}.yuki");
-				pathToSaveEncoded = Path.Combine (API.currentPath, $"Themes/{Helper.ConvertNameToPath (fileName)}.yuki");
+				pathToSave = Path.Combine (SettingsConst.CurrentPath, $"Themes/{fileName}.yuki");
+				pathToSaveEncoded = Path.Combine (SettingsConst.CurrentPath, $"Themes/{Helper.ConvertNameToPath (fileName)}.yuki");
 			}
 
 			if (CheckAvailableAndAsk (pathToSaveEncoded, ask, exist))

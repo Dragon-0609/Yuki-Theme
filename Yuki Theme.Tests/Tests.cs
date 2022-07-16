@@ -36,10 +36,10 @@ namespace Yuki_Theme.Tests
 				if (!isInitialized)
 				{
 					SetDefaultActions ();
-					Core.API.currentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+					Core.SettingsConst.CurrentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
 					ResetForTests ();
 					ClearTestThemes ();
-					Settings.connectAndGet ();
+					Settings.ConnectAndGet ();
 					Core.API.LoadSchemes ();
 					bool cnd = Core.API.SelectTheme (Helper.GetRandomElement (Core.API.Schemes));
 
@@ -75,7 +75,7 @@ namespace Yuki_Theme.Tests
 			{
 				if (copyTo != null && copyFrom != null)
 				{
-					string patsh = Path.Combine (Core.API.currentPath,
+					string patsh = Path.Combine (Core.SettingsConst.CurrentPath,
 					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
@@ -222,9 +222,9 @@ namespace Yuki_Theme.Tests
 
 		private void ClearTestThemes ()
 		{
-			if (Directory.Exists (Path.Combine (Core.API.currentPath, "Themes")))
+			if (Directory.Exists (Path.Combine (Core.SettingsConst.CurrentPath, "Themes")))
 			{
-				string [] files = Directory.GetFiles (Path.Combine (Core.API.currentPath, "Themes"), "*_Test.yukitheme");
+				string [] files = Directory.GetFiles (Path.Combine (Core.SettingsConst.CurrentPath, "Themes"), "*_Test.yukitheme");
 				foreach (string file in files)
 				{
 					File.Delete (file);

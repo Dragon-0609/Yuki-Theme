@@ -1,47 +1,48 @@
 ﻿using Yuki_Theme.Core.Utils;
 
-namespace Yuki_Theme.Core.Themes;
-
-public class ThemeInfo
+namespace Yuki_Theme.Core.Themes
 {
-	public bool          isDefault;
-	public bool          isOld;
-	public ThemeLocation location;
-	public bool          isTokenValid;
-	public string        group;
-
-	public ThemeInfo (bool isDefault, bool isOld, ThemeLocation location, string Group)
+	public class ThemeInfo
 	{
-		this.isDefault = isDefault;
-		this.isOld = isOld;
-		this.location = location;
-		isTokenValid = false;
-		group = Group;
-	}
+		public bool          isDefault;
+		public bool          isOld;
+		public ThemeLocation location;
+		public bool          isTokenValid;
+		public string        group;
 
-	public ThemeInfo (bool isDefault, bool isOld, ThemeLocation location, string Group, bool valid)
-	{
-		this.isDefault = isDefault;
-		this.isOld = isOld;
-		this.location = location;
-		isTokenValid = valid;
-		group = Group;
-	}
+		public ThemeInfo (bool isDefault, bool isOld, ThemeLocation location, string Group)
+		{
+			this.isDefault = isDefault;
+			this.isOld = isOld;
+			this.location = location;
+			isTokenValid = false;
+			group = Group;
+		}
 
-	public override string ToString ()
-	{
-		return $"Default: {isDefault}, Old: {isOld}, Location: {location}";
-	}
+		public ThemeInfo (bool isDefault, bool isOld, ThemeLocation location, string Group, bool valid)
+		{
+			this.isDefault = isDefault;
+			this.isOld = isOld;
+			this.location = location;
+			isTokenValid = valid;
+			group = Group;
+		}
 
-	public bool CheckCondition (string name, Condition condition)
-	{
-		bool result = false;
-		result = Condition.Conditions [condition.Target] (this, condition);
-		return result;
-	}
+		public override string ToString ()
+		{
+			return $"Default: {isDefault}, Old: {isOld}, Location: {location}";
+		}
 
-	public ThemeInfo SetField (string name, Condition condition)
-	{
-		return Condition.Fields [condition.Target] (name, this, condition);
+		public bool CheckCondition (string name, Condition condition)
+		{
+			bool result = false;
+			result = Condition.Conditions [condition.Target] (this, condition);
+			return result;
+		}
+
+		public ThemeInfo SetField (string name, Condition condition)
+		{
+			return Condition.Fields [condition.Target] (name, this, condition);
+		}
 	}
 }

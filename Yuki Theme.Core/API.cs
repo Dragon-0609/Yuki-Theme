@@ -29,7 +29,6 @@ namespace Yuki_Theme.Core
 		#endregion
 
 		public static string selectedItem = "empty";
-		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
 		public static bool   isEdited;
 
 
@@ -60,7 +59,7 @@ namespace Yuki_Theme.Core
 			DefaultThemes.addExternalThemes ();
 			_schemes.AddRange (DefaultThemes.names);
 			Helper.CreateThemeDirectory ();
-			if (Directory.Exists (Path.Combine (currentPath, "Themes")))
+			if (Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
 			{
 				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_OLD);
 				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_NEW);
@@ -199,7 +198,6 @@ namespace Yuki_Theme.Core
 		public static void Save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
-			Console.WriteLine ("{0}, {1}", nameToLoad, IsDefault ());
 			if (!IsDefault ())
 			{
 				SaveTheme (currentTheme, img2, img3, wantToKeep);
@@ -385,7 +383,6 @@ namespace Yuki_Theme.Core
 		/// <returns>Name of the theme</returns>
 		public static string GetNameOfTheme (string path)
 		{
-			// Console.WriteLine ("Path to get theme name: {0}", path);
 			if (_actions.IsNewTheme (path))
 				return _newThemeFormat.GetNameOfTheme (path);
 			return _oldThemeFormat.GetNameOfTheme (path);
@@ -413,7 +410,6 @@ namespace Yuki_Theme.Core
 		private static void PrepareToExport (string path)
 		{
 			string dir = Path.GetDirectoryName (path);
-			// Console.WriteLine(currentTheme.Fields["Method"].ToString ());
 			foreach (SyntaxType syntax in (SyntaxType [])Enum.GetValues (typeof (SyntaxType)))
 			{
 				if (syntax != SyntaxType.NULL) _actions.MergeSyntax (dir, syntax);
