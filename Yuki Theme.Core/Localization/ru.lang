@@ -169,7 +169,7 @@
     "messages.path.select": "Выберите папку PascalABC.NET.",
     "messages.path.select.inexport.short": "Путь до PascalABC.NET.",
     "messages.path.select.inexport.full": "Пожалуйста, выберите папку PascalABC.NET.",
-    "messages.export.success": "Ваша тема успешна экспортирована в папку PascalABC.NET. Перезапустите PascalABC.NET для активации темы",
+    "messages.export.success": "Ваша тема успешно экспортирована в папку PascalABC.NET. Перезапустите PascalABC.NET для активации темы",
     "messages.export.error.short": "Не удалось экспортировать",
     "messages.export.error.full": "Не удалось экспортировать, потому что вы не выбрали папку PascalABC.NET!",
     "messages.directory.notexist": "Папка не существует",
