@@ -389,11 +389,11 @@ namespace Yuki_Theme.Core
 			API.ThemeInfos.Add (name, themeInfo);
 		}
 
-		internal void ShowEndMessage ()
+		internal void ShowEndMessage (string name)
 		{
 			if (Helper.mode != ProductMode.Plugin)
 				if (API_Events.showSuccess != null)
-					API_Events.showSuccess (API.Translate ("messages.export.success"), API.Translate ("messages.buttons.done"));
+					API_Events.showSuccess (API.Translate ("messages.export.success", name), API.Translate ("messages.buttons.done"));
 		}
 
 		internal int GetActionChoice (int result)

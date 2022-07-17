@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
@@ -57,7 +58,9 @@ namespace Yuki_Theme.Core
 			DefaultThemes.Clear ();
 			DefaultThemes.addDefaultThemes ();
 			DefaultThemes.addExternalThemes ();
-			_schemes.AddRange (DefaultThemes.names);
+			IEnumerable<string> distinctNames = DefaultThemes.names.Distinct ();
+			DefaultThemes.names = distinctNames.ToList ();
+			Schemes.AddRange (DefaultThemes.names);
 			Helper.CreateThemeDirectory ();
 			if (Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
 			{
@@ -234,7 +237,7 @@ namespace Yuki_Theme.Core
 
 				PrepareToExport (path);
 
-				_actions.ShowEndMessage ();
+				_actions.ShowEndMessage (currentTheme.Name);
 
 				Helper.currentTheme = currentTheme.Name;
 				if (setTheme != null)

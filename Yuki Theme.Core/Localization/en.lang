@@ -222,6 +222,7 @@
     "cli.help.copy.names": "Copy <from> <to>",
     "cli.help.list": "Show list of themes",
     "cli.help.list.groups": "Show list of themes with groups",
+    "cli.help.list.custom": "Show list of custom themes",
     "cli.help.clear": "Clear the CLI",
     "cli.help.fields": "Show main editable fields",
     "cli.help.allfields": "Show all editable fields",
