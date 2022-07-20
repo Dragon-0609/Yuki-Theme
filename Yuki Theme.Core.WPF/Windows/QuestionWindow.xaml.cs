@@ -1,5 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Interop;
+using Button = System.Windows.Controls.Button;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -33,6 +36,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			HideButton (b2, B2);
 			HideButton (b3, B3);
 			ButtonsGrid.Columns = _visibleButtonsCount;
+		}
+
+		public void SetButtonAlign (HorizontalAlignment alignment)
+		{
+			B1.HorizontalAlignment = B2.HorizontalAlignment = B3.HorizontalAlignment = alignment;
 		}
 
 		private void HideButton (bool b1, Button button)
@@ -81,6 +89,22 @@ namespace Yuki_Theme.Core.WPF.Windows
 				choice = questionWindow.result;
 			}
 			return choice;
+		}
+
+		public void SetOwner (Window target)
+		{
+				Owner = target;
+		}
+
+		public void SetOwner (Form target)
+		{
+			if (target != null)
+			{
+				WindowInteropHelper helper = new (this)
+				{
+					Owner = target.Handle
+				};
+			}
 		}
 		
 	}

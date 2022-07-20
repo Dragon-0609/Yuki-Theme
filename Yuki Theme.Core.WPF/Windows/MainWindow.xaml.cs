@@ -35,6 +35,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private bool _blockOpacity = false;
 
+		private Timer InstallTrackerTimer;
+
 		#region Initialization
 
 		public MainWindow ()
@@ -717,15 +719,31 @@ namespace Yuki_Theme.Core.WPF.Windows
 			AdditionalTools.ShowLicense (Tag, this);
 			IsUpdated ();
 			CheckUpdate ();
-			AdditionalTools.TrackInstall ();
+			InstallTracker ();
 		}
-		
-		
+
+		private void InstallTracker ()
+		{
+			if (AdditionalTools.ShouldTrack ())
+			{
+				InstallTrackerTimer = new Timer { Interval = 100 };
+				InstallTrackerTimer.Tick += (_, __) =>
+				{
+					InstallTrackerTimer.Enabled = false;
+					AdditionalTools.TrackInstall (this);
+				};
+				InstallTrackerTimer.Start ();
+			}
+		}
+
+
 		private void CheckUpdate ()
 		{
 			if (Settings.update && Helper.mode != ProductMode.Plugin)
 			{
 				_popupController.CheckUpdate ();
+				// _popupController.ShowNotification ("Test1", "Test1", null, null);
+				// _popupController.ShowNotification ("Test2", "Test2", null, null);
 			}
 		}
 
@@ -738,7 +756,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Helper.DeleteInstallationStatus ();
 			}
 		}
-
 
 		public event ColorUpdate OnColorUpdate;
 

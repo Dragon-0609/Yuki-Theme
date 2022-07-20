@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="Add Theme" Width="400" Height="200" SizeToContent="Height" ResizeMode="NoResize">
+        Title="Add Theme" Width="400" Height="100" SizeToContent="Height" ResizeMode="NoResize">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
                               SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
@@ -32,7 +32,7 @@
     <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
         <TextBlock Name="Question" TextWrapping="Wrap" Text="Example Text" TextAlignment="Center" Margin="5 6" FontSize="14" />

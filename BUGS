@@ -1,0 +1,3 @@
+﻿when trying to show 3 notifications, 2 of them is shown as should, but 3rd doesn't update color.
+when changing window state with a notification shown, windows animation looks strange.  
+

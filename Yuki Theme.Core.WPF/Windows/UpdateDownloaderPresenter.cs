@@ -50,8 +50,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			} else
 			{
-				title = "";
-				content = "";
+				title = API.Translate ("download.uptodate");
+				content = API.Translate ("download.latest");
 				button1Data = button2Data = null;
 			}
 			
@@ -133,13 +133,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 					};
 
 					if (_controller.Target != null)
-						questionWindow.Owner = _controller.Target;
+						questionWindow.SetOwner (_controller.Target);
 					else
 					{
-						WindowInteropHelper helper = new (questionWindow)
-						{
-							Owner = _controller.TargetForm.Handle
-						};
+						questionWindow.SetOwner (_controller.TargetForm);
 					}
 					
 					questionWindow.Title = API.Translate ("download.downloaded.short");

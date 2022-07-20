@@ -212,6 +212,11 @@
     "messages.buttons.accept": "Принять",
     "messages.buttons.decline": "Отказать",
     "messages.buttons.close": "Закрыть",
+    
+    "messages.warnings.adminprivileges.cli.title": "CLI запущен без прав Администратора.",
+    "messages.warnings.adminprivileges.cli.content": "CLI запущен без прав Администратора. CLI нужны права Администратора, чтобы установить визуальную тема оформления для среды PascalABC.NET.",
+    "messages.warnings.adminprivileges.plugin.title": "Плагин не имеет права Администратора.",
+    "messages.warnings.adminprivileges.plugin.content": "Плагин не имеет права Администратора. Плагину нужны права Администратора, чтобы применить тему.",
 
     "theme.downloader.errors.group.request": "Не удалось получить информацию о группах",
     "theme.downloader.errors.group.wrong": "Что-то пошло не так.",

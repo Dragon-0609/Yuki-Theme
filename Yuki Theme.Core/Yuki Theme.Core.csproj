@@ -149,6 +149,7 @@
     <Compile Include="Themes\ThemeFormatBase.cs" />
     <Compile Include="Themes\ThemeInfo.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
+    <Compile Include="Utils\AdminTools.cs" />
     <Compile Include="Utils\Condition.cs" />
     <Compile Include="Utils\FontManager.cs" />
     <Compile Include="Utils\HighlitherUtil.cs" />

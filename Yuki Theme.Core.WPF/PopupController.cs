@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -18,6 +20,8 @@ namespace Yuki_Theme.Core.WPF
 		private UpdateDownloaderWindow _downloaderWindow;
 
 		private IColorUpdatable _colorUpdatable;
+
+		private Queue<NotificationPackage> _notificationPackages = new Queue<NotificationPackage> ();
 
 		public PopupController (Window parent, IColorUpdatable updatable)
 		{
@@ -51,12 +55,14 @@ namespace Yuki_Theme.Core.WPF
 				if (IsNotificationNull ())
 				{
 					CreateAndShowNotification (title, content, button1Data, button2Data);
+
+					UpdateNotificationColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
 				} else
 				{
-					SwapNotificationData (title, content, button1Data, button2Data);
+					_notificationPackages.Enqueue (new NotificationPackage (title, content, button1Data, button2Data));
+					
+					// SwapNotificationData (title, content, button1Data, button2Data);
 				}
-
-				UpdateNotificationColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
 			} else
 			{
 				API_Events.showError ("Couldn't get parent", "Couldn't get parent");
@@ -85,13 +91,36 @@ namespace Yuki_Theme.Core.WPF
 			{
 				_notificationWindow.SetAlign (new SnapWindowAlign (AlignmentX.Right, AlignmentY.Bottom));
 				_notificationWindow.SetButtons (button1Data, button2Data);
+				_notificationWindow.Closed += NotificationWindowOnClosed;
 				_notificationWindow.Show ();
 				_notificationWindow.ResetPosition ();
 			}
 		}
 
+		private void CreateAndShowNotification (NotificationPackage package)
+		{
+			lock (_notificationWindow)
+			{
+				CreateAndShowNotification (package.Title, package.Content, package.Button1Data, package.Button2Data);
+			}
+
+			UpdateNotificationColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
+		}
+
+		private void NotificationWindowOnClosed (object sender, EventArgs e)
+		{
+			lock (_notificationPackages)
+			{
+				if (_notificationPackages.Count > 0)
+				{
+						NotificationPackage package = _notificationPackages.Dequeue ();
+						CreateAndShowNotification (package);
+				}
+			}
+		}
+
 		private void SwapNotificationData (string title,
-		                                   string content, NotificationButtonData button1Data, NotificationButtonData button2Data)
+										   string content, NotificationButtonData button1Data, NotificationButtonData button2Data)
 		{
 			_notificationWindow.RemoveOldEvents ();
 			_notificationWindow.SetContent (title, content);
@@ -100,12 +129,18 @@ namespace Yuki_Theme.Core.WPF
 
 		private void UpdateNotificationColor (Color bg, Color fg, Color bgClick)
 		{
-			if (!IsNotificationNull ())
+			lock (_notificationWindow)
 			{
-				_notificationWindow.UpdateColors ();
+				if (!IsNotificationNull ())
+				{
+					Console.WriteLine ("Updating");
+					_notificationWindow.UpdateColors ();
+				} else
+					Console.WriteLine ("NotUpdating");
+
 			}
 		}
-		
+
 		private void UpdateDownloaderColor (Color bg, Color fg, Color bgClick)
 		{
 			if (!IsDownloaderNull () && UpdateDownloaderWindow.IsShown)

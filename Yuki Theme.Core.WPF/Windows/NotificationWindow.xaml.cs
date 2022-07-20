@@ -162,4 +162,21 @@ namespace Yuki_Theme.Core.WPF.Windows
 			NavigateEventArgs = navigateEventArgs;
 		}
 	}
+
+	public struct NotificationPackage
+	{
+		public string                 Title;
+		public string                 Content;
+		public NotificationButtonData Button1Data;
+		public NotificationButtonData Button2Data;
+
+		public NotificationPackage (string title, string content, NotificationButtonData button1Data, NotificationButtonData button2Data)
+		{
+			Title = title;
+			Content = content;
+			Button1Data = button1Data;
+			Button2Data = button2Data;
+		}
+	}
+	
 }

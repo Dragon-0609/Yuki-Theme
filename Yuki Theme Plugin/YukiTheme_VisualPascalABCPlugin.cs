@@ -26,6 +26,7 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
@@ -272,12 +273,14 @@ namespace Yuki_Theme_Plugin
 			MForm.TrackInstall ();*/
 			AdditionalTools.ShowLicense (WPFHelper.GenerateTag, null, ideComponents.fm);
 			
-			AdditionalTools.TrackInstall ();
+			AdditionalTools.TrackInstall (ideComponents.fm);
 			if (!IsUpdated () && Settings.update)
 			{
 				popupController.CheckUpdate ();
 			}
-
+			
+			IsAdmin();
+			
 			ToolBarListItem.camouflage = camouflage;
 			ToolBarListItem.manager = manager;
 			SettingsPanelUtilities.items = camouflage.items;
@@ -797,6 +800,19 @@ namespace Yuki_Theme_Plugin
 				
 				Settings.license = true;
 				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
+			}
+		}
+		
+		
+
+
+		private void IsAdmin ()
+		{
+			AdminTools adminTools = new AdminTools();
+			if (!adminTools.CurrentUserIsAdmin ())
+			{
+				popupController.ShowNotification (API.Translate ("messages.warnings.adminprivileges.program.title"),
+					API.Translate ("messages.warnings.adminprivileges.program.content"), null, null);
 			}
 		}
 		
