@@ -18,12 +18,13 @@ using Yuki_Theme.Core;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
+using Yuki_Theme_Plugin.Interfaces;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using IWorkbench = VisualPascalABCPlugins.IWorkbench;
 
 namespace Yuki_Theme_Plugin
 {
-	public class IdeComponents
+	public class IdeComponents : IConsole
 	{
 		#region IDE Controls
 
@@ -939,9 +940,9 @@ namespace Yuki_Theme_Plugin
 
 		public void WriteToConsole (string text)
 		{
-			fm.AddTextToCompilerMessages (text + Environment.NewLine);
+			fm.AddTextToCompilerMessages ($"Yuki Theme: {text}{Environment.NewLine}");
 		}
-
+		
 		private void GetProperities ()
 		{
 			if (supportProject && projectExplorer != null)
@@ -967,8 +968,7 @@ namespace Yuki_Theme_Plugin
 		
 		private void ToggleQuiet (object sender, EventArgs e)
 		{
-			GetProperities ();
-			/*if (!toggled)
+			if (!toggled)
 			{
 				Settings.bgImage = false;
 				Settings.swSticker = false;
@@ -988,7 +988,7 @@ namespace Yuki_Theme_Plugin
 			plugin.LoadSticker ();
 			updateQuietImage ();
 			UpdateMenuWallpaperImage ();
-			UpdateMenuStickerImage ();*/
+			UpdateMenuStickerImage ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)

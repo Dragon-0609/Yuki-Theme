@@ -57,6 +57,9 @@
       <HintPath>C:\Program Files (x86)\PascalABC.NET\Localization.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
+    <Reference Include="NamedPipeWrapper">
+      <HintPath>..\packages\NamedPipeWrapper.dll</HintPath>
+    </Reference>
     <Reference Include="ParserTools">
       <HintPath>C:\Program Files (x86)\PascalABC.NET\ParserTools.dll</HintPath>
     </Reference>
@@ -103,6 +106,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communicator\Server.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionAllNames.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionKeyHandler.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionListView.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="EditorInspector.cs" />
     <Compile Include="IconManager.cs" />
     <Compile Include="IdeComponents.cs" />
+    <Compile Include="Interfaces\IConsole.cs" />
     <Compile Include="MenuRenderer.cs" />
     <Compile Include="Props.cs">
       <SubType>Form</SubType>
@@ -166,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\favorite.svg" />
@@ -316,6 +322,10 @@
     <Content Include="Resources\YukiTheme.gif" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Theme Installer\Theme Installer.csproj">
+      <Project>{896224a1-7358-47d0-9272-d1a20773e91f}</Project>
+      <Name>Theme Installer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj">
       <Project>{2ab7513f-70fb-4ffa-88ff-b133f20dd7dc}</Project>
       <Name>Yuki Theme.Core.WPF</Name>

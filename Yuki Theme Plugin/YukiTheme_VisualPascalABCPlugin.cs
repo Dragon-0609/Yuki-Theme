@@ -30,6 +30,7 @@ using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
+using Yuki_Theme_Plugin.Communicator;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
@@ -109,7 +110,10 @@ namespace Yuki_Theme_Plugin
 		public PopupController popupController;
 
 		public static YukiTheme_VisualPascalABCPlugin plugin;
-		private       MainWindow                      CoreWindow;
+
+		private MainWindow CoreWindow;
+
+		private Server _server;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -141,7 +145,7 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nameInStatusBar = Settings.swStatusbar;
 			
-			ideComponents.WriteToConsole ("Yuki Theme: Initialization started.");
+			ideComponents.WriteToConsole ("Initialization started.");
 			
 			loadWithWaiting ();
 			Initialize ();
@@ -263,7 +267,7 @@ namespace Yuki_Theme_Plugin
 
 			ideComponents.AddMenuItems ();
 
-			ideComponents.WriteToConsole ("Yuki Theme: Initialization finished.");
+			ideComponents.WriteToConsole ("Initialization finished.");
 
 			inspector.InjectCodeCompletion ();
 			
@@ -279,11 +283,10 @@ namespace Yuki_Theme_Plugin
 				popupController.CheckUpdate ();
 			}
 			
-			IsAdmin();
-			
 			ToolBarListItem.camouflage = camouflage;
 			ToolBarListItem.manager = manager;
 			SettingsPanelUtilities.items = camouflage.items;
+			InitCommunicator ();
 		}
 
 		private void loadSVG ()
@@ -448,6 +451,11 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
+		private void InitCommunicator ()
+		{
+			_server = new Server (ideComponents);
+		}
+		
 		#endregion
 
 		
@@ -802,20 +810,7 @@ namespace Yuki_Theme_Plugin
 				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
 			}
 		}
-		
-		
 
-
-		private void IsAdmin ()
-		{
-			AdminTools adminTools = new AdminTools();
-			if (!adminTools.CurrentUserIsAdmin ())
-			{
-				popupController.ShowNotification (API.Translate ("messages.warnings.adminprivileges.program.title"),
-					API.Translate ("messages.warnings.adminprivileges.program.content"), null, null);
-			}
-		}
-		
 		#endregion
 
 		public event ColorUpdate OnColorUpdate;
