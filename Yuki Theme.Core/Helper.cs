@@ -399,8 +399,8 @@ namespace Yuki_Theme.Core
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
 					if (API_Events.showError != null)
-						API_Events.showError (API.Translate ("messages.file.notexist.withname.param", filename),
-						                      API.Translate ("messages.file.notexist.withname", filename));
+						API_Events.showError (API_Base.Current.Translate ("messages.file.notexist.withname.param", filename),
+						                      API_Base.Current.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -674,18 +674,18 @@ namespace Yuki_Theme.Core
 
 		public static void LoadCurrent ()
 		{
-			API.LoadSchemes ();
+			API_Base.Current.LoadSchemes ();
 			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{
 				foreach (string s in files)
 				{
-					string sp = API.GetNameOfTheme (s);
-					if (API.Schemes.Contains (sp))
+					string sp = API_Base.Current.GetNameOfTheme (s);
+					if (API_Base.Current.Schemes.Contains (sp))
 					{
 						currentTheme = sp;
-						API.selectedItem = currentTheme;
+						API_Base.Current.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -843,7 +843,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = API.GetCore ();
+	        Assembly a = API_Base.Current.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))

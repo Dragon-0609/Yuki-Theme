@@ -428,9 +428,9 @@ namespace Yuki_Theme_Plugin
 						Image stckr = Image.FromFile (pth);
 
 
-						if (API.currentTheme.StickerOpacity != 100)
+						if (API_Base.Current.currentTheme.StickerOpacity != 100)
 						{
-							sticker = Helper.SetOpacity (stckr, API.currentTheme.StickerOpacity);
+							sticker = Helper.SetOpacity (stckr, API_Base.Current.currentTheme.StickerOpacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -763,7 +763,7 @@ namespace Yuki_Theme_Plugin
 				tp.Activate ();
 			} else
 			{
-				MessageBox.Show (API.Translate ("plugin.browser.error"));
+				MessageBox.Show (API_Base.Current.Translate ("plugin.browser.error"));
 			}
 		}
 

@@ -53,34 +53,15 @@ namespace Yuki_Theme.Core
 		/// <param name="ifZero">If there isn't any theme, ask to set it</param>
 		public static void LoadSchemes (Func <string> ifZero = null)
 		{
-			_schemes.Clear ();
-			_themeInfos.Clear ();
+			ClearThemeInfos ();
 			DefaultThemes.Clear ();
 			DefaultThemes.addDefaultThemes ();
 			DefaultThemes.addExternalThemes ();
-			IEnumerable<string> distinctNames = DefaultThemes.names.Distinct ();
-			DefaultThemes.names = distinctNames.ToList ();
+			DefaultThemes.DistinctThemeNames ();
 			Schemes.AddRange (DefaultThemes.names);
 			Helper.CreateThemeDirectory ();
-			if (Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
-			{
-				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_OLD);
-				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_NEW);
-			}
-
-			if (_schemes.Count == 0)
-			{
-				if (ifZero != null)
-				{
-					string sm = ifZero ();
-					if (sm != null)
-					{
-						nameToLoad = Path.GetFileNameWithoutExtension (sm);
-						File.Copy (sm, PathGenerator.PathToFile (pathToLoad, true));
-						_schemes.Add (nameToLoad);
-					}
-				}
-			}
+			LoadExternalThemes ();
+			IfThemesNotFound (ifZero);
 		}
 
 		/// <summary>
@@ -89,7 +70,7 @@ namespace Yuki_Theme.Core
 		/// <param name="copyFrom">Copy from</param>
 		/// <param name="name">Copy to</param>
 		/// <returns>0 -> Theme isn't added cause of exceptions. 1 -> Theme is added. 2 -> Theme is overriden</returns>
-		public static int Add (string copyFrom, string name)
+		public static int AddTheme (string copyFrom, string name)
 		{
 			if (name.Length < 3)
 			{
@@ -120,38 +101,6 @@ namespace Yuki_Theme.Core
 			return 0;
 		}
 
-		public static bool CopyTheme (string copyFrom, string themeName, string destination, out string path, bool check)
-		{
-			if (check && _themeInfos [copyFrom].location == ThemeLocation.Memory)
-			{
-				path = PathGenerator.PathToMemory (copyFrom);
-				if (path == null)
-				{
-					if (API_Events.showError != null)
-						API_Events.showError (Translate ("messages.theme.memory.notfound.full"),
-						                      Translate ("messages.theme.memory.notfound.short"));
-
-					return true;
-				}
-
-				_themeManager.CopyFromMemory (copyFrom, copyFrom, destination);
-			} else
-			{
-				path = PathGenerator.PathToFile (Helper.ConvertNameToPath (copyFrom), _themeInfos [copyFrom].isOld);
-				File.Copy (path, destination);
-			}
-
-			if (destination.EndsWith (Helper.FILE_EXTENSTION_OLD))
-			{
-				_oldThemeFormat.WriteNameAndResetToken (destination, themeName);
-			} else
-			{
-				_newThemeFormat.WriteNameAndResetToken (destination, themeName);
-			}
-			
-			return false;
-		}
-
 		/// <summary>
 		/// Delete the theme
 		/// </summary>
@@ -159,7 +108,7 @@ namespace Yuki_Theme.Core
 		/// <param name="askToDelete">Ask to delete</param>
 		/// <param name="afterAsk">Do action after asked</param>
 		/// <param name="afterDelete">Do action after deleted</param>
-		public static void Remove (string                  name, Func <string, string, bool> askToDelete, Func <string, object> afterAsk = null,
+		public static void RemoveTheme (string                  name, Func <string, string, bool> askToDelete, Func <string, object> afterAsk = null,
 		                           Action <string, object> afterDelete = null)
 		{
 			Helper.CreateThemeDirectory ();
@@ -195,15 +144,15 @@ namespace Yuki_Theme.Core
 		/// <summary>
 		/// Save current theme (currentFile string)
 		/// </summary>
-		/// <param name="img2">Background image</param>
-		/// <param name="img3">Sticker</param>
+		/// <param name="wallpaper">Background image</param>
+		/// <param name="sticker">Sticker</param>
 		/// <param name="wantToKeep">Want to keep background image and sticker</param>
-		public static void Save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void Save (Image wallpaper = null, Image sticker = null, bool wantToKeep = false)
 		{
 			Helper.CreateThemeDirectory ();
 			if (!IsDefault ())
 			{
-				SaveTheme (currentTheme, img2, img3, wantToKeep);
+				SaveTheme (currentTheme, wallpaper, sticker, wantToKeep);
 				if (isEdited) isEdited = false;
 			}
 		}
@@ -211,14 +160,14 @@ namespace Yuki_Theme.Core
 		/// <summary>
 		/// Export current theme to pascal directory
 		/// </summary>
-		/// <param name="img2">Background image</param>
-		/// <param name="img3">Sticker</param>
+		/// <param name="wallpaper">Background image</param>
+		/// <param name="sticker">Sticker</param>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
 		/// <param name="wantToKeep">Want to keep background image and sticker</param>
-		public static void Export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
+		public static void ExportTheme (Image wallpaper, Image sticker, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
-			_actions.AskToSaveInExport (img2, img3, wantToKeep);
+			_actions.AskToSaveInExport (wallpaper, sticker, wantToKeep);
 
 			if (Settings.pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
 			{
@@ -282,9 +231,19 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="path">Theme from</param>
 		/// <param name="exist">Do if exist</param>
-		public static void Import (string path, Func <string, string, bool> exist)
+		public static void ImportTheme (string path, Func <string, string, bool> exist)
 		{
 			MainParser.Parse (path, true, true, API_Events.showError, exist);
+		}
+		
+		/// <summary>
+		/// Import theme
+		/// </summary>
+		/// <param name="path">Theme from</param>
+		/// <param name="exist">Do if exist</param>
+		public static void ImportTheme (string path, bool ask = true, bool select = true, Action <string, string> defaultTheme = null, Func <string, string, bool> exist = null, Action <string> addToUIList = null, Action <string> selectAfterParse = null)
+		{
+			MainParser.Parse (path, ask, select, defaultTheme, exist, addToUIList, selectAfterParse);
 		}
 
 		/// <summary>
@@ -293,7 +252,7 @@ namespace Yuki_Theme.Core
 		/// <param name="from">From</param>
 		/// <param name="to">To</param>
 		/// <returns>0 -> error. 1 -> success</returns>
-		public static int Rename (string from, string to)
+		public static int RenameTheme (string from, string to)
 		{
 			bool canShowError = API_Events.showError != null;
 			if (_actions.CheckNameToRenameTo (to, canShowError, out int rename)) return rename;
@@ -463,9 +422,39 @@ namespace Yuki_Theme.Core
 		public static void AddThemeInfo (string name, ThemeInfo themeInfo) => _actions.AddThemeInfo (name, themeInfo);
 
 		#endregion
+		
+		private static void ClearThemeInfos ()
+		{
+			_schemes.Clear ();
+			_themeInfos.Clear ();
+		}
+		
+		private static void LoadExternalThemes ()
+		{
+			if (Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+			{
+				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_OLD);
+				_actions.LoadSchemesByExtension (Helper.FILE_EXTENSTION_NEW);
+			}
+		}
 
-		#endregion
-
+		private static void IfThemesNotFound (Func<string> ifZero)
+		{
+			if (_schemes.Count == 0)
+			{
+				if (ifZero != null)
+				{
+					string sm = ifZero ();
+					if (sm != null)
+					{
+						nameToLoad = Path.GetFileNameWithoutExtension (sm);
+						File.Copy (sm, PathGenerator.PathToFile (pathToLoad, true));
+						_schemes.Add (nameToLoad);
+					}
+				}
+			}
+		}
+		
 		public static void ShowError (string message, string title)
 		{
 			_actions.ShowError (true, message, title);
@@ -475,5 +464,8 @@ namespace Yuki_Theme.Core
 		{
 			_actions.ShowError (canShowError, message, title);
 		}
+		
+		#endregion
+
 	}
 }

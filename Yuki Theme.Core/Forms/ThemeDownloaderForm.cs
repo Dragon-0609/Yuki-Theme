@@ -49,14 +49,14 @@ namespace Yuki_Theme.Core.Forms
 
 
 		private const string REMOTE_SERVER =
-			"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
+			"https://API_Base.Current.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
 	
-		private const string REMOTE_BRANCH_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
+		private const string REMOTE_BRANCH_SERVER = "https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
 		private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
 		private const string STICKER_SERVER   = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
 
-		private const string BRANCH_COMMIT_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches/";
+		private const string BRANCH_COMMIT_SERVER = "https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/branches/";
 
 		private const string GROUP_FILE = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
 
@@ -112,7 +112,7 @@ namespace Yuki_Theme.Core.Forms
 					} catch (JsonReaderException e)
 					{
 						Console.WriteLine (json);
-						MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+						MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 							MessageBoxIcon.Error);
 						return;
 					}
@@ -238,8 +238,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private static void ShowRequestError ()
 		{
-			string message = API.Translate ("theme.downloader.errors.group.request");
-			string wrong = API.Translate ("theme.downloader.errors.group.wrong");
+			string message = API_Base.Current.Translate ("theme.downloader.errors.group.request");
+			string wrong = API_Base.Current.Translate ("theme.downloader.errors.group.wrong");
 			MessageBox.Show ($"{message}\n{wrong}", message, MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
@@ -260,7 +260,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 
-			string message = API.Translate ("theme.downloader.errors.group.request");
+			string message = API_Base.Current.Translate ("theme.downloader.errors.group.request");
 			MessageBox.Show ($"{message}\n{exceptionHeader}\n{innerMessage}\n{lowestMessage}", message, MessageBoxButtons.OK,
 				MessageBoxIcon.Error);
 		}
@@ -332,7 +332,7 @@ namespace Yuki_Theme.Core.Forms
 				string json = multi [1];
 				doki.Parse (json, "none", "none", false, false, false);
 				doki.theme.link = multi [0];
-				bool isEqual = !IsEqual (doki.theme, API.GetTheme (doki.theme.Name));
+				bool isEqual = !IsEqual (doki.theme, API_Base.Current.GetTheme (doki.theme.Name));
 				themes.Add (doki.theme.Name, doki.theme);
 				newThemes.Add (doki.theme.Name, isEqual);
 				LoadThemeIntoPage (doki.theme, isEqual);
@@ -347,7 +347,7 @@ namespace Yuki_Theme.Core.Forms
 				jresponse = JObject.Parse (json);
 			} catch (JsonReaderException e)
 			{
-				MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+				MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 				return;
 			}
@@ -373,7 +373,7 @@ namespace Yuki_Theme.Core.Forms
 				jresponse = JObject.Parse (json);
 			} catch (JsonReaderException e)
 			{
-				MessageBox.Show (API.Translate("theme.downloader.errors.github.exceed.message"), API.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+				MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 				return;
 			}
@@ -418,7 +418,7 @@ namespace Yuki_Theme.Core.Forms
 			} else
 			{
 				searchMode = 1;
-				return $"https://api.github.com/repos/doki-theme/doki-master-theme/git/trees/{branch}?recursive=1";
+				return $"https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/git/trees/{branch}?recursive=1";
 			}
 		}
 
@@ -645,12 +645,12 @@ namespace Yuki_Theme.Core.Forms
 				Console.WriteLine ("Downloading theme {0}", name);
 				try
 				{
-					if (API.ThemeInfos.ContainsKey (name))
+					if (API_Base.Current.ThemeInfos.ContainsKey (name))
 					{
-						if (API.ThemeInfos [name].location == ThemeLocation.File &&
-							File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.ThemeInfos [name].isOld)))
+						if (API_Base.Current.ThemeInfos [name].location == ThemeLocation.File &&
+							File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API_Base.Current.ThemeInfos [name].isOld)))
 						{
-							File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.ThemeInfos [name].isOld));
+							File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API_Base.Current.ThemeInfos [name].isOld));
 						}
 					}
 
@@ -666,8 +666,8 @@ namespace Yuki_Theme.Core.Forms
 					theme.fullPath = PathGenerator.PathToFile (Helper.ConvertNameToPath (name), true);
 					theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 					Console.WriteLine ("Token: {0}", theme.Token);
-					API.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-					API.SaveTheme (theme, wallpaper, sticker);
+					API_Base.Current.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+					API_Base.Current.SaveTheme (theme, wallpaper, sticker);
 					wallpaper.Dispose ();
 					sticker.Dispose ();
 					AddNSetProgress ();

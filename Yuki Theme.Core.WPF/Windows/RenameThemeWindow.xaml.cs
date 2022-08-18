@@ -34,12 +34,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			if (from != to)
 			{
-				result = API.Rename (from, to);
+				result = API_Base.Current.RenameTheme (from, to);
 
 				canReturn = result != 0;
 			} else
 			{
-				API_Events.showError (API.Translate ("messages.name.equal.message"), API.Translate ("messages.name.equal.title"));
+				API_Events.showError (API_Base.Current.Translate ("messages.name.equal.message"), API_Base.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

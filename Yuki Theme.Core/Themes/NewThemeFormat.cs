@@ -58,7 +58,7 @@ namespace Yuki_Theme.Core.Themes
 				IThemeHeader header = DefaultThemes.headers [pathToTheme];
 				Assembly a = header.Location;
 				string pathToMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
-				// var a = API.GetCore ();
+				// var a = API_Base.Current.GetCore ();
 
 				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, a);
 				if (content.Item1)
@@ -265,7 +265,7 @@ namespace Yuki_Theme.Core.Themes
 		
 		public override void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions)
 		{
-			Assembly a = API.GetCore ();
+			Assembly a = API_Base.Current.GetCore ();
 			string str;
 
 			Stream resourceStream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
@@ -306,7 +306,7 @@ namespace Yuki_Theme.Core.Themes
 		public override Theme PopulateList (string name, bool loadImages)
 		{
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = API.ThemeInfos [name].isDefault;
+			bool isDef = API_Base.Current.ThemeInfos [name].isDefault;
 			string json = LoadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
@@ -318,8 +318,8 @@ namespace Yuki_Theme.Core.Themes
 
 		public override void ProcessAfterParsing (Theme theme)
 		{
-			API.names.AddRange (theme.Fields.Keys);
-			API.names.InsertRange (1, ShadowNames.imageNames);	
+			API_Base.Current.names.AddRange (theme.Fields.Keys);
+			API_Base.Current.names.InsertRange (1, ShadowNames.imageNames);	
 		}
 
 		public override Tuple <bool, string> VerifyToken (string path)

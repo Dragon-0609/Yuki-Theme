@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -22,9 +23,9 @@ namespace Yuki_Theme.Core.Themes
 	
 		public Theme GetTheme (string name)
 		{
-			if (API.ThemeInfos.ContainsKey (name))
+			if (API_Base.Current.ThemeInfos.ContainsKey (name))
 			{
-				Theme theme = API.ThemeInfos [name].isOld
+				Theme theme = API_Base.Current.ThemeInfos [name].isOld
 					? _oldThemeFormat.PopulateList (name, false)
 					: _newThemeFormat.PopulateList (name, false);
 
@@ -44,7 +45,7 @@ namespace Yuki_Theme.Core.Themes
 				file = Helper.ConvertNameToPath (file);
 			}
 
-			string ext = Helper.GetExtension (API.ThemeInfos [name].isOld);
+			string ext = Helper.GetExtension (API_Base.Current.ThemeInfos [name].isOld);
 			Stream stream = a.GetManifestResourceStream ($"{header.ResourceHeader}.{file}" + ext);
 			return stream;
 		}
@@ -71,8 +72,8 @@ namespace Yuki_Theme.Core.Themes
 				if (Helper.IsZip (stream))
 				{
 					_actions.CleanDestination ();
-					Tuple <bool, Image> img = Helper.GetImage (nxp);
-					Tuple <bool, Image> sticker = Helper.GetSticker (nxp);
+					Tuple<bool, Image> img = Helper.GetImage (nxp);
+					Tuple<bool, Image> sticker = Helper.GetSticker (nxp);
 
 					Helper.ExtractZip (nxp, path, img.Item1, sticker.Item1, false);
 					File.Delete (nxp);
@@ -91,7 +92,7 @@ namespace Yuki_Theme.Core.Themes
 		/// <param name="path">Path</param>
 		private void ExportTheme (string path)
 		{
-			string source = API.currentTheme.fullPath;
+			string source = API_Base.Current.currentTheme.fullPath;
 			bool iszip = Helper.IsZip (source);
 			if (!iszip)
 			{
@@ -101,8 +102,8 @@ namespace Yuki_Theme.Core.Themes
 
 			_actions.CleanDestination ();
 
-			Tuple <bool, Image> img = Helper.GetImage (source);
-			Tuple <bool, Image> sticker = Helper.GetSticker (source);
+			Tuple<bool, Image> img = Helper.GetImage (source);
+			Tuple<bool, Image> sticker = Helper.GetSticker (source);
 
 			Helper.ExtractZip (source, path, img.Item1, sticker.Item1, false);
 		}
@@ -125,18 +126,17 @@ namespace Yuki_Theme.Core.Themes
 
 		internal int AddTheme (string copyFrom, string name, string destination, bool exist)
 		{
-			if (API.CopyTheme (copyFrom, name, destination, out _, true)) return 0;
+			CopyTheme (copyFrom, name, destination, true);
 			if (!exist)
 			{
-				API.Schemes.Add (name);
-				_actions.AddThemeInfo (
-					name,
-					new ThemeInfo (false, API.ThemeInfos [copyFrom].isOld, ThemeLocation.File, API.Translate ("messages.theme.group.custom")));
+				API_Base.Current.Schemes.Add (name);
+				_actions.AddThemeInfo ( name,
+					new ThemeInfo (false, API_Base.Current.ThemeInfos [copyFrom].isOld, ThemeLocation.File, API_Base.Current.Translate ("messages.theme.group.custom")));
 			}
 
 			if (Helper.mode == ProductMode.CLI)
 				if (API_Events.showSuccess != null)
-					API_Events.showSuccess (API.Translate ("messages.theme.duplicate"), API.Translate ("messages.buttons.done"));
+					API_Events.showSuccess (API_Base.Current.Translate ("messages.theme.duplicate"), API_Base.Current.Translate ("messages.buttons.done"));
 
 			return exist ? 2 : 1;
 		}
@@ -180,9 +180,9 @@ namespace Yuki_Theme.Core.Themes
 
 		internal void CopyThemeToDirectory (string path)
 		{
-			if (API.currentTheme.isDefault && API.ThemeInfos [API.currentTheme.Name].location == ThemeLocation.Memory)
+			if (API_Base.Current.currentTheme.isDefault && API_Base.Current.ThemeInfos [API_Base.Current.currentTheme.Name].location == ThemeLocation.Memory)
 			{
-				CopyFromMemory (API.currentTheme.path, API.currentTheme.Name, path, true);
+				CopyFromMemory (API_Base.Current.currentTheme.path, API_Base.Current.currentTheme.Name, path, true);
 			} else
 			{
 				ExportTheme (path);
@@ -191,13 +191,13 @@ namespace Yuki_Theme.Core.Themes
 	
 		private string [] IdentifySyntaxHighlightings (string [] files)
 		{
-			List <string> unknownThemes = new List <string> ();
+			List<string> unknownThemes = new List<string> ();
 			foreach (string file in files)
 			{
 				string name = _oldThemeFormat.GetNameOfTheme (file);
 				if (name.Length > 0)
 				{
-					if (!API.Schemes.Contains (name))
+					if (!API_Base.Current.Schemes.Contains (name))
 					{
 						unknownThemes.Add (file);
 					}
@@ -206,6 +206,26 @@ namespace Yuki_Theme.Core.Themes
 
 			return unknownThemes.ToArray ();
 		}
-	
+
+		private static void CopyTheme (string copyFrom, string themeName, string destination, bool check)
+		{
+			if (check && API_Base.Current.ThemeInfos [copyFrom].location == ThemeLocation.Memory)
+			{
+				PathGenerator.PathToMemory (copyFrom);
+				API_Base.Current._themeManager.CopyFromMemory (copyFrom, copyFrom, destination);
+			} else
+			{
+				string path = PathGenerator.PathToFile (Helper.ConvertNameToPath (copyFrom), API_Base.Current.ThemeInfos [copyFrom].isOld);
+				File.Copy (path, destination);
+			}
+
+			if (destination.EndsWith (Helper.FILE_EXTENSTION_OLD))
+			{
+				API_Base.Current._oldThemeFormat.WriteNameAndResetToken (destination, themeName);
+			} else
+			{
+				API_Base.Current._newThemeFormat.WriteNameAndResetToken (destination, themeName);
+			}
+		}
 	}
 }

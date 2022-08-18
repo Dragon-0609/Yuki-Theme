@@ -3,7 +3,7 @@ using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core.Utils
 {
-	public class PathGenerator
+	public static class PathGenerator
 	{
 		public static string PathToFile (string pathLoad, bool old)
 		{
@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.Utils
 				file = Helper.ConvertNameToPath (file);
 			}
 
-			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.ThemeInfos[name].isOld)}";
+			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API_Base.Current.ThemeInfos[name].isOld)}";
 		}
 	}
 }

@@ -32,7 +32,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			using (var client = new HttpClient ())
 			{
 				client.DefaultRequestHeaders.Add ("User-Agent", user_agent);
-				HttpResponseMessage response = await client.GetAsync (url);
+				HttpResponseMessage response;
+				try
+				{
+					response = await client.GetAsync (url);
+				} catch (HttpRequestException httpRequestException)
+				{
+					response = null;
+				}
+ 
 				if (response != null)
 				{
 					string json = await response.Content.ReadAsStringAsync ();
@@ -68,7 +76,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			// } catch (Exception e)
 			// {
-			// 	controller.ShowNotification (API.Translate ("theme.downloader.errors.group.wrong"), e.Message, null, null);
+			// 	controller.ShowNotification (API_Base.Current.Translate ("theme.downloader.errors.group.wrong"), e.Message, null, null);
 			// }
 		}
 

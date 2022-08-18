@@ -307,7 +307,7 @@ namespace Yuki_Theme.Core.Themes
 				string pathToLoad = Helper.ConvertNameToPath (pathToTheme);
 				if (customNameForMemory)
 				{
-					a = API.GetCore ();
+					a = API_Base.Current.GetCore ();
 					pathForMemory = pathToTheme;
 				} else
 				{
@@ -318,7 +318,7 @@ namespace Yuki_Theme.Core.Themes
 						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 					} else
 					{
-						a = API.GetCore ();
+						a = API_Base.Current.GetCore ();
 						pathForMemory = $"{DefaultThemesHeader.CoreThemeHeader}.{pathToLoad}{extension}";
 					}
 				}
@@ -426,7 +426,7 @@ namespace Yuki_Theme.Core.Themes
 					{
 						if (API_Events.hasProblem != null)
 							API_Events.hasProblem (
-								API.Translate ("messages.theme.invalid.full"));
+								API_Base.Current.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
 
@@ -513,7 +513,7 @@ namespace Yuki_Theme.Core.Themes
 					{
 						if (API_Events.hasProblem != null)
 							API_Events.hasProblem (
-								API.Translate ("messages.theme.invalid.full"));
+								API_Base.Current.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
 				}
@@ -699,7 +699,7 @@ namespace Yuki_Theme.Core.Themes
 
 			if (DefaultThemes.isDefault (oldName))
 			{
-				Stream stream = API._themeManager.GetStreamFromMemory (oldName, oldName);
+				Stream stream = API_Base.Current._themeManager.GetStreamFromMemory (oldName, oldName);
 				isZip = Helper.IsZip (stream);
 				stream.Dispose ();
 			} else
@@ -719,12 +719,12 @@ namespace Yuki_Theme.Core.Themes
 		/// Load Theme by name.
 		/// </summary>
 		/// <param name="name">Theme's name. It's mandatory for loading theme properly</param>
-		/// <param name="ToCLI">Need to load to API? It'll affect "API.names".</param>
+		/// <param name="ToCLI">Need to load to API? It'll affect "API_Base.Current.names".</param>
 		/// <returns>Parsed theme</returns>
 		public override Theme PopulateList (string name, bool ToCLI)
 		{
-			bool isDef = API.ThemeInfos [name].isDefault;
-			bool fromAssembly = API.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
+			bool isDef = API_Base.Current.ThemeInfos [name].isDefault;
+			bool fromAssembly = API_Base.Current.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
 
 			string path = Helper.ConvertNameToPath (name);
 			Theme theme = new Theme
@@ -759,7 +759,7 @@ namespace Yuki_Theme.Core.Themes
 				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "KeyWords";
 				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
 				if (ToCLI)
-					API.names.Add (methdoName);
+					API_Base.Current.names.Add (methdoName);
 			}
 
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
@@ -917,7 +917,7 @@ namespace Yuki_Theme.Core.Themes
 		private string ReadThemeTemplate ()
 		{
 			string res = "";
-			var a = API.GetCore ();
+			var a = API_Base.Current.GetCore ();
 			var stream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
 			using (StreamReader reader = new StreamReader (stream))
 			{

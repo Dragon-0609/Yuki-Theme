@@ -85,9 +85,9 @@ namespace Yuki_Theme.Core.WPF
 
 		private static void SetContents (QuestionWindow questionWindow)
 		{
-			questionWindow.SetTitle (API.Translate ("messages.google.analytics"));
+			questionWindow.SetTitle (API_Base.Current.Translate ("messages.google.analytics"));
 
-			questionWindow.SetButtonContents (API.Translate ("messages.buttons.decline"), API.Translate ("messages.buttons.accept"), "");
+			questionWindow.SetButtonContents (API_Base.Current.Translate ("messages.buttons.decline"), API_Base.Current.Translate ("messages.buttons.accept"), "");
 
 			questionWindow.SetButtonVisibilities (true, true, false);
 			questionWindow.SetButtonAlign (HorizontalAlignment.Center);

@@ -40,12 +40,12 @@ namespace Yuki_Theme.Tests
 					ResetForTests ();
 					ClearTestThemes ();
 					Settings.ConnectAndGet ();
-					Core.API.LoadSchemes ();
-					bool cnd = Core.API.SelectTheme (Helper.GetRandomElement (Core.API.Schemes));
+					Core.API_Base.Current.LoadSchemes ();
+					bool cnd = Core.API_Base.Current.SelectTheme (Helper.GetRandomElement (Core.API_Base.Current.Schemes));
 
 					Assert.IsTrue (cnd);
 
-					Core.API.Restore (false);
+					Core.API_Base.Current.Restore (false);
 					isInitialized = true;
 				}
 			} catch (Exception e)
@@ -65,10 +65,10 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeAdded)
 				{
-					copyFrom = Helper.GetRandomElement (Core.API.Schemes);
+					copyFrom = Helper.GetRandomElement (Core.API_Base.Current.Schemes);
 					copyTo = $"{copyFrom}_Test";
-					Core.API.Add (copyFrom, copyTo);
-					Core.API.SelectTheme (copyTo);
+					Core.API_Base.Current.AddTheme (copyFrom, copyTo);
+					Core.API_Base.Current.SelectTheme (copyTo);
 					isThemeAdded = true;
 				}
 			} catch (Exception e)
@@ -76,7 +76,7 @@ namespace Yuki_Theme.Tests
 				if (copyTo != null && copyFrom != null)
 				{
 					string patsh = Path.Combine (Core.SettingsConst.CurrentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API.ThemeInfos [copyFrom].isOld)}");
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (Core.API_Base.Current.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
@@ -98,13 +98,13 @@ namespace Yuki_Theme.Tests
 						values = FieldValues;
 					else
 						values = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, FieldValues);
-					Core.API.Restore (false, onFieldsLoaded);
+					Core.API_Base.Current.Restore (false, onFieldsLoaded);
 					foreach (string field in fields)
 					{
 						if (values.ContainsKey (field))
 						{
 							ThemeField fiel = values [field];
-							Core.API.currentTheme.Fields [field].SetValues (fiel);
+							Core.API_Base.Current.currentTheme.Fields [field].SetValues (fiel);
 						}
 					}
 
@@ -131,7 +131,7 @@ namespace Yuki_Theme.Tests
 						if (FieldValues.ContainsKey (field))
 						{
 							ThemeField fiel = FieldValues [field];
-							ThemeField fiel2 = Core.API.currentTheme.Fields [field];
+							ThemeField fiel2 = Core.API_Base.Current.currentTheme.Fields [field];
 							if (fiel.Background != null)
 								equal = equal && fiel.Background == fiel2.Background;
 
@@ -159,14 +159,14 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeSaved)
 				{
-					foreach (KeyValuePair <string, ThemeField> themeField in Core.API.currentTheme.Fields)
+					foreach (KeyValuePair <string, ThemeField> themeField in Core.API_Base.Current.currentTheme.Fields)
 					{
 						Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
 					}
 
-					// Console.WriteLine(Core.API.currentTheme.Fields ["Default Text"].Background);
-					// Console.WriteLine(Core.API.currentTheme.Fields ["Default Text"].Foreground);
-					Core.API.Save (img2, img3);
+					// Console.WriteLine(Core.API_Base.Current.currentTheme.Fields ["Default Text"].Background);
+					// Console.WriteLine(Core.API_Base.Current.currentTheme.Fields ["Default Text"].Foreground);
+					Core.API_Base.Current.Save (img2, img3);
 
 					isThemeSaved = true;
 				}
@@ -185,7 +185,7 @@ namespace Yuki_Theme.Tests
 			{
 				if (isThemeRemoved)
 				{
-					Core.API.Remove (Core.API.nameToLoad, (s, s1) => true, null, null);
+					Core.API_Base.Current.RemoveTheme (Core.API_Base.Current.nameToLoad, (s, s1) => true, null, null);
 					
 					isThemeRemoved = true;
 				}
@@ -197,17 +197,13 @@ namespace Yuki_Theme.Tests
 
 		private void onFieldsLoaded ()
 		{
-			fields = Core.API.names.ToArray ();
+			fields = Core.API_Base.Current.names.ToArray ();
 		}
 
 		private void ResetForTests ()
 		{
-			Core.API.Schemes.Clear ();
-			DefaultThemes.categories.Clear ();
-			DefaultThemes.headers.Clear ();
-			DefaultThemes.names.Clear ();
-			DefaultThemes.categoriesList.Clear ();
-			DefaultThemes.headersList.Clear ();
+			API_Base.Current.Schemes.Clear ();
+			DefaultThemes.Clear ();
 		}
 
 		private void SetDefaultActions ()

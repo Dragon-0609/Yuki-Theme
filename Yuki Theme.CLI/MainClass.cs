@@ -33,7 +33,7 @@ namespace Yuki_Theme.CLI
 		internal Completion completion;
 
 		/// <summary>
-		/// Load API, to work with API. For example, get settings and load themes. After that, you can process the themes
+		/// Load API, to work with API_Base.Current. For example, get settings and load themes. After that, you can process the themes
 		/// </summary>
 		internal void LoadCLI (bool refreshSchemes)
 		{
@@ -49,13 +49,13 @@ namespace Yuki_Theme.CLI
 				Settings.ConnectAndGet ();
 				Settings.settingMode = SettingMode.Light;
 				Settings.saveAsOld = true;
-				API.LoadSchemes ();
+				API_Base.Current.LoadSchemes ();
 				AddThemeCompletion ();
 				AddDefinitionCompletion ();
 				AddLanguageCompletion ();
 			} else if (refreshSchemes)
 			{
-				API.LoadSchemes ();
+				API_Base.Current.LoadSchemes ();
 				AddThemeCompletion ();
 			}
 		}
@@ -63,7 +63,7 @@ namespace Yuki_Theme.CLI
 		private void AddThemeCompletion ()
 		{
 			completion.themes.Clear ();
-			string[] themes = API.Schemes.ToArray ();
+			string[] themes = API_Base.Current.Schemes.ToArray ();
 			themes = themes.Select (e => e.EndsWith ("\"") ? e : "\"" + e + "\"").ToArray ();
 
 			string[] commands = new[] { "copy", "export", "delete", "rename", "edit" };
@@ -102,15 +102,15 @@ namespace Yuki_Theme.CLI
 		/// <param name="theme">Theme name</param>
 		private void SetFile (string theme)
 		{
-			API.SelectTheme (theme);
+			API_Base.Current.SelectTheme (theme);
 			if (theme != "N|L")
-				API.Restore ();
+				API_Base.Current.Restore ();
 		}
 
 		internal void ShowLoopMessage ()
 		{
 			if (loop)
-				ShowError (API.Translate ("cli.errors.loop").ToUpper ());
+				ShowError (API_Base.Current.Translate ("cli.errors.loop").ToUpper ());
 		}
 
 		internal string[] ParseArguments (string commandLine)
@@ -166,16 +166,16 @@ namespace Yuki_Theme.CLI
 					{
 						case BadVerbSelectedError badVerbSelectedError:
 							if (badVerbSelectedError.Token.Length > 0)
-								ShowError (API.Translate ("cli.errors.nocommand", badVerbSelectedError.Token));
+								ShowError (API_Base.Current.Translate ("cli.errors.nocommand", badVerbSelectedError.Token));
 							break;
 
 						case UnknownOptionError unknownOptionError:
-							ShowError (API.Translate ("cli.errors.nooption", unknownOptionError.Token));
+							ShowError (API_Base.Current.Translate ("cli.errors.nooption", unknownOptionError.Token));
 							break;
 
 						case SequenceOutOfRangeError sequenceOutOfRange:
 							ShowError (sequenceOutOfRange.ToString ());
-							// ShowError (Core.API.Translate ("cli.errors.length"));
+							// ShowError (Core.API_Base.Current.Translate ("cli.errors.length"));
 							break;
 
 						case MissingValueOptionError missingValueOptionError:
@@ -184,7 +184,7 @@ namespace Yuki_Theme.CLI
 							break;
 						// Handler other appropriate exceptions downhere.
 						default:
-							ShowError (API.Translate ("cli.errors.happened", error.ToString ()));
+							ShowError (API_Base.Current.Translate ("cli.errors.happened", error.ToString ()));
 							break;
 					}
 			}
@@ -206,22 +206,22 @@ namespace Yuki_Theme.CLI
 					{
 						if (!Contains (to))
 						{
-							API.Add (fr, to);
+							API_Base.Current.AddTheme (fr, to);
 						} else
 						{
-							ShowError (API.Translate ("messages.name.exist.full"));
+							ShowError (API_Base.Current.Translate ("messages.name.exist.full"));
 						}
 					} else
 					{
-						ShowError (API.Translate ("cli.errors.notinthemes", fr));
+						ShowError (API_Base.Current.Translate ("cli.errors.notinthemes", fr));
 					}
 				} else
 				{
-					ShowError (API.Translate ("messages.name.notchanged"), API.Translate ("download.canceled.title"));
+					ShowError (API_Base.Current.Translate ("messages.name.notchanged"), API_Base.Current.Translate ("download.canceled.title"));
 				}
 			} else
 			{
-				ShowError (API.Translate ("messages.name.invalid"), API.Translate ("messages.name.invalid.short"));
+				ShowError (API_Base.Current.Translate ("messages.name.invalid"), API_Base.Current.Translate ("messages.name.invalid.short"));
 			}
 		}
 
@@ -231,20 +231,20 @@ namespace Yuki_Theme.CLI
 			Console.WriteLine ("Theme list:");
 			if (command.ShowGroups)
 			{
-				foreach (string scheme in API.Schemes)
+				foreach (string scheme in API_Base.Current.Schemes)
 				{
-					Console.WriteLine ($"{API.ThemeInfos[scheme].group}:  {scheme}");
+					Console.WriteLine ($"{API_Base.Current.ThemeInfos[scheme].group}:  {scheme}");
 				}
 			} else if (command.ShowCustom)
 			{
-				foreach (string scheme in API.Schemes)
+				foreach (string scheme in API_Base.Current.Schemes)
 				{
-					if (!API.ThemeInfos[scheme].isDefault)
+					if (!API_Base.Current.ThemeInfos[scheme].isDefault)
 						Console.WriteLine ("\t{0}", scheme);
 				}
 			} else
 			{
-				foreach (string scheme in API.Schemes)
+				foreach (string scheme in API_Base.Current.Schemes)
 				{
 					Console.WriteLine ("\t{0}", scheme);
 				}
@@ -261,8 +261,8 @@ namespace Yuki_Theme.CLI
 		{
 			LoadCLI (true);
 			SetFile ("Darcula");
-			Console.WriteLine ($"There're {API.names.Count} fields:");
-			foreach (string name in API.names)
+			Console.WriteLine ($"There're {API_Base.Current.names.Count} fields:");
+			foreach (string name in API_Base.Current.names)
 			{
 				Console.WriteLine ("\t" + Populater.GetChangedName (name));
 			}
@@ -275,8 +275,8 @@ namespace Yuki_Theme.CLI
 			LoadCLI (true);
 			Settings.settingMode = SettingMode.Advanced;
 			SetFile ("Darcula");
-			Console.WriteLine ($"There're {API.currentTheme.Fields.Keys.Count} fields:");
-			foreach (string name in API.currentTheme.Fields.Keys)
+			Console.WriteLine ($"There're {API_Base.Current.currentTheme.Fields.Keys.Count} fields:");
+			foreach (string name in API_Base.Current.currentTheme.Fields.Keys)
 			{
 				Console.WriteLine ("\t" + name);
 			}
@@ -295,10 +295,10 @@ namespace Yuki_Theme.CLI
 				if (Contains (o.Name))
 				{
 					SetFile (o.Name);
-					API.Export (null, null, null, null, true);
+					API_Base.Current.ExportTheme (null, null, null, null, true);
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (API_Base.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -307,7 +307,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (API.Translate ("cli.errors.cantexport", o.Name));
+				ShowError (API_Base.Current.Translate ("cli.errors.cantexport", o.Name));
 			}
 		}
 
@@ -319,7 +319,7 @@ namespace Yuki_Theme.CLI
 				if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
 				{
 					LoadCLI (true);
-					API.Import (o.Path, AskToDelete);
+					API_Base.Current.ImportTheme (o.Path, AskToDelete);
 				} else
 					showerror = true;
 			} else
@@ -329,7 +329,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (API.Translate ("cli.errors.cantimport", o.Path));
+				ShowError (API_Base.Current.Translate ("cli.errors.cantimport", o.Path));
 			}
 		}
 
@@ -341,10 +341,11 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				o.Name = ConvertToText (o.Name);
 				if (Contains (o.Name))
-					API.Remove (o.Name, AskToDelete, null, AfterDelete);
+					API_Base.Current.RemoveTheme (o.Name, AskToDelete, null, AfterDelete);
+				
 				else
 				{
-					ShowError (API.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (API_Base.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -353,7 +354,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (API.Translate ("cli.errors.cantdelete", o.Name));
+				ShowError (API_Base.Current.Translate ("cli.errors.cantdelete", o.Name));
 			}
 		}
 
@@ -366,14 +367,14 @@ namespace Yuki_Theme.CLI
 			{
 				if (fr != to)
 				{
-					API.Rename (fr, to);
+					API_Base.Current.RenameTheme (fr, to);
 				} else
 				{
-					ShowError (API.Translate ("messages.name.notchanged"), API.Translate ("download.canceled.title"));
+					ShowError (API_Base.Current.Translate ("messages.name.notchanged"), API_Base.Current.Translate ("download.canceled.title"));
 				}
 			} else
 			{
-				ShowError (API.Translate ("messages.name.invalid"), API.Translate ("messages.name.invalid.short"));
+				ShowError (API_Base.Current.Translate ("messages.name.invalid"), API_Base.Current.Translate ("messages.name.invalid.short"));
 			}
 		}
 
@@ -389,7 +390,7 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (API.Translate ("messages.path.wrong"));
+					ShowError (API_Base.Current.Translate ("messages.path.wrong"));
 				}
 			}
 
@@ -402,7 +403,7 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.quiet.wrong.full"), API.Translate ("cli.errors.quiet.wrong.short"));
+					ShowError (API_Base.Current.Translate ("cli.errors.quiet.wrong.full"), API_Base.Current.Translate ("cli.errors.quiet.wrong.short"));
 				}
 			}
 
@@ -418,7 +419,7 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.mode.invalid"));
+					ShowError (API_Base.Current.Translate ("cli.errors.mode.invalid"));
 				}
 			}
 
@@ -434,7 +435,7 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.action.invalid"));
+					ShowError (API_Base.Current.Translate ("cli.errors.action.invalid"));
 				}
 			}
 
@@ -449,7 +450,7 @@ namespace Yuki_Theme.CLI
 				} else
 				{
 					string languages = string.Join (", ", Settings.translation.GetShortLanguageNames);
-					ShowError (API.Translate ("cli.errors.language.invalid", languages));
+					ShowError (API_Base.Current.Translate ("cli.errors.language.invalid", languages));
 				}
 			}
 
@@ -460,8 +461,8 @@ namespace Yuki_Theme.CLI
 				ShowSuccess ("Settings are saved!", "Saved");
 			} else
 			{
-				ShowError (API.Translate ("cli.errors.settings.notsaved.full"),
-					API.Translate ("cli.errors.settings.notsaved.short"));
+				ShowError (API_Base.Current.Translate ("cli.errors.settings.notsaved.full"),
+					API_Base.Current.Translate ("cli.errors.settings.notsaved.short"));
 			}
 		}
 
@@ -479,7 +480,7 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
-					if (!API.ThemeInfos[o.Name].isDefault)
+					if (!API_Base.Current.ThemeInfos[o.Name].isDefault)
 					{
 						SetFile (o.Name);
 						if (o.Definition != null)
@@ -520,9 +521,9 @@ namespace Yuki_Theme.CLI
 									if (bg || txt)
 									{
 										o.Definition = Populater.GetNormalizedName (o.Definition);
-										if (API.currentTheme.Fields.ContainsKey (o.Definition))
+										if (API_Base.Current.currentTheme.Fields.ContainsKey (o.Definition))
 										{
-											ThemeField dic = API.currentTheme.Fields[o.Definition];
+											ThemeField dic = API_Base.Current.currentTheme.Fields[o.Definition];
 											SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
 											foreach (KeyValuePair<string, string> keyValuePair in dic.GetAttributes ())
 											{
@@ -534,14 +535,14 @@ namespace Yuki_Theme.CLI
 										if (sttr != null)
 											foreach (var sr in sttr)
 											{
-												ThemeField dic = API.currentTheme.Fields[sr];
+												ThemeField dic = API_Base.Current.currentTheme.Fields[sr];
 												SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
 											}
 
-										API.Save (null, null, true);
+										API_Base.Current.Save (null, null, true);
 									} else
 									{
-										ShowError (API.Translate ("cli.errors.parameter"));
+										ShowError (API_Base.Current.Translate ("cli.errors.parameter"));
 									}
 								} else
 								{
@@ -549,9 +550,9 @@ namespace Yuki_Theme.CLI
 									if (o.Opacity != null)
 									{
 										if (o.Definition.ToLower () == "sticker")
-											API.currentTheme.StickerOpacity = int.Parse (o.Opacity);
+											API_Base.Current.currentTheme.StickerOpacity = int.Parse (o.Opacity);
 										else
-											API.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
+											API_Base.Current.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
 										changed = true;
 									}
 
@@ -561,12 +562,12 @@ namespace Yuki_Theme.CLI
 										if (o.Align.ToLower () == "left") align = Alignment.Left;
 										else if (o.Align.ToLower () == "center") align = Alignment.Center;
 										else align = Alignment.Right;
-										API.currentTheme.WallpaperAlign = (int)align;
+										API_Base.Current.currentTheme.WallpaperAlign = (int)align;
 										changed = true;
 									}
 
 									if (changed)
-										API.Save (null, null, true);
+										API_Base.Current.Save (null, null, true);
 									SetImageLocation (o);
 								}
 							} else
@@ -576,11 +577,11 @@ namespace Yuki_Theme.CLI
 						}
 					} else
 					{
-						ShowError (API.Translate ("colors.default.error.full"), API.Translate ("colors.default.error.short"));
+						ShowError (API_Base.Current.Translate ("colors.default.error.full"), API_Base.Current.Translate ("colors.default.error.short"));
 					}
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (API_Base.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -589,7 +590,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (API.Translate ("cli.errors.cantedit", o.Name));
+				ShowError (API_Base.Current.Translate ("cli.errors.cantedit", o.Name));
 			}
 		}
 
@@ -639,7 +640,7 @@ namespace Yuki_Theme.CLI
 						Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
 							"yuki_theme.zip"), true);
 
-					Assembly a = API.GetCore ();
+					Assembly a = API_Base.Current.GetCore ();
 					int md = 0;
 					bool found = false;
 					while (!found)
@@ -692,11 +693,11 @@ namespace Yuki_Theme.CLI
 						quit = true;
 					} else
 					{
-						ShowError (API.Translate ("cli.errors.find.app"));
+						ShowError (API_Base.Current.Translate ("cli.errors.find.app"));
 					}
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.find.file"));
+					ShowError (API_Base.Current.Translate ("cli.errors.find.file"));
 				}
 			} else // Check Update
 			{
@@ -727,11 +728,11 @@ namespace Yuki_Theme.CLI
 						isPath = true;
 					} else
 					{
-						ShowError (API.Translate ("messages.path.wrong"));
+						ShowError (API_Base.Current.Translate ("messages.path.wrong"));
 					}
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.directory.notexist"));
+					ShowError (API_Base.Current.Translate ("cli.errors.directory.notexist"));
 				}
 			}
 
@@ -762,7 +763,7 @@ namespace Yuki_Theme.CLI
 
 		private bool Contains (string st)
 		{
-			return API.Schemes.Contains (st);
+			return API_Base.Current.Schemes.Contains (st);
 		}
 
 		private string ConvertToText (string str)
@@ -807,7 +808,7 @@ namespace Yuki_Theme.CLI
 
 			if (err)
 			{
-				ShowError (API.Translate ("cli.errors.input.wrong"));
+				ShowError (API_Base.Current.Translate ("cli.errors.input.wrong"));
 			}
 
 			return ans;
@@ -815,7 +816,7 @@ namespace Yuki_Theme.CLI
 
 		private void AfterDelete (string content, object obj)
 		{
-			ShowError (API.Translate ("cli.message.deleted", content));
+			ShowError (API_Base.Current.Translate ("cli.message.deleted", content));
 		}
 
 		private bool isNull (string st)
@@ -826,7 +827,7 @@ namespace Yuki_Theme.CLI
 		private Image LoadImage ()
 		{
 			Image res = null;
-			if (API.IsDefault ())
+			if (API_Base.Current.IsDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
@@ -841,10 +842,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (API.pathToLoad, true));
+				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (API_Base.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetImage (PathGenerator.PathToFile (API.pathToLoad, true));
+					Tuple<bool, Image> iag = Helper.GetImage (PathGenerator.PathToFile (API_Base.Current.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -858,7 +859,7 @@ namespace Yuki_Theme.CLI
 		private Image LoadSticker ()
 		{
 			Image res = null;
-			if (API.IsDefault ())
+			if (API_Base.Current.IsDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
@@ -873,10 +874,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (API.pathToLoad, true));
+				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (API_Base.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetSticker (PathGenerator.PathToFile (API.pathToLoad, true));
+					Tuple<bool, Image> iag = Helper.GetSticker (PathGenerator.PathToFile (API_Base.Current.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -889,11 +890,11 @@ namespace Yuki_Theme.CLI
 
 		private Tuple<bool, string> GetThemeFromMemory (out Assembly location, out string pathToMemory)
 		{
-			IThemeHeader header = DefaultThemes.headers[API.nameToLoad];
-			string ext = Helper.GetThemeFormat (true, API.pathToLoad, API.nameToLoad) == ThemeFormat.Old
+			IThemeHeader header = DefaultThemes.headers[API_Base.Current.nameToLoad];
+			string ext = Helper.GetThemeFormat (true, API_Base.Current.pathToLoad, API_Base.Current.nameToLoad) == ThemeFormat.Old
 				? Helper.FILE_EXTENSTION_OLD
 				: Helper.FILE_EXTENSTION_NEW;
-			pathToMemory = $"{header}.{API.pathToLoad}{ext}";
+			pathToMemory = $"{header}.{API_Base.Current.pathToLoad}{ext}";
 			location = header.Location;
 			Tuple<bool, string> content = Helper.GetThemeFromMemory (pathToMemory, location);
 			return content;
@@ -933,7 +934,7 @@ namespace Yuki_Theme.CLI
 				Image sticker = null;
 				if (!File.Exists (o.Path))
 				{
-					ShowError (API.Translate ("cli.errors.file.notexist"));
+					ShowError (API_Base.Current.Translate ("cli.errors.file.notexist"));
 					return;
 				}
 
@@ -951,10 +952,10 @@ namespace Yuki_Theme.CLI
 
 				if (img || stick)
 				{
-					API.Save (image, sticker, false);
+					API_Base.Current.Save (image, sticker, false);
 				} else
 				{
-					ShowError (API.Translate ("cli.errors.strange"));
+					ShowError (API_Base.Current.Translate ("cli.errors.strange"));
 				}
 			}
 		}
@@ -990,7 +991,7 @@ namespace Yuki_Theme.CLI
 
 			foreach (Match match in matches)
 			{
-				string translation = API.Translate (match.Value);
+				string translation = API_Base.Current.Translate (match.Value);
 				if (translation.Contains ("{0}") && ToReplaceTranslationWithVariable.ContainsKey (match.Value))
 					translation = translation.Replace ("{0}", ToReplaceTranslationWithVariable[match.Value]);
 				string[] cv = translation.Split ('\n');
@@ -1037,7 +1038,7 @@ namespace Yuki_Theme.CLI
 			int inst = Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
 			if (inst == 1)
 			{
-				ShowSuccess (API.Translate ("cli.success.update.full"), API.Translate ("cli.success.update.short"));
+				ShowSuccess (API_Base.Current.Translate ("cli.success.update.full"), API_Base.Current.Translate ("cli.success.update.short"));
 				Settings.database.DeleteValue ("install");
 				if (Settings.database.GetValue ("cli_update", "null") != "null")
 					Settings.database.DeleteValue ("cli_update");

@@ -129,16 +129,16 @@ namespace Yuki_Theme.Core.WPF
 
 		private void UpdateNotificationColor (Color bg, Color fg, Color bgClick)
 		{
-			lock (_notificationWindow)
+			if (!IsNotificationNull ())
 			{
-				if (!IsNotificationNull ())
+				Console.WriteLine ("Updating");
+				lock (_notificationWindow)
 				{
-					Console.WriteLine ("Updating");
 					_notificationWindow.UpdateColors ();
-				} else
-					Console.WriteLine ("NotUpdating");
-
-			}
+				}
+			} else
+				Console.WriteLine ("NotUpdating");
+			
 		}
 
 		private void UpdateDownloaderColor (Color bg, Color fg, Color bgClick)
@@ -185,7 +185,7 @@ namespace Yuki_Theme.Core.WPF
 			} else
 			{
 				if (API_Events.showError != null)
-					API_Events.showError (API.Translate ("messages.update.invalid"), API.Translate ("messages.update.wrong"));
+					API_Events.showError (API_Base.Current.Translate ("messages.update.invalid"), API_Base.Current.Translate ("messages.update.wrong"));
 			}
 			
 		}

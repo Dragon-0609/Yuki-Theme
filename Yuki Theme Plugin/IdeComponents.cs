@@ -581,15 +581,15 @@ namespace Yuki_Theme_Plugin
 		
 		public void UpdateTranslations ()
 		{
-			openInExplorerItem.Text = API.Translate ("plugin.explorer.open");
-			menu_settings.Text = API.Translate ("plugin.menu.settings");
-			quiet.Text = API.Translate ("plugin.menu.discreet");
-			stick.Text = API.Translate ("plugin.menu.stickers");
-			backimage.Text = API.Translate ("plugin.menu.wallpaper");
-			switchTheme.Text = API.Translate ("plugin.menu.switch");
-			enablePositioning.Text = API.Translate ("plugin.menu.positioning");
-			resetStickerPosition.Text = API.Translate ("plugin.menu.margins");
-			updatePage.Text = API.Translate ("plugin.menu.notification");
+			openInExplorerItem.Text = API_Base.Current.Translate ("plugin.explorer.open");
+			menu_settings.Text = API_Base.Current.Translate ("plugin.menu.settings");
+			quiet.Text = API_Base.Current.Translate ("plugin.menu.discreet");
+			stick.Text = API_Base.Current.Translate ("plugin.menu.stickers");
+			backimage.Text = API_Base.Current.Translate ("plugin.menu.wallpaper");
+			switchTheme.Text = API_Base.Current.Translate ("plugin.menu.switch");
+			enablePositioning.Text = API_Base.Current.Translate ("plugin.menu.positioning");
+			resetStickerPosition.Text = API_Base.Current.Translate ("plugin.menu.margins");
+			updatePage.Text = API_Base.Current.Translate ("plugin.menu.notification");
 		}
 		
 		internal void UpdateMenuStickersPositioningImage ()

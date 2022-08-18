@@ -22,8 +22,8 @@ namespace Yuki_Theme.Core.Utils
 
 			if (Helper.mode == null)
 			{
-				string translation = API.Translate ("theme.downloader.errors.group.wrong");
-				API_Events.showError (translation, API.Translate (translation));
+				string translation = API_Base.Current.Translate ("theme.downloader.errors.group.wrong");
+				API_Events.showError (translation, API_Base.Current.Translate (translation));
 				return;
 			}
 			

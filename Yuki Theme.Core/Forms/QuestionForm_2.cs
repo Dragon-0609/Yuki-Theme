@@ -12,9 +12,9 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
-			Message.Text = API.Translate ("messages.google.analytics");
-			button2.Text = API.Translate ("messages.buttons.accept");
-			button1.Text = API.Translate ("messages.buttons.decline");
+			Message.Text = API_Base.Current.Translate ("messages.google.analytics");
+			button2.Text = API_Base.Current.Translate ("messages.buttons.accept");
+			button1.Text = API_Base.Current.Translate ("messages.buttons.decline");
 		}
 
 		private void button2_Click (object sender, EventArgs e)

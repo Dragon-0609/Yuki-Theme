@@ -121,7 +121,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
+    <Compile Include="API_Base.cs" />
     <Compile Include="API_Events.cs" />
+    <Compile Include="CommonAPI.cs" />
     <Compile Include="Communicator\Message.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Database\FileDatabase.cs" />

@@ -64,7 +64,7 @@ namespace Yuki_Theme.CLI
 				{
 					if (conditions.Count == 0)
 					{
-						ShowError (API.Translate ("cli.errors.conditions.null"));
+						ShowError (API_Base.Current.Translate ("cli.errors.conditions.null"));
 						conditionSet = null;
 						return;
 					}
@@ -90,7 +90,7 @@ namespace Yuki_Theme.CLI
 				conditionSet = new ConditionSet () { conditions = conditions.ToArray (), fieldsToSet = fieldsToSet.ToArray () };
 			} else
 			{
-				ShowError (API.Translate (conditions.Count > 0 ? "cli.errors.setter.null" : "cli.errors.conditions.null"));
+				ShowError (API_Base.Current.Translate (conditions.Count > 0 ? "cli.errors.setter.null" : "cli.errors.conditions.null"));
 				conditionSet = null;
 			}
 		}
@@ -120,7 +120,7 @@ namespace Yuki_Theme.CLI
 		{
 			Dictionary <string, ThemeInfo> update = new Dictionary <string, ThemeInfo> ();
 
-			foreach (KeyValuePair <string, ThemeInfo> pair in API.ThemeInfos)
+			foreach (KeyValuePair <string, ThemeInfo> pair in API_Base.Current.ThemeInfos)
 			{
 				if (pair.Value.location != ThemeLocation.Memory)
 				{
@@ -152,7 +152,7 @@ namespace Yuki_Theme.CLI
 			{
 				foreach (KeyValuePair <string, ThemeInfo> pair in update)
 				{
-					API.ThemeInfos [pair.Key] = pair.Value;
+					API_Base.Current.ThemeInfos [pair.Key] = pair.Value;
 				}
 			}
 		}
@@ -164,7 +164,7 @@ namespace Yuki_Theme.CLI
 				bool need = Condition.NeedToLoadThemeInConditions [condition.Target];
 				if (need && theme == null)
 				{
-					theme = API.GetTheme (name);
+					theme = API_Base.Current.GetTheme (name);
 				}
 			}
 		}
