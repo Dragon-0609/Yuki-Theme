@@ -18,6 +18,7 @@ using System.Xml;
 using CommonMark;
 using Microsoft.Win32;
 using Svg;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
 using Size = System.Drawing.Size;
 
@@ -399,8 +400,8 @@ namespace Yuki_Theme.Core
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
 					if (API_Events.showError != null)
-						API_Events.showError (API_Base.Current.Translate ("messages.file.notexist.withname.param", filename),
-						                      API_Base.Current.Translate ("messages.file.notexist.withname", filename));
+						API_Events.showError (API.API.Current.Translate ("messages.file.notexist.withname.param", filename),
+						                      API.API.Current.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -674,18 +675,18 @@ namespace Yuki_Theme.Core
 
 		public static void LoadCurrent ()
 		{
-			API_Base.Current.LoadSchemes ();
+			API.API.Current.LoadSchemes ();
 			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{
 				foreach (string s in files)
 				{
-					string sp = API_Base.Current.GetNameOfTheme (s);
-					if (API_Base.Current.Schemes.Contains (sp))
+					string sp = API.API.Current.GetNameOfTheme (s);
+					if (API.API.Current.Schemes.Contains (sp))
 					{
 						currentTheme = sp;
-						API_Base.Current.selectedItem = currentTheme;
+						API.API.Current.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -843,7 +844,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = API_Base.Current.GetCore ();
+	        Assembly a = API.API.Current.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))

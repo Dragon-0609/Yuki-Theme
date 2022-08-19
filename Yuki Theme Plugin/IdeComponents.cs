@@ -15,6 +15,7 @@ using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
@@ -581,15 +582,15 @@ namespace Yuki_Theme_Plugin
 		
 		public void UpdateTranslations ()
 		{
-			openInExplorerItem.Text = API_Base.Current.Translate ("plugin.explorer.open");
-			menu_settings.Text = API_Base.Current.Translate ("plugin.menu.settings");
-			quiet.Text = API_Base.Current.Translate ("plugin.menu.discreet");
-			stick.Text = API_Base.Current.Translate ("plugin.menu.stickers");
-			backimage.Text = API_Base.Current.Translate ("plugin.menu.wallpaper");
-			switchTheme.Text = API_Base.Current.Translate ("plugin.menu.switch");
-			enablePositioning.Text = API_Base.Current.Translate ("plugin.menu.positioning");
-			resetStickerPosition.Text = API_Base.Current.Translate ("plugin.menu.margins");
-			updatePage.Text = API_Base.Current.Translate ("plugin.menu.notification");
+			openInExplorerItem.Text = API.Current.Translate ("plugin.explorer.open");
+			menu_settings.Text = API.Current.Translate ("plugin.menu.settings");
+			quiet.Text = API.Current.Translate ("plugin.menu.discreet");
+			stick.Text = API.Current.Translate ("plugin.menu.stickers");
+			backimage.Text = API.Current.Translate ("plugin.menu.wallpaper");
+			switchTheme.Text = API.Current.Translate ("plugin.menu.switch");
+			enablePositioning.Text = API.Current.Translate ("plugin.menu.positioning");
+			resetStickerPosition.Text = API.Current.Translate ("plugin.menu.margins");
+			updatePage.Text = API.Current.Translate ("plugin.menu.notification");
 		}
 		
 		internal void UpdateMenuStickersPositioningImage ()

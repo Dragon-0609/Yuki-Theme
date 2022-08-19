@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
@@ -265,7 +266,7 @@ namespace Yuki_Theme.Core.Themes
 		
 		public override void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions)
 		{
-			Assembly a = API_Base.Current.GetCore ();
+			Assembly a = API.API.Current.GetCore ();
 			string str;
 
 			Stream resourceStream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
@@ -306,7 +307,7 @@ namespace Yuki_Theme.Core.Themes
 		public override Theme PopulateList (string name, bool loadImages)
 		{
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = API_Base.Current.ThemeInfos [name].isDefault;
+			bool isDef = API.API.Current.ThemeInfos [name].isDefault;
 			string json = LoadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
@@ -318,8 +319,8 @@ namespace Yuki_Theme.Core.Themes
 
 		public override void ProcessAfterParsing (Theme theme)
 		{
-			API_Base.Current.names.AddRange (theme.Fields.Keys);
-			API_Base.Current.names.InsertRange (1, ShadowNames.imageNames);	
+			API.API.Current.names.AddRange (theme.Fields.Keys);
+			API.API.Current.names.InsertRange (1, ShadowNames.imageNames);	
 		}
 
 		public override Tuple <bool, string> VerifyToken (string path)

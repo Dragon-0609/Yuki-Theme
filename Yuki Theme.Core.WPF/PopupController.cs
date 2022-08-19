@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
@@ -185,7 +186,7 @@ namespace Yuki_Theme.Core.WPF
 			} else
 			{
 				if (API_Events.showError != null)
-					API_Events.showError (API_Base.Current.Translate ("messages.update.invalid"), API_Base.Current.Translate ("messages.update.wrong"));
+					API_Events.showError (API.API.Current.Translate ("messages.update.invalid"), API.API.Current.Translate ("messages.update.wrong"));
 			}
 			
 		}

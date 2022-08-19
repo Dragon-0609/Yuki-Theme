@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Database;
 
 namespace Yuki_Theme.Core
@@ -62,13 +63,13 @@ namespace Yuki_Theme.Core
 				if (Environment.Is64BitOperatingSystem)
 				{
 					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-					if (API_Base.Current.IsPascalDirectory (defpas))
+					if (API.API.Current.IsPascalDirectory (defpas))
 					{
 						pascalPath = defpas;
 					} else
 					{
 						defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
-						if (API_Base.Current.IsPascalDirectory (defpas))
+						if (API.API.Current.IsPascalDirectory (defpas))
 						{
 							pascalPath = defpas;
 						}
@@ -76,7 +77,7 @@ namespace Yuki_Theme.Core
 				} else
 				{
 					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-					if (API_Base.Current.IsPascalDirectory (defpas))
+					if (API.API.Current.IsPascalDirectory (defpas))
 					{
 						pascalPath = defpas;
 					}
@@ -112,7 +113,7 @@ namespace Yuki_Theme.Core
 			colorPicker = int.Parse (data [SettingsConst.COLOR_PICKER]);
 			localization = data [SettingsConst.LOCALIZATION];
 
-			API_Base.Current.selectedItem = data [SettingsConst.ACTIVE];
+			API.API.Current.selectedItem = data [SettingsConst.ACTIVE];
 			var os = 0;
 			int.TryParse (data [SettingsConst.CHOICE_INDEX], out os);
 			actionChoice = os;
@@ -143,7 +144,7 @@ namespace Yuki_Theme.Core
 				Dictionary <int, string> dict = new Dictionary <int, string>
 				{
 					{ SettingsConst.PASCAL_PATH, pascalPath },
-					{ SettingsConst.ACTIVE, API_Base.Current.selectedItem },
+					{ SettingsConst.ACTIVE, API.API.Current.selectedItem },
 					{ SettingsConst.ASK_CHOICE, askChoice.ToString () },
 					{ SettingsConst.CHOICE_INDEX, actionChoice.ToString () },
 					{ SettingsConst.SETTING_MODE, ((int)settingMode).ToString () },

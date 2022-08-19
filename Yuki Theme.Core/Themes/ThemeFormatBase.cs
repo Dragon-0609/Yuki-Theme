@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Yuki_Theme.Core.API;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -11,11 +12,11 @@ namespace Yuki_Theme.Core.Themes
 	{
 		public virtual void LoadThemeToCLI ()
 		{
-			Theme theme = PopulateList (API_Base.Current.nameToLoad, true);
-			API_Base.Current.currentTheme = theme;
+			Theme theme = PopulateList (API.API.Current.nameToLoad, true);
+			API.API.Current.currentTheme = theme;
 			if (theme == null)
 			{
-				API_Base.Current.ShowError (API_Base.Current.Translate ("messages.theme.invalid.full"), API_Base.Current.Translate ("messages.theme.invalid.short"));
+				API.API.Current.ShowError (API.API.Current.Translate ("messages.theme.invalid.full"), API.API.Current.Translate ("messages.theme.invalid.short"));
 			} else
 			{
 				ProcessAfterParsing (theme);

@@ -112,7 +112,7 @@ namespace Yuki_Theme.Core.Forms
 					} catch (JsonReaderException e)
 					{
 						Console.WriteLine (json);
-						MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+						MessageBox.Show (API.API.Current.Translate("theme.downloader.errors.github.exceed.message"), API.API.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 							MessageBoxIcon.Error);
 						return;
 					}
@@ -238,8 +238,8 @@ namespace Yuki_Theme.Core.Forms
 
 		private static void ShowRequestError ()
 		{
-			string message = API_Base.Current.Translate ("theme.downloader.errors.group.request");
-			string wrong = API_Base.Current.Translate ("theme.downloader.errors.group.wrong");
+			string message = API.API.Current.Translate ("theme.downloader.errors.group.request");
+			string wrong = API.API.Current.Translate ("theme.downloader.errors.group.wrong");
 			MessageBox.Show ($"{message}\n{wrong}", message, MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
@@ -260,7 +260,7 @@ namespace Yuki_Theme.Core.Forms
 				}
 			}
 
-			string message = API_Base.Current.Translate ("theme.downloader.errors.group.request");
+			string message = API.API.Current.Translate ("theme.downloader.errors.group.request");
 			MessageBox.Show ($"{message}\n{exceptionHeader}\n{innerMessage}\n{lowestMessage}", message, MessageBoxButtons.OK,
 				MessageBoxIcon.Error);
 		}
@@ -332,7 +332,7 @@ namespace Yuki_Theme.Core.Forms
 				string json = multi [1];
 				doki.Parse (json, "none", "none", false, false, false);
 				doki.theme.link = multi [0];
-				bool isEqual = !IsEqual (doki.theme, API_Base.Current.GetTheme (doki.theme.Name));
+				bool isEqual = !IsEqual (doki.theme, API.API.Current.GetTheme (doki.theme.Name));
 				themes.Add (doki.theme.Name, doki.theme);
 				newThemes.Add (doki.theme.Name, isEqual);
 				LoadThemeIntoPage (doki.theme, isEqual);
@@ -347,7 +347,7 @@ namespace Yuki_Theme.Core.Forms
 				jresponse = JObject.Parse (json);
 			} catch (JsonReaderException e)
 			{
-				MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+				MessageBox.Show (API.API.Current.Translate("theme.downloader.errors.github.exceed.message"), API.API.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 				return;
 			}
@@ -373,7 +373,7 @@ namespace Yuki_Theme.Core.Forms
 				jresponse = JObject.Parse (json);
 			} catch (JsonReaderException e)
 			{
-				MessageBox.Show (API_Base.Current.Translate("theme.downloader.errors.github.exceed.message"), API_Base.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
+				MessageBox.Show (API.API.Current.Translate("theme.downloader.errors.github.exceed.message"), API.API.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
 				return;
 			}
@@ -645,12 +645,12 @@ namespace Yuki_Theme.Core.Forms
 				Console.WriteLine ("Downloading theme {0}", name);
 				try
 				{
-					if (API_Base.Current.ThemeInfos.ContainsKey (name))
+					if (API.API.Current.ThemeInfos.ContainsKey (name))
 					{
-						if (API_Base.Current.ThemeInfos [name].location == ThemeLocation.File &&
-							File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API_Base.Current.ThemeInfos [name].isOld)))
+						if (API.API.Current.ThemeInfos [name].location == ThemeLocation.File &&
+							File.Exists (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.API.Current.ThemeInfos [name].isOld)))
 						{
-							File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API_Base.Current.ThemeInfos [name].isOld));
+							File.Delete (PathGenerator.PathToFile (Helper.ConvertNameToPath (name), API.API.Current.ThemeInfos [name].isOld));
 						}
 					}
 
@@ -666,8 +666,8 @@ namespace Yuki_Theme.Core.Forms
 					theme.fullPath = PathGenerator.PathToFile (Helper.ConvertNameToPath (name), true);
 					theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 					Console.WriteLine ("Token: {0}", theme.Token);
-					API_Base.Current.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
-					API_Base.Current.SaveTheme (theme, wallpaper, sticker);
+					API.API.Current.ExtractSyntaxTemplate (SyntaxType.Pascal, theme.fullPath); // Create theme file
+					API.API.Current.SaveTheme (theme, wallpaper, sticker);
 					wallpaper.Dispose ();
 					sticker.Dispose ();
 					AddNSetProgress ();

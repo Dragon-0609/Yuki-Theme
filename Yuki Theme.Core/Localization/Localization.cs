@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using Yuki_Theme.Core.API;
 
 namespace Yuki_Theme.Core.Localization
 {

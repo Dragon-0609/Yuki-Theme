@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using CustomControls.RJControls;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Utils;
@@ -141,8 +142,8 @@ namespace Yuki_Theme.Core.Controls
 					popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (API_Base.Current.Translate ("messages.update.invalid"),
-					                 API_Base.Current.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show (API.API.Current.Translate ("messages.update.invalid"),
+					                 API.API.Current.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -501,7 +502,7 @@ namespace Yuki_Theme.Core.Controls
 			foreach (Control control in parent.Controls)
 			{
 				if (control.AccessibleName != null)
-					control.Text = API_Base.Current.Translate (control.AccessibleName);
+					control.Text = API.API.Current.Translate (control.AccessibleName);
 				if (control.Controls.Count > 0)
 				{
 					TranslateControls (control);

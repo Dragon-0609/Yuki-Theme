@@ -32,26 +32,26 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			foreach (string sc in DefaultThemes.categoriesList)
 			{
-				string nameTranslation = API_Base.Current.Translate (sc);
+				string nameTranslation = API.API.Current.Translate (sc);
 				ManageableItem defa = new ManageableItem (nameTranslation, sc, true);
 				groups.Add (defa);
 				groupItems.Add (sc, defa);
 			}
 
-			string customGroup = API_Base.Current.Translate ("messages.theme.group.custom");
+			string customGroup = API.API.Current.Translate ("messages.theme.group.custom");
 			ManageableItem custom = new ManageableItem (customGroup, "custom", true);
 			groups.Add (custom);
 			groupItems.Add ("custom", custom);
 
-			foreach (string item in API_Base.Current.Schemes)
+			foreach (string item in API.API.Current.Schemes)
 			{
-				if (API_Base.Current.ThemeInfos[item].isDefault)
+				if (API.API.Current.ThemeInfos[item].isDefault)
 				{
 					ManageableItem cat = groupItems [DefaultThemes.getCategory (item)];
-					new ManageableItem (item, item, false, API_Base.Current.ThemeInfos[item].isOld, cat);
+					new ManageableItem (item, item, false, API.API.Current.ThemeInfos[item].isOld, cat);
 				} else
 				{
-					new ManageableItem (item, item, false, API_Base.Current.ThemeInfos[item].isOld, custom);
+					new ManageableItem (item, item, false, API.API.Current.ThemeInfos[item].isOld, custom);
 				}
 			}
 
@@ -132,7 +132,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item && !item.IsGroup)
 			{
-				API_Base.Current.RemoveTheme (item.Content.ToString (), askDelete, afterAsk, afterDelete);
+				API.API.Current.RemoveTheme (item.Content.ToString (), askDelete, afterAsk, afterDelete);
 			}
 		}
 
@@ -214,13 +214,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				prevT = groupItems ["Doki Theme"].children.Last ().Content.ToString ();
 			}
 
-			indx = API_Base.Current.Schemes.IndexOf (prevT);
+			indx = API.API.Current.Schemes.IndexOf (prevT);
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {indx}");
 			} else
 			{
-				API_Base.Current.Schemes.Insert (indx + 1, theme);
+				API.API.Current.Schemes.Insert (indx + 1, theme);
 			}
 		}
 
@@ -244,7 +244,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Schemes.Items.Insert (indx + 1, old);
 			}
 
-			API_Base.Current.Schemes.Remove (res.from);
+			API.API.Current.Schemes.Remove (res.from);
 			InsertThemeToCLI (prevTheme, res.to);
 
 		}

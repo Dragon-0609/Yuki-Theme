@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -87,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
-			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", API_Base.Current.GetCore ());
+			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", API.API.Current.GetCore ());
 		}
 
 
@@ -472,7 +473,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 					// popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (API_Base.Current.Translate ("messages.update.invalid"), API_Base.Current.Translate ("messages.update.wrong"),
+					MessageBox.Show (API.API.Current.Translate ("messages.update.invalid"), API.API.Current.Translate ("messages.update.wrong"),
 					                 MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}

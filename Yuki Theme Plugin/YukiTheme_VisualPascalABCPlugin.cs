@@ -22,6 +22,7 @@ using VisualPascalABC.OptionsContent;
 using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
@@ -30,7 +31,7 @@ using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
-using Yuki_Theme_Plugin.Communicator;
+using Yuki_Theme_Plugin.Communication;
 using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
@@ -134,9 +135,10 @@ namespace Yuki_Theme_Plugin
 			//Добавляем в меню
 			MenuItems.Add (item1);
 			plugin = this;
-
+			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
+			API.Current = new ServerAPI ();
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
 			Settings.ConnectAndGet ();
 
@@ -428,9 +430,9 @@ namespace Yuki_Theme_Plugin
 						Image stckr = Image.FromFile (pth);
 
 
-						if (API_Base.Current.currentTheme.StickerOpacity != 100)
+						if (API.Current.currentTheme.StickerOpacity != 100)
 						{
-							sticker = Helper.SetOpacity (stckr, API_Base.Current.currentTheme.StickerOpacity);
+							sticker = Helper.SetOpacity (stckr, API.Current.currentTheme.StickerOpacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -763,7 +765,7 @@ namespace Yuki_Theme_Plugin
 				tp.Activate ();
 			} else
 			{
-				MessageBox.Show (API_Base.Current.Translate ("plugin.browser.error"));
+				MessageBox.Show (API.Current.Translate ("plugin.browser.error"));
 			}
 		}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
@@ -23,9 +24,9 @@ namespace Yuki_Theme.Core.Themes
 	
 		public Theme GetTheme (string name)
 		{
-			if (API_Base.Current.ThemeInfos.ContainsKey (name))
+			if (API.API.Current.ThemeInfos.ContainsKey (name))
 			{
-				Theme theme = API_Base.Current.ThemeInfos [name].isOld
+				Theme theme = API.API.Current.ThemeInfos [name].isOld
 					? _oldThemeFormat.PopulateList (name, false)
 					: _newThemeFormat.PopulateList (name, false);
 
@@ -45,7 +46,7 @@ namespace Yuki_Theme.Core.Themes
 				file = Helper.ConvertNameToPath (file);
 			}
 
-			string ext = Helper.GetExtension (API_Base.Current.ThemeInfos [name].isOld);
+			string ext = Helper.GetExtension (API.API.Current.ThemeInfos [name].isOld);
 			Stream stream = a.GetManifestResourceStream ($"{header.ResourceHeader}.{file}" + ext);
 			return stream;
 		}
@@ -92,7 +93,7 @@ namespace Yuki_Theme.Core.Themes
 		/// <param name="path">Path</param>
 		private void ExportTheme (string path)
 		{
-			string source = API_Base.Current.currentTheme.fullPath;
+			string source = API.API.Current.currentTheme.fullPath;
 			bool iszip = Helper.IsZip (source);
 			if (!iszip)
 			{
@@ -129,14 +130,14 @@ namespace Yuki_Theme.Core.Themes
 			CopyTheme (copyFrom, name, destination, true);
 			if (!exist)
 			{
-				API_Base.Current.Schemes.Add (name);
+				API.API.Current.Schemes.Add (name);
 				_actions.AddThemeInfo ( name,
-					new ThemeInfo (false, API_Base.Current.ThemeInfos [copyFrom].isOld, ThemeLocation.File, API_Base.Current.Translate ("messages.theme.group.custom")));
+					new ThemeInfo (false, API.API.Current.ThemeInfos [copyFrom].isOld, ThemeLocation.File, API.API.Current.Translate ("messages.theme.group.custom")));
 			}
 
 			if (Helper.mode == ProductMode.CLI)
 				if (API_Events.showSuccess != null)
-					API_Events.showSuccess (API_Base.Current.Translate ("messages.theme.duplicate"), API_Base.Current.Translate ("messages.buttons.done"));
+					API_Events.showSuccess (API.API.Current.Translate ("messages.theme.duplicate"), API.API.Current.Translate ("messages.buttons.done"));
 
 			return exist ? 2 : 1;
 		}
@@ -180,9 +181,9 @@ namespace Yuki_Theme.Core.Themes
 
 		internal void CopyThemeToDirectory (string path)
 		{
-			if (API_Base.Current.currentTheme.isDefault && API_Base.Current.ThemeInfos [API_Base.Current.currentTheme.Name].location == ThemeLocation.Memory)
+			if (API.API.Current.currentTheme.isDefault && API.API.Current.ThemeInfos [API.API.Current.currentTheme.Name].location == ThemeLocation.Memory)
 			{
-				CopyFromMemory (API_Base.Current.currentTheme.path, API_Base.Current.currentTheme.Name, path, true);
+				CopyFromMemory (API.API.Current.currentTheme.path, API.API.Current.currentTheme.Name, path, true);
 			} else
 			{
 				ExportTheme (path);
@@ -197,7 +198,7 @@ namespace Yuki_Theme.Core.Themes
 				string name = _oldThemeFormat.GetNameOfTheme (file);
 				if (name.Length > 0)
 				{
-					if (!API_Base.Current.Schemes.Contains (name))
+					if (!API.API.Current.Schemes.Contains (name))
 					{
 						unknownThemes.Add (file);
 					}
@@ -209,22 +210,22 @@ namespace Yuki_Theme.Core.Themes
 
 		private static void CopyTheme (string copyFrom, string themeName, string destination, bool check)
 		{
-			if (check && API_Base.Current.ThemeInfos [copyFrom].location == ThemeLocation.Memory)
+			if (check && API.API.Current.ThemeInfos [copyFrom].location == ThemeLocation.Memory)
 			{
 				PathGenerator.PathToMemory (copyFrom);
-				API_Base.Current._themeManager.CopyFromMemory (copyFrom, copyFrom, destination);
+				API.API.Current._themeManager.CopyFromMemory (copyFrom, copyFrom, destination);
 			} else
 			{
-				string path = PathGenerator.PathToFile (Helper.ConvertNameToPath (copyFrom), API_Base.Current.ThemeInfos [copyFrom].isOld);
+				string path = PathGenerator.PathToFile (Helper.ConvertNameToPath (copyFrom), API.API.Current.ThemeInfos [copyFrom].isOld);
 				File.Copy (path, destination);
 			}
 
 			if (destination.EndsWith (Helper.FILE_EXTENSTION_OLD))
 			{
-				API_Base.Current._oldThemeFormat.WriteNameAndResetToken (destination, themeName);
+				API.API.Current._oldThemeFormat.WriteNameAndResetToken (destination, themeName);
 			} else
 			{
-				API_Base.Current._newThemeFormat.WriteNameAndResetToken (destination, themeName);
+				API.API.Current._newThemeFormat.WriteNameAndResetToken (destination, themeName);
 			}
 		}
 	}

@@ -2,6 +2,6 @@
 {
 	public interface IConsole
 	{
-		public void WriteToConsole (string text);
+		void WriteToConsole (string text);
 	}
 }

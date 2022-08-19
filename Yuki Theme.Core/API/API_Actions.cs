@@ -4,25 +4,29 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml;
-using Newtonsoft.Json;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
-using Formatting = Newtonsoft.Json.Formatting;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.API
 {
 	internal sealed class API_Actions
 	{
 		private readonly ThemeManager    _themeManager; 
-		private readonly ThemeFormatBase _newThemeFormat; 
-		private readonly OldThemeFormat  _oldThemeFormat; 
+		private readonly ThemeFormatBase _newThemeFormat;
+		private readonly ThemeFormatBase _oldThemeFormat; 
 
 		internal API_Actions ()
 		{
-			_themeManager = API_Base.Current._themeManager;
-			_newThemeFormat = API_Base.Current._newThemeFormat;
-			_oldThemeFormat = (OldThemeFormat)API_Base.Current._oldThemeFormat;
+			_themeManager = API.Current._themeManager;
+			_newThemeFormat = API.Current._newThemeFormat;
+			_oldThemeFormat = (OldThemeFormat)API.Current._oldThemeFormat;
+			if (_oldThemeFormat is not IMerger)
+			{
+				MessageBox.Show ("The old theme format doesn't implement IMerger");
+			}
 			_themeManager.SetActionsAPI (this);
 			_themeManager.SetNewThemeFormat (_newThemeFormat);
 			_themeManager.SetOldThemeFormat (_oldThemeFormat);
@@ -32,16 +36,16 @@ namespace Yuki_Theme.Core
 
 		internal void MergeSyntax (string dir, SyntaxType syntax)
 		{
-			string destination = Path.Combine (dir, $"{API_Base.Current.pathToLoad}_{syntax}.xshd");
+			string destination = Path.Combine (dir, $"{API.Current.pathToLoad}_{syntax}.xshd");
 			ExtractSyntaxTemplate (syntax, destination);
 
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, API_Base.Current.currentTheme);
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, API.Current.currentTheme);
 			MergeFiles (destination, localDic);
 		}
 
 		internal void ExtractSyntaxTemplate (SyntaxType syntax, string destination)
 		{
-			Assembly a = API_Base.Current.GetCore ();
+			Assembly a = API.Current.GetCore ();
 			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
 			if (stream != null)
 			{
@@ -58,16 +62,16 @@ namespace Yuki_Theme.Core
 			XmlDocument doc = new XmlDocument ();
 			doc.Load (path);
 
-			MergeFiles (local, API_Base.Current.currentTheme, ref doc);
+			MergeFiles (local, API.Current.currentTheme, ref doc);
 
 			doc.Save (path);
 		}
 
 		private void MergeFiles (Dictionary <string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
 		{
-			_oldThemeFormat.MergeThemeFieldsWithFile (fields, doc);
+			((IMerger) _oldThemeFormat).MergeThemeFieldsWithFile (fields, doc);
 
-			_oldThemeFormat.MergeCommentsWithFile (themeToMerge, doc);
+			((IMerger) _oldThemeFormat).MergeCommentsWithFile (themeToMerge, doc);
 		}
 
 		internal void LoadFieldsAndMergeFiles (string content, string path, Theme theme)
@@ -75,11 +79,11 @@ namespace Yuki_Theme.Core
 			XmlDocument doc = new XmlDocument ();
 			doc.LoadXml (content);
 
-			Dictionary <string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, API_Base.Current.currentTheme);
+			Dictionary <string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, API.Current.currentTheme);
 
 			MergeFiles (localFields, theme, ref doc);
 
-			_oldThemeFormat.SaveXML (null, null, true, theme.IsZip (), ref doc, path);
+			((IMerger) _oldThemeFormat).SaveXML (null, null, true, theme.IsZip (), ref doc, path);
 		}
 
 		#endregion
@@ -173,15 +177,15 @@ namespace Yuki_Theme.Core
 		/// <returns></returns>
 		internal bool IsDefault ()
 		{
-			return DefaultThemes.isDefault (API_Base.Current.nameToLoad);
+			return DefaultThemes.isDefault (API.Current.nameToLoad);
 		}
 	
 	
 		internal bool AskToOverrideFile (string destination, ref bool exist, out int add)
 		{
-			if (!API_Events.SaveInExport (API_Base.Current.Translate ("messages.file.exist.override.full"), API_Base.Current.Translate ("messages.file.exist.override.short")))
+			if (!API_Events.SaveInExport (API.Current.Translate ("messages.file.exist.override.full"), API.Current.Translate ("messages.file.exist.override.short")))
 			{
-				if (API_Events.showError != null) API_Events.showError (API_Base.Current.Translate ("messages.name.exist.full"), API_Base.Current.Translate ("messages.name.exist.short"));
+				if (API_Events.showError != null) API_Events.showError (API.Current.Translate ("messages.name.exist.full"), API.Current.Translate ("messages.name.exist.short"));
 				{
 					add = 0;
 					return true;
@@ -203,7 +207,7 @@ namespace Yuki_Theme.Core
 				rename = 0;
 			}
 			
-			if (API_Base.Current.ThemeInfos.ContainsKey (to))
+			if (API.Current.ThemeInfos.ContainsKey (to))
 			{
 				ShowError (canShowError, "messages.name.exist.full", "messages.name.exist.short");
 				rename = 0;
@@ -214,13 +218,13 @@ namespace Yuki_Theme.Core
 
 		internal void AskToSaveInExport (Image wallpaper, Image sticker, bool wantToKeep)
 		{
-			if (!IsDefault () && Helper.mode != ProductMode.Plugin && API_Base.Current.isEdited)
+			if (!IsDefault () && Helper.mode != ProductMode.Plugin && API.Current.isEdited)
 			{
 				if (API_Events.SaveInExport ("messages.theme.save.full", "messages.theme.save.short"))
-					API_Base.Current.Save (wallpaper, sticker, wantToKeep);
+					API.Current.Save (wallpaper, sticker, wantToKeep);
 			} else if (!IsDefault ())
 			{
-				API_Base.Current.Save (wallpaper, sticker, wantToKeep);
+				API.Current.Save (wallpaper, sticker, wantToKeep);
 			}
 		}
 	
@@ -235,7 +239,7 @@ namespace Yuki_Theme.Core
 		/// <param name="onSelect">Action, after populating list</param>
 		internal void PopulateList (Action onSelect = null)
 		{
-			if (API_Base.Current.ThemeInfos [API_Base.Current.nameToLoad].isOld)
+			if (API.Current.ThemeInfos [API.Current.nameToLoad].isOld)
 			{
 				_oldThemeFormat.LoadThemeToCLI ();
 			} else
@@ -263,7 +267,7 @@ namespace Yuki_Theme.Core
 					if (pts.Contains ("__"))
 					{
 						string stee = Path.Combine (SettingsConst.CurrentPath, "Themes", $"{pts}{extension}");
-						pts = API_Base.Current.GetNameOfTheme (stee);
+						pts = API.Current.GetNameOfTheme (stee);
 						
 						if (DefaultThemes.isDefault (pts))
 						{
@@ -274,11 +278,11 @@ namespace Yuki_Theme.Core
 					{
 						if (!has && pts.Length > 0)
 						{
-							API_Base.Current.Schemes.Add (pts);
+							API.Current.Schemes.Add (pts);
 							AddThemeInfo (
 								pts,
 								new ThemeInfo (false, IsOldTheme (file), ThemeLocation.File,
-									tokenGroupName == "" ? API_Base.Current.Translate ("messages.theme.group.custom") : tokenGroupName));
+									tokenGroupName == "" ? API.Current.Translate ("messages.theme.group.custom") : tokenGroupName));
 						}
 					} else
 					{
@@ -290,13 +294,13 @@ namespace Yuki_Theme.Core
 
 		private void ForceAddToDefaults (string name, string file, string group)
 		{
-			if (!API_Base.Current.Schemes.Contains (name))
+			if (!API.Current.Schemes.Contains (name))
 			{
 				int index = GetIndexForInsert (name, @group);
 				if (index != -1)
-					API_Base.Current.Schemes.Insert (index, name);
+					API.Current.Schemes.Insert (index, name);
 				else
-					API_Base.Current.Schemes.Add (name);
+					API.Current.Schemes.Add (name);
 				DefaultThemes.categories.Add (name, @group);
 				if (!DefaultThemes.categoriesList.Contains (@group))
 				{
@@ -305,10 +309,10 @@ namespace Yuki_Theme.Core
 			}
 
 			ThemeInfo info = new ThemeInfo (true, IsOldTheme (file), ThemeLocation.File, @group, true);
-			if (API_Base.Current.ThemeInfos.ContainsKey (name))
-				API_Base.Current.ThemeInfos [name] = info;
+			if (API.Current.ThemeInfos.ContainsKey (name))
+				API.Current.ThemeInfos [name] = info;
 			else
-				API_Base.Current.ThemeInfos.Add (name, info);
+				API.Current.ThemeInfos.Add (name, info);
 			
 			if (!DefaultThemes.names.Contains (name))
 				DefaultThemes.names.Add (name);
@@ -356,9 +360,9 @@ namespace Yuki_Theme.Core
 				if (res != -1)
 				{
 					string targ2 = themes [res];
-					res = API_Base.Current.Schemes.FindIndex (item => item == targ2);
+					res = API.Current.Schemes.FindIndex (item => item == targ2);
 
-					if (res + 1 < API_Base.Current.Schemes.Count)
+					if (res + 1 < API.Current.Schemes.Count)
 					{
 						res += 1;
 					}
@@ -386,14 +390,14 @@ namespace Yuki_Theme.Core
 
 		internal void AddThemeInfo (string name, ThemeInfo themeInfo)
 		{
-			API_Base.Current.ThemeInfos.Add (name, themeInfo);
+			API.Current.ThemeInfos.Add (name, themeInfo);
 		}
 
 		internal void ShowEndMessage (string name)
 		{
 			if (Helper.mode != ProductMode.Plugin)
 				if (API_Events.showSuccess != null)
-					API_Events.showSuccess (API_Base.Current.Translate ("messages.export.success", name), API_Base.Current.Translate ("messages.buttons.done"));
+					API_Events.showSuccess (API.Current.Translate ("messages.export.success", name), API.Current.Translate ("messages.buttons.done"));
 		}
 
 		internal int GetActionChoice (int result)
@@ -418,12 +422,12 @@ namespace Yuki_Theme.Core
 
 		internal void ShowError (bool canShowError, string content, string title)
 		{
-			if (canShowError) API_Events.showError (API_Base.Current.Translate (content), API_Base.Current.Translate (title));
+			if (canShowError) API_Events.showError (API.Current.Translate (content), API.Current.Translate (title));
 		}
 
 		internal Dictionary <string, ThemeField> ConvertToRealNames (SyntaxType syntax)
 		{
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, API_Base.Current.currentTheme);
+			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, API.Current.currentTheme);
 			return localDic;
 		}
 	}

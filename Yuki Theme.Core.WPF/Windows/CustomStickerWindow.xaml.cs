@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Yuki_Theme.Core.API;
 using Brush = System.Windows.Media.Brush;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -29,7 +30,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				canReturn = true;
 			} else
 			{
-				API_Events.showError (API_Base.Current.Translate ("messages.name.equal.message"), API_Base.Current.Translate ("messages.name.equal.title"));
+				API_Events.showError (API.API.Current.Translate ("messages.name.equal.message"), API.API.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle ("Theme_Installer")]
+[assembly: AssemblyTitle ("Theme_Editor")]
 [assembly: AssemblyDescription ("")]
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("Theme_Installer")]
+[assembly: AssemblyProduct ("Theme_Editor")]
 [assembly: AssemblyCopyright ("Copyright ©  2022")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible (false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid ("896224A1-7358-47D0-9272-D1A20773E91F")]
+[assembly: Guid ("360F057D-EA35-4F2C-A9C0-B7D83A4027A5")]
 
 // Version information for an assembly consists of the following four values:
 //

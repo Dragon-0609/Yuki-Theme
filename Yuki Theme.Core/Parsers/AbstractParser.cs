@@ -51,13 +51,13 @@ namespace Yuki_Theme.Core.Parsers
 
 				if (!overwrite)
 				{
-					string syt = API_Base.Current.Schemes [1];
-					if (API_Base.Current.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
-						API_Base.Current.CopyFromMemory (syt, syt, PathToSave);
+					string syt = API.API.Current.Schemes [1];
+					if (API.API.Current.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
+						API.API.Current.CopyFromMemory (syt, syt, PathToSave);
 					else
 					{
 						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-						if (!API_Base.Current.Schemes.Contains (flname))
+						if (!API.API.Current.Schemes.Contains (flname))
 							File.Copy (Path.Combine (SettingsConst.CurrentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
 					}
 				} else
@@ -65,7 +65,7 @@ namespace Yuki_Theme.Core.Parsers
 					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
 					{
 						XmlDocument document = new XmlDocument ();
-						OldThemeFormat oldThemeFormat = (OldThemeFormat)API_Base.Current._oldThemeFormat;
+						OldThemeFormat oldThemeFormat = (OldThemeFormat)API.API.Current._oldThemeFormat;
 						oldThemeFormat.LoadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
 						                                    false, true);
 						Dictionary <string, string> additionalInfo = oldThemeFormat.GetAdditionalInfoFromDoc (document);
@@ -78,9 +78,9 @@ namespace Yuki_Theme.Core.Parsers
 				finishParsing (path);
 				if (!overwrite)
 				{
-					API_Base.Current.AddThemeInfo (
-						flname, new ThemeInfo (false, true, ThemeLocation.File, API_Base.Current.Translate ("messages.theme.group.custom")));
-					API_Base.Current.names.Add (flname);
+					API.API.Current.AddThemeInfo (
+						flname, new ThemeInfo (false, true, ThemeLocation.File, API.API.Current.Translate ("messages.theme.group.custom")));
+					API.API.Current.names.Add (flname);
 				if (addToUIList != null)
 					addToUIList (flname);
 				/*if (form != null)
@@ -98,7 +98,7 @@ namespace Yuki_Theme.Core.Parsers
 		{
 			XmlDocument doc = new XmlDocument ();
 
-			OldThemeFormat oldThemeFormat = (OldThemeFormat)API_Base.Current._oldThemeFormat;
+			OldThemeFormat oldThemeFormat = (OldThemeFormat)API.API.Current._oldThemeFormat;
 			
 			oldThemeFormat.LoadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
 			                                     ref theme,Helper.FILE_EXTENSTION_OLD, true, true);

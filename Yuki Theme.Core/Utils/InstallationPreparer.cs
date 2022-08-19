@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Win32;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Database;
 
 namespace Yuki_Theme.Core.Utils
@@ -22,8 +23,8 @@ namespace Yuki_Theme.Core.Utils
 
 			if (Helper.mode == null)
 			{
-				string translation = API_Base.Current.Translate ("theme.downloader.errors.group.wrong");
-				API_Events.showError (translation, API_Base.Current.Translate (translation));
+				string translation = API.API.Current.Translate ("theme.downloader.errors.group.wrong");
+				API_Events.showError (translation, API.API.Current.Translate (translation));
 				return;
 			}
 			

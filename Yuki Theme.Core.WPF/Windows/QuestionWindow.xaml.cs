@@ -78,11 +78,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Icon = parent.Icon,
 				Owner = parent
 			};
-			questionWindow.SetTitle (API_Base.Current.Translate ("messages.theme.others.found"));
+			questionWindow.SetTitle (API.API.Current.Translate ("messages.theme.others.found"));
 
-			questionWindow.SetButtonContents (API_Base.Current.Translate ("messages.buttons.yes"),
-			                                  API_Base.Current.Translate ("settings.additional.action.import"),
-			                                  API_Base.Current.Translate ("messages.buttons.no"));
+			questionWindow.SetButtonContents (API.API.Current.Translate ("messages.buttons.yes"),
+			                                  API.API.Current.Translate ("settings.additional.action.import"),
+			                                  API.API.Current.Translate ("messages.buttons.no"));
 			bool? dialog = questionWindow.ShowDialog ();
 			if (dialog == true)
 			{

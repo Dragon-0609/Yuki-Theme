@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Yuki_Theme.Core.Communicator
+namespace Yuki_Theme.Core.Communication
 {
 	[Serializable]
 	public class Message

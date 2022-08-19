@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NamedPipeWrapper;
+using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme_Plugin.Interfaces;
-using static Yuki_Theme.Core.Communicator.MessageTypes;
-using Message = Yuki_Theme.Core.Communicator.Message;
+using static Yuki_Theme.Core.Communication.MessageTypes;
+using Message = Yuki_Theme.Core.Communication.Message;
 
-namespace Yuki_Theme_Plugin.Communicator
+namespace Yuki_Theme_Plugin.Communication
 {
-	internal class Server
+	internal class Server : Communicator.IServer
 	{
 		private const string                   THEME_INSTALLER = "Theme_Installer.exe";
 		private       NamedPipeServer<Message> _server;
+		
+		public event MessageRecieved recieved;
+
+		public bool IsConnected => _isConnected;
 
 		private Queue<Message> _messages;
 
@@ -62,6 +67,9 @@ namespace Yuki_Theme_Plugin.Communicator
 		{
 			_console.WriteToConsole ($"Received: {message}");
 			ParseMessage (message);
+			
+			if (recieved != null)
+				recieved (message);
 		}
 
 		private void ErrorRaised (Exception exception)

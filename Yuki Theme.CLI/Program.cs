@@ -2,6 +2,7 @@
 using CLITools;
 using CommandLine;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.CLI
@@ -16,7 +17,7 @@ namespace Yuki_Theme.CLI
 			
 			AdminTools adminTools = new AdminTools();
 			if (!adminTools.CurrentUserIsAdmin ())
-				program.ShowError(API_Base.Current.Translate ("messages.warnings.adminprivileges.cli.content"));
+				program.ShowError(API.Current.Translate ("messages.warnings.adminprivileges.cli.content"));
 			
 			var parser = new Parser (parserSettings =>
 			{

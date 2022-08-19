@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using VisualPascalABC;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme_Plugin.Controls.Helpers
@@ -88,17 +89,17 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 		}
 
 		public void SetTheme(string theme) {
-			bool cnd = API_Base.Current.SelectTheme (theme);
+			bool cnd = API.Current.SelectTheme (theme);
 
 			if (cnd)
 			{
-				API_Base.Current.selectedItem = API_Base.Current.nameToLoad;
+				API.Current.selectedItem = API.Current.nameToLoad;
 				API_Events.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
 				API_Events.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
 				API_Events.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
 				API_Events.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
-				API_Base.Current.Restore (false);
-				API_Base.Current.ExportTheme (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
+				API.Current.Restore (false);
+				API.Current.ExportTheme (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);

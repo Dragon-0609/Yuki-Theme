@@ -12,10 +12,10 @@ namespace Yuki_Theme.Core.Forms
 			InitializeComponent ();
 			StartPosition = FormStartPosition.CenterParent;
 			Icon = Helper.GetYukiThemeIcon (new Size (32, 32));
-			Message.Text = API_Base.Current.Translate ("messages.theme.others.found");
-			button1.Text = API_Base.Current.Translate ("messages.buttons.no");
-			button2.Text = API_Base.Current.Translate ("messages.buttons.yes");
-			button3.Text = API_Base.Current.Translate ("settings.additional.action.import");
+			Message.Text = API.API.Current.Translate ("messages.theme.others.found");
+			button1.Text = API.API.Current.Translate ("messages.buttons.no");
+			button2.Text = API.API.Current.Translate ("messages.buttons.yes");
+			button3.Text = API.API.Current.Translate ("settings.additional.action.import");
 		}
 
 		private void button2_Click (object sender, EventArgs e)

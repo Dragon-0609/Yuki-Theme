@@ -111,7 +111,7 @@ namespace Yuki_Theme.Core.Parsers
 				PathToSave = Path.Combine (SettingsConst.CurrentPath, "Themes",
 				                           $"{Helper.ConvertNameToPath (_originalFileName)}.yukitheme");
 				if (!MainParser.CheckAvailableAndAsk (PathToSave, ask, exist))
-					throw new InvalidDataException (API_Base.Current.Translate ("parser.theme.exist"));
+					throw new InvalidDataException (API.API.Current.Translate ("parser.theme.exist"));
 
 				overwrite = File.Exists (PathToSave);
 				Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
@@ -121,7 +121,7 @@ namespace Yuki_Theme.Core.Parsers
 				_dark = bool.Parse (json ["dark"].ToString ());
 
 			JToken colorsToken = json ["colors"];
-			if (colorsToken == null) throw new InvalidDataException (API_Base.Current.Translate ("parser.theme.colors"));
+			if (colorsToken == null) throw new InvalidDataException (API.API.Current.Translate ("parser.theme.colors"));
 			foreach (JToken colorToken in colorsToken)
 			{
 				ParseColor (colorToken);

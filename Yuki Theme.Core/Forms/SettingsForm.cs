@@ -138,9 +138,9 @@ namespace Yuki_Theme.Core.Forms
 
 		public void UpdateTranslation ()
 		{
-			button2.Text = API_Base.Current.Translate ("main.tips.save");
-			button3.Text = API_Base.Current.Translate ("download.cancel");
-			Text = API_Base.Current.Translate ("main.tips.settings");
+			button2.Text = API.API.Current.Translate ("main.tips.save");
+			button3.Text = API.API.Current.Translate ("download.cancel");
+			Text = API.API.Current.Translate ("main.tips.settings");
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Yuki_Theme.Core
+namespace Yuki_Theme.Core.API
 {
 	public static class API_Events
 	{

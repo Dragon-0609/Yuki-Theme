@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Utils;
 using Yuki_Theme_Plugin.Controls.DockStyles;
@@ -47,7 +48,7 @@ namespace Yuki_Theme_Plugin
 				lbl.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
 				lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				lbl.Font = fnt;
-				lbl.Text = API_Base.Current.Translate ("plugin.themes");
+				lbl.Text = API.Current.Translate ("plugin.themes");
 				lbl.TextAlign = ContentAlignment.MiddleCenter;
 				lbl.Size = new Size (200, 25);
 
@@ -55,7 +56,7 @@ namespace Yuki_Theme_Plugin
 				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
 				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				themeList.BorderStyle = BorderStyle.None;
-				themeList.list = API_Base.Current.Schemes.ToArray ();
+				themeList.list = API.Current.Schemes.ToArray ();
 				themeList.SearchText ("");
 				themeList.BorderStyle = BorderStyle.None;
 				themeList.Font = fnt;
@@ -144,8 +145,8 @@ namespace Yuki_Theme_Plugin
 						needToFullExportTheme = false;
 					} else
 					{
-						hideBG = !API_Base.Current.currentTheme.HasWallpaper;
-						plugin.stickerControl.Visible = Settings.swSticker && API_Base.Current.currentTheme.HasSticker;
+						hideBG = !API.Current.currentTheme.HasWallpaper;
+						plugin.stickerControl.Visible = Settings.swSticker && API.Current.currentTheme.HasSticker;
 					}
 				}
 
@@ -176,17 +177,17 @@ namespace Yuki_Theme_Plugin
 			{
 				if (themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
-					bool cnd = API_Base.Current.SelectTheme (themeList.SelectedItem.ToString ());
+					bool cnd = API.Current.SelectTheme (themeList.SelectedItem.ToString ());
 
 					if (cnd)
 					{
-						API_Base.Current.selectedItem = API_Base.Current.nameToLoad;
+						API.Current.selectedItem = API.Current.nameToLoad;
 						API_Events.ifHasImage2 = plugin.ifHsImage;
 						API_Events.ifHasSticker2 = plugin.ifHsSticker;
 						API_Events.ifDoesntHave2 = plugin.ifDNIMG;
 						API_Events.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
-						API_Base.Current.Restore (false, null);
-						API_Base.Current.ExportTheme (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
+						API.Current.Restore (false, null);
+						API.Current.ExportTheme (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
 
 						API_Events.ifHasImage2 = null;
 						API_Events.ifHasSticker2 = null;
@@ -224,25 +225,25 @@ namespace Yuki_Theme_Plugin
 		{
 			if (name != oldName)
 			{
-				if (API_Base.Current.SelectTheme (name))
+				if (API.Current.SelectTheme (name))
 				{
-					API_Base.Current.Restore ();
-					hideBG = !API_Base.Current.currentTheme.HasWallpaper;
-					plugin.stickerControl.Visible = Settings.swSticker && API_Base.Current.currentTheme.HasSticker;
+					API.Current.Restore ();
+					hideBG = !API.Current.currentTheme.HasWallpaper;
+					plugin.stickerControl.Visible = Settings.swSticker && API.Current.currentTheme.HasSticker;
 					if (needToFullExportTheme)
 					{
-						API_Base.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+						API.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
 					} else
 					{
 						SyntaxType type =
 							ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
 						if (type != SyntaxType.Pascal)
 						{
-							API_Base.Current.Preview (type, true, null);                                   // Not to reload layout
-							API_Base.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
+							API.Current.Preview (type, true, null);                                   // Not to reload layout
+							API.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
 						} else
 						{
-							API_Base.Current.Preview (type, true, plugin.ReloadLayoutLight);
+							API.Current.Preview (type, true, plugin.ReloadLayoutLight);
 						}
 					}
 				}

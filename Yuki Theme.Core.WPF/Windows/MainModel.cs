@@ -68,7 +68,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (CalculatedWallpaperSize.Width != rectangle.Width || CalculatedWallpaperSize.Height != rectangle.Height)
 			{
 				CalculatedWallpaperSize = Helper.GetSizes (WallpaperRender.Size, rectangle.Width, rectangle.Height,
-					API_Base.Current.currentTheme.align);
+					API.API.Current.currentTheme.align);
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void ChangeWallpaperOpacity()
 		{
-			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, API_Base.Current.currentTheme.WallpaperOpacity) : null;
+			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, API.API.Current.currentTheme.WallpaperOpacity) : null;
 		}
 		
 

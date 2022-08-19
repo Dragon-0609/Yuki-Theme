@@ -120,19 +120,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API.cs" />
-    <Compile Include="API_Base.cs" />
-    <Compile Include="API_Events.cs" />
-    <Compile Include="CommonAPI.cs" />
-    <Compile Include="Communicator\Message.cs" />
+    <Compile Include="API\API.cs" />
+    <Compile Include="API\API_Actions.cs" />
+    <Compile Include="API\API_Base.cs" />
+    <Compile Include="API\API_Events.cs" />
+    <Compile Include="API\ClientAPI.cs" />
+    <Compile Include="API\CommonAPI.cs" />
+    <Compile Include="API\ServerAPI.cs" />
+    <Compile Include="Communication\Message.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Database\FileDatabase.cs" />
     <Compile Include="Database\WindowsRegistryDatabase.cs" />
     <Compile Include="Forms\PopupFormsController.cs" />
     <Compile Include="Interfaces\ICamouflage.cs" />
     <Compile Include="Interfaces\IColorUpdatable.cs" />
+    <Compile Include="Interfaces\Communicator.cs" />
     <Compile Include="Interfaces\IDatabase.cs" />
     <Compile Include="Interfaces\IIconManager.cs" />
+    <Compile Include="Interfaces\IMerger.cs" />
     <Compile Include="Interfaces\IUpdatable.cs" />
     <Compile Include="Forms\ThemeDownloaderForm.cs">
       <SubType>Form</SubType>
@@ -164,7 +169,6 @@
     <Compile Include="Utils\SmallDocumentation.cs" />
     <Compile Include="Utils\WindowProps.cs" />
     <None Include="Controls\CustomB.cs" />
-    <Compile Include="API_Actions.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorModes.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\Controls\ColorBox2D.cs" />
