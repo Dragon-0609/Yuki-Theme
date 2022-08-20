@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using NamedPipeWrapper;
+using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Interfaces;
 using static Yuki_Theme.Core.Communication.MessageTypes;
@@ -14,6 +16,8 @@ namespace Theme_Editor
 
 		private bool isConnected = false;
 
+		private Queue<Message> _messages;
+		
 		public event MessageRecieved recieved;
 
 		public bool IsConnected => isConnected;
@@ -38,7 +42,13 @@ namespace Theme_Editor
 
 		private void SetAPI ()
 		{
-			API.Current = new ClientAPI ();
+			ClientAPI api = new ClientAPI ();
+			CentralAPI.Current = api;
+			Helper.mode = ProductMode.Plugin;
+			api.Client = this;
+			api.LoadSchemes ();
+			api.AddEvents ();
+			Settings.ConnectAndGet ();
 		}
 
 		private void InitMessaging ()
@@ -58,7 +68,7 @@ namespace Theme_Editor
 
 		private void ErrorRaised (Exception exception)
 		{
-			API.Current.ShowError ($"ERROR: {exception}", "Error");
+			CentralAPI.Current.ShowError ($"ERROR: {exception}", "Error");
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
@@ -70,9 +80,25 @@ namespace Theme_Editor
 			ParseMessage (message);
 		}
 
-		private void SendMessage (int id)
+		public void SendMessage (Message message)
 		{
-			_client.PushMessage (new Message (id));
+			if (isConnected)
+			{
+				_client.PushMessage (message);
+			} else
+			{
+				_messages.Enqueue (message);
+			}
+		}
+
+		public void SendMessage (int id)
+		{
+			SendMessage (new Message (id));
+		}
+		
+		public void SendMessage (int id, string content)
+		{
+			SendMessage (new Message (id, content));
 		}
 
 		private void ParseMessage (Message message)

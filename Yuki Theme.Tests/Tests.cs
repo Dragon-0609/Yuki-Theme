@@ -41,12 +41,12 @@ namespace Yuki_Theme.Tests
 					ResetForTests ();
 					ClearTestThemes ();
 					Settings.ConnectAndGet ();
-					API.Current.LoadSchemes ();
-					bool cnd = API.Current.SelectTheme (Helper.GetRandomElement (API.Current.Schemes));
+					CentralAPI.Current.LoadSchemes ();
+					bool cnd = CentralAPI.Current.SelectTheme (Helper.GetRandomElement (CentralAPI.Current.Schemes));
 
 					Assert.IsTrue (cnd);
 
-					API.Current.Restore (false);
+					CentralAPI.Current.Restore (false);
 					isInitialized = true;
 				}
 			} catch (Exception e)
@@ -66,10 +66,10 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeAdded)
 				{
-					copyFrom = Helper.GetRandomElement (API.Current.Schemes);
+					copyFrom = Helper.GetRandomElement (CentralAPI.Current.Schemes);
 					copyTo = $"{copyFrom}_Test";
-					API.Current.AddTheme (copyFrom, copyTo);
-					API.Current.SelectTheme (copyTo);
+					CentralAPI.Current.AddTheme (copyFrom, copyTo);
+					CentralAPI.Current.SelectTheme (copyTo);
 					isThemeAdded = true;
 				}
 			} catch (Exception e)
@@ -77,7 +77,7 @@ namespace Yuki_Theme.Tests
 				if (copyTo != null && copyFrom != null)
 				{
 					string patsh = Path.Combine (Core.SettingsConst.CurrentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (API.Current.ThemeInfos [copyFrom].isOld)}");
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (CentralAPI.Current.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
@@ -99,13 +99,13 @@ namespace Yuki_Theme.Tests
 						values = FieldValues;
 					else
 						values = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, FieldValues);
-					API.Current.Restore (false, onFieldsLoaded);
+					CentralAPI.Current.Restore (false, onFieldsLoaded);
 					foreach (string field in fields)
 					{
 						if (values.ContainsKey (field))
 						{
 							ThemeField fiel = values [field];
-							API.Current.currentTheme.Fields [field].SetValues (fiel);
+							CentralAPI.Current.currentTheme.Fields [field].SetValues (fiel);
 						}
 					}
 
@@ -132,7 +132,7 @@ namespace Yuki_Theme.Tests
 						if (FieldValues.ContainsKey (field))
 						{
 							ThemeField fiel = FieldValues [field];
-							ThemeField fiel2 = API.Current.currentTheme.Fields [field];
+							ThemeField fiel2 = CentralAPI.Current.currentTheme.Fields [field];
 							if (fiel.Background != null)
 								equal = equal && fiel.Background == fiel2.Background;
 
@@ -160,14 +160,14 @@ namespace Yuki_Theme.Tests
 			{
 				if (!isThemeSaved)
 				{
-					foreach (KeyValuePair <string, ThemeField> themeField in API.Current.currentTheme.Fields)
+					foreach (KeyValuePair <string, ThemeField> themeField in CentralAPI.Current.currentTheme.Fields)
 					{
 						Console.WriteLine ("{0}: {1}", themeField.Key, themeField.Value.ToString ());
 					}
 
 					// Console.WriteLine(Core.API_Base.Current.currentTheme.Fields ["Default Text"].Background);
 					// Console.WriteLine(Core.API_Base.Current.currentTheme.Fields ["Default Text"].Foreground);
-					API.Current.Save (img2, img3);
+					CentralAPI.Current.Save (img2, img3);
 
 					isThemeSaved = true;
 				}
@@ -186,7 +186,7 @@ namespace Yuki_Theme.Tests
 			{
 				if (isThemeRemoved)
 				{
-					API.Current.RemoveTheme (API.Current.nameToLoad, (s, s1) => true, null, null);
+					CentralAPI.Current.RemoveTheme (CentralAPI.Current.nameToLoad, (s, s1) => true, null, null);
 					
 					isThemeRemoved = true;
 				}
@@ -198,12 +198,12 @@ namespace Yuki_Theme.Tests
 
 		private void onFieldsLoaded ()
 		{
-			fields = API.Current.names.ToArray ();
+			fields = CentralAPI.Current.names.ToArray ();
 		}
 
 		private void ResetForTests ()
 		{
-			API.Current.Schemes.Clear ();
+			CentralAPI.Current.Schemes.Clear ();
 			DefaultThemes.Clear ();
 		}
 

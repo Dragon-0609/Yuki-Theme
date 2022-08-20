@@ -58,7 +58,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private DoubleAnimation AnimateWindow (bool positive)
 		{
-			DoubleAnimation widthAnimation = new DoubleAnimation (this.Width + (positive ? 300 : -300), duration);
+			DoubleAnimation widthAnimation = new DoubleAnimation (Width + (positive ? 300 : -300), duration);
 			widthAnimation.AccelerationRatio = 0.4;
 			widthAnimation.DecelerationRatio = 0.6;
 			return widthAnimation;
@@ -96,7 +96,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
 				positionAnimation.Completed += (sender, args) =>
 				{
-					this.Left = left;
+					Left = left;
 				};
 			} else
 			{
@@ -104,7 +104,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				positionAnimation = new DoubleAnimation (windowLeft, left, duration);
 				positionAnimation.Completed += (sender, args) =>
 				{
-					this.Left = left;
+					Left = left;
 				};
 			}
 
@@ -131,13 +131,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				}
 
 				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedChangelog, ChangeLogPanel);
-				AddAnimation (sb, panelWidthAnimation, ChangeLogPanel, DockPanel.WidthProperty);
+				AddAnimation (sb, panelWidthAnimation, ChangeLogPanel, WidthProperty);
 
 				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedChangelog);
-				AddAnimation (sb, windowWidthAnimation, this, Window.WidthProperty);
+				AddAnimation (sb, windowWidthAnimation, this, WidthProperty);
 
 				DoubleAnimation windowPositionAnimation = CalculatePosition (openedChangelog);
-				AddAnimation (sb, windowPositionAnimation, this, Window.LeftProperty);
+				AddAnimation (sb, windowPositionAnimation, this, LeftProperty);
 
 				openedChangelog = !openedChangelog;
 				animating = true;
@@ -156,9 +156,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 				}
 
 				DoubleAnimation panelWidthAnimation = GenerateAnimation (openedLicense, LicensePanel);
-				AddAnimation (sb, panelWidthAnimation, LicensePanel, DockPanel.WidthProperty);
+				AddAnimation (sb, panelWidthAnimation, LicensePanel, WidthProperty);
 				DoubleAnimation windowWidthAnimation = AnimateWindow (!openedLicense);
-				AddAnimation (sb, windowWidthAnimation, this, Window.WidthProperty);
+				AddAnimation (sb, windowWidthAnimation, this, WidthProperty);
 				openedLicense = !openedLicense;
 				animating = true;
 				sb.Begin ();

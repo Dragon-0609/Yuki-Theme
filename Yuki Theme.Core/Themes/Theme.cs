@@ -68,7 +68,7 @@ namespace Yuki_Theme.Core.Themes
 
 
 		[JsonIgnore]
-		public bool IsOld => API.API.Current.ThemeInfos [Name].isOld;
+		public bool IsOld => API.CentralAPI.Current.ThemeInfos [Name].isOld;
 
 		public static bool operator == (Theme t1, Theme t2)
 		{

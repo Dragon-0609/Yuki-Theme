@@ -334,7 +334,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return API.API.Current.Translate (key);
+			return API.CentralAPI.Current.Translate (key);
 		}
 
 		private static string GetUpdatePath ()

@@ -31,8 +31,8 @@ namespace Yuki_Theme.Core.Forms
 			tabHexagon.Enter += TabHexagonOnEnter;
 			tabWheel.Enter += TabWheelOnEnter;
 			tabColorBox.Enter += TabColorBoxOnEnter;
-			OKBTN.Text = API.API.Current.Translate ("messages.buttons.select");
-			CNBTN.Text = API.API.Current.Translate ("download.cancel");
+			OKBTN.Text = API.CentralAPI.Current.Translate ("messages.buttons.select");
+			CNBTN.Text = API.CentralAPI.Current.Translate ("download.cancel");
 		}
 
 		public Color MainColor
@@ -318,8 +318,8 @@ namespace Yuki_Theme.Core.Forms
 		{
 			if (!allowSave)
 			{
-				MessageBox.Show ((IWin32Window)this, API.API.Current.Translate ("colors.default.error.full"),
-				                 API.API.Current.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show ((IWin32Window)this, API.CentralAPI.Current.Translate ("colors.default.error.full"),
+				                 API.CentralAPI.Current.Translate ("colors.default.error.short"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			} else
 				DialogResult = DialogResult.OK;
 		}

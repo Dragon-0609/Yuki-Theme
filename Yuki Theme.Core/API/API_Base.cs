@@ -35,7 +35,9 @@ public abstract class API_Base
 	internal ThemeFormatBase _newThemeFormat = new NewThemeFormat ();
 	internal ThemeFormatBase _oldThemeFormat = new OldThemeFormat ();
 	internal ThemeManager    _themeManager   = new ();
-	private  API_Actions     _actions        = new ();
+	private API_Actions     _actions        = new ();
+
+	internal API_Actions Actions => _actions;
 
 	public List<string> Schemes => _schemes;
 
@@ -164,8 +166,8 @@ public abstract class API_Base
 	/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
 	/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
 	/// <param name="wantToKeep">Want to keep background image and sticker</param>
-	public void ExportTheme (Image wallpaper, Image sticker, Action setTheme = null, Action startSettingTheme = null,
-							 bool wantToKeep = false)
+	public virtual void ExportTheme (Image wallpaper, Image sticker, Action setTheme = null, Action startSettingTheme = null,
+									 bool wantToKeep = false)
 	{
 		_actions.AskToSaveInExport (wallpaper, sticker, wantToKeep);
 
@@ -371,7 +373,7 @@ public abstract class API_Base
 		}
 	}
 
-	private void PrepareToExport (string path)
+	internal void PrepareToExport (string path)
 	{
 		string dir = Path.GetDirectoryName (path);
 		foreach (SyntaxType syntax in (SyntaxType[])Enum.GetValues (typeof (SyntaxType)))

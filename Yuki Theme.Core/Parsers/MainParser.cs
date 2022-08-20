@@ -18,7 +18,7 @@ namespace Yuki_Theme.Core.Parsers
 			if (IsDefault (fileName))
 			{
 				if (defaultTheme != null)
-					defaultTheme (API.API.Current.Translate ("parser.theme.default"), API.API.Current.Translate ("messages.theme.default.short"));
+					defaultTheme (API.CentralAPI.Current.Translate ("parser.theme.default"), API.CentralAPI.Current.Translate ("messages.theme.default.short"));
 				return;
 			}
 

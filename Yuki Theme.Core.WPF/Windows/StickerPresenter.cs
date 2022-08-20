@@ -12,8 +12,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public StickerPresenter (Sticker.IModel stickerModel, Sticker.IView stickerView)
 		{
-			this._stickerModel = stickerModel;
-			this._stickerView = stickerView;
+			_stickerModel = stickerModel;
+			_stickerView = stickerView;
 		}
 
 		public void SetStickerSize ()

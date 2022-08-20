@@ -30,7 +30,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				canReturn = true;
 			} else
 			{
-				API_Events.showError (API.API.Current.Translate ("messages.name.equal.message"), API.API.Current.Translate ("messages.name.equal.title"));
+				API_Events.showError (CentralAPI.Current.Translate ("messages.name.equal.message"), CentralAPI.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

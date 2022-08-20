@@ -48,7 +48,7 @@ namespace Yuki_Theme_Plugin
 				lbl.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
 				lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				lbl.Font = fnt;
-				lbl.Text = API.Current.Translate ("plugin.themes");
+				lbl.Text = CentralAPI.Current.Translate ("plugin.themes");
 				lbl.TextAlign = ContentAlignment.MiddleCenter;
 				lbl.Size = new Size (200, 25);
 
@@ -56,7 +56,7 @@ namespace Yuki_Theme_Plugin
 				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
 				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
 				themeList.BorderStyle = BorderStyle.None;
-				themeList.list = API.Current.Schemes.ToArray ();
+				themeList.list = CentralAPI.Current.Schemes.ToArray ();
 				themeList.SearchText ("");
 				themeList.BorderStyle = BorderStyle.None;
 				themeList.Font = fnt;
@@ -145,8 +145,8 @@ namespace Yuki_Theme_Plugin
 						needToFullExportTheme = false;
 					} else
 					{
-						hideBG = !API.Current.currentTheme.HasWallpaper;
-						plugin.stickerControl.Visible = Settings.swSticker && API.Current.currentTheme.HasSticker;
+						hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
+						plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
 					}
 				}
 
@@ -177,17 +177,17 @@ namespace Yuki_Theme_Plugin
 			{
 				if (themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
-					bool cnd = API.Current.SelectTheme (themeList.SelectedItem.ToString ());
+					bool cnd = CentralAPI.Current.SelectTheme (themeList.SelectedItem.ToString ());
 
 					if (cnd)
 					{
-						API.Current.selectedItem = API.Current.nameToLoad;
+						CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
 						API_Events.ifHasImage2 = plugin.ifHsImage;
 						API_Events.ifHasSticker2 = plugin.ifHsSticker;
 						API_Events.ifDoesntHave2 = plugin.ifDNIMG;
 						API_Events.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
-						API.Current.Restore (false, null);
-						API.Current.ExportTheme (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
+						CentralAPI.Current.Restore (false, null);
+						CentralAPI.Current.ExportTheme (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
 
 						API_Events.ifHasImage2 = null;
 						API_Events.ifHasSticker2 = null;
@@ -225,25 +225,25 @@ namespace Yuki_Theme_Plugin
 		{
 			if (name != oldName)
 			{
-				if (API.Current.SelectTheme (name))
+				if (CentralAPI.Current.SelectTheme (name))
 				{
-					API.Current.Restore ();
-					hideBG = !API.Current.currentTheme.HasWallpaper;
-					plugin.stickerControl.Visible = Settings.swSticker && API.Current.currentTheme.HasSticker;
+					CentralAPI.Current.Restore ();
+					hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
+					plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
 					if (needToFullExportTheme)
 					{
-						API.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+						CentralAPI.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
 					} else
 					{
 						SyntaxType type =
 							ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
 						if (type != SyntaxType.Pascal)
 						{
-							API.Current.Preview (type, true, null);                                   // Not to reload layout
-							API.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
+							CentralAPI.Current.Preview (type, true, null);                                   // Not to reload layout
+							CentralAPI.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
 						} else
 						{
-							API.Current.Preview (type, true, plugin.ReloadLayoutLight);
+							CentralAPI.Current.Preview (type, true, plugin.ReloadLayoutLight);
 						}
 					}
 				}

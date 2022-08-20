@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using FastColoredTextBoxNS;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.WPF.Interfaces;
 using Image = System.Drawing.Image;
 
@@ -68,7 +69,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (CalculatedWallpaperSize.Width != rectangle.Width || CalculatedWallpaperSize.Height != rectangle.Height)
 			{
 				CalculatedWallpaperSize = Helper.GetSizes (WallpaperRender.Size, rectangle.Width, rectangle.Height,
-					API.API.Current.currentTheme.align);
+					CentralAPI.Current.currentTheme.align);
 			}
 		}
 
@@ -76,7 +77,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void ChangeWallpaperOpacity()
 		{
-			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, API.API.Current.currentTheme.WallpaperOpacity) : null;
+			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, API.CentralAPI.Current.currentTheme.WallpaperOpacity) : null;
 		}
 		
 

@@ -40,18 +40,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 			NotificationButtonData button2Data;
 			if (hasUpdate)
 			{
-				title = API.API.Current.Translate ("download.available");
+				title = API.CentralAPI.Current.Translate ("download.available");
 				content = GetVersionFormatted (true);
 				
-				button1Data = new NotificationButtonData (API.API.Current.Translate ("download.buttons.update"), true, StartUpdate);
+				button1Data = new NotificationButtonData (API.CentralAPI.Current.Translate ("download.buttons.update"), true, StartUpdate);
 
-				button2Data = new NotificationButtonData (API.API.Current.Translate ("download.buttons.github"), _model.GetGithubUrl (), true,
+				button2Data = new NotificationButtonData (API.CentralAPI.Current.Translate ("download.buttons.github"), _model.GetGithubUrl (), true,
 					(sender, args) => { Process.Start (args.Uri.AbsoluteUri); });
 
 			} else
 			{
-				title = API.API.Current.Translate ("download.uptodate");
-				content = API.API.Current.Translate ("download.latest");
+				title = API.CentralAPI.Current.Translate ("download.uptodate");
+				content = API.CentralAPI.Current.Translate ("download.latest");
 				button1Data = button2Data = null;
 			}
 			
@@ -65,7 +65,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private string GetFormattedSize (bool withSize)
 		{
-			return !withSize ? "" : $"{Environment.NewLine}{API.API.Current.Translate ("download.size")}: {_model.GetSize ()}";
+			return !withSize ? "" : $"{Environment.NewLine}{API.CentralAPI.Current.Translate ("download.size")}: {_model.GetSize ()}";
 		}
 
 		private void StartUpdate (object sender, RequestNavigateEventArgs e)
@@ -91,14 +91,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (e.Error != null)
 			{
-				string title = API.API.Current.Translate ("download.refused.error");
+				string title = API.CentralAPI.Current.Translate ("download.refused.error");
 				string message = e.Error.Message;
 				if(e.Error.InnerException != null)
 				{
 					if (e.Error.InnerException is SocketException)
 					{
-						title = API.API.Current.Translate ("download.refused.title");
-						message = API.API.Current.Translate ("download.refused.message");
+						title = API.CentralAPI.Current.Translate ("download.refused.title");
+						message = API.CentralAPI.Current.Translate ("download.refused.message");
 					} else
 					{
 						message = e.Error.InnerException.Message;
@@ -107,7 +107,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				if (e.Error is WebException)
 				{
-					NotificationButtonData button1Data = new (API.API.Current.Translate ("download.buttons.github"), _model.GetGithubUrl (), true,
+					NotificationButtonData button1Data = new (API.CentralAPI.Current.Translate ("download.buttons.github"), _model.GetGithubUrl (), true,
 						(sender, args) => { Process.Start (args.Uri.AbsoluteUri); });
 					
 					_controller.ShowNotification (title, message, button1Data, null);
@@ -119,8 +119,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				if (e.Cancelled)
 				{
-					string title = API.API.Current.Translate ("download.canceled.title");
-					string content = API.API.Current.Translate ("download.canceled.message");
+					string title = API.CentralAPI.Current.Translate ("download.canceled.title");
+					string content = API.CentralAPI.Current.Translate ("download.canceled.message");
 					_controller.ShowNotification (title, content, null, null);
 					_view.Close ();
 				} else
@@ -139,11 +139,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 						questionWindow.SetOwner (_controller.TargetForm);
 					}
 					
-					questionWindow.Title = API.API.Current.Translate ("download.downloaded.short");
+					questionWindow.Title = API.CentralAPI.Current.Translate ("download.downloaded.short");
 					
-					questionWindow.SetTitle (API.API.Current.Translate ("download.downloaded.full"));
-					questionWindow.SetButtonContents (API.API.Current.Translate ("download.buttons.install"),
-						API.API.Current.Translate ("download.buttons.later"), "");
+					questionWindow.SetTitle (API.CentralAPI.Current.Translate ("download.downloaded.full"));
+					questionWindow.SetButtonContents (API.CentralAPI.Current.Translate ("download.buttons.install"),
+						API.CentralAPI.Current.Translate ("download.buttons.later"), "");
 					questionWindow.SetButtonVisibilities (true, true, false);
 					bool needToClose = true;
 					if (questionWindow.ShowDialog () == true)

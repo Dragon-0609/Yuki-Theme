@@ -88,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
-			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", API.API.Current.GetCore ());
+			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", API.CentralAPI.Current.GetCore ());
 		}
 
 
@@ -473,7 +473,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 					// popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (API.API.Current.Translate ("messages.update.invalid"), API.API.Current.Translate ("messages.update.wrong"),
+					MessageBox.Show (API.CentralAPI.Current.Translate ("messages.update.invalid"), API.CentralAPI.Current.Translate ("messages.update.wrong"),
 					                 MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}

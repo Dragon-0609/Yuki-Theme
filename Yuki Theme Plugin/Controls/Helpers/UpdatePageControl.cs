@@ -89,17 +89,17 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 		}
 
 		public void SetTheme(string theme) {
-			bool cnd = API.Current.SelectTheme (theme);
+			bool cnd = CentralAPI.Current.SelectTheme (theme);
 
 			if (cnd)
 			{
-				API.Current.selectedItem = API.Current.nameToLoad;
+				CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
 				API_Events.ifHasImage2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsImage;
 				API_Events.ifHasSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifHsSticker;
 				API_Events.ifDoesntHave2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNIMG;
 				API_Events.ifDoesntHaveSticker2 = YukiTheme_VisualPascalABCPlugin.plugin.ifDNSTCK;
-				API.Current.Restore (false);
-				API.Current.ExportTheme (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
+				CentralAPI.Current.Restore (false);
+				CentralAPI.Current.ExportTheme (YukiTheme_VisualPascalABCPlugin.plugin.tmpImage1,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.tmpImage2,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
 				                            YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources);

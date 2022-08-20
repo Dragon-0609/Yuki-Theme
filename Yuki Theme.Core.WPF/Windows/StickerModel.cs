@@ -38,9 +38,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void PrepareRenderImage ()
 		{
-			if (API.API.Current.currentTheme.StickerOpacity != 100)
+			if (API.CentralAPI.Current.currentTheme.StickerOpacity != 100)
 			{
-				renderImage = Helper.SetOpacity (originalImage, API.API.Current.currentTheme.StickerOpacity);
+				renderImage = Helper.SetOpacity (originalImage, API.CentralAPI.Current.currentTheme.StickerOpacity);
 				originalImage.Dispose ();
 			} else
 				renderImage = originalImage;

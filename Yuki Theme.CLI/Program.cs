@@ -17,7 +17,7 @@ namespace Yuki_Theme.CLI
 			
 			AdminTools adminTools = new AdminTools();
 			if (!adminTools.CurrentUserIsAdmin ())
-				program.ShowError(API.Current.Translate ("messages.warnings.adminprivileges.cli.content"));
+				program.ShowError(CentralAPI.Current.Translate ("messages.warnings.adminprivileges.cli.content"));
 			
 			var parser = new Parser (parserSettings =>
 			{

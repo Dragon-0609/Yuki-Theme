@@ -38,7 +38,7 @@ namespace Yuki_Theme.Core
 
 		//styles
 
-		private Dictionary <string, ThemeField> localAttributes => API.API.Current.currentTheme.Fields;
+		private Dictionary <string, ThemeField> localAttributes => API.CentralAPI.Current.currentTheme.Fields;
 
 		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;

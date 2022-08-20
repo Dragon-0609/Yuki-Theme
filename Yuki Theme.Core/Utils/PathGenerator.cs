@@ -19,7 +19,7 @@ namespace Yuki_Theme.Core.Utils
 				file = Helper.ConvertNameToPath (file);
 			}
 
-			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.API.Current.ThemeInfos[name].isOld)}";
+			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (API.CentralAPI.Current.ThemeInfos[name].isOld)}";
 		}
 	}
 }

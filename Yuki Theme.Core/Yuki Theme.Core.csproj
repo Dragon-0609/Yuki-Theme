@@ -120,12 +120,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\API.cs" />
+    <Compile Include="API\CentralAPI.cs" />
     <Compile Include="API\API_Actions.cs" />
     <Compile Include="API\API_Base.cs" />
     <Compile Include="API\API_Events.cs" />
     <Compile Include="API\ClientAPI.cs" />
     <Compile Include="API\CommonAPI.cs" />
+    <Compile Include="API\NetworkAPI.cs" />
     <Compile Include="API\ServerAPI.cs" />
     <Compile Include="Communication\Message.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />

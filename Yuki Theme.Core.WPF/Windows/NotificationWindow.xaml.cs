@@ -119,7 +119,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void OnCloseClicked (object sender, RoutedEventArgs e)
 		{
-			this.Close ();
+			Close ();
 		}
 
 		public void UpdateColors ()

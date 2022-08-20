@@ -2,7 +2,7 @@
 
 namespace Yuki_Theme.Core.API
 {
-	public static class API
+	public static class CentralAPI
 	{
 		private static API_Base _apiBase;
 

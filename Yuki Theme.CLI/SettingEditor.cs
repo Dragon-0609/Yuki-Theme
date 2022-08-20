@@ -20,7 +20,7 @@ namespace Yuki_Theme.CLI
 			} else
 			{
 				destination = Path.Combine (SettingsConst.CurrentPath, "settings.syuki");
-				if (!Path.HasExtension (path)) ShowError (API.Current.Translate ("cli.errors.export.extension", path, destination));
+				if (!Path.HasExtension (path)) ShowError (CentralAPI.Current.Translate ("cli.errors.export.extension", path, destination));
 			}
 
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
@@ -36,8 +36,8 @@ namespace Yuki_Theme.CLI
 			
 			if (!string.IsNullOrEmpty (outdir)) Directory.CreateDirectory (outdir);
 			File.WriteAllText (destination, output, Encoding.UTF8);
-			ShowSuccess (API.Current.Translate ("cli.success.settings.export.full"),
-			             API.Current.Translate ("cli.success.settings.export.short"));
+			ShowSuccess (CentralAPI.Current.Translate ("cli.success.settings.export.full"),
+			             CentralAPI.Current.Translate ("cli.success.settings.export.short"));
 		}
 
 		internal void ImportSettings (string path)
@@ -62,17 +62,17 @@ namespace Yuki_Theme.CLI
 
 					Settings.database.UpdateData (dict);
 					Settings.ConnectAndGet ();
-					ShowSuccess (API.Current.Translate ("cli.success.settings.import.full"),
-					             API.Current.Translate ("cli.success.settings.import.short"));
+					ShowSuccess (CentralAPI.Current.Translate ("cli.success.settings.import.full"),
+					             CentralAPI.Current.Translate ("cli.success.settings.import.short"));
 				} catch (Exception e)
 				{
-					ShowError (API.Current.Translate ("cli.errors.happened", e.ToString ()));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.happened", e.ToString ()));
 				}
 			} else
 			{
 				ShowError (path == "null"
-					           ? API.Current.Translate ("cli.errors.export.null")
-					           : API.Current.Translate ("messages.file.notexist.full2"));
+					           ? CentralAPI.Current.Translate ("cli.errors.export.null")
+					           : CentralAPI.Current.Translate ("messages.file.notexist.full2"));
 			}
 		}
 

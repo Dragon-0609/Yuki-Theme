@@ -309,7 +309,7 @@ namespace Yuki_Theme.Core.Themes
 				string pathToLoad = Helper.ConvertNameToPath (pathToTheme);
 				if (customNameForMemory)
 				{
-					a = API.API.Current.GetCore ();
+					a = API.CentralAPI.Current.GetCore ();
 					pathForMemory = pathToTheme;
 				} else
 				{
@@ -320,7 +320,7 @@ namespace Yuki_Theme.Core.Themes
 						pathForMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 					} else
 					{
-						a = API.API.Current.GetCore ();
+						a = API.CentralAPI.Current.GetCore ();
 						pathForMemory = $"{DefaultThemesHeader.CoreThemeHeader}.{pathToLoad}{extension}";
 					}
 				}
@@ -428,7 +428,7 @@ namespace Yuki_Theme.Core.Themes
 					{
 						if (API_Events.hasProblem != null)
 							API_Events.hasProblem (
-								API.API.Current.Translate ("messages.theme.invalid.full"));
+								API.CentralAPI.Current.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
 
@@ -515,7 +515,7 @@ namespace Yuki_Theme.Core.Themes
 					{
 						if (API_Events.hasProblem != null)
 							API_Events.hasProblem (
-								API.API.Current.Translate ("messages.theme.invalid.full"));
+								API.CentralAPI.Current.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
 				}
@@ -701,7 +701,7 @@ namespace Yuki_Theme.Core.Themes
 
 			if (DefaultThemes.isDefault (oldName))
 			{
-				Stream stream = API.API.Current._themeManager.GetStreamFromMemory (oldName, oldName);
+				Stream stream = API.CentralAPI.Current._themeManager.GetStreamFromMemory (oldName, oldName);
 				isZip = Helper.IsZip (stream);
 				stream.Dispose ();
 			} else
@@ -725,8 +725,8 @@ namespace Yuki_Theme.Core.Themes
 		/// <returns>Parsed theme</returns>
 		public override Theme PopulateList (string name, bool ToCLI)
 		{
-			bool isDef = API.API.Current.ThemeInfos [name].isDefault;
-			bool fromAssembly = API.API.Current.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
+			bool isDef = API.CentralAPI.Current.ThemeInfos [name].isDefault;
+			bool fromAssembly = API.CentralAPI.Current.ThemeInfos [name].location == ThemeLocation.Memory && isDef;
 
 			string path = Helper.ConvertNameToPath (name);
 			Theme theme = new Theme
@@ -748,7 +748,7 @@ namespace Yuki_Theme.Core.Themes
 
 			theme.Fields = new Dictionary <string, ThemeField> ();
 			if (ToCLI)
-				PopulateDictionaryFromDoc (doc, ref theme, ref API.API.Current.names);
+				PopulateDictionaryFromDoc (doc, ref theme, ref API.CentralAPI.Current.names);
 			else
 			{
 				List <string> localNames = new List <string> ();
@@ -761,7 +761,7 @@ namespace Yuki_Theme.Core.Themes
 				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "KeyWords";
 				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
 				if (ToCLI)
-					API.API.Current.names.Add (methdoName);
+					API.CentralAPI.Current.names.Add (methdoName);
 			}
 
 			Dictionary <string, string> additionalInfo = GetAdditionalInfoFromDoc (doc);
@@ -919,7 +919,7 @@ namespace Yuki_Theme.Core.Themes
 		private string ReadThemeTemplate ()
 		{
 			string res = "";
-			var a = API.API.Current.GetCore ();
+			var a = API.CentralAPI.Current.GetCore ();
 			var stream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
 			using (StreamReader reader = new StreamReader (stream))
 			{

@@ -76,7 +76,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void HasProblem (string content)
 		{
 			MessageBox.Show (
-				content, API.API.Current.Translate ("messages.theme.invalid.short"), MessageBoxButton.OK, MessageBoxImage.Error);
+				content, CentralAPI.Current.Translate ("messages.theme.invalid.short"), MessageBoxButton.OK, MessageBoxImage.Error);
 			_view.SelectDefaultTheme ();
 		}
 
@@ -137,7 +137,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void LoadThemesWithApi(ComboBox themeBox, ListView definitionsBox)
 		{
-			API.API.Current.LoadSchemes ();
+			CentralAPI.Current.LoadSchemes ();
 			LoadThemesToUi (themeBox, definitionsBox);
 		}
 
@@ -145,7 +145,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			_model.BlockedThemeSelector = true;
 			themeBox.Items.Clear ();
-			_model.Themes = API.API.Current.Schemes.ToArray ();
+			_model.Themes = CentralAPI.Current.Schemes.ToArray ();
 			foreach (string theme in _model.Themes)
 			{
 				themeBox.Items.Add (theme);
@@ -153,19 +153,19 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			_model.BlockedThemeSelector = false;
 			// MessageBox.Show (API_Base.Current.isDefaultTheme.Count.ToString ());
-			if (themeBox.Items.Contains (API.API.Current.selectedItem))
-				themeBox.SelectedItem = API.API.Current.selectedItem;
+			if (themeBox.Items.Contains (CentralAPI.Current.selectedItem))
+				themeBox.SelectedItem = CentralAPI.Current.selectedItem;
 			else
 				themeBox.SelectedIndex = 0;
 
-			API.API.Current.Restore (false, null);
+			CentralAPI.Current.Restore (false, null);
 			LoadDefinitions (definitionsBox);
 		}
 
 		public void LoadDefinitions(ListView definitionsBox)
 		{
 			definitionsBox.Items.Clear ();
-			foreach (string definition in API.API.Current.names.ToArray ())
+			foreach (string definition in CentralAPI.Current.names.ToArray ())
 			{
 				definitionsBox.Items.Add (definition);
 			}
@@ -180,7 +180,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				foreach (string item in _model.Themes)
 				{
-					if (!API.API.Current.ThemeInfos[item].isDefault)
+					if (!CentralAPI.Current.ThemeInfos[item].isDefault)
 					{
 						customThemes.Add (item);
 					}
@@ -198,13 +198,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				} else
 				{
 					int mx = customThemes.Count > 2 ? 1 : 0;
-					string prevTheme = API.API.Current.Schemes [API.API.Current.Schemes.IndexOf (customThemes [mx]) - 1];
+					string prevTheme = CentralAPI.Current.Schemes [CentralAPI.Current.Schemes.IndexOf (customThemes [mx]) - 1];
 					index2 = Array.IndexOf (_model.Themes, prevTheme) + 1;
 				}
 
 				themeBox.Items.Insert (index2, res.to);
 				themeBox.SelectedIndex = index2;
-				_model.Themes = API.API.Current.Schemes.ToArray ();
+				_model.Themes = CentralAPI.Current.Schemes.ToArray ();
 			}
 		}
 
@@ -212,7 +212,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
 			{
-				Filter = API.API.Current.Translate ("main.import.extensions.all") +
+				Filter = CentralAPI.Current.Translate ("main.import.extensions.all") +
 				         " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd"
 			};
 			if (openFileDialog.ShowDialog () == true)
@@ -232,7 +232,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void ImportFile(string fileName, bool select, Action<string> addToUiList = null, Action<string> selectAfterParse = null)
 		{
-			API.API.Current.ImportTheme (fileName, true, select, ErrorExport, AskChoiceParser, addToUiList, selectAfterParse);
+			CentralAPI.Current.ImportTheme (fileName, true, select, ErrorExport, AskChoiceParser, addToUiList, selectAfterParse);
 		}
 		
 
@@ -244,12 +244,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (Settings.colorPicker == 0)
 			{
 				ColorPicker picker = new ColorPicker ();
-				picker.allowSave = !API.API.Current.currentTheme.isDefault;
+				picker.allowSave = !CentralAPI.Current.currentTheme.isDefault;
 				picker.MainColor = defaultColor;
 				NativeWindow win32Parent = new NativeWindow ();
 				win32Parent.AssignHandle (new WindowInteropHelper (parent).Handle);
 
-				if (picker.ShowDialog (win32Parent) == System.Windows.Forms.DialogResult.OK)
+				if (picker.ShowDialog (win32Parent) == DialogResult.OK)
 				{
 					save = true;
 					ncolor = picker.MainColor;
@@ -258,7 +258,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				ColorPickerWindow picker = new ColorPickerWindow
 				{
-					allowSave = !API.API.Current.currentTheme.isDefault,
+					allowSave = !CentralAPI.Current.currentTheme.isDefault,
 					MainColor = defaultColor.ToWPFColor (),
 					Owner = parent,
 					Tag = parent.Tag

@@ -11,7 +11,7 @@
 
 		public override string ToString ()
 		{
-			return API.API.Current.Translate (name);
+			return API.CentralAPI.Current.Translate (name);
 		}
 	}
 }

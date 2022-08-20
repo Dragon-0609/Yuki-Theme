@@ -9,6 +9,7 @@ public class Communicator
 	{
 		void SendMessage (Message message);
 		void SendMessage (int id);
+		void SendMessage (int id, string content);
 
 		event MessageRecieved recieved;
 
@@ -17,10 +18,15 @@ public class Communicator
 	
 	public interface IClient
 	{
+		void SendMessage (Message message);
+		void SendMessage (int id);
+		void SendMessage (int id, string content);
+		
 		event MessageRecieved recieved;
 		
 		bool IsConnected { get; }
 	}
+	
 }
 
 public delegate void MessageRecieved (Message message);

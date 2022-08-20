@@ -23,12 +23,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void SaveButtonClick (object sender, RoutedEventArgs e)
 		{
-			this.DialogResult = true;
+			DialogResult = true;
 		}
 
 		private void CancleButtonClick (object sender, RoutedEventArgs e)
 		{
-			this.DialogResult = false;
+			DialogResult = false;
 		}
 
 		private void SettingsWindow_OnLoaded (object sender, RoutedEventArgs e)
@@ -42,8 +42,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void TranslateDialogButtons ()
 		{
-			SaveButton.Content = API.API.Current.Translate ("messages.theme.save.short");
-			CancelButton.Content = API.API.Current.Translate ("download.cancel");
+			SaveButton.Content = API.CentralAPI.Current.Translate ("messages.theme.save.short");
+			CancelButton.Content = API.CentralAPI.Current.Translate ("download.cancel");
 		}
 
 		private void IncludeToolBarItems ()

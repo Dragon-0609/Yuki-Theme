@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Xml;
-using ICSharpCode.TextEditor;
-using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
-using Microsoft.Win32;
 using Svg;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
@@ -24,15 +17,11 @@ using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
-using Yuki_Theme.Core.Database;
-using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
-using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Communication;
-using Yuki_Theme_Plugin.Controls.CodeCompletion;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -40,6 +29,8 @@ using Point = System.Drawing.Point;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
+using static Yuki_Theme.Core.Communication.MessageTypes;
+using Message = Yuki_Theme.Core.Communication.Message;
 
 namespace Yuki_Theme_Plugin
 {
@@ -138,7 +129,7 @@ namespace Yuki_Theme_Plugin
 			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
-			API.Current = new ServerAPI ();
+			CentralAPI.Current = new ServerAPI ();
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
 			Settings.ConnectAndGet ();
 
@@ -430,9 +421,9 @@ namespace Yuki_Theme_Plugin
 						Image stckr = Image.FromFile (pth);
 
 
-						if (API.Current.currentTheme.StickerOpacity != 100)
+						if (CentralAPI.Current.currentTheme.StickerOpacity != 100)
 						{
-							sticker = Helper.SetOpacity (stckr, API.Current.currentTheme.StickerOpacity);
+							sticker = Helper.SetOpacity (stckr, CentralAPI.Current.currentTheme.StickerOpacity);
 							stckr.Dispose ();
 						} else
 							sticker = stckr;
@@ -456,10 +447,30 @@ namespace Yuki_Theme_Plugin
 		private void InitCommunicator ()
 		{
 			_server = new Server (ideComponents);
+			ServerAPI api = (ServerAPI)CentralAPI.Current;
+			api.Server = _server;
+			api.AddEvents ();
+			api.AddEvent (RELEASE_RESOURCES, ReleaseResources);
+			api.AddEvent (APPLY_THEME, ApplyTheme);
 		}
-		
+
 		#endregion
 
+
+		#region Server Actions
+
+		private void ReleaseResources (Message obj)
+		{
+			ReleaseResources ();
+		}
+
+		private void ApplyTheme (Message obj)
+		{
+			ReloadLayout ();
+		}
+		
+
+		#endregion
 		
 		#region Updates
 
@@ -765,7 +776,7 @@ namespace Yuki_Theme_Plugin
 				tp.Activate ();
 			} else
 			{
-				MessageBox.Show (API.Current.Translate ("plugin.browser.error"));
+				MessageBox.Show (CentralAPI.Current.Translate ("plugin.browser.error"));
 			}
 		}
 

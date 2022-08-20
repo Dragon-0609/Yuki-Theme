@@ -69,9 +69,9 @@ namespace Yuki_Theme.Core.Utils
 		private static ThemeInfo SetGroup (string name, ThemeInfo info, Condition value)
 		{
 			info.group = value.Equality;
-			Theme theme = API.API.Current.GetTheme (name);
+			Theme theme = API.CentralAPI.Current.GetTheme (name);
 			theme.Group = info.group;
-			API.API.Current.SaveTheme (theme, null, null, true);
+			API.CentralAPI.Current.SaveTheme (theme, null, null, true);
 			return info;
 		}
 		
