@@ -10,7 +10,10 @@ public abstract class NetworkAPI : API_Base
 
 	public abstract void AddEvents ();
 
-	
+	public void AddEvent (int id, Action<Message> action)
+	{
+		ActionsDictionary.Add (id, action);
+	}
 
 	protected void ParseMessage (Message message)
 	{

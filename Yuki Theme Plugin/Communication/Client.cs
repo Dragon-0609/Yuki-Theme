@@ -1,54 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme_Plugin.Interfaces;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 using Message = Yuki_Theme.Core.Communication.Message;
 
-namespace Theme_Editor
+namespace Yuki_Theme_Plugin.Communication
 {
-	internal class Client : Communicator.IClient
+	internal class Client : CommunicatorBase, Communicator.IClient
 	{
+		private const string THEME_INSTALLER = "Theme_Installer.exe";
+		
 		private NamedPipeClient<Message> _client;
 
-		private bool isConnected = false;
-
-		private Queue<Message> _messages;
+		private bool _isConnected = false;
 		
 		public event MessageRecieved recieved;
 
-		public bool IsConnected => isConnected;
+		public bool IsConnected => _isConnected;
 		
-		[STAThread]
-		public static void Main (string[] args)
-		{
-			Client client = new Client ();
-		}
+
+		private IConsole _console;
 		
-		private Client ()
+		internal Client (IConsole console)
 		{
+			_console = console;
 			Init ();
-			Application.Run ();
 		}
 		
 		private void Init ()
 		{
-			SetAPI ();
+			_messages = new Queue<Message> ();
 			InitMessaging ();
-		}
-
-		private void SetAPI ()
-		{
-			ClientAPI api = new ClientAPI ();
-			CentralAPI.Current = api;
-			Helper.mode = ProductMode.Plugin;
-			api.Client = this;
-			api.LoadSchemes ();
-			api.AddEvents ();
-			Settings.ConnectAndGet ();
+			RunServer ();
 		}
 
 		private void InitMessaging ()
@@ -63,26 +53,31 @@ namespace Theme_Editor
 		private void ServerDisconnected (NamedPipeConnection<Message, Message> connection)
 		{
 			_client.Stop ();
-			Application.Exit ();
+			_console.WriteToConsole ("Client is disconnected");
 		}
 
 		private void ErrorRaised (Exception exception)
 		{
-			CentralAPI.Current.ShowError ($"ERROR: {exception}", "Error");
+			_console.WriteToConsole ($"ERROR: {exception}");
+		}
+
+		private void RunServer ()
+		{
+			Process.Start (THEME_INSTALLER);
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
-			Console.WriteLine ($"Received: {message}");
+			_console.WriteToConsole ($"Received: {message}");
 			
 			if (recieved != null)
 				recieved (message);
 			ParseMessage (message);
 		}
 
-		public void SendMessage (Message message)
+		public override void SendMessage (Message message)
 		{
-			if (isConnected)
+			if (_isConnected)
 			{
 				_client.PushMessage (message);
 			} else
@@ -105,14 +100,9 @@ namespace Theme_Editor
 		{
 			switch (message.Id)
 			{
-				case TEST_CONNECTION:
-					isConnected = true;
-					SendMessage (TEST_CONNECTION_OK);
-					break;
-				
-				case CLOSE_CLIENT:
-					_client.Stop ();
-					Application.Exit();
+				case TEST_CONNECTION_OK:
+					_isConnected = true;
+					_console.WriteToConsole ("Theme applier is running");
 					break;
 			}
 		}

@@ -106,7 +106,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Communication\Server.cs" />
+    <Compile Include="Communication\Client.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionAllNames.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionKeyHandler.cs" />
     <Compile Include="Controls\CodeCompletion\CodeCompletionListView.cs" />

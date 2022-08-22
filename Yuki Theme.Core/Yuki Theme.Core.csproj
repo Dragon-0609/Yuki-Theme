@@ -128,6 +128,7 @@
     <Compile Include="API\CommonAPI.cs" />
     <Compile Include="API\NetworkAPI.cs" />
     <Compile Include="API\ServerAPI.cs" />
+    <Compile Include="Communication\CommunicatorBase.cs" />
     <Compile Include="Communication\Message.cs" />
     <Compile Include="Controls\ExtendedDropItem.cs" />
     <Compile Include="Database\FileDatabase.cs" />

@@ -14,23 +14,37 @@ public class ServerAPI : NetworkAPI
 	public override void ExportTheme (Image wallpaper, Image sticker, Action setTheme = null, Action startSettingTheme = null,
 									  bool wantToKeep = false)
 	{
-		Send (EXPORT_THEME);
+		Send (RELEASE_RESOURCES);
+		string path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
+
+		_themeManager.DeleteOldThemeIfNeed ();
+
+		_themeManager.CopyThemeToDirectory (path);
+
+		PrepareToExport (path);
+
+		Actions.ShowEndMessage (currentTheme.Name);
+
+		Helper.currentTheme = currentTheme.Name;
+		Send (APPLY_THEME);
 	}
 
 	public override void AddEvents ()
 	{
-		ActionsDictionary.Add (TEST_CONNECTION_OK, SetPascalPath);
+		ActionsDictionary.Add (SET_PASCAL_PATH, SetPascalPath);
+		ActionsDictionary.Add (EXPORT_THEME, ExportTheme);
 		Server.recieved += ParseMessage;
 	}
 
-	public void AddEvent (int id, Action<Message> action)
-	{
-		ActionsDictionary.Add (id, action);
-	}
 
 	private void SetPascalPath (Message message)
 	{
-		Send (SET_PASCAL_PATH, Settings.pascalPath);
+		Settings.pascalPath = message.Content;
+	}
+
+	private void ExportTheme (Message message)
+	{
+		ExportTheme (null, null, null, null, true);
 	}
 
 	private void Send (int id) => Server.SendMessage (id);

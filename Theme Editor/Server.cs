@@ -1,44 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows.Forms;
 using NamedPipeWrapper;
+using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
-using Yuki_Theme_Plugin.Interfaces;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 using Message = Yuki_Theme.Core.Communication.Message;
 
-namespace Yuki_Theme_Plugin.Communication
+namespace Theme_Editor
 {
-	internal class Server : Communicator.IServer
+	public class Server : CommunicatorBase, Communicator.IServer
 	{
-		private const string                   THEME_INSTALLER = "Theme_Installer.exe";
 		private       NamedPipeServer<Message> _server;
 		
 		public event MessageRecieved recieved;
 
 		public bool IsConnected => _isConnected;
 
-		private Queue<Message> _messages;
-
-		private Timer _timer;
-
 		private bool _isConnected = false;
 
-		private IConsole _console;
-
-		internal Server (IConsole console)
+		internal Server ()
 		{
-			_console = console;
 			Init ();
 		}
 
 		private void Init ()
 		{
 			_messages = new Queue<Message> ();
-			InitMessaging ();
-			RunClient ();
-			InitTimer ();
+			SetAPI ();
+			InitMessaging ();			
+			// InitTimer ();
+		}
+
+		private void SetAPI ()
+		{
+			ServerAPI api = new ServerAPI ();
+			Settings.ConnectAndGet ();
+			CentralAPI.Current = api;
+			Helper.mode = ProductMode.Plugin;
+			api.Server = this;
+			api.LoadSchemes ();
+			api.AddEvents ();
 		}
 
 		private void InitMessaging ()
@@ -49,6 +53,7 @@ namespace Yuki_Theme_Plugin.Communication
 			_server.ClientMessage += MessageReceived;
 			_server.Error += ErrorRaised;
 			_server.Start ();
+			Console.WriteLine("Server started");
 		}
 
 		private void ClientConnected (NamedPipeConnection<Message, Message> connection)
@@ -60,12 +65,12 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			_timer.Stop ();
 			_server.Stop ();
-			_console.WriteToConsole ("Client is disconnected");
+			Application.Exit ();
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
-			_console.WriteToConsole ($"Received: {message}");
+			Console.WriteLine ($"Received: {message}");
 			ParseMessage (message);
 			
 			if (recieved != null)
@@ -74,16 +79,11 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private void ErrorRaised (Exception exception)
 		{
-			_console.WriteToConsole ($"ERROR: {exception}");
+			CentralAPI.Current.ShowError ($"ERROR: {exception} =>{exception.StackTrace}", "Error");
 		}
 
 
-		private void RunClient ()
-		{
-			Process.Start (THEME_INSTALLER);
-		}
-
-		public void SendMessage (Message message)
+		public override void SendMessage (Message message)
 		{
 			if (_isConnected && _server._connections.Count > 0)
 			{
@@ -111,31 +111,17 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			switch (message.Id)
 			{
-				case TEST_CONNECTION_OK:
+				case TEST_CONNECTION:
 					_isConnected = true;
-					_console.WriteToConsole ("Theme applier is running");
+					SendMessage (TEST_CONNECTION_OK);
+					break;
+				
+				case CLOSE_CLIENT:
+					_server.Stop ();
+					Application.Exit();
 					break;
 			}
 		}
 		
-
-		private void InitTimer ()
-		{
-			_timer = new Timer ();
-			_timer.Interval = 100;
-			_timer.Tick += TimerOnTick;
-			_timer.Start ();
-		}
-
-		private void TimerOnTick (object sender, EventArgs e)
-		{
-			lock (_messages)
-			{
-				if (_messages.Count > 0)
-				{
-					SendMessage (_messages.Dequeue ());
-				}
-			}
-		}
 	}
 }

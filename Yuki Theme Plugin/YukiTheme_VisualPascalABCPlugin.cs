@@ -105,7 +105,7 @@ namespace Yuki_Theme_Plugin
 
 		private MainWindow CoreWindow;
 
-		private Server _server;
+		private Client _client;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -446,9 +446,9 @@ namespace Yuki_Theme_Plugin
 
 		private void InitCommunicator ()
 		{
-			_server = new Server (ideComponents);
-			ServerAPI api = (ServerAPI)CentralAPI.Current;
-			api.Server = _server;
+			_client = new Client (ideComponents);
+			ClientAPI api = (ClientAPI)CentralAPI.Current;
+			api.Client = _client;
 			api.AddEvents ();
 			api.AddEvent (RELEASE_RESOURCES, ReleaseResources);
 			api.AddEvent (APPLY_THEME, ApplyTheme);
