@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
+using System.Threading;
 using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core;
@@ -17,9 +19,8 @@ namespace Theme_Editor
 		
 		public event MessageRecieved recieved;
 
-		public bool IsConnected => _isConnected;
+		private EventWaitHandle _startedEvent;
 
-		private bool _isConnected = false;
 
 		internal Server ()
 		{
@@ -29,35 +30,44 @@ namespace Theme_Editor
 		private void Init ()
 		{
 			_messages = new Queue<Message> ();
-			SetAPI ();
-			InitMessaging ();			
-			// InitTimer ();
+			InitMessaging ();
+			SetAPI ();			
+			InitTimer ();
 		}
 
 		private void SetAPI ()
 		{
 			ServerAPI api = new ServerAPI ();
-			Settings.ConnectAndGet ();
 			CentralAPI.Current = api;
 			Helper.mode = ProductMode.Plugin;
+			Settings.ConnectAndGet ();
 			api.Server = this;
 			api.LoadSchemes ();
 			api.AddEvents ();
+			api.AddEvent (OPEN_MAIN_WINDOW, message => Program._manager.OpenMainWindow ());
 		}
 
 		private void InitMessaging ()
 		{
-			_server = new NamedPipeServer<Message> (Message.PATH);
+			
+			PipeSecurity pSecure = new PipeSecurity();
+			pSecure.SetAccessRule(new PipeAccessRule(Environment.UserName, PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow));
+			
+			_server = new NamedPipeServer<Message> (Message.PATH, pSecure);
 			_server.ClientConnected += ClientConnected;
 			_server.ClientDisconnected += ClientDisconnected;
 			_server.ClientMessage += MessageReceived;
 			_server.Error += ErrorRaised;
 			_server.Start ();
+			Program._manager._server = this;
 			Console.WriteLine("Server started");
+			_startedEvent = new EventWaitHandle(false, EventResetMode.ManualReset, @"Global\YukiThemeServerStarted");
+			_startedEvent.Set();
 		}
 
 		private void ClientConnected (NamedPipeConnection<Message, Message> connection)
 		{
+			Console.WriteLine("Client Connected");
 			SendMessage (TEST_CONNECTION);
 		}
 
@@ -70,7 +80,7 @@ namespace Theme_Editor
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
-			Console.WriteLine ($"Received: {message}");
+			Console.WriteLine ($"Received: {message.Id}");
 			ParseMessage (message);
 			
 			if (recieved != null)
@@ -85,7 +95,7 @@ namespace Theme_Editor
 
 		public override void SendMessage (Message message)
 		{
-			if (_isConnected && _server._connections.Count > 0)
+			if (_server._connections.Count > 0)
 			{
 				foreach (NamedPipeConnection<Message, Message> connection in _server._connections)
 				{
@@ -111,12 +121,10 @@ namespace Theme_Editor
 		{
 			switch (message.Id)
 			{
-				case TEST_CONNECTION:
-					_isConnected = true;
-					SendMessage (TEST_CONNECTION_OK);
+				case TEST_CONNECTION_OK:
 					break;
 				
-				case CLOSE_CLIENT:
+				case CLOSE_SERVER:
 					_server.Stop ();
 					Application.Exit();
 					break;

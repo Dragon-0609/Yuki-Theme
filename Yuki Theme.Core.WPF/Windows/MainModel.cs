@@ -77,7 +77,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void ChangeWallpaperOpacity()
 		{
-			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, API.CentralAPI.Current.currentTheme.WallpaperOpacity) : null;
+			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, CentralAPI.Current.currentTheme.WallpaperOpacity) : null;
 		}
 		
 

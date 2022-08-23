@@ -88,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
-			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", API.CentralAPI.Current.GetCore ());
+			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CentralAPI.Current.GetCore ());
 		}
 
 
@@ -97,7 +97,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			if (asm == null)
 				asm = Assembly.GetExecutingAssembly ();
-			this.Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
+			Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
 
 		private void LoadSettings ()
@@ -339,7 +339,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void CheckGridSize ()
 		{
 			const int additionalMargins = 125;
-			bool canExpand = this.RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
+			bool canExpand = RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
 			CheckNSetGridLayouts (DimensionCapGroup, canExpand);
 			CheckNSetMargin (DimensionCapGroup, canExpand, groupBoxExpanded, groupBoxCollapsed);
 		}
@@ -473,7 +473,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 					// popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (API.CentralAPI.Current.Translate ("messages.update.invalid"), API.CentralAPI.Current.Translate ("messages.update.wrong"),
+					MessageBox.Show (CentralAPI.Current.Translate ("messages.update.invalid"), CentralAPI.Current.Translate ("messages.update.wrong"),
 					                 MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}

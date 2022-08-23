@@ -10,6 +10,11 @@ public class ClientAPI : NetworkAPI
 {
 	public Communicator.IClient Client;
 
+	public ClientAPI ()
+	{
+		CreateThemesDirectory = false;
+	}
+
 	public override void ExportTheme (Image wallpaper, Image sticker, Action setTheme = null, Action startSettingTheme = null,
 									  bool wantToKeep = false)
 	{

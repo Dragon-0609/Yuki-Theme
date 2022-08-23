@@ -103,8 +103,6 @@ namespace Yuki_Theme_Plugin
 
 		public static YukiTheme_VisualPascalABCPlugin plugin;
 
-		private MainWindow CoreWindow;
-
 		private Client _client;
 
 		/// <summary>
@@ -129,7 +127,7 @@ namespace Yuki_Theme_Plugin
 			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
-			CentralAPI.Current = new ServerAPI ();
+			CentralAPI.Current = new ClientAPI ();
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
 			Settings.ConnectAndGet ();
 
@@ -194,28 +192,7 @@ namespace Yuki_Theme_Plugin
 
 		private void InitCore ()
 		{
-			WPFHelper.InitAppForWinforms ();
-			if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
-			{
-				CoreWindow = new MainWindow ();
-				CoreWindow.Model.StartSettingTheme += ReleaseResources;
-				CoreWindow.Model.SetTheme += ReloadLayout;
-				
-				CoreWindow.Closed += (_, _) =>
-				{
-					GC.Collect ();
-					GC.WaitForPendingFinalizers ();
-				};
-			} else
-			{
-				if (CoreWindow.IsVisible)
-				{
-					CoreWindow.Activate ();
-					return;
-				}
-			}
-
-			CoreWindow.Show ();
+			_client.SendMessage (OPEN_MAIN_WINDOW);
 		}
 
 		private void InitializeSticker ()

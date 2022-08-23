@@ -186,7 +186,7 @@ namespace Yuki_Theme.Core.WPF
 			} else
 			{
 				if (API_Events.showError != null)
-					API_Events.showError (API.CentralAPI.Current.Translate ("messages.update.invalid"), API.CentralAPI.Current.Translate ("messages.update.wrong"));
+					API_Events.showError (CentralAPI.Current.Translate ("messages.update.invalid"), CentralAPI.Current.Translate ("messages.update.wrong"));
 			}
 			
 		}

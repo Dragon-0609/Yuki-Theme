@@ -191,7 +191,7 @@ namespace Yuki_Theme.Core.WPF
 				);
 				Console.WriteLine ("LINE: " + saoFont.LineSpacing);
 				rd.Add ("SAOFont", saoFont);
-				if (System.Windows.Application.Current != null) System.Windows.Application.Current.Resources = rd;
+				if (Application.Current != null) Application.Current.Resources = rd;
 				Console.WriteLine ("Font Added");
 			}
 		}

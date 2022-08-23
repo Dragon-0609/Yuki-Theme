@@ -36,23 +36,37 @@
         <Reference Include="NamedPipeWrapper">
             <HintPath>..\packages\NamedPipeWrapper.dll</HintPath>
         </Reference>
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
         <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xaml" />
         <Reference Include="System.Xml" />
+        <Reference Include="WindowsBase" />
+        <Reference Include="WindowsFormsIntegration" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Program.cs" />
         <Compile Include="Server.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="WindowManager.cs" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj">
+        <Project>{2ab7513f-70fb-4ffa-88ff-b133f20dd7dc}</Project>
+        <Name>Yuki Theme.Core.WPF</Name>
+      </ProjectReference>
       <ProjectReference Include="..\Yuki Theme.Core\Yuki Theme.Core.csproj">
         <Project>{c12b1851-e2ae-4a31-95dc-1daafcdcb108}</Project>
         <Name>Yuki Theme.Core</Name>
       </ProjectReference>
     </ItemGroup>
+    <PropertyGroup>
+        <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    </PropertyGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

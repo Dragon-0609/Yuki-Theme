@@ -52,7 +52,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 			}
 		}
 
-		protected override DockPaneStripBase.Tab CreateTab (IDockContent content)
+		protected override Tab CreateTab (IDockContent content)
 		{
 			return new TabYuki (content);
 		}
@@ -90,9 +90,9 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 			protected override void OnRefreshChanges ()
 			{
-				if (YukiDockPaneStrip.ColorDocumentActiveText != ForeColor)
+				if (ColorDocumentActiveText != ForeColor)
 				{
-					ForeColor = YukiDockPaneStrip.ColorDocumentActiveText;
+					ForeColor = ColorDocumentActiveText;
 					Invalidate ();
 				}
 			}
@@ -1330,7 +1330,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		protected override void OnMouseHover (EventArgs e)
 		{
-			int index = HitTest (PointToClient (Control.MousePosition));
+			int index = HitTest (PointToClient (MousePosition));
 			string toolTip = string.Empty;
 
 			base.OnMouseHover (e);
@@ -1370,7 +1370,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		protected override void OnMouseMove (MouseEventArgs e)
 		{
-			int index = HitTest (PointToClient (Control.MousePosition));
+			int index = HitTest (PointToClient (MousePosition));
 
 			if (index != -1)
 			{

@@ -26,16 +26,18 @@ public abstract class API_Base
 	public string nameToLoad;
 	public string pathToLoad;
 
+	public bool CreateThemesDirectory = true;
+
 	#endregion
 
 	public string selectedItem = "empty";
 	public bool   isEdited;
 
 
-	internal ThemeFormatBase _newThemeFormat = new NewThemeFormat ();
-	internal ThemeFormatBase _oldThemeFormat = new OldThemeFormat ();
-	internal ThemeManager    _themeManager   = new ();
-	private API_Actions     _actions        = new ();
+	internal readonly ThemeFormatBase _newThemeFormat;
+	internal readonly ThemeFormatBase _oldThemeFormat;
+	internal readonly ThemeManager    _themeManager  ;
+	private readonly  API_Actions     _actions;
 
 	internal API_Actions Actions => _actions;
 
@@ -44,6 +46,14 @@ public abstract class API_Base
 	public Dictionary<string, ThemeInfo> ThemeInfos => _themeInfos;
 
 	#endregion
+
+	public API_Base ()
+	{
+		_newThemeFormat = new NewThemeFormat ();
+		_oldThemeFormat = new OldThemeFormat ();
+		_themeManager = new ThemeManager ();
+		_actions = new API_Actions (this);
+	}
 
 
 	#region Main Commands

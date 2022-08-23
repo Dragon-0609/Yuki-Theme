@@ -18,7 +18,7 @@ namespace Yuki_Theme.Core.Communication
 			_timer = new Timer ();
 			_timer.Interval = 100;
 			_timer.Tick += TimerOnTick;
-			_timer.Start ();
+			// _timer.Start ();
 		}
 
 		private void TimerOnTick (object sender, EventArgs e)

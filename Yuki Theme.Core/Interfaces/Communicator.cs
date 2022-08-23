@@ -12,8 +12,6 @@ public class Communicator
 		void SendMessage (int id, string content);
 
 		event MessageRecieved recieved;
-
-		bool IsConnected { get; }
 	}
 	
 	public interface IClient
@@ -23,8 +21,6 @@ public class Communicator
 		void SendMessage (int id, string content);
 		
 		event MessageRecieved recieved;
-		
-		bool IsConnected { get; }
 	}
 	
 }

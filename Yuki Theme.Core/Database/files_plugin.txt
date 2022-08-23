@@ -1,1 +1,3 @@
 ﻿Yuki Theme Plugin.dll
+Theme_Editor.exe
+NamedPipeWrapper.dll

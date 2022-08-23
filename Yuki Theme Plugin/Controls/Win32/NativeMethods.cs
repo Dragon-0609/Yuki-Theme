@@ -15,18 +15,18 @@ namespace Yuki_Theme_Plugin.Controls.Helper
 
         public POINT(int x, int y)
         {
-            this.X = x;
-            this.Y = y;
+            X = x;
+            Y = y;
         }
 
-        public POINT(System.Drawing.Point pt) : this(pt.X, pt.Y) { }
+        public POINT(Point pt) : this(pt.X, pt.Y) { }
 
-        public static implicit operator System.Drawing.Point(POINT p)
+        public static implicit operator Point(POINT p)
         {
-            return new System.Drawing.Point(p.X, p.Y);
+            return new Point(p.X, p.Y);
         }
 
-        public static implicit operator POINT(System.Drawing.Point p)
+        public static implicit operator POINT(Point p)
         {
             return new POINT(p.X, p.Y);
         }
@@ -77,7 +77,7 @@ namespace Yuki_Theme_Plugin.Controls.Helper
         public delegate IntPtr HookProc(int code, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SetWindowsHookEx(Win32.HookType code, HookProc func, IntPtr hInstance, int threadID);
+        public static extern IntPtr SetWindowsHookEx(HookType code, HookProc func, IntPtr hInstance, int threadID);
 
         [DllImport("user32.dll")]
         public static extern int UnhookWindowsHookEx(IntPtr hhook);
@@ -87,7 +87,7 @@ namespace Yuki_Theme_Plugin.Controls.Helper
 
         public static bool IsUnix()
         {
-            return System.Environment.OSVersion.Platform == System.PlatformID.Unix || System.Environment.OSVersion.Platform == System.PlatformID.MacOSX;
+            return Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX;
         }
 	}
 }

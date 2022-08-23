@@ -12,11 +12,11 @@ namespace Yuki_Theme.Core.Themes
 	{
 		public virtual void LoadThemeToCLI ()
 		{
-			Theme theme = PopulateList (API.CentralAPI.Current.nameToLoad, true);
-			API.CentralAPI.Current.currentTheme = theme;
+			Theme theme = PopulateList (CentralAPI.Current.nameToLoad, true);
+			CentralAPI.Current.currentTheme = theme;
 			if (theme == null)
 			{
-				API.CentralAPI.Current.ShowError (API.CentralAPI.Current.Translate ("messages.theme.invalid.full"), API.CentralAPI.Current.Translate ("messages.theme.invalid.short"));
+				CentralAPI.Current.ShowError (CentralAPI.Current.Translate ("messages.theme.invalid.full"), CentralAPI.Current.Translate ("messages.theme.invalid.short"));
 			} else
 			{
 				ProcessAfterParsing (theme);

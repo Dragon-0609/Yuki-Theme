@@ -27,7 +27,7 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 			updatePrev = (Button)GetValueFromField ("btnPrev");
 			updateBrowser.AllowWebBrowserDrop = false;
 			updateBrowser.IsWebBrowserContextMenuEnabled = false;
-			this.Icon = Yuki_Theme.Core.Helper.GetYukiThemeIcon (new Size (32, 32));
+			Icon = Yuki_Theme.Core.Helper.GetYukiThemeIcon (new Size (32, 32));
 			updateBrowser.Navigated += (sender, e) =>
 			{
 				HtmlDocument doc = updateBrowser.Document;

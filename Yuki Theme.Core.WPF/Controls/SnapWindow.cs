@@ -35,7 +35,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public SnapWindow ()
 		{
-			this.Loaded += SnapWindow_OnLoaded;
+			Loaded += SnapWindow_OnLoaded;
 			ResizeMode = ResizeMode.NoResize;
 			WindowStyle = WindowStyle.None;
 			ShowInTaskbar = false;

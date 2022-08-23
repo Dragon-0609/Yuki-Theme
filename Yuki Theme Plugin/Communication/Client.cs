@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.Threading;
 using NamedPipeWrapper;
-using Yuki_Theme.Core;
-using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme_Plugin.Interfaces;
@@ -15,15 +13,15 @@ namespace Yuki_Theme_Plugin.Communication
 {
 	internal class Client : CommunicatorBase, Communicator.IClient
 	{
-		private const string THEME_INSTALLER = "Theme_Installer.exe";
+		private const string THEME_EDITOR = "Theme_Editor.exe";
 		
 		private NamedPipeClient<Message> _client;
 
-		private bool _isConnected = false;
+		private bool                 _isConnected = false;
+
+		private EventWaitHandle _startedEvent;
 		
 		public event MessageRecieved recieved;
-
-		public bool IsConnected => _isConnected;
 		
 
 		private IConsole _console;
@@ -37,8 +35,8 @@ namespace Yuki_Theme_Plugin.Communication
 		private void Init ()
 		{
 			_messages = new Queue<Message> ();
-			InitMessaging ();
 			RunServer ();
+			InitMessaging ();
 		}
 
 		private void InitMessaging ()
@@ -48,6 +46,7 @@ namespace Yuki_Theme_Plugin.Communication
 			_client.Error += ErrorRaised;
 			_client.Disconnected += ServerDisconnected;
 			_client.Start ();
+			_console.WriteToConsole ("Client Connected");
 		}
 
 		private void ServerDisconnected (NamedPipeConnection<Message, Message> connection)
@@ -63,12 +62,15 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private void RunServer ()
 		{
-			Process.Start (THEME_INSTALLER);
+			Process.Start (THEME_EDITOR);
+			
+			_startedEvent = new EventWaitHandle(false, EventResetMode.ManualReset, @"Global\YukiThemeServerStarted");
+			_startedEvent.WaitOne();
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
-			_console.WriteToConsole ($"Received: {message}");
+			_console.WriteToConsole ($"Received: {message.Id}");
 			
 			if (recieved != null)
 				recieved (message);
@@ -100,9 +102,10 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			switch (message.Id)
 			{
-				case TEST_CONNECTION_OK:
+				case TEST_CONNECTION:
 					_isConnected = true;
-					_console.WriteToConsole ("Theme applier is running");
+					SendMessage (TEST_CONNECTION_OK);
+					_console.WriteToConsole ("Theme editor is running");
 					break;
 			}
 		}

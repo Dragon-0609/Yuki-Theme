@@ -99,7 +99,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
             if (IsDisposed)
                 return;
 
-            bool mouseOver = ClientRectangle.Contains(PointToClient(Control.MousePosition));
+            bool mouseOver = ClientRectangle.Contains(PointToClient(MousePosition));
             if (mouseOver != IsMouseOver)
                 IsMouseOver = mouseOver;
 

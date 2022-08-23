@@ -36,9 +36,10 @@ namespace Yuki_Theme.Core.Communication
 		public const int RELEASE_RESOURCES  = 4;
 		public const int APPLY_THEME        = 5;
 		public const int SET_PASCAL_PATH    = 6;
+		public const int OPEN_MAIN_WINDOW   = 7;
 
 
-		public const int CLOSE_CLIENT = 66;
+		public const int CLOSE_SERVER = 66;
 	}
 	
 	

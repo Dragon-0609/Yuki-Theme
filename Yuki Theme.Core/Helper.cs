@@ -400,8 +400,8 @@ namespace Yuki_Theme.Core
 				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
 				{
 					if (API_Events.showError != null)
-						API_Events.showError (API.CentralAPI.Current.Translate ("messages.file.notexist.withname.param", filename),
-						                      API.CentralAPI.Current.Translate ("messages.file.notexist.withname", filename));
+						API_Events.showError (CentralAPI.Current.Translate ("messages.file.notexist.withname.param", filename),
+						                      CentralAPI.Current.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -675,18 +675,18 @@ namespace Yuki_Theme.Core
 
 		public static void LoadCurrent ()
 		{
-			API.CentralAPI.Current.LoadSchemes ();
+			CentralAPI.Current.LoadSchemes ();
 			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{
 				foreach (string s in files)
 				{
-					string sp = API.CentralAPI.Current.GetNameOfTheme (s);
-					if (API.CentralAPI.Current.Schemes.Contains (sp))
+					string sp = CentralAPI.Current.GetNameOfTheme (s);
+					if (CentralAPI.Current.Schemes.Contains (sp))
 					{
 						currentTheme = sp;
-						API.CentralAPI.Current.selectedItem = currentTheme;
+						CentralAPI.Current.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -704,7 +704,7 @@ namespace Yuki_Theme.Core
 
 		public static void CreateThemeDirectory ()
 		{
-			if (!Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+			if (CentralAPI.Current.CreateThemesDirectory && !Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
 				Directory.CreateDirectory (Path.Combine (SettingsConst.CurrentPath, "Themes"));
 		}
 
@@ -844,7 +844,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = API.CentralAPI.Current.GetCore ();
+	        Assembly a = CentralAPI.Current.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))

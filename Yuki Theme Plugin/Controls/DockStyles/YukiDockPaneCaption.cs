@@ -16,7 +16,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
         {
             if (scale > 0)
                 return scale;
-            var dpiXProperty = typeof(System.Windows.SystemParameters).GetProperty("DpiX", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            var dpiXProperty = typeof(System.Windows.SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
             var dpiX = (int)dpiXProperty.GetValue(null, null);
             scale = (double)dpiX / 96;
             return scale;
@@ -500,7 +500,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
         private void Options_Click(object sender, EventArgs e)
         {
-            ShowTabPageContextMenu(PointToClient(Control.MousePosition));
+            ShowTabPageContextMenu(PointToClient(MousePosition));
         }
 
         protected override void OnRightToLeftChanged(EventArgs e)

@@ -21,7 +21,7 @@ public class HighlitherUtil
 	public static bool IsInColors (string str, SettingMode mode, bool forceAdvanced)
 	{
 		if (Settings.settingMode == mode || forceAdvanced)
-			return HighlitherUtil.names.Contains (str.ToLower ());
+			return names.Contains (str.ToLower ());
 
 		return str != "Special Character" && ShadowNames.PascalFields_raw.ContainsKey (str);
 	}

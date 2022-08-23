@@ -515,7 +515,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 			Invalidate();
 		}
 
-        protected override AutoHideStripBase.Tab CreateTab(IDockContent content)
+        protected override Tab CreateTab(IDockContent content)
         {
             return new TabYuki(content);
         }
@@ -528,7 +528,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
         protected override void OnMouseMove (MouseEventArgs e)
         {
-	        Point ptMouse = PointToClient (Control.MousePosition);
+	        Point ptMouse = PointToClient (MousePosition);
 	        IDockContent content = HitTest (ptMouse);
 	        if (content == null)
 	        {
@@ -563,7 +563,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 	        if (e.Button != MouseButtons.Left)
 		        return;
 
-	        Point ptMouse = PointToClient(Control.MousePosition);
+	        Point ptMouse = PointToClient(MousePosition);
 	        IDockContent content = HitTest (ptMouse);
 	        if (content == null)
 		        return;

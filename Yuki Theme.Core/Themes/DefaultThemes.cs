@@ -74,8 +74,8 @@ namespace Yuki_Theme.Core.Themes
 
 		internal static void DistinctThemeNames ()
 		{
-			IEnumerable<string> distinctNames = DefaultThemes.names.Distinct ();
-			DefaultThemes.names = distinctNames.ToList ();
+			IEnumerable<string> distinctNames = names.Distinct ();
+			names = distinctNames.ToList ();
 		}
 	}
 }

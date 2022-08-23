@@ -142,8 +142,8 @@ namespace Yuki_Theme.Core.Controls
 					popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (API.CentralAPI.Current.Translate ("messages.update.invalid"),
-					                 API.CentralAPI.Current.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show (CentralAPI.Current.Translate ("messages.update.invalid"),
+					                 CentralAPI.Current.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -502,7 +502,7 @@ namespace Yuki_Theme.Core.Controls
 			foreach (Control control in parent.Controls)
 			{
 				if (control.AccessibleName != null)
-					control.Text = API.CentralAPI.Current.Translate (control.AccessibleName);
+					control.Text = CentralAPI.Current.Translate (control.AccessibleName);
 				if (control.Controls.Count > 0)
 				{
 					TranslateControls (control);
