@@ -36,7 +36,7 @@ public abstract class API_Base
 
 	internal readonly ThemeFormatBase _newThemeFormat;
 	internal readonly ThemeFormatBase _oldThemeFormat;
-	internal readonly ThemeManager    _themeManager  ;
+	internal readonly ThemeManager    _themeManager;
 	private readonly  API_Actions     _actions;
 
 	internal API_Actions Actions => _actions;
@@ -216,7 +216,7 @@ public abstract class API_Base
 	/// <param name="syntax">Syntax type to export</param>
 	/// <param name="needToDelete">Need to delete old files</param>
 	/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
-	public void Preview (SyntaxType syntax, bool needToDelete, Action setTheme = null)
+	public virtual void Preview (SyntaxType syntax, bool needToDelete, Action setTheme = null)
 	{
 		string path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
 		if (needToDelete)
@@ -316,7 +316,7 @@ public abstract class API_Base
 	/// </summary>
 	/// <param name="wantClean">Do you want to clean garbage?</param>
 	/// <param name="onSelect">Action, after populating list</param>
-	public void Restore (bool wantClean = true, Action onSelect = null)
+	public virtual void Restore (bool wantClean = true, Action onSelect = null)
 	{
 		isEdited = false;
 		if (currentTheme.Fields != null)
@@ -330,11 +330,10 @@ public abstract class API_Base
 		}
 	}
 
-	public bool SelectTheme (string name)
+	public virtual void SelectTheme (string name)
 	{
 		nameToLoad = name;
 		pathToLoad = Helper.ConvertNameToPath (name);
-		return true;
 	}
 
 	#endregion

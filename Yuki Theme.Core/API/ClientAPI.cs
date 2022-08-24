@@ -27,6 +27,19 @@ public class ClientAPI : NetworkAPI
 		Client.recieved += ParseMessage;
 	}
 	
+	
+	public override void SelectTheme (string name)
+	{
+		base.SelectTheme (name);
+		Send (SELECT_THEME, name);
+	}
+
+	public override void Restore (bool wantClean = true, Action onSelect = null)
+	{
+		base.Restore (wantClean, onSelect);
+		Send (RELOAD_THEME, wantClean.ToString());
+	}
+	
 	private void SetPascalPath (Message message)
 	{
 		Send (SET_PASCAL_PATH, Settings.pascalPath);

@@ -42,10 +42,7 @@ namespace Yuki_Theme.Tests
 					ClearTestThemes ();
 					Settings.ConnectAndGet ();
 					CentralAPI.Current.LoadSchemes ();
-					bool cnd = CentralAPI.Current.SelectTheme (Helper.GetRandomElement (CentralAPI.Current.Schemes));
-
-					Assert.IsTrue (cnd);
-
+					CentralAPI.Current.SelectTheme (Helper.GetRandomElement (CentralAPI.Current.Schemes));
 					CentralAPI.Current.Restore (false);
 					isInitialized = true;
 				}

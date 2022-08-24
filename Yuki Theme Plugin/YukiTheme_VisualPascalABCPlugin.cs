@@ -83,15 +83,12 @@ namespace Yuki_Theme_Plugin
 		private  Image                 sticker;
 		public   CustomPicture         stickerControl;
 		internal IHighlightingStrategy highlighting;
-		
-		public  Image tmpImage1;
-		public  Image tmpImage2;
 
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
 		internal      ThemeSwitcher     switcher;
 		internal      EditorInspector   inspector;
-		internal      IdeComponents       ideComponents = new IdeComponents ();
+		internal      IdeComponents     ideComponents = new IdeComponents ();
 
 		internal bool   bgImage => Settings.bgImage;
 		internal int    imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
@@ -118,13 +115,13 @@ namespace Yuki_Theme_Plugin
 			ideComponents.compiler = compiler;
 		}
 
-		public void GetGUI (List <IPluginGUIItem> MenuItems, List <IPluginGUIItem> ToolBarItems)
+		public void GetGUI (List<IPluginGUIItem> MenuItems, List<IPluginGUIItem> ToolBarItems)
 		{
 			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", null, Color.Transparent, InitCore);
 			//Добавляем в меню
 			MenuItems.Add (item1);
 			plugin = this;
-			
+
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
 			CentralAPI.Current = new ClientAPI ();
@@ -135,9 +132,9 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			nameInStatusBar = Settings.swStatusbar;
-			
+
 			ideComponents.WriteToConsole ("Initialization started.");
-			
+
 			loadWithWaiting ();
 			Initialize ();
 		}
@@ -158,7 +155,8 @@ namespace Yuki_Theme_Plugin
 			inspector = new EditorInspector (this);
 			inspector.InspectBrackets ();
 
-			manager = new IconManager (ideComponents.tools, ideComponents.menu, ideComponents.context, ideComponents.context2, ideComponents.fm);
+			manager = new IconManager (ideComponents.tools, ideComponents.menu, ideComponents.context, ideComponents.context2,
+				ideComponents.fm);
 			camouflage = new ToolBarCamouflage (ideComponents.tools);
 			switcher = new ThemeSwitcher (this);
 
@@ -240,19 +238,19 @@ namespace Yuki_Theme_Plugin
 			ideComponents.WriteToConsole ("Initialization finished.");
 
 			inspector.InjectCodeCompletion ();
-			
+
 			ShowLicense ();
 			/*MForm.showLicense (bg, clr, bgClick, ideComponents.fm);
 			MForm.showGoogleAnalytics (bg, clr, bgClick, ideComponents.fm);
 			MForm.TrackInstall ();*/
 			AdditionalTools.ShowLicense (WPFHelper.GenerateTag, null, ideComponents.fm);
-			
+
 			AdditionalTools.TrackInstall (ideComponents.fm);
 			if (!IsUpdated () && Settings.update)
 			{
 				popupController.CheckUpdate ();
 			}
-			
+
 			ToolBarListItem.camouflage = camouflage;
 			ToolBarListItem.manager = manager;
 			SettingsPanelUtilities.items = camouflage.items;
@@ -264,7 +262,7 @@ namespace Yuki_Theme_Plugin
 			if (currentThemeName.Image != null)
 				currentThemeName.Image.Dispose ();
 			SvgDocument svg = Helper.LoadSvg ("favorite", Assembly.GetExecutingAssembly (),
-			                                  "Yuki_Theme_Plugin.Resources");
+				"Yuki_Theme_Plugin.Resources");
 			svg.Fill = new SvgColourServer (bgBorder);
 			svg.Stroke = new SvgColourServer (bgBorder);
 			currentThemeName.Image = svg.Draw (16, 16);
@@ -272,8 +270,8 @@ namespace Yuki_Theme_Plugin
 
 			if (Helper.currentTheme.Contains (":"))
 			{
-				string [] spl = Helper.currentTheme.Split (':');
-				currentThemeName.Text = spl [spl.Length - 1];
+				string[] spl = Helper.currentTheme.Split (':');
+				currentThemeName.Text = spl[spl.Length - 1];
 				spl = null;
 			} else
 				currentThemeName.Text = Helper.currentTheme;
@@ -286,12 +284,12 @@ namespace Yuki_Theme_Plugin
 			highlighting = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
 			bgdef = highlighting.GetColorFor ("Default").BackgroundColor;
 			bg = Helper.DarkerOrLighter (bgdef, 0.05f);
-			
+
 			bgClick = Helper.DarkerOrLighter (bgdef, 0.25f);
 			bgClick2 = Helper.DarkerOrLighter (bgdef, 0.4f);
 			bgClick3 = Helper.DarkerOrLighter (bgdef, 0.1f);
 			bgSelection = highlighting.GetColorFor ("Selection").BackgroundColor;
-			
+
 			bgInactive = Helper.ChangeColorBrightness (bgdef, -0.3f);
 			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
@@ -300,19 +298,19 @@ namespace Yuki_Theme_Plugin
 			clr = Helper.DarkerOrLighter (defaultForeground, 0.2f);
 			clrHover = Helper.DarkerOrLighter (defaultForeground, 0.6f);
 			clrKey = highlighting.GetColorFor ("Keywords").Color;
-			
-			
+
+
 			Helper.bgColor = bg;
 			Helper.bgdefColor = bgdef;
 			Helper.bgClick = bgClick;
 			Helper.bgBorder = bgBorder;
 			Helper.selectionColor = bgSelection;
-			
+
 			Helper.fgColor = clr;
 			Helper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
 			Helper.fgKeyword = clrKey;
 			// Helper.selectionColor = highlighting.GetColorFor ("Selection").BackgroundColor;
-			
+
 			ResetBrushesAndPens ();
 		}
 
@@ -342,7 +340,7 @@ namespace Yuki_Theme_Plugin
 				{
 					doc.Load (fl);
 					XmlNode nod = doc.SelectSingleNode ("/SyntaxDefinition");
-					if (nod.Attributes ["name"].Value == high.Name)
+					if (nod.Attributes["name"].Value == high.Name)
 					{
 						XmlNodeList comms = nod.SelectNodes ("//comment()");
 
@@ -384,7 +382,7 @@ namespace Yuki_Theme_Plugin
 				sticker.Dispose ();
 				sticker = null;
 			}
-			
+
 			if (Settings.swSticker)
 			{
 				if (Settings.useCustomSticker && File.Exists (Settings.customSticker))
@@ -427,8 +425,9 @@ namespace Yuki_Theme_Plugin
 			ClientAPI api = (ClientAPI)CentralAPI.Current;
 			api.Client = _client;
 			api.AddEvents ();
-			api.AddEvent (RELEASE_RESOURCES, ReleaseResources);
-			api.AddEvent (APPLY_THEME, ApplyTheme);
+			api.AddEvent (RELEASE_RESOURCES, _ => ReleaseResources ());
+			api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
+			api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
 		}
 
 		#endregion
@@ -436,19 +435,10 @@ namespace Yuki_Theme_Plugin
 
 		#region Server Actions
 
-		private void ReleaseResources (Message obj)
-		{
-			ReleaseResources ();
-		}
 
-		private void ApplyTheme (Message obj)
-		{
-			ReloadLayout ();
-		}
-		
 
 		#endregion
-		
+
 		#region Updates
 
 		private void UpdateColors ()
@@ -572,8 +562,8 @@ namespace Yuki_Theme_Plugin
 		{
 			WebBrowserControl tp = null;
 			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
-			Dictionary <string, WebBrowserControl> OpenBrowserDocuments =
-				(Dictionary <string, WebBrowserControl>)field.GetValue (ideComponents.fm);
+			Dictionary<string, WebBrowserControl> OpenBrowserDocuments =
+				(Dictionary<string, WebBrowserControl>)field.GetValue (ideComponents.fm);
 			OpenBrowserDocuments.TryGetValue (yukiThemeUpdate, out tp);
 			if (tp is UpdatePageControl)
 			{
@@ -610,31 +600,6 @@ namespace Yuki_Theme_Plugin
 		#endregion
 
 
-		#region Events For Core
-
-		public void ifHsImage (Image img)
-		{
-			tmpImage1 = img;
-		}
-
-		public void ifHsSticker (Image img)
-		{
-			tmpImage2 = img;
-		}
-
-		public void ifDNIMG ()
-		{
-			tmpImage1 = null;
-		}
-
-		public void ifDNSTCK ()
-		{
-			tmpImage2 = null;
-		}
-
-		#endregion
-
-
 		internal void RememberCurrentEditor ()
 		{
 			if (ideComponents.fm.ActiveControl is UpdatePageControl)
@@ -649,8 +614,8 @@ namespace Yuki_Theme_Plugin
 
 		internal void ReFocusCurrentEditor ()
 		{
-			IDockContent [] docs = ideComponents.fm.MainDockPanel.DocumentsToArray ();
-			IDockContent doc = docs [lastFocused];
+			IDockContent[] docs = ideComponents.fm.MainDockPanel.DocumentsToArray ();
+			IDockContent doc = docs[lastFocused];
 			doc.DockHandler.Pane.Focus ();
 			if (doc.DockHandler.Content is UpdatePageControl)
 			{
@@ -664,7 +629,7 @@ namespace Yuki_Theme_Plugin
 
 			docs = null;
 		}
-		
+
 		public void ReleaseResources ()
 		{
 			if (img != null)
@@ -701,7 +666,7 @@ namespace Yuki_Theme_Plugin
 			prop.propertyGrid1.SelectedObject = ideComponents.fm;
 			prop.Show ();
 		}
-		
+
 		private void addToSettings ()
 		{
 			var getopt = ideComponents.fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -740,8 +705,8 @@ namespace Yuki_Theme_Plugin
 		{
 			WebBrowserControl tp = null; //new UpdatePageControl();
 			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
-			Dictionary <string, WebBrowserControl> OpenBrowserDocuments =
-				(Dictionary <string, WebBrowserControl>)field.GetValue (ideComponents.fm);
+			Dictionary<string, WebBrowserControl> OpenBrowserDocuments =
+				(Dictionary<string, WebBrowserControl>)field.GetValue (ideComponents.fm);
 			if (!OpenBrowserDocuments.TryGetValue (title, out tp))
 			{
 				tp = new UpdatePageControl ();
@@ -777,7 +742,7 @@ namespace Yuki_Theme_Plugin
 			if (!Settings.license)
 			{
 				WPFHelper.InitAppForWinforms ();
-				
+
 				LicenseWindow licenseWindow = new LicenseWindow ()
 				{
 					Background = WPFHelper.bgBrush,
@@ -787,7 +752,7 @@ namespace Yuki_Theme_Plugin
 				};
 				WindowInteropHelper helper = new WindowInteropHelper (licenseWindow);
 				helper.Owner = ideComponents.fm.Handle;
-				
+
 				licenseWindow.Closed += (_, _) =>
 				{
 					GC.Collect ();
@@ -795,7 +760,7 @@ namespace Yuki_Theme_Plugin
 				};
 
 				licenseWindow.ShowDialog ();
-				
+
 				Settings.license = true;
 				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
 			}

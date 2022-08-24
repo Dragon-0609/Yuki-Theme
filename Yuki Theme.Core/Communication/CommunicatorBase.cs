@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using Yuki_Theme.Core.Interfaces;
+using Timer = System.Timers.Timer;
 
 namespace Yuki_Theme.Core.Communication
 {
 	public abstract class CommunicatorBase
 	{
-		protected Timer _timer;
+		protected System.Timers.Timer _timer;
 
 
 		protected Queue<Message> _messages;
@@ -17,7 +16,7 @@ namespace Yuki_Theme.Core.Communication
 		{
 			_timer = new Timer ();
 			_timer.Interval = 100;
-			_timer.Tick += TimerOnTick;
+			_timer.Elapsed += TimerOnTick;
 			// _timer.Start ();
 		}
 

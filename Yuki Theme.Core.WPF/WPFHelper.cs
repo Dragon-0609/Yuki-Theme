@@ -183,7 +183,6 @@ namespace Yuki_Theme.Core.WPF
 				{
 					ShutdownMode = ShutdownMode.OnExplicitShutdown
 				};
-				;
 				ResourceDictionary rd = new ResourceDictionary ();
 
 				System.Windows.Media.FontFamily saoFont = new System.Windows.Media.FontFamily (

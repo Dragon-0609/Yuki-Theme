@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
-using System.Windows;
+using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
@@ -69,7 +69,7 @@ namespace Theme_Editor
 		{
 			_timer.Stop ();
 			_server.Stop ();
-			Application.Current.Shutdown();
+			Application.Exit ();
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
@@ -118,7 +118,7 @@ namespace Theme_Editor
 				
 				case CLOSE_SERVER:
 					_server.Stop ();
-					Application.Current.Shutdown();
+					Application.Exit();
 					break;
 			}
 		}

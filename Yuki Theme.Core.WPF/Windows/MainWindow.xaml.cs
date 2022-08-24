@@ -542,23 +542,22 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (!Model.BlockedThemeSelector)
 			{
-				bool cnd = CentralAPI.Current.SelectTheme (Themes.SelectedItem.ToString ());
+				CentralAPI.Current.SelectTheme (Themes.SelectedItem.ToString ());
 
-				if (cnd)
+				if (CentralAPI.Current.isEdited) // Ask to save the changes
 				{
-					if (CentralAPI.Current.isEdited) // Ask to save the changes
-					{
-						if (_presenter.SaveInExport (CentralAPI.Current.Translate ("main.theme.edited.full"), CentralAPI.Current.Translate ("main.theme.edited.short")))
-							Save ();
-					}
-					Restore ();
-					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CentralAPI.Current.IsDefault ();
-					LoadDefinitionsWithSelection ();
-
-					SelectField ();
-					CentralAPI.Current.selectedItem = Themes.SelectedItem.ToString ();
-					Settings.database.UpdateData (SettingsConst.ACTIVE, CentralAPI.Current.selectedItem);
+					if (_presenter.SaveInExport (CentralAPI.Current.Translate ("main.theme.edited.full"),
+							CentralAPI.Current.Translate ("main.theme.edited.short")))
+						Save ();
 				}
+
+				Restore ();
+				BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CentralAPI.Current.IsDefault ();
+				LoadDefinitionsWithSelection ();
+
+				SelectField ();
+				CentralAPI.Current.selectedItem = Themes.SelectedItem.ToString ();
+				Settings.database.UpdateData (SettingsConst.ACTIVE, CentralAPI.Current.selectedItem);
 			}
 		}
 

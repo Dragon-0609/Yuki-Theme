@@ -155,17 +155,6 @@ namespace Yuki_Theme_Plugin
 				themeList?.searchBar.Dispose ();
 				themeList?.Dispose ();
 				panel_bg = null;
-				if (plugin.tmpImage1 != null)
-				{
-					plugin.tmpImage1.Dispose ();
-					plugin.tmpImage1 = null;
-				}
-
-				if (plugin.tmpImage2 != null)
-				{
-					plugin.tmpImage2.Dispose ();
-					plugin.tmpImage2 = null;
-				}
 
 				plugin.ReFocusCurrentEditor ();
 			}
@@ -177,23 +166,11 @@ namespace Yuki_Theme_Plugin
 			{
 				if (themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
-					bool cnd = CentralAPI.Current.SelectTheme (themeList.SelectedItem.ToString ());
+					CentralAPI.Current.SelectTheme (themeList.SelectedItem.ToString ());
 
-					if (cnd)
-					{
-						CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
-						API_Events.ifHasImage2 = plugin.ifHsImage;
-						API_Events.ifHasSticker2 = plugin.ifHsSticker;
-						API_Events.ifDoesntHave2 = plugin.ifDNIMG;
-						API_Events.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
-						CentralAPI.Current.Restore (false, null);
-						CentralAPI.Current.ExportTheme (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
-
-						API_Events.ifHasImage2 = null;
-						API_Events.ifHasSticker2 = null;
-						API_Events.ifDoesntHave2 = null;
-						API_Events.ifDoesntHaveSticker2 = null;
-					}
+					CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
+					CentralAPI.Current.Restore (false, null);
+					CentralAPI.Current.ExportTheme (null, null, plugin.ReloadLayout, plugin.ReleaseResources, true);
 				}
 
 				needToReturnTheme = false;
@@ -225,26 +202,24 @@ namespace Yuki_Theme_Plugin
 		{
 			if (name != oldName)
 			{
-				if (CentralAPI.Current.SelectTheme (name))
+				CentralAPI.Current.SelectTheme (name);
+				CentralAPI.Current.Restore ();
+				hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
+				plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
+				if (needToFullExportTheme)
 				{
-					CentralAPI.Current.Restore ();
-					hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
-					plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
-					if (needToFullExportTheme)
+					CentralAPI.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+				} else
+				{
+					SyntaxType type =
+						ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
+					if (type != SyntaxType.Pascal)
 					{
-						CentralAPI.Current.Preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+						CentralAPI.Current.Preview (type, true, null);                                   // Not to reload layout
+						CentralAPI.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
 					} else
 					{
-						SyntaxType type =
-							ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
-						if (type != SyntaxType.Pascal)
-						{
-							CentralAPI.Current.Preview (type, true, null);                                   // Not to reload layout
-							CentralAPI.Current.Preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
-						} else
-						{
-							CentralAPI.Current.Preview (type, true, plugin.ReloadLayoutLight);
-						}
+						CentralAPI.Current.Preview (type, true, plugin.ReloadLayoutLight);
 					}
 				}
 			}

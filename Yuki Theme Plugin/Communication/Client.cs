@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
 using NamedPipeWrapper;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
@@ -18,8 +17,6 @@ namespace Yuki_Theme_Plugin.Communication
 		private NamedPipeClient<Message> _client;
 
 		private bool                 _isConnected = false;
-
-		private EventWaitHandle _startedEvent;
 		
 		public event MessageRecieved recieved;
 		
@@ -63,9 +60,6 @@ namespace Yuki_Theme_Plugin.Communication
 		private void RunServer ()
 		{
 			Process.Start (THEME_EDITOR);
-			
-			_startedEvent = new EventWaitHandle(false, EventResetMode.ManualReset, @"Global\YukiThemeServerStarted");
-			_startedEvent.WaitOne();
 		}
 
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
@@ -104,8 +98,8 @@ namespace Yuki_Theme_Plugin.Communication
 			{
 				case TEST_CONNECTION:
 					_isConnected = true;
-					SendMessage (TEST_CONNECTION_OK);
 					_console.WriteToConsole ("Theme editor is running");
+					SendMessage (TEST_CONNECTION_OK);
 					break;
 			}
 		}
