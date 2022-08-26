@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Image = System.Windows.Controls.Image;
@@ -109,7 +110,7 @@ namespace Yuki_Theme.Core.WPF
 		public static BitmapImage GetSvg (string source,                                          Dictionary <string, SDColor> idColor, bool withCustomColor, System.Drawing.Size size,
 		                                  string nameSpace = "Yuki_Theme.Core.WPF.Resources.SVG", Assembly                   assm = null)
 		{
-			return (Helper.RenderSvg (size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, Helper.bgBorder))
+			return (Helper.RenderSvg (size, Helper.LoadSvg (source, assm, nameSpace), idColor, withCustomColor, ColorKeeper.bgBorder))
 				.ToWPFImage ();
 		}
 
@@ -119,7 +120,7 @@ namespace Yuki_Theme.Core.WPF
 		{
 			if (customColor == default)
 			{
-				customColor = Helper.bgBorder;
+				customColor = ColorKeeper.bgBorder;
 			}
 			dictionary [name] = GetSvg (source, idColor, size, customColor);
 		}
@@ -133,19 +134,19 @@ namespace Yuki_Theme.Core.WPF
 
 		public static Dictionary <string, SDColor> GenerateDisabledBGColors ()
 		{
-			Dictionary <string, SDColor> disabledIdColors = new Dictionary <string, SDColor> { { "bg", Helper.DarkerOrLighter (Helper.bgColor, 0.2f) } };
+			Dictionary <string, SDColor> disabledIdColors = new Dictionary <string, SDColor> { { "bg", Helper.DarkerOrLighter (ColorKeeper.bgColor, 0.2f) } };
 			return disabledIdColors;
 		}
 
 		public static Dictionary <string, SDColor> GenerateBGColors ()
 		{
-			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "bg", Helper.bgColor } };
+			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "bg", ColorKeeper.bgColor } };
 			return idColors;
 		}
 		
 		public static Dictionary <string, SDColor> GenerateRadioButtonColors ()
 		{
-			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "center", Helper.bgBorder } };
+			Dictionary <string, SDColor> idColors = new Dictionary <string, SDColor> { { "center", ColorKeeper.bgBorder } };
 			return idColors;
 		}
 
@@ -157,13 +158,13 @@ namespace Yuki_Theme.Core.WPF
 
 		public static void ConvertGUIColorsNBrushes ()
 		{
-			bgColor = Helper.bgColor.ToWPFColor ();
-			bgdefColor = Helper.bgdefColor.ToWPFColor ();
-			bgClickColor = Helper.bgClick.ToWPFColor ();
-			fgColor = Helper.fgColor.ToWPFColor ();
-			borderColor = Helper.bgBorder.ToWPFColor ();
-			selectionColor = Helper.selectionColor.ToWPFColor ();
-			keywordColor = Helper.fgKeyword.ToWPFColor ();
+			bgColor = ColorKeeper.bgColor.ToWPFColor ();
+			bgdefColor = ColorKeeper.bgdefColor.ToWPFColor ();
+			bgClickColor = ColorKeeper.bgClick.ToWPFColor ();
+			fgColor = ColorKeeper.fgColor.ToWPFColor ();
+			borderColor = ColorKeeper.bgBorder.ToWPFColor ();
+			selectionColor = ColorKeeper.selectionColor.ToWPFColor ();
+			keywordColor = ColorKeeper.fgKeyword.ToWPFColor ();
 			bgBrush = bgColor.ToBrush ();
 			bgdefBrush = bgdefColor.ToBrush ();
 			bgClickBrush = bgClickColor.ToBrush ();

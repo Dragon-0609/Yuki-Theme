@@ -165,8 +165,8 @@ namespace Yuki_Theme.Core.Controls
 				fr = fg;
 			} else
 			{
-				add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-				fr = Helper.fgColor;
+				add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
+				fr = ColorKeeper.fgColor;
 			}
 
 			Helper.RenderSvg (showHelp, Helper.LoadSvg ("help", a), false, Size.Empty, true, fr);
@@ -439,9 +439,9 @@ namespace Yuki_Theme.Core.Controls
 				brdr = border;
 			} else
 			{
-				back = Helper.bgColor;
-				fore = Helper.fgColor;
-				brdr = Helper.bgBorder;
+				back = ColorKeeper.bgColor;
+				fore = ColorKeeper.fgColor;
+				brdr = ColorKeeper.bgBorder;
 			}
 
 			HelperForm hf = new HelperForm ();

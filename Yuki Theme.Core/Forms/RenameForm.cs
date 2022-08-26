@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -28,15 +29,15 @@ namespace Yuki_Theme.Core.Forms
 		private void RenameForm_Shown (object sender, EventArgs e)
 		{
 			BackColor = button1.BackColor = button2.BackColor =
-				toTBox.BackColor = fromTBox.BackColor = Helper.bgColor;
+				toTBox.BackColor = fromTBox.BackColor = ColorKeeper.bgColor;
 
 			ForeColor = button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
-				toTBox.ForeColor = fromTBox.ForeColor = Helper.fgColor;
+				toTBox.ForeColor = fromTBox.ForeColor = ColorKeeper.fgColor;
 
 			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
-				Helper.bgClick;
+				ColorKeeper.bgClick;
 
-			toTBox.BorderColor = fromTBox.BorderColor = Helper.bgBorder;
+			toTBox.BorderColor = fromTBox.BorderColor = ColorKeeper.bgBorder;
 		}
 	}
 }

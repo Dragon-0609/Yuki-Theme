@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using MechanikaDesign.WinForms.UI.ColorPicker;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -334,19 +335,19 @@ namespace Yuki_Theme.Core.Forms
 			tabColorBox.BackColor = tabWheel.BackColor = tabHexagon.BackColor = textboxHexColor.BackColor =
 				OKBTN.BackColor = CNBTN.BackColor = tabControlMain.BackColor =
 					BackColor = numBlue.BackColor = numGreen.BackColor = numRed.BackColor =
-						numLuminance.BackColor = numSaturation.BackColor = numHue.BackColor = Helper.bgColor;
+						numLuminance.BackColor = numSaturation.BackColor = numHue.BackColor = ColorKeeper.bgColor;
 			labelCurrent.ForeColor = OKBTN.ForeColor = CNBTN.ForeColor = 
 				OKBTN.FlatAppearance.BorderColor = CNBTN.FlatAppearance.BorderColor = tabColorBox.ForeColor = 
 				textboxHexColor.ForeColor = labelHex.ForeColor = 
 					numBlue.ForeColor = numGreen.ForeColor = numRed.ForeColor =
-						numLuminance.ForeColor = numSaturation.ForeColor = numHue.ForeColor = ForeColor = Helper.fgColor;
+						numLuminance.ForeColor = numSaturation.ForeColor = numHue.ForeColor = ForeColor = ColorKeeper.fgColor;
 			OKBTN.FlatAppearance.MouseOverBackColor = CNBTN.FlatAppearance.MouseOverBackColor = 
 				numBlue.ButtonHighlightColor = numGreen.ButtonHighlightColor = numRed.ButtonHighlightColor =
 				numLuminance.ButtonHighlightColor = numSaturation.ButtonHighlightColor = 
-					numHue.ButtonHighlightColor = Helper.bgClick;
+					numHue.ButtonHighlightColor = ColorKeeper.bgClick;
 
 			numBlue.BorderColor = numGreen.BorderColor = numRed.BorderColor =
-				numLuminance.BorderColor = numSaturation.BorderColor = numHue.BorderColor = Helper.bgBorder;
+				numLuminance.BorderColor = numSaturation.BorderColor = numHue.BorderColor = ColorKeeper.bgBorder;
 		}
 
 		private void textboxHexColor_KeyPress (object sender, KeyPressEventArgs e)

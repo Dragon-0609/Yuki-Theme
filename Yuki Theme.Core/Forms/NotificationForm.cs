@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -45,26 +46,26 @@ namespace Yuki_Theme.Core.Forms
 		{
 			button2.FlatAppearance.MouseDownBackColor = button2.BackColor =
 					button2.FlatAppearance.MouseOverBackColor = tcontent.BackColor = Color.Transparent;
-			BackColor = button2.FlatAppearance.BorderColor = Helper.bgColor;
+			BackColor = button2.FlatAppearance.BorderColor = ColorKeeper.bgColor;
 			button2.ForeColor = button1.ForeColor = button1.VisitedLinkColor =
-				button3.ForeColor = button3.VisitedLinkColor = ForeColor = Helper.fgColor;
-			button3.LinkColor = button1.LinkColor = Helper.fgHover;
+				button3.ForeColor = button3.VisitedLinkColor = ForeColor = ColorKeeper.fgColor;
+			button3.LinkColor = button1.LinkColor = ColorKeeper.fgHover;
 		}
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint (e);
-			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
+			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, ColorKeeper.bgBorder, ButtonBorderStyle.Solid);
 		}
 
 		private void button2_MouseEnter (object sender, EventArgs e)
 		{
-			button2.ForeColor = Helper.fgHover;
+			button2.ForeColor = ColorKeeper.fgHover;
 		}
 
 		private void button2_MouseLeave (object sender, EventArgs e)
 		{
-			button2.ForeColor = Helper.fgColor;
+			button2.ForeColor = ColorKeeper.fgColor;
 		}
 
 		private void button3_LinkClicked (object sender, LinkLabelLinkClickedEventArgs e)

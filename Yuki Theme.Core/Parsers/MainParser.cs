@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Parsers
 {
@@ -127,7 +128,7 @@ namespace Yuki_Theme.Core.Parsers
 				Image sticker = null;
 				if (isWallpaperExist) wallpaper = Image.FromFile (Path.Combine (directory, "background.png"));
 				if (isStickerExist) sticker = Image.FromFile (Path.Combine (directory, "sticker.png"));
-				Helper.Zip (pathef, content, wallpaper, sticker, "theme.xshd");
+				ZipManager.Zip (pathef, content, wallpaper, sticker, "theme.xshd");
 			} else
 			{
 				File.Copy (path, pathef, true);

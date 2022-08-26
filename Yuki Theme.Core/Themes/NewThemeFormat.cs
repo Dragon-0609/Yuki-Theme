@@ -33,7 +33,7 @@ namespace Yuki_Theme.Core.Themes
 		public override void SaveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
 			string json = JsonConvert.SerializeObject (themeToSave, Formatting.Indented);
-			bool iszip = Helper.IsZip (themeToSave.fullPath);
+			bool iszip = ZipManager.IsZip (themeToSave.fullPath);
 
 
 			if (!iszip && img2 == null && img3 == null && !wantToKeep)
@@ -42,10 +42,10 @@ namespace Yuki_Theme.Core.Themes
 			{
 				if (iszip)
 				{
-					Helper.UpdateZip (themeToSave.fullPath, json, img2, wantToKeep, img3, wantToKeep, "", false);
+					ZipManager.UpdateZip (themeToSave.fullPath, json, img2, wantToKeep, img3, wantToKeep, "", false);
 				} else
 				{
-					Helper.Zip (themeToSave.fullPath, json, img2, img3, "", false);
+					ZipManager.Zip (themeToSave.fullPath, json, img2, img3, "", false);
 				}
 			}
 		}
@@ -76,17 +76,10 @@ namespace Yuki_Theme.Core.Themes
 							{
 								API_Events.ifHasImage (iag.Item2);
 							}
-
-							if (API_Events.ifHasImage2 != null)
-							{
-								API_Events.ifHasImage2 (iag.Item2);
-							}
 						} else
 						{
 							if (API_Events.ifDoesntHave != null)
 								API_Events.ifDoesntHave ();
-							if (API_Events.ifDoesntHave2 != null)
-								API_Events.ifDoesntHave2 ();
 						}
 
 						iag = null;
@@ -98,17 +91,10 @@ namespace Yuki_Theme.Core.Themes
 							{
 								API_Events.ifHasSticker (iag.Item2);
 							}
-
-							if (API_Events.ifHasSticker2 != null)
-							{
-								API_Events.ifHasSticker2 (iag.Item2);
-							}
 						} else
 						{
 							if (API_Events.ifDoesntHaveSticker != null)
 								API_Events.ifDoesntHaveSticker ();
-							if (API_Events.ifDoesntHaveSticker2 != null)
-								API_Events.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
@@ -120,12 +106,6 @@ namespace Yuki_Theme.Core.Themes
 
 						if (API_Events.ifDoesntHaveSticker != null)
 							API_Events.ifDoesntHaveSticker ();
-
-						if (API_Events.ifDoesntHave2 != null)
-							API_Events.ifDoesntHave2 ();
-
-						if (API_Events.ifDoesntHaveSticker2 != null)
-							API_Events.ifDoesntHaveSticker2 ();
 					}
 
 					StreamReader reader = new StreamReader (a.GetManifestResourceStream (pathToMemory));
@@ -147,18 +127,10 @@ namespace Yuki_Theme.Core.Themes
 							{
 								API_Events.ifHasImage (iag.Item2);
 							}
-
-							if (API_Events.ifHasImage2 != null)
-							{
-								API_Events.ifHasImage2 (iag.Item2);
-							}
 						} else
 						{
 							if (API_Events.ifDoesntHave != null)
 								API_Events.ifDoesntHave ();
-
-							if (API_Events.ifDoesntHave2 != null)
-								API_Events.ifDoesntHave2 ();
 						}
 
 						iag = Helper.GetSticker (pathToTheme);
@@ -173,9 +145,6 @@ namespace Yuki_Theme.Core.Themes
 						{
 							if (API_Events.ifDoesntHaveSticker != null)
 								API_Events.ifDoesntHaveSticker ();
-
-							if (API_Events.ifDoesntHaveSticker2 != null)
-								API_Events.ifDoesntHaveSticker2 ();
 						}
 					}
 				} else
@@ -186,11 +155,6 @@ namespace Yuki_Theme.Core.Themes
 							API_Events.ifDoesntHave ();
 						if (API_Events.ifDoesntHaveSticker != null)
 							API_Events.ifDoesntHaveSticker ();
-
-						if (API_Events.ifDoesntHave2 != null)
-							API_Events.ifDoesntHave2 ();
-						if (API_Events.ifDoesntHaveSticker2 != null)
-							API_Events.ifDoesntHaveSticker2 ();
 					}
 
 					json = File.ReadAllText (pathToTheme);
@@ -260,7 +224,7 @@ namespace Yuki_Theme.Core.Themes
 				File.WriteAllText (path, json);
 			else
 			{
-				Helper.UpdateZip (path, json, null, true, null, true, "", false);
+				ZipManager.UpdateZip (path, json, null, true, null, true, "", false);
 			}
 		}
 		

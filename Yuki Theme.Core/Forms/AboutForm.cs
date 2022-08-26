@@ -89,10 +89,10 @@ namespace Yuki_Theme.Core.Forms
 
 			if (!isFromPascal)
 			{
-				bg = Helper.bgColor;
-				fg = Helper.fgColor;
-				key = Helper.fgKeyword;
-				click = Helper.bgClick;
+				bg = ColorKeeper.bgColor;
+				fg = ColorKeeper.fgColor;
+				key = ColorKeeper.fgKeyword;
+				click = ColorKeeper.bgClick;
 			} else
 			{
 				bg = sp.bg;

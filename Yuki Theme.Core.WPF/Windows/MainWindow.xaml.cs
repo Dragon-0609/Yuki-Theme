@@ -78,16 +78,16 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void LoadSVG ()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			WPFHelper.SetSVGImage (AddButton, "add" + add);
 			WPFHelper.SetSVGImage (ManageButton, "listFiles" + add);
 			WPFHelper.SetSVGImage (SaveButton, "menu-saveall");
 			WPFHelper.SetSVGImage (RestoreButton, "refresh" + add);
 			WPFHelper.SetSVGImage (ExportButton, "export" + add);
 			WPFHelper.SetSVGImage (ImportButton, "import" + add);
-			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add, true, Helper.bgBorder);
-			WPFHelper.SetSVGImage (SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
-			WPFHelper.SetSVGImage (DownloaderButton, "smartStepInto" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add, true, ColorKeeper.bgBorder);
+			WPFHelper.SetSVGImage (SettingsButton, "gearPlain" + add, true, ColorKeeper.bgBorder);
+			WPFHelper.SetSVGImage (DownloaderButton, "smartStepInto" + add, true, ColorKeeper.bgBorder);
 			WPFHelper.SetSVGImage (ImagePathButton, "moreHorizontal" + add);
 			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
 			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
@@ -464,7 +464,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Window.Tag = WPFHelper.GenerateTag;
 
 			if (OnColorUpdate != null)
-				OnColorUpdate (Helper.bgColor, Helper.fgColor, Helper.bgClick);
+				OnColorUpdate (ColorKeeper.bgColor, ColorKeeper.fgColor, ColorKeeper.bgClick);
 		}
 
 		private void bgImagePaint (object sender, PaintEventArgs e)

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -77,7 +78,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void LoadSvg ()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			Size size = new Size (24, 24);
 			Collapsed = WPFHelper.GetSVGImage ("findAndShowNextMatches" + add, size);
 			Expanded = WPFHelper.GetSVGImage ("findAndShowPrevMatches" + add, size);

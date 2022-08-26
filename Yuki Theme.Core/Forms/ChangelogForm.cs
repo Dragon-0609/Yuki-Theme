@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -45,8 +46,8 @@ namespace Yuki_Theme.Core.Forms
 		{
 			StartPosition = FormStartPosition.Manual;
 			Location = new Point (Owner.Location.X, Owner.Location.Y);
-			button1.BackColor = panel1.BackColor = label1.BackColor = BackColor = Helper.bgColor;
-			button1.ForeColor = panel1.ForeColor = label1.ForeColor = ForeColor = Helper.fgColor;
+			button1.BackColor = panel1.BackColor = label1.BackColor = BackColor = ColorKeeper.bgColor;
+			button1.ForeColor = panel1.ForeColor = label1.ForeColor = ForeColor = ColorKeeper.fgColor;
 			label1.Focus ();
 		}
 

@@ -16,12 +16,14 @@ using VisualPascalABC;
 using VisualPascalABCPlugins;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Interfaces;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using IWorkbench = VisualPascalABCPlugins.IWorkbench;
+using Message = Yuki_Theme.Core.Communication.Message;
 
 namespace Yuki_Theme_Plugin
 {
@@ -932,6 +934,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (System.Windows.Application.Current != null)
 				System.Windows.Application.Current.Shutdown ();
+			plugin._client.SendMessage (MessageTypes.CLOSE_SERVER);
 		}
 
 		private void RemoveErrorMarksOnCaretPositionChanged (object sender, EventArgs e)

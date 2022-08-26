@@ -307,17 +307,17 @@ namespace Yuki_Theme.Core.Forms
 
 		private void DownloadForm_Shown (object sender, EventArgs e)
 		{
-			ForeColor = button1.FlatAppearance.BorderColor = Helper.fgColor;
-			BackColor = Helper.bgColor;
+			ForeColor = button1.FlatAppearance.BorderColor = ColorKeeper.fgColor;
+			BackColor = ColorKeeper.bgColor;
 			
-			button1.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			button1.FlatAppearance.MouseOverBackColor = ColorKeeper.bgClick;
 		}
 
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint (e);
-			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
+			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, ColorKeeper.bgBorder, ButtonBorderStyle.Solid);
 		}
 		
 		public static bool IsUpdateDownloaded (string path = null)

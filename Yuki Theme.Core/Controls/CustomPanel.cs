@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Controls
 {
@@ -40,8 +41,8 @@ namespace Yuki_Theme.Core.Controls
 		public void Prepare ()
 		{
 			lines?.Dispose ();
-			lines = new Pen (Helper.bgBorder, 5);
-			bg = Helper.DarkerOrLighter (Helper.bgColor, 0.4f);
+			lines = new Pen (ColorKeeper.bgBorder, 5);
+			bg = Helper.DarkerOrLighter (ColorKeeper.bgColor, 0.4f);
 			lines.Alignment = PenAlignment.Center;
 			Enabled = false;
 			Size = Parent.ClientSize;

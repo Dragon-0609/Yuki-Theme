@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
@@ -65,9 +66,12 @@ namespace Yuki_Theme_Plugin.Communication
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
 			_console.WriteToConsole ($"Received: {message.Id}");
+			YukiTheme_VisualPascalABCPlugin.plugin.InvokeUI (new MethodInvoker (delegate
+			{
+				if (recieved != null)
+					recieved (message);
+			}));
 			
-			if (recieved != null)
-				recieved (message);
 			ParseMessage (message);
 		}
 

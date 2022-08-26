@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -51,12 +52,12 @@ namespace Yuki_Theme.Core.Forms
 
 		private void QuestionForm_Shown (object sender, EventArgs e)
 		{
-			button1.BackColor = button2.BackColor = button3.BackColor = BackColor = Helper.bgColor;
+			button1.BackColor = button2.BackColor = button3.BackColor = BackColor = ColorKeeper.bgColor;
 			
-			button1.ForeColor = button2.ForeColor = button3.ForeColor = ForeColor = Helper.fgColor;
+			button1.ForeColor = button2.ForeColor = button3.ForeColor = ForeColor = ColorKeeper.fgColor;
 			
 			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor = 
-			button3.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			button3.FlatAppearance.MouseOverBackColor = ColorKeeper.bgClick;
 		}
 	}
 }

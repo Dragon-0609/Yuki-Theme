@@ -13,31 +13,28 @@ namespace Theme_Editor
 
 		public void OpenMainWindow ()
 		{
-			Application.Current.Dispatcher.Invoke (new Action (() =>
+			// WPFHelper.InitAppForWinforms ();
+			if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
 			{
-				// WPFHelper.InitAppForWinforms ();
-				if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
-				{
-					CoreWindow = new MainWindow ();
-					CoreWindow.Model.StartSettingTheme += ReleaseResources;
-					CoreWindow.Model.SetTheme += ReloadLayout;
+				CoreWindow = new MainWindow ();
+				CoreWindow.Model.StartSettingTheme += ReleaseResources;
+				CoreWindow.Model.SetTheme += ReloadLayout;
 
-					CoreWindow.Closed += (sender, args) =>
-					{
-						GC.Collect ();
-						GC.WaitForPendingFinalizers ();
-					};
-				} else
+				CoreWindow.Closed += (sender, args) =>
 				{
-					if (CoreWindow.IsVisible)
-					{
-						CoreWindow.Activate ();
-						return;
-					}
+					GC.Collect ();
+					GC.WaitForPendingFinalizers ();
+				};
+			} else
+			{
+				if (CoreWindow.IsVisible)
+				{
+					CoreWindow.Activate ();
+					return;
 				}
+			}
 
-				CoreWindow.Show ();
-			}));
+			CoreWindow.Show ();
 		}
 
 		private void ReleaseResources ()

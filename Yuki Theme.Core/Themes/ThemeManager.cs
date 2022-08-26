@@ -70,13 +70,13 @@ namespace Yuki_Theme.Core.Themes
 
 			if (extract)
 			{
-				if (Helper.IsZip (stream))
+				if (ZipManager.IsZip (stream))
 				{
 					_actions.CleanDestination ();
 					Tuple<bool, Image> img = Helper.GetImage (nxp);
 					Tuple<bool, Image> sticker = Helper.GetSticker (nxp);
 
-					Helper.ExtractZip (nxp, path, img.Item1, sticker.Item1, false);
+					ZipManager.ExtractZip (nxp, path, img.Item1, sticker.Item1, false);
 					File.Delete (nxp);
 					return;
 				}
@@ -94,7 +94,7 @@ namespace Yuki_Theme.Core.Themes
 		private void ExportTheme (string path)
 		{
 			string source = CentralAPI.Current.currentTheme.fullPath;
-			bool iszip = Helper.IsZip (source);
+			bool iszip = ZipManager.IsZip (source);
 			if (!iszip)
 			{
 				// File.Copy (source, path, true);
@@ -106,7 +106,7 @@ namespace Yuki_Theme.Core.Themes
 			Tuple<bool, Image> img = Helper.GetImage (source);
 			Tuple<bool, Image> sticker = Helper.GetSticker (source);
 
-			Helper.ExtractZip (source, path, img.Item1, sticker.Item1, false);
+			ZipManager.ExtractZip (source, path, img.Item1, sticker.Item1, false);
 		}
 	
 		/// <summary>

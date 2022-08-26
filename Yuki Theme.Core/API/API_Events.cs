@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.API
 {
@@ -18,10 +19,30 @@ namespace Yuki_Theme.Core.API
 		public static Action                      ifDoesntHave         = null;
 		public static Action <Image>              ifHasSticker         = null;
 		public static Action                      ifDoesntHaveSticker  = null;
-		public static Action <Image>              ifHasImage2          = null;
-		public static Action                      ifDoesntHave2        = null;
-		public static Action <Image>              ifHasSticker2        = null;
-		public static Action                      ifDoesntHaveSticker2 = null;
 		public static Action <string, string>     onRename;
 	}
+
+	[Serializable]
+	public class PreviewOptions
+	{
+		public SyntaxType Syntax;
+		public bool       NeedToDelete;
+		public bool       HasAction;
+
+		public PreviewOptions (SyntaxType type, bool delete)
+		{
+			Syntax = type;
+			NeedToDelete = delete;
+			HasAction = false;
+		}
+
+		public PreviewOptions (SyntaxType type, bool delete, bool action)
+		{
+			Syntax = type;
+			NeedToDelete = delete;
+			HasAction = action;
+		}
+
+	}
+	
 }

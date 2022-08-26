@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using System.Drawing.Design;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Utils;
 
 namespace CustomControls.RJControls
 {
@@ -92,7 +93,7 @@ namespace CustomControls.RJControls
             {
                 e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
                                            e.Index, e.State ^ DrawItemState.Selected,
-                                           e.ForeColor, Helper.bgClick);
+                                           e.ForeColor, ColorKeeper.bgClick);
             }
 
             e.DrawBackground ();

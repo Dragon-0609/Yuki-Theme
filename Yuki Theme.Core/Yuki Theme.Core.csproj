@@ -160,6 +160,7 @@
     <Compile Include="Themes\ThemeInfo.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
     <Compile Include="Utils\AdminTools.cs" />
+    <Compile Include="Utils\ColorKeeper.cs" />
     <Compile Include="Utils\Condition.cs" />
     <Compile Include="Utils\FontManager.cs" />
     <Compile Include="Utils\HighlitherUtil.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Utils\ShadowNames.cs" />
     <Compile Include="Utils\SmallDocumentation.cs" />
     <Compile Include="Utils\WindowProps.cs" />
+    <Compile Include="Utils\ZipManager.cs" />
     <None Include="Controls\CustomB.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorChangedEventArgs.cs" />
     <Compile Include="Controls\ColorEditor\ColorPicker\ColorModes.cs" />

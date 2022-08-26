@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -36,7 +37,7 @@ namespace Yuki_Theme.Core.Forms
 		{
 			var a = Assembly.GetExecutingAssembly ();
 
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			Helper.RenderSvg (other, Helper.LoadSvg ("moreHorizontal" + add, a));
 		}
 		
@@ -49,10 +50,10 @@ namespace Yuki_Theme.Core.Forms
 
 			if (!isFromPascal)
 			{
-				bg = Helper.bgColor;
-				fg = Helper.fgColor;
-				border = Helper.fgKeyword;
-				click = Helper.bgClick;
+				bg = ColorKeeper.bgColor;
+				fg = ColorKeeper.fgColor;
+				border = ColorKeeper.fgKeyword;
+				click = ColorKeeper.bgClick;
 			} else
 			{
 				bg = sp.bg;

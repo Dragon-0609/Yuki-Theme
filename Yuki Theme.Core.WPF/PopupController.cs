@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Color = System.Drawing.Color;
@@ -57,7 +58,7 @@ namespace Yuki_Theme.Core.WPF
 				{
 					CreateAndShowNotification (title, content, button1Data, button2Data);
 
-					UpdateNotificationColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
+					UpdateNotificationColor (ColorKeeper.bgColor, ColorKeeper.fgColor, ColorKeeper.bgClick);
 				} else
 				{
 					_notificationPackages.Enqueue (new NotificationPackage (title, content, button1Data, button2Data));
@@ -105,7 +106,7 @@ namespace Yuki_Theme.Core.WPF
 				CreateAndShowNotification (package.Title, package.Content, package.Button1Data, package.Button2Data);
 			}
 
-			UpdateNotificationColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
+			UpdateNotificationColor (ColorKeeper.bgColor, ColorKeeper.fgColor, ColorKeeper.bgClick);
 		}
 
 		private void NotificationWindowOnClosed (object sender, EventArgs e)
@@ -168,7 +169,7 @@ namespace Yuki_Theme.Core.WPF
 				else if (TargetForm != null)
 					_downloaderWindow = UpdateDownloaderWindow.CreateUpdateDownloader (TargetForm);
 
-				UpdateDownloaderColor (Helper.bgColor, Helper.fgColor, Helper.bgClick);
+				UpdateDownloaderColor (ColorKeeper.bgColor, ColorKeeper.fgColor, ColorKeeper.bgClick);
 				_downloaderWindow.CheckVersion (this);
 			}
 		}

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using Newtonsoft.Json.Linq;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Parsers
 {
@@ -471,7 +472,7 @@ namespace Yuki_Theme.Core.Parsers
 					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
 				}
 
-				Helper.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
+				ZipManager.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
 			}
 		}
 

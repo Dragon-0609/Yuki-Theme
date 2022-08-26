@@ -75,10 +75,14 @@ namespace Theme_Editor
 		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
 		{
 			Console.WriteLine ($"Received: {message.Id}");
+
 			ParseMessage (message);
-			
-			if (recieved != null)
-				recieved (message);
+			Application.Current.Dispatcher.Invoke (() =>
+			{
+
+				if (recieved != null)
+					recieved (message);
+			});
 		}
 
 		private void ErrorRaised (Exception exception)

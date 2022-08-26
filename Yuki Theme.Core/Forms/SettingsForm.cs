@@ -102,7 +102,7 @@ namespace Yuki_Theme.Core.Forms
 						settingsPanel.mode.ListBackColor = settingsPanel.mode.BackColor = settingsPanel.textBox1.BackColor =
 							settingsPanel.add_program.BackColor = settingsPanel.add_plugin.BackColor = settingsPanel.tabPage1.BackColor =
 								settingsPanel.unit.ListBackColor = settingsPanel.unit.BackColor =
-									settingsPanel.BackColor = settingsPanel.add_toolbar.BackColor = Helper.bgColor;
+									settingsPanel.BackColor = settingsPanel.add_toolbar.BackColor = ColorKeeper.bgColor;
 
 			ForeColor = settingsPanel.button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
 				button3.FlatAppearance.BorderColor = settingsPanel.button4.FlatAppearance.BorderColor =
@@ -112,19 +112,19 @@ namespace Yuki_Theme.Core.Forms
 								settingsPanel.unit.ForeColor = settingsPanel.unit.ListTextColor = settingsPanel.textBox1.ForeColor =
 									settingsPanel.tabs.ForeColor = settingsPanel.add_program.ForeColor =
 										settingsPanel.add_plugin.ForeColor = settingsPanel.add_toolbar.ForeColor =
-											settingsPanel.tabPage1.ForeColor = settingsPanel.roundLabel1.ForeColor = Helper.fgColor;
+											settingsPanel.tabPage1.ForeColor = settingsPanel.roundLabel1.ForeColor = ColorKeeper.fgColor;
 
 			settingsPanel.button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
 				button3.FlatAppearance.MouseOverBackColor = settingsPanel.button4.FlatAppearance.MouseOverBackColor =
 					settingsPanel.button5.FlatAppearance.MouseOverBackColor = settingsPanel.button6.FlatAppearance.MouseOverBackColor =
-						settingsPanel.roundLabel1._BackColor = Helper.bgClick;
+						settingsPanel.roundLabel1._BackColor = ColorKeeper.bgClick;
 
 			settingsPanel.ActionBox.BorderColor = settingsPanel.ActionBox.IconColor = settingsPanel.lang.BorderColor =
 				settingsPanel.lang.IconColor = settingsPanel.mode.BorderColor = settingsPanel.mode.IconColor =
-					settingsPanel.unit.BorderColor = settingsPanel.unit.IconColor = settingsPanel.textBox1.BorderColor = Helper.bgBorder;
+					settingsPanel.unit.BorderColor = settingsPanel.unit.IconColor = settingsPanel.textBox1.BorderColor = ColorKeeper.bgBorder;
 
-			settingsPanel.tabs.bg = new SolidBrush (Helper.bgColor);
-			settingsPanel.tabs.bgClick = new SolidBrush (Helper.bgClick);
+			settingsPanel.tabs.bg = new SolidBrush (ColorKeeper.bgColor);
+			settingsPanel.tabs.bgClick = new SolidBrush (ColorKeeper.bgClick);
 
 			// settingsPanel.stickerToUpdate.Add (form.stickerControl);
 			bool isProgram = Helper.mode == ProductMode.Program;

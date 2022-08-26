@@ -106,7 +106,7 @@ namespace Yuki_Theme.Core.Parsers
 			oldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
 			oldThemeFormat.MergeCommentsWithFile (theme, doc);
 
-			oldThemeFormat.SaveXML (null, null, true, Helper.IsZip (PathToSave), ref doc, PathToSave);
+			oldThemeFormat.SaveXML (null, null, true, ZipManager.IsZip (PathToSave), ref doc, PathToSave);
 		}
 
 		public abstract void populateList (string path);

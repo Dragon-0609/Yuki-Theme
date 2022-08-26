@@ -1,28 +1,29 @@
 ﻿using System.Security.Principal;
 using Yuki_Theme.Core.Database;
 
-namespace Yuki_Theme.Core.Utils;
-
-public class AdminTools
+namespace Yuki_Theme.Core.Utils
 {
-	public bool CurrentUserIsAdmin() 
+	public class AdminTools
 	{
-		if (DatabaseManager.IsLinux)
+		public bool CurrentUserIsAdmin() 
 		{
-			return true;
-		}else
-		{
-			return CheckPrivileges ();
+			if (DatabaseManager.IsLinux)
+			{
+				return true;
+			}else
+			{
+				return CheckPrivileges ();
+			}
 		}
-	}
 
-	private bool CheckPrivileges ()
-	{
-		WindowsIdentity user = null;
+		private bool CheckPrivileges ()
+		{
+			WindowsIdentity user = null;
 
-		user = WindowsIdentity.GetCurrent();
-		WindowsPrincipal principal = new WindowsPrincipal(user);
-		bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-		return isAdmin;
+			user = WindowsIdentity.GetCurrent();
+			WindowsPrincipal principal = new WindowsPrincipal(user);
+			bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+			return isAdmin;
+		}
 	}
 }

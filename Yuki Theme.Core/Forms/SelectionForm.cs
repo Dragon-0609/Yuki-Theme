@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -29,15 +30,15 @@ namespace Yuki_Theme.Core.Forms
 		private void SelectionForm_Shown (object sender, EventArgs e)
 		{
 			BackColor = button1.BackColor = button2.BackColor =comboBox1.ListBackColor = comboBox1.BackColor = 
-				textBox1.BackColor = Helper.bgColor;
+				textBox1.BackColor = ColorKeeper.bgColor;
 				
 			ForeColor = button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
-				comboBox1.ForeColor = comboBox1.ListTextColor = textBox1.ForeColor = Helper.fgColor;
+				comboBox1.ForeColor = comboBox1.ListTextColor = textBox1.ForeColor = ColorKeeper.fgColor;
 						
 			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
-				Helper.bgClick;
+				ColorKeeper.bgClick;
 
-			comboBox1.BorderColor = comboBox1.IconColor = textBox1.BorderColor = Helper.bgBorder;
+			comboBox1.BorderColor = comboBox1.IconColor = textBox1.BorderColor = ColorKeeper.bgBorder;
 		}
 	}
 }

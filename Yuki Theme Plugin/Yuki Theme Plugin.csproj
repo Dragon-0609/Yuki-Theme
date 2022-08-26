@@ -138,6 +138,7 @@
     <Compile Include="IconManager.cs" />
     <Compile Include="IdeComponents.cs" />
     <Compile Include="Interfaces\IConsole.cs" />
+    <Compile Include="Interfaces\IDispatcher.cs" />
     <Compile Include="MenuRenderer.cs" />
     <Compile Include="Props.cs">
       <SubType>Form</SubType>

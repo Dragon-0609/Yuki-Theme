@@ -18,12 +18,14 @@ using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Communication;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
+using Yuki_Theme_Plugin.Interfaces;
 using MessageBox = System.Windows.Forms.MessageBox;
 using Point = System.Drawing.Point;
 using Resources = Yuki_Theme_Plugin.Properties.Resources;
@@ -34,7 +36,7 @@ using Message = Yuki_Theme.Core.Communication.Message;
 
 namespace Yuki_Theme_Plugin
 {
-	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable
+	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable, IDispatcher
 	{
 		public string Name => "Yuki Theme";
 
@@ -103,7 +105,7 @@ namespace Yuki_Theme_Plugin
 
 		public static YukiTheme_VisualPascalABCPlugin plugin;
 
-		private Client _client;
+		internal Client _client;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -302,15 +304,15 @@ namespace Yuki_Theme_Plugin
 			clrKey = highlighting.GetColorFor ("Keywords").Color;
 			
 			
-			Helper.bgColor = bg;
-			Helper.bgdefColor = bgdef;
-			Helper.bgClick = bgClick;
-			Helper.bgBorder = bgBorder;
-			Helper.selectionColor = bgSelection;
+			ColorKeeper.bgColor = bg;
+			ColorKeeper.bgdefColor = bgdef;
+			ColorKeeper.bgClick = bgClick;
+			ColorKeeper.bgBorder = bgBorder;
+			ColorKeeper.selectionColor = bgSelection;
 			
-			Helper.fgColor = clr;
-			Helper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
-			Helper.fgKeyword = clrKey;
+			ColorKeeper.fgColor = clr;
+			ColorKeeper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
+			ColorKeeper.fgKeyword = clrKey;
 			// Helper.selectionColor = highlighting.GetColorFor ("Selection").BackgroundColor;
 			
 			ResetBrushesAndPens ();
@@ -427,25 +429,21 @@ namespace Yuki_Theme_Plugin
 			ClientAPI api = (ClientAPI)CentralAPI.Current;
 			api.Client = _client;
 			api.AddEvents ();
-			api.AddEvent (RELEASE_RESOURCES, ReleaseResources);
-			api.AddEvent (APPLY_THEME, ApplyTheme);
+			api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
+			api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
+			api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
 		}
 
 		#endregion
 
 
 		#region Server Actions
-
-		private void ReleaseResources (Message obj)
+		
+		private void ReleaseResourcesForServer (Message obj)
 		{
 			ReleaseResources ();
+			_client.SendMessage (RELEASE_RESOURCES_OK);
 		}
-
-		private void ApplyTheme (Message obj)
-		{
-			ReloadLayout ();
-		}
-		
 
 		#endregion
 		
@@ -508,7 +506,8 @@ namespace Yuki_Theme_Plugin
 		public void ReloadLayoutLight ()
 		{
 			ReloadLayoutAll (true);
-			switcher.panel_bg.Visible = false;
+			if (switcher is { panel_bg: { } })
+				switcher.panel_bg.Visible = false;
 
 			Timer tim = new Timer ();
 			tim.Interval = 5;
@@ -775,7 +774,12 @@ namespace Yuki_Theme_Plugin
 				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
 			}
 		}
-
+		
+		public void InvokeUI (Delegate method)
+		{
+			ideComponents.fm.BeginInvoke (method);
+		}
+		
 		#endregion
 
 		public event ColorUpdate OnColorUpdate;

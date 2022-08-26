@@ -98,7 +98,7 @@ namespace Yuki_Theme.Core
 
 						if (kilow == "keywords" || kilow == "keyword")
 						{
-							Helper.fgKeyword = Parse (style.Value.Foreground);
+							ColorKeeper.fgKeyword = Parse (style.Value.Foreground);
 						}
 					}
 
@@ -111,17 +111,17 @@ namespace Yuki_Theme.Core
 						{
 							sBox.BackColor = Parse (style.Value.Background);
 							sBox.ForeColor = Parse (style.Value.Foreground);
-							Helper.bgdefColor = sBox.BackColor;
-							Helper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
-							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
-							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
-							Helper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
+							ColorKeeper.bgdefColor = sBox.BackColor;
+							ColorKeeper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
+							ColorKeeper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
+							ColorKeeper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
+							ColorKeeper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
 						}
 							break;
 						case "Selection" :
 						{
-							Helper.selectionColor = Parse (style.Value.Background);
-							sBox.SelectionColor = Color.FromArgb (100, Helper.selectionColor);
+							ColorKeeper.selectionColor = Parse (style.Value.Background);
+							sBox.SelectionColor = Color.FromArgb (100, ColorKeeper.selectionColor);
 						}
 							break;
 						case "VRuler" :
@@ -134,7 +134,7 @@ namespace Yuki_Theme.Core
 						case "Caret" :
 						{
 							sBox.CaretColor = Parse (style.Value.Foreground);
-							Helper.bgBorder = sBox.CaretColor;
+							ColorKeeper.bgBorder = sBox.CaretColor;
 						}
 							break;
 						case "LineNumbers" :
