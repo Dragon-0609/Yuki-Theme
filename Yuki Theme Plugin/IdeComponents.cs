@@ -84,19 +84,19 @@ namespace Yuki_Theme_Plugin
 
 		#region Colors, Brushes, Pens
 
-		private Color bg       => YukiTheme_VisualPascalABCPlugin.bg;
-		private Color bgdef    => YukiTheme_VisualPascalABCPlugin.bgdef;
-		private Color bgBorder => YukiTheme_VisualPascalABCPlugin.bgBorder;
-		private Color bgClick  => YukiTheme_VisualPascalABCPlugin.bgClick;
-		private Color bgSelection  => YukiTheme_VisualPascalABCPlugin.bgSelection;
-		private Color clr      => YukiTheme_VisualPascalABCPlugin.clr;
-		private Color clrHover => YukiTheme_VisualPascalABCPlugin.clrHover;
-		private Color clrKey => YukiTheme_VisualPascalABCPlugin.clrKey;
+		private Color bg       => YukiTheme_VisualPascalABCPlugin.Colors.bg;
+		private Color bgdef    => YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
+		private Color bgBorder => YukiTheme_VisualPascalABCPlugin.Colors.bgBorder;
+		private Color bgClick  => YukiTheme_VisualPascalABCPlugin.Colors.bgClick;
+		private Color bgSelection  => YukiTheme_VisualPascalABCPlugin.Colors.bgSelection;
+		private Color clr      => YukiTheme_VisualPascalABCPlugin.Colors.clr;
+		private Color clrHover => YukiTheme_VisualPascalABCPlugin.Colors.clrHover;
+		private Color clrKey => YukiTheme_VisualPascalABCPlugin.Colors.clrKey;
 
-		private Pen separatorPen => YukiTheme_VisualPascalABCPlugin.separatorPen;
+		private Pen separatorPen => YukiTheme_VisualPascalABCPlugin.Colors.separatorPen;
 
-		private Brush bgBrush  => YukiTheme_VisualPascalABCPlugin.bgBrush;
-		private Brush clrBrush => YukiTheme_VisualPascalABCPlugin.clrBrush;
+		private Brush bgBrush  => YukiTheme_VisualPascalABCPlugin.Colors.bgBrush;
+		private Brush clrBrush => YukiTheme_VisualPascalABCPlugin.Colors.clrBrush;
 
 		#endregion
 
@@ -795,13 +795,13 @@ namespace Yuki_Theme_Plugin
 				return;
 			}
 			Graphics g = dea.Graphics;
-			Brush stringColor = YukiTheme_VisualPascalABCPlugin.clrBrush;
-			Brush backColor = YukiTheme_VisualPascalABCPlugin.bgBrush;
+			Brush stringColor = YukiTheme_VisualPascalABCPlugin.Colors.clrBrush;
+			Brush backColor = YukiTheme_VisualPascalABCPlugin.Colors.bgBrush;
 			
 			if ((dea.State & DrawItemState.Selected) == DrawItemState.Selected) {
 				if ((dea.State & DrawItemState.Focus) == DrawItemState.Focus)
 				{
-					backColor = YukiTheme_VisualPascalABCPlugin.selectionBrush;
+					backColor = YukiTheme_VisualPascalABCPlugin.Colors.selectionBrush;
 					g.FillRectangle(backColor, dea.Bounds);
 				} else {
 					g.FillRectangle(backColor, dea.Bounds);
@@ -976,13 +976,13 @@ namespace Yuki_Theme_Plugin
 			{
 				Settings.bgImage = false;
 				Settings.swSticker = false;
-				if (plugin.nameInStatusBar)
+				if (plugin.StatusBarNameEnabled)
 					plugin.currentThemeName.Visible = false;
 			} else
 			{
-				Settings.bgImage = plugin.imagesEnabled == 1 || plugin.imagesEnabled == 3;
-				Settings.swSticker = plugin.imagesEnabled == 2 || plugin.imagesEnabled == 3;
-				if (plugin.nameInStatusBar)
+				Settings.bgImage = plugin.imagesEnabled is 1 or 3;
+				Settings.swSticker = plugin.imagesEnabled is 2 or 3;
+				if (plugin.StatusBarNameEnabled)
 					plugin.currentThemeName.Visible = true;
 			}
 
@@ -1023,7 +1023,7 @@ namespace Yuki_Theme_Plugin
 
 		private void ShowUpdatePage (object sender, EventArgs e)
 		{
-			plugin.openUpdate ();
+			plugin._helper.openUpdate ();
 		}
 
 		private void ToggleSticker (object sender, EventArgs e)

@@ -229,7 +229,7 @@ namespace Yuki_Theme_Plugin
 				{
 					Assembly a = Assembly.GetExecutingAssembly ();
 					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
-					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 				}
 			}
 		}
@@ -246,7 +246,7 @@ namespace Yuki_Theme_Plugin
 					Assembly a = Assembly.GetExecutingAssembly ();
 					// MessageBox.Show (btn.Name);
 					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
-					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 				}
 			}
 		}
@@ -298,14 +298,14 @@ namespace Yuki_Theme_Plugin
 			string add = "";
 			if (HasDark (btn.AccessibleDescription))
 			{
-				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 				add = isDark ? "" : "_dark";
 			}
 
 			Assembly a = Assembly.GetExecutingAssembly ();
 			// MessageBox.Show (btn.Name);
 			Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + add, a, IconFolder),
-			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 		}
 
 		private bool HasDark (string str)
@@ -372,7 +372,7 @@ namespace Yuki_Theme_Plugin
 
 				if (isDark)
 				{
-					isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+					isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 					sad = isDark ? "" : "_dark";
 				} else
 				{
@@ -389,13 +389,13 @@ namespace Yuki_Theme_Plugin
 			string dark = "";
 			if (asDark)
 			{
-				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 				dark = isDark ? "" : "_dark";
 			}
 
 			Assembly a = Assembly.GetExecutingAssembly ();
 			return Helper.RenderSvg (btn.Size, Helper.LoadSvg (btn.AccessibleDescription + dark, a, IconFolder),
-			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 		}
 	}
 }

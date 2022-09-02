@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Timers;
 using Timer = System.Timers.Timer;
 
 namespace Yuki_Theme.Core.Communication
@@ -8,19 +9,26 @@ namespace Yuki_Theme.Core.Communication
 	{
 		protected System.Timers.Timer _timer;
 
+		protected int Interval = 100;
 
+		private int tempInterval;
+
+		private int tryCount;
+
+		private bool _connectionEstablished = false;
+		
 		protected Queue<Message> _messages;
 		
 
 		protected void InitTimer ()
 		{
 			_timer = new Timer ();
-			_timer.Interval = 100;
-			_timer.Elapsed += TimerOnTick;
-			// _timer.Start ();
+			_timer.Interval = Interval;
+			_timer.Elapsed += SendMessages;
+			_timer.Start ();
 		}
 
-		private void TimerOnTick (object sender, EventArgs e)
+		private void SendMessages (object sender, EventArgs e)
 		{
 			lock (_messages)
 			{
@@ -31,6 +39,38 @@ namespace Yuki_Theme.Core.Communication
 			}
 		}
 
+		protected void StartTesting ()
+		{
+			_timer.Stop ();
+			tryCount = 0;
+			_timer.Elapsed -= SendMessages;
+			_timer.Elapsed += TestConnection;
+			_timer.Interval = 2000;
+			_timer.Start ();
+		}
+		private void TestConnection (object sender, ElapsedEventArgs e)
+		{
+			if (tryCount < 10)
+			{
+				SendMessage (new Message (MessageTypes.TEST_CONNECTION));
+				tryCount++;
+			} else
+			{
+				ConnectionNotEstablished ();
+			}
+		}
+
+		protected void ConnectionEstablished ()
+		{
+			_timer.Stop ();
+			_timer.Interval = Interval;
+			_connectionEstablished = true;
+			_timer.Elapsed -= TestConnection;
+			_timer.Elapsed += SendMessages;
+			_timer.Start ();
+		}
+
+		protected abstract void ConnectionNotEstablished ();
 
 		public abstract void SendMessage (Message message);
 	}

@@ -63,7 +63,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
         {
             if (IsMouseOver && Enabled)
             {
-                using (Pen pen = new Pen(YukiTheme_VisualPascalABCPlugin.clr))
+                using (Pen pen = new Pen(YukiTheme_VisualPascalABCPlugin.Colors.clr))
                 {
                     e.Graphics.DrawRectangle(pen, Rectangle.Inflate(ClientRectangle, -1, -1));
                 }
@@ -74,7 +74,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
                 ColorMap[] colorMap = new ColorMap[2];
                 colorMap[0] = new ColorMap();
                 colorMap[0].OldColor = Color.FromArgb(0, 0, 0);
-                colorMap[0].NewColor = YukiTheme_VisualPascalABCPlugin.clr;
+                colorMap[0].NewColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
                 colorMap[1] = new ColorMap();
                 colorMap[1].OldColor = Image.GetPixel(0, 0);
                 colorMap[1].NewColor = Color.Transparent;

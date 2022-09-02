@@ -355,13 +355,13 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 					
 					if (curItem == selectedItem)
 					{
-						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.bgBrush, drawingBackground);
-						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.selectionBrush, drawingBackgroundText);
+						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.Colors.bgBrush, drawingBackground);
+						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.Colors.selectionBrush, drawingBackgroundText);
 						//Pen pen = new Pen(Color.Black); pen.DashStyle;
 						//g.DrawRectangle(pen, drawingBackgroundText.X, drawingBackgroundText.Y, drawingBackgroundText.Width, drawingBackgroundText.Height);
 					} else
 					{
-						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.bgBrush, drawingBackground);
+						g.FillRectangle (YukiTheme_VisualPascalABCPlugin.Colors.bgBrush, drawingBackground);
 					}
 		
 					// draw Icon
@@ -375,7 +375,7 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 
 					// draw text
 
-					g.DrawString (completionData [curItem].Text, Font, YukiTheme_VisualPascalABCPlugin.clrBrush, xPos, yPos + dfont);
+					g.DrawString (completionData [curItem].Text, Font, YukiTheme_VisualPascalABCPlugin.Colors.clrBrush, xPos, yPos + dfont);
 				}
 
 				yPos += itemHeight;

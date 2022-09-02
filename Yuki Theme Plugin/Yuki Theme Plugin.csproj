@@ -139,7 +139,17 @@
     <Compile Include="IdeComponents.cs" />
     <Compile Include="Interfaces\IConsole.cs" />
     <Compile Include="Interfaces\IDispatcher.cs" />
+    <Compile Include="Interfaces\Plugin.cs" />
     <Compile Include="MenuRenderer.cs" />
+    <Compile Include="PluginColors.cs">
+      <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginHelper.cs">
+      <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginModel.cs">
+      <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Props.cs">
       <SubType>Form</SubType>
     </Compile>

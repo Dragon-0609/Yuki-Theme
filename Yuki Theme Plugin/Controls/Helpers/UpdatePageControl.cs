@@ -39,8 +39,8 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 				{
 					string err_element =
 						"<h1 style=' text-align: center; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center;'><div>Something went wrong. Try to load the page later</div></h1>";
-					string bg = ColorTranslator.ToHtml (YukiTheme_VisualPascalABCPlugin.bgdef);
-					string clr = ColorTranslator.ToHtml (YukiTheme_VisualPascalABCPlugin.clr);
+					string bg = ColorTranslator.ToHtml (YukiTheme_VisualPascalABCPlugin.Colors.bgdef);
+					string clr = ColorTranslator.ToHtml (YukiTheme_VisualPascalABCPlugin.Colors.clr);
 					string htmlHeader =
 						"<html><head><title>Error></title><meta content=\"IE=Edge,11,10,9,7,8\" http-equiv=\"X-UA-Compatible\"/> <style>body { background-color: " +
 						bg + ";color: " + clr + ";}</style>  </head>";

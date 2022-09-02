@@ -36,7 +36,7 @@ using Message = Yuki_Theme.Core.Communication.Message;
 
 namespace Yuki_Theme_Plugin
 {
-	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable, IDispatcher
+	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable, Plugin.IView
 	{
 		public string Name => "Yuki Theme";
 
@@ -44,34 +44,6 @@ namespace Yuki_Theme_Plugin
 			SettingsConst.CURRENT_VERSION.ToString ("0.0", System.Globalization.CultureInfo.InvariantCulture);
 
 		public string Copyright => "Dragon-LV";
-
-		#region Colors, Brushes and Pens
-
-		public static Color bg;
-		public static Color bgdef;
-		public static Color bgSelection;
-		public static Color bgClick;
-		public static Color bgClick2;
-		public static Color bgClick3;
-		public static Color bgInactive;
-		public static Color clr;
-		public static Color clrKey;
-		public static Color clrHover;
-		public static Color bgBorder;
-		public static Color bgType;
-
-		public static Brush bgdefBrush;
-		public static Brush bgBrush;
-		public static Brush selectionBrush;
-		public static Brush bgClickBrush;
-		public static Brush bgClick3Brush;
-		public static Brush typeBrush;
-		public static Brush clrBrush;
-		public static Brush bgInactiveBrush;
-		public static Pen   separatorPen;
-		public static Pen   bgBorderPen;
-
-		#endregion
 
 		public static Image     img;
 		internal      Alignment wallpaperAlign;
@@ -85,21 +57,24 @@ namespace Yuki_Theme_Plugin
 		private  Image                 sticker;
 		public   CustomPicture         stickerControl;
 		internal IHighlightingStrategy highlighting;
-		
-		public  Image tmpImage1;
-		public  Image tmpImage2;
 
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
+		public static PluginColors      Colors;
 		internal      ThemeSwitcher     switcher;
 		internal      EditorInspector   inspector;
-		internal      IdeComponents       ideComponents = new IdeComponents ();
+		internal      IdeComponents     ideComponents = new IdeComponents ();
+
+		
+		internal PluginModel  _model = new PluginModel ();
+		internal PluginHelper _helper;
+
+		private bool isCommonAPI;
 
 		internal bool   bgImage => Settings.bgImage;
-		internal int    imagesEnabled   = 0;     // Is enabled bg image and (or) sticker
-		internal bool   nameInStatusBar = false; // Name in status bar
-		const    string yukiThemeUpdate = "Yuki Theme Update";
-		private  int    lastFocused     = -1;
+		internal int    imagesEnabled;   // Is enabled Colors.bg image and (or) sticker
+		internal bool   StatusBarNameEnabled; // Name in status bar
+		private  int    lastFocused  = -1;
 
 		public PopupController popupController;
 
@@ -129,14 +104,17 @@ namespace Yuki_Theme_Plugin
 			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
-			CentralAPI.Current = new ClientAPI ();
+			
+			InitAPI ();
+			
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
 			Settings.ConnectAndGet ();
 
 			imagesEnabled = 0;
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
-			nameInStatusBar = Settings.swStatusbar;
+			StatusBarNameEnabled = Settings.swStatusbar;
+			_helper = new PluginHelper (ideComponents);
 			
 			ideComponents.WriteToConsole ("Initialization started.");
 			
@@ -243,14 +221,14 @@ namespace Yuki_Theme_Plugin
 
 			inspector.InjectCodeCompletion ();
 			
-			ShowLicense ();
-			/*MForm.showLicense (bg, clr, bgClick, ideComponents.fm);
-			MForm.showGoogleAnalytics (bg, clr, bgClick, ideComponents.fm);
+			_helper.ShowLicense ();
+			/*MForm.showLicense (Colors.bg, Colors.clr, Colors.bgClick, ideComponents.fm);
+			MForm.showGoogleAnalytics (Colors.bg, Colors.clr, Colors.bgClick, ideComponents.fm);
 			MForm.TrackInstall ();*/
 			AdditionalTools.ShowLicense (WPFHelper.GenerateTag, null, ideComponents.fm);
 			
 			AdditionalTools.TrackInstall (ideComponents.fm);
-			if (!IsUpdated () && Settings.update)
+			if (!_helper.IsUpdated () && Settings.update)
 			{
 				popupController.CheckUpdate ();
 			}
@@ -267,8 +245,8 @@ namespace Yuki_Theme_Plugin
 				currentThemeName.Image.Dispose ();
 			SvgDocument svg = Helper.LoadSvg ("favorite", Assembly.GetExecutingAssembly (),
 			                                  "Yuki_Theme_Plugin.Resources");
-			svg.Fill = new SvgColourServer (bgBorder);
-			svg.Stroke = new SvgColourServer (bgBorder);
+			svg.Fill = new SvgColourServer (Colors.bgBorder);
+			svg.Stroke = new SvgColourServer (Colors.bgBorder);
 			currentThemeName.Image = svg.Draw (16, 16);
 
 
@@ -286,36 +264,36 @@ namespace Yuki_Theme_Plugin
 		private void LoadColors ()
 		{
 			highlighting = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
-			bgdef = highlighting.GetColorFor ("Default").BackgroundColor;
-			bg = Helper.DarkerOrLighter (bgdef, 0.05f);
+			Colors.bgdef = highlighting.GetColorFor ("Default").BackgroundColor;
+			Colors.bg = Helper.DarkerOrLighter (Colors.bgdef, 0.05f);
 			
-			bgClick = Helper.DarkerOrLighter (bgdef, 0.25f);
-			bgClick2 = Helper.DarkerOrLighter (bgdef, 0.4f);
-			bgClick3 = Helper.DarkerOrLighter (bgdef, 0.1f);
-			bgSelection = highlighting.GetColorFor ("Selection").BackgroundColor;
+			Colors.bgClick = Helper.DarkerOrLighter (Colors.bgdef, 0.25f);
+			Colors.bgClick2 = Helper.DarkerOrLighter (Colors.bgdef, 0.4f);
+			Colors.bgClick3 = Helper.DarkerOrLighter (Colors.bgdef, 0.1f);
+			Colors.bgSelection = highlighting.GetColorFor ("Selection").BackgroundColor;
 			
-			bgInactive = Helper.ChangeColorBrightness (bgdef, -0.3f);
-			bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
-			bgType = highlighting.GetColorFor ("EOLMarkers").Color;
+			Colors.bgInactive = Helper.ChangeColorBrightness (Colors.bgdef, -0.3f);
+			Colors.bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
+			Colors.bgType = highlighting.GetColorFor ("EOLMarkers").Color;
 
 			Color defaultForeground = highlighting.GetColorFor ("Default").Color;
-			clr = Helper.DarkerOrLighter (defaultForeground, 0.2f);
-			clrHover = Helper.DarkerOrLighter (defaultForeground, 0.6f);
-			clrKey = highlighting.GetColorFor ("Keywords").Color;
+			Colors.clr = Helper.DarkerOrLighter (defaultForeground, 0.2f);
+			Colors.clrHover = Helper.DarkerOrLighter (defaultForeground, 0.6f);
+			Colors.clrKey = highlighting.GetColorFor ("Keywords").Color;
 			
 			
-			ColorKeeper.bgColor = bg;
-			ColorKeeper.bgdefColor = bgdef;
-			ColorKeeper.bgClick = bgClick;
-			ColorKeeper.bgBorder = bgBorder;
-			ColorKeeper.selectionColor = bgSelection;
+			ColorKeeper.bgColor = Colors.bg;
+			ColorKeeper.bgdefColor = Colors.bgdef;
+			ColorKeeper.bgClick = Colors.bgClick;
+			ColorKeeper.bgBorder = Colors.bgBorder;
+			ColorKeeper.selectionColor = Colors.bgSelection;
 			
-			ColorKeeper.fgColor = clr;
+			ColorKeeper.fgColor = Colors.clr;
 			ColorKeeper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
-			ColorKeeper.fgKeyword = clrKey;
+			ColorKeeper.fgKeyword = Colors.clrKey;
 			// Helper.selectionColor = highlighting.GetColorFor ("Selection").BackgroundColor;
 			
-			ResetBrushesAndPens ();
+			_helper.ResetBrushesAndPens ();
 		}
 
 		private void LoadImage ()
@@ -422,16 +400,32 @@ namespace Yuki_Theme_Plugin
 				stickerControl.Visible = false;
 			}
 		}
+		
+		private void InitAPI ()
+		{
+			AdminTools tools = new AdminTools ();
+			if (tools.IsUACEnabled)
+			{
+				CentralAPI.Current = new ClientAPI ();
+			} else
+			{
+				isCommonAPI = true;
+				CentralAPI.Current = new CommonAPI ();
+			}
+		}
 
 		private void InitCommunicator ()
 		{
-			_client = new Client (ideComponents);
-			ClientAPI api = (ClientAPI)CentralAPI.Current;
-			api.Client = _client;
-			api.AddEvents ();
-			api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
-			api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
-			api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
+			if (!isCommonAPI)
+			{
+				_client = new Client (ideComponents, _helper);
+				ClientAPI api = (ClientAPI)CentralAPI.Current;
+				api.Client = _client;
+				api.AddEvents ();
+				api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
+				api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
+				api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
+			}
 		}
 
 		#endregion
@@ -453,7 +447,7 @@ namespace Yuki_Theme_Plugin
 		{
 			WPFHelper.ConvertGUIColorsNBrushes ();
 			if (OnColorUpdate != null)
-				OnColorUpdate (bgdef, clr, bgClick);
+				OnColorUpdate (Colors.bgdef, Colors.clr, Colors.bgClick);
 			// popupController.TryToUpdateNotificationWindow ();
 			WaitAndUpdateMenuColors ();
 
@@ -461,20 +455,6 @@ namespace Yuki_Theme_Plugin
 			ideComponents.UpdateColors ();
 		}
 
-		private void ResetBrushesAndPens ()
-		{
-			ResetBrush (ref bgdefBrush, bgdef);
-			ResetBrush (ref bgBrush, bg);
-			ResetBrush (ref selectionBrush, bgSelection);
-			ResetBrush (ref bgClickBrush, bgClick);
-			ResetBrush (ref bgClick3Brush, bgClick3);
-			ResetBrush (ref bgInactiveBrush, bgInactive);
-			ResetBrush (ref clrBrush, clr);
-			ResetBrush (ref typeBrush, bgType);
-
-			ResetPen (ref separatorPen, bgClick3, 1, default);
-			ResetPen (ref bgBorderPen, bgBorder, 8, default);
-		}
 
 		private void ReloadSticker ()
 		{
@@ -487,7 +467,7 @@ namespace Yuki_Theme_Plugin
 		private void RefreshStatusBar ()
 		{
 			currentThemeName.Visible = Settings.swStatusbar;
-			nameInStatusBar = Settings.swStatusbar;
+			StatusBarNameEnabled = Settings.swStatusbar;
 		}
 
 		private void RefreshEditor ()
@@ -554,12 +534,12 @@ namespace Yuki_Theme_Plugin
 		{
 			foreach (ToolStripMenuItem item in ideComponents.menu.Items)
 			{
-				item.BackColor = bg;
-				item.ForeColor = clr;
+				item.BackColor = Colors.bg;
+				item.ForeColor = Colors.clr;
 				foreach (ToolStripItem downItem in item.DropDownItems)
 				{
-					downItem.BackColor = bg;
-					downItem.ForeColor = clr;
+					downItem.BackColor = Colors.bg;
+					downItem.ForeColor = Colors.clr;
 				}
 			}
 
@@ -573,7 +553,7 @@ namespace Yuki_Theme_Plugin
 			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
 			Dictionary <string, WebBrowserControl> OpenBrowserDocuments =
 				(Dictionary <string, WebBrowserControl>)field.GetValue (ideComponents.fm);
-			OpenBrowserDocuments.TryGetValue (yukiThemeUpdate, out tp);
+			OpenBrowserDocuments.TryGetValue (PluginHelper.UPDATE_TITLE, out tp);
 			if (tp is UpdatePageControl)
 			{
 				UpdatePageControl upage = (UpdatePageControl)tp;
@@ -589,7 +569,7 @@ namespace Yuki_Theme_Plugin
 		private void showLogo ()
 		{
 			logoBox = new PictureBox ();
-			logoBox.BackColor = bgdef;
+			logoBox.BackColor = Colors.bgdef;
 			logoBox.Image = Resources.YukiTheme;
 			logoBox.Location = new Point (ideComponents.fm.ClientSize.Width / 2 - 50, ideComponents.fm.ClientSize.Height / 2 - 50);
 			logoBox.Name = "logoBox";
@@ -660,13 +640,6 @@ namespace Yuki_Theme_Plugin
 			return PascalABCCompiler.StringResourcesLanguage.CurrentLanguageName;
 		}
 
-		public void openUpdate ()
-		{
-			string version = SettingsConst.CURRENT_VERSION.ToString ("0.0").Replace (',', '.');
-			if (SettingsConst.CURRENT_VERSION_ADD != null && SettingsConst.CURRENT_VERSION_ADD.Length > 1)
-				version += "-" + SettingsConst.CURRENT_VERSION_ADD;
-			AddTabWithUrl (ideComponents.fm.MainDockPanel, yukiThemeUpdate, $"https://dragon-0609.github.io/Yuki-Theme/updates/{version}");
-		}
 
 		private void GetWindowProperities ()
 		{
@@ -698,88 +671,6 @@ namespace Yuki_Theme_Plugin
 
 		#region Helper Methods
 
-		private void ResetBrush (ref Brush brush, Color color)
-		{
-			if (brush != null) brush.Dispose ();
-			brush = new SolidBrush (color);
-		}
-
-		private void ResetPen (ref Pen pen, Color color, float width, PenAlignment alignment)
-		{
-			if (pen != null) pen.Dispose ();
-			pen = new Pen (color, width) { Alignment = alignment };
-		}
-
-		public void AddTabWithUrl (DockPanel tabControl, string title, string url)
-		{
-			WebBrowserControl tp = null; //new UpdatePageControl();
-			FieldInfo field = typeof (Form1).GetField ("OpenBrowserDocuments", BindingFlags.Instance | BindingFlags.NonPublic);
-			Dictionary <string, WebBrowserControl> OpenBrowserDocuments =
-				(Dictionary <string, WebBrowserControl>)field.GetValue (ideComponents.fm);
-			if (!OpenBrowserDocuments.TryGetValue (title, out tp))
-			{
-				tp = new UpdatePageControl ();
-				tp.OpenPage (title, url);
-				ideComponents.fm.AddWindowToDockPanel (tp, tabControl, tp.Dock, DockState.Document, tp.IsFloat, null, 0);
-				OpenBrowserDocuments.Add (title, tp);
-			} else if (tp is UpdatePageControl)
-			{
-				tp.Activate ();
-			} else
-			{
-				MessageBox.Show (CentralAPI.Current.Translate ("plugin.browser.error"));
-			}
-		}
-
-
-		private bool IsUpdated ()
-		{
-			bool updated = false;
-			int inst = Helper.RecognizeInstallationStatus ();
-			if (inst == 1)
-			{
-				openUpdate ();
-				updated = true;
-				Helper.DeleteInstallationStatus ();
-			}
-
-			return updated;
-		}
-
-		private void ShowLicense ()
-		{
-			if (!Settings.license)
-			{
-				WPFHelper.InitAppForWinforms ();
-				
-				LicenseWindow licenseWindow = new LicenseWindow ()
-				{
-					Background = WPFHelper.bgBrush,
-					Foreground = WPFHelper.fgBrush,
-					BorderBrush = WPFHelper.borderBrush,
-					Tag = WPFHelper.GenerateTag
-				};
-				WindowInteropHelper helper = new WindowInteropHelper (licenseWindow);
-				helper.Owner = ideComponents.fm.Handle;
-				
-				licenseWindow.Closed += (_, _) =>
-				{
-					GC.Collect ();
-					GC.WaitForPendingFinalizers ();
-				};
-
-				licenseWindow.ShowDialog ();
-				
-				Settings.license = true;
-				Settings.database.UpdateData (SettingsConst.LICENSE, "True");
-			}
-		}
-		
-		public void InvokeUI (Delegate method)
-		{
-			ideComponents.fm.BeginInvoke (method);
-		}
-		
 		#endregion
 
 		public event ColorUpdate OnColorUpdate;

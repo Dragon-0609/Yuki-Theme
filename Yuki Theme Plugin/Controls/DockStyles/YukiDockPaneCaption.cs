@@ -325,27 +325,27 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		private static Color ActiveBackColorGradientBegin
 		{
-			get => YukiTheme_VisualPascalABCPlugin.bgInactive;
+			get => YukiTheme_VisualPascalABCPlugin.Colors.bgInactive;
         }
 
         private static Color ActiveBackColorGradientEnd
         {
-            get => YukiTheme_VisualPascalABCPlugin.bgInactive;
+            get => YukiTheme_VisualPascalABCPlugin.Colors.bgInactive;
         }
 
 		private static Color InactiveBackColor
 		{
-			get => YukiTheme_VisualPascalABCPlugin.bg;
+			get => YukiTheme_VisualPascalABCPlugin.Colors.bg;
 		}
 
 		private static Color ActiveTextColor
 		{
-			get => YukiTheme_VisualPascalABCPlugin.clr;
+			get => YukiTheme_VisualPascalABCPlugin.Colors.clr;
 		}
 
 		private static Color InactiveTextColor
 		{
-			get => YukiTheme_VisualPascalABCPlugin.clrHover;
+			get => YukiTheme_VisualPascalABCPlugin.Colors.clrHover;
 		}
 
         private Color TextColor

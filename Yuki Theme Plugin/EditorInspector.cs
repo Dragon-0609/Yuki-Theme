@@ -137,7 +137,7 @@ namespace Yuki_Theme_Plugin
 							new Point (xpos, liny),
 							currentWord.GetFont (plugin.ideComponents.textArea.TextView.TextEditorProperties.FontContainer),
 							currentWord.Color,
-							YukiTheme_VisualPascalABCPlugin.typeBrush
+							YukiTheme_VisualPascalABCPlugin.Colors.typeBrush
 						});
 					}
 					currentWordOffset += currentWord.Length;

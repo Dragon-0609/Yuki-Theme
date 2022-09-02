@@ -1,4 +1,5 @@
 ﻿using System.Security.Principal;
+using Microsoft.Win32;
 using Yuki_Theme.Core.Database;
 
 namespace Yuki_Theme.Core.Utils
@@ -15,15 +16,25 @@ namespace Yuki_Theme.Core.Utils
 				return CheckPrivileges ();
 			}
 		}
+		
+		public bool IsUACEnabled
+		{
+			get
+			{
+				if (DatabaseManager.IsLinux)
+					return false;
+				string UAC_key = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
+				int luaValue = (int) Registry.GetValue(UAC_key, "EnableLUA", 0);
+				bool enabled = luaValue == 1;
+
+				return enabled;
+			}
+		}
 
 		private bool CheckPrivileges ()
 		{
-			WindowsIdentity user = null;
-
-			user = WindowsIdentity.GetCurrent();
-			WindowsPrincipal principal = new WindowsPrincipal(user);
-			bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-			return isAdmin;
+			return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
+				.IsInRole(WindowsBuiltInRole.Administrator);
 		}
 	}
 }

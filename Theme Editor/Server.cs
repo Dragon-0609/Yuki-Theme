@@ -14,8 +14,8 @@ namespace Theme_Editor
 {
 	public class Server : CommunicatorBase, Communicator.IServer
 	{
-		private       NamedPipeServer<Message> _server;
-		
+		private NamedPipeServer <Message> _server;
+
 		public event MessageRecieved recieved;
 
 
@@ -26,9 +26,9 @@ namespace Theme_Editor
 
 		private void Init ()
 		{
-			_messages = new Queue<Message> ();
+			_messages = new Queue <Message> ();
 			InitMessaging ();
-			SetAPI ();			
+			SetAPI ();
 			InitTimer ();
 		}
 
@@ -46,33 +46,33 @@ namespace Theme_Editor
 
 		private void InitMessaging ()
 		{
-			PipeSecurity pSecure = new PipeSecurity();
-			pSecure.SetAccessRule(new PipeAccessRule(Environment.UserName, PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow));
-			
-			_server = new NamedPipeServer<Message> (Message.PATH, pSecure);
+			PipeSecurity pSecure = new PipeSecurity ();
+			pSecure.SetAccessRule (new PipeAccessRule (Environment.UserName, PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow));
+
+			_server = new NamedPipeServer <Message> (Message.PATH, pSecure);
 			_server.ClientConnected += ClientConnected;
 			_server.ClientDisconnected += ClientDisconnected;
 			_server.ClientMessage += MessageReceived;
 			_server.Error += ErrorRaised;
 			_server.Start ();
 			App._manager._server = this;
-			Console.WriteLine("Server started");
+			Console.WriteLine ("Server started");
 		}
 
-		private void ClientConnected (NamedPipeConnection<Message, Message> connection)
+		private void ClientConnected (NamedPipeConnection <Message, Message> connection)
 		{
-			Console.WriteLine("Client Connected");
+			Console.WriteLine ("Client Connected");
 			SendMessage (TEST_CONNECTION);
 		}
 
-		private void ClientDisconnected (NamedPipeConnection<Message, Message> connection)
+		private void ClientDisconnected (NamedPipeConnection <Message, Message> connection)
 		{
 			_timer.Stop ();
 			_server.Stop ();
-			Application.Current.Shutdown();
+			Application.Current.Shutdown ();
 		}
 
-		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
+		private void MessageReceived (NamedPipeConnection <Message, Message> connection, Message message)
 		{
 			Console.WriteLine ($"Received: {message.Id}");
 
@@ -91,11 +91,16 @@ namespace Theme_Editor
 		}
 
 
+		protected override void ConnectionNotEstablished ()
+		{
+
+		}
+
 		public override void SendMessage (Message message)
 		{
 			if (_server._connections.Count > 0)
 			{
-				foreach (NamedPipeConnection<Message, Message> connection in _server._connections)
+				foreach (NamedPipeConnection <Message, Message> connection in _server._connections)
 				{
 					connection.PushMessage (message);
 				}
@@ -119,13 +124,16 @@ namespace Theme_Editor
 		{
 			switch (message.Id)
 			{
-				
+				case TEST_CONNECTION:
+					SendMessage (TEST_CONNECTION_OK);
+					break;
+
 				case CLOSE_SERVER:
 					_server.Stop ();
-					Application.Current.Shutdown();
+					Application.Current.Shutdown ();
 					break;
 			}
 		}
-		
+
 	}
 }

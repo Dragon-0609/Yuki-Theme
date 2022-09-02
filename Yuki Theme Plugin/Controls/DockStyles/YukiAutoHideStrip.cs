@@ -156,22 +156,22 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		private static Brush BrushTabBackground
 		{
-			get	{	return YukiTheme_VisualPascalABCPlugin.bgBrush;	}
+			get	{	return YukiTheme_VisualPascalABCPlugin.Colors.bgBrush;	}
 		}
 
 		private static Brush BrushTabPressBackground
 		{
-			get	{	return YukiTheme_VisualPascalABCPlugin.bgClickBrush;	}
+			get	{	return YukiTheme_VisualPascalABCPlugin.Colors.bgClickBrush;	}
 		}
 
 		private static Pen PenTabBorder
 		{
-			get	{	return YukiTheme_VisualPascalABCPlugin.separatorPen;	}
+			get	{	return YukiTheme_VisualPascalABCPlugin.Colors.separatorPen;	}
 		}
 
 		private static Brush BrushTabText
 		{
-			get	{	return YukiTheme_VisualPascalABCPlugin.clrBrush;	}
+			get	{	return YukiTheme_VisualPascalABCPlugin.Colors.clrBrush;	}
 		}
 		#endregion
 
@@ -216,13 +216,13 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
                 ControlStyles.UserPaint |
                 ControlStyles.AllPaintingInWmPaint |
                 ControlStyles.OptimizedDoubleBuffer, true);
-			BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
+			BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (BackColor != YukiTheme_VisualPascalABCPlugin.bgdef)
-				BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
+			if (BackColor != YukiTheme_VisualPascalABCPlugin.Colors.bgdef)
+				BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
 			Graphics g = e.Graphics;
 			DrawTabStrip(g);
 		}

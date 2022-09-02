@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NamedPipeWrapper;
+using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme_Plugin.Interfaces;
@@ -14,32 +16,37 @@ namespace Yuki_Theme_Plugin.Communication
 	internal class Client : CommunicatorBase, Communicator.IClient
 	{
 		private const string THEME_EDITOR = "Theme_Editor.exe";
-		
-		private NamedPipeClient<Message> _client;
 
-		private bool                 _isConnected = false;
-		
+		private NamedPipeClient <Message> _client;
+
+		private bool _isConnected = false;
+
 		public event MessageRecieved recieved;
-		
+
 
 		private IConsole _console;
-		
-		internal Client (IConsole console)
+
+		private IDispatcher _dispatcher;
+
+		internal Client (IConsole console, IDispatcher dispatcher)
 		{
 			_console = console;
+			_dispatcher = dispatcher;
 			Init ();
 		}
-		
+
 		private void Init ()
 		{
-			_messages = new Queue<Message> ();
+			_messages = new Queue <Message> ();
 			RunServer ();
 			InitMessaging ();
+			InitTimer ();
+			StartTesting ();
 		}
 
 		private void InitMessaging ()
 		{
-			_client = new NamedPipeClient<Message> (Message.PATH);
+			_client = new NamedPipeClient <Message> (Message.PATH);
 			_client.ServerMessage += MessageReceived;
 			_client.Error += ErrorRaised;
 			_client.Disconnected += ServerDisconnected;
@@ -47,7 +54,7 @@ namespace Yuki_Theme_Plugin.Communication
 			_console.WriteToConsole ("Client Connected");
 		}
 
-		private void ServerDisconnected (NamedPipeConnection<Message, Message> connection)
+		private void ServerDisconnected (NamedPipeConnection <Message, Message> connection)
 		{
 			_client.Stop ();
 			_console.WriteToConsole ("Client is disconnected");
@@ -63,21 +70,28 @@ namespace Yuki_Theme_Plugin.Communication
 			Process.Start (THEME_EDITOR);
 		}
 
-		private void MessageReceived (NamedPipeConnection<Message, Message> connection, Message message)
+		private void MessageReceived (NamedPipeConnection <Message, Message> connection, Message message)
 		{
 			_console.WriteToConsole ($"Received: {message.Id}");
-			YukiTheme_VisualPascalABCPlugin.plugin.InvokeUI (new MethodInvoker (delegate
+			_dispatcher.InvokeUI (new MethodInvoker (delegate
 			{
 				if (recieved != null)
 					recieved (message);
 			}));
-			
+
 			ParseMessage (message);
+		}
+
+		protected override void ConnectionNotEstablished ()
+		{
+			API_Events.showError ("Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.", "Couldn't connect to Theme Editor app");
+			CentralAPI.Current = new CommonAPI ();
+			Settings.ConnectAndGet ();
 		}
 
 		public override void SendMessage (Message message)
 		{
-			if (_isConnected)
+			if (_isConnected || message.Id == TEST_CONNECTION)
 			{
 				_client.PushMessage (message);
 			} else
@@ -90,7 +104,7 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			SendMessage (new Message (id));
 		}
-		
+
 		public void SendMessage (int id, string content)
 		{
 			SendMessage (new Message (id, content));
@@ -101,8 +115,10 @@ namespace Yuki_Theme_Plugin.Communication
 			switch (message.Id)
 			{
 				case TEST_CONNECTION:
+				case TEST_CONNECTION_OK:
 					_isConnected = true;
 					_console.WriteToConsole ("Theme editor is running");
+					ConnectionEstablished ();
 					SendMessage (TEST_CONNECTION_OK);
 					break;
 			}
