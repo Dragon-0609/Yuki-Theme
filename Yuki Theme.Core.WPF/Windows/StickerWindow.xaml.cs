@@ -127,12 +127,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				} catch (Exception)
 				{
-					_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point(BORDER_OUTLINE)  : new Drawing.Point (1, 1);
+					_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point(BORDER_OUTLINE)  : GetMargin ();
 					align = AnchorStyles.Bottom | AnchorStyles.Right;
 				}
 			} else
 			{
-				_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE) : new Drawing.Point (1, 1);
+				_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE) : GetMargin ();
 				align = AnchorStyles.Bottom | AnchorStyles.Right;
 			}
 
@@ -140,6 +140,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			AlignY = align.ConvertToY ();
 
 			SetBorderOutline ();
+		}
+		private static Drawing.Point GetMargin ()
+		{
+			int margin = 1;
+			if (Helper.mode == ProductMode.Plugin)
+			{
+				margin = 20;
+			}
+			return new Drawing.Point (margin, margin);
 		}
 
 		private void SetBorderOutline ()

@@ -934,7 +934,8 @@ namespace Yuki_Theme_Plugin
 		{
 			if (System.Windows.Application.Current != null)
 				System.Windows.Application.Current.Shutdown ();
-			plugin._client.SendMessage (MessageTypes.CLOSE_SERVER);
+			if (plugin._client != null)
+				plugin._client.SendMessage (MessageTypes.CLOSE_SERVER);
 		}
 
 		private void RemoveErrorMarksOnCaretPositionChanged (object sender, EventArgs e)

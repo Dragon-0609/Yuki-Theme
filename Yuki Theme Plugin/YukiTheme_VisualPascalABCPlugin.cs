@@ -60,7 +60,7 @@ namespace Yuki_Theme_Plugin
 
 		private       IconManager       manager;
 		public static ToolBarCamouflage camouflage;
-		public static PluginColors      Colors;
+		public static PluginColors      Colors = new PluginColors ();
 		internal      ThemeSwitcher     switcher;
 		internal      EditorInspector   inspector;
 		internal      IdeComponents     ideComponents = new IdeComponents ();
@@ -81,6 +81,8 @@ namespace Yuki_Theme_Plugin
 		public static YukiTheme_VisualPascalABCPlugin plugin;
 
 		internal Client _client;
+
+		private MainWindow CoreWindow;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -104,6 +106,7 @@ namespace Yuki_Theme_Plugin
 			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
+			_helper = new PluginHelper (ideComponents);
 			
 			InitAPI ();
 			
@@ -114,7 +117,6 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			StatusBarNameEnabled = Settings.swStatusbar;
-			_helper = new PluginHelper (ideComponents);
 			
 			ideComponents.WriteToConsole ("Initialization started.");
 			
@@ -127,10 +129,10 @@ namespace Yuki_Theme_Plugin
 
 		private void Initialize ()
 		{
+			LoadColors ();
 			ideComponents.fm.AllowTransparency = true;
 			popupController = new PopupController (ideComponents.fm, this);
 			// popupController = new PopupFormsController (ideComponents.fm, this);
-			LoadColors ();
 			LoadImage ();
 
 			ideComponents.Initialize ();
@@ -172,9 +174,40 @@ namespace Yuki_Theme_Plugin
 
 		private void InitCore ()
 		{
-			_client.SendMessage (OPEN_MAIN_WINDOW);
+			if (!isCommonAPI)
+				_client.SendMessage (OPEN_MAIN_WINDOW);
+			else
+			{
+				InitMainWindow ();
+			}
 		}
 
+		private void InitMainWindow ()
+		{
+			WPFHelper.InitAppForWinforms ();
+			if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
+			{
+				CoreWindow = new MainWindow ();
+				CoreWindow.Model.StartSettingTheme += ReleaseResources;
+				CoreWindow.Model.SetTheme += ReloadLayout;
+				
+				CoreWindow.Closed += (_, _) =>
+				{
+					GC.Collect ();
+					GC.WaitForPendingFinalizers ();
+				};
+			} else
+			{
+				if (CoreWindow.IsVisible)
+				{
+					CoreWindow.Activate ();
+					return;
+				}
+			}
+
+			CoreWindow.Show ();
+		}
+		
 		private void InitializeSticker ()
 		{
 			stickerControl = new CustomPicture (ideComponents.fm);
@@ -236,7 +269,6 @@ namespace Yuki_Theme_Plugin
 			ToolBarListItem.camouflage = camouflage;
 			ToolBarListItem.manager = manager;
 			SettingsPanelUtilities.items = camouflage.items;
-			InitCommunicator ();
 		}
 
 		private void loadSVG ()
@@ -404,9 +436,11 @@ namespace Yuki_Theme_Plugin
 		private void InitAPI ()
 		{
 			AdminTools tools = new AdminTools ();
-			if (tools.IsUACEnabled)
+			if (tools.IsUACEnabled && _helper.IsInProgramFiles ())
 			{
-				CentralAPI.Current = new ClientAPI ();
+				InitCommunicator ();
+				if (!isCommonAPI)
+					CentralAPI.Current = new ClientAPI ();
 			} else
 			{
 				isCommonAPI = true;
@@ -419,12 +453,17 @@ namespace Yuki_Theme_Plugin
 			if (!isCommonAPI)
 			{
 				_client = new Client (ideComponents, _helper);
-				ClientAPI api = (ClientAPI)CentralAPI.Current;
-				api.Client = _client;
-				api.AddEvents ();
-				api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
-				api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
-				api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
+
+				isCommonAPI = CentralAPI.Current is not ClientAPI;
+				if (!isCommonAPI)
+				{
+					ClientAPI api = (ClientAPI)CentralAPI.Current;
+					api.Client = _client;
+					api.AddEvents ();
+					api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
+					api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
+					api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
+				}
 			}
 		}
 

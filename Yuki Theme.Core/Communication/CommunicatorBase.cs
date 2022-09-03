@@ -18,6 +18,8 @@ namespace Yuki_Theme.Core.Communication
 		private bool _connectionEstablished = false;
 		
 		protected Queue<Message> _messages;
+
+		protected bool stopTimer = false;
 		
 
 		protected void InitTimer ()
@@ -50,13 +52,20 @@ namespace Yuki_Theme.Core.Communication
 		}
 		private void TestConnection (object sender, ElapsedEventArgs e)
 		{
-			if (tryCount < 10)
+			if (!stopTimer)
 			{
-				SendMessage (new Message (MessageTypes.TEST_CONNECTION));
-				tryCount++;
+				if (tryCount < 10)
+				{
+					SendMessage (new Message (MessageTypes.TEST_CONNECTION));
+					tryCount++;
+				} else if (tryCount < 20)
+				{
+					tryCount = 30;
+					ConnectionNotEstablished ();
+				}
 			} else
 			{
-				ConnectionNotEstablished ();
+				_timer.Stop ();
 			}
 		}
 

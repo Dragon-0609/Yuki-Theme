@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using NamedPipeWrapper;
@@ -21,6 +22,8 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private bool _isConnected = false;
 
+		private bool stopClient = false;
+
 		public event MessageRecieved recieved;
 
 
@@ -39,9 +42,12 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			_messages = new Queue <Message> ();
 			RunServer ();
-			InitMessaging ();
-			InitTimer ();
-			StartTesting ();
+			if (!stopClient)
+			{
+				InitMessaging ();
+				InitTimer ();
+				StartTesting ();
+			}
 		}
 
 		private void InitMessaging ()
@@ -67,7 +73,15 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private void RunServer ()
 		{
-			Process.Start (THEME_EDITOR);
+			try
+			{
+				Process.Start (THEME_EDITOR);
+			} catch
+			{
+				stopTimer = stopClient = true;
+				ConnectionNotEstablished ();
+			}
+			
 		}
 
 		private void MessageReceived (NamedPipeConnection <Message, Message> connection, Message message)
@@ -84,7 +98,7 @@ namespace Yuki_Theme_Plugin.Communication
 
 		protected override void ConnectionNotEstablished ()
 		{
-			API_Events.showError ("Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.", "Couldn't connect to Theme Editor app");
+			MessageBox.Show ("Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.", "Couldn't connect to Theme Editor app");
 			CentralAPI.Current = new CommonAPI ();
 			Settings.ConnectAndGet ();
 		}

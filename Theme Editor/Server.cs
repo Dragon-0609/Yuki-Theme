@@ -16,6 +16,8 @@ namespace Theme_Editor
 	{
 		private NamedPipeServer <Message> _server;
 
+		private bool forceShutdown = false;
+
 		public event MessageRecieved recieved;
 
 
@@ -61,8 +63,15 @@ namespace Theme_Editor
 
 		private void ClientConnected (NamedPipeConnection <Message, Message> connection)
 		{
-			Console.WriteLine ("Client Connected");
-			SendMessage (TEST_CONNECTION);
+			if (forceShutdown)
+			{
+				connection.Close ();
+				_server.Stop ();
+			}else
+			{
+				Console.WriteLine ("Client Connected");
+				SendMessage (TEST_CONNECTION);
+			}
 		}
 
 		private void ClientDisconnected (NamedPipeConnection <Message, Message> connection)
@@ -98,15 +107,22 @@ namespace Theme_Editor
 
 		public override void SendMessage (Message message)
 		{
-			if (_server._connections.Count > 0)
+			try
 			{
-				foreach (NamedPipeConnection <Message, Message> connection in _server._connections)
+				if (_server._connections.Count > 0)
 				{
-					connection.PushMessage (message);
+					foreach (NamedPipeConnection <Message, Message> connection in _server._connections)
+					{
+						connection.PushMessage (message);
+					}
+				} else
+				{
+					_messages.Enqueue (message);
 				}
-			} else
+
+			} catch (InvalidOperationException exception)
 			{
-				_messages.Enqueue (message);
+				CloseServer ();
 			}
 		}
 
@@ -129,10 +145,15 @@ namespace Theme_Editor
 					break;
 
 				case CLOSE_SERVER:
-					_server.Stop ();
-					Application.Current.Shutdown ();
+					CloseServer ();
 					break;
 			}
+		}
+		private void CloseServer ()
+		{
+			forceShutdown = true;
+			_server.Stop ();
+			Application.Current.Shutdown ();
 		}
 
 	}

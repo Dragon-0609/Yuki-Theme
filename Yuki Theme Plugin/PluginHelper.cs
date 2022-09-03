@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Interop;
@@ -129,6 +130,14 @@ namespace Yuki_Theme_Plugin
 		public void InvokeUI (Delegate method)
 		{
 			_components.fm.BeginInvoke (method);
+		}
+
+		public bool IsInProgramFiles ()
+		{
+			string path = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
+			var programfileX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+
+			return path.IndexOf (programfileX86, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 		
 	}
