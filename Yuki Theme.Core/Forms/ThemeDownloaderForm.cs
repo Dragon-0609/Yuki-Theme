@@ -49,20 +49,23 @@ namespace Yuki_Theme.Core.Forms
 
 
 		private const string REMOTE_SERVER =
-			"https://API_Base.Current.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
+			"https://api.github.com/search/code?q=extension:json+repo:doki-theme/doki-master-theme&page=1&per_page=100";
 	
-		private const string REMOTE_BRANCH_SERVER = "https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
+		private const string REMOTE_BRANCH_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches?per_page=100";
 
 		private const string WALLPAPER_SERVER = "https://github.com/doki-theme/doki-theme-assets/raw/master/backgrounds/wallpapers/";
 		private const string STICKER_SERVER   = "https://github.com/doki-theme/doki-theme-assets/raw/master/stickers/jetbrains/v2/";
 
-		private const string BRANCH_COMMIT_SERVER = "https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/branches/";
+		private const string BRANCH_COMMIT_SERVER = "https://api.github.com/repos/doki-theme/doki-master-theme/branches/";
 
 		private const string GROUP_FILE = "https://github.com/doki-theme/doki-theme-jetbrains/raw/master/buildSrc/src/main/kotlin/Tools.kt";
 
 		public ThemeDownloaderForm ()
 		{
 			InitializeComponent ();
+			// System.Net.ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+			ServicePointManager.Expect100Continue = true;
+			ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 			browser.ScrollBarsEnabled = true;
 			browser.ObjectForScripting = this;
 			browser.ScriptErrorsSuppressed = false;
@@ -418,7 +421,7 @@ namespace Yuki_Theme.Core.Forms
 			} else
 			{
 				searchMode = 1;
-				return $"https://API_Base.Current.github.com/repos/doki-theme/doki-master-theme/git/trees/{branch}?recursive=1";
+				return $"https://api.github.com/repos/doki-theme/doki-master-theme/git/trees/{branch}?recursive=1";
 			}
 		}
 

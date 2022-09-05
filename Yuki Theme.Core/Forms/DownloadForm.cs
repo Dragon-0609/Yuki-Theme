@@ -53,8 +53,8 @@ namespace Yuki_Theme.Core.Forms
 			}else
 			{
 				var url = Settings.Beta
-					? "https://API_Base.Current.github.com/repos/dragon-0609/yuki-theme/releases"
-					: "https://API_Base.Current.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+					? "https://api.github.com/repos/dragon-0609/yuki-theme/releases"
+					: "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
 				try
 				{
 					using (var client = new HttpClient ())

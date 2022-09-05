@@ -66,8 +66,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void CheckVersion (PopupController controller)
 		{
-			const string stableUrl = "https://API_Base.Current.github.com/repos/dragon-0609/yuki-theme/releases";
-			const string betaUrl = "https://API_Base.Current.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+			const string stableUrl = "https://api.github.com/repos/dragon-0609/yuki-theme/releases";
+			const string betaUrl = "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
 			string url = Settings.Beta ? stableUrl : betaUrl;
 			_presenter.CheckVersion (url, controller);
 		}

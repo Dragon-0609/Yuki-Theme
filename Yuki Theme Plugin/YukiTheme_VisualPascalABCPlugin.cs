@@ -708,10 +708,6 @@ namespace Yuki_Theme_Plugin
 		}
 
 
-		#region Helper Methods
-
-		#endregion
-
 		public event ColorUpdate OnColorUpdate;
 	}
 }

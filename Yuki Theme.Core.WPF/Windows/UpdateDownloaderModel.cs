@@ -63,7 +63,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					nextVersion = ParseVersion (hasBeta, tg);
 
 					double nextVer = double.Parse (nextVersion, CultureInfo.InvariantCulture);
-					bool available = SettingsConst.CURRENT_VERSION < nextVer || (Math.Abs (SettingsConst.CURRENT_VERSION - nextVer) >= 0.1 &&
+					bool available = SettingsConst.CURRENT_VERSION < nextVer || (Math.Abs (SettingsConst.CURRENT_VERSION - nextVer) < 1 &&
 																				 SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
 					if (available)
 					{
