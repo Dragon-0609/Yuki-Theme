@@ -40,7 +40,7 @@ namespace Yuki_Theme.Core.Controls
 					using (var p = new Pen(BorderColor,2))
 						g.DrawRectangle(p, new Rectangle(1, 1, Width - 2, Height - 2));
 				}
-				ReleaseDC(this.Handle, dc);
+				ReleaseDC(Handle, dc);
 			}
 		}
 

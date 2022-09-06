@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Yuki_Theme.Core.API;
 using Brush = System.Windows.Media.Brush;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -34,12 +35,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			if (from != to)
 			{
-				result = CLI.rename (from, to);
+				result = CentralAPI.Current.RenameTheme (from, to);
 
 				canReturn = result != 0;
 			} else
 			{
-				CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
+				API_Events.showError (CentralAPI.Current.Translate ("messages.name.equal.message"), CentralAPI.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

@@ -41,9 +41,9 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 		public void InitSearchBar ()
 		{
 			searchBar = new CustomText ();
-			searchBar.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
-			searchBar.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
-			searchBar.BorderColor = YukiTheme_VisualPascalABCPlugin.bgBorder;
+			searchBar.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bg;
+			searchBar.ForeColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
+			searchBar.BorderColor = YukiTheme_VisualPascalABCPlugin.Colors.bgBorder;
 			searchBar.Font = Font;
 			searchBar.KeyUp += (sender, args) =>
 			{

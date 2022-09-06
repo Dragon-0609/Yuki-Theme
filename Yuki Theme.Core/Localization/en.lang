@@ -96,6 +96,7 @@
     "main.labels.apply": "Apply",
     "main.labels.italic": "Italic",
     "main.labels.bold": "Bold",
+    "main.dragndrop.format": "File format can be just .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",
     
     "ui.tooltips.add.title": "Add Theme",
     "ui.tooltips.add.message": "Add theme by copying from another\ntheme.",
@@ -133,6 +134,7 @@
     "theme.manager.new": "New Theme",
     "parser.theme.exist": "The theme is exist...canceling...",
     "parser.theme.default": "The theme is default! You can't import it!",
+    "parser.theme.colors": "Couldn't get theme colors...cancelling...",
     
     "plugin.explorer.open": "Open in Explorer",
     "plugin.menu.settings": "Show Settings",
@@ -211,10 +213,21 @@
     "messages.buttons.decline": "Decline",
     "messages.buttons.close": "Close",
     
+    "messages.warnings.adminprivileges.cli.title": "CLI opened without Administrator privileges.",
+    "messages.warnings.adminprivileges.cli.content": "CLI opened without Administrator privileges. CLI needs Administrator privileges to install a visual theme for PascalABC.NET IDE.",
+    "messages.warnings.adminprivileges.plugin.title": "Plugin doesn't have Administrator privileges.",
+    "messages.warnings.adminprivileges.plugin.content": "Plugin doesn't have Administrator privileges. Plugin needs Administrator privileges to apply a theme.",
+    
+    "theme.downloader.errors.group.request": "Couldn't get info about groups",
+    "theme.downloader.errors.group.wrong": "Something went wrong.",
+    "theme.downloader.errors.github.exceed.title": "Github API Limit",
+    "theme.downloader.errors.github.exceed.message": "Github API Limit exceeded for your address. Try later!",
+    
     "cli.help.copy": "Copy the specified themes\ncopy <from> <to>",
     "cli.help.copy.names": "Copy <from> <to>",
     "cli.help.list": "Show list of themes",
     "cli.help.list.groups": "Show list of themes with groups",
+    "cli.help.list.custom": "Show list of custom themes",
     "cli.help.clear": "Clear the CLI",
     "cli.help.fields": "Show main editable fields",
     "cli.help.allfields": "Show all editable fields",

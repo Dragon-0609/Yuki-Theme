@@ -1,6 +1,9 @@
-﻿using CLITools;
+﻿using System;
+using CLITools;
 using CommandLine;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.CLI
 {
@@ -10,6 +13,12 @@ namespace Yuki_Theme.CLI
 		
 		public static void Main (string [] args)
 		{
+			Settings.translation.LoadLocalization ();
+			
+			AdminTools adminTools = new AdminTools();
+			if (!adminTools.CurrentUserIsAdmin ())
+				program.ShowError(CentralAPI.Current.Translate ("messages.warnings.adminprivileges.cli.content"));
+			
 			var parser = new Parser (parserSettings =>
 			{
 				parserSettings.AutoHelp = true;
@@ -19,7 +28,7 @@ namespace Yuki_Theme.CLI
 				parserSettings.EnableDashDash = true;
 				parserSettings.IgnoreUnknownArguments = false;
 			});
-			Settings.translation.LoadLocalization ();
+			
 			if (args != null && args.Length > 0)
 			{
 				program.quit = true;

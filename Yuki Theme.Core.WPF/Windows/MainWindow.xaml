@@ -15,7 +15,8 @@
         Closing="MainWindow_OnClosing"
         SourceInitialized="MainWindow_OnSourceInitialized"
         SizeChanged="MainWindow_OnSizeChanged"
-        Title="Yuki Theme" Height="400" Width="680">
+        Title="Yuki Theme" Height="400" Width="680"
+        AllowDrop="True" Drop="MainWindow_OnDrop">
 
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
@@ -322,21 +323,6 @@
 
             </WrapPanel>
             <Grid Grid.Row="1">
-
-                <controls:AirspacePopup PlacementTarget="{Binding ElementName=Fstb}"
-                                        FollowPlacementTarget="True"
-                                        AllowOutsideScreenPlacement="True"
-                                        StaysOpen="True"
-                                        ParentWindow="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
-                                        IsOpen="True"
-                                        AllowsTransparency="True"
-                                        Placement="Bottom, Right"
-                                        x:Name="Popup" Width="200" Height="200">
-                    <Grid>
-                        <Image VerticalAlignment="Bottom" HorizontalAlignment="Right" Name="Sticker" Width="200" Height="200"
-                               Visibility="Hidden" />
-                    </Grid>
-                </controls:AirspacePopup>
 
                 <controls:CodeTextboxHost x:Name="Fstb"></controls:CodeTextboxHost>
 

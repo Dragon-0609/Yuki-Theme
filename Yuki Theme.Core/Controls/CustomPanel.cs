@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Controls
 {
@@ -40,8 +41,8 @@ namespace Yuki_Theme.Core.Controls
 		public void Prepare ()
 		{
 			lines?.Dispose ();
-			lines = new Pen (Helper.bgBorder, 5);
-			bg = Helper.DarkerOrLighter (Helper.bgColor, 0.4f);
+			lines = new Pen (ColorKeeper.bgBorder, 5);
+			bg = Helper.DarkerOrLighter (ColorKeeper.bgColor, 0.4f);
 			lines.Alignment = PenAlignment.Center;
 			Enabled = false;
 			Size = Parent.ClientSize;
@@ -56,7 +57,7 @@ namespace Yuki_Theme.Core.Controls
 			b2_2 = new Point (Size.Width, pict.height32);
 			painted = false;
 			Visible = true;
-			this.BringToFront ();
+			BringToFront ();
 			pict.BringToFront ();
 			Invalidate();
 		}
@@ -75,11 +76,11 @@ namespace Yuki_Theme.Core.Controls
 		{
 			if (mode == 0)
 			{
-				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (5, 0, 0, 0)), this.ClientRectangle);
+				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (5, 0, 0, 0)), ClientRectangle);
 			} else if (!painted)
 			{
 				// painted = true;
-				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (50, bg)), this.ClientRectangle);
+				e.Graphics.FillRectangle (new SolidBrush (Color.FromArgb (50, bg)), ClientRectangle);
 				e.Graphics.DrawLine (lines, l1, l1_2);
 				e.Graphics.DrawLine (lines, l2, l2_2);
 				e.Graphics.DrawLine (lines, b1, b1_2);

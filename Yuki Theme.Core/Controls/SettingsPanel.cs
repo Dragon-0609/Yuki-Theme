@@ -7,8 +7,10 @@ using System.Reflection;
 using System.Windows.Forms;
 using CustomControls.RJControls;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Controls
 {
@@ -87,7 +89,7 @@ namespace Yuki_Theme.Core.Controls
 			{
 				if (Directory.Exists (co.FileName))
 				{
-					if (Directory.Exists (System.IO.Path.Combine (co.FileName, "Highlighting")))
+					if (Directory.Exists (Path.Combine (co.FileName, "Highlighting")))
 					{
 						textBox1.Text = co.FileName;
 					} else
@@ -140,8 +142,8 @@ namespace Yuki_Theme.Core.Controls
 					popupController.df.InstallManually ();
 				} else
 				{
-					MessageBox.Show (CLI.Translate ("messages.update.invalid"),
-					                 CLI.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show (CentralAPI.Current.Translate ("messages.update.invalid"),
+					                 CentralAPI.Current.Translate ("messages.update.wrong"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -163,8 +165,8 @@ namespace Yuki_Theme.Core.Controls
 				fr = fg;
 			} else
 			{
-				add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-				fr = Helper.fgColor;
+				add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
+				fr = ColorKeeper.fgColor;
 			}
 
 			Helper.RenderSvg (showHelp, Helper.LoadSvg ("help", a), false, Size.Empty, true, fr);
@@ -343,7 +345,7 @@ namespace Yuki_Theme.Core.Controls
 
 		private void reset_margin_Click (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
+			Settings.database.DeleteData (SettingsConst.STICKER_POSITION);
 			for (int i = 0; i < stickerToUpdate.Count; i++)
 			{
 				try
@@ -437,9 +439,9 @@ namespace Yuki_Theme.Core.Controls
 				brdr = border;
 			} else
 			{
-				back = Helper.bgColor;
-				fore = Helper.fgColor;
-				brdr = Helper.bgBorder;
+				back = ColorKeeper.bgColor;
+				fore = ColorKeeper.fgColor;
+				brdr = ColorKeeper.bgBorder;
 			}
 
 			HelperForm hf = new HelperForm ();
@@ -456,7 +458,7 @@ namespace Yuki_Theme.Core.Controls
 				popupController.df.startUpdating ();
 			} else
 			{
-				CLI_Actions.showError ("Update isn't downloaded!", "Update isn't downloaded");
+				API_Events.showError ("Update isn't downloaded!", "Update isn't downloaded");
 			}
 		}
 
@@ -500,7 +502,7 @@ namespace Yuki_Theme.Core.Controls
 			foreach (Control control in parent.Controls)
 			{
 				if (control.AccessibleName != null)
-					control.Text = CLI.Translate (control.AccessibleName);
+					control.Text = CentralAPI.Current.Translate (control.AccessibleName);
 				if (control.Controls.Count > 0)
 				{
 					TranslateControls (control);

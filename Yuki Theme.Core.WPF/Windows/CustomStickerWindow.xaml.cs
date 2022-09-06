@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Utils;
 using Brush = System.Windows.Media.Brush;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -29,7 +31,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				canReturn = true;
 			} else
 			{
-				CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
+				API_Events.showError (CentralAPI.Current.Translate ("messages.name.equal.message"), CentralAPI.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;
@@ -37,7 +39,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void Initialization (object sender, RoutedEventArgs e)
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			WPFHelper.SetSVGImage (ImagePathButton, "moreHorizontal" + add);
 		}
 

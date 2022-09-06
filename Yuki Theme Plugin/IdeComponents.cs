@@ -15,15 +15,19 @@ using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
+using Yuki_Theme_Plugin.Interfaces;
 using CodeCompletionHighlighter = Yuki_Theme_Plugin.Controls.DockStyles.CodeCompletionHighlighter;
 using IWorkbench = VisualPascalABCPlugins.IWorkbench;
+using Message = Yuki_Theme.Core.Communication.Message;
 
 namespace Yuki_Theme_Plugin
 {
-	public class IdeComponents
+	public class IdeComponents : IConsole
 	{
 		#region IDE Controls
 
@@ -80,19 +84,19 @@ namespace Yuki_Theme_Plugin
 
 		#region Colors, Brushes, Pens
 
-		private Color bg       => YukiTheme_VisualPascalABCPlugin.bg;
-		private Color bgdef    => YukiTheme_VisualPascalABCPlugin.bgdef;
-		private Color bgBorder => YukiTheme_VisualPascalABCPlugin.bgBorder;
-		private Color bgClick  => YukiTheme_VisualPascalABCPlugin.bgClick;
-		private Color bgSelection  => YukiTheme_VisualPascalABCPlugin.bgSelection;
-		private Color clr      => YukiTheme_VisualPascalABCPlugin.clr;
-		private Color clrHover => YukiTheme_VisualPascalABCPlugin.clrHover;
-		private Color clrKey => YukiTheme_VisualPascalABCPlugin.clrKey;
+		private Color bg       => YukiTheme_VisualPascalABCPlugin.Colors.bg;
+		private Color bgdef    => YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
+		private Color bgBorder => YukiTheme_VisualPascalABCPlugin.Colors.bgBorder;
+		private Color bgClick  => YukiTheme_VisualPascalABCPlugin.Colors.bgClick;
+		private Color bgSelection  => YukiTheme_VisualPascalABCPlugin.Colors.bgSelection;
+		private Color clr      => YukiTheme_VisualPascalABCPlugin.Colors.clr;
+		private Color clrHover => YukiTheme_VisualPascalABCPlugin.Colors.clrHover;
+		private Color clrKey => YukiTheme_VisualPascalABCPlugin.Colors.clrKey;
 
-		private Pen separatorPen => YukiTheme_VisualPascalABCPlugin.separatorPen;
+		private Pen separatorPen => YukiTheme_VisualPascalABCPlugin.Colors.separatorPen;
 
-		private Brush bgBrush  => YukiTheme_VisualPascalABCPlugin.bgBrush;
-		private Brush clrBrush => YukiTheme_VisualPascalABCPlugin.clrBrush;
+		private Brush bgBrush  => YukiTheme_VisualPascalABCPlugin.Colors.bgBrush;
+		private Brush clrBrush => YukiTheme_VisualPascalABCPlugin.Colors.clrBrush;
 
 		#endregion
 
@@ -580,15 +584,15 @@ namespace Yuki_Theme_Plugin
 		
 		public void UpdateTranslations ()
 		{
-			openInExplorerItem.Text = CLI.Translate ("plugin.explorer.open");
-			menu_settings.Text = CLI.Translate ("plugin.menu.settings");
-			quiet.Text = CLI.Translate ("plugin.menu.discreet");
-			stick.Text = CLI.Translate ("plugin.menu.stickers");
-			backimage.Text = CLI.Translate ("plugin.menu.wallpaper");
-			switchTheme.Text = CLI.Translate ("plugin.menu.switch");
-			enablePositioning.Text = CLI.Translate ("plugin.menu.positioning");
-			resetStickerPosition.Text = CLI.Translate ("plugin.menu.margins");
-			updatePage.Text = CLI.Translate ("plugin.menu.notification");
+			openInExplorerItem.Text = CentralAPI.Current.Translate ("plugin.explorer.open");
+			menu_settings.Text = CentralAPI.Current.Translate ("plugin.menu.settings");
+			quiet.Text = CentralAPI.Current.Translate ("plugin.menu.discreet");
+			stick.Text = CentralAPI.Current.Translate ("plugin.menu.stickers");
+			backimage.Text = CentralAPI.Current.Translate ("plugin.menu.wallpaper");
+			switchTheme.Text = CentralAPI.Current.Translate ("plugin.menu.switch");
+			enablePositioning.Text = CentralAPI.Current.Translate ("plugin.menu.positioning");
+			resetStickerPosition.Text = CentralAPI.Current.Translate ("plugin.menu.margins");
+			updatePage.Text = CentralAPI.Current.Translate ("plugin.menu.notification");
 		}
 		
 		internal void UpdateMenuStickersPositioningImage ()
@@ -791,13 +795,13 @@ namespace Yuki_Theme_Plugin
 				return;
 			}
 			Graphics g = dea.Graphics;
-			Brush stringColor = YukiTheme_VisualPascalABCPlugin.clrBrush;
-			Brush backColor = YukiTheme_VisualPascalABCPlugin.bgBrush;
+			Brush stringColor = YukiTheme_VisualPascalABCPlugin.Colors.clrBrush;
+			Brush backColor = YukiTheme_VisualPascalABCPlugin.Colors.bgBrush;
 			
 			if ((dea.State & DrawItemState.Selected) == DrawItemState.Selected) {
 				if ((dea.State & DrawItemState.Focus) == DrawItemState.Focus)
 				{
-					backColor = YukiTheme_VisualPascalABCPlugin.selectionBrush;
+					backColor = YukiTheme_VisualPascalABCPlugin.Colors.selectionBrush;
 					g.FillRectangle(backColor, dea.Bounds);
 				} else {
 					g.FillRectangle(backColor, dea.Bounds);
@@ -930,6 +934,8 @@ namespace Yuki_Theme_Plugin
 		{
 			if (System.Windows.Application.Current != null)
 				System.Windows.Application.Current.Shutdown ();
+			if (plugin._client != null)
+				plugin._client.SendMessage (MessageTypes.CLOSE_SERVER);
 		}
 
 		private void RemoveErrorMarksOnCaretPositionChanged (object sender, EventArgs e)
@@ -939,9 +945,9 @@ namespace Yuki_Theme_Plugin
 
 		public void WriteToConsole (string text)
 		{
-			fm.AddTextToCompilerMessages (text + Environment.NewLine);
+			fm.AddTextToCompilerMessages ($"Yuki Theme: {text}{Environment.NewLine}");
 		}
-
+		
 		private void GetProperities ()
 		{
 			if (supportProject && projectExplorer != null)
@@ -967,18 +973,17 @@ namespace Yuki_Theme_Plugin
 		
 		private void ToggleQuiet (object sender, EventArgs e)
 		{
-			GetProperities ();
-			/*if (!toggled)
+			if (!toggled)
 			{
 				Settings.bgImage = false;
 				Settings.swSticker = false;
-				if (plugin.nameInStatusBar)
+				if (plugin.StatusBarNameEnabled)
 					plugin.currentThemeName.Visible = false;
 			} else
 			{
-				Settings.bgImage = plugin.imagesEnabled == 1 || plugin.imagesEnabled == 3;
-				Settings.swSticker = plugin.imagesEnabled == 2 || plugin.imagesEnabled == 3;
-				if (plugin.nameInStatusBar)
+				Settings.bgImage = plugin.imagesEnabled is 1 or 3;
+				Settings.swSticker = plugin.imagesEnabled is 2 or 3;
+				if (plugin.StatusBarNameEnabled)
 					plugin.currentThemeName.Visible = true;
 			}
 
@@ -988,7 +993,7 @@ namespace Yuki_Theme_Plugin
 			plugin.LoadSticker ();
 			updateQuietImage ();
 			UpdateMenuWallpaperImage ();
-			UpdateMenuStickerImage ();*/
+			UpdateMenuStickerImage ();
 		}
 
 		private void ToggleWallpaper (object sender, EventArgs e)
@@ -1012,14 +1017,14 @@ namespace Yuki_Theme_Plugin
 
 		private void ResetStickerPosition (object sender, EventArgs e)
 		{
-			DatabaseManager.DeleteData (Settings.STICKERPOSITION);
+			Settings.database.DeleteData (SettingsConst.STICKER_POSITION);
 			plugin.stickerControl.ReadData ();
 			plugin.stickerControl.UpdateLocation ();
 		}
 
 		private void ShowUpdatePage (object sender, EventArgs e)
 		{
-			plugin.openUpdate ();
+			plugin._helper.openUpdate ();
 		}
 
 		private void ToggleSticker (object sender, EventArgs e)

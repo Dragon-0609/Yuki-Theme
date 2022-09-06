@@ -1,9 +1,10 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace Yuki_Theme.Core.Interfaces;
-
-public interface IIconManager
+namespace Yuki_Theme.Core.Interfaces
 {
-	Image RenderToolBarItemImage (ToolStripItem btn);
+	public interface IIconManager
+	{
+		Image RenderToolBarItemImage (ToolStripItem btn);
+	}
 }

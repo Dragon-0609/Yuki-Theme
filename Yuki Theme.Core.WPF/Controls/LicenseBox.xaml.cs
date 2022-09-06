@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using Yuki_Theme.Core.Utils;
 using Drawing = System.Drawing;
 
 namespace Yuki_Theme.Core.WPF.Controls
@@ -16,7 +17,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		internal void LoadSvg ()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			Drawing.Size size = new Drawing.Size (24, 24);
 			Assembly assm = Assembly.GetExecutingAssembly ();
 			BackImage.Source = WPFHelper.GetSvg ("back" + add,null, false, size, "Yuki_Theme.Core.WPF.Resources.SVG", assm);

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows;
+using Yuki_Theme.Core.API;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -19,7 +17,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void AddThemes (string themeToSelect)
 		{
 			Themes.Items.Clear ();
-			foreach (string theme in CLI.schemes.ToArray ())
+			foreach (string theme in CentralAPI.Current.Schemes.ToArray ())
 			{
 				Themes.Items.Add (theme);
 			}
@@ -41,12 +39,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			
 			if (from != to)
 			{
-				result = CLI.add (from, to);
+				result = CentralAPI.Current.AddTheme (from, to);
 
 				canReturn = result != 0;
 			} else
 			{
-				CLI_Actions.showError (CLI.Translate ("messages.name.equal.message"), CLI.Translate ("messages.name.equal.title"));
+				API_Events.showError (CentralAPI.Current.Translate ("messages.name.equal.message"), CentralAPI.Current.Translate ("messages.name.equal.title"));
 			}
 			
 			return canReturn;

@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Tests", "Yuki Th
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Core.WPF", "Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj", "{2AB7513F-70FB-4FFA-88FF-B133F20DD7DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theme Editor", "Theme Editor\Theme Editor.csproj", "{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,5 +58,9 @@ Global
 		{2AB7513F-70FB-4FFA-88FF-B133F20DD7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AB7513F-70FB-4FFA-88FF-B133F20DD7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AB7513F-70FB-4FFA-88FF-B133F20DD7DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

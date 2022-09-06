@@ -1,6 +1,7 @@
-﻿namespace Yuki_Theme.Core.Interfaces;
-
-public interface IUpdatable
+﻿namespace Yuki_Theme.Core.Interfaces
 {
-	void updateBackgroundColors ();
+	public interface IUpdatable
+	{
+		void updateBackgroundColors ();
+	}
 }

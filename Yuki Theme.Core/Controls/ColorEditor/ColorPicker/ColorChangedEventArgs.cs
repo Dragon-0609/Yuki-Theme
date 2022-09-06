@@ -11,12 +11,12 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         public ColorChangedEventArgs(Color selectedColor)
         {
             this.selectedColor = selectedColor;
-            this.selectedHslColor = HslColor.FromColor(selectedColor);
+            selectedHslColor = HslColor.FromColor(selectedColor);
         }
 
         public ColorChangedEventArgs(HslColor selectedHslColor)
         {
-            this.selectedColor = selectedHslColor.RgbValue;
+            selectedColor = selectedHslColor.RgbValue;
             this.selectedHslColor = selectedHslColor;
         }
 
@@ -24,7 +24,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.selectedColor;
+                return selectedColor;
             }
         }
 
@@ -32,7 +32,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.selectedHslColor;
+                return selectedHslColor;
             }
         }
     }

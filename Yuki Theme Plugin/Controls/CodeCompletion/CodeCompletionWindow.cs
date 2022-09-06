@@ -69,7 +69,7 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
         
         public void CalcFormWidth()
         {
-        	this.codeCompletionListView.CalcWidth();
+        	codeCompletionListView.CalcWidth();
         }
         
         public static YukiCodeCompletionWindow ShowCompletionWindowWithFirstChar(Form parent, TextEditorControl control, string fileName, ICompletionDataProvider completionDataProvider, char firstChar, PascalABCCompiler.Parsers.KeywordKind keyw)
@@ -86,9 +86,9 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
         
 		YukiCodeCompletionWindow(ICompletionDataProvider completionDataProvider, ICompletionData[] completionData, Form parentForm, TextEditorControl control,bool visibleKeyPressed, bool is_by_dot) : base(parentForm, control)
 		{
-			this.dataProvider = completionDataProvider;
+			dataProvider = completionDataProvider;
 			this.completionData = completionData;
-			this.document = control.Document;
+			document = control.Document;
 			workingScreen = Screen.GetWorkingArea(Location);
             lastCursorScreenPosition = control.ActiveTextAreaControl.Caret.ScreenPosition;
             startOffset = control.ActiveTextAreaControl.Caret.Offset + (visibleKeyPressed ? 1 : 0);
@@ -120,7 +120,7 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 				codeCompletionListView.FirstItemChanged += new EventHandler(CodeCompletionListViewFirstItemChanged);
 				Controls.Add(vScrollBar);
 			}
-            this.drawingSize = new Size(//codeCompletionListView.ItemHeight * 10,
+            drawingSize = new Size(//codeCompletionListView.ItemHeight * 10,
                                         VisualPascalABC.Constants.CompletionWindowWidth,
                                         codeCompletionListView.ItemHeight * Math.Min(MaxListLength, completionData.Length) + 2);
 			SetLocation();
@@ -128,7 +128,7 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 			if (declarationViewWindow == null) {
 				declarationViewWindow = new DeclarationWindow(parentForm);
 				declarationViewWindow.in_completion_list = true;
-                declarationViewWindow.Font = new Font(VisualPascalABC.Constants.CompletionWindowDeclarationViewWindowFontName, declarationViewWindow.Font.Size);
+				declarationViewWindow.Font = new Font(VisualPascalABC.Constants.CompletionWindowDeclarationViewWindowFontName, declarationViewWindow.Font.Size);
 			}            
 			SetDeclarationViewLocation();
             //DS закоментил, это желтый квадрат при старте
@@ -200,13 +200,13 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 		{
 			int MAX_DELTA  = 120; // basically it's constant now, but could be changed later by MS
 			int multiplier = e.Delta / MAX_DELTA;
-			multiplier *= System.Windows.Forms.SystemInformation.MouseWheelScrollLines * vScrollBar.SmallChange;
+			multiplier *= SystemInformation.MouseWheelScrollLines * vScrollBar.SmallChange;
 			
 			int newValue;
-			if (System.Windows.Forms.SystemInformation.MouseWheelScrollLines > 0) {
-				newValue = this.vScrollBar.Value - (control.TextEditorProperties.MouseWheelScrollDown ? 1 : -1) * multiplier;
+			if (SystemInformation.MouseWheelScrollLines > 0) {
+				newValue = vScrollBar.Value - (control.TextEditorProperties.MouseWheelScrollDown ? 1 : -1) * multiplier;
 			} else {
-				newValue = this.vScrollBar.Value - (control.TextEditorProperties.MouseWheelScrollDown ? 1 : -1) * multiplier;
+				newValue = vScrollBar.Value - (control.TextEditorProperties.MouseWheelScrollDown ? 1 : -1) * multiplier;
 			}
 			vScrollBar.Value = Math.Max(vScrollBar.Minimum, Math.Min(vScrollBar.Maximum - vScrollBar.LargeChange + 1, newValue));
 		}

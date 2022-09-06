@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Yuki_Theme.Core.Utils;
 using Drawing = System.Drawing; 
 
 namespace Yuki_Theme.Core.WPF.Styles
@@ -21,9 +22,9 @@ namespace Yuki_Theme.Core.WPF.Styles
 		{
 			Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateRadioButtonColors ();
 
-			this.SetResourceSvg ("RadioButtonDefault", "radioButton", null, defaultSize, Helper.fgColor);
+			this.SetResourceSvg ("RadioButtonDefault", "radioButton", null, defaultSize, ColorKeeper.fgColor);
 			this.SetResourceSvg ("RadioButtonFocused", "radioButtonFocused", null, defaultSize);
-			this.SetResourceSvg ("RadioButtonSelected", "radioButtonSelected", idColors, defaultSize, Helper.fgColor);
+			this.SetResourceSvg ("RadioButtonSelected", "radioButtonSelected", idColors, defaultSize, ColorKeeper.fgColor);
 			this.SetResourceSvg ("RadioButtonSelectedFocused", "radioButtonSelectedFocused", idColors, defaultSize);
 		}
 

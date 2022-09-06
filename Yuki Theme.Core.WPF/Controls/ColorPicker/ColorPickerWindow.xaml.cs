@@ -18,8 +18,8 @@ namespace Yuki_Theme.Core.WPF.Controls.ColorPicker
 		{
 			if (!allowSave)
 			{
-				MessageBox.Show (this, CLI.Translate ("colors.default.error.full"),
-				                 CLI.Translate ("colors.default.error.short"), MessageBoxButton.OK, MessageBoxImage.Warning);
+				MessageBox.Show (this, API.CentralAPI.Current.Translate ("colors.default.error.full"),
+				                 API.CentralAPI.Current.Translate ("colors.default.error.short"), MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 			
 			return allowSave;

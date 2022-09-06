@@ -102,7 +102,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void PlacementTargetChanged (object sender, EventArgs e)
 		{
-			FrameworkElement placementTarget = this.PlacementTarget as FrameworkElement;
+			FrameworkElement placementTarget = PlacementTarget as FrameworkElement;
 			if (placementTarget != null)
 			{
 				placementTarget.SizeChanged += (sender2, e2) =>
@@ -114,8 +114,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public void UpdatePopupPosition ()
 		{
-			FrameworkElement placementTarget = this.PlacementTarget as FrameworkElement;
-			FrameworkElement child = this.Child as FrameworkElement;
+			FrameworkElement placementTarget = PlacementTarget as FrameworkElement;
+			FrameworkElement child = Child as FrameworkElement;
 
 			if (PresentationSource.FromVisual (placementTarget) != null &&
 			    AllowOutsideScreenPlacement == true)
@@ -125,8 +125,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 				double rightOffset = CutRight (placementTarget);
 				double bottomOffset = CutBottom (placementTarget);
 				Debug.WriteLine (bottomOffset);
-				this.Width = Math.Max (0, Math.Min (leftOffset, rightOffset) + placementTarget.ActualWidth);
-				this.Height = Math.Max (0, Math.Min (topOffset, bottomOffset) + placementTarget.ActualHeight);
+				Width = Math.Max (0, Math.Min (leftOffset, rightOffset) + placementTarget.ActualWidth);
+				Height = Math.Max (0, Math.Min (topOffset, bottomOffset) + placementTarget.ActualHeight);
 
 				if (child != null)
 				{
@@ -136,8 +136,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 			if (FollowPlacementTarget == true)
 			{
-				this.HorizontalOffset += 0.01;
-				this.HorizontalOffset -= 0.01;
+				HorizontalOffset += 0.01;
+				HorizontalOffset -= 0.01;
 			}
 		}
 

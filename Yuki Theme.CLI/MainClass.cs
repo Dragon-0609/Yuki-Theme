@@ -11,7 +11,9 @@ using CommandLine;
 using CommandLine.Text;
 using Microsoft.Win32;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.CLI
 {
@@ -21,34 +23,40 @@ namespace Yuki_Theme.CLI
 		internal      bool loop      = false;
 		private const int  MAX_WIDTH = 80;
 
-		private Dictionary <string, string> ToReplaceTranslationWithVariable = new ();
+		private const string SettingModeLight    = "light";
+		private const string SettingModeAdvanced = "advanced";
+		private const string ActionDelete        = "delete";
+		private const string ActionImport        = "import";
+		private const string ActionIgnore        = "ignore";
+
+		private Dictionary<string, string> ToReplaceTranslationWithVariable = new ();
 
 		internal Completion completion;
 
 		/// <summary>
-		/// Load CLI, to work with CLI. For example, get settings and load themes. After that, you can process the themes
+		/// Load API, to work with API_Base.Current. For example, get settings and load themes. After that, you can process the themes
 		/// </summary>
 		internal void LoadCLI (bool refreshSchemes)
 		{
-			if (Helper.mode != ProductMode.CLI) // Check if we loaded CLI early. If not load it
+			if (Helper.mode != ProductMode.CLI) // Check if we loaded API early. If not load it
 			{
 				Helper.mode = ProductMode.CLI;
-				CLI_Actions.setPath = AskPath;
-				CLI_Actions.showSuccess = ShowSuccess;
-				CLI_Actions.showError = ShowError;
-				CLI_Actions.showError = ShowError;
-				CLI_Actions.onRename = ShowInvertSuccess;
-				CLI_Actions.SaveInExport = AskToDelete;
-				Settings.connectAndGet ();
+				API_Events.setPath = AskPath;
+				API_Events.showSuccess = ShowSuccess;
+				API_Events.showError = ShowError;
+				API_Events.showError = ShowError;
+				API_Events.onRename = ShowInvertSuccess;
+				API_Events.SaveInExport = AskToDelete;
+				Settings.ConnectAndGet ();
 				Settings.settingMode = SettingMode.Light;
 				Settings.saveAsOld = true;
-				Core.CLI.load_schemes ();
+				CentralAPI.Current.LoadSchemes ();
 				AddThemeCompletion ();
 				AddDefinitionCompletion ();
 				AddLanguageCompletion ();
 			} else if (refreshSchemes)
 			{
-				Core.CLI.load_schemes ();
+				CentralAPI.Current.LoadSchemes ();
 				AddThemeCompletion ();
 			}
 		}
@@ -56,8 +64,10 @@ namespace Yuki_Theme.CLI
 		private void AddThemeCompletion ()
 		{
 			completion.themes.Clear ();
-			string [] themes = Core.CLI.schemes.ToArray ();
-			string [] commands = new [] { "copy", "export", "delete", "rename", "edit" };
+			string[] themes = CentralAPI.Current.Schemes.ToArray ();
+			themes = themes.Select (e => e.EndsWith ("\"") ? e : "\"" + e + "\"").ToArray ();
+
+			string[] commands = new[] { "copy", "export", "delete", "rename", "edit" };
 			foreach (string command in commands)
 			{
 				completion.themes.Add (command, themes);
@@ -66,8 +76,8 @@ namespace Yuki_Theme.CLI
 
 		private void AddDefinitionCompletion ()
 		{
-			List <string> list = new List <string> ();
-			foreach (KeyValuePair <string, string> pair in Populater.changedNames)
+			List<string> list = new List<string> ();
+			foreach (KeyValuePair<string, string> pair in Populater.changedNames)
 			{
 				list.Add (pair.Value);
 			}
@@ -77,12 +87,12 @@ namespace Yuki_Theme.CLI
 
 		private void AddLanguageCompletion ()
 		{
-			completion.commands = new Dictionary <string, string []>
-			                      {
-				                      { "settings --language", Settings.translation.GetShortLanguageNames },
-				                      { "settings -l", Settings.translation.GetShortLanguageNames }
-			                      }
-			                      .Concat (completion.commands).ToDictionary (k => k.Key, v => v.Value);
+			completion.commands = new Dictionary<string, string[]>
+								  {
+									  { "settings --language", Settings.translation.GetShortLanguageNames },
+									  { "settings -l", Settings.translation.GetShortLanguageNames }
+								  }
+								  .Concat (completion.commands).ToDictionary (k => k.Key, v => v.Value);
 			string valueToReplace = string.Join (", ", Settings.translation.GetShortLanguageNames);
 			ToReplaceTranslationWithVariable.Add ("cli.help.settings.language", valueToReplace);
 		}
@@ -91,31 +101,33 @@ namespace Yuki_Theme.CLI
 		/// Set current theme to process it. For example export it.
 		/// </summary>
 		/// <param name="theme">Theme name</param>
-		public void SetFile (string theme)
+		private void SetFile (string theme)
 		{
-			Core.CLI.SelectTheme (theme);
+			CentralAPI.Current.SelectTheme (theme);
+			if (theme != "N|L")
+				CentralAPI.Current.Restore ();
 		}
 
 		internal void ShowLoopMessage ()
 		{
 			if (loop)
-				ShowError (Core.CLI.Translate ("cli.errors.loop").ToUpper ());
+				ShowError (CentralAPI.Current.Translate ("cli.errors.loop").ToUpper ());
 		}
 
-		internal string [] ParseArguments (string commandLine)
+		internal string[] ParseArguments (string commandLine)
 		{
-			char [] parmChars = commandLine.ToCharArray ();
+			char[] parmChars = commandLine.ToCharArray ();
 			bool inQuote = false;
 			for (int index = 0; index < parmChars.Length; index++)
 			{
-				if (parmChars [index] == '"')
+				if (parmChars[index] == '"')
 					inQuote = !inQuote;
-				if (!inQuote && parmChars [index] == ' ')
-					parmChars [index] = '\n';
+				if (!inQuote && parmChars[index] == ' ')
+					parmChars[index] = '\n';
 			}
 
 			string[] arguments = (new string (parmChars)).Split ('\n');
-			arguments [0] = arguments [0].ToLower ();
+			arguments[0] = arguments[0].ToLower ();
 			return arguments;
 		}
 
@@ -124,87 +136,59 @@ namespace Yuki_Theme.CLI
 		/// </summary>
 		/// <param name="parser">Parser</param>
 		/// <param name="args">Arguments of commands</param>
-		internal void Parse (Parser parser, string [] args)
+		internal void Parse (Parser parser, string[] args)
 		{
 			var res = parser
-				.ParseArguments <CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
+				.ParseArguments<CopyCommand, ListCommand, ClearCommand, FieldsCommand, AllFieldsCommand, ExportCommand, ImportCommand,
 					DeleteCommand,
 					RenameCommand, SettingsCommand, EditCommand, FeatureCommand> (args);
 
-			res.WithParsed <CopyCommand> (o =>
-			   {
-				   CopyC (o);
-			   }).WithParsed <ListCommand> (o =>
-			   {
-				   ListC (o.ShowGroups);
-			   }).WithParsed <ClearCommand> (o =>
-			   {
-				   ClearC ();
-			   }).WithParsed <FieldsCommand> (o =>
-			   {
-				   FieldsC ();
-			   }).WithParsed <AllFieldsCommand> (o =>
-			   {
-				   AllFieldsC ();
-			   }).WithParsed <ExportCommand> (o =>
-			   {
-				   ExportC (o);
-			   }).WithParsed <ImportCommand> (o =>
-			   {
-				   ImportC (o);
-			   }).WithParsed <DeleteCommand> (o =>
-			   {
-				   DeleteC (o);
-			   }).WithParsed <RenameCommand> (o =>
-			   {
-				   RenameC (o);
-			   }).WithParsed <SettingsCommand> (o =>
-			   {
-				   SettingC (o);
-			   }).WithParsed <EditCommand> (o =>
-			   {
-				   EditC (o);
-			   }).WithParsed <FeatureCommand> (o =>
-			   {
-				   FeaturesC (o);
-			   })
-			   .WithNotParsed (errors =>
-			   {
-				   HelpText helpText = null;
-				   if (errors.IsHelp () || errors.IsVersion ())
-				   {
-					   helpText = HelpText.AutoBuild (res);
-					   Console.WriteLine (Translation (helpText.ToString ()));
-					   // Console.WriteLine ( helpText.ToString ());
-				   } else
-				   {
-					   foreach (var error in errors)
-						   switch (error)
-						   {
-							   case BadVerbSelectedError badVerbSelectedError :
-								   ShowError (Core.CLI.Translate ("cli.errors.nocommand", badVerbSelectedError.Token));
-								   break;
+			res.WithParsed<CopyCommand> (o => { CopyC (o); }).WithParsed<ListCommand> (o => { ListC (o); })
+			   .WithParsed<ClearCommand> (o => { ClearC (); }).WithParsed<FieldsCommand> (o => { FieldsC (); })
+			   .WithParsed<AllFieldsCommand> (o => { AllFieldsC (); }).WithParsed<ExportCommand> (o => { ExportC (o); })
+			   .WithParsed<ImportCommand> (o => { ImportC (o); }).WithParsed<DeleteCommand> (o => { DeleteC (o); })
+			   .WithParsed<RenameCommand> (o => { RenameC (o); }).WithParsed<SettingsCommand> (o => { SettingC (o); })
+			   .WithParsed<EditCommand> (o => { EditC (o); }).WithParsed<FeatureCommand> (o => { FeaturesC (o); })
+			   .WithNotParsed (errors => { ParseError (errors, res); });
+		}
 
-							   case UnknownOptionError unknownOptionError :
-								   ShowError (Core.CLI.Translate ("cli.errors.nooption", unknownOptionError.Token));
-								   break;
+		private void ParseError (IEnumerable<Error> errors, ParserResult<object> res)
+		{
+			HelpText helpText = null;
+			if (errors.IsHelp () || errors.IsVersion ())
+			{
+				helpText = HelpText.AutoBuild (res);
+				Console.WriteLine (Translation (helpText.ToString ()));
+				// Console.WriteLine ( helpText.ToString ());
+			} else
+			{
+				foreach (var error in errors)
+					switch (error)
+					{
+						case BadVerbSelectedError badVerbSelectedError:
+							if (badVerbSelectedError.Token.Length > 0)
+								ShowError (CentralAPI.Current.Translate ("cli.errors.nocommand", badVerbSelectedError.Token));
+							break;
 
-							   case SequenceOutOfRangeError sequenceOutOfRange :
-								   ShowError (sequenceOutOfRange.ToString ());
-								   // ShowError (Core.CLI.Translate ("cli.errors.length"));
-								   break;
+						case UnknownOptionError unknownOptionError:
+							ShowError (CentralAPI.Current.Translate ("cli.errors.nooption", unknownOptionError.Token));
+							break;
 
-							   case MissingValueOptionError missingValueOptionError :
-								   helpText = HelpText.AutoBuild (res);
-								   Console.WriteLine (Translation (helpText.ToString ()));
-								   break;
-							   // Handler other appropriate exceptions downhere.
-							   default :
-								   ShowError (Core.CLI.Translate ("cli.errors.happened", error.ToString ()));
-								   break;
-						   }
-				   }
-			   });
+						case SequenceOutOfRangeError sequenceOutOfRange:
+							ShowError (sequenceOutOfRange.ToString ());
+							// ShowError (Core.API_Base.Current.Translate ("cli.errors.length"));
+							break;
+
+						case MissingValueOptionError missingValueOptionError:
+							helpText = HelpText.AutoBuild (res);
+							Console.WriteLine (Translation (helpText.ToString ()));
+							break;
+						// Handler other appropriate exceptions downhere.
+						default:
+							ShowError (CentralAPI.Current.Translate ("cli.errors.happened", error.ToString ()));
+							break;
+					}
+			}
 		}
 
 		#region Commands
@@ -223,38 +207,45 @@ namespace Yuki_Theme.CLI
 					{
 						if (!Contains (to))
 						{
-							Core.CLI.add (fr, to);
+							CentralAPI.Current.AddTheme (fr, to);
 						} else
 						{
-							ShowError (Core.CLI.Translate ("messages.name.exist.full"));
+							ShowError (CentralAPI.Current.Translate ("messages.name.exist.full"));
 						}
 					} else
 					{
-						ShowError (Core.CLI.Translate ("cli.errors.notinthemes", fr));
+						ShowError (CentralAPI.Current.Translate ("cli.errors.notinthemes", fr));
 					}
 				} else
 				{
-					ShowError (Core.CLI.Translate ("messages.name.notchanged"), Core.CLI.Translate ("download.canceled.title"));
+					ShowError (CentralAPI.Current.Translate ("messages.name.notchanged"), CentralAPI.Current.Translate ("download.canceled.title"));
 				}
 			} else
 			{
-				ShowError (Core.CLI.Translate ("messages.name.invalid"), Core.CLI.Translate ("messages.name.invalid.short"));
+				ShowError (CentralAPI.Current.Translate ("messages.name.invalid"), CentralAPI.Current.Translate ("messages.name.invalid.short"));
 			}
 		}
 
-		private void ListC (bool groups)
+		private void ListC (ListCommand command)
 		{
 			LoadCLI (true);
 			Console.WriteLine ("Theme list:");
-			if (groups)
+			if (command.ShowGroups)
 			{
-				foreach (string scheme in Core.CLI.schemes)
+				foreach (string scheme in CentralAPI.Current.Schemes)
 				{
-					Console.WriteLine ($"{Core.CLI.ThemeInfos [scheme].group}:  {scheme}");
+					Console.WriteLine ($"{CentralAPI.Current.ThemeInfos[scheme].group}:  {scheme}");
 				}
-			}else
+			} else if (command.ShowCustom)
 			{
-				foreach (string scheme in Core.CLI.schemes)
+				foreach (string scheme in CentralAPI.Current.Schemes)
+				{
+					if (!CentralAPI.Current.ThemeInfos[scheme].isDefault)
+						Console.WriteLine ("\t{0}", scheme);
+				}
+			} else
+			{
+				foreach (string scheme in CentralAPI.Current.Schemes)
 				{
 					Console.WriteLine ("\t{0}", scheme);
 				}
@@ -271,11 +262,10 @@ namespace Yuki_Theme.CLI
 		{
 			LoadCLI (true);
 			SetFile ("Darcula");
-			Core.CLI.restore ();
-			Console.WriteLine ($"There're {Core.CLI.names.Count} fields:");
-			foreach (string name in Core.CLI.names)
+			Console.WriteLine ($"There're {CentralAPI.Current.names.Count} fields:");
+			foreach (string name in CentralAPI.Current.names)
 			{
-				Console.WriteLine ("\t" + Populater.getChangedName (name));
+				Console.WriteLine ("\t" + Populater.GetChangedName (name));
 			}
 
 			SetFile ("N|L"); // Set to the default value
@@ -286,9 +276,8 @@ namespace Yuki_Theme.CLI
 			LoadCLI (true);
 			Settings.settingMode = SettingMode.Advanced;
 			SetFile ("Darcula");
-			Core.CLI.restore ();
-			Console.WriteLine ($"There're {Core.CLI.currentTheme.Fields.Keys.Count} fields:");
-			foreach (string name in Core.CLI.currentTheme.Fields.Keys)
+			Console.WriteLine ($"There're {CentralAPI.Current.currentTheme.Fields.Keys.Count} fields:");
+			foreach (string name in CentralAPI.Current.currentTheme.Fields.Keys)
 			{
 				Console.WriteLine ("\t" + name);
 			}
@@ -302,15 +291,15 @@ namespace Yuki_Theme.CLI
 			if (o.Name != null)
 			{
 				o.Name = ConvertToText (o.Name);
+
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
 					SetFile (o.Name);
-
-					Core.CLI.export (null, null, null, null, true);
+					CentralAPI.Current.ExportTheme (null, null, null, null, true);
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -319,7 +308,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.cantexport", o.Name));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.cantexport", o.Name));
 			}
 		}
 
@@ -331,7 +320,7 @@ namespace Yuki_Theme.CLI
 				if (o.Path.Contains (".yukitheme") || o.Path.Contains (".icls") || o.Path.Contains (".json"))
 				{
 					LoadCLI (true);
-					Core.CLI.import (o.Path, AskToDelete);
+					CentralAPI.Current.ImportTheme (o.Path, AskToDelete);
 				} else
 					showerror = true;
 			} else
@@ -341,7 +330,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.cantimport", o.Path));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.cantimport", o.Path));
 			}
 		}
 
@@ -353,10 +342,11 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				o.Name = ConvertToText (o.Name);
 				if (Contains (o.Name))
-					Core.CLI.remove (o.Name, AskToDelete, null, AfterDelete);
+					CentralAPI.Current.RemoveTheme (o.Name, AskToDelete, null, AfterDelete);
+				
 				else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -365,7 +355,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.cantdelete", o.Name));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.cantdelete", o.Name));
 			}
 		}
 
@@ -378,14 +368,14 @@ namespace Yuki_Theme.CLI
 			{
 				if (fr != to)
 				{
-					Core.CLI.rename (fr, to);
+					CentralAPI.Current.RenameTheme (fr, to);
 				} else
 				{
-					ShowError (Core.CLI.Translate ("messages.name.notchanged"), Core.CLI.Translate ("download.canceled.title"));
+					ShowError (CentralAPI.Current.Translate ("messages.name.notchanged"), CentralAPI.Current.Translate ("download.canceled.title"));
 				}
 			} else
 			{
-				ShowError (Core.CLI.Translate ("messages.name.invalid"), Core.CLI.Translate ("messages.name.invalid.short"));
+				ShowError (CentralAPI.Current.Translate ("messages.name.invalid"), CentralAPI.Current.Translate ("messages.name.invalid.short"));
 			}
 		}
 
@@ -401,7 +391,7 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (Core.CLI.Translate ("messages.path.wrong"));
+					ShowError (CentralAPI.Current.Translate ("messages.path.wrong"));
 				}
 			}
 
@@ -414,76 +404,45 @@ namespace Yuki_Theme.CLI
 					changed = true;
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.quiet.wrong.full"), Core.CLI.Translate ("cli.errors.quiet.wrong.short"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.quiet.wrong.full"), CentralAPI.Current.Translate ("cli.errors.quiet.wrong.short"));
 				}
 			}
 
 			if (!isNull (o.Mode))
 			{
 				bool isValid = false;
-				switch (o.Mode.ToLower ())
-				{
-					case "light" :
-					{
-						isValid = true;
-					}
-						break;
-					case "advanced" :
-					{
-						isValid = true;
-					}
-						break;
-				}
+				string modeInLower = o.Mode.ToLower ();
+				isValid = modeInLower == SettingModeLight || modeInLower == SettingModeAdvanced;
 
 				if (isValid)
 				{
-					Settings.settingMode = o.Mode.ToLower () == "light" ? SettingMode.Light : SettingMode.Advanced;
+					Settings.settingMode = modeInLower == SettingModeLight ? SettingMode.Light : SettingMode.Advanced;
 					changed = true;
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.mode.invalid"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.mode.invalid"));
 				}
 			}
 
 			if (!isNull (o.Action))
 			{
-				bool isValid = false;
-				int act = 0;
-				switch (o.Action.ToLower ())
-				{
-					case "delete" :
-					{
-						isValid = true;
-						act = 0;
-					}
-						break;
-					case "import" :
-					{
-						isValid = true;
-						act = 1;
-					}
-						break;
-					case "ignore" :
-					{
-						isValid = true;
-						act = 2;
-					}
-						break;
-				}
+				string actionLower = o.Action.ToLower ();
+				bool isValid = actionLower is ActionDelete or ActionImport or ActionIgnore;
+				int actionNumber = GetThemeFoundActionNumber (actionLower);
 
 				if (isValid)
 				{
-					Settings.actionChoice = act;
+					Settings.actionChoice = actionNumber;
 					changed = true;
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.action.invalid"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.action.invalid"));
 				}
 			}
-			
+
 			if (!isNull (o.Language))
 			{
-				string lower = o.Language.ToLower();
+				string lower = o.Language.ToLower ();
 				if (Settings.translation.ContainsLanguageISO2 (lower))
 				{
 					Settings.localization = lower;
@@ -492,10 +451,10 @@ namespace Yuki_Theme.CLI
 				} else
 				{
 					string languages = string.Join (", ", Settings.translation.GetShortLanguageNames);
-					ShowError (Core.CLI.Translate ("cli.errors.language.invalid", languages));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.language.invalid", languages));
 				}
 			}
-			
+
 
 			if (changed)
 			{
@@ -503,9 +462,14 @@ namespace Yuki_Theme.CLI
 				ShowSuccess ("Settings are saved!", "Saved");
 			} else
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.settings.notsaved.full"),
-				           Core.CLI.Translate ("cli.errors.settings.notsaved.short"));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.settings.notsaved.full"),
+					CentralAPI.Current.Translate ("cli.errors.settings.notsaved.short"));
 			}
+		}
+
+		private static int GetThemeFoundActionNumber (string actionLower)
+		{
+			return actionLower == ActionDelete ? 0 : actionLower == ActionImport ? 1 : 2;
 		}
 
 		private void EditC (EditCommand o)
@@ -517,10 +481,9 @@ namespace Yuki_Theme.CLI
 				LoadCLI (true);
 				if (Contains (o.Name))
 				{
-					if (!Core.CLI.ThemeInfos [o.Name].isDefault)
+					if (!CentralAPI.Current.ThemeInfos[o.Name].isDefault)
 					{
 						SetFile (o.Name);
-						Core.CLI.restore ();
 						if (o.Definition != null)
 						{
 							bool color = false;
@@ -528,7 +491,7 @@ namespace Yuki_Theme.CLI
 							string err_txt = "";
 							try
 							{
-								color = isColor (o.Definition);
+								color = IsColor (o.Definition);
 							} catch (ArgumentException e)
 							{
 								error = true;
@@ -558,29 +521,29 @@ namespace Yuki_Theme.CLI
 
 									if (bg || txt)
 									{
-										o.Definition = Populater.getNormalizedName (o.Definition);
-										if (Core.CLI.currentTheme.Fields.ContainsKey (o.Definition))
+										o.Definition = Populater.GetNormalizedName (o.Definition);
+										if (CentralAPI.Current.currentTheme.Fields.ContainsKey (o.Definition))
 										{
-											ThemeField dic = Core.CLI.currentTheme.Fields [o.Definition];
+											ThemeField dic = CentralAPI.Current.currentTheme.Fields[o.Definition];
 											SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
-											foreach (KeyValuePair <string, string> keyValuePair in dic.GetAttributes ())
+											foreach (KeyValuePair<string, string> keyValuePair in dic.GetAttributes ())
 											{
 												GiveMessage (keyValuePair.Value, keyValuePair.Key);
 											}
 										}
 
-										var sttr = Populater.getDependencies (o.Definition);
+										var sttr = Populater.GetDependencies (o.Definition);
 										if (sttr != null)
 											foreach (var sr in sttr)
 											{
-												ThemeField dic = Core.CLI.currentTheme.Fields [sr];
+												ThemeField dic = CentralAPI.Current.currentTheme.Fields[sr];
 												SetColorsToField (ref dic, txt, txtcolor, bg, bgcolor);
 											}
 
-										Core.CLI.save (null, null, true);
+										CentralAPI.Current.Save (null, null, true);
 									} else
 									{
-										ShowError (Core.CLI.Translate ("cli.errors.parameter"));
+										ShowError (CentralAPI.Current.Translate ("cli.errors.parameter"));
 									}
 								} else
 								{
@@ -588,9 +551,9 @@ namespace Yuki_Theme.CLI
 									if (o.Opacity != null)
 									{
 										if (o.Definition.ToLower () == "sticker")
-											Core.CLI.currentTheme.StickerOpacity = int.Parse (o.Opacity);
+											CentralAPI.Current.currentTheme.StickerOpacity = int.Parse (o.Opacity);
 										else
-											Core.CLI.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
+											CentralAPI.Current.currentTheme.WallpaperOpacity = int.Parse (o.Opacity);
 										changed = true;
 									}
 
@@ -600,12 +563,12 @@ namespace Yuki_Theme.CLI
 										if (o.Align.ToLower () == "left") align = Alignment.Left;
 										else if (o.Align.ToLower () == "center") align = Alignment.Center;
 										else align = Alignment.Right;
-										Core.CLI.currentTheme.WallpaperAlign = (int)align;
+										CentralAPI.Current.currentTheme.WallpaperAlign = (int)align;
 										changed = true;
 									}
 
 									if (changed)
-										Core.CLI.save (null, null, true);
+										CentralAPI.Current.Save (null, null, true);
 									SetImageLocation (o);
 								}
 							} else
@@ -615,11 +578,11 @@ namespace Yuki_Theme.CLI
 						}
 					} else
 					{
-						ShowError (Core.CLI.Translate ("colors.default.error.full"), Core.CLI.Translate ("colors.default.error.short"));
+						ShowError (CentralAPI.Current.Translate ("colors.default.error.full"), CentralAPI.Current.Translate ("colors.default.error.short"));
 					}
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.notinthemes", o.Name));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.notinthemes", o.Name));
 				}
 			} else
 			{
@@ -628,7 +591,7 @@ namespace Yuki_Theme.CLI
 
 			if (showerror)
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.cantedit", o.Name));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.cantedit", o.Name));
 			}
 		}
 
@@ -643,15 +606,15 @@ namespace Yuki_Theme.CLI
 				UpdateC (path);
 			else if (command == "export")
 			{
-				SettingEditor editor = new SettingEditor();
+				SettingEditor editor = new SettingEditor ();
 				editor.ExportSettings (path);
 			} else if (command == "import")
 			{
-				SettingEditor editor = new SettingEditor();
+				SettingEditor editor = new SettingEditor ();
 				editor.ImportSettings (path);
 			} else if (command == "print")
 			{
-				SettingEditor editor = new SettingEditor();
+				SettingEditor editor = new SettingEditor ();
 				editor.PrintSettings ();
 			} else if (command == "edit")
 			{
@@ -663,7 +626,7 @@ namespace Yuki_Theme.CLI
 		#endregion
 
 
-		#region CLI Features
+		#region API Features
 
 		private void UpdateC (string path)
 		{
@@ -676,21 +639,21 @@ namespace Yuki_Theme.CLI
 					File.Copy (
 						path,
 						Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
-						              "yuki_theme.zip"), true);
+							"yuki_theme.zip"), true);
 
-					Assembly a = Core.CLI.GetCore ();
+					Assembly a = CentralAPI.Current.GetCore ();
 					int md = 0;
 					bool found = false;
 					while (!found)
 					{
-						string pth = Preparer.FileNamespace +
-						             (md == 0 ? "files_program.txt" : "files_plugin.txt");
+						string pth = InstallationPreparer.FILE_NAMESPACE +
+									 (md == 0 ? "files_program.txt" : "files_plugin.txt");
 						Stream str = a.GetManifestResourceStream (pth);
 						if (str != null)
 						{
 							using StreamReader reader = new StreamReader (str);
 							string cx = reader.ReadLine ();
-							string ph = Path.Combine (Core.CLI.currentPath, cx);
+							string ph = Path.Combine (SettingsConst.CurrentPath, cx);
 							Console.WriteLine (ph);
 							if (ph.Exist ())
 							{
@@ -723,20 +686,19 @@ namespace Yuki_Theme.CLI
 					if (found)
 					{
 						Helper.mode = md == 0 ? ProductMode.Program : ProductMode.Plugin;
-						Preparer prep = new Preparer ();
-						prep.prepare (false);
-						RegistryKey ke =
-							Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-						if (ke != null) ke.SetValue ("cli_update", "true");
+						InstallationPreparer prep = new InstallationPreparer ();
+						prep.Prepare (false);
+						Settings.database.SetValue ("cli_update", "true");
+
 
 						quit = true;
 					} else
 					{
-						ShowError (Core.CLI.Translate ("cli.errors.find.app"));
+						ShowError (CentralAPI.Current.Translate ("cli.errors.find.app"));
 					}
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.find.file"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.find.file"));
 				}
 			} else // Check Update
 			{
@@ -761,24 +723,24 @@ namespace Yuki_Theme.CLI
 					break;
 				} else if (Directory.Exists (path))
 				{
-					if (Directory.Exists (System.IO.Path.Combine (path, "Highlighting")))
+					if (Directory.Exists (Path.Combine (path, "Highlighting")))
 					{
 						pth = path;
 						isPath = true;
 					} else
 					{
-						ShowError (Core.CLI.Translate ("messages.path.wrong"));
+						ShowError (CentralAPI.Current.Translate ("messages.path.wrong"));
 					}
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.directory.notexist"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.directory.notexist"));
 				}
 			}
 
 			if (isPath)
 			{
 				Settings.pascalPath = pth;
-				Core.Settings.SaveData ();
+				Settings.SaveData ();
 			}
 		}
 
@@ -802,7 +764,7 @@ namespace Yuki_Theme.CLI
 
 		private bool Contains (string st)
 		{
-			return Core.CLI.schemes.Contains (st);
+			return CentralAPI.Current.Schemes.Contains (st);
 		}
 
 		private string ConvertToText (string str)
@@ -833,7 +795,9 @@ namespace Yuki_Theme.CLI
 					err = true;
 			} else if (res.StartsWith ("n"))
 			{
-				if (res.Length == 1) { } else if (res.Length == 2)
+				if (res.Length == 1)
+				{
+				} else if (res.Length == 2)
 				{
 					err = res != "no";
 				} else
@@ -845,7 +809,7 @@ namespace Yuki_Theme.CLI
 
 			if (err)
 			{
-				ShowError (Core.CLI.Translate ("cli.errors.input.wrong"));
+				ShowError (CentralAPI.Current.Translate ("cli.errors.input.wrong"));
 			}
 
 			return ans;
@@ -853,7 +817,7 @@ namespace Yuki_Theme.CLI
 
 		private void AfterDelete (string content, object obj)
 		{
-			ShowError (Core.CLI.Translate ("cli.message.deleted", content));
+			ShowError (CentralAPI.Current.Translate ("cli.message.deleted", content));
 		}
 
 		private bool isNull (string st)
@@ -864,14 +828,14 @@ namespace Yuki_Theme.CLI
 		private Image LoadImage ()
 		{
 			Image res = null;
-			if (Core.CLI.isDefault ())
+			if (CentralAPI.Current.IsDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
-				Tuple <bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
+				Tuple<bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, location);
+					Tuple<bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, location);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -879,10 +843,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
+				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetImage (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
+					Tuple<bool, Image> iag = Helper.GetImage (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -896,14 +860,14 @@ namespace Yuki_Theme.CLI
 		private Image LoadSticker ()
 		{
 			Image res = null;
-			if (Core.CLI.isDefault ())
+			if (CentralAPI.Current.IsDefault ())
 			{
 				Assembly location;
 				string pathToMemory;
-				Tuple <bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
+				Tuple<bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetStickerFromMemory (pathToMemory, location);
+					Tuple<bool, Image> iag = Helper.GetStickerFromMemory (pathToMemory, location);
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -911,10 +875,10 @@ namespace Yuki_Theme.CLI
 				}
 			} else
 			{
-				Tuple <bool, string> contents = Helper.GetTheme (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
+				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple <bool, Image> iag = Helper.GetSticker (Core.CLI.pathToFile (Core.CLI.pathToLoad, true));
+					Tuple<bool, Image> iag = Helper.GetSticker (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 					if (iag.Item1)
 					{
 						res = iag.Item2;
@@ -925,15 +889,15 @@ namespace Yuki_Theme.CLI
 			return res;
 		}
 
-		private Tuple <bool, string> GetThemeFromMemory (out Assembly location, out string pathToMemory)
+		private Tuple<bool, string> GetThemeFromMemory (out Assembly location, out string pathToMemory)
 		{
-			IThemeHeader header = DefaultThemes.headers [Core.CLI.nameToLoad];
-			string ext = Helper.GetThemeFormat (true, Core.CLI.pathToLoad, Core.CLI.nameToLoad) == ThemeFormat.Old
+			IThemeHeader header = DefaultThemes.headers[CentralAPI.Current.nameToLoad];
+			string ext = Helper.GetThemeFormat (true, CentralAPI.Current.pathToLoad, CentralAPI.Current.nameToLoad) == ThemeFormat.Old
 				? Helper.FILE_EXTENSTION_OLD
 				: Helper.FILE_EXTENSTION_NEW;
-			pathToMemory = $"{header}.{Core.CLI.pathToLoad}{ext}";
+			pathToMemory = $"{header}.{CentralAPI.Current.pathToLoad}{ext}";
 			location = header.Location;
-			Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, location);
+			Tuple<bool, string> content = Helper.GetThemeFromMemory (pathToMemory, location);
 			return content;
 		}
 
@@ -971,7 +935,7 @@ namespace Yuki_Theme.CLI
 				Image sticker = null;
 				if (!File.Exists (o.Path))
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.file.notexist"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.file.notexist"));
 					return;
 				}
 
@@ -989,10 +953,10 @@ namespace Yuki_Theme.CLI
 
 				if (img || stick)
 				{
-					Core.CLI.save (image, sticker, false);
+					CentralAPI.Current.Save (image, sticker, false);
 				} else
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.strange"));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.strange"));
 				}
 			}
 		}
@@ -1005,84 +969,9 @@ namespace Yuki_Theme.CLI
 				dic.Background = ColorTranslator.ToHtml (bgcolor);
 		}
 
-		private bool isColor (string definition)
+		private bool IsColor (string definition)
 		{
-			bool result = false;
-			definition = definition.ToLower ();
-			switch (definition)
-			{
-				case "default" :
-				case "linenumber" :
-				case "fold" :
-				case "foldmarker" :
-				case "selectedfold" :
-				case "digit" :
-				case "comment" :
-				case "string" :
-				case "keyword" :
-				case "beginend" :
-				case "punctuation" :
-				case "operator" :
-				case "constant" :
-				case "selection" :
-				case "vruler" :
-				case "invalidlines" :
-				case "caretmarker" :
-				case "linenumbers" :
-				case "foldline" :
-				case "method" :
-				case "markprevious" :
-				case "selectedfoldline" :
-				case "eolmarkers" :
-				case "spacemarkers" :
-				case "tabmarkers" :
-				case "digits" :
-				case "linebigcomment" :
-				case "linecomment" :
-				case "blockcomment" :
-				case "blockcomment2" :
-				case "keywords" :
-				case "programsections" :
-				case "special" :
-				case "async" :
-				case "accesskeywords1" :
-				case "nonreserved1" :
-				case "operatorkeywords" :
-				case "selectionstatements" :
-				case "iterationstatements" :
-				case "exceptionhandlingstatements" :
-				case "raisestatement" :
-				case "jumpstatements" :
-				case "jumpprocedures" :
-				case "internalconstant" :
-				case "internaltypes" :
-				case "referencetypes" :
-				case "modifiers" :
-				case "accessmodifiers" :
-				case "errorwords" :
-				case "warningwords" :
-				case "direcivenames" :
-				case "specialdirecivenames" :
-				case "direcivevalues" :
-				{
-					result = true;
-				}
-					break;
-
-				case "image" :
-				case "sticker" :
-				{
-					result = false;
-				}
-					break;
-
-				default :
-				{
-					throw new ArgumentException ("Wrong value. To see acceptable value please write: \"yuki help edit\"");
-				}
-				break;
-			}
-
+			bool result = HighlitherUtil.IsInColors (definition);
 			return result;
 		}
 
@@ -1091,8 +980,8 @@ namespace Yuki_Theme.CLI
 			string res = help;
 			Regex regex = new Regex ("cli.help(\n|\\S)*", RegexOptions.Multiline);
 			MatchCollection matches = regex.Matches (res);
-			
-			
+
+
 			string whitespace = "";
 
 			foreach (Match match2 in matches)
@@ -1100,20 +989,20 @@ namespace Yuki_Theme.CLI
 				Match matched2 = Regex.Match (res, "^.*?(?=" + match2.Value + ")", RegexOptions.Multiline);
 				whitespace = new string (' ', matched2.Value.Length);
 			}
-			
+
 			foreach (Match match in matches)
 			{
-				string translation = Core.CLI.Translate (match.Value);
+				string translation = CentralAPI.Current.Translate (match.Value);
 				if (translation.Contains ("{0}") && ToReplaceTranslationWithVariable.ContainsKey (match.Value))
-					translation = translation.Replace ("{0}", ToReplaceTranslationWithVariable [match.Value]);
-				string [] cv = translation.Split ('\n');
+					translation = translation.Replace ("{0}", ToReplaceTranslationWithVariable[match.Value]);
+				string[] cv = translation.Split ('\n');
 				if (cv.Length > 1)
 				{
 					translation = "";
 					int cvLength = cv.Length - 1;
 					for (var i = 0; i < cv.Length; i++)
 					{
-						translation += cv [i];
+						translation += cv[i];
 						if (i != cvLength)
 						{
 							translation += "\n" + whitespace;
@@ -1122,7 +1011,7 @@ namespace Yuki_Theme.CLI
 				}
 
 				int cnt = 0;
-				string [] cc = translation.Split (' ');
+				string[] cc = translation.Split (' ');
 				if (cc.Length > 1)
 				{
 					translation = "";
@@ -1147,16 +1036,13 @@ namespace Yuki_Theme.CLI
 
 		internal void CheckUpdateInslattaion ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-
-			int inst = ke?.GetValue ("install") != null ? 1 : 0;
+			int inst = Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
 			if (inst == 1)
 			{
-				ShowSuccess (Core.CLI.Translate ("cli.success.update.full"), Core.CLI.Translate ("cli.success.update.short"));
-				ke?.DeleteValue ("install");
-				if ((string)ke?.GetValue ("cli_update", "null") != "null")
-					ke.DeleteValue ("cli_update");
+				ShowSuccess (CentralAPI.Current.Translate ("cli.success.update.full"), CentralAPI.Current.Translate ("cli.success.update.short"));
+				Settings.database.DeleteValue ("install");
+				if (Settings.database.GetValue ("cli_update", "null") != "null")
+					Settings.database.DeleteValue ("cli_update");
 			}
 		}
 

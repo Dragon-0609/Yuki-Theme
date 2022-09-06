@@ -1172,17 +1172,14 @@ namespace Yuki_Theme.Core.Forms
 
 		private void isUpdated ()
 		{
-			RegistryKey ke =
-				Registry.CurrentUser.CreateSubKey (@"SOFTWARE\YukiTheme", RegistryKeyPermissionCheck.ReadWriteSubTree);
-			
-			if ((string)ke?.GetValue ("cli_update", "null") != "null")
-				ke.DeleteValue ("cli_update");
+			if (Settings.database.GetValue ("cli_update", "null") != "null")
+				Settings.database.DeleteValue ("cli_update");
 
-			int inst = ke.GetValue ("install") != null ? 1 : 0;
+			int inst = Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
 			if (inst == 1)
 			{
 				new ChangelogForm ().Show (this);
-				ke.DeleteValue ("install");
+				Settings.database.DeleteValue ("install");
 			}
 		}
 
@@ -1242,7 +1239,7 @@ namespace Yuki_Theme.Core.Forms
 		}
 
 		/// <summary>
-		/// The app will track install via Google Analytics. This is necessary for me to be kept inspired. I'll switch to passive development on 1st April of 2022, but it doesn't mean that I'll close project. The installs are necessary to make me inspired for continue the development. 
+		/// The app will track install via Google Analytics. 
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>

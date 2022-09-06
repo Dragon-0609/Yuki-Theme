@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
 {
@@ -67,7 +68,7 @@ namespace Yuki_Theme.Core.Themes
 
 
 		[JsonIgnore]
-		public bool IsOld => CLI.ThemeInfos [Name].isOld;
+		public bool IsOld => API.CentralAPI.Current.ThemeInfos [Name].isOld;
 
 		public static bool operator == (Theme t1, Theme t2)
 		{

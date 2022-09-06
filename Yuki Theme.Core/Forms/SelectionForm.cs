@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -8,12 +9,12 @@ namespace Yuki_Theme.Core.Forms
 		public SelectionForm ()
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
-			button1.Text = CLI.Translate ("main.tips.save");
-			button2.Text = CLI.Translate ("download.cancel");
-			label1.Text = CLI.Translate ("messages.copy.from");
-			label2.Text = CLI.Translate ("messages.copy.name");
-			this.Text = CLI.Translate ("messages.copy.title");
+			StartPosition = FormStartPosition.CenterParent;
+			button1.Text = API.CentralAPI.Current.Translate ("main.tips.save");
+			button2.Text = API.CentralAPI.Current.Translate ("download.cancel");
+			label1.Text = API.CentralAPI.Current.Translate ("messages.copy.from");
+			label2.Text = API.CentralAPI.Current.Translate ("messages.copy.name");
+			Text = API.CentralAPI.Current.Translate ("messages.copy.title");
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -29,15 +30,15 @@ namespace Yuki_Theme.Core.Forms
 		private void SelectionForm_Shown (object sender, EventArgs e)
 		{
 			BackColor = button1.BackColor = button2.BackColor =comboBox1.ListBackColor = comboBox1.BackColor = 
-				textBox1.BackColor = Helper.bgColor;
+				textBox1.BackColor = ColorKeeper.bgColor;
 				
 			ForeColor = button1.FlatAppearance.BorderColor = button2.FlatAppearance.BorderColor =
-				comboBox1.ForeColor = comboBox1.ListTextColor = textBox1.ForeColor = Helper.fgColor;
+				comboBox1.ForeColor = comboBox1.ListTextColor = textBox1.ForeColor = ColorKeeper.fgColor;
 						
 			button1.FlatAppearance.MouseOverBackColor = button2.FlatAppearance.MouseOverBackColor =
-				Helper.bgClick;
+				ColorKeeper.bgClick;
 
-			comboBox1.BorderColor = comboBox1.IconColor = textBox1.BorderColor = Helper.bgBorder;
+			comboBox1.BorderColor = comboBox1.IconColor = textBox1.BorderColor = ColorKeeper.bgBorder;
 		}
 	}
 }

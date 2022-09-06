@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -111,8 +112,8 @@ namespace Yuki_Theme.Core.Forms
 							Console.WriteLine (nv);
 							Console.WriteLine (ver);
 #endif
-							if (Settings.current_version < ver ||
-							    (Settings.current_version == ver && Settings.current_version_add.Length != 0 && !hasBeta))
+							if (SettingsConst.CURRENT_VERSION < ver ||
+							    (SettingsConst.CURRENT_VERSION == ver && SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta))
 							{
 								int md = (int)Helper.mode;
 								size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -133,10 +134,7 @@ namespace Yuki_Theme.Core.Forms
 								popupController.nf.button3.Visible = true;
 
 								popupController.nf.Show (popupController.form);
-								lock (Settings.next_version)
-								{
-									Settings.next_version = $"{ver} | {size}";
-								}
+								
 
 								popupController.changeNotificationLocation ();
 								size = jresponse ["assets"] [md] ["size"].ToString ();
@@ -177,8 +175,7 @@ namespace Yuki_Theme.Core.Forms
 			popupController.showDownloader ();
 			popupController.df.downloadlink = downloadlink;
 			popupController.df.size = size;
-			if (!File.Exists(Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), "Yuki Theme",
-			                               "yuki_theme.zip")))
+			if (!File.Exists(GetUpdatePath ()))
 			{
 				popupController.df.downl.ClickHere (EventArgs.Empty);
 			} else
@@ -274,8 +271,8 @@ namespace Yuki_Theme.Core.Forms
 
 		public void startUpdating ()
 		{
-			Preparer prep = new Preparer ();
-			prep.prepare (true);
+			InstallationPreparer prep = new InstallationPreparer ();
+			prep.Prepare (true);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -304,23 +301,23 @@ namespace Yuki_Theme.Core.Forms
 		private void DownloadForm_FormClosing (object sender, FormClosingEventArgs e)
 		{
 			e.Cancel = true;
-			this.Hide();
-			this.Parent = null;
+			Hide();
+			Parent = null;
 		}
 
 		private void DownloadForm_Shown (object sender, EventArgs e)
 		{
-			ForeColor = button1.FlatAppearance.BorderColor = Helper.fgColor;
-			BackColor = Helper.bgColor;
+			ForeColor = button1.FlatAppearance.BorderColor = ColorKeeper.fgColor;
+			BackColor = ColorKeeper.bgColor;
 			
-			button1.FlatAppearance.MouseOverBackColor = Helper.bgClick;
+			button1.FlatAppearance.MouseOverBackColor = ColorKeeper.bgClick;
 		}
 
 		
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			base.OnPaint (e);
-			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, Helper.bgBorder, ButtonBorderStyle.Solid);
+			ControlPaint.DrawBorder (e.Graphics, ClientRectangle, ColorKeeper.bgBorder, ButtonBorderStyle.Solid);
 		}
 		
 		public static bool IsUpdateDownloaded (string path = null)
@@ -337,7 +334,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return CLI.Translate (key);
+			return API.CentralAPI.Current.Translate (key);
 		}
 
 		private static string GetUpdatePath ()

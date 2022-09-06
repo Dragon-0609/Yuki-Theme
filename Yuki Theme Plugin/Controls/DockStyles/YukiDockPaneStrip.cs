@@ -52,7 +52,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 			}
 		}
 
-		protected override DockPaneStripBase.Tab CreateTab (IDockContent content)
+		protected override Tab CreateTab (IDockContent content)
 		{
 			return new TabYuki (content);
 		}
@@ -90,9 +90,9 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 			protected override void OnRefreshChanges ()
 			{
-				if (YukiDockPaneStrip.ColorDocumentActiveText != ForeColor)
+				if (ColorDocumentActiveText != ForeColor)
 				{
-					ForeColor = YukiDockPaneStrip.ColorDocumentActiveText;
+					ForeColor = ColorDocumentActiveText;
 					Invalidate ();
 				}
 			}
@@ -453,42 +453,42 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		private static Brush BrushToolWindowActiveBackground
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.bgClick3Brush; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.bgClick3Brush; }
 		}
 
 		private static Brush BrushToolWindowHoverBackground
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.bgClickBrush; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.bgClickBrush; }
 		}
 
 		private static Brush BrushDocumentActiveBackground
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.bgClick3Brush; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.bgClick3Brush; }
 		}
 
 		private static Brush BrushDocumentInactiveBackground
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.bgdefBrush; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.bgdefBrush; }
 		}
 
 		private static Color ColorToolWindowActiveText
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.clr; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.clr; }
 		}
 
 		private static Color ColorDocumentActiveText
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.clr; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.clr; }
 		}
 
 		private static Color ColorToolWindowInactiveText
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.clr; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.clr; }
 		}
 
 		private static Color ColorDocumentInactiveText
 		{
-			get { return YukiTheme_VisualPascalABCPlugin.clr; }
+			get { return YukiTheme_VisualPascalABCPlugin.Colors.clr; }
 		}
 
 		private int        currentIndex = -1;
@@ -626,8 +626,8 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		protected override void OnPaint (PaintEventArgs e)
 		{
-			if (BackColor != YukiTheme_VisualPascalABCPlugin.bgdef)
-				BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
+			if (BackColor != YukiTheme_VisualPascalABCPlugin.Colors.bgdef)
+				BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
 			base.OnPaint (e);
 			CalculateTabs ();
 			if (Appearance == DockPane.AppearanceStyle.Document && DockPane.ActiveContent != null)
@@ -965,7 +965,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 				if (rectTab.IntersectsWith (rectTabOnly))
 					DrawTab (g, tabActive, rectTab);
 				if (DockPane.IsActiveDocumentPane)
-					g.DrawLine (YukiTheme_VisualPascalABCPlugin.bgBorderPen, rectTab.Left, rectTab.Bottom,
+					g.DrawLine (YukiTheme_VisualPascalABCPlugin.Colors.bgBorderPen, rectTab.Left, rectTab.Bottom,
 					            rectTab.Right, rectTab.Bottom);
 			}
 		}
@@ -1330,7 +1330,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		protected override void OnMouseHover (EventArgs e)
 		{
-			int index = HitTest (PointToClient (Control.MousePosition));
+			int index = HitTest (PointToClient (MousePosition));
 			string toolTip = string.Empty;
 
 			base.OnMouseHover (e);
@@ -1370,7 +1370,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		protected override void OnMouseMove (MouseEventArgs e)
 		{
-			int index = HitTest (PointToClient (Control.MousePosition));
+			int index = HitTest (PointToClient (MousePosition));
 
 			if (index != -1)
 			{

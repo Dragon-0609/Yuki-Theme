@@ -11,23 +11,27 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Xml;
 using CommonMark;
+using Microsoft.Win32;
 using Svg;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
+using Size = System.Drawing.Size;
 
 namespace Yuki_Theme.Core
 {
 	public static class Helper
 	{
-		public static Color bgdefColor, bgColor, bgClick, bgBorder, fgColor, fgHover, fgKeyword, selectionColor;
-
 		public static ProductMode?  mode;
 		public static RelativeUnit unit;
 
 		private static Size   Standart32 = new Size (32, 32);
-		public static  string CustomThemesBegin => Path.Combine (CLI.currentPath, "Themes");
+		public static  string CustomThemesBegin => Path.Combine (SettingsConst.CurrentPath, "Themes");
 
 		public static Rectangle GetSizes (Size ima, int mWidth, int mHeight, Alignment align)
 		{
@@ -68,10 +72,10 @@ namespace Yuki_Theme.Core
 
 		#region CONST
 
-		private const string THEME_NAME_OLD      = "theme.xshd";
-		private const string THEME_NAME_NEW      = "theme.json";
-		private const string WALLPAPER_NAME      = "background.png";
-		private const string STICKER_NAME        = "sticker.png";
+		internal const string THEME_NAME_OLD      = "theme.xshd";
+		internal const string THEME_NAME_NEW      = "theme.json";
+		internal const string WALLPAPER_NAME      = "background.png";
+		internal const string STICKER_NAME        = "sticker.png";
 		public const  string FILE_EXTENSTION_OLD = ".yukitheme";
 		public const  string FILE_EXTENSTION_NEW = ".yuki";
 		public const  string PASCALTEMPLATE      = "Yuki_Theme.Core.Resources.Syntax_Templates.Pascal.xshd";
@@ -231,8 +235,6 @@ namespace Yuki_Theme.Core
 				IThemeHeader header = DefaultThemes.headers [name];
 				assembly = header.Location;
 				pathHeader = header.ResourceHeader;
-				// Console.WriteLine(pathHeader);
-				// Console.WriteLine (path);
 				if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_OLD}") != null)
 					return ThemeFormat.Old;
 				else if (assembly.GetManifestResourceStream ($"{pathHeader}.{path}{FILE_EXTENSTION_NEW}") != null)
@@ -255,204 +257,7 @@ namespace Yuki_Theme.Core
 		}
 
 		#endregion
-
-
-		#region Zip
-
-		public static bool IsZip (string path)
-		{
-			try
-			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
-				{
-					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-						return IsZip (zipFile, THEME_NAME_OLD);
-					else
-						return IsZip (zipFile, THEME_NAME_NEW);
-				}
-			} catch (InvalidDataException)
-			{
-				return false;
-			}
-		}
-
-		public static bool IsZip (Stream stream)
-		{
-			try
-			{
-				using (var zipFile = new ZipArchive (stream, ZipArchiveMode.Read))
-				{
-					bool res = IsZip (zipFile, THEME_NAME_OLD);
-					if (!res)
-						res = IsZip (zipFile, THEME_NAME_NEW);
-					return res;
-				}
-			} catch (InvalidDataException)
-			{
-				return false;
-			}
-		}
-
-		private static bool IsZip (ZipArchive zipFile, string themefile)
-		{
-			var theme = zipFile.GetEntry (themefile);
-			return true;
-			
-		}
-
-		public static void UpdateZip (string path, string content, Image img, bool wantToKeepImage = false, Image sticker = null,
-		                              bool   wantToKeepSticker = false, string themeName = "", bool asOld = true)
-		{
-			if (!wantToKeepImage && !wantToKeepSticker && img == null && sticker == null)
-			{
-				SaveToFile (path, content, asOld);
-			} else
-			{
-				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
-				{
-					if (themeName.Length == 0) themeName = GetThemeSaveName (asOld);
-					ZipArchiveEntry entry = archive.GetEntry (themeName);
-
-					entry?.Delete ();
-					// To be sure that there's no old theme file
-					entry = archive.GetEntry (THEME_NAME_OLD);
-					entry?.Delete ();
-
-					entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
-
-
-					using (StreamWriter writer = new StreamWriter (entry.Open ()))
-					{
-						writer.Write (content);
-					}
-
-					if (!wantToKeepImage)
-					{
-						entry = archive.GetEntry (WALLPAPER_NAME);
-
-						entry?.Delete ();
-						AddImageToZip (archive, img, WALLPAPER_NAME);
-					}
-
-					if (!wantToKeepSticker)
-					{
-						entry = archive.GetEntry (STICKER_NAME);
-
-						entry?.Delete ();
-						AddImageToZip (archive, sticker, STICKER_NAME);
-					}
-				}
-			}
-		}
-
-		private static void SaveToFile (string path, string content, bool asOld)
-		{
-			if (File.Exists (path)) File.Delete (path);
-			if (asOld)
-				SaveToFileOld (path, content);
-			else
-				SaveToFileNew (path, content);
-		}
-
-		private static void SaveToFileOld (string path, string content)
-		{
-			XmlDocument doc = new XmlDocument ();
-			doc.LoadXml (content);
-			doc.Save (path);
-		}
-
-		private static void SaveToFileNew (string path, string content)
-		{
-			File.WriteAllText (path, content);
-		}
-
-		public static void ExtractZip (string source, string destination, bool needImage = false, bool needSticker = false,
-		                               bool   needTheme = true)
-		{
-			using (ZipArchive archive = ZipFile.OpenRead (source))
-			{
-				if (needTheme)
-				{
-					ZipArchiveEntry entry = archive.GetEntry (THEME_NAME_OLD);
-					if (entry == null)
-						entry = archive.GetEntry (THEME_NAME_NEW);
-					entry.ExtractToFile (destination, true);
-				}
-
-				if (needImage)
-					ExtractFile (archive, WALLPAPER_NAME, destination);
-				if (needSticker)
-					ExtractFile (archive, STICKER_NAME, destination);
-			}
-		}
-
-		private static void ExtractFile (ZipArchive archive, string filename, string destination)
-		{
-			try
-			{
-				ZipArchiveEntry entry = archive.GetEntry (filename);
-				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), filename), true);
-			} catch (Exception ex)
-			{
-				if (ex is ArgumentException || ex is ArgumentNullException || ex is NullReferenceException)
-				{
-					if (CLI_Actions.showError != null)
-						CLI_Actions.showError (CLI.Translate ("messages.file.notexist.withname.param", filename),
-						                       CLI.Translate ("messages.file.notexist.withname", filename));
-				} else
-				{
-					throw;
-				}
-			}
-		}
-
-		public static void Zip (string path, string content, Image img, Image sticker = null, string themeName = "", bool asOld = true)
-		{
-			if (img == null && sticker == null)
-			{
-				SaveToFile (path, content, asOld);
-			} else
-			{
-				using (var fileStream = new FileStream (path, FileMode.Create))
-				{
-					using (var archive = new ZipArchive (fileStream, ZipArchiveMode.Create))
-					{
-						if (themeName.Length == 0) themeName = GetThemeSaveName (asOld);
-						ZipArchiveEntry entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
-
-
-						using (StreamWriter writer = new StreamWriter (entry.Open ()))
-						{
-							writer.Write (content);
-						}
-
-						AddImageToZip (archive, img, WALLPAPER_NAME);
-						AddImageToZip (archive, sticker, STICKER_NAME);
-					}
-				}
-			}
-		}
-
-		private static void AddImageToZip (ZipArchive archive, Image img, string filename)
-		{
-			if (img != null)
-			{
-				var file = archive.CreateEntry (filename, CompressionLevel.Optimal);
-				using (var stream = new MemoryStream ())
-				{
-					img.Save (stream, ImageFormat.Png);
-					using (var entryStream = file.Open ())
-					{
-						// to keep it as image better to have it as bytes
-						var bytes = stream.ToArray ();
-						entryStream.Write (bytes, 0, bytes.Length);
-					}
-				}
-			}
-		}
-
-		#endregion
-
+		
 
 		#region Color Management
 
@@ -545,7 +350,7 @@ namespace Yuki_Theme.Core
 			if (customColor)
 				svg.Color = new SvgColourServer (clr);
 			else
-				svg.Color = new SvgColourServer (fgColor);
+				svg.Color = new SvgColourServer (ColorKeeper.fgColor);
 
 			if (!custom)
 				return svg.Draw (im.Width, im.Height);
@@ -558,7 +363,7 @@ namespace Yuki_Theme.Core
 			if (customColor)
 				svg.Color = new SvgColourServer (clr);
 			else
-				svg.Color = new SvgColourServer (fgColor);
+				svg.Color = new SvgColourServer (ColorKeeper.fgColor);
 
 			if (idColors != null)
 			{
@@ -601,12 +406,12 @@ namespace Yuki_Theme.Core
 		
 		public static string ReplaceHTMLColors (string html)
 		{
-			html = html.Replace ("__bg__", ColorTranslator.ToHtml (bgColor));
-			html = html.Replace ("__clr__", ColorTranslator.ToHtml (fgColor));
-			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (fgHover));
+			html = html.Replace ("__bg__", ColorTranslator.ToHtml (ColorKeeper.bgColor));
+			html = html.Replace ("__clr__", ColorTranslator.ToHtml (ColorKeeper.fgColor));
+			html = html.Replace ("__clr_click__", ColorTranslator.ToHtml (ColorKeeper.fgHover));
 			if (html.Contains ("__border__"))
 			{
-				html = html.Replace ("__border__", ColorTranslator.ToHtml (bgBorder));
+				html = html.Replace ("__border__", ColorTranslator.ToHtml (ColorKeeper.bgBorder));
 			}
 			return html;
 		}
@@ -672,19 +477,18 @@ namespace Yuki_Theme.Core
 
 		public static void LoadCurrent ()
 		{
-			CLI.load_schemes ();
+			CentralAPI.Current.LoadSchemes ();
 			string [] files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
 			bool sett = false;
 			if (files.Length > 0)
 			{
 				foreach (string s in files)
 				{
-					string sp = CLI.GetNameOfTheme (s);
-					if (CLI.schemes.Contains (sp))
+					string sp = CentralAPI.Current.GetNameOfTheme (s);
+					if (CentralAPI.Current.Schemes.Contains (sp))
 					{
-						// Console.WriteLine(nod.Attributes ["name"].Value);
 						currentTheme = sp;
-						CLI.selectedItem = currentTheme;
+						CentralAPI.Current.selectedItem = currentTheme;
 						sett = true;
 						break;
 					}
@@ -702,8 +506,8 @@ namespace Yuki_Theme.Core
 
 		public static void CreateThemeDirectory ()
 		{
-			if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-				Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+			if (CentralAPI.Current.CreateThemesDirectory && !Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+				Directory.CreateDirectory (Path.Combine (SettingsConst.CurrentPath, "Themes"));
 		}
 
 		public static T GetRandomElement <T> (List <T> list)
@@ -723,6 +527,8 @@ namespace Yuki_Theme.Core
 			return Icon.FromHandle (((Bitmap)RenderSvg (size, LoadSvg ("yuki_theme", Assembly.GetExecutingAssembly ()))).GetHicon ());
 		}
 
+		#region Encryptor
+
 		public static string EncryptString (string key, string plainText)
 		{
 			byte [] iv = new byte[16];
@@ -730,18 +536,8 @@ namespace Yuki_Theme.Core
 			key = KeyFillerNCutter (key);
 			using (Aes aes = Aes.Create ())
 			{
-				Console.WriteLine ("Key size: {0} - {1}", Encoding.UTF8.GetBytes (key).Length, key.Length);
 				KeySizes [] ks = aes.LegalKeySizes;
-				foreach (KeySizes item in ks)
-				{
-					Console.WriteLine ("Legal min key size = " + item.MinSize);
-					Console.WriteLine ("Legal max key size = " + item.MaxSize);
-					//Output
-					// Legal min key size = 128
-					// Legal max key size = 256
-				}
-
-
+				
 				aes.Key = Encoding.UTF8.GetBytes (key);
 				aes.IV = iv;
 
@@ -789,18 +585,20 @@ namespace Yuki_Theme.Core
 		}
 
 		public static string KeyFillerNCutter (string key)
-        {
-	        string res = key;
-	        if (res.Length < 16)
-	        {
-		        res += new string ('.', 16 - res.Length);
-	        }else if (res.Length > 16)
-	        {
-		        res = res.Substring (0, 16);
-	        }
-	        return res;
-        }
-        
+		{
+			string res = key;
+			if (res.Length < 16)
+			{
+				res += new string ('.', 16 - res.Length);
+			}else if (res.Length > 16)
+			{
+				res = res.Substring (0, 16);
+			}
+			return res;
+		}
+		
+
+		#endregion
 
         public static string GetExtension (bool isOld)
         {
@@ -817,7 +615,7 @@ namespace Yuki_Theme.Core
 
         public static bool VerifyToken (Theme theme)
         {
-	        if (theme != null && theme.Token != null)
+	        if (theme != null && theme.Token != null && theme.Token != "null")
 	        {
 		        string token = theme.Token;
 		        if (token == "" || token.Length < 6) return false;
@@ -852,7 +650,7 @@ namespace Yuki_Theme.Core
         public static string ReadResource (string target, string nameSpace = "Yuki_Theme.Core.Resources.")
         {
 	        string result = "";
-	        Assembly a = CLI.GetCore ();
+	        Assembly a = CentralAPI.Current.GetCore ();
 	        Stream stm = a.GetManifestResourceStream (nameSpace + target);
 	        if (stm != null)
 		        using (StreamReader reader = new StreamReader (stm))
@@ -896,6 +694,26 @@ namespace Yuki_Theme.Core
         internal static bool IsDimensionAvailable ()
         {
 	        return Settings.useDimensionCap && Settings.dimensionCapMax > 20;
+        }
+
+        public static int RecognizeInstallationStatus ()
+        {
+			if (Settings.database.GetValue ("cli_update", "null") != "null")
+				Settings.database.DeleteValue ("cli_update");
+
+	        return Settings.database.GetValue ("install").Length != 0 ? 1 : 0;
+        }
+
+        public static void DeleteInstallationStatus ()
+        {
+			Settings.database.DeleteValue ("install");
+        }
+
+        public static NativeWindow ToNativeWindow (this Window window)
+        {
+	        NativeWindow win32Parent = new NativeWindow ();
+	        win32Parent.AssignHandle (new WindowInteropHelper (window).Handle);
+	        return win32Parent;
         }
 	}
 
@@ -960,105 +778,4 @@ namespace Yuki_Theme.Core
 
 	}
 	
-	internal class ZipVerificator
-	{
-		private const int    ZIP_LEAD_BYTES  = 0x04034b50;
-		private const ushort GZIP_LEAD_BYTES = 0x8b1f;
-
-		internal static bool IsPkZipCompressedData(byte[] data)
-		{
-			Debug.Assert(data != null && data.Length >= 4);
-			// if the first 4 bytes of the array are the ZIP signature then it is compressed data
-			return (BitConverter.ToInt32(data, 0) == ZIP_LEAD_BYTES);
-		}
-
-		internal static bool IsGZipCompressedData(byte[] data)
-		{
-			Debug.Assert(data != null && data.Length >= 2);
-			// if the first 2 bytes of the array are theG ZIP signature then it is compressed data;
-			return (BitConverter.ToUInt16(data, 0) == GZIP_LEAD_BYTES);
-		}
-
-		public static bool IsCompressedData(byte[] data)
-		{
-			return IsPkZipCompressedData(data) || IsGZipCompressedData(data);
-		}
-
-		public static bool IsZip(Stream stream)
-		{
-			bool isZip = false;
-			Debug.Assert(stream != null);
-			Debug.Assert(stream.CanSeek);
-			stream.Seek(0, 0);
-
-			try
-			{
-				byte[] bytes = new byte[4];
-
-				stream.Read(bytes, 0, 4);
-
-				if (IsGZipCompressedData(bytes))
-					isZip = true;
-
-				if (IsPkZipCompressedData (bytes))
-					isZip = true;
-			}
-			finally
-			{
-				stream.Seek(0, 0); // set the stream back to the begining
-			}
-
-			return isZip;
-		}
-	}
-	public struct WindowProps
-	{
-		public int   Left;
-		public int   Top;
-		public int?  Width     = null;
-		public int?  Height    = null;
-		public bool? Maximized = null;
-		public WindowProps ()
-		{
-			Left = 0;
-			Top = 0;
-		}
-
-
-		public static WindowProps Parse (string target)
-		{
-			string [] spp = target.Split (':');
-			
-			if (spp.Length < 2) return new WindowProps {Left = 0, Top = 0};
-			
-			WindowProps props = new WindowProps
-			{
-				Left = int.Parse (spp [0]),
-				Top = int.Parse (spp [1])
-			};
-			try
-			{
-				if (spp.Length > 2)
-				{
-					props.Width = int.Parse (spp [2]);
-					if (spp.Length > 3)
-					{
-						props.Height = int.Parse (spp [3]);
-						if (spp.Length == 5)
-							props.Maximized = bool.Parse (spp [4]);
-					}
-				}
-			} catch
-			{
-				// ignored
-			}
-
-			return props;
-		}
-		
-		public override string ToString ()
-		{
-			return $"{Left}:{Top}:{Width}:{Height}:{Maximized}";
-		}
-	}
 }

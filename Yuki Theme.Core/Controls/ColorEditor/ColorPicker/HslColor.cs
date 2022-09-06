@@ -16,31 +16,31 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         public HslColor(int a, double h, double s, double l)
         {
-            this.alpha = a;
-            this.hue = h;
-            this.saturation = s;
-            this.luminance = l;
-            this.A = a;
-            this.H = this.hue;
-            this.S = this.saturation;
-            this.L = this.luminance;
+            alpha = a;
+            hue = h;
+            saturation = s;
+            luminance = l;
+            A = a;
+            H = hue;
+            S = saturation;
+            L = luminance;
         }
 
         public HslColor(double h, double s, double l)
         {
-            this.alpha = 0xff;
-            this.hue = h;
-            this.saturation = s;
-            this.luminance = l;
+            alpha = 0xff;
+            hue = h;
+            saturation = s;
+            luminance = l;
         }
 
         public HslColor(Color color)
         {
-            this.alpha = color.A;
-            this.hue = 0.0;
-            this.saturation = 0.0;
-            this.luminance = 0.0;
-            this.RGBtoHSL(color);
+            alpha = color.A;
+            hue = 0.0;
+            saturation = 0.0;
+            luminance = 0.0;
+            RGBtoHSL(color);
         }
 
         public static HslColor FromArgb(int a, int r, int g, int b)
@@ -88,7 +88,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             if (obj is HslColor)
             {
                 HslColor color = (HslColor)obj;
-                if (((this.A == color.A) && (this.H == color.H)) && ((this.S == color.S) && (this.L == color.L)))
+                if (((A == color.A) && (H == color.H)) && ((S == color.S) && (L == color.L)))
                 {
                     return true;
                 }
@@ -98,7 +98,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         public override int GetHashCode()
         {
-            return (((this.alpha.GetHashCode() ^ this.hue.GetHashCode()) ^ this.saturation.GetHashCode()) ^ this.luminance.GetHashCode());
+            return (((alpha.GetHashCode() ^ hue.GetHashCode()) ^ saturation.GetHashCode()) ^ luminance.GetHashCode());
         }
 
         [DefaultValue((double)0.0), Category("Appearance"), Description("H Channel value")]
@@ -106,12 +106,12 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.hue;
+                return hue;
             }
             set
             {
-                this.hue = value;
-                this.hue = (this.hue > 1.0) ? 1.0 : ((this.hue < 0.0) ? 0.0 : this.hue);
+                hue = value;
+                hue = (hue > 1.0) ? 1.0 : ((hue < 0.0) ? 0.0 : hue);
             }
         }
         [Category("Appearance"), Description("S Channel value"), DefaultValue((double)0.0)]
@@ -119,12 +119,12 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.saturation;
+                return saturation;
             }
             set
             {
-                this.saturation = value;
-                this.saturation = (this.saturation > 1.0) ? 1.0 : ((this.saturation < 0.0) ? 0.0 : this.saturation);
+                saturation = value;
+                saturation = (saturation > 1.0) ? 1.0 : ((saturation < 0.0) ? 0.0 : saturation);
             }
         }
         [Category("Appearance"), Description("L Channel value"), DefaultValue((double)0.0)]
@@ -132,12 +132,12 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.luminance;
+                return luminance;
             }
             set
             {
-                this.luminance = value;
-                this.luminance = (this.luminance > 1.0) ? 1.0 : ((this.luminance < 0.0) ? 0.0 : this.luminance);
+                luminance = value;
+                luminance = (luminance > 1.0) ? 1.0 : ((luminance < 0.0) ? 0.0 : luminance);
             }
         }
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -145,50 +145,50 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             get
             {
-                return this.HSLtoRGB();
+                return HSLtoRGB();
             }
             set
             {
-                this.RGBtoHSL(value);
+                RGBtoHSL(value);
             }
         }
         public int A
         {
             get
             {
-                return this.alpha;
+                return alpha;
             }
             set
             {
-                this.alpha = (value > 0xff) ? 0xff : ((value < 0) ? 0 : value);
+                alpha = (value > 0xff) ? 0xff : ((value < 0) ? 0 : value);
             }
         }
         public bool IsEmpty
         {
             get
             {
-                return ((((this.alpha == 0) && (this.H == 0.0)) && (this.S == 0.0)) && (this.L == 0.0));
+                return ((((alpha == 0) && (H == 0.0)) && (S == 0.0)) && (L == 0.0));
             }
         }
 
         public Color ToRgbColor()
         {
-            return this.ToRgbColor(this.A);
+            return ToRgbColor(A);
         }
 
         public Color ToRgbColor(int alpha)
         {
             double q;
-            if (this.L < 0.5)
+            if (L < 0.5)
             {
-                q = this.L * (1 + this.S);
+                q = L * (1 + S);
             }
             else
             {
-                q = this.L + this.S - (this.L * this.S);
+                q = L + S - (L * S);
             }
-            double p = 2 * this.L - q;
-            double hk = this.H / 360;
+            double p = 2 * L - q;
+            double hk = H / 360;
 
             // r,g,b colors
             double[] tc = new[]
@@ -271,40 +271,40 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         private Color HSLtoRGB()
         {
             int num2;
-            int red = this.Round(this.luminance * 255.0);
-            int blue = this.Round(((1.0 - this.saturation) * (this.luminance / 1.0)) * 255.0);
+            int red = Round(luminance * 255.0);
+            int blue = Round(((1.0 - saturation) * (luminance / 1.0)) * 255.0);
             double num4 = ((double)(red - blue)) / 255.0;
-            if ((this.hue >= 0.0) && (this.hue <= 0.16666666666666666))
+            if ((hue >= 0.0) && (hue <= 0.16666666666666666))
             {
-                num2 = this.Round((((this.hue - 0.0) * num4) * 1530.0) + blue);
-                return Color.FromArgb(this.alpha, red, num2, blue);
+                num2 = Round((((hue - 0.0) * num4) * 1530.0) + blue);
+                return Color.FromArgb(alpha, red, num2, blue);
             }
-            if (this.hue <= 0.33333333333333331)
+            if (hue <= 0.33333333333333331)
             {
-                num2 = this.Round((-((this.hue - 0.16666666666666666) * num4) * 1530.0) + red);
-                return Color.FromArgb(this.alpha, num2, red, blue);
+                num2 = Round((-((hue - 0.16666666666666666) * num4) * 1530.0) + red);
+                return Color.FromArgb(alpha, num2, red, blue);
             }
-            if (this.hue <= 0.5)
+            if (hue <= 0.5)
             {
-                num2 = this.Round((((this.hue - 0.33333333333333331) * num4) * 1530.0) + blue);
-                return Color.FromArgb(this.alpha, blue, red, num2);
+                num2 = Round((((hue - 0.33333333333333331) * num4) * 1530.0) + blue);
+                return Color.FromArgb(alpha, blue, red, num2);
             }
-            if (this.hue <= 0.66666666666666663)
+            if (hue <= 0.66666666666666663)
             {
-                num2 = this.Round((-((this.hue - 0.5) * num4) * 1530.0) + red);
-                return Color.FromArgb(this.alpha, blue, num2, red);
+                num2 = Round((-((hue - 0.5) * num4) * 1530.0) + red);
+                return Color.FromArgb(alpha, blue, num2, red);
             }
-            if (this.hue <= 0.83333333333333337)
+            if (hue <= 0.83333333333333337)
             {
-                num2 = this.Round((((this.hue - 0.66666666666666663) * num4) * 1530.0) + blue);
-                return Color.FromArgb(this.alpha, num2, blue, red);
+                num2 = Round((((hue - 0.66666666666666663) * num4) * 1530.0) + blue);
+                return Color.FromArgb(alpha, num2, blue, red);
             }
-            if (this.hue <= 1.0)
+            if (hue <= 1.0)
             {
-                num2 = this.Round((-((this.hue - 0.83333333333333337) * num4) * 1530.0) + red);
-                return Color.FromArgb(this.alpha, red, blue, num2);
+                num2 = Round((-((hue - 0.83333333333333337) * num4) * 1530.0) + red);
+                return Color.FromArgb(alpha, red, blue, num2);
             }
-            return Color.FromArgb(this.alpha, 0, 0, 0);
+            return Color.FromArgb(alpha, 0, 0, 0);
         }
 
         private void RGBtoHSL(Color color)
@@ -312,7 +312,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             int r;
             int g;
             double num4;
-            this.alpha = color.A;
+            alpha = color.A;
             if (color.R > color.G)
             {
                 r = color.R;
@@ -332,14 +332,14 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 g = color.B;
             }
             int num3 = r - g;
-            this.luminance = ((double)r) / 255.0;
+            luminance = ((double)r) / 255.0;
             if (r == 0)
             {
-                this.saturation = 0.0;
+                saturation = 0.0;
             }
             else
             {
-                this.saturation = ((double)num3) / ((double)r);
+                saturation = ((double)num3) / ((double)r);
             }
             if (num3 == 0)
             {
@@ -353,24 +353,24 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             {
                 if (color.G < color.B)
                 {
-                    this.hue = (360.0 + (num4 * (color.G - color.B))) / 360.0;
+                    hue = (360.0 + (num4 * (color.G - color.B))) / 360.0;
                 }
                 else
                 {
-                    this.hue = (num4 * (color.G - color.B)) / 360.0;
+                    hue = (num4 * (color.G - color.B)) / 360.0;
                 }
             }
             else if (r == color.G)
             {
-                this.hue = (120.0 + (num4 * (color.B - color.R))) / 360.0;
+                hue = (120.0 + (num4 * (color.B - color.R))) / 360.0;
             }
             else if (r == color.B)
             {
-                this.hue = (240.0 + (num4 * (color.R - color.G))) / 360.0;
+                hue = (240.0 + (num4 * (color.R - color.G))) / 360.0;
             }
             else
             {
-                this.hue = 0.0;
+                hue = 0.0;
             }
         }
 

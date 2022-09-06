@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -15,7 +16,7 @@ namespace Yuki_Theme.Core.Forms
 		public ChangelogForm ()
 		{
 			InitializeComponent ();
-			this.Text = label1.Text = CLI.Translate ("changelog.title");
+			Text = label1.Text = API.CentralAPI.Current.Translate ("changelog.title");
 
 			string md = Helper.ReadHTML ("CHANGELOG.md");
 			string html = Helper.ReadHTML ("CHANGELOG.html");
@@ -28,10 +29,10 @@ namespace Yuki_Theme.Core.Forms
 			md = ReplaceCheckbox (md);
 			string str = CommonMark.CommonMarkConverter.Convert (md);
 
-			html = html.Replace ("Expand", CLI.Translate ("changelog.expand")).Replace ("__content__", str);
+			html = html.Replace ("Expand", API.CentralAPI.Current.Translate ("changelog.expand")).Replace ("__content__", str);
 			webBrowser1.DocumentText = html;
 			webBrowser1.ScrollBarsEnabled = true;
-			this.webBrowser1.ObjectForScripting = this;
+			webBrowser1.ObjectForScripting = this;
 		}
 
 		private static string ReplaceCheckbox (string md)
@@ -45,14 +46,14 @@ namespace Yuki_Theme.Core.Forms
 		{
 			StartPosition = FormStartPosition.Manual;
 			Location = new Point (Owner.Location.X, Owner.Location.Y);
-			button1.BackColor = panel1.BackColor = label1.BackColor = BackColor = Helper.bgColor;
-			button1.ForeColor = panel1.ForeColor = label1.ForeColor = ForeColor = Helper.fgColor;
+			button1.BackColor = panel1.BackColor = label1.BackColor = BackColor = ColorKeeper.bgColor;
+			button1.ForeColor = panel1.ForeColor = label1.ForeColor = ForeColor = ColorKeeper.fgColor;
 			label1.Focus ();
 		}
 
 		private void button1_Click (object sender, EventArgs e)
 		{
-			this.Close ();
+			Close ();
 		}
 
 		private void webBrowser1_DocumentCompleted (object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -67,10 +68,10 @@ namespace Yuki_Theme.Core.Forms
 			string ntxt = "";
 			if (expanded)
 			{
-				ntxt = CLI.Translate ("changelog.collapse");
+				ntxt = API.CentralAPI.Current.Translate ("changelog.collapse");
 			} else
 			{
-				ntxt = CLI.Translate ("changelog.expand");
+				ntxt = API.CentralAPI.Current.Translate ("changelog.expand");
 			}
 
 			Assembly a = Assembly.GetExecutingAssembly ();
@@ -89,8 +90,8 @@ namespace Yuki_Theme.Core.Forms
 			mdd = CommonMark.CommonMarkConverter.Convert (mdd);
 			stm.Dispose ();
 			// Load SVG
-			this.webBrowser1.Document.GetElementById ("content").InnerHtml = mdd;
-			this.webBrowser1.Document.GetElementById ("expander_button").InnerHtml = ntxt;
+			webBrowser1.Document.GetElementById ("content").InnerHtml = mdd;
+			webBrowser1.Document.GetElementById ("expander_button").InnerHtml = ntxt;
 			if (!expanded)
 			{
 				webBrowser1.Height = webBrowser1.Document.Body.ClientRectangle.Height + 35;

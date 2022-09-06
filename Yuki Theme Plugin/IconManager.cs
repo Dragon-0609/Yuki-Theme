@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using VisualPascalABC;
+using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Interfaces;
 
@@ -17,27 +20,151 @@ namespace Yuki_Theme_Plugin
 		private          ContextMenuStrip context;
 		private          ContextMenuStrip context2;
 
+		private readonly Dictionary <string, string> _iconNames = new ()
+		{
+			{ "tbNew", "addFile" },
+			{ "miNew", "addFile" },
+			{ "tbOpen", "menu-open" },
+			{ "miOpen", "menu-open" },
+			{ "tbSave", "menu-saveall" },
+			{ "tbSaveAll", "menu-saveall" },
+			{ "miSave", "menu-saveall" },
+			{ "miSaveAll", "menu-saveall" },
+			{ "cmSave", "menu-saveall" },
+			{ "tsCut", "menu-cut" },
+			{ "miCut", "menu-cut" },
+			{ "cmCut", "menu-cut" },
+			{ "tsCopy", "copy" },
+			{ "miCopy", "copy" },
+			{ "cmCopy", "copy" },
+			{ "tsPaste", "menu-paste" },
+			{ "miPaste", "menu-paste" },
+			{ "cmPaste", "menu-paste" },
+			{ "tsUndo", "undo" },
+			{ "miUndo", "undo" },
+			{ "tsRedo", "redo" },
+			{ "miRedo", "redo" },
+			{ "tsNavigBack", "back" },
+			{ "miNavigBack", "back" },
+			{ "tsNavigForw", "forward" },
+			{ "miNavigForw", "forward" },
+			{ "StartButton", "execute" },
+			{ "miRun", "execute" },
+			{ "cmRun", "execute" },
+			{ "StartNoDebugButton", "runAll" },
+			{ "miRunNoDebug", "runAll" },
+			{ "stopButton", "suspend" },
+			{ "miStop", "suspend" },
+			{ "CompileButton", "compile" },
+			{ "miBuild", "compile" },
+			{ "StartDebugButton", "startDebugger" },
+			{ "StopDebugButton", "restartDebugger" },
+			{ "StepOverButton", "traceOver" },
+			{ "mSTEPOVERToolStripMenuItem", "traceOver" },
+			{ "StepIntoButton", "traceInto" },
+			{ "mSTEPINToolStripMenuItem", "traceInto" },
+			{ "StepOutButton", "stepOut" },
+			{ "mSTEPToolStripMenuItem", "stepOut" },
+			{ "ReCompileButton", "forceRefresh" },
+			{ "miRebuild", "forceRefresh" },
+			{ "tsOutputWindow", "console" },
+			{ "tsShowOutputWindow", "console" },
+			{ "OutputWindowForm", "console" },
+			{ "tsAutoInsertCode", "intentionBulb" },
+			{ "mAUTOINSERTToolStripMenuItem", "intentionBulb" },
+			{ "toolStripButton1", "cwmPermissionEdit" },
+			{ "tsFormat", "magicResolve" },
+			{ "mFORMATToolStripMenuItem", "magicResolve" },
+			{ "cmFormat", "magicResolve" },
+			{ "miPrint", "print" },
+			{ "miNewProject", "projectTab" },
+			{ "miDelete", "close" },
+			{ "miFind", "find" },
+			{ "miFindNext", "findForward" },
+			{ "miReplace", "replace" },
+			{ "tsShowFindSymbolsResultWindow", "replace" },
+			{ "FindSymbolsResultWindowForm", "replace" },
+			{ "miOutputWindow", "moveToBottomLeft" },
+			{ "tsShowErrorsListWindow", "notificationError" },
+			{ "ErrorsListWindowForm", "notificationError" },
+			{ "tsShowCompilerConsoleWindow", "toolWindowMessages" },
+			{ "CompilerConsoleWindowForm", "toolWindowMessages" },
+			{ "tsShowDebugVariablesListWindow", "dynamicUsages" },
+			{ "DebugVariablesListWindowForm", "dynamicUsages" },
+			{ "tsShowDebugWatchListWindow", "showHiddens" },
+			{ "DebugWatchListWindowForm", "showHiddens" },
+			{ "tsDisassembly", "MoveTo2" },
+			{ "DisassemblyWindow", "MoveTo2" },
+			{ "mOPTIONSToolStripMenuItem", "gearPlain" },
+			{ "tsGotoDefinition", "showReadAccess" },
+			{ "cmGotoDefinition", "showReadAccess" },
+			{ "tsGotoRealization", "showWriteAccess" },
+			{ "cmGotoRealization", "showWriteAccess" },
+			{ "miGenerateRealization", "externalTools" },
+			{ "cmGenerateRealization", "externalTools" },
+			{ "tsHelp", "help" },
+			{ "cmHelp", "help" },
+		};
+
+		private readonly string [] _iconsWithDarkVersion =
+		{
+			"menu-cut",
+			"menu-saveall",
+			"menu-paste",
+			"copy",
+			"addFile",
+			"undo",
+			"redo",
+			"stepOut",
+			"traceInto",
+			"console",
+			"intentionBulb",
+			"magicResolve",
+			"menu-open",
+			"restartDebugger",
+			"traceOver",
+			"back",
+			"forward",
+			"print",
+			"projectTab",
+			"close",
+			"find",
+			"findForward",
+			"replace",
+			"moveToBottomLeft",
+			"toolWindowMessages",
+			"dynamicUsages",
+			"showHiddens",
+			"MoveTo2",
+			"gearPlain",
+			"showReadAccess",
+			"showWriteAccess",
+			"externalTools",
+			"help"
+		};
+
+		private readonly string [] _iconsToDelete = { "miExit" };
+
 		private bool internalchanges;
 
-		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip, ContextMenuStrip contextMenuStrip2, Form1 form)
+		public IconManager (ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip, ContextMenuStrip contextMenuStrip2,
+		                    Form1     form)
 		{
 			tools = toolStrip;
 			menu = menuStrip;
 			fm = form;
 			context = contextMenuStrip;
 			context2 = contextMenuStrip2;
-			// tools.RightToLeft = RightToLeft.Yes;
 			Init ();
 		}
 
-		public void Init ()
+		private void Init ()
 		{
-			foreach (var control in tools.Items)
-				if (control is ToolStripButton)
+			foreach (ToolStripItem control in tools.Items)
+				if (control is ToolStripButton btn)
 				{
-					var btn = (ToolStripButton)control;
 					btn.AccessibleDescription = GetIconName (btn.Name);
-					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					if (btn.AccessibleDescription is { Length: > 2 })
 					{
 						btn.ImageTransparentColor = Color.Transparent;
 						btn.EnabledChanged += BtnOnEnabledChanged;
@@ -46,12 +173,11 @@ namespace Yuki_Theme_Plugin
 
 			foreach (ToolStripMenuItem control in menu.Items)
 			{
-				foreach (var item in control.DropDownItems)
-					if (item is ToolStripMenuItem)
+				foreach (ToolStripItem item in control.DropDownItems)
+					if (item is ToolStripMenuItem btn)
 					{
-						var btn = (ToolStripMenuItem)item;
 						btn.AccessibleDescription = GetIconName (btn.Name);
-						if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+						if (btn.AccessibleDescription is { Length: > 2 })
 						{
 							btn.ImageTransparentColor = Color.Transparent;
 							btn.EnabledChanged += MenuOnEnabledChanged;
@@ -59,14 +185,13 @@ namespace Yuki_Theme_Plugin
 							RemoveIcon (btn);
 					}
 			}
-			
+
 			foreach (ToolStripItem item in context.Items)
 			{
-				if (item is ToolStripMenuItem)
+				if (item is ToolStripMenuItem btn)
 				{
-					var btn = (ToolStripMenuItem)item;
 					btn.AccessibleDescription = GetIconName (btn.Name);
-					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					if (btn.AccessibleDescription is { Length: > 2 })
 					{
 						btn.ImageTransparentColor = Color.Transparent;
 						btn.EnabledChanged += MenuOnEnabledChanged;
@@ -74,14 +199,13 @@ namespace Yuki_Theme_Plugin
 						RemoveIcon (btn);
 				}
 			}
-			
+
 			foreach (ToolStripItem item in context2.Items)
 			{
-				if (item is ToolStripMenuItem)
+				if (item is ToolStripMenuItem btn)
 				{
-					var btn = (ToolStripMenuItem)item;
 					btn.AccessibleDescription = GetIconName (btn.Name);
-					if (btn.AccessibleDescription != null && btn.AccessibleDescription.Length > 2)
+					if (btn.AccessibleDescription is { Length: > 2 })
 					{
 						btn.ImageTransparentColor = Color.Transparent;
 						btn.EnabledChanged += MenuOnEnabledChanged;
@@ -89,42 +213,40 @@ namespace Yuki_Theme_Plugin
 						RemoveIcon (btn);
 				}
 			}
-			
-			foreach (var content in fm.BottomPane.Contents)
+
+			foreach (IDockContent content in fm.BottomPane.Contents)
 				// MessageBox.Show (content.DockHandler.Form.Name);
 				content.DockHandler.Form.AccessibleDescription = GetIconName (content.DockHandler.Form.Name);
 		}
 
 		private void BtnOnEnabledChanged (object sender, EventArgs e)
 		{
-			if (sender is ToolStripButton)
+			if (sender is ToolStripButton btn)
 			{
-				ToolStripButton btn = (ToolStripButton)sender;
 				Tuple <bool, string> rest = GetState (btn);
 
 				if (rest.Item1 || internalchanges)
 				{
 					Assembly a = Assembly.GetExecutingAssembly ();
 					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
-					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 				}
 			}
 		}
 
 		private void MenuOnEnabledChanged (object sender, EventArgs e)
 		{
-			if (sender is ToolStripMenuItem)
+			if (sender is ToolStripMenuItem btn)
 			{
-				ToolStripMenuItem btn = (ToolStripMenuItem)sender;
 				Tuple <bool, string> rest = GetState (btn);
 
 
 				if (rest.Item1 || internalchanges)
 				{
-					var a = Assembly.GetExecutingAssembly ();
+					Assembly a = Assembly.GetExecutingAssembly ();
 					// MessageBox.Show (btn.Name);
 					Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + rest.Item2, a, IconFolder),
-					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+					                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 				}
 			}
 		}
@@ -132,420 +254,63 @@ namespace Yuki_Theme_Plugin
 		public void UpdateColors ()
 		{
 			internalchanges = true;
-			foreach (var control in tools.Items)
-				if (control is ToolStripButton)
-					if (((ToolStripButton)control).AccessibleDescription != null &&
-					    ((ToolStripButton)control).AccessibleDescription.Length > 2)
-						BtnOnEnabledChanged (control, EventArgs.Empty);
+			foreach (ToolStripItem control in tools.Items)
+				if (control is ToolStripButton { AccessibleDescription: { Length: > 2 } })
+					BtnOnEnabledChanged (control, EventArgs.Empty);
 
 			foreach (ToolStripMenuItem control in menu.Items)
 			{
-				foreach (var item in control.DropDownItems)
-					if (item is ToolStripMenuItem)
-						if (((ToolStripMenuItem)item).AccessibleDescription != null &&
-						    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
-							MenuOnEnabledChanged (item, EventArgs.Empty);
+				foreach (ToolStripItem item in control.DropDownItems)
+					if (item is ToolStripMenuItem { AccessibleDescription: { Length: > 2 } })
+						MenuOnEnabledChanged (item, EventArgs.Empty);
 			}
 
-			
+
 			foreach (ToolStripItem item in context.Items)
 			{
-				if (item is ToolStripMenuItem)
-				{
-					if (((ToolStripMenuItem)item).AccessibleDescription != null &&
-					    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
-						MenuOnEnabledChanged (item, EventArgs.Empty);
-				}
+				if (item is ToolStripMenuItem { AccessibleDescription: { Length: > 2 } }) 
+					MenuOnEnabledChanged (item, EventArgs.Empty);
 			}
-			
+
 			foreach (ToolStripItem item in context2.Items)
 			{
-				if (item is ToolStripMenuItem)
-				{
-					if (((ToolStripMenuItem)item).AccessibleDescription != null &&
-					    ((ToolStripMenuItem)item).AccessibleDescription.Length > 2)
-						MenuOnEnabledChanged (item, EventArgs.Empty);
-				}
+				if (item is ToolStripMenuItem { AccessibleDescription: { Length: > 2 } }) 
+					MenuOnEnabledChanged (item, EventArgs.Empty);
 			}
 
 
-			foreach (var content in fm.BottomPane.Contents)
-				if (content.DockHandler.Form.AccessibleDescription != null &&
-				    content.DockHandler.Form.AccessibleDescription.Length > 2)
+			foreach (IDockContent content in fm.BottomPane.Contents)
+				if (content.DockHandler.Form.AccessibleDescription is { Length: > 2 })
 					UpdateIcon (content.DockHandler.Form);
 			internalchanges = false;
 		}
 
 		private string GetIconName (string str)
 		{
-			var res = "";
-
-			switch (str)
-			{
-				case "tbNew" :
-				case "miNew" :
-				{
-					res = "addFile";
-				}
-					break;
-
-				case "tbOpen" :
-				case "miOpen" :
-				{
-					res = "menu-open";
-				}
-					break;
-
-				case "tbSave" :
-				case "tbSaveAll" :
-				case "miSave" :
-				case "miSaveAll" :
-				case "cmSave" :
-				{
-					res = "menu-saveall";
-				}
-					break;
-
-				case "tsCut" :
-				case "miCut" :
-				case "cmCut" :
-				{
-					res = "menu-cut";
-				}
-					break;
-
-				case "tsCopy" :
-				case "miCopy" :
-				case "cmCopy" :
-				{
-					res = "copy";
-				}
-					break;
-
-				case "tsPaste" :
-				case "miPaste" :
-				case "cmPaste" :
-				{
-					res = "menu-paste";
-				}
-					break;
-
-				case "tsUndo" :
-				case "miUndo" :
-				{
-					res = "undo";
-				}
-					break;
-
-				case "tsRedo" :
-				case "miRedo" :
-				{
-					res = "redo";
-				}
-					break;
-
-				case "tsNavigBack" :
-				case "miNavigBack" :
-				{
-					res = "back";
-				}
-					break;
-
-				case "tsNavigForw" :
-				case "miNavigForw" :
-				{
-					res = "forward";
-				}
-					break;
-
-				case "StartButton" :
-				case "miRun" :
-				case "cmRun" :
-				{
-					res = "execute";
-				}
-					break;
-
-				case "StartNoDebugButton" :
-				case "miRunNoDebug" :
-				{
-					res = "runAll";
-				}
-					break;
-
-				case "stopButton" :
-				case "miStop" :
-				{
-					res = "suspend";
-				}
-					break;
-
-				case "CompileButton" :
-				case "miBuild" :
-				{
-					res = "compile";
-				}
-					break;
-
-				case "StartDebugButton" :
-				{
-					res = "startDebugger";
-				}
-					break;
-
-				case "StopDebugButton" :
-				{
-					res = "restartDebugger";
-				}
-					break;
-
-				case "StepOverButton" :
-				case "mSTEPOVERToolStripMenuItem" :
-				{
-					res = "traceOver";
-				}
-					break;
-
-				case "StepIntoButton" :
-				case "mSTEPINToolStripMenuItem" :
-				{
-					res = "traceInto";
-				}
-					break;
-
-				case "StepOutButton" :
-				case "mSTEPToolStripMenuItem" :
-				{
-					res = "stepOut";
-				}
-					break;
-
-				case "ReCompileButton" :
-				case "miRebuild" :
-				{
-					res = "forceRefresh";
-				}
-					break;
-
-				case "tsOutputWindow" :
-				case "tsShowOutputWindow" :
-				case "OutputWindowForm" :
-				{
-					res = "console";
-				}
-					break;
-
-				case "tsAutoInsertCode" :
-				case "mAUTOINSERTToolStripMenuItem" :
-				{
-					res = "intentionBulb";
-				}
-					break;
-
-				case "toolStripButton1" :
-				{
-					res = "cwmPermissionEdit";
-				}
-					break;
-
-				case "tsFormat" :
-				case "mFORMATToolStripMenuItem" :
-				case "cmFormat" :
-				{
-					res = "magicResolve";
-				}
-					break;
-
-				case "miPrint" :
-				{
-					res = "print";
-				}
-					break;
-
-				case "miNewProject" :
-				{
-					res = "projectTab";
-				}
-					break;
-
-				case "miDelete" :
-				{
-					res = "close";
-				}
-					break;
-
-				case "miFind" :
-				{
-					res = "find";
-				}
-					break;
-
-				case "miFindNext" :
-				{
-					res = "findForward";
-				}
-					break;
-
-				case "miReplace" :
-				case "tsShowFindSymbolsResultWindow" :
-				case "FindSymbolsResultWindowForm" :
-				{
-					res = "replace";
-				}
-					break;
-
-				case "miOutputWindow" :
-				{
-					res = "moveToBottomLeft";
-				}
-					break;
-
-				case "tsShowErrorsListWindow" :
-				case "ErrorsListWindowForm" :
-				{
-					res = "notificationError";
-				}
-					break;
-
-				case "tsShowCompilerConsoleWindow" :
-				case "CompilerConsoleWindowForm" :
-				{
-					res = "toolWindowMessages";
-				}
-					break;
-
-				case "tsShowDebugVariablesListWindow" :
-				case "DebugVariablesListWindowForm" :
-				{
-					res = "dynamicUsages";
-				}
-					break;
-
-				case "tsShowDebugWatchListWindow" :
-				case "DebugWatchListWindowForm" :
-				{
-					res = "showHiddens";
-				}
-					break;
-
-				case "tsDisassembly" :
-				case "DisassemblyWindow" :
-				{
-					res = "MoveTo2";
-				}
-					break;
-
-				case "mOPTIONSToolStripMenuItem" :
-				{
-					res = "gearPlain";
-				}
-					break;
-
-				case "tsGotoDefinition" :
-				case "cmGotoDefinition" :
-				{
-					res = "showReadAccess";
-				}
-					break;
-
-				case "tsGotoRealization" :
-				case "cmGotoRealization" :
-				{
-					res = "showWriteAccess";
-				}
-					break;
-
-				case "miGenerateRealization" :
-				case "cmGenerateRealization" :
-				{
-					res = "externalTools";
-				}
-					break;
-
-				case "tsHelp" :
-				case "cmHelp" :
-				{
-					res = "help";
-				}
-					break;
-
-				/*
-			case "" :
-			{
-				res = "";
-			}
-				break;
-				*/
-				default :
-				{
-					res = "";
-				}
-					break;
-			}
-
+			string res = "";
+			if (_iconNames.ContainsKey (str))
+				res = _iconNames [str];
 			return res;
 		}
 
 		private void UpdateIcon (Form btn)
 		{
-			var add = "";
-			if (hasDark (btn.AccessibleDescription))
+			string add = "";
+			if (HasDark (btn.AccessibleDescription))
 			{
-				var isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 				add = isDark ? "" : "_dark";
 			}
 
-			var a = Assembly.GetExecutingAssembly ();
+			Assembly a = Assembly.GetExecutingAssembly ();
 			// MessageBox.Show (btn.Name);
 			Helper.RenderSvg (btn, Helper.LoadSvg (btn.AccessibleDescription + add, a, IconFolder),
-			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
+			                  false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 		}
 
-		private bool hasDark (string str)
+		private bool HasDark (string str)
 		{
-			var s = false;
-			switch (str)
-			{
-				case "menu-cut" :
-				case "menu-saveall" :
-				case "menu-paste" :
-				case "copy" :
-				case "addFile" :
-				case "undo" :
-				case "redo" :
-				case "stepOut" :
-				case "traceInto" :
-				case "console" :
-				case "intentionBulb" :
-				case "magicResolve" :
-				case "menu-open" :
-				case "restartDebugger" :
-				case "traceOver" :
-				case "back" :
-				case "forward" :
-				case "print" :
-				case "projectTab" :
-				case "close" :
-				case "find" :
-				case "findForward" :
-				case "replace" :
-				case "moveToBottomLeft" :
-				case "toolWindowMessages" :
-				case "dynamicUsages" :
-				case "showHiddens" :
-				case "MoveTo2" :
-				case "gearPlain" :
-				case "showReadAccess" :
-				case "showWriteAccess" :
-				case "externalTools" :
-				case "help" :
-				{
-					s = true;
-				}
-					break;
-			}
-
-			return s;
+			return _iconsWithDarkVersion.Contains (str);
 		}
 
 		private void RemoveIcon (ToolStripMenuItem mi)
@@ -568,17 +333,7 @@ namespace Yuki_Theme_Plugin
 
 		private bool needToDelete (string str)
 		{
-			var res = false;
-			switch (str)
-			{
-				case "miExit" :
-				{
-					res = true;
-				}
-					break;
-			}
-
-			return res;
+			return _iconsToDelete.Contains (str);
 		}
 
 		/// <summary>
@@ -610,14 +365,14 @@ namespace Yuki_Theme_Plugin
 		private Tuple <bool, string> GetState (string accessibleDescription, bool enabled)
 		{
 			string sad = "";
-			bool asDark = hasDark (accessibleDescription);
+			bool asDark = HasDark (accessibleDescription);
 			if (asDark)
 			{
 				bool isDark = enabled;
 
 				if (isDark)
 				{
-					isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+					isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 					sad = isDark ? "" : "_dark";
 				} else
 				{
@@ -630,18 +385,17 @@ namespace Yuki_Theme_Plugin
 
 		public Image RenderToolBarItemImage (ToolStripItem btn)
 		{
-			bool asDark = hasDark (btn.AccessibleDescription);
+			bool asDark = HasDark (btn.AccessibleDescription);
 			string dark = "";
 			if (asDark)
 			{
-				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.bg);
+				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
 				dark = isDark ? "" : "_dark";
 			}
-			
+
 			Assembly a = Assembly.GetExecutingAssembly ();
 			return Helper.RenderSvg (btn.Size, Helper.LoadSvg (btn.AccessibleDescription + dark, a, IconFolder),
-			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.bgBorder);
-
+			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 		}
 	}
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using Yuki_Theme.Core.Formats;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Parsers
 {
@@ -45,30 +45,31 @@ namespace Yuki_Theme.Core.Parsers
 
 			if (needToWrite)
 			{
-				if (!Directory.Exists (Path.Combine (CLI.currentPath, "Themes")))
-					Directory.CreateDirectory (Path.Combine (CLI.currentPath, "Themes"));
+				if (!Directory.Exists (Path.Combine (SettingsConst.CurrentPath, "Themes")))
+					Directory.CreateDirectory (Path.Combine (SettingsConst.CurrentPath, "Themes"));
 				Console.WriteLine (PathToSave);
 
 				if (!overwrite)
 				{
-					string syt = CLI.schemes [1];
-					if (CLI.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
-						CLI.CopyFromMemory (syt, syt, PathToSave);
+					string syt = API.CentralAPI.Current.Schemes [1];
+					if (API.CentralAPI.Current.ThemeInfos[syt].location == ThemeLocation.Memory && DefaultThemes.headers.ContainsKey (syt))
+						API.CentralAPI.Current.CopyFromMemory (syt, syt, PathToSave);
 					else
 					{
 						// Here I check if the theme isn't exist. Else, just its colors will be replaced, not wallpaper or sticker. 
-						if (!CLI.schemes.Contains (flname))
-							File.Copy (Path.Combine (CLI.currentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
+						if (!API.CentralAPI.Current.Schemes.Contains (flname))
+							File.Copy (Path.Combine (SettingsConst.CurrentPath, "Themes", $"{syt}.yukitheme"), PathToSave, true);
 					}
 				} else
 				{
 					if (PathToSave.EndsWith (Helper.FILE_EXTENSTION_OLD)) // Get old opacity from theme file
 					{
 						XmlDocument document = new XmlDocument ();
-						OldThemeFormat.loadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
+						OldThemeFormat oldThemeFormat = (OldThemeFormat)API.CentralAPI.Current._oldThemeFormat;
+						oldThemeFormat.LoadThemeToPopulate (ref document, PathToSave, false, false, ref theme, Helper.FILE_EXTENSTION_OLD,
 						                                    false, true);
-						Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (document);
-						theme.Name = OldThemeFormat.GetNameOfTheme (PathToSave);
+						Dictionary <string, string> additionalInfo = oldThemeFormat.GetAdditionalInfoFromDoc (document);
+						theme.Name = oldThemeFormat.GetNameOfTheme (PathToSave);
 						theme.SetAdditionalInfo (additionalInfo);
 					}
 				}
@@ -77,9 +78,9 @@ namespace Yuki_Theme.Core.Parsers
 				finishParsing (path);
 				if (!overwrite)
 				{
-					CLI.AddThemeInfo (
-						flname, new ThemeInfo (false, true, ThemeLocation.File, CLI.Translate ("messages.theme.group.custom")));
-					CLI.names.Add (flname);
+					API.CentralAPI.Current.AddThemeInfo (
+						flname, new ThemeInfo (false, true, ThemeLocation.File, API.CentralAPI.Current.Translate ("messages.theme.group.custom")));
+					API.CentralAPI.Current.names.Add (flname);
 				if (addToUIList != null)
 					addToUIList (flname);
 				/*if (form != null)
@@ -97,13 +98,15 @@ namespace Yuki_Theme.Core.Parsers
 		{
 			XmlDocument doc = new XmlDocument ();
 
-			OldThemeFormat.loadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
-			                                    ref theme,Helper.FILE_EXTENSTION_OLD, true, true);
+			OldThemeFormat oldThemeFormat = (OldThemeFormat)API.CentralAPI.Current._oldThemeFormat;
 			
-			OldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
-			OldThemeFormat.MergeCommentsWithFile (theme, doc);
+			oldThemeFormat.LoadThemeToPopulate (ref doc, Helper.PASCALTEMPLATE, false, true,
+			                                     ref theme,Helper.FILE_EXTENSTION_OLD, true, true);
+			
+			oldThemeFormat.MergeThemeFieldsWithFile (theme.Fields, doc);
+			oldThemeFormat.MergeCommentsWithFile (theme, doc);
 
-			OldThemeFormat.SaveXML (null, null, true, Helper.IsZip (PathToSave), ref doc, PathToSave);
+			oldThemeFormat.SaveXML (null, null, true, ZipManager.IsZip (PathToSave), ref doc, PathToSave);
 		}
 
 		public abstract void populateList (string path);

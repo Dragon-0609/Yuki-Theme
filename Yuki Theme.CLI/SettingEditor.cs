@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 
 namespace Yuki_Theme.CLI
 {
@@ -11,15 +12,15 @@ namespace Yuki_Theme.CLI
 	{
 		internal void ExportSettings (string path)
 		{
-			Settings.connectAndGet ();
+			Settings.ConnectAndGet ();
 			string destination;
 			if (path != "null" && Path.HasExtension (path))
 			{
 				destination = path;
 			} else
 			{
-				destination = Path.Combine (Core.CLI.currentPath, "settings.syuki");
-				if (!Path.HasExtension (path)) ShowError (Core.CLI.Translate ("cli.errors.export.extension", path, destination));
+				destination = Path.Combine (SettingsConst.CurrentPath, "settings.syuki");
+				if (!Path.HasExtension (path)) ShowError (CentralAPI.Current.Translate ("cli.errors.export.extension", path, destination));
 			}
 
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
@@ -35,13 +36,13 @@ namespace Yuki_Theme.CLI
 			
 			if (!string.IsNullOrEmpty (outdir)) Directory.CreateDirectory (outdir);
 			File.WriteAllText (destination, output, Encoding.UTF8);
-			ShowSuccess (Core.CLI.Translate ("cli.success.settings.export.full"),
-			             Core.CLI.Translate ("cli.success.settings.export.short"));
+			ShowSuccess (CentralAPI.Current.Translate ("cli.success.settings.export.full"),
+			             CentralAPI.Current.Translate ("cli.success.settings.export.short"));
 		}
 
 		internal void ImportSettings (string path)
 		{
-			Settings.connectAndGet ();
+			Settings.ConnectAndGet ();
 			if (path != "null" && File.Exists (path))
 			{
 				try
@@ -60,24 +61,24 @@ namespace Yuki_Theme.CLI
 					}
 
 					Settings.database.UpdateData (dict);
-					Settings.connectAndGet ();
-					ShowSuccess (Core.CLI.Translate ("cli.success.settings.import.full"),
-					             Core.CLI.Translate ("cli.success.settings.import.short"));
+					Settings.ConnectAndGet ();
+					ShowSuccess (CentralAPI.Current.Translate ("cli.success.settings.import.full"),
+					             CentralAPI.Current.Translate ("cli.success.settings.import.short"));
 				} catch (Exception e)
 				{
-					ShowError (Core.CLI.Translate ("cli.errors.happened", e.ToString ()));
+					ShowError (CentralAPI.Current.Translate ("cli.errors.happened", e.ToString ()));
 				}
 			} else
 			{
 				ShowError (path == "null"
-					           ? Core.CLI.Translate ("cli.errors.export.null")
-					           : Core.CLI.Translate ("messages.file.notexist.full2"));
+					           ? CentralAPI.Current.Translate ("cli.errors.export.null")
+					           : CentralAPI.Current.Translate ("messages.file.notexist.full2"));
 			}
 		}
 
 		internal void PrintSettings ()
 		{
-			Settings.connectAndGet ();
+			Settings.ConnectAndGet ();
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
 			Console.WriteLine ();
 			foreach (KeyValuePair <int, string> pair in dict)

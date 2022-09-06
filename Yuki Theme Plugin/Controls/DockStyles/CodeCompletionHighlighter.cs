@@ -20,7 +20,7 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
             var field = typeof (TextMarker).GetField ("color", BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (TextMarker textMarker in marks)
             {
-                field.SetValue (textMarker, YukiTheme_VisualPascalABCPlugin.bgType);
+                field.SetValue (textMarker, YukiTheme_VisualPascalABCPlugin.Colors.bgType);
             }
             
             textArea.Document.CommitUpdate();

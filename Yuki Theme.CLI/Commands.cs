@@ -18,6 +18,9 @@ namespace Yuki_Theme.CLI
 	{
 		[Option('g', "group", Default = false, Required = false, HelpText = "cli.help.list.groups")]
 		public bool ShowGroups { get; set; }
+		
+		[Option('c', "custom", Default = false, Required = false, HelpText = "cli.help.list.custom")]
+		public bool ShowCustom { get; set; }
 	}
 
 	[Verb("clear", HelpText = "cli.help.clear")]

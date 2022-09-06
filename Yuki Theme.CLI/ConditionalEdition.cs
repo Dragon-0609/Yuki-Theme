@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.CLI
 {
@@ -63,7 +65,7 @@ namespace Yuki_Theme.CLI
 				{
 					if (conditions.Count == 0)
 					{
-						ShowError (Core.CLI.Translate ("cli.errors.conditions.null"));
+						ShowError (CentralAPI.Current.Translate ("cli.errors.conditions.null"));
 						conditionSet = null;
 						return;
 					}
@@ -89,7 +91,7 @@ namespace Yuki_Theme.CLI
 				conditionSet = new ConditionSet () { conditions = conditions.ToArray (), fieldsToSet = fieldsToSet.ToArray () };
 			} else
 			{
-				ShowError (Core.CLI.Translate (conditions.Count > 0 ? "cli.errors.setter.null" : "cli.errors.conditions.null"));
+				ShowError (CentralAPI.Current.Translate (conditions.Count > 0 ? "cli.errors.setter.null" : "cli.errors.conditions.null"));
 				conditionSet = null;
 			}
 		}
@@ -119,7 +121,7 @@ namespace Yuki_Theme.CLI
 		{
 			Dictionary <string, ThemeInfo> update = new Dictionary <string, ThemeInfo> ();
 
-			foreach (KeyValuePair <string, ThemeInfo> pair in Core.CLI.ThemeInfos)
+			foreach (KeyValuePair <string, ThemeInfo> pair in CentralAPI.Current.ThemeInfos)
 			{
 				if (pair.Value.location != ThemeLocation.Memory)
 				{
@@ -151,7 +153,7 @@ namespace Yuki_Theme.CLI
 			{
 				foreach (KeyValuePair <string, ThemeInfo> pair in update)
 				{
-					Core.CLI.ThemeInfos [pair.Key] = pair.Value;
+					CentralAPI.Current.ThemeInfos [pair.Key] = pair.Value;
 				}
 			}
 		}
@@ -163,7 +165,7 @@ namespace Yuki_Theme.CLI
 				bool need = Condition.NeedToLoadThemeInConditions [condition.Target];
 				if (need && theme == null)
 				{
-					theme = Core.CLI.GetTheme (name);
+					theme = CentralAPI.Current.GetTheme (name);
 				}
 			}
 		}

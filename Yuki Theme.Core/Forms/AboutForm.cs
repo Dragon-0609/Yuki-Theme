@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Forms
 {
@@ -14,9 +15,9 @@ namespace Yuki_Theme.Core.Forms
 		public AboutForm (SettingsPanel s)
 		{
 			InitializeComponent ();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 			vers.Text =
-				$"{Translate ("about.version")}: {Settings.current_version.ToString ("0.0").Replace (',', '.')} {Settings.current_version_add}";
+				$"{Translate ("about.version")}: {SettingsConst.CURRENT_VERSION.ToString ("0.0").Replace (',', '.')} {SettingsConst.CURRENT_VERSION_ADD}";
 
 			changelog_link.Text = Translate ("about.changelog");
 			label2.Text = Translate ("about.inspiration");
@@ -41,7 +42,7 @@ namespace Yuki_Theme.Core.Forms
 
 		private string Translate (string key)
 		{
-			return CLI.Translate (key);
+			return API.CentralAPI.Current.Translate (key);
 		}
 
 		private void button1_Click (object sender, EventArgs e)
@@ -88,10 +89,10 @@ namespace Yuki_Theme.Core.Forms
 
 			if (!isFromPascal)
 			{
-				bg = Helper.bgColor;
-				fg = Helper.fgColor;
-				key = Helper.fgKeyword;
-				click = Helper.bgClick;
+				bg = ColorKeeper.bgColor;
+				fg = ColorKeeper.fgColor;
+				key = ColorKeeper.fgKeyword;
+				click = ColorKeeper.bgClick;
 			} else
 			{
 				bg = sp.bg;

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 using static System.Drawing.Brushes;
 using TextStyle = FastColoredTextBoxNS.TextStyle;
 
@@ -36,20 +38,12 @@ namespace Yuki_Theme.Core
 
 		//styles
 
-		private Dictionary <string, ThemeField> localAttributes => CLI.currentTheme.Fields;
+		private Dictionary <string, ThemeField> localAttributes => API.CentralAPI.Current.currentTheme.Fields;
 
 		private       Dictionary <string, Regex>     regexes;
 		public static Dictionary <string, TextStyle> styles;
-		
-		private string [] names =
-		{ 
-			"linebigcomment", "linecomment", "blockcomment", "blockcomment2", "string", "digits", "beginend",
-			"keywords", "programsections", "punctuation", "nonreserved1", "operatorkeywords", "selectionstatements",
-			"iterationstatements", "exceptionhandlingstatements", "raisestatement", "jumpstatements", "jumpprocedures",
-			"internalconstant", "internaltypes", "referencetypes", "modifiers", "accessmodifiers", "accesskeywords1",
-			"errorwords", "warningwords", "direcivenames", "specialdirecivenames", "direcivevalues", "markprevious"
-		};
-		
+
+
 		private Regex currentRegex;
 
 		private EllipseStyle ellipseStyle = new EllipseStyle ();
@@ -57,7 +51,7 @@ namespace Yuki_Theme.Core
 		public static RegexOptions RegexCompiledOption
 		{
 			get
-		{
+			{
 				if (platformType == Platform.X86)
 					return RegexOptions.Compiled;
 				return RegexOptions.None;
@@ -75,16 +69,15 @@ namespace Yuki_Theme.Core
 			sBox.TextChanged += PascalSyntaxHighlight;
 		}
 
-		public void updateColors ()
+		public void UpdateColors ()
 		{
 			if (styles == null)
 				InitStyles ();
 			bool isLight = Settings.settingMode == SettingMode.Light;
 			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
 			{
-				if (isInNames (style.Key))
-			{
-					// Console.WriteLine(style.Key);
+				if (HighlitherUtil.IsInColors (style.Key))
+				{
 					string [] key = new string [] { style.Key.ToLower () };
 					if (isLight)
 						key = ShadowNames.PascalFields [style.Key];
@@ -105,46 +98,43 @@ namespace Yuki_Theme.Core
 
 						if (kilow == "keywords" || kilow == "keyword")
 						{
-							Helper.fgKeyword = Parse (style.Value.Foreground);
+							ColorKeeper.fgKeyword = Parse (style.Value.Foreground);
 						}
 					}
 
-					// else
-					// Console.WriteLine($"BL {key}");
 				} else
 				{
-					// Console.WriteLine (style.Key);
-				switch (style.Key)
-				{
-					case "Default" :
-					case "Default Text" :
+					switch (style.Key)
 					{
+						case "Default" :
+						case "Default Text" :
+						{
 							sBox.BackColor = Parse (style.Value.Background);
 							sBox.ForeColor = Parse (style.Value.Foreground);
-							Helper.bgdefColor = sBox.BackColor;
-							Helper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
-							Helper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
-							Helper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
-							Helper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
-					}
-						break;
-					case "Selection" :
-					{
-						Helper.selectionColor = Parse (style.Value.Background);
-							sBox.SelectionColor = Color.FromArgb (100, Helper.selectionColor);
+							ColorKeeper.bgdefColor = sBox.BackColor;
+							ColorKeeper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
+							ColorKeeper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
+							ColorKeeper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
+							ColorKeeper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
+						}
+							break;
+						case "Selection" :
+						{
+							ColorKeeper.selectionColor = Parse (style.Value.Background);
+							sBox.SelectionColor = Color.FromArgb (100, ColorKeeper.selectionColor);
 						}
 							break;
 						case "VRuler" :
 						case "Vertical Ruler" :
 						{
 							sBox.ServiceLinesColor = Parse (style.Value.Foreground);
-					}
-						break;
-					case "CaretMarker" :
-					case "Caret" :
-					{
+						}
+							break;
+						case "CaretMarker" :
+						case "Caret" :
+						{
 							sBox.CaretColor = Parse (style.Value.Foreground);
-							Helper.bgBorder = sBox.CaretColor;
+							ColorKeeper.bgBorder = sBox.CaretColor;
 						}
 							break;
 						case "LineNumbers" :
@@ -173,13 +163,13 @@ namespace Yuki_Theme.Core
 						case "Other Marker" :
 						case "EOLMarkers" :
 						{
-							sBox.BracketsStyle.BackgroundBrush = new SolidBrush (Color.FromArgb (100, Parse(style.Value.Foreground)));
+							sBox.BracketsStyle.BackgroundBrush = new SolidBrush (Color.FromArgb (100, Parse (style.Value.Foreground)));
+						}
+							break;
 					}
-						break;
 				}
 			}
-		}
-		
+
 			sBox.Refresh ();
 		}
 
@@ -242,38 +232,40 @@ namespace Yuki_Theme.Core
 
 		public static void InitStyles ()
 		{
-			styles = new Dictionary <string, TextStyle> ();
-			styles.Add ("string", new TextStyle (DarkRed, null, FontStyle.Regular));
-			styles.Add ("digits", new TextStyle (Blue, null, FontStyle.Regular));
-			styles.Add ("linebigcomment", new TextStyle (Green, null, FontStyle.Regular));
-			styles.Add ("linecomment", new TextStyle (Green, null, FontStyle.Regular));
-			styles.Add ("blockcomment", new TextStyle (Green, null, FontStyle.Regular));
-			styles.Add ("blockcomment2", new TextStyle (Green, null, FontStyle.Regular));
-			styles.Add ("beginend", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("markprevious", new TextStyle (Red, null, FontStyle.Regular));
-			styles.Add ("keywords", new TextStyle (PowderBlue, null, FontStyle.Bold));
-			styles.Add ("programsections", new TextStyle (PowderBlue, null, FontStyle.Bold));
-			styles.Add ("punctuation", new TextStyle (Red, null, FontStyle.Regular));
-			styles.Add ("nonreserved1", new TextStyle (PowderBlue, null, FontStyle.Regular));
-			styles.Add ("async", new TextStyle (PowderBlue, null, FontStyle.Regular));
-			styles.Add ("operatorkeywords", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("selectionstatements", new TextStyle (Gray, null, FontStyle.Bold));
-			styles.Add ("iterationstatements", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("exceptionhandlingstatements", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("raisestatement", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("jumpstatements", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("jumpprocedures", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("internalconstant", new TextStyle (Red, null, FontStyle.Regular));
-			styles.Add ("internaltypes", new TextStyle (Red, null, FontStyle.Regular));
-			styles.Add ("referencetypes", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("modifiers", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("accessmodifiers", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("accesskeywords1", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("errorwords", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("warningwords", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("direcivenames", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("specialdirecivenames", new TextStyle (Red, null, FontStyle.Bold));
-			styles.Add ("direcivevalues", new TextStyle (Red, null, FontStyle.Regular));
+			styles = new Dictionary <string, TextStyle>
+			{
+				{ "string", new TextStyle (DarkRed, null, FontStyle.Regular) },
+				{ "digits", new TextStyle (Blue, null, FontStyle.Regular) },
+				{ "linebigcomment", new TextStyle (Green, null, FontStyle.Regular) },
+				{ "linecomment", new TextStyle (Green, null, FontStyle.Regular) },
+				{ "blockcomment", new TextStyle (Green, null, FontStyle.Regular) },
+				{ "blockcomment2", new TextStyle (Green, null, FontStyle.Regular) },
+				{ "beginend", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "markprevious", new TextStyle (Red, null, FontStyle.Regular) },
+				{ "keywords", new TextStyle (PowderBlue, null, FontStyle.Bold) },
+				{ "programsections", new TextStyle (PowderBlue, null, FontStyle.Bold) },
+				{ "punctuation", new TextStyle (Red, null, FontStyle.Regular) },
+				{ "nonreserved1", new TextStyle (PowderBlue, null, FontStyle.Regular) },
+				{ "async", new TextStyle (PowderBlue, null, FontStyle.Regular) },
+				{ "operatorkeywords", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "selectionstatements", new TextStyle (Gray, null, FontStyle.Bold) },
+				{ "iterationstatements", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "exceptionhandlingstatements", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "raisestatement", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "jumpstatements", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "jumpprocedures", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "internalconstant", new TextStyle (Red, null, FontStyle.Regular) },
+				{ "internaltypes", new TextStyle (Red, null, FontStyle.Regular) },
+				{ "referencetypes", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "modifiers", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "accessmodifiers", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "accesskeywords1", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "errorwords", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "warningwords", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "direcivenames", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "specialdirecivenames", new TextStyle (Red, null, FontStyle.Bold) },
+				{ "direcivevalues", new TextStyle (Red, null, FontStyle.Regular) }
+			};
 		}
 
 		private void LaunchMarker ()
@@ -282,7 +274,6 @@ namespace Yuki_Theme.Core
 
 			if (currentRegex != null)
 			{
-				// Console.WriteLine("TEST");
 				sBox.Range.SetStyle (ellipseStyle, currentRegex);
 			}
 		}
@@ -296,7 +287,7 @@ namespace Yuki_Theme.Core
 			{
 				if (Settings.settingMode == SettingMode.Light)
 				{
-					string [] srt = Populater.getDependencies (str);
+					string [] srt = Populater.GetDependencies (str);
 					if (srt != null)
 					{
 						string rgx = "";
@@ -310,7 +301,7 @@ namespace Yuki_Theme.Core
 								{
 									rgx = $"{regexes [dependency.ToLower ()]}";
 									ik++;
-								} else if (!Populater.isEnvironmentColor (dependency))
+								} else if (!Populater.IsEnvironmentColor (dependency))
 								{
 									rgx += $"|{regexes [dependency.ToLower ()]}";
 								}
@@ -354,7 +345,7 @@ namespace Yuki_Theme.Core
 			if (regexes == null)
 				InitPascalRegex ();
 
-			foreach (string name in names)
+			foreach (string name in HighlitherUtil.names)
 			{
 				e.ChangedRange.SetStyle (styles [name], regexes [name]);
 			}
@@ -369,7 +360,7 @@ namespace Yuki_Theme.Core
 		{
 			sBox.Text = Placeholder.place;
 
-			updateColors ();
+			UpdateColors ();
 		}
 
 		private Color Parse (string str)
@@ -380,18 +371,6 @@ namespace Yuki_Theme.Core
 		private string Translate (Color clr)
 		{
 			return ColorTranslator.ToHtml (clr);
-		}
-
-		public static bool isInNames (string str, bool forceAdvanced = false)
-		{
-			if (styles == null)
-				InitStyles ();
-			if (Settings.settingMode == SettingMode.Advanced || forceAdvanced)
-				return styles.ContainsKey (str.ToLower ());
-			else
-			{
-				return str != "Special Character" && ShadowNames.PascalFields_raw.ContainsKey (str);
-		}
 		}
 
 

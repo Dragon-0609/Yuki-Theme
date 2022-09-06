@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
+using CheckBox = System.Windows.Controls.CheckBox;
+using ComboBox = System.Windows.Controls.ComboBox;
 using Drawing = System.Drawing;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace Yuki_Theme.Core.WPF.Controls
 {
@@ -20,8 +29,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private Thickness groupBoxExpanded  = new Thickness (5);
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
 
-		public Window                    ParentWindow = null;
-		public System.Windows.Forms.Form ParentForm   = null;
+		public Window ParentWindow = null;
+		public Form   ParentForm   = null;
 
 		private bool blockLanguageSelection = false;
 
@@ -30,7 +39,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Action                   ExecuteOnLoad;
 		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
 
-		public bool freezeToolBarBehaviour;
+		private bool _freezeToolBarBehaviour;
+
+		public PopupController popupController;
 
 		public SettingsPanel ()
 		{
@@ -57,9 +68,15 @@ namespace Yuki_Theme.Core.WPF.Controls
 			LoadSettings ();
 			AddLanguages ();
 			blockLanguageSelection = false;
+			EnableRestartButton ();
 			UpdateTranslations ();
 			if (ExecuteOnLoad != null)
 				ExecuteOnLoad ();
+		}
+
+		private void EnableRestartButton ()
+		{
+			RestartForUpdate.IsEnabled = DownloadForm.IsUpdateDownloaded ();
 		}
 
 
@@ -71,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void LoadSVG ()
 		{
 			SetResourceSvg ("InfoImage", "balloonInformation", null, defaultSmallSize);
-			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CLI.GetCore ());
+			SetResourceSvg ("HelpImage", "help", null, defaultSmallSize, "Yuki_Theme.Core.Resources.SVG", CentralAPI.Current.GetCore ());
 		}
 
 
@@ -80,7 +97,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			if (asm == null)
 				asm = Assembly.GetExecutingAssembly ();
-			this.Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
+			Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
 
 		private void LoadSettings ()
@@ -322,7 +339,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void CheckGridSize ()
 		{
 			const int additionalMargins = 125;
-			bool canExpand = this.RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
+			bool canExpand = RenderSize.Width > PositioningPanel.ActualWidth + DimensionCapPanel.ActualWidth + additionalMargins;
 			CheckNSetGridLayouts (DimensionCapGroup, canExpand);
 			CheckNSetMargin (DimensionCapGroup, canExpand, groupBoxExpanded, groupBoxCollapsed);
 		}
@@ -380,9 +397,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = true;
 				if (ExecuteOnToolBarItemSelection != null)
 				{
-					freezeToolBarBehaviour = true;
+					_freezeToolBarBehaviour = true;
 					ExecuteOnToolBarItemSelection (item);
-					freezeToolBarBehaviour = false;
+					_freezeToolBarBehaviour = false;
 				}
 				// ToolBarItemShow.IsChecked = 
 			} else
@@ -415,6 +432,51 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void SetToolBarHeight ()
 		{
 			
+		}
+
+		private void RestartForUpdate_OnClick (object sender, RoutedEventArgs e)
+		{
+			if (DownloadForm.IsUpdateDownloaded ())
+			{
+				
+			} else
+			{
+				API_Events.showError ("Update isn't downloaded!", "Update isn't downloaded");
+			}
+		}
+
+		private void CheckUpdate (object sender, RoutedEventArgs e)
+		{
+			
+			popupController.CheckUpdate ();
+			// popupController.InitializeAllWindows ();
+			// popupController.df.CheckUpdate ();			
+		}
+
+		private void UpdateManually (object sender, RoutedEventArgs e)
+		{
+			OpenFileDialog of = new OpenFileDialog ();
+			of.DefaultExt = "zip";
+			of.Filter = "Yuki Theme(*.zip)|*.zip";
+			of.Multiselect = false;
+			if (of.ShowDialog () == DialogResult.OK)
+			{
+				bool has = DownloadForm.IsValidUpdate (of.FileName);
+
+				if (has)
+				{
+					File.Copy (of.FileName, Path.Combine (
+						           Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+						           "Yuki Theme",
+						           "yuki_theme.zip"), true);
+					// popupController.InitializeAllWindows ();
+					// popupController.df.InstallManually ();
+				} else
+				{
+					MessageBox.Show (CentralAPI.Current.Translate ("messages.update.invalid"), CentralAPI.Current.Translate ("messages.update.wrong"),
+					                 MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			}
 		}
 	}
 }

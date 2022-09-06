@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Yuki_Theme.Core.Themes;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -32,26 +33,26 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			foreach (string sc in DefaultThemes.categoriesList)
 			{
-				string nameTranslation = CLI.Translate (sc);
+				string nameTranslation = API.CentralAPI.Current.Translate (sc);
 				ManageableItem defa = new ManageableItem (nameTranslation, sc, true);
 				groups.Add (defa);
 				groupItems.Add (sc, defa);
 			}
 
-			string customGroup = CLI.Translate ("messages.theme.group.custom");
+			string customGroup = API.CentralAPI.Current.Translate ("messages.theme.group.custom");
 			ManageableItem custom = new ManageableItem (customGroup, "custom", true);
 			groups.Add (custom);
 			groupItems.Add ("custom", custom);
 
-			foreach (string item in CLI.schemes)
+			foreach (string item in API.CentralAPI.Current.Schemes)
 			{
-				if (CLI.ThemeInfos[item].isDefault)
+				if (API.CentralAPI.Current.ThemeInfos[item].isDefault)
 				{
 					ManageableItem cat = groupItems [DefaultThemes.getCategory (item)];
-					new ManageableItem (item, item, false, CLI.ThemeInfos[item].isOld, cat);
+					new ManageableItem (item, item, false, API.CentralAPI.Current.ThemeInfos[item].isOld, cat);
 				} else
 				{
-					new ManageableItem (item, item, false, CLI.ThemeInfos[item].isOld, custom);
+					new ManageableItem (item, item, false, API.CentralAPI.Current.ThemeInfos[item].isOld, custom);
 				}
 			}
 
@@ -77,7 +78,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void LoadSvg ()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
+			string add = Helper.IsDark (ColorKeeper.bgColor) ? "" : "_dark";
 			Size size = new Size (24, 24);
 			Collapsed = WPFHelper.GetSVGImage ("findAndShowNextMatches" + add, size);
 			Expanded = WPFHelper.GetSVGImage ("findAndShowPrevMatches" + add, size);
@@ -132,7 +133,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Schemes.SelectedItem != null && Schemes.SelectedItem is ManageableItem item && !item.IsGroup)
 			{
-				CLI.remove (item.Content.ToString (), askDelete, afterAsk, afterDelete);
+				API.CentralAPI.Current.RemoveTheme (item.Content.ToString (), askDelete, afterAsk, afterDelete);
 			}
 		}
 
@@ -214,13 +215,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				prevT = groupItems ["Doki Theme"].children.Last ().Content.ToString ();
 			}
 
-			indx = CLI.schemes.IndexOf (prevT);
+			indx = API.CentralAPI.Current.Schemes.IndexOf (prevT);
 			if (indx == -1)
 			{
 				MessageBox.Show ($"Index wasn't found. PrevIndx: {indx}");
 			} else
 			{
-				CLI.schemes.Insert (indx + 1, theme);
+				API.CentralAPI.Current.Schemes.Insert (indx + 1, theme);
 			}
 		}
 
@@ -244,7 +245,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Schemes.Items.Insert (indx + 1, old);
 			}
 
-			CLI.schemes.Remove (res.from);
+			API.CentralAPI.Current.Schemes.Remove (res.from);
 			InsertThemeToCLI (prevTheme, res.to);
 
 		}

@@ -29,12 +29,12 @@ namespace Yuki_Theme_Plugin.Controls
 
 				if (unfocused)
 				{
-					bgBorder = bg = YukiTheme_VisualPascalABCPlugin.bgInactive;
+					bgBorder = bg = YukiTheme_VisualPascalABCPlugin.Colors.bgInactive;
 				}
 				else
 				{
-					bg = YukiTheme_VisualPascalABCPlugin.bgSelection;
-					bgBorder = YukiTheme_VisualPascalABCPlugin.bgBorder;
+					bg = YukiTheme_VisualPascalABCPlugin.Colors.bgSelection;
+					bgBorder = YukiTheme_VisualPascalABCPlugin.Colors.bgBorder;
 				}
 				
 				e.Graphics.FillRectangle(new SolidBrush(bgBorder), e.Bounds);

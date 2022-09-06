@@ -3,7 +3,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 
 namespace Yuki_Theme_Plugin
@@ -43,18 +45,18 @@ namespace Yuki_Theme_Plugin
 				Font fnt = new Font (FontFamily.GenericSansSerif, 10, GraphicsUnit.Point);
 
 				lbl = new Label ();
-				lbl.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
-				lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
+				lbl.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bg;
+				lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
 				lbl.Font = fnt;
-				lbl.Text = CLI.Translate ("plugin.themes");
+				lbl.Text = CentralAPI.Current.Translate ("plugin.themes");
 				lbl.TextAlign = ContentAlignment.MiddleCenter;
 				lbl.Size = new Size (200, 25);
 
 				themeList = new CustomList ();
-				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
-				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
+				themeList.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
+				themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
 				themeList.BorderStyle = BorderStyle.None;
-				themeList.list = CLI.schemes.ToArray ();
+				themeList.list = CentralAPI.Current.Schemes.ToArray ();
 				themeList.SearchText ("");
 				themeList.BorderStyle = BorderStyle.None;
 				themeList.Font = fnt;
@@ -100,7 +102,7 @@ namespace Yuki_Theme_Plugin
 
 				// } else
 				// {
-				// 	MessageBox.Show (CLI.Translate ("plugin.close"));
+				// 	MessageBox.Show (API_Base.Current.Translate ("plugin.close"));
 				// }
 			}
 		}
@@ -113,18 +115,18 @@ namespace Yuki_Theme_Plugin
 			if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
 			{
 				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
-				                           e.Index, e.State ^ DrawItemState.Selected,
-				                           e.ForeColor, YukiTheme_VisualPascalABCPlugin.bgClick2);
+					e.Index, e.State ^ DrawItemState.Selected,
+					e.ForeColor, YukiTheme_VisualPascalABCPlugin.Colors.bgClick2);
 			} else if (e.Index == themeList.selectionindex)
 			{
 				e = new DrawItemEventArgs (e.Graphics, e.Font, e.Bounds,
-				                           e.Index, e.State,
-				                           e.ForeColor, YukiTheme_VisualPascalABCPlugin.bgClick);
+					e.Index, e.State,
+					e.ForeColor, YukiTheme_VisualPascalABCPlugin.Colors.bgClick);
 			}
 
 			e.DrawBackground ();
-			e.Graphics.DrawString (((ListBox)sender).Items [e.Index].ToString (), e.Font, YukiTheme_VisualPascalABCPlugin.clrBrush,
-			                       e.Bounds);
+			e.Graphics.DrawString (((ListBox)sender).Items[e.Index].ToString (), e.Font, YukiTheme_VisualPascalABCPlugin.Colors.clrBrush,
+				e.Bounds);
 
 			e.DrawFocusRectangle ();
 		}
@@ -143,8 +145,8 @@ namespace Yuki_Theme_Plugin
 						needToFullExportTheme = false;
 					} else
 					{
-						hideBG = !CLI.currentTheme.HasWallpaper;
-						plugin.stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
+						hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
+						plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
 					}
 				}
 
@@ -153,17 +155,6 @@ namespace Yuki_Theme_Plugin
 				themeList?.searchBar.Dispose ();
 				themeList?.Dispose ();
 				panel_bg = null;
-				if (plugin.tmpImage1 != null)
-				{
-					plugin.tmpImage1.Dispose ();
-					plugin.tmpImage1 = null;
-				}
-
-				if (plugin.tmpImage2 != null)
-				{
-					plugin.tmpImage2.Dispose ();
-					plugin.tmpImage2 = null;
-				}
 
 				plugin.ReFocusCurrentEditor ();
 			}
@@ -175,23 +166,11 @@ namespace Yuki_Theme_Plugin
 			{
 				if (themeList.SelectedItem.ToString () != themeList.AccessibleName)
 				{
-					bool cnd = CLI.SelectTheme (themeList.SelectedItem.ToString ());
+					CentralAPI.Current.SelectTheme (themeList.SelectedItem.ToString ());
 
-					if (cnd)
-					{
-						CLI.selectedItem = CLI.nameToLoad;
-						CLI_Actions.ifHasImage2 = plugin.ifHsImage;
-						CLI_Actions.ifHasSticker2 = plugin.ifHsSticker;
-						CLI_Actions.ifDoesntHave2 = plugin.ifDNIMG;
-						CLI_Actions.ifDoesntHaveSticker2 = plugin.ifDNSTCK;
-						CLI.restore (false, null);
-						CLI.export (plugin.tmpImage1, plugin.tmpImage2, plugin.ReloadLayout, plugin.ReleaseResources);
-
-						CLI_Actions.ifHasImage2 = null;
-						CLI_Actions.ifHasSticker2 = null;
-						CLI_Actions.ifDoesntHave2 = null;
-						CLI_Actions.ifDoesntHaveSticker2 = null;
-					}
+					CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
+					CentralAPI.Current.Restore (false, null);
+					CentralAPI.Current.ExportTheme (null, null, plugin.ReloadLayout, plugin.ReleaseResources, true);
 				}
 
 				needToReturnTheme = false;
@@ -204,17 +183,17 @@ namespace Yuki_Theme_Plugin
 			InvalidateItem ();
 			if (Settings.showPreview)
 			{
-				string nm = themeList.Items [themeList.selectionindex].ToString ();
+				string nm = themeList.Items[themeList.selectionindex].ToString ();
 				if ((DateTime.Now - prevPreExportTime).TotalMilliseconds >= 25 &&
-				    nm != oldThemeNameForPreExport) // Preview Theme if delay is more than 25 milliseconds
+					nm != oldThemeNameForPreExport) // Preview Theme if delay is more than 25 milliseconds
 				{
 					prevPreExportTime = DateTime.Now;
 					PreviewTheme (nm, oldThemeNameForPreExport);
-					lbl.BackColor = YukiTheme_VisualPascalABCPlugin.bg;
-					lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
-					themeList.BackColor = YukiTheme_VisualPascalABCPlugin.bgdef;
-					themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.clr;
-					oldThemeNameForPreExport = themeList.Items [themeList.selectionindex].ToString ();
+					lbl.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bg;
+					lbl.ForeColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
+					themeList.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgdef;
+					themeList.ForeColor = YukiTheme_VisualPascalABCPlugin.Colors.clr;
+					oldThemeNameForPreExport = themeList.Items[themeList.selectionindex].ToString ();
 				}
 			}
 		}
@@ -223,26 +202,25 @@ namespace Yuki_Theme_Plugin
 		{
 			if (name != oldName)
 			{
-				if (CLI.SelectTheme (name))
+				CentralAPI.Current.SelectTheme (name);
+				CentralAPI.Current.Restore ();
+				hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
+				plugin.stickerControl.Visible = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker;
+				if (needToFullExportTheme)
 				{
-					CLI.restore ();
-					hideBG = !CLI.currentTheme.HasWallpaper;
-					plugin.stickerControl.Visible = Settings.swSticker && CLI.currentTheme.HasSticker;
-					if (needToFullExportTheme)
+					CentralAPI.Current.Preview (new PreviewOptions (SyntaxType.NULL, true, true), plugin.ReloadLayoutLight);
+				} else
+				{
+					SyntaxType type =
+						ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
+					if (type != SyntaxType.Pascal)
 					{
-						CLI.preview (SyntaxType.NULL, true, plugin.ReloadLayoutLight);
+						CentralAPI.Current.Preview (new PreviewOptions (type, true), null); // Not to reload layout
+						CentralAPI.Current.Preview (new PreviewOptions (SyntaxType.Pascal, false, true),
+							plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
 					} else
 					{
-						SyntaxType type =
-							ShadowNames.GetSyntaxByExtension (Path.GetExtension (plugin.ideComponents.fm.CurrentCodeFileDocument.FileName));
-						if (type != SyntaxType.Pascal)
-						{
-							CLI.preview (type, true, null);                                   // Not to reload layout
-							CLI.preview (SyntaxType.Pascal, false, plugin.ReloadLayoutLight); // Pascal theme is necessary for UI
-						} else
-						{
-							CLI.preview (type, true, plugin.ReloadLayoutLight);
-						}
+						CentralAPI.Current.Preview (new PreviewOptions (type, true, true), plugin.ReloadLayoutLight);
 					}
 				}
 			}
@@ -261,9 +239,9 @@ namespace Yuki_Theme_Plugin
 			Panel pan = new Panel ();
 			pan.BorderStyle = BorderStyle.None;
 			pan.Size = new Size (ctl.ClientRectangle.Width + 2,
-			                     ctl.ClientRectangle.Height + ctl2.ClientRectangle.Height + ctl3.ClientRectangle.Height + 6);
+				ctl.ClientRectangle.Height + ctl2.ClientRectangle.Height + ctl3.ClientRectangle.Height + 6);
 			pan.Location = new Point (ctl.Left - 1, ctl.Top - 1);
-			pan.BackColor = YukiTheme_VisualPascalABCPlugin.bgInactive;
+			pan.BackColor = YukiTheme_VisualPascalABCPlugin.Colors.bgInactive;
 			pan.Parent = ctl.Parent;
 			ctl.Parent = pan;
 			ctl2.Parent = pan;

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Controls;
 
 namespace Yuki_Theme.Core.WPF.Windows
@@ -11,6 +12,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		internal bool dimensionCap  = false;
 		internal bool customSticker = false;
 		
+		public   PopupController popupController;
+		
 		public SettingsWindow ()
 		{
 			InitializeComponent ();
@@ -20,26 +23,27 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void SaveButtonClick (object sender, RoutedEventArgs e)
 		{
-			this.DialogResult = true;
+			DialogResult = true;
 		}
 
 		private void CancleButtonClick (object sender, RoutedEventArgs e)
 		{
-			this.DialogResult = false;
+			DialogResult = false;
 		}
 
 		private void SettingsWindow_OnLoaded (object sender, RoutedEventArgs e)
 		{
 			SettingsPanelControl.ParentWindow = this;
 			SettingsPanelControl.UpdateExternalTranslations = TranslateDialogButtons;
+			SettingsPanelControl.popupController = popupController;
 			TranslateDialogButtons ();
 			IncludeToolBarItems ();
 		}
 		
 		private void TranslateDialogButtons ()
 		{
-			SaveButton.Content = CLI.Translate ("messages.theme.save.short");
-			CancelButton.Content = CLI.Translate ("download.cancel");
+			SaveButton.Content = API.CentralAPI.Current.Translate ("messages.theme.save.short");
+			CancelButton.Content = API.CentralAPI.Current.Translate ("download.cancel");
 		}
 
 		private void IncludeToolBarItems ()

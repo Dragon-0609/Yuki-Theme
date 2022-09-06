@@ -40,13 +40,13 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         /// </summary>
         public ColorWheel()
         {
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable | ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, true);
-            this.Color = Color.Black;
-            this.ColorStep = 4;
-            this.SelectionSize = 10;
-            this.SmallChange = 1;
-            this.LargeChange = 5;
-            this.SelectionGlyph = this.CreateSelectionGlyph();
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.Selectable | ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, true);
+            Color = Color.Black;
+            ColorStep = 4;
+            SelectionSize = 10;
+            SmallChange = 1;
+            LargeChange = 5;
+            SelectionGlyph = CreateSelectionGlyph();
         }
 
         #endregion
@@ -105,9 +105,9 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                     _brush.Dispose();
                 }
 
-                if (this.SelectionGlyph != null)
+                if (SelectionGlyph != null)
                 {
-                    this.SelectionGlyph.Dispose();
+                    SelectionGlyph.Dispose();
                 }
             }
 
@@ -142,7 +142,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnGotFocus(e);
 
-            this.Invalidate();
+            Invalidate();
         }
 
         /// <summary>
@@ -155,10 +155,10 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             double hue;
             int step;
 
-            color = this.HslColor;
+            color = HslColor;
             hue = color.H;
 
-            step = e.Shift ? this.LargeChange : this.SmallChange;
+            step = e.Shift ? LargeChange : SmallChange;
 
             switch (e.KeyCode)
             {
@@ -171,10 +171,10 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                     hue -= step;
                     break;
                 case Keys.PageUp:
-                    hue += this.LargeChange;
+                    hue += LargeChange;
                     break;
                 case Keys.PageDown:
-                    hue -= this.LargeChange;
+                    hue -= LargeChange;
                     break;
             }
 
@@ -193,10 +193,10 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
                 // As the Color and HslColor properties update each other, need to temporarily disable this and manually set both
                 // otherwise the wheel "sticks" due to imprecise conversion from RGB to HSL
-                this.LockUpdates = true;
-                this.Color = color.ToRgbColor();
-                this.HslColor = color;
-                this.LockUpdates = false;
+                LockUpdates = true;
+                Color = color.ToRgbColor();
+                HslColor = color;
+                LockUpdates = false;
 
                 e.Handled = true;
             }
@@ -212,7 +212,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnLostFocus(e);
 
-            this.Invalidate();
+            Invalidate();
         }
 
         /// <summary>
@@ -223,15 +223,15 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnMouseDown(e);
 
-            if (!this.Focused && this.TabStop)
+            if (!Focused && TabStop)
             {
-                this.Focus();
+                Focus();
             }
 
-            if (e.Button == MouseButtons.Left && this.IsPointInWheel(e.Location))
+            if (e.Button == MouseButtons.Left && IsPointInWheel(e.Location))
             {
                 _dragStartedWithinWheel = true;
-                this.SetColor(e.Location);
+                SetColor(e.Location);
             }
         }
 
@@ -245,7 +245,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
             if (e.Button == MouseButtons.Left && _dragStartedWithinWheel)
             {
-                this.SetColor(e.Location);
+                SetColor(e.Location);
             }
         }
 
@@ -268,7 +268,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnPaddingChanged(e);
 
-            this.RefreshWheel();
+            RefreshWheel();
         }
 
         /// <summary>
@@ -279,30 +279,30 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnPaint(e);
 
-            if (this.AllowPainting)
+            if (AllowPainting)
             {
                 base.OnPaintBackground(e);
 
-                if (this.BackgroundImage == null && this.Parent != null && (this.BackColor == this.Parent.BackColor || this.Parent.BackColor.A != 255))
+                if (BackgroundImage == null && Parent != null && (BackColor == Parent.BackColor || Parent.BackColor.A != 255))
                 {
-                    ButtonRenderer.DrawParentBackground(e.Graphics, this.DisplayRectangle, this);
+                    ButtonRenderer.DrawParentBackground(e.Graphics, DisplayRectangle, this);
                 }
 
                 if (_brush != null)
                 {
-                    e.Graphics.FillPie(_brush, this.ClientRectangle, 0, 360);
+                    e.Graphics.FillPie(_brush, ClientRectangle, 0, 360);
                 }
 
                 // smooth out the edge of the wheel
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                using (Pen pen = new Pen(this.BackColor, 2))
+                using (Pen pen = new Pen(BackColor, 2))
                 {
                     e.Graphics.DrawEllipse(pen, new RectangleF(_centerPoint.X - _radius, _centerPoint.Y - _radius, _radius * 2, _radius * 2));
                 }
 
-                if (!this.Color.IsEmpty)
+                if (!Color.IsEmpty)
                 {
-                    this.PaintCurrentColor(e);
+                    PaintCurrentColor(e);
                 }
             }
         }
@@ -315,7 +315,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             base.OnResize(e);
 
-            this.RefreshWheel();
+            RefreshWheel();
         }
 
         #endregion
@@ -333,11 +333,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             get { return _color; }
             set
             {
-                if (this.Color != value)
+                if (Color != value)
                 {
                     _color = value;
 
-                    this.OnColorChanged(EventArgs.Empty);
+                    OnColorChanged(EventArgs.Empty);
                 }
             }
         }
@@ -359,11 +359,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                     throw new ArgumentOutOfRangeException("value", value, "Value must be between 1 and 359");
                 }
 
-                if (this.ColorStep != value)
+                if (ColorStep != value)
                 {
                     _colorStep = value;
 
-                    this.OnColorStepChanged(EventArgs.Empty);
+                    OnColorStepChanged(EventArgs.Empty);
                 }
             }
         }
@@ -381,11 +381,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             get { return _hslColor; }
             set
             {
-                if (this.HslColor != value)
+                if (HslColor != value)
                 {
                     _hslColor = value;
 
-                    this.OnHslColorChanged(EventArgs.Empty);
+                    OnHslColorChanged(EventArgs.Empty);
                 }
             }
         }
@@ -401,11 +401,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             get { return _largeChange; }
             set
             {
-                if (this.LargeChange != value)
+                if (LargeChange != value)
                 {
                     _largeChange = value;
 
-                    this.OnLargeChangeChanged(EventArgs.Empty);
+                    OnLargeChangeChanged(EventArgs.Empty);
                 }
             }
         }
@@ -421,11 +421,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             get { return _selectionSize; }
             set
             {
-                if (this.SelectionSize != value)
+                if (SelectionSize != value)
                 {
                     _selectionSize = value;
 
-                    this.OnSelectionSizeChanged(EventArgs.Empty);
+                    OnSelectionSizeChanged(EventArgs.Empty);
                 }
             }
         }
@@ -441,11 +441,11 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             get { return _smallChange; }
             set
             {
-                if (this.SmallChange != value)
+                if (SmallChange != value)
                 {
                     _smallChange = value;
 
-                    this.OnSmallChangeChanged(EventArgs.Empty);
+                    OnSmallChangeChanged(EventArgs.Empty);
                 }
             }
         }
@@ -495,9 +495,9 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 _updateCount--;
             }
 
-            if (this.AllowPainting)
+            if (AllowPainting)
             {
-                this.Invalidate();
+                Invalidate();
             }
         }
 
@@ -518,32 +518,32 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
             // Only define the points if the control is above a minimum size, otherwise if it's too small, 
             // you get an "out of memory" exceptions (of all things) when creating the brush
-            if (this.ClientSize.Width > 16 && this.ClientSize.Height > 16)
+            if (ClientSize.Width > 16 && ClientSize.Height > 16)
             {
                 int w;
                 int h;
 
-                w = this.ClientSize.Width;
-                h = this.ClientSize.Height;
+                w = ClientSize.Width;
+                h = ClientSize.Height;
 
                 _centerPoint = new PointF(w / 2.0F, h / 2.0F);
-                _radius = this.GetRadius(_centerPoint);
+                _radius = GetRadius(_centerPoint);
 
-                for (double angle = 0; angle < 360; angle += this.ColorStep)
+                for (double angle = 0; angle < 360; angle += ColorStep)
                 {
                     double angleR;
                     PointF location;
 
                     angleR = angle * (Math.PI / 180);
-                    location = this.GetColorLocation(angleR, _radius);
+                    location = GetColorLocation(angleR, _radius);
 
                     points.Add(location);
                     colors.Add(new HslColor(angle, 1.0, 0.5).ToRgbColor());
                 }
             }
 
-            this.Points = points.ToArray();
-            this.Colors = colors.ToArray();
+            Points = points.ToArray();
+            Colors = colors.ToArray();
         }
 
         /// <summary>
@@ -553,13 +553,13 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             Brush result;
 
-            if (this.Points.Length != 0 && this.Points.Length == this.Colors.Length)
+            if (Points.Length != 0 && Points.Length == Colors.Length)
             {
-                result = new PathGradientBrush(this.Points, WrapMode.Clamp)
+                result = new PathGradientBrush(Points, WrapMode.Clamp)
                 {
                     CenterPoint = _centerPoint,
                     CenterColor = Color.White,
-                    SurroundColors = this.Colors
+                    SurroundColors = Colors
                 };
             }
             else
@@ -578,8 +578,8 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             Image image;
             int halfSize;
 
-            halfSize = this.SelectionSize / 2;
-            image = new Bitmap(this.SelectionSize + 1, this.SelectionSize + 1);
+            halfSize = SelectionSize / 2;
+            image = new Bitmap(SelectionSize + 1, SelectionSize + 1);
 
             using (Graphics g = Graphics.FromImage(image))
             {
@@ -587,7 +587,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
                 diamondOuter = new[]
                        {
-                         new Point(halfSize, 0), new Point(this.SelectionSize, halfSize), new Point(halfSize, this.SelectionSize), new Point(0, halfSize)
+                         new Point(halfSize, 0), new Point(SelectionSize, halfSize), new Point(halfSize, SelectionSize), new Point(0, halfSize)
                        };
 
 				g.FillPolygon(SystemBrushes.Control, diamondOuter);
@@ -595,15 +595,15 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
                 using (Pen pen = new Pen(Color.FromArgb(128, SystemColors.ControlDark)))
                 {
-                    g.DrawLine(pen, halfSize, 1, this.SelectionSize - 1, halfSize);
-                    g.DrawLine(pen, halfSize, 2, this.SelectionSize - 2, halfSize);
-                    g.DrawLine(pen, halfSize, this.SelectionSize - 1, this.SelectionSize - 2, halfSize + 1);
-                    g.DrawLine(pen, halfSize, this.SelectionSize - 2, this.SelectionSize - 3, halfSize + 1);
+                    g.DrawLine(pen, halfSize, 1, SelectionSize - 1, halfSize);
+                    g.DrawLine(pen, halfSize, 2, SelectionSize - 2, halfSize);
+                    g.DrawLine(pen, halfSize, SelectionSize - 1, SelectionSize - 2, halfSize + 1);
+                    g.DrawLine(pen, halfSize, SelectionSize - 2, SelectionSize - 3, halfSize + 1);
                 }
 
                 using (Pen pen = new Pen(Color.FromArgb(196, SystemColors.ControlLightLight)))
                 {
-                    g.DrawLine(pen, halfSize, this.SelectionSize - 1, 1, halfSize);
+                    g.DrawLine(pen, halfSize, SelectionSize - 1, 1, halfSize);
                 }
 
                 g.DrawLine(SystemPens.ControlLightLight, 1, halfSize, halfSize, 1);
@@ -618,7 +618,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         /// <param name="color">The color.</param>
         protected PointF GetColorLocation(Color color)
         {
-            return this.GetColorLocation(new HslColor(color));
+            return GetColorLocation(new HslColor(color));
         }
 
         /// <summary>
@@ -633,7 +633,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             angle = color.H * Math.PI / 180;
             radius = _radius * color.S;
 
-            return this.GetColorLocation(angle, radius);
+            return GetColorLocation(angle, radius);
         }
 
         protected PointF GetColorLocation(double angleR, double radius)
@@ -641,15 +641,15 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             double x;
             double y;
 
-            x = this.Padding.Left + _centerPoint.X + Math.Cos(angleR) * radius;
-            y = this.Padding.Top + _centerPoint.Y - Math.Sin(angleR) * radius;
+            x = Padding.Left + _centerPoint.X + Math.Cos(angleR) * radius;
+            y = Padding.Top + _centerPoint.Y - Math.Sin(angleR) * radius;
 
             return new PointF((float)x, (float)y);
         }
 
         protected float GetRadius(PointF centerPoint)
         {
-            return Math.Min(centerPoint.X, centerPoint.Y) - (Math.Max(this.Padding.Horizontal, this.Padding.Vertical) + (this.SelectionSize / 2));
+            return Math.Min(centerPoint.X, centerPoint.Y) - (Math.Max(Padding.Horizontal, Padding.Vertical) + (SelectionSize / 2));
         }
 
         /// <summary>
@@ -676,13 +676,13 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            if (!this.LockUpdates)
+            if (!LockUpdates)
             {
-                this.HslColor = new HslColor(this.Color);
+                HslColor = new HslColor(Color);
             }
-            this.Refresh();
+            Refresh();
 
-            handler = this.ColorChanged;
+            handler = ColorChanged;
 
             if (handler != null)
             {
@@ -698,9 +698,9 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            this.RefreshWheel();
+            RefreshWheel();
 
-            handler = this.ColorStepChanged;
+            handler = ColorStepChanged;
 
             if (handler != null)
             {
@@ -716,13 +716,13 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            if (!this.LockUpdates)
+            if (!LockUpdates)
             {
-                this.Color = this.HslColor.ToRgbColor();
+                Color = HslColor.ToRgbColor();
             }
-            this.Invalidate();
+            Invalidate();
 
-            handler = this.HslColorChanged;
+            handler = HslColorChanged;
 
             if (handler != null)
             {
@@ -738,7 +738,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            handler = this.LargeChangeChanged;
+            handler = LargeChangeChanged;
 
             if (handler != null)
             {
@@ -754,15 +754,15 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            if (this.SelectionGlyph != null)
+            if (SelectionGlyph != null)
             {
-                this.SelectionGlyph.Dispose();
+                SelectionGlyph.Dispose();
             }
 
-            this.SelectionGlyph = this.CreateSelectionGlyph();
-            this.RefreshWheel();
+            SelectionGlyph = CreateSelectionGlyph();
+            RefreshWheel();
 
-            handler = this.SelectionSizeChanged;
+            handler = SelectionSizeChanged;
 
             if (handler != null)
             {
@@ -778,7 +778,7 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
         {
             EventHandler handler;
 
-            handler = this.SmallChangeChanged;
+            handler = SmallChangeChanged;
 
             if (handler != null)
             {
@@ -788,42 +788,42 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
 
         protected void PaintColor(PaintEventArgs e, HslColor color)
         {
-            this.PaintColor(e, color, false);
+            PaintColor(e, color, false);
         }
 
         protected virtual void PaintColor(PaintEventArgs e, HslColor color, bool includeFocus)
         {
             PointF location;
 
-            location = this.GetColorLocation(color);
+            location = GetColorLocation(color);
 
             if (!float.IsNaN(location.X) && !float.IsNaN(location.Y))
             {
                 int x;
                 int y;
 
-                x = (int)location.X - (this.SelectionSize / 2);
-                y = (int)location.Y - (this.SelectionSize / 2);
+                x = (int)location.X - (SelectionSize / 2);
+                y = (int)location.Y - (SelectionSize / 2);
 
-                if (this.SelectionGlyph == null)
+                if (SelectionGlyph == null)
                 {
-                    e.Graphics.DrawRectangle(Pens.Black, x, y, this.SelectionSize, this.SelectionSize);
+                    e.Graphics.DrawRectangle(Pens.Black, x, y, SelectionSize, SelectionSize);
                 }
                 else
                 {
-                    e.Graphics.DrawImage(this.SelectionGlyph, x, y);
+                    e.Graphics.DrawImage(SelectionGlyph, x, y);
                 }
 
-                if (this.Focused && includeFocus)
+                if (Focused && includeFocus)
                 {
-                    ControlPaint.DrawFocusRectangle(e.Graphics, new Rectangle(x - 1, y - 1, this.SelectionSize + 2, this.SelectionSize + 2));
+                    ControlPaint.DrawFocusRectangle(e.Graphics, new Rectangle(x - 1, y - 1, SelectionSize + 2, SelectionSize + 2));
                 }
             }
         }
 
         protected virtual void PaintCurrentColor(PaintEventArgs e)
         {
-            this.PaintColor(e, this.HslColor, true);
+            PaintColor(e, HslColor, true);
         }
 
         protected virtual void SetColor(Point point)
@@ -834,8 +834,8 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
             double distance;
             double saturation;
 
-            dx = Math.Abs(point.X - _centerPoint.X - this.Padding.Left);
-            dy = Math.Abs(point.Y - _centerPoint.Y - this.Padding.Top);
+            dx = Math.Abs(point.X - _centerPoint.X - Padding.Left);
+            dy = Math.Abs(point.Y - _centerPoint.Y - Padding.Top);
             angle = Math.Atan(dy / dx) / Math.PI * 180;
             distance = Math.Pow((Math.Pow(dx, 2) + (Math.Pow(dy, 2))), 0.5);
             saturation = distance / _radius;
@@ -854,10 +854,10 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 angle = 360 - angle;
             }
 
-            this.LockUpdates = true;
-            this.HslColor = new HslColor(angle, saturation, 0.5);
-            this.Color = this.HslColor.ToRgbColor();
-            this.LockUpdates = false;
+            LockUpdates = true;
+            HslColor = new HslColor(angle, saturation, 0.5);
+            Color = HslColor.ToRgbColor();
+            LockUpdates = false;
         }
 
         #endregion
@@ -874,9 +874,9 @@ namespace MechanikaDesign.WinForms.UI.ColorPicker
                 _brush.Dispose();
             }
 
-            this.CalculateWheel();
-            _brush = this.CreateGradientBrush();
-            this.Invalidate();
+            CalculateWheel();
+            _brush = CreateGradientBrush();
+            Invalidate();
         }
 
         #endregion

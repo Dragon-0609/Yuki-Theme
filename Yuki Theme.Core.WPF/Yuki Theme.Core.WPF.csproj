@@ -13,6 +13,7 @@
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <WarningLevel>4</WarningLevel>
         <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -46,6 +47,9 @@
         <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
           <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
         </Reference>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\packages\Newtonsoft.Json.dll</HintPath>
+        </Reference>
         <Reference Include="Svg, Version=3.3.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2">
           <HintPath>..\packages\Svg.dll</HintPath>
         </Reference>
@@ -59,9 +63,12 @@
         <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Drawing.Common.dll</HintPath>
         </Reference>
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.IO.Compression.FileSystem" />
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
           <HintPath>..\packages\System.Memory.dll</HintPath>
         </Reference>
+        <Reference Include="System.Net.Http" />
         <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
         </Reference>
@@ -74,8 +81,12 @@
         <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
         <Reference Include="WindowsFormsIntegration" />
+        <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc">
+          <HintPath>..\packages\WpfAnimatedGif.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AdditionalTools.cs" />
         <Compile Include="App.xaml.cs">
           <DependentUpon>App.xaml</DependentUpon>
           <SubType>Code</SubType>
@@ -106,10 +117,18 @@
         <Compile Include="Controls\SettingsPanelUtilities.cs">
           <DependentUpon>SettingsPanel.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\SnapWindow.cs">
+          <DependentUpon>SnapWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
         <Compile Include="Controls\ToolBarList.cs" />
         <Compile Include="Controls\ToolBarListItem.cs" />
         <Compile Include="Converter.cs" />
+        <Compile Include="FileExtensions.cs" />
+        <Compile Include="Interfaces\Main.cs" />
+        <Compile Include="Interfaces\Sticker.cs" />
+        <Compile Include="Interfaces\UpdateDownloader.cs" />
+        <Compile Include="PopupController.cs" />
         <Compile Include="Styles\CheckboxStyles.xaml.cs">
           <DependentUpon>CheckboxStyles.xaml</DependentUpon>
         </Compile>
@@ -129,6 +148,12 @@
         <Compile Include="Windows\LicenseWindow.xaml.cs">
           <DependentUpon>LicenseWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\MainModel.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\MainPresenter.cs">
+          <DependentUpon>MainWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Windows\MainWindow.xaml.cs">
           <DependentUpon>MainWindow.xaml</DependentUpon>
           <SubType>Code</SubType>
@@ -136,11 +161,35 @@
         <Compile Include="Windows\ManageThemesWindow.xaml.cs">
           <DependentUpon>ManageThemesWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\NotificationWindow.xaml.cs">
+          <DependentUpon>NotificationWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\QuestionWindow.xaml.cs">
+          <DependentUpon>QuestionWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Windows\RenameThemeWindow.xaml.cs">
           <DependentUpon>RenameThemeWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Windows\SettingsWindow.xaml.cs">
           <DependentUpon>SettingsWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\StickerModel.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\StickerPresenter.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\StickerWindow.xaml.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\UpdateDownloaderModel.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\UpdateDownloaderPresenter.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Windows\UpdateDownloaderWindow.xaml.cs">
+          <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="WPFHelper.cs" />
         <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
@@ -171,8 +220,12 @@
           <SubType>Designer</SubType>
         </Page>
         <Page Include="Windows\ManageThemesWindow.xaml" />
+        <Page Include="Windows\NotificationWindow.xaml" />
+        <Page Include="Windows\QuestionWindow.xaml" />
         <Page Include="Windows\RenameThemeWindow.xaml" />
         <Page Include="Windows\SettingsWindow.xaml" />
+        <Page Include="Windows\StickerWindow.xaml" />
+        <Page Include="Windows\UpdateDownloaderWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs">

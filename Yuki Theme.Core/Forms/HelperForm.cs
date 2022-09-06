@@ -9,7 +9,7 @@ namespace Yuki_Theme.Core.Forms
 		public HelperForm ()
 		{
 			InitializeComponent();
-			this.StartPosition = FormStartPosition.CenterParent;
+			StartPosition = FormStartPosition.CenterParent;
 		}
 
 		public void setMessage (string title, string description, string btntext = "OK")

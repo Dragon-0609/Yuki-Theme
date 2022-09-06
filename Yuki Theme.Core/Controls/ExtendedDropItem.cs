@@ -1,16 +1,17 @@
-﻿namespace Yuki_Theme.Core.Controls;
-
-public class ExtendedDropItem
+﻿namespace Yuki_Theme.Core.Controls
 {
-	private string name = "";
-
-	public ExtendedDropItem (string accessName)
+	public class ExtendedDropItem
 	{
-		name = accessName;
-	}
+		private string name = "";
 
-	public override string ToString ()
-	{
-		return CLI.Translate (name);
+		public ExtendedDropItem (string accessName)
+		{
+			name = accessName;
+		}
+
+		public override string ToString ()
+		{
+			return API.CentralAPI.Current.Translate (name);
+		}
 	}
 }

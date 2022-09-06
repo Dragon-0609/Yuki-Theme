@@ -140,8 +140,14 @@ namespace CLITools
 			if (target.Length == 0) return reference;
 			if (!keepCase)
 				target = target.ToLower ();
-			string [] result = reference.OrderBy (m => m.ToLower().StartsWith (target) ? 0 : 1).ThenBy (m => m.ToLower().Contains (target) ? 0 : 1)
+			string[] result;
+			
+			if (!keepCase)
+				result = reference.OrderBy (m => m.ToLower().StartsWith (target) ? 0 : 1).ThenBy (m => m.ToLower().Contains (target) ? 0 : 1)
 			                            .ThenBy (m => m).ToArray ();
+			else
+				result = reference.OrderBy (m => m.StartsWith (target) ? 0 : 1).ThenBy (m => m.Contains (target) ? 0 : 1)
+						 .ThenBy (m => m).ToArray ();
 			return result;
 		}
 	}

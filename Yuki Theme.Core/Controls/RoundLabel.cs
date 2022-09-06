@@ -15,20 +15,20 @@ namespace Yuki_Theme.Core.Controls
 
 		public RoundLabel ()
 		{
-			this.DoubleBuffered = true;
+			DoubleBuffered = true;
 		}
 
 		protected override void OnPaint (PaintEventArgs e)
 		{
 			base.OnPaint (e);
-			using (var graphicsPath = _getRoundRectangle (this.ClientRectangle))
+			using (var graphicsPath = _getRoundRectangle (ClientRectangle))
 			{
 				e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 				using (var brush = new SolidBrush (_BackColor))
 					e.Graphics.FillPath (brush, graphicsPath);
 				using (var pen = new Pen (_BackColor, 1.0f))
 					e.Graphics.DrawPath (pen, graphicsPath);
-				TextRenderer.DrawText (e.Graphics, Text, this.Font, this.ClientRectangle, this.ForeColor,
+				TextRenderer.DrawText (e.Graphics, Text, Font, ClientRectangle, ForeColor,
 				                       TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 			}
 		}

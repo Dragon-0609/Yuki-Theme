@@ -72,8 +72,8 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
         public ErrorLineBookmarkNew(string fileName, IDocument document, int startLine)
             : base(fileName, document, startLine)
         {
-            this.IsSaved = false;
-            this.IsVisibleInBookmarkPad = false;
+            IsSaved = false;
+            IsVisibleInBookmarkPad = false;
         }
 
         public override void Draw(IconBarMargin margin, Graphics g, Point p)

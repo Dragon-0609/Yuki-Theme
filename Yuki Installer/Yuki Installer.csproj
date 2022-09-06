@@ -42,6 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Yuki Theme.Core\Database\DatabaseManager.cs">
+      <Link>CoreParts\DatabaseManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\Database\FileDatabase.cs">
+      <Link>CoreParts\FileDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\Database\WindowsRegistryDatabase.cs">
+      <Link>CoreParts\WindowsRegistryDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\Enums.cs">
+      <Link>CoreParts\Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\Interfaces\IDatabase.cs">
+      <Link>CoreParts\IDatabase.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\SettingsConst.cs">
+      <Link>CoreParts\SettingsConst.cs</Link>
+    </Compile>
+    <Compile Include="..\Yuki Theme.Core\Utils\WindowProps.cs">
+      <Link>CoreParts\WindowProps.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
