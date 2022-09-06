@@ -1018,6 +1018,12 @@ namespace Yuki_Theme.Core
 		public int?  Width     = null;
 		public int?  Height    = null;
 		public bool? Maximized = null;
+		public WindowProps ()
+		{
+			Left = 0;
+			Top = 0;
+		}
+
 
 		public static WindowProps Parse (string target)
 		{
