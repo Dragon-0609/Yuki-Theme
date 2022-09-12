@@ -164,6 +164,9 @@
         <Compile Include="Windows\NotificationWindow.xaml.cs">
           <DependentUpon>NotificationWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\ProgressWindow.xaml.cs">
+          <DependentUpon>ProgressWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Windows\QuestionWindow.xaml.cs">
           <DependentUpon>QuestionWindow.xaml</DependentUpon>
         </Compile>
@@ -221,6 +224,7 @@
         </Page>
         <Page Include="Windows\ManageThemesWindow.xaml" />
         <Page Include="Windows\NotificationWindow.xaml" />
+        <Page Include="Windows\ProgressWindow.xaml" />
         <Page Include="Windows\QuestionWindow.xaml" />
         <Page Include="Windows\RenameThemeWindow.xaml" />
         <Page Include="Windows\SettingsWindow.xaml" />

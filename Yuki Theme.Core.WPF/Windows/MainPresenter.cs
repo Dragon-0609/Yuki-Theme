@@ -24,8 +24,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Main.IView _view;
 		private Window     parent;
 		
-		private Thickness minMargin  = new Thickness (0);
-		private Thickness normMargin = new Thickness (24, 0, 0, 0);
+		private Thickness      minMargin  = new Thickness (0);
+		private Thickness      normMargin = new Thickness (24, 0, 0, 0);
+		private ProgressWindow _progressWindow;
+
+		private bool _cancelImports = false;
+		private bool _askToOverride = false;
+		private bool _importing     = false;
 
 		public MainPresenter (Main.Model model, Main.IView view, Window parent)
 		{
@@ -33,7 +38,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_view = view;
 			this.parent = parent;
 		}
-
+		
 		public void SetAPIActions ()
 		{
 			API_Events.ifHasImage = IfHasImage;
@@ -98,9 +103,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public bool AskChoiceParser (string content, string title)
 		{
-			return MessageBox.Show (content,
-			                        title,
-			                        MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+			bool askChoice = MessageBox.Show (content,
+			                                        title,
+			                                        MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+			if (_importing)
+				_askToOverride = askChoice;
+			return askChoice;
 		}
 		
 		private int AskActionChoice ()
@@ -224,10 +232,23 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void ImportFiles(string path, string extension, Action<string> addToUiList = null, Action<string> selectAfterParse = null)
 		{
 			string [] fls = Directory.GetFiles (path, extension, SearchOption.TopDirectoryOnly);
+			bool isNotNull = _progressWindow != null;
+			_askToOverride = true;
+			_importing = true;
 			foreach (string fl in fls)
 			{
-				ImportFile(fl, false, addToUiList, selectAfterParse);
+				if (_cancelImports)
+					break;
+				ImportFile(fl, _askToOverride, false, addToUiList, selectAfterParse);
+				if (isNotNull && !_cancelImports)
+					_progressWindow.UpdateProgress ();
 			}
+			_importing = false;
+		}
+
+		private void ImportFile(string fileName, bool ask, bool select, Action<string> addToUiList = null, Action<string> selectAfterParse = null)
+		{
+			CentralAPI.Current.ImportTheme (fileName, ask, select, ErrorExport, AskChoiceParser, addToUiList, selectAfterParse);
 		}
 
 		private void ImportFile(string fileName, bool select, Action<string> addToUiList = null, Action<string> selectAfterParse = null)
@@ -273,6 +294,37 @@ namespace Yuki_Theme.Core.WPF.Windows
 				WPFHelper.windowForDialogs = null;
 			}
 			return ncolor;
+		}
+		public int GetFilesCount (string path, string extension)
+		{
+			return Directory.GetFiles (path, extension, SearchOption.TopDirectoryOnly).Length;
+		}
+		public bool SetImportsCancel (bool cancel) => _cancelImports = cancel;
+		public void ImportDirectoryDone ()
+		{
+			if (_progressWindow != null)
+			{
+				_progressWindow.Dispatcher.Invoke (() => _progressWindow.Close ());
+				_progressWindow = null;
+			}
+		}
+
+		public void PrepareProgressWindow (string filename)
+		{
+			int max = GetFilesCount (filename, "*.json");
+			max += GetFilesCount (filename, "*.icls");
+			Window window = _view.getWindow ();
+
+			_progressWindow = new ProgressWindow (this)
+			{
+				Background = window.Background,
+				Foreground = window.Foreground,
+				Owner = window,
+				Tag = window.Tag
+			};
+			_progressWindow.SetMax (max);
+			_progressWindow.Show ();
+			
 		}
 	}
 	

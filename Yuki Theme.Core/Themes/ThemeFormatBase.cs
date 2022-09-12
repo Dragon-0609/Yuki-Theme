@@ -38,5 +38,75 @@ namespace Yuki_Theme.Core.Themes
 		public abstract void WriteNameAndResetToken (string path, string name);
 
 		public abstract void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions);
+
+		protected void LoadImage (bool exist, bool needToDoActions, string pathForMemory, Action<Image> hasImage, Action doesntHaveImage)
+		{
+			if (needToDoActions)
+			{
+				if (exist)
+				{
+					if (hasImage != null)
+					{
+						hasImage (Helper.GetImage (pathForMemory));
+					}
+				} else
+				{
+					if (doesntHaveImage != null)
+						doesntHaveImage ();
+				}
+			}
+		}
+		protected void LoadSticker (bool exist, bool needToDoActions, string pathForMemory, Action<Image> hasImage, Action doesntHaveImage)
+		{
+			if (needToDoActions)
+			{
+				if (exist)
+				{
+					if (hasImage != null)
+					{
+						hasImage (Helper.GetSticker (pathForMemory));
+					}
+				} else
+				{
+					if (doesntHaveImage != null)
+						doesntHaveImage ();
+				}
+			}
+		}
+
+		protected void LoadImage (bool exist, bool needToDoActions, string pathForMemory, Assembly a, Action<Image> hasImage, Action doesntHaveImage)
+		{
+			if (needToDoActions)
+			{
+				if (exist)
+				{
+					if (hasImage != null)
+					{
+						hasImage (Helper.GetImageFromMemory (pathForMemory, a));
+					}
+				} else
+				{
+					if (doesntHaveImage != null)
+						doesntHaveImage ();
+				}
+			}
+		}
+		protected void LoadSticker (bool exist, bool needToDoActions, string pathForMemory, Assembly a, Action<Image> hasImage, Action doesntHaveImage)
+		{
+			if (needToDoActions)
+			{
+				if (exist)
+				{
+					if (hasImage != null)
+					{
+						hasImage (Helper.GetStickerFromMemory (pathForMemory, a));
+					}
+				} else
+				{
+					if (doesntHaveImage != null)
+						doesntHaveImage ();
+				}
+			}
+		}
 	}
 }

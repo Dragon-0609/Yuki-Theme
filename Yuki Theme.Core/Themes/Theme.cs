@@ -119,6 +119,9 @@ namespace Yuki_Theme.Core.Themes
 		public void ParseWallpaperAlign (string target)
 		{
 			target = target.ToLower ();
+#if CONSOLE_LOGS_ACTIVE
+			Console.WriteLine ("ALIGN: {0}", target);
+#endif
 			if (target == "left") WallpaperAlign = (int)Alignment.Left;
 			else if (target == "center") WallpaperAlign = (int)Alignment.Center;
 			else WallpaperAlign = (int)Alignment.Right;

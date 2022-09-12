@@ -60,6 +60,8 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void SelectDefaultTheme ();
 			
 			void OpenSettings ();
+
+			Window getWindow ();
 		}
 
 		public interface IPresenter
@@ -85,6 +87,14 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void ImportFiles(string path, string extension, Action<string> addToUiList = null, Action<string> selectAfterParse = null);
 
 			Color SelectColor(Color defaultColor, out bool save);
+
+			void PrepareProgressWindow (string filename);
+			
+			int GetFilesCount(string path, string extension);
+
+			bool SetImportsCancel (bool cancel);
+
+			void ImportDirectoryDone ();
 		}
 	}
 }

@@ -1,0 +1,49 @@
+﻿<Window x:Class="Yuki_Theme.Core.WPF.Windows.ProgressWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
+        xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Initialize"
+        Name="Window"
+        Title="Theme Import" Width="300" Style="{DynamicResource SLayer}">
+    <Window.Tag>
+        <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F" BorderBrush="#97A0A5"
+                              SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F" BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F" 
+                              BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
+    </Window.Tag>
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="/Yuki Theme.Core.WPF;component/Styles/WindowTemplate.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary
+                    Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Imported:" Name="Title" FontWeight="Bold" Style="{StaticResource TextBlockWindow}" />
+        
+        <StackPanel Grid.Row="1" Margin="4 5 4 0">
+            <ProgressBar Height="10" Value="15" Name="Progress" 
+                         Foreground="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.BorderBrush}"
+                         Background="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.BackgroundClickBrush}"/>
+            <TextBlock Text="1/15" Margin="0 5 0 0" Style="{StaticResource TextBlockWindow}" Name="Status" />
+        </StackPanel>
+        
+    </Grid>
+</Window>

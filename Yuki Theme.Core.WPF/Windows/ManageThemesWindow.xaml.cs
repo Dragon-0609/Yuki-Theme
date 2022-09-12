@@ -72,8 +72,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Button saveBtn = (Button)Template.FindName ("SaveButton", this);
 			saveBtn.Visibility = Visibility.Collapsed;
-			Button closeBtn = (Button)Template.FindName ("Cancel", this);
-			saveBtn.Content = "Close";
+			Button closeBtn = (Button)Template.FindName ("CancelButton", this);
+			closeBtn.Content = "Close";
 		}
 
 		private void LoadSvg ()

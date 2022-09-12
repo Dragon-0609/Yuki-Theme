@@ -85,146 +85,51 @@ namespace Yuki_Theme.Core
 
 		#region Get Image
 
-		public static Tuple <bool, Image> GetImage (string path)
+
+		public static bool DoesImageExist (string path)
 		{
-			return GetImage (path, WALLPAPER_NAME);
+			return ZipManager.DoesImageExist (path, WALLPAPER_NAME);
 		}
 
-		public static Tuple <bool, Image> GetSticker (string path)
+		public static bool DoesStickerExist (string path)
 		{
-			return GetImage (path, STICKER_NAME);
+			return ZipManager.DoesImageExist (path, STICKER_NAME);
+		}
+		
+		public static Image GetImage (string path)
+		{
+			return ZipManager.GetImage (path, WALLPAPER_NAME);
 		}
 
-		private static Tuple <bool, Image> GetImage (string path, string filename)
+		public static Image GetSticker (string path)
 		{
-			try
-			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
-				{
-					ZipArchiveEntry imag = zipFile.GetEntry (filename);
-					if (imag != null)
-					{
-						Image img = null;
-						bool b = false;
-						using (Stream stream = imag.Open ())
-						{
-							img = Image.FromStream (stream);
-							b = true;
-						}
-
-						return new Tuple <bool, Image> (b, img);
-					} else
-					{
-						return new Tuple <bool, Image> (false, null);
-					}
-				}
-			} catch (InvalidDataException)
-			{
-				return new Tuple <bool, Image> (false, null);
-			}
+			return ZipManager.GetImage (path, STICKER_NAME);
 		}
 
-		public static Tuple <bool, Image> GetStickerFromMemory (string path, Assembly a)
+		public static Image GetStickerFromMemory (string path, Assembly a)
 		{
-			return GetImageFromMemory (path, STICKER_NAME, a);
+			return ZipManager.GetImageFromMemory (path, STICKER_NAME, a);
 		}
 
-		public static Tuple <bool, Image> GetImageFromMemory (string path, Assembly a)
+		public static Image GetImageFromMemory (string path, Assembly a)
 		{
-			return GetImageFromMemory (path, WALLPAPER_NAME, a);
+			return ZipManager.GetImageFromMemory (path, WALLPAPER_NAME, a);
 		}
 
-		public static Tuple <bool, Image> GetImageFromMemory (string path, string filename, Assembly a)
+		public static bool DoesImageExistInMemory (string path, Assembly a)
 		{
-			try
-			{
-				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
-				{
-					ZipArchiveEntry imag = zipFile.GetEntry (filename);
-					if (imag != null)
-					{
-						Image img = null;
-						bool b = false;
-						using (Stream stream = imag.Open ())
-						{
-							img = Image.FromStream (stream);
-							b = true;
-						}
-
-						return new Tuple <bool, Image> (b, img);
-					} else
-					{
-						return new Tuple <bool, Image> (false, null);
-					}
-				}
-			} catch (InvalidDataException)
-			{
-				return new Tuple <bool, Image> (false, null);
-			}
+			return ZipManager.DoesImageExistInMemory (path, WALLPAPER_NAME, a);
 		}
 
+		public static bool DoesStickerExistInMemory (string path, Assembly a)
+		{
+			return ZipManager.DoesImageExistInMemory (path, STICKER_NAME, a);
+		}
+		
 		#endregion
 
 
 		#region Get Theme
-
-		public static Tuple <bool, string> GetTheme (string path)
-		{
-			Tuple <bool, string> result;
-			try
-			{
-				using (ZipArchive zipFile = ZipFile.OpenRead (path))
-				{
-					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-					{
-						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					} else
-						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
-				}
-			} catch
-			{
-				result = new Tuple <bool, string> (false, "");
-			}
-			return result;
-		}
-
-		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
-		{
-			Tuple <bool, string> result;
-			try
-			{
-				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
-				{
-					if (path.ToLower ().EndsWith (FILE_EXTENSTION_OLD))
-					{
-						result = ReadThemeFromZip (zipFile, THEME_NAME_OLD);
-					} else
-						result = ReadThemeFromZip (zipFile, THEME_NAME_NEW);
-				}
-			} catch (InvalidDataException)
-			{
-				result = new Tuple <bool, string> (false, "");
-			}
-			return result;
-		}
-
-		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
-		{
-			var theme = zipFile.GetEntry (themefile);
-			if (theme != null)
-			{
-				string content = "";
-				using (StreamReader reader = new StreamReader (theme.Open ()))
-				{
-					content = reader.ReadToEnd ();
-				}
-
-				return new Tuple <bool, string> (true, content);
-			} else
-			{
-				return new Tuple <bool, string> (false, "");
-			}
-		}
 
 		public static ThemeFormat GetThemeFormat (bool isDefault, string path, string name)
 		{

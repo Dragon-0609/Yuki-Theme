@@ -21,6 +21,8 @@ namespace Yuki_Theme.Core.Parsers
 		
 		public  Func <string, string, bool> exist;
 
+		internal bool Tokenize = false;
+
 		public static Dictionary <string, string> groups = new ()
 		{
 			
@@ -115,7 +117,6 @@ namespace Yuki_Theme.Core.Parsers
 					throw new InvalidDataException (API.CentralAPI.Current.Translate ("parser.theme.exist"));
 
 				overwrite = File.Exists (PathToSave);
-				Console.WriteLine ("{0} | Exist: {1}", PathToSave, overwrite);
 			}
 
 			if (json ["dark"] != null)
@@ -151,7 +152,8 @@ namespace Yuki_Theme.Core.Parsers
 			df.Bold = null;
 			df.Italic = null;
 			
-			theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
+			if (Tokenize)
+				theme.Token = Helper.EncryptString (theme.Name, DateTime.Now.ToString ("ddMMyyyy"));
 			
 			// To Add: _LineNumbers->bg from default->bg, FoldMarker from default,_ SelectedFoldLine from default
 		}
@@ -420,11 +422,11 @@ namespace Yuki_Theme.Core.Parsers
 
 					Dictionary <string, string> commentValues = new Dictionary <string, string> ()
 					{
-						{ "name", "name:" + _originalFileName }, { "align", "align:" + ((int)Alignment.Center).ToString () },
-						{ "opacity", "opacity:" + (10).ToString () },
-						{ "sopacity", "sopacity:" + (100).ToString () },
-						{ "hasImage", "hasImage:" + wallp.Item1.ToString () },
-						{ "hasSticker", "hasSticker:" + stick.Item1.ToString () }
+						{ "name", "name:" + _originalFileName }, { "align", "align:" + ((int)theme.align) },
+						{ "opacity", "opacity:" + (theme.WallpaperOpacity) },
+						{ "sopacity", "sopacity:" + (100) },
+						{ "hasImage", "hasImage:" + wallp.Item1 },
+						{ "hasSticker", "hasSticker:" + stick.Item1 }
 					};
 					foreach (XmlComment comm in comms)
 					{
@@ -465,14 +467,16 @@ namespace Yuki_Theme.Core.Parsers
 				} else
 				{
 					node.AppendChild (doc.CreateComment ("name:" + _originalFileName));
-					node.AppendChild (doc.CreateComment ("align:" + ((int)Alignment.Center).ToString ()));
-					node.AppendChild (doc.CreateComment ("opacity:" + (10).ToString ()));
-					node.AppendChild (doc.CreateComment ("sopacity:" + (100).ToString ()));
-					node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1.ToString ()));
-					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1.ToString ()));
+					node.AppendChild (doc.CreateComment ("align:" + ((int)theme.align)));
+					node.AppendChild (doc.CreateComment ("opacity:" + (theme.WallpaperOpacity)));
+					node.AppendChild (doc.CreateComment ("sopacity:" + (100)));
+					node.AppendChild (doc.CreateComment ("hasImage:" + wallp.Item1));
+					node.AppendChild (doc.CreateComment ("hasSticker:" + stick.Item1));
 				}
 
 				ZipManager.Zip (PathToSave, doc.OuterXml, wallp.Item2, stick.Item2, "", true);
+				wallp.Item2.Dispose ();
+				stick.Item2.Dispose ();
 			}
 		}
 

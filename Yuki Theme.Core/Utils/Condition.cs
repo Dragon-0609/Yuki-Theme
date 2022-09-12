@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Themes;
 
 namespace Yuki_Theme.Core.Utils
@@ -14,7 +15,9 @@ namespace Yuki_Theme.Core.Utils
 
 		public static Dictionary <string, Func <string, ThemeInfo, Condition, ThemeInfo>> Fields = new ()
 		{
-			{ "group", SetGroup }
+			{ "group", SetGroup },
+			{ "token", SetToken },
+			
 		};
 
 		public static Dictionary <string, bool> NeedToLoadThemeInConditions = new ()
@@ -54,7 +57,7 @@ namespace Yuki_Theme.Core.Utils
 		private static bool CheckGroupCondition (ThemeInfo info, Condition condition)
 		{
 			if (condition.Equality.ToLower () == "null")
-				return info.group == "";
+				return info.group == "" || info.group == CentralAPI.Current.Translate ("messages.theme.group.custom");
 			else
 				return info.group == condition.Equality;
 		}
@@ -71,6 +74,18 @@ namespace Yuki_Theme.Core.Utils
 			info.group = value.Equality;
 			Theme theme = API.CentralAPI.Current.GetTheme (name);
 			theme.Group = info.group;
+			API.CentralAPI.Current.SaveTheme (theme, null, null, true);
+			return info;
+		}
+		
+		private static ThemeInfo SetToken (string name, ThemeInfo info, Condition value)
+		{
+			Theme theme = API.CentralAPI.Current.GetTheme (name);
+			if (value.Equality == "null")
+			{
+				info.isTokenValid = false;
+				theme.Token = value.Equality;
+			}
 			API.CentralAPI.Current.SaveTheme (theme, null, null, true);
 			return info;
 		}

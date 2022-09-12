@@ -67,8 +67,6 @@
       <EmbeddedResource Include="Themes\EroManga__Sagiri.yukitheme" />
       <EmbeddedResource Include="Themes\EVA__Katsuragi Misato.yukitheme" />
       <EmbeddedResource Include="Themes\EVA__Rei.yukitheme" />
-      <EmbeddedResource Include="Themes\Franxx__Zero Two Dark.yukitheme" />
-      <EmbeddedResource Include="Themes\Franxx__Zero Two Light.yukitheme" />
       <EmbeddedResource Include="Themes\FutureDiary__Gasai Yuno.yukitheme" />
       <EmbeddedResource Include="Themes\Gate__Rory Mercury.yukitheme" />
       <EmbeddedResource Include="Themes\JahySama__Jahy.yukitheme" />
@@ -131,7 +129,17 @@
       <EmbeddedResource Include="Themes\QQ__Nakano Itsuki.yukitheme" />
       <EmbeddedResource Include="Themes\Senko-san__Senko.yukitheme" />
       <EmbeddedResource Include="Themes\Shokugeki__Yukihira Soma.yukitheme" />
-      <EmbeddedResource Include="Themes\Slime__Rimiru Tempest.yukitheme" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Themes\Franxx__Hiro x Zero Two.yukitheme" />
+      <EmbeddedResource Include="Themes\Franxx__Hiro.yukitheme" />
+      <EmbeddedResource Include="Themes\Slime__Rimuru Tempest.yukitheme" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Themes\Franxx__Zero Two Dark Obsidian.yukitheme" />
+      <Content Include="Themes\Franxx__Zero Two Dark Rose.yukitheme" />
+      <Content Include="Themes\Franxx__Zero Two Light Lily.yukitheme" />
+      <Content Include="Themes\Franxx__Zero Two Light Sakura.yukitheme" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

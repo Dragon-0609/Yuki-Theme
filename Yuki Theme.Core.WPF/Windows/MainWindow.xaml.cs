@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -21,6 +22,7 @@ using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using Drawing = System.Drawing;
 using MessageBox = System.Windows.MessageBox;
+using Timer = System.Windows.Forms.Timer;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -314,19 +316,27 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void ImportFolder ()
 		{
-			CommonOpenFileDialog co = new CommonOpenFileDialog ();
-			co.IsFolderPicker = true;
-			co.Multiselect = false;
-			CommonFileDialogResult res = co.ShowDialog ();
+			CommonOpenFileDialog dialog = new CommonOpenFileDialog ();
+			dialog.IsFolderPicker = true;
+			dialog.Multiselect = false;
+			_presenter.SetImportsCancel (false);
+			CommonFileDialogResult res = dialog.ShowDialog ();
 			if (res == CommonFileDialogResult.Ok)
 			{
-				MessageBox.Show (CentralAPI.Current.Translate ("main.import.directory"));
-				
-				_presenter.ImportFiles(co.FileName, "*.json", ImportUIAddition, ImportThemeReset);
-				_presenter.ImportFiles(co.FileName, "*.icls", ImportUIAddition, ImportThemeReset);
-				
-				Themes.SelectedIndex = Themes.Items.Count - 1;
+				// MessageBox.Show (CentralAPI.Current.Translate ("main.import.directory"));
+
+				_presenter.PrepareProgressWindow (dialog.FileName);
+				Thread thread = new Thread (() => ImportFolderWithProgress(dialog.FileName));
+				thread.Start();
+				// Themes.SelectedIndex = Themes.Items.Count - 1;
 			}
+		}
+		private void ImportFolderWithProgress (string location)
+		{
+			_presenter.ImportFiles (location, "*.json", ImportUIAddition, ImportThemeReset);
+			_presenter.ImportFiles (location, "*.icls", ImportUIAddition, ImportThemeReset);
+			_presenter.ImportDirectoryDone ();
+			Dispatcher.Invoke (() => Themes.SelectedIndex = Themes.Items.Count - 1);
 		}
 
 		private void OpenDownloader ()
@@ -342,15 +352,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		private void ImportUIAddition (string fileName)
 		{
-			Themes.Items.Add (fileName);
+			Dispatcher.Invoke (() => Themes.Items.Add (fileName));
 		}
 
 		private void ImportThemeReset (string fileName)
 		{
-			if (Themes.SelectedItem.ToString () != fileName)
-				Themes.SelectedItem = fileName;
-			else
-				Restore ();
+			Dispatcher.Invoke (() =>
+			{
+				if (Themes.SelectedItem.ToString () != fileName)
+					Themes.SelectedItem = fileName;
+				else
+					Restore ();
+			});
 		}
 		
 		#endregion
@@ -824,6 +837,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Icon = Helper.GetYukiThemeIconImage(new Drawing.Size(24, 24)).ToWPFImage();
 		}
-		
+
+		public Window getWindow ()
+		{
+			return this;
+		}
+
 	}
 }

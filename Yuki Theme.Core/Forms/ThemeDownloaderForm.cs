@@ -331,11 +331,14 @@ namespace Yuki_Theme.Core.Forms
 				DokiThemeParser doki = new DokiThemeParser ();
 				doki.needToWrite = false;
 				doki.groupName = "Doki Theme";
+				doki.Tokenize = true;
 				string [] multi = jsonMulti.Split (new string [] { "-|-" }, StringSplitOptions.None);
 				string json = multi [1];
 				doki.Parse (json, "none", "none", false, false, false);
 				doki.theme.link = multi [0];
-				bool isEqual = !IsEqual (doki.theme, API.CentralAPI.Current.GetTheme (doki.theme.Name));
+				Theme originalTheme = API.CentralAPI.Current.GetTheme (doki.theme.Name);
+				bool isEqual = !IsEqual (doki.theme, originalTheme);
+				
 				themes.Add (doki.theme.Name, doki.theme);
 				newThemes.Add (doki.theme.Name, isEqual);
 				LoadThemeIntoPage (doki.theme, isEqual);

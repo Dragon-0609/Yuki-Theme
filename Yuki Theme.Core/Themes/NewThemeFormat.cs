@@ -61,41 +61,17 @@ namespace Yuki_Theme.Core.Themes
 				string pathToMemory = $"{header.ResourceHeader}.{pathToLoad}{extension}";
 				// var a = API_Base.Current.GetCore ();
 
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathToMemory, a);
+				Tuple <bool, string> content = ZipManager.GetThemeFromMemory (pathToMemory, a);
 				if (content.Item1)
 				{
 					json = content.Item2;
 					if (needToGetImages)
 					{
-						Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, a);
+						bool exist = Helper.DoesImageExistInMemory (pathToMemory, a);
+						LoadImage (exist, true, pathToMemory, a, API_Events.ifHasImage, API_Events.ifDoesntHave);
 
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasImage != null)
-							{
-								API_Events.ifHasImage (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHave != null)
-								API_Events.ifDoesntHave ();
-						}
-
-						iag = null;
-						iag = Helper.GetStickerFromMemory (pathToMemory, a);
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasSticker != null)
-							{
-								API_Events.ifHasSticker (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHaveSticker != null)
-								API_Events.ifDoesntHaveSticker ();
-						}
+						exist = Helper.DoesStickerExistInMemory (pathToMemory, a);
+						LoadSticker (exist, true, pathToMemory, a, API_Events.ifHasSticker, API_Events.ifDoesntHaveSticker);
 					}
 				} else
 				{
@@ -113,39 +89,17 @@ namespace Yuki_Theme.Core.Themes
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
+				Tuple <bool, string> content = ZipManager.GetTheme (pathToTheme);
 				if (content.Item1)
 				{
 					json = content.Item2;
 					if (needToGetImages)
 					{
-						Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasImage != null)
-							{
-								API_Events.ifHasImage (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHave != null)
-								API_Events.ifDoesntHave ();
-						}
+						bool exist = Helper.DoesImageExist (pathToTheme);
+						LoadImage (exist, true, pathToTheme, API_Events.ifHasImage, API_Events.ifDoesntHave);
 
-						iag = Helper.GetSticker (pathToTheme);
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasSticker != null)
-							{
-								API_Events.ifHasSticker (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHaveSticker != null)
-								API_Events.ifDoesntHaveSticker ();
-						}
+						exist = Helper.DoesStickerExist (pathToTheme);
+						LoadSticker (exist, true, pathToTheme, API_Events.ifHasSticker, API_Events.ifDoesntHaveSticker);
 					}
 				} else
 				{
@@ -184,7 +138,7 @@ namespace Yuki_Theme.Core.Themes
 		{
 			string json = "";
 
-			Tuple <bool, string> content = Helper.GetTheme (path);
+			Tuple <bool, string> content = ZipManager.GetTheme (path);
 			iszip = content.Item1;
 
 			if (content.Item1)

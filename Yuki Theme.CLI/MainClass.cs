@@ -835,21 +835,19 @@ namespace Yuki_Theme.CLI
 				Tuple<bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetImageFromMemory (pathToMemory, location);
-					if (iag.Item1)
+					if (Helper.DoesImageExistInMemory (pathToMemory, location))
 					{
-						res = iag.Item2;
+						res = Helper.GetImageFromMemory (pathToMemory, location);
 					}
 				}
 			} else
 			{
-				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
+				Tuple<bool, string> contents = ZipManager.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetImage (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
-					if (iag.Item1)
+					if (Helper.DoesImageExist (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true)))
 					{
-						res = iag.Item2;
+						res = Helper.GetImage (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 					}
 				}
 			}
@@ -867,21 +865,19 @@ namespace Yuki_Theme.CLI
 				Tuple<bool, string> content = GetThemeFromMemory (out location, out pathToMemory);
 				if (content.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetStickerFromMemory (pathToMemory, location);
-					if (iag.Item1)
+					if (Helper.DoesStickerExistInMemory (pathToMemory, location))
 					{
-						res = iag.Item2;
+						res = Helper.GetStickerFromMemory (pathToMemory, location);
 					}
 				}
 			} else
 			{
-				Tuple<bool, string> contents = Helper.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
+				Tuple<bool, string> contents = ZipManager.GetTheme (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 				if (contents.Item1)
 				{
-					Tuple<bool, Image> iag = Helper.GetSticker (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
-					if (iag.Item1)
+					if (Helper.DoesStickerExist (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true)))
 					{
-						res = iag.Item2;
+						res = Helper.GetSticker (PathGenerator.PathToFile (CentralAPI.Current.pathToLoad, true));
 					}
 				}
 			}
@@ -897,7 +893,7 @@ namespace Yuki_Theme.CLI
 				: Helper.FILE_EXTENSTION_NEW;
 			pathToMemory = $"{header}.{CentralAPI.Current.pathToLoad}{ext}";
 			location = header.Location;
-			Tuple<bool, string> content = Helper.GetThemeFromMemory (pathToMemory, location);
+			Tuple<bool, string> content = ZipManager.GetThemeFromMemory (pathToMemory, location);
 			return content;
 		}
 

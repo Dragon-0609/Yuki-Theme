@@ -197,7 +197,7 @@ namespace Yuki_Theme.Core.Themes
 		{
 			XmlDocument docu = new XmlDocument ();
 
-			Tuple <bool, string> content = Helper.GetTheme (path);
+			Tuple <bool, string> content = ZipManager.GetTheme (path);
 			if (content.Item1)
 			{
 				docu.LoadXml (content.Item2);
@@ -244,7 +244,7 @@ namespace Yuki_Theme.Core.Themes
 		{
 			var doc = new XmlDocument ();
 			string themePath = themeToSave.fullPath;
-			Tuple <bool, string> content = Helper.GetTheme (themePath);
+			Tuple <bool, string> content = ZipManager.GetTheme (themePath);
 			bool iszip = content.Item1;
 
 			doc.LoadXml (ReadThemeTemplate ());
@@ -325,61 +325,21 @@ namespace Yuki_Theme.Core.Themes
 					}
 				}
 
-				Tuple <bool, string> content = Helper.GetThemeFromMemory (pathForMemory, a);
+				Tuple <bool, string> content = ZipManager.GetThemeFromMemory (pathForMemory, a);
 				themeToSet.fullPath = pathForMemory;
 				if (needToSetDefaultField)
 					themeToSet.isDefault = true;
 				if (content.Item1)
 				{
 					doc.LoadXml (content.Item2);
-					Tuple <bool, Image> iag = Helper.GetImageFromMemory (pathForMemory, a);
-					if (needToDoActions)
-					{
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasImage != null)
-							{
-								API_Events.ifHasImage (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHave != null)
-								API_Events.ifDoesntHave ();
-						}
-					} else
-					{
-						// Release resource
-						if (iag.Item2 != null)
-							iag.Item2.Dispose ();
-					}
+					
+					bool exist = Helper.DoesImageExistInMemory (pathForMemory, a);
+					LoadImage (exist, needToDoActions, pathForMemory, a, API_Events.ifHasImage, API_Events.ifDoesntHave);
+					themeToSet.HasWallpaper = exist;
 
-					themeToSet.HasWallpaper = iag.Item1;
-
-					iag = null;
-					iag = Helper.GetStickerFromMemory (pathForMemory, a);
-					if (needToDoActions)
-					{
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasSticker != null)
-							{
-								API_Events.ifHasSticker (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHaveSticker != null)
-								API_Events.ifDoesntHaveSticker ();
-						}
-					} else
-					{
-						// Release resource
-						if (iag.Item2 != null)
-							iag.Item2.Dispose ();
-					}
-
-					themeToSet.HasSticker = iag.Item1;
+					exist = Helper.DoesStickerExistInMemory (pathForMemory, a);
+					LoadSticker (exist, needToDoActions, pathForMemory, a, API_Events.ifHasSticker, API_Events.ifDoesntHaveSticker);
+					themeToSet.HasSticker = exist;
 				} else
 				{
 					if (needToDoActions)
@@ -395,7 +355,7 @@ namespace Yuki_Theme.Core.Themes
 				}
 			} else
 			{
-				Tuple <bool, string> content = Helper.GetTheme (pathToTheme);
+				Tuple <bool, string> content = ZipManager.GetTheme (pathToTheme);
 				if (needToSetDefaultField)
 					themeToSet.isDefault = false;
 				themeToSet.fullPath = pathToTheme;
@@ -411,54 +371,14 @@ namespace Yuki_Theme.Core.Themes
 								CentralAPI.Current.Translate ("messages.theme.invalid.full"));
 						throw;
 					}
+					bool exist = Helper.DoesImageExist (pathToTheme);
+					LoadImage (exist, needToDoActions, pathToTheme, API_Events.ifHasImage, API_Events.ifDoesntHave);
+					themeToSet.HasWallpaper = exist;
 
-					Tuple <bool, Image> iag = Helper.GetImage (pathToTheme);
-					if (needToDoActions)
-					{
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasImage != null)
-							{
-								API_Events.ifHasImage (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHave != null)
-								API_Events.ifDoesntHave ();
-						}
-					} else
-					{
-						// Release resource
-						if (iag.Item2 != null)
-							iag.Item2.Dispose ();
-					}
-
-					themeToSet.HasWallpaper = iag.Item1;
-
-					iag = Helper.GetSticker (pathToTheme);
-					if (needToDoActions)
-					{
-						if (iag.Item1)
-						{
-							// img = iag.Item2;
-							if (API_Events.ifHasSticker != null)
-							{
-								API_Events.ifHasSticker (iag.Item2);
-							}
-						} else
-						{
-							if (API_Events.ifDoesntHaveSticker != null)
-								API_Events.ifDoesntHaveSticker ();
-						}
-					} else
-					{
-						// Release resource
-						if (iag.Item2 != null)
-							iag.Item2.Dispose ();
-					}
-
-					themeToSet.HasSticker = iag.Item1;
+					exist = Helper.DoesStickerExist (pathToTheme);
+					LoadSticker (exist, needToDoActions, pathToTheme, API_Events.ifHasSticker, API_Events.ifDoesntHaveSticker);
+					themeToSet.HasSticker = exist;
+					
 				} else
 				{
 					if (needToDoActions)
@@ -587,7 +507,7 @@ namespace Yuki_Theme.Core.Themes
 		{
 			XmlDocument doc = new XmlDocument ();
 			iszip = false;
-			Tuple <bool, string> content = Helper.GetTheme (path);
+			Tuple <bool, string> content = ZipManager.GetTheme (path);
 			if (content.Item1)
 			{
 				doc.LoadXml (content.Item2);

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Xml;
 using Yuki_Theme.Core.API;
 
@@ -59,17 +60,17 @@ namespace Yuki_Theme.Core.Utils
 				SaveToFile (path, content, asOld);
 			} else
 			{
-				using (var archive = ZipFile.Open (path, ZipArchiveMode.Update))
+				using (var zipFile = ZipFile.Open (path, ZipArchiveMode.Update))
 				{
 					if (themeName.Length == 0) themeName = Helper.GetThemeSaveName (asOld);
-					ZipArchiveEntry entry = archive.GetEntry (themeName);
+					ZipArchiveEntry entry = zipFile.GetEntry (themeName);
 
 					entry?.Delete ();
 					// To be sure that there's no old theme file
-					entry = archive.GetEntry (Helper.THEME_NAME_OLD);
+					entry = zipFile.GetEntry (Helper.THEME_NAME_OLD);
 					entry?.Delete ();
 
-					entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
+					entry = zipFile.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
 					using (StreamWriter writer = new StreamWriter (entry.Open ()))
@@ -79,18 +80,18 @@ namespace Yuki_Theme.Core.Utils
 
 					if (!wantToKeepImage)
 					{
-						entry = archive.GetEntry (Helper.WALLPAPER_NAME);
+						entry = zipFile.GetEntry (Helper.WALLPAPER_NAME);
 
 						entry?.Delete ();
-						AddImageToZip (archive, img, Helper.WALLPAPER_NAME);
+						AddImageToZip (zipFile, img, Helper.WALLPAPER_NAME);
 					}
 
 					if (!wantToKeepSticker)
 					{
-						entry = archive.GetEntry (Helper.STICKER_NAME);
+						entry = zipFile.GetEntry (Helper.STICKER_NAME);
 
 						entry?.Delete ();
-						AddImageToZip (archive, sticker, Helper.STICKER_NAME);
+						AddImageToZip (zipFile, sticker, Helper.STICKER_NAME);
 					}
 				}
 			}
@@ -120,26 +121,26 @@ namespace Yuki_Theme.Core.Utils
 		public static void ExtractZip (string source, string destination, bool needImage = false, bool needSticker = false,
 									   bool   needTheme = true)
 		{
-			using (ZipArchive archive = ZipFile.OpenRead (source))
+			using (ZipArchive zipFile = ZipFile.OpenRead (source))
 			{
 				if (needTheme)
 				{
-					ZipArchiveEntry entry = archive.GetEntry (Helper.THEME_NAME_OLD);
+					ZipArchiveEntry entry = zipFile.GetEntry (Helper.THEME_NAME_OLD);
 					if (entry == null)
-						entry = archive.GetEntry (Helper.THEME_NAME_NEW);
+						entry = zipFile.GetEntry (Helper.THEME_NAME_NEW);
 					entry.ExtractToFile (destination, true);
 				}
 
-				if (needImage) ExtractFile (archive, Helper.WALLPAPER_NAME, destination);
-				if (needSticker) ExtractFile (archive, Helper.STICKER_NAME, destination);
+				if (needImage) ExtractFile (zipFile, Helper.WALLPAPER_NAME, destination);
+				if (needSticker) ExtractFile (zipFile, Helper.STICKER_NAME, destination);
 			}
 		}
 
-		private static void ExtractFile (ZipArchive archive, string filename, string destination)
+		private static void ExtractFile (ZipArchive zipFile, string filename, string destination)
 		{
 			try
 			{
-				ZipArchiveEntry entry = archive.GetEntry (filename);
+				ZipArchiveEntry entry = zipFile.GetEntry (filename);
 				entry.ExtractToFile (Path.Combine (Path.GetDirectoryName (destination), filename), true);
 			} catch (Exception ex)
 			{
@@ -147,7 +148,7 @@ namespace Yuki_Theme.Core.Utils
 				{
 					if (API_Events.showError != null)
 						API_Events.showError (CentralAPI.Current.Translate ("messages.file.notexist.withname.param", filename),
-							CentralAPI.Current.Translate ("messages.file.notexist.withname", filename));
+						                      CentralAPI.Current.Translate ("messages.file.notexist.withname", filename));
 				} else
 				{
 					throw;
@@ -164,10 +165,10 @@ namespace Yuki_Theme.Core.Utils
 			{
 				using (var fileStream = new FileStream (path, FileMode.Create))
 				{
-					using (var archive = new ZipArchive (fileStream, ZipArchiveMode.Create))
+					using (var zipFile = new ZipArchive (fileStream, ZipArchiveMode.Create))
 					{
 						if (themeName.Length == 0) themeName = Helper.GetThemeSaveName (asOld);
-						ZipArchiveEntry entry = archive.CreateEntry (themeName, CompressionLevel.Optimal);
+						ZipArchiveEntry entry = zipFile.CreateEntry (themeName, CompressionLevel.Optimal);
 
 
 						using (StreamWriter writer = new StreamWriter (entry.Open ()))
@@ -175,18 +176,18 @@ namespace Yuki_Theme.Core.Utils
 							writer.Write (content);
 						}
 
-						AddImageToZip (archive, img, Helper.WALLPAPER_NAME);
-						AddImageToZip (archive, sticker, Helper.STICKER_NAME);
+						AddImageToZip (zipFile, img, Helper.WALLPAPER_NAME);
+						AddImageToZip (zipFile, sticker, Helper.STICKER_NAME);
 					}
 				}
 			}
 		}
 
-		private static void AddImageToZip (ZipArchive archive, Image img, string filename)
+		private static void AddImageToZip (ZipArchive zipFile, Image img, string filename)
 		{
 			if (img != null)
 			{
-				var file = archive.CreateEntry (filename, CompressionLevel.Optimal);
+				var file = zipFile.CreateEntry (filename, CompressionLevel.Optimal);
 				using (var stream = new MemoryStream ())
 				{
 					img.Save (stream, ImageFormat.Png);
@@ -199,5 +200,150 @@ namespace Yuki_Theme.Core.Utils
 				}
 			}
 		}
+
+		public static bool DoesImageExist (string path, string filename)
+		{
+			using (ZipArchive zipFile = ZipFile.OpenRead (path))
+			{
+				foreach (ZipArchiveEntry entry in zipFile.Entries)
+				{
+					if (entry.FullName.EndsWith(filename, StringComparison.OrdinalIgnoreCase))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
+		public static bool DoesImageExistInMemory (string path, string filename, Assembly a)
+		{
+			using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+			{
+				foreach (ZipArchiveEntry entry in zipFile.Entries)
+				{
+					if (entry.FullName.EndsWith(filename, StringComparison.OrdinalIgnoreCase))
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public static Image GetImage (string path, string filename)
+		{
+			try
+			{
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				{
+					ZipArchiveEntry imag = zipFile.GetEntry (filename);
+					if (imag != null)
+					{
+						Image img = null;
+						using (Stream stream = imag.Open ())
+						{
+							img = Image.FromStream (stream);
+						}
+
+						return img;
+					} else
+					{
+						return null;
+					}
+				}
+			} catch (InvalidDataException)
+			{
+				return null;
+			}
+		}
+		
+		public static Image GetImageFromMemory (string path, string filename, Assembly a)
+		{
+			try
+			{
+				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+				{
+					ZipArchiveEntry imag = zipFile.GetEntry (filename);
+					if (imag != null)
+					{
+						Image img = null;
+						using (Stream stream = imag.Open ())
+						{
+							img = Image.FromStream (stream);
+						}
+
+						return img;
+					} else
+					{
+						return null;
+					}
+				}
+			} catch (InvalidDataException)
+			{
+				return null;
+			}
+		}
+
+
+		#region Get Theme
+		
+		public static Tuple <bool, string> GetTheme (string path)
+		{
+			Tuple <bool, string> result;
+			try
+			{
+				using (ZipArchive zipFile = ZipFile.OpenRead (path))
+				{
+					if (path.ToLower ().EndsWith (Helper.FILE_EXTENSTION_OLD))
+					{
+						result = ReadThemeFromZip (zipFile, Helper.THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, Helper.THEME_NAME_NEW);
+				}
+			} catch
+			{
+				result = new Tuple <bool, string> (false, "");
+			}
+			return result;
+		}
+		public static Tuple <bool, string> GetThemeFromMemory (string path, Assembly a)
+		{
+			Tuple <bool, string> result;
+			try
+			{
+				using (ZipArchive zipFile = new ZipArchive (a.GetManifestResourceStream (path)))
+				{
+					if (path.ToLower ().EndsWith (Helper.FILE_EXTENSTION_OLD))
+					{
+						result = ReadThemeFromZip (zipFile, Helper.THEME_NAME_OLD);
+					} else
+						result = ReadThemeFromZip (zipFile, Helper.THEME_NAME_NEW);
+				}
+			} catch (InvalidDataException)
+			{
+				result = new Tuple <bool, string> (false, "");
+			}
+			return result;
+		}
+		private static Tuple <bool, string> ReadThemeFromZip (ZipArchive zipFile, string themefile)
+		{
+			var theme = zipFile.GetEntry (themefile);
+			if (theme != null)
+			{
+				string content = "";
+				using (StreamReader reader = new StreamReader (theme.Open ()))
+				{
+					content = reader.ReadToEnd ();
+				}
+
+				return new Tuple <bool, string> (true, content);
+			} else
+			{
+				return new Tuple <bool, string> (false, "");
+			}
+		}
+		
+		#endregion
 	}
 }
