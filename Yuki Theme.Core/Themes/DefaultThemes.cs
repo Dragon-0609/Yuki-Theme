@@ -2,13 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.Themes
 {
 	public class DefaultThemes
 	{
+		public static bool     LocalAPI = false;
+		public static API_Base API;
 
+		private static API_Base GetCurrentAPI
+		{
+			get
+			{
+				if (LocalAPI)
+					return API;
+				else
+					return CentralAPI.Current;
+			}
+		}
+		
 		public static List<string> names = new ();
 
 		public static bool isDefault (string str)
@@ -29,9 +43,9 @@ namespace Yuki_Theme.Core.Themes
 			headersList.Add (header);
 			foreach (KeyValuePair<string, bool> themeName in header.ThemeNames)
 			{
-				if(!API.CentralAPI.Current.ThemeInfos.ContainsKey (themeName.Key))
+				if(!GetCurrentAPI.ThemeInfos.ContainsKey (themeName.Key))
 				{
-					API.CentralAPI.Current.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
+					GetCurrentAPI.AddThemeInfo (themeName.Key, new ThemeInfo (true, themeName.Value, ThemeLocation.Memory, header.GroupName));
 					categories.Add (themeName.Key, header.GroupName);
 					headers.Add (themeName.Key, header);
 				}

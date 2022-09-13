@@ -13,14 +13,6 @@ namespace Yuki_Theme.Tests
 	[TestFixture]
 	public class Tests
 	{
-		private bool      isInitialized  = false;
-		private bool      isThemeAdded   = false;
-		private bool      isThemeEdited  = false;
-		private bool      isThemeChecked = false;
-		private bool      isThemeSaved   = false;
-		private bool      isThemeRemoved = false;
-		private string [] fields;
-
 		private Image img2, img3;
 
 		private Dictionary <string, ThemeField> FieldValues = new Dictionary <string, ThemeField> ()
@@ -34,54 +26,66 @@ namespace Yuki_Theme.Tests
 		{
 			try
 			{
-				if (!isInitialized)
-				{
-					SetDefaultActions ();
-					SettingsConst.CurrentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
-					ResetForTests ();
-					ClearTestThemes ();
-					Settings.ConnectAndGet ();
-					CentralAPI.Current.LoadSchemes ();
-					CentralAPI.Current.SelectTheme (Helper.GetRandomElement (CentralAPI.Current.Schemes));
-					CentralAPI.Current.Restore (false);
-					isInitialized = true;
-				}
+				SetDefaultActions ();
+				SettingsConst.CurrentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+				CommonAPI api = new CommonAPI ();
+				ResetForTests (api);
+				ClearTestThemes ();
+				Settings.ConnectAndGet ();
+				api.LoadSchemes ();
+				api.SelectTheme (Helper.GetRandomElement (api.Schemes));
+				Console.WriteLine (api.nameToLoad);
+				api.Restore (true);
+
 			} catch (Exception e)
 			{
-				Assert.Fail ("Expected no exception, but got: " + e.Message);
+				Fail (e);
 			}
+		}
+		private static void Fail (Exception e)
+		{
+
+			Assert.Fail ("Expected no exception, but got: {0}. Trace:\n{1}", e.Message, e.StackTrace);
 		}
 
 		[Test]
-		public void AddNSelectNewTheme ()
+		public void AddLoadNDeleteTheme ()
 		{
-			if (!isInitialized)
-				InitializationAndLoading ();
 			string copyFrom = null;
 			string copyTo = null;
+			CommonAPI api = new CommonAPI ();
 			try
 			{
-				if (!isThemeAdded)
-				{
-					copyFrom = Helper.GetRandomElement (CentralAPI.Current.Schemes);
-					copyTo = $"{copyFrom}_Test";
-					CentralAPI.Current.AddTheme (copyFrom, copyTo);
-					CentralAPI.Current.SelectTheme (copyTo);
-					isThemeAdded = true;
-				}
+				SetDefaultActions ();
+				SettingsConst.CurrentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
+
+				ResetForTests (api);
+				ClearTestThemes ();
+				Settings.ConnectAndGet ();
+				api.LoadSchemes ();
+
+				copyFrom = Helper.GetRandomElement (api.Schemes);
+				copyTo = $"{copyFrom}_Test";
+				api.AddTheme (copyFrom, copyTo);
+				api.SelectTheme (copyTo);
+				api.Restore (true);
+				
+				api.RemoveTheme (api.nameToLoad, (s, s1) => true, null, null);
+
 			} catch (Exception e)
 			{
 				if (copyTo != null && copyFrom != null)
 				{
 					string patsh = Path.Combine (SettingsConst.CurrentPath,
-					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (CentralAPI.Current.ThemeInfos [copyFrom].isOld)}");
+					                             $"Themes/{Helper.ConvertNameToPath (copyTo)}{Helper.GetExtension (api.ThemeInfos [copyFrom].isOld)}");
 					if (File.Exists (patsh)) File.Delete (patsh);
 				}
 
-				Assert.Fail ("Expected no exception, but got: " + e.Message);
+				Fail (e);
 			}
 		}
 
+		/*
 		[Test]
 		public void EditNewTheme ()
 		{
@@ -197,16 +201,18 @@ namespace Yuki_Theme.Tests
 		{
 			fields = CentralAPI.Current.names.ToArray ();
 		}
+		*/
 
-		private void ResetForTests ()
+		private void ResetForTests (API_Base api)
 		{
-			CentralAPI.Current.Schemes.Clear ();
 			DefaultThemes.Clear ();
+			DefaultThemes.LocalAPI = PathGenerator.LocalAPI = true;
+			DefaultThemes.API = PathGenerator.api = api;
 		}
 
 		private void SetDefaultActions ()
 		{
-			API_Events.showError = (s,    s1) => { Console.WriteLine ($"{s1}: {s}"); };
+			API_Events.showError = (s,    s1) => { Assert.Fail ($"{s1}: {s}"); };
 			API_Events.SaveInExport = (s, s1) => true;
 			API_Events.ifHasImage = image => { img2 = image; };
 			API_Events.ifHasSticker = image => { img3 = image; };

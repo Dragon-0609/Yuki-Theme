@@ -49,9 +49,9 @@ namespace Yuki_Theme.Core.API
 
 		public API_Base ()
 		{
-			_newThemeFormat = new NewThemeFormat ();
-			_oldThemeFormat = new OldThemeFormat ();
-			_themeManager = new ThemeManager ();
+			_newThemeFormat = new NewThemeFormat (this);
+			_oldThemeFormat = new OldThemeFormat (this);
+			_themeManager = new ThemeManager (this);
 			_actions = new API_Actions (this);
 		}
 

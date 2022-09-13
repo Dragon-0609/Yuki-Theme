@@ -136,10 +136,10 @@
       <EmbeddedResource Include="Themes\Slime__Rimuru Tempest.yukitheme" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="Themes\Franxx__Zero Two Dark Obsidian.yukitheme" />
-      <Content Include="Themes\Franxx__Zero Two Dark Rose.yukitheme" />
-      <Content Include="Themes\Franxx__Zero Two Light Lily.yukitheme" />
-      <Content Include="Themes\Franxx__Zero Two Light Sakura.yukitheme" />
+      <EmbeddedResource Include="Themes\Franxx__Zero Two Dark Obsidian.yukitheme" />
+      <EmbeddedResource Include="Themes\Franxx__Zero Two Dark Rose.yukitheme" />
+      <EmbeddedResource Include="Themes\Franxx__Zero Two Light Lily.yukitheme" />
+      <EmbeddedResource Include="Themes\Franxx__Zero Two Light Sakura.yukitheme" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

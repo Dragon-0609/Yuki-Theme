@@ -313,4 +313,5 @@ namespace Yuki_Theme.Core.WPF
 	
 	
 	public delegate void SetTheme ();
+	
 }

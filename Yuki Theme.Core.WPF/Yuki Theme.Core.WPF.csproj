@@ -136,6 +136,7 @@
           <DependentUpon>RadioButtonStyles.xaml</DependentUpon>
         </Compile>
         <Compile Include="Styles\WindowTemplate.xaml.cs" />
+        <Compile Include="WindowExtension.cs" />
         <Compile Include="Windows\AboutWindow.xaml.cs">
           <DependentUpon>AboutWindow.xaml</DependentUpon>
         </Compile>

@@ -10,13 +10,15 @@ namespace Yuki_Theme.Core.Themes
 {
 	internal abstract class ThemeFormatBase
 	{
+		protected API_Base api;
+		
 		public virtual void LoadThemeToCLI ()
 		{
-			Theme theme = PopulateList (CentralAPI.Current.nameToLoad, true);
-			CentralAPI.Current.currentTheme = theme;
+			Theme theme = PopulateList (api.nameToLoad, true);
+			api.currentTheme = theme;
 			if (theme == null)
 			{
-				CentralAPI.Current.ShowError (CentralAPI.Current.Translate ("messages.theme.invalid.full"), CentralAPI.Current.Translate ("messages.theme.invalid.short"));
+				api.ShowError (api.Translate ("messages.theme.invalid.full"), api.Translate ("messages.theme.invalid.short"));
 			} else
 			{
 				ProcessAfterParsing (theme);

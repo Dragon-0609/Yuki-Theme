@@ -23,11 +23,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private FormWindowState _formWindowState = FormWindowState.Normal;
 
 		private bool lockState = false;
+
+		private Rect _currentRect;
 		
 		public void ResetPosition ()
 		{
 			if (target != null || targetForm != null)
 			{
+				if (target != null)
+					_currentRect = target.GetAbsoluteRect ();
+				
 				Left = GetX ();
 				Top = GetY ();
 			}
@@ -47,13 +52,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private double GetX ()
 		{
 			double res = 0;
-			double left = GetLeft ();
+			double left = target != null ? _currentRect.X : GetLeft ();
 			if (AlignX == AlignmentX.Left)
 			{
 				res = left + borderOutlineX;
 			}else
 			{
-				double width = GetWidth ();
+				double width = target != null ? _currentRect.Width : GetWidth ();
 				if (AlignX == AlignmentX.Center)
 				{
 					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE ? 0 : borderOutlineX);
@@ -69,13 +74,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private double GetY ()
 		{
 			double res = 0;
-			double top = GetTop ();
+			double top = target != null ? _currentRect.Y : GetTop ();
 			if (AlignY == AlignmentY.Top)
 			{
 				res = top + borderOutlineY;
 			}else
 			{
-				double height = GetHeight ();
+				double height = target != null ? _currentRect.Height : GetHeight ();
 				if (AlignY == AlignmentY.Center)
 				{
 					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE ? 0 : borderOutlineY);
@@ -167,7 +172,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 				WindowState = WindowState.Normal;
 				if (target.WindowState == WindowState.Maximized)
 				{
-					ShowWindowOverWindow ();
+					// ShowWindowOverWindow ();
+					ResetPosition ();
 				}
 			}
 			

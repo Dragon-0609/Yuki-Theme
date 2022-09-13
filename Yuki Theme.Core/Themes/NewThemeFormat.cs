@@ -12,6 +12,12 @@ namespace Yuki_Theme.Core.Themes
 {
 	internal class NewThemeFormat : ThemeFormatBase
 	{
+
+		public NewThemeFormat (API_Base api)
+		{
+			this.api = api;
+		}
+
 		public Dictionary <string, ThemeField> GetFieldsFromDictionary (Dictionary <string, Dictionary <string, string>> attributes)
 		{
 			Dictionary <string, ThemeField> fields = new Dictionary <string, ThemeField> ();
@@ -184,7 +190,7 @@ namespace Yuki_Theme.Core.Themes
 		
 		public override void ReGenerate (string path, string oldPath, string name, string oldName, API_Actions apiActions)
 		{
-			Assembly a = CentralAPI.Current.GetCore ();
+			Assembly a = api.GetCore ();
 			string str;
 
 			Stream resourceStream = a.GetManifestResourceStream (Helper.PASCALTEMPLATE);
@@ -225,7 +231,7 @@ namespace Yuki_Theme.Core.Themes
 		public override Theme PopulateList (string name, bool loadImages)
 		{
 			string path = Helper.ConvertNameToPath (name);
-			bool isDef = CentralAPI.Current.ThemeInfos [name].isDefault;
+			bool isDef = api.ThemeInfos [name].isDefault;
 			string json = LoadThemeToPopulate (isDef ? name : PathGenerator.PathToFile(path, false), loadImages, isDef, Helper.FILE_EXTENSTION_NEW);
 
 			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
@@ -237,8 +243,8 @@ namespace Yuki_Theme.Core.Themes
 
 		public override void ProcessAfterParsing (Theme theme)
 		{
-			CentralAPI.Current.names.AddRange (theme.Fields.Keys);
-			CentralAPI.Current.names.InsertRange (1, ShadowNames.imageNames);	
+			api.names.AddRange (theme.Fields.Keys);
+			api.names.InsertRange (1, ShadowNames.imageNames);	
 		}
 
 		public override Tuple <bool, string> VerifyToken (string path)
