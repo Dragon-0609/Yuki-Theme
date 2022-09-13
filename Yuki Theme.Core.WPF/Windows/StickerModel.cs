@@ -26,6 +26,16 @@ namespace Yuki_Theme.Core.WPF.Windows
 			renderImage = null;
 		}
 
+		public void ReleaseImages ()
+		{
+			if (!IsOriginalImageNull ())
+				originalImage.Dispose ();
+			originalImage = null;
+			if (!IsRenderImageNull ())
+				renderImage.Dispose ();
+			renderImage = null;
+		}
+
 		public bool IsOriginalImageNull ()
 		{
 			return originalImage == null;

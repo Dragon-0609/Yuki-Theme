@@ -153,7 +153,8 @@ namespace Theme_Editor
 		{
 			forceShutdown = true;
 			_server.Stop ();
-			Application.Current.Shutdown ();
+			// Application.Current.Shutdown ();
+			Environment.Exit (1); // Force close the app
 		}
 
 	}

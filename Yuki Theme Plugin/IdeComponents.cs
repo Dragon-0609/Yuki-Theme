@@ -990,7 +990,7 @@ namespace Yuki_Theme_Plugin
 			toggled = !toggled;
 
 			textArea.Refresh ();
-			plugin.LoadSticker ();
+			plugin._model.LoadSticker ();
 			updateQuietImage ();
 			UpdateMenuWallpaperImage ();
 			UpdateMenuStickerImage ();
@@ -1011,15 +1011,15 @@ namespace Yuki_Theme_Plugin
 		private void stickersPositioning (object sender, EventArgs e)
 		{
 			Settings.positioning = !Settings.positioning;
-			plugin.stickerControl.Enabled = Settings.positioning;
+			plugin._model.StickerPositioning (Settings.positioning);
 			UpdateMenuStickersPositioningImage ();
 		}
 
 		private void ResetStickerPosition (object sender, EventArgs e)
 		{
 			Settings.database.DeleteData (SettingsConst.STICKER_POSITION);
-			plugin.stickerControl.ReadData ();
-			plugin.stickerControl.UpdateLocation ();
+			plugin._model.ReadData ();
+			plugin._model.UpdateLocation ();
 		}
 
 		private void ShowUpdatePage (object sender, EventArgs e)
@@ -1030,7 +1030,7 @@ namespace Yuki_Theme_Plugin
 		private void ToggleSticker (object sender, EventArgs e)
 		{
 			Settings.swSticker = !Settings.swSticker;
-			plugin.LoadSticker ();
+			plugin._model.LoadSticker ();
 			UpdateMenuStickerImage ();
 		}
 

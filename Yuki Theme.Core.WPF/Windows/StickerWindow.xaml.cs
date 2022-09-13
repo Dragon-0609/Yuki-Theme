@@ -54,10 +54,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void LoadSticker () => _presenter.LoadSticker ();
 
-		public void SetStickerSize ()
-		{
-			
-		}
+		public void SetStickerSize () => _presenter.SetStickerSize ();
 
 		public void ChangeVisibility (Visibility visibility)
 		{
@@ -164,5 +161,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 
 		public void LoadImage (Drawing.Image image) => _presenter.LoadImage (image);
+		public void Release () => _model.ReleaseImages ();
+		
 	}
 }

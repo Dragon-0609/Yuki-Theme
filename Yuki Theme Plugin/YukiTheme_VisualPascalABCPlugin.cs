@@ -54,8 +54,6 @@ namespace Yuki_Theme_Plugin
 
 		internal ToolStripButton       currentThemeName;
 		private  PictureBox            logoBox;
-		private  Image                 sticker;
-		public   CustomPicture         stickerControl;
 		internal IHighlightingStrategy highlighting;
 
 		private       IconManager       manager;
@@ -69,7 +67,7 @@ namespace Yuki_Theme_Plugin
 		internal PluginModel  _model = new PluginModel ();
 		internal PluginHelper _helper;
 
-		private bool isCommonAPI;
+		private bool isCommonAPI = false;
 
 		internal bool   bgImage => Settings.bgImage;
 		internal int    imagesEnabled;   // Is enabled Colors.bg image and (or) sticker
@@ -161,8 +159,9 @@ namespace Yuki_Theme_Plugin
 			currentThemeName.Margin = Padding.Empty;
 			ideComponents.statusBar.Items.Add (currentThemeName);
 			RefreshStatusBar ();
-
-			InitializeSticker ();
+			_model.InitSticker (ideComponents.fm);
+			_model.LoadSticker ();
+			// InitializeSticker ();
 			ideComponents.fm.Resize += FmOnResize;
 			addToSettings ();
 		}
@@ -206,21 +205,6 @@ namespace Yuki_Theme_Plugin
 			}
 
 			CoreWindow.Show ();
-		}
-		
-		private void InitializeSticker ()
-		{
-			stickerControl = new CustomPicture (ideComponents.fm);
-			stickerControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom;
-			stickerControl.margin = new Point (10, ideComponents.statusBar.Size.Height);
-			stickerControl.Enabled = Settings.positioning;
-			CustomPanel pnl = new CustomPanel (1) { Visible = false, Name = "LayerGrids" };
-			pnl.pict = stickerControl;
-			ideComponents.fm.Controls.Add (pnl);
-			ideComponents.fm.Controls.Add (stickerControl);
-			stickerControl.pnl = pnl;
-			LoadSticker ();
-			stickerControl.BringToFront ();
 		}
 
 		private void loadWithWaiting ()
@@ -388,50 +372,6 @@ namespace Yuki_Theme_Plugin
 				wallpaperAlign = Alignment.Left;
 			}
 		}
-
-		public void LoadSticker ()
-		{
-			if (sticker != null)
-			{
-				sticker.Dispose ();
-				sticker = null;
-			}
-			
-			if (Settings.swSticker)
-			{
-				if (Settings.useCustomSticker && File.Exists (Settings.customSticker))
-				{
-					sticker = Image.FromFile (Settings.customSticker);
-				} else
-				{
-					string pth = Path.Combine (Settings.pascalPath, "Highlighting", "sticker.png");
-					if (File.Exists (pth))
-					{
-						Image stckr = Image.FromFile (pth);
-
-
-						if (CentralAPI.Current.currentTheme.StickerOpacity != 100)
-						{
-							sticker = Helper.SetOpacity (stckr, CentralAPI.Current.currentTheme.StickerOpacity);
-							stckr.Dispose ();
-						} else
-							sticker = stckr;
-
-						stickerControl.Visible = true;
-					} else
-					{
-						sticker = null;
-						stickerControl.Visible = false;
-					}
-				}
-
-				stickerControl.img = sticker;
-			} else
-			{
-				sticker = null;
-				stickerControl.Visible = false;
-			}
-		}
 		
 		private void InitAPI ()
 		{
@@ -454,10 +394,11 @@ namespace Yuki_Theme_Plugin
 			{
 				_client = new Client (ideComponents, _helper);
 
-				isCommonAPI = CentralAPI.Current is not ClientAPI;
+				isCommonAPI = CentralAPI.DefaultAPIInited;
 				if (!isCommonAPI)
 				{
-					ClientAPI api = (ClientAPI)CentralAPI.Current;
+					ClientAPI api = new ClientAPI ();
+					CentralAPI.Current = api;
 					api.Client = _client;
 					api.AddEvents ();
 					api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
@@ -500,7 +441,7 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled = 0;
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
-			LoadSticker ();
+			_model.LoadSticker ();
 		}
 
 		private void RefreshStatusBar ()
@@ -544,7 +485,7 @@ namespace Yuki_Theme_Plugin
 			if (!lightReload)
 			{
 				LoadImage ();
-				LoadSticker ();
+				_model.LoadSticker ();
 			}
 
 			LoadColors ();
@@ -666,12 +607,7 @@ namespace Yuki_Theme_Plugin
 				img = null;
 			}
 
-			if (sticker != null)
-			{
-				sticker.Dispose ();
-				sticker = null;
-				stickerControl.img = null;
-			}
+			_model.Release ();
 		}
 
 		private string GetDefaultLocalization ()
@@ -699,11 +635,11 @@ namespace Yuki_Theme_Plugin
 		{
 			if (customStickerChanged)
 			{
-				LoadSticker ();
+				_model.LoadSticker ();
 			} else if (dimensionChanged)
 			{
-				if (stickerControl.Image != null)
-					stickerControl.ReCalculatePositionNSize ();
+				_model.ReadData ();
+				_model.ResetStickerPosition ();
 			}
 		}
 

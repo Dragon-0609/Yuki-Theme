@@ -19,6 +19,8 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void LoadCustomSticker ();
 
 			Image GetRenderImage ();
+
+			void ReleaseImages ();
 		}
 		
 		public interface IView
@@ -38,6 +40,8 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void LoadSticker ();
 
 			void LoadImage (Image image);
+
+			void SetStickerSize ();
 		}
 	}
 }
