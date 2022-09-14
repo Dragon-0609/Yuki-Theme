@@ -116,6 +116,11 @@ namespace Yuki_Theme.Core.Themes
 			return !(t1 == t2);
 		}
 
+		public override bool Equals (object obj)
+		{
+			return this == (Theme)obj;
+		}
+
 		public void ParseWallpaperAlign (string target)
 		{
 			target = target.ToLower ();

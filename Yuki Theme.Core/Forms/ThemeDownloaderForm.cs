@@ -31,14 +31,11 @@ namespace Yuki_Theme.Core.Forms
 		private List <string> branches   = new List <string> ();
 
 		private bool        isFromBranch = false;
-		private Task        loadingJSONSTask;
 		private HtmlElement themesElement;
 
 		private double stepProgress;
 		private double currentProgress;
 		private bool   needToReset = false;
-
-		private bool htmlLoaded = false;
 
 		private Dictionary <string, string> themesWithUrls    = new ();
 		private Dictionary <string, string> branchCommitDates = new ();
@@ -112,7 +109,7 @@ namespace Yuki_Theme.Core.Forms
 					try
 					{
 						jresponse = JArray.Parse (json);
-					} catch (JsonReaderException e)
+					} catch (JsonReaderException)
 					{
 						Console.WriteLine (json);
 						MessageBox.Show (API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.message"), API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
@@ -351,7 +348,7 @@ namespace Yuki_Theme.Core.Forms
 			try
 			{
 				jresponse = JObject.Parse (json);
-			} catch (JsonReaderException e)
+			} catch (JsonReaderException)
 			{
 				MessageBox.Show (API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.message"), API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -377,7 +374,7 @@ namespace Yuki_Theme.Core.Forms
 			try
 			{
 				jresponse = JObject.Parse (json);
-			} catch (JsonReaderException e)
+			} catch (JsonReaderException)
 			{
 				MessageBox.Show (API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.message"), API.CentralAPI.Current.Translate("theme.downloader.errors.github.exceed.title"), MessageBoxButtons.OK,
 					MessageBoxIcon.Error);
@@ -499,10 +496,9 @@ namespace Yuki_Theme.Core.Forms
 			stepProgress = 100.0 / max;
 			currentProgress = 0;
 			needToReset = true;
-			int pars = 0;
 			ParallelQuery <string> downloads = themesWithUrls.AsParallel ()
-															 .WithDegreeOfParallelism (20)
-															 .Select (url => downloadFile (url.Value));
+			                                                 .WithDegreeOfParallelism (20)
+			                                                 .Select (url => downloadFile (url.Value));
 
 			Console.WriteLine ("Start loading jsons...");
 			for (int i = 0; i < max; i++)
@@ -563,7 +559,7 @@ namespace Yuki_Theme.Core.Forms
 					browser.Navigate ("about:blank");
 					browser.Document.OpenNew (false);
 					browser.Document.Write (html);
-					htmlLoaded = true;
+					themesElement = browser.Document.GetElementById ("themes");
 					browser.Refresh ();
 				}
 			}

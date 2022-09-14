@@ -36,7 +36,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <TextBlock Text="Imported:" Name="Title" FontWeight="Bold" Style="{StaticResource TextBlockWindow}" />
+        <TextBlock Text="Imported:" FontWeight="Bold" Style="{StaticResource TextBlockWindow}" />
         
         <StackPanel Grid.Row="1" Margin="4 5 4 0">
             <ProgressBar Height="10" Value="15" Name="Progress" 

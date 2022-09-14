@@ -15,7 +15,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private bool     openedLicense   = false;
 		private bool     openedChangelog = false;
 		private bool     animating       = false;
-		private bool     secondLicense   = false;
 		private Duration duration        = new Duration (TimeSpan.FromSeconds (0.5));
 
 		public AboutWindow ()

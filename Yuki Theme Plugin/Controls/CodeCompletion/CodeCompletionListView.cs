@@ -155,7 +155,6 @@ namespace Yuki_Theme_Plugin.Controls.CodeCompletion
 
 		public int GetIndexByData (ICompletionData data)
 		{
-			var ind = -1;
 			var o = cache [data];
 			if (o != null) return (int)o;
 			return -1;

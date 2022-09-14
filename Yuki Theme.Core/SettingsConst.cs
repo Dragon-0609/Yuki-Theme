@@ -45,6 +45,7 @@ namespace Yuki_Theme.Core
 		public const  int    DIMENSION_CAP_MAX   = 33;
 		public const  int    DIMENSION_CAP_UNIT  = 34;
 		public const  int    COLOR_PICKER        = 35;
+		public const  int    HIDE_ON_HOVER       = 36;
 		public const  double CURRENT_VERSION     = 8.0;
 		public const  string CURRENT_VERSION_ADD = "beta";
 		public static string CurrentPath         = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);

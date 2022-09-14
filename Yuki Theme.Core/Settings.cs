@@ -38,6 +38,7 @@ namespace Yuki_Theme.Core
 		public static int          dimensionCapMax;
 		public static int          dimensionCapUnit;
 		public static int          colorPicker;
+		public static bool         hideOnHover;
 
 		#endregion
 
@@ -50,7 +51,7 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		public static void ConnectAndGet ()
 		{
-			Dictionary<int, string> data = database.ReadData ();
+			Dictionary <int, string> data = database.ReadData ();
 			pascalPath = data [SettingsConst.PASCAL_PATH] == "empty" ? null : data [SettingsConst.PASCAL_PATH];
 			if (Helper.mode == ProductMode.Plugin)
 			{
@@ -111,6 +112,7 @@ namespace Yuki_Theme.Core
 			dimensionCapMax = int.Parse (data [SettingsConst.DIMENSION_CAP_MAX]);
 			dimensionCapUnit = int.Parse (data [SettingsConst.DIMENSION_CAP_UNIT]);
 			colorPicker = int.Parse (data [SettingsConst.COLOR_PICKER]);
+			hideOnHover = bool.Parse (data [SettingsConst.HIDE_ON_HOVER]);
 			localization = data [SettingsConst.LOCALIZATION];
 
 			CentralAPI.Current.selectedItem = data [SettingsConst.ACTIVE];
@@ -118,10 +120,10 @@ namespace Yuki_Theme.Core
 			int.TryParse (data [SettingsConst.CHOICE_INDEX], out os);
 			actionChoice = os;
 			int.TryParse (data [SettingsConst.SETTING_MODE], out os);
-			settingMode = (SettingMode) os;
+			settingMode = (SettingMode)os;
 			int.TryParse (data [SettingsConst.STICKER_POSITION_UNIT], out os);
-			unit = (RelativeUnit) os;
-		
+			unit = (RelativeUnit)os;
+
 			translation.LoadLocalization ();
 		}
 
@@ -171,6 +173,7 @@ namespace Yuki_Theme.Core
 					{ SettingsConst.DIMENSION_CAP_MAX, dimensionCapMax.ToString () },
 					{ SettingsConst.DIMENSION_CAP_UNIT, dimensionCapUnit.ToString () },
 					{ SettingsConst.COLOR_PICKER, colorPicker.ToString () },
+					{ SettingsConst.HIDE_ON_HOVER, hideOnHover.ToString () },
 					{ SettingsConst.LOCALIZATION, localization }
 				};
 				return dict;
@@ -186,7 +189,7 @@ namespace Yuki_Theme.Core
 				dict.Add (SettingsConst.CAMOUFLAGE_HIDDEN, database.ReadData (SettingsConst.CAMOUFLAGE_HIDDEN, ""));
 				dict.Add (SettingsConst.LOGIN, Logged.ToString ());
 				SortedDictionary <int, string> sorted = new SortedDictionary <int, string> (dict);
-			
+
 				return sorted;
 			}
 		}

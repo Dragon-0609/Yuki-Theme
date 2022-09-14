@@ -314,11 +314,9 @@ namespace Yuki_Theme_Plugin
 
 		private void LoadImage ()
 		{
-			bool dispI = false;
 			if (img != null)
 			{
 				img.Dispose ();
-				dispI = true;
 			}
 
 			string pth = Path.Combine (Settings.pascalPath, "Highlighting", "background.png");

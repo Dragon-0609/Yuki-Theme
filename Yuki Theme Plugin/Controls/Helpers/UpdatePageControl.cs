@@ -35,7 +35,7 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 				try
 				{
 					string srtr = doc.Domain;
-				} catch (Exception exception)
+				} catch (Exception)
 				{
 					string err_element =
 						"<h1 style=' text-align: center; height: 100vh; width: 100vw; display: flex; flex-direction: column; justify-content: center;'><div>Something went wrong. Try to load the page later</div></h1>";

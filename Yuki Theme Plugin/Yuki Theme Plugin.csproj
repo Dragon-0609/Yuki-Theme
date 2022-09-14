@@ -332,9 +332,9 @@
     <Content Include="Resources\YukiTheme.gif" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Theme Installer\Theme Installer.csproj">
-      <Project>{896224a1-7358-47d0-9272-d1a20773e91f}</Project>
-      <Name>Theme Installer</Name>
+    <ProjectReference Include="..\Theme Editor\Theme Editor.csproj">
+      <Project>{b21fd2dc-2a60-4393-aa9e-0ed734dd7605}</Project>
+      <Name>Theme Editor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Yuki Theme.Core.WPF\Yuki Theme.Core.WPF.csproj">
       <Project>{2ab7513f-70fb-4ffa-88ff-b133f20dd7dc}</Project>

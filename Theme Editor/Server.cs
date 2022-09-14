@@ -120,7 +120,7 @@ namespace Theme_Editor
 					_messages.Enqueue (message);
 				}
 
-			} catch (InvalidOperationException exception)
+			} catch (InvalidOperationException)
 			{
 				CloseServer ();
 			}

@@ -13,8 +13,6 @@ namespace Yuki_Theme_Plugin.Controls.DockStyles
 
 		public string [] list;
 
-		private bool internalChanges = false;
-
 		public int selectionindex;
 
 		public CustomList ()

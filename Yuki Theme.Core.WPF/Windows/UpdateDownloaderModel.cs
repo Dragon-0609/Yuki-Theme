@@ -36,7 +36,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				try
 				{
 					response = await client.GetAsync (url);
-				} catch (HttpRequestException httpRequestException)
+				} catch (HttpRequestException)
 				{
 					response = null;
 				}
@@ -247,7 +247,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 						}
 					}
 				}
-			} catch (Exception e)
+			} catch (Exception)
 			{
 				// ignored
 			}

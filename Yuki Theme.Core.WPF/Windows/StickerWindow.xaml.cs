@@ -4,10 +4,12 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
 using WpfAnimatedGif;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Interfaces;
 using Drawing = System.Drawing;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -162,6 +164,32 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void LoadImage (Drawing.Image image) => _presenter.LoadImage (image);
 		public void Release () => _model.ReleaseImages ();
-		
+
+
+		private void Sticker_MouseEnter (object sender, MouseEventArgs e)
+		{
+			if (Settings.hideOnHover)
+			{
+				DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromSeconds(1));
+				Sticker.BeginAnimation(OpacityProperty, anim);
+			}
+		}
+		private void Sticker_MouseLeave (object sender, MouseEventArgs e)
+		{
+			if (Settings.hideOnHover)
+			{
+				DoubleAnimation anim = new DoubleAnimation (1, TimeSpan.FromSeconds (1));
+				Sticker.BeginAnimation (OpacityProperty, anim);
+			}
+		}
+		/*private bool IsMouseInside ()
+		{
+			Point cursor = Mouse.GetPosition (this);
+			cursor.X -= 10;
+			cursor.Y -= 10;
+			cursor.X = -cursor.X + RenderSize.Width;
+			cursor.Y = -cursor.Y + RenderSize.Height;
+			return (0 < cursor.X && cursor.X < RenderSize.Width) && (0 < cursor.Y && cursor.Y < RenderSize.Height);
+		}*/
 	}
 }

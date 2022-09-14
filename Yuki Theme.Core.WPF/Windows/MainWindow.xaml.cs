@@ -634,17 +634,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			Top = props.Top;
 			Left = props.Left;
-			if (props.Height != null)
+			Height = props.Height;
+			Width = props.Width;
+			if (props.Maximized)
 			{
-				Height = (int)props.Height;
-				if (props.Width != null)
-				{
-					Width = (int)props.Width;
-					if (props.Maximized != null && (bool)props.Maximized)
-					{
-						WindowState = WindowState.Maximized;
-					}
-				}
+				WindowState = WindowState.Maximized;
 			}
 		}
 

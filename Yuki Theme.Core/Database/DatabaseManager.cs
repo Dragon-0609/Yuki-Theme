@@ -10,6 +10,41 @@ namespace Yuki_Theme.Core.Database
 	{
 		private IDatabase _database;
 
+		private readonly Dictionary <int, string> _defaults = new Dictionary <int, string> ()
+		{
+			{ SettingsConst.PASCAL_PATH, "empty" },
+			{ SettingsConst.ACTIVE, "empty" },
+			{ SettingsConst.ASK_CHOICE, "true" },
+			{ SettingsConst.CHOICE_INDEX, "0" },
+			{ SettingsConst.SETTING_MODE, "0" },
+			{ SettingsConst.AUTO_UPDATE, "true" },
+			{ SettingsConst.BG_IMAGE, "true" },
+			{ SettingsConst.STICKER, "true" },
+			{ SettingsConst.STATUS_BAR, "true" },
+			{ SettingsConst.LOGO, "true" },
+			{ SettingsConst.EDITOR, "false" },
+			{ SettingsConst.BETA, "true" },
+			{ SettingsConst.LOGIN, "false" },
+			{ SettingsConst.STICKER_POSITION_UNIT, "1" },
+			{ SettingsConst.ALLOW_POSITIONING, "false" },
+			{ SettingsConst.SHOW_GRIDS, "false" },
+			{ SettingsConst.USE_CUSTOM_STICKER, "false" },
+			{ SettingsConst.CUSTOM_STICKER_PATH, "" },
+			{ SettingsConst.LICENSE, "false" },
+			{ SettingsConst.GOOGLE_ANALYTICS, "false" },
+			{ SettingsConst.DON_T_TRACK, "false" },
+			{ SettingsConst.AUTO_FIT_WIDTH, "true" },
+			{ SettingsConst.ASK_TO_SAVE, "true" },
+			{ SettingsConst.SAVE_AS_OLD, "true" },
+			{ SettingsConst.SHOW_PREVIEW, "true" },
+			{ SettingsConst.LOCALIZATION, "unknown" },
+			{ SettingsConst.USE_DIMENSION_CAP, "false" },
+			{ SettingsConst.DIMENSION_CAP_MAX, "-1" },
+			{ SettingsConst.DIMENSION_CAP_UNIT, "0" },
+			{ SettingsConst.COLOR_PICKER, "0" },
+			{ SettingsConst.HIDE_ON_HOVER, "true" },
+		};
+
 		public DatabaseManager (bool setDefault)
 		{
 			InitDatabase ();
@@ -29,36 +64,10 @@ namespace Yuki_Theme.Core.Database
 		{
 			if (setDefault && _database.GetValue (SettingsConst.PASCAL_PATH.ToString ()).Length <= 2)
 			{
-				SetValue (SettingsConst.PASCAL_PATH, "empty");
-				SetValue (SettingsConst.ACTIVE, "empty");
-				SetValue (SettingsConst.ASK_CHOICE, "true");
-				SetValue (SettingsConst.CHOICE_INDEX, "0");
-				SetValue (SettingsConst.SETTING_MODE, "0");
-				SetValue (SettingsConst.AUTO_UPDATE, "true");
-				SetValue (SettingsConst.BG_IMAGE, "true");
-				SetValue (SettingsConst.STICKER, "true");
-				SetValue (SettingsConst.STATUS_BAR, "true");
-				SetValue (SettingsConst.LOGO, "true");
-				SetValue (SettingsConst.EDITOR, "false");
-				SetValue (SettingsConst.BETA, "true");
-				SetValue (SettingsConst.LOGIN, "false");
-				SetValue (SettingsConst.STICKER_POSITION_UNIT, "1");
-				SetValue (SettingsConst.ALLOW_POSITIONING, "false");
-				SetValue (SettingsConst.SHOW_GRIDS, "false");
-				SetValue (SettingsConst.USE_CUSTOM_STICKER, "false");
-				SetValue (SettingsConst.CUSTOM_STICKER_PATH, "");
-				SetValue (SettingsConst.LICENSE, "false");
-				SetValue (SettingsConst.GOOGLE_ANALYTICS, "false");
-				SetValue (SettingsConst.DON_T_TRACK, "false");
-				SetValue (SettingsConst.AUTO_FIT_WIDTH, "true");
-				SetValue (SettingsConst.ASK_TO_SAVE, "true");
-				SetValue (SettingsConst.SAVE_AS_OLD, "true");
-				SetValue (SettingsConst.SHOW_PREVIEW, "true");
-				SetValue (SettingsConst.LOCALIZATION, "unknown");
-				SetValue (SettingsConst.USE_DIMENSION_CAP, "false");
-				SetValue (SettingsConst.DIMENSION_CAP_MAX, "-1");
-				SetValue (SettingsConst.DIMENSION_CAP_UNIT, "0");
-				SetValue (SettingsConst.COLOR_PICKER, "0");
+				foreach (KeyValuePair<int,string> pair in _defaults)
+				{
+					SetValue (pair.Key, pair.Value);	
+				}
 			}
 		}
 
@@ -81,36 +90,10 @@ namespace Yuki_Theme.Core.Database
 		{
 			Dictionary <int, string> dictionary = new Dictionary <int, string> ();
 			
-			AddToDictionary (ref dictionary, SettingsConst.PASCAL_PATH, "empty");
-			AddToDictionary (ref dictionary, SettingsConst.ACTIVE, "empty");
-			AddToDictionary (ref dictionary, SettingsConst.ASK_CHOICE, "true");
-			AddToDictionary (ref dictionary, SettingsConst.CHOICE_INDEX, "0");
-			AddToDictionary (ref dictionary, SettingsConst.SETTING_MODE, "0");
-			AddToDictionary (ref dictionary, SettingsConst.AUTO_UPDATE, "true");
-			AddToDictionary (ref dictionary, SettingsConst.BG_IMAGE, "true");
-			AddToDictionary (ref dictionary, SettingsConst.STICKER, "true");
-			AddToDictionary (ref dictionary, SettingsConst.STATUS_BAR, "true");
-			AddToDictionary (ref dictionary, SettingsConst.LOGO, "true");
-			AddToDictionary (ref dictionary, SettingsConst.EDITOR, "false");
-			AddToDictionary (ref dictionary, SettingsConst.BETA, "true");
-			AddToDictionary (ref dictionary, SettingsConst.LOGIN, "false");
-			AddToDictionary (ref dictionary, SettingsConst.STICKER_POSITION_UNIT, "1");
-			AddToDictionary (ref dictionary, SettingsConst.ALLOW_POSITIONING, "false");
-			AddToDictionary (ref dictionary, SettingsConst.SHOW_GRIDS, "false");
-			AddToDictionary (ref dictionary, SettingsConst.USE_CUSTOM_STICKER, "false");
-			AddToDictionary (ref dictionary, SettingsConst.CUSTOM_STICKER_PATH, "");
-			AddToDictionary (ref dictionary, SettingsConst.LICENSE, "false");
-			AddToDictionary (ref dictionary, SettingsConst.GOOGLE_ANALYTICS, "false");
-			AddToDictionary (ref dictionary, SettingsConst.DON_T_TRACK, "false");
-			AddToDictionary (ref dictionary, SettingsConst.AUTO_FIT_WIDTH, "true");
-			AddToDictionary (ref dictionary, SettingsConst.ASK_TO_SAVE, "true");
-			AddToDictionary (ref dictionary, SettingsConst.SAVE_AS_OLD, "true");
-			AddToDictionary (ref dictionary, SettingsConst.SHOW_PREVIEW, "true");
-			AddToDictionary (ref dictionary, SettingsConst.LOCALIZATION, "unknown");
-			AddToDictionary (ref dictionary, SettingsConst.USE_DIMENSION_CAP, "false");
-			AddToDictionary (ref dictionary, SettingsConst.DIMENSION_CAP_MAX, "-1");
-			AddToDictionary (ref dictionary, SettingsConst.DIMENSION_CAP_UNIT, "0");
-			AddToDictionary (ref dictionary, SettingsConst.COLOR_PICKER, "0");
+			foreach (KeyValuePair<int,string> pair in _defaults)
+			{
+				AddToDictionary (ref dictionary, pair.Key, pair.Value);	
+			}
 
 			return dictionary;
 		}
@@ -118,7 +101,7 @@ namespace Yuki_Theme.Core.Database
 
 		public string ReadData (int key, string defaultValue = "")
 		{
-			return GetValue (key.ToString (), defaultValue).ToString ();
+			return GetValue (key.ToString (), defaultValue);
 		}
 
 		public void UpdateData (Dictionary <int, string> dictionary)

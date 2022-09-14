@@ -44,8 +44,6 @@ namespace Yuki_Theme_Plugin.Controls
 
 		public UserControl Content => this;
 
-		private bool oldeditor = false;
-
 		public void Action (OptionsContentAction action)
 		{
 			if (action == OptionsContentAction.Show)

@@ -11,12 +11,8 @@ namespace Yuki_Theme.Core.Communication
 
 		protected int Interval = 100;
 
-		private int tempInterval;
-
 		private int tryCount;
 
-		private bool _connectionEstablished = false;
-		
 		protected Queue<Message> _messages;
 
 		protected bool stopTimer = false;
@@ -73,7 +69,6 @@ namespace Yuki_Theme.Core.Communication
 		{
 			_timer.Stop ();
 			_timer.Interval = Interval;
-			_connectionEstablished = true;
 			_timer.Elapsed -= TestConnection;
 			_timer.Elapsed += SendMessages;
 			_timer.Start ();

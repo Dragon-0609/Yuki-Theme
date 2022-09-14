@@ -39,7 +39,6 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Action                   ExecuteOnLoad;
 		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
 
-		private bool _freezeToolBarBehaviour;
 
 		public PopupController popupController;
 
@@ -397,9 +396,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = true;
 				if (ExecuteOnToolBarItemSelection != null)
 				{
-					_freezeToolBarBehaviour = true;
 					ExecuteOnToolBarItemSelection (item);
-					_freezeToolBarBehaviour = false;
 				}
 				// ToolBarItemShow.IsChecked = 
 			} else
