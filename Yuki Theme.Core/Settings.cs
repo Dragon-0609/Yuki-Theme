@@ -39,6 +39,8 @@ namespace Yuki_Theme.Core
 		public static int          dimensionCapUnit;
 		public static int          colorPicker;
 		public static bool         hideOnHover;
+		public static int          hideDelay;
+		public static bool         portableMode;
 
 		#endregion
 
@@ -113,6 +115,9 @@ namespace Yuki_Theme.Core
 			dimensionCapUnit = int.Parse (data [SettingsConst.DIMENSION_CAP_UNIT]);
 			colorPicker = int.Parse (data [SettingsConst.COLOR_PICKER]);
 			hideOnHover = bool.Parse (data [SettingsConst.HIDE_ON_HOVER]);
+			hideDelay = int.Parse (data [SettingsConst.HIDE_DELAY]);
+			portableMode = bool.Parse (data [SettingsConst.PORTABLE_MODE]);
+
 			localization = data [SettingsConst.LOCALIZATION];
 
 			CentralAPI.Current.selectedItem = data [SettingsConst.ACTIVE];
@@ -174,6 +179,8 @@ namespace Yuki_Theme.Core
 					{ SettingsConst.DIMENSION_CAP_UNIT, dimensionCapUnit.ToString () },
 					{ SettingsConst.COLOR_PICKER, colorPicker.ToString () },
 					{ SettingsConst.HIDE_ON_HOVER, hideOnHover.ToString () },
+					{ SettingsConst.HIDE_DELAY, hideDelay.ToString () },
+					{ SettingsConst.PORTABLE_MODE, portableMode.ToString () },
 					{ SettingsConst.LOCALIZATION, localization }
 				};
 				return dict;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Win32;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Utils;
@@ -43,6 +44,8 @@ namespace Yuki_Theme.Core.Database
 			{ SettingsConst.DIMENSION_CAP_UNIT, "0" },
 			{ SettingsConst.COLOR_PICKER, "0" },
 			{ SettingsConst.HIDE_ON_HOVER, "true" },
+			{ SettingsConst.HIDE_DELAY, "750" },
+			{ SettingsConst.PORTABLE_MODE, "false" },
 		};
 
 		public DatabaseManager (bool setDefault)
@@ -54,10 +57,20 @@ namespace Yuki_Theme.Core.Database
 
 		private void InitDatabase ()
 		{
-			if (IsLinux)
+			if (IsLinux || ForcePortable ())
 				_database = new FileDatabase ();
 			else
 				_database = new WindowsRegistryDatabase ();
+		}
+		
+		private const string APP_NAME = "Yuki Theme";
+		
+		private string GetAppDataDirectory =>
+			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), APP_NAME);
+
+		private bool ForcePortable ()
+		{
+			return File.Exists (Path.Combine (GetAppDataDirectory, "portable"));
 		}
 
 		private void AddDefaults (bool setDefault)

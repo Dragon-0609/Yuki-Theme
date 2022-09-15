@@ -16,6 +16,7 @@ using CheckBox = System.Windows.Controls.CheckBox;
 using ComboBox = System.Windows.Controls.ComboBox;
 using Drawing = System.Drawing;
 using MessageBox = System.Windows.MessageBox;
+using RadioButton = System.Windows.Controls.RadioButton;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -105,7 +106,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			FillGeneralValues ();
 			FillProgramValues ();
 			FillPluginValues ();
-			StickerDimensionCapCheckedChanged (this, null);
+			StickerDimensionCap_CheckedChanged (this, null);
+			HideHover_CheckedChanged (this, null);
 		}
 
 		private void HideFields ()
@@ -126,13 +128,15 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SCheck (AutoUpdate, Settings.update);
 			SCheck (CheckBeta, Settings.Beta);
 			SCheck (StickerDimensionCap, Settings.useDimensionCap);
+			SCheck (HideHover, Settings.hideOnHover);
 			SDrop (EditorModeDropdown, (int)Settings.settingMode);
 			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
-			customStickerPath = Settings.customSticker;
 			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
+			SText (HideDelay.box, Settings.hideDelay.ToString ());
+			customStickerPath = Settings.customSticker;
 			bool firstSelected = Settings.colorPicker == 0;
-			WinformsPicker.IsChecked = firstSelected;
-			WPFPicker.IsChecked = !firstSelected;
+			SRadio (WinformsPicker, firstSelected);
+			SRadio(WPFPicker, !firstSelected);
 			// LanguageDropdown, Settings.localization
 		}
 
@@ -186,12 +190,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (CheckBeta, ref Settings.Beta);
 			KCheck (CheckBeta, ref Settings.Beta);
 			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
+			KCheck (HideHover, ref Settings.hideOnHover);
 			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
 
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
 			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
 			Settings.customSticker = customStickerPath;
 			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
+			Settings.hideDelay = HideDelay.GetNumber ();
 		}
 
 		private void SaveProgramSettings ()
@@ -261,6 +267,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 		}
 
 		/// <summary>
+		/// Set value of radiobutton
+		/// </summary>
+		private void SRadio (RadioButton radioButton, bool value)
+		{
+			radioButton.IsChecked = value;
+		}
+
+		/// <summary>
 		/// Set value of textbox
 		/// </summary>
 		private void SText (TextBox textBox, string value)
@@ -325,7 +339,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				customStickerPath = customStickerWindow.ImagePath.Text;
 		}
 
-		private void StickerDimensionCapCheckedChanged (object sender, RoutedEventArgs e)
+		private void StickerDimensionCap_CheckedChanged (object sender, RoutedEventArgs e)
 		{
 			DimensionCapMax.IsEnabled = DimensionCapBy.IsEnabled = StickerDimensionCap.IsChecked == true;
 		}
@@ -474,6 +488,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 					                 MessageBoxButton.OK, MessageBoxImage.Error);
 				}
 			}
+		}
+		
+		private void HideHover_CheckedChanged (object sender, RoutedEventArgs e)
+		{
+			HideDelay.IsEnabled = HideHover.IsChecked == true;
 		}
 	}
 }

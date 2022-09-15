@@ -78,6 +78,8 @@
             <system:String x:Key="settings.general.about">About</system:String>
             <system:String x:Key="settings.general.language">Language:</system:String>
             <system:String x:Key="settings.general.colorpicker">Color Picker</system:String>
+            <system:String x:Key="settings.general.hidehover">Hide on hover</system:String>
+            <system:String x:Key="settings.general.hidedelay">Hide on delay (ms)</system:String>
 
             <system:String x:Key="settings.additional.path">Path to PascalABC.NET:</system:String>
             <system:String x:Key="settings.additional.ask">Ask other themes are in Pascal directory</system:String>
@@ -164,7 +166,19 @@
                                 <CheckBox Content="{DynamicResource settings.general.sticker.custom}"
                                           Style="{StaticResource CheckBoxUserControl}" Name="CustomSticker" />
                             </WrapPanel>
-
+                            
+                            <CheckBox Content="{DynamicResource settings.general.hidehover }"
+                                      Style="{StaticResource CheckBoxUserControl}" Name="HideHover" Checked="HideHover_CheckedChanged" Unchecked="HideHover_CheckedChanged" />
+                            <WrapPanel Margin="0 5">
+                                <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center"
+                                           Text="{DynamicResource settings.general.hidedelay }" />
+                                
+                                <controls:IntegerUpDown
+                                    FontSize="12" Text="750" BorderBrush="DimGray" Padding="2 2"
+                                    VerticalAlignment="Center" Width="70" Height="30"
+                                    Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
+                                    MinValue="50" DefaultValue="750" MaxValue="5000" ValueChange="50" x:Name="HideDelay" />
+                            </WrapPanel>
 
                         </StackPanel>
 
@@ -173,8 +187,8 @@
                             <StackPanel HorizontalAlignment="Left" Margin="4 5" Name="DimensionCapPanel">
                                 <CheckBox Content="{DynamicResource settings.general.dimension.enable}" Margin="0 5"
                                           Style="{StaticResource CheckBoxUserControl}"
-                                          Name="StickerDimensionCap" Checked="StickerDimensionCapCheckedChanged"
-                                          Unchecked="StickerDimensionCapCheckedChanged" />
+                                          Name="StickerDimensionCap" Checked="StickerDimensionCap_CheckedChanged"
+                                          Unchecked="StickerDimensionCap_CheckedChanged" />
                                 <WrapPanel Margin="0 5">
                                     <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}" VerticalAlignment="Center"
                                                Text="{DynamicResource settings.general.dimension.max.px}" />

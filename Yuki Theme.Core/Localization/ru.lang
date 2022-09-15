@@ -41,6 +41,8 @@
     "settings.general.about": "О проекте",
     "settings.general.language": "Язык:",
     "settings.general.colorpicker": "Выбор цвета",
+    "settings.general.hidehover": "Скрыть при наведении",
+    "settings.general.hidedelay": "Скрыть при задержке (ms)",
     
     "settings.additional.path": "Путь до PascalABC.NET:",
     "settings.additional.ask": "Спросить если в папке среды PascalABC.NET есть другие темы",

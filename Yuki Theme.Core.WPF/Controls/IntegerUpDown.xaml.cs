@@ -49,6 +49,36 @@ namespace Yuki_Theme.Core.WPF.Controls
 			DependencyProperty.Register ("MinValue", typeof (int), typeof (IntegerUpDown),
 			                             new PropertyMetadata (0));
 
+		public int MaxValue
+		{
+			get => (int)GetValue (MaxValueProperty);
+			set => SetValue (MaxValueProperty, value);
+		}
+
+		public static readonly DependencyProperty MaxValueProperty =
+			DependencyProperty.Register ("MaxValue", typeof (int), typeof (IntegerUpDown),
+			                             new PropertyMetadata (100));
+
+		public int DefaultValue
+		{
+			get => (int)GetValue (DefaultValueProperty);
+			set => SetValue (DefaultValueProperty, value);
+		}
+
+		public static readonly DependencyProperty DefaultValueProperty =
+			DependencyProperty.Register ("DefaultValue", typeof (int), typeof (IntegerUpDown),
+			                             new PropertyMetadata (0));
+
+		public int ValueChange
+		{
+			get => (int)GetValue (ValueChangeProperty);
+			set => SetValue (ValueChangeProperty, value);
+		}
+
+		public static readonly DependencyProperty ValueChangeProperty =
+			DependencyProperty.Register ("ValueChange", typeof (int), typeof (IntegerUpDown),
+			                             new PropertyMetadata (1));
+
 		private void Box_OnKeyDown (object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Back && box.Text.Length == 0)
@@ -62,11 +92,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 			int res;
 			if (int.TryParse (box.Text, out res))
 			{
-				res++;
-				box.Text = res.ToString ();
+				if (res + ValueChange <= MaxValue)
+				{
+					res += ValueChange;
+					box.Text = res.ToString ();
+				}
 			} else
 			{
-				box.Text = "-1";
+				box.Text = DefaultValue.ToString();
 			}
 		}
 
@@ -75,14 +108,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 			int res;
 			if (int.TryParse (box.Text, out res))
 			{
-				if (res - 1 >= MinValue)
+				if (res - ValueChange >= MinValue)
 				{
-					res--;
+					res -= ValueChange;
 					box.Text = res.ToString ();
 				}
 			} else
 			{
-				box.Text = "-1";
+				box.Text = DefaultValue.ToString();
 			}
 		}
 
@@ -91,16 +124,30 @@ namespace Yuki_Theme.Core.WPF.Controls
 			int res;
 			if (!int.TryParse (box.Text, out res))
 			{
-				box.Text = "-1";
+				box.Text = DefaultValue.ToString();
+			} else
+			{
+				ValidateCurrentNumber (res);
 			}
+		}
+		private void ValidateCurrentNumber (int res)
+		{
+
+			if (res > MaxValue)
+				box.Text = MaxValue.ToString ();
+			else if (res < MinValue)
+				box.Text = MinValue.ToString ();
 		}
 
 		public int GetNumber ()
 		{
-			int res = -1;
+			int res = DefaultValue;
 			if (!int.TryParse (box.Text, out res))
 			{
-				box.Text = "-1";
+				box.Text = DefaultValue.ToString();
+			} else
+			{
+				ValidateCurrentNumber (res);
 			}
 
 			return res;

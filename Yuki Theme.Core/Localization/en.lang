@@ -41,6 +41,8 @@
     "settings.general.about": "About",
     "settings.general.language": "Language:",
     "settings.general.colorpicker": "Color Picker",
+    "settings.general.hidehover": "Hide on hover",
+    "settings.general.hidedelay": "Hide on delay (ms)",
     
     "settings.additional.path": "Path to PascalABC.NET:",
     "settings.additional.ask": "Ask other themes are in Pascal directory",

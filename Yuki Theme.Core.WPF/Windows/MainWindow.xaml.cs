@@ -38,6 +38,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private bool _blockOpacity = false;
 
+		private int _restoredTimes = 0;
+
 		private Timer InstallTrackerTimer;
 
 		#region Initialization
@@ -209,7 +211,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void Restore ()
 		{
-			CentralAPI.Current.Restore (false, null);
+			bool clean = _restoredTimes >= 3;
+			_restoredTimes = _restoredTimes >= 3 ? 0 : _restoredTimes + 1;
+			
+			CentralAPI.Current.Restore (clean, null);
 			LoadDefinitionsWithSelection ();
 			Model.UpdateSyntaxColors();
 			UpdateColors ();

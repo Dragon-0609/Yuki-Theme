@@ -170,7 +170,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Settings.hideOnHover)
 			{
-				DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromSeconds(1));
+				DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromMilliseconds(Settings.hideDelay));
 				Sticker.BeginAnimation(OpacityProperty, anim);
 			}
 		}
@@ -178,7 +178,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Settings.hideOnHover)
 			{
-				DoubleAnimation anim = new DoubleAnimation (1, TimeSpan.FromSeconds (1));
+				DoubleAnimation anim = new DoubleAnimation (1, TimeSpan.FromMilliseconds(Settings.hideDelay));
 				Sticker.BeginAnimation (OpacityProperty, anim);
 			}
 		}

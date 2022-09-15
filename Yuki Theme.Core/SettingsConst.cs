@@ -38,14 +38,17 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		public const int ASK_TO_SAVE = 28;
 
-		public const  int    SAVE_AS_OLD         = 29;
-		public const  int    SHOW_PREVIEW        = 30;
-		public const  int    LOCALIZATION        = 31;
-		public const  int    USE_DIMENSION_CAP   = 32;
-		public const  int    DIMENSION_CAP_MAX   = 33;
-		public const  int    DIMENSION_CAP_UNIT  = 34;
-		public const  int    COLOR_PICKER        = 35;
-		public const  int    HIDE_ON_HOVER       = 36;
+		public const int SAVE_AS_OLD        = 29;
+		public const int SHOW_PREVIEW       = 30;
+		public const int LOCALIZATION       = 31;
+		public const int USE_DIMENSION_CAP  = 32;
+		public const int DIMENSION_CAP_MAX  = 33;
+		public const int DIMENSION_CAP_UNIT = 34;
+		public const int COLOR_PICKER       = 35;
+		public const int HIDE_ON_HOVER      = 36;
+		public const int HIDE_DELAY         = 37;
+		public const int PORTABLE_MODE      = 38;
+		
 		public const  double CURRENT_VERSION     = 8.0;
 		public const  string CURRENT_VERSION_ADD = "beta";
 		public static string CurrentPath         = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
