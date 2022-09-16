@@ -49,6 +49,14 @@ namespace Yuki_Theme.Core.Database
 				_dictionary.Remove (name);
 			Save ();
 		}
+		public void Wipe ()
+		{
+			if (File.Exists (GetSettingsPath ()))
+			{
+				File.Delete (GetSettingsPath ());
+			}
+			_dictionary.Clear ();
+		}
 
 		private void Load ()
 		{

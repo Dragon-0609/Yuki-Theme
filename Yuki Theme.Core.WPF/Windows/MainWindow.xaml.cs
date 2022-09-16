@@ -191,12 +191,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 			bool customSticker = Settings.useCustomSticker;
 			bool dimensionCap = Settings.useDimensionCap;
 			int dimensionCapMax = Settings.dimensionCapMax;
+			bool showSticker = Settings.swSticker;
 			bool? dialog = settingsWindow.ShowDialog ();
 			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
 			{
 				settingsWindow.utilities.SaveSettings ();
-				ApplySettingsChanges (currentMode, settingsWindow, customSticker, dimensionCap, dimensionCapMax);
+				ApplySettingsChanges (currentMode, showSticker, customSticker, dimensionCap, dimensionCapMax);
 			} else
 			{
 				Settings.localization = lang;
@@ -207,6 +208,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				UpdateTranslations ();
 			}
+			
 		}
 
 		private void Restore ()
@@ -526,17 +528,22 @@ namespace Yuki_Theme.Core.WPF.Windows
 			SetOpacityWallpaper ();
 		}
 		
-		private void ApplySettingsChanges (SettingMode currentMode, SettingsWindow settingsWindow, bool customSticker, bool dimensionCap, int dimensionCapMax)
+		private void ApplySettingsChanges (SettingMode currentMode, bool showSticker, bool customSticker, bool dimensionCap, int dimensionCapMax)
 		{
 			ToggleEditor ();
 			if (currentMode != Settings.settingMode)
 			{
 				Restore ();
 			}
-
-			if (customSticker != settingsWindow.customSticker)
+			
+			if (showSticker != Settings.swSticker)
 			{
-				if (settingsWindow.customSticker)
+				Model.UpdateStickerVisibility ();
+			}
+
+			if (customSticker != Settings.useCustomSticker)
+			{
+				if (Settings.useCustomSticker)
 				{
 					Model.ReloadSticker();	
 				} else
@@ -545,7 +552,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				}
 			}
 			
-			if (dimensionCap != settingsWindow.dimensionCap || Settings.dimensionCapMax != dimensionCapMax)
+			if (dimensionCap != Settings.useDimensionCap || Settings.dimensionCapMax != dimensionCapMax)
 			{
 				Model.ResetStickerPosition();
 			}

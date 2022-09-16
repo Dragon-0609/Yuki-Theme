@@ -9,7 +9,9 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -42,6 +44,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 
 		public PopupController popupController;
+
+		private bool portable;
 
 		public SettingsPanel ()
 		{
@@ -129,6 +133,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SCheck (CheckBeta, Settings.Beta);
 			SCheck (StickerDimensionCap, Settings.useDimensionCap);
 			SCheck (HideHover, Settings.hideOnHover);
+			SCheck (PortableMode, Settings.portableMode);
 			SDrop (EditorModeDropdown, (int)Settings.settingMode);
 			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
 			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
@@ -137,6 +142,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			bool firstSelected = Settings.colorPicker == 0;
 			SRadio (WinformsPicker, firstSelected);
 			SRadio(WPFPicker, !firstSelected);
+			portable = Settings.portableMode;
 			// LanguageDropdown, Settings.localization
 		}
 
@@ -191,6 +197,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (CheckBeta, ref Settings.Beta);
 			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
 			KCheck (HideHover, ref Settings.hideOnHover);
+			KCheck (PortableMode, ref Settings.portableMode);
 			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
 
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
@@ -198,6 +205,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			Settings.customSticker = customStickerPath;
 			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
 			Settings.hideDelay = HideDelay.GetNumber ();
+			if (portable != PortableMode.IsChecked)
+				Settings.database.SwapDatabase ();
 		}
 
 		private void SaveProgramSettings ()
@@ -205,9 +214,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 			bool isProgram = Helper.mode == ProductMode.Program;
 			if (isProgram)
 			{
-				KText (PascalPath, ref Settings.pascalPath);
 				KCheck (AskOthers, ref Settings.askChoice);
 				KDrop (ActionDropdown, ref Settings.actionChoice);
+				if (IsPascalDirectory(PascalPath.Text))
+					KText (PascalPath, ref Settings.pascalPath);
+				else
+				{
+					MessageBox.Show (CentralAPI.Current.Translate ("messages.path.wrong.restore", PascalPath.Text));
+					if (!Directory.Exists (Settings.pascalPath))
+						Settings.pascalPath = "";
+				}
 			}
 		}
 
@@ -336,7 +352,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 			bool? dialog = customStickerWindow.ShowDialog ();
 			if (dialog != null && (bool)dialog)
+			{
 				customStickerPath = customStickerWindow.ImagePath.Text;
+				if (CustomSticker.IsChecked != null && (bool)CustomSticker.IsChecked && customStickerPath.Length == 0)
+				{
+					CustomSticker.IsChecked = false;
+				}
+					
+			}
 		}
 
 		private void StickerDimensionCap_CheckedChanged (object sender, RoutedEventArgs e)
@@ -493,6 +516,47 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void HideHover_CheckedChanged (object sender, RoutedEventArgs e)
 		{
 			HideDelay.IsEnabled = HideHover.IsChecked == true;
+		}
+
+
+		private void SetPascalPath (object sender, RoutedEventArgs e)
+		{
+			CommonOpenFileDialog co = new CommonOpenFileDialog ();
+			co.IsFolderPicker = true;
+			co.Multiselect = false;
+			co.Title = CentralAPI.Current.Translate ("messages.path.select");
+			SelectFolder (co);
+		}
+
+		private void SelectFolder (CommonOpenFileDialog co)
+		{
+			CommonFileDialogResult res = co.ShowDialog ();
+			if (res == CommonFileDialogResult.Ok)
+			{
+				if (Directory.Exists (co.FileName))
+				{
+					if (IsPascalDirectory (co.FileName))
+					{
+						PascalPath.Text = co.FileName;
+					} else
+					{
+						if (System.Windows.Forms.MessageBox.Show (CentralAPI.Current.Translate ("messages.path.wrong"), CentralAPI.Current.Translate ("messages.path.select"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
+						{
+							co.Title = CentralAPI.Current.Translate ("messages.path.wrong");
+							SelectFolder (co);	
+						}
+					}
+				} else
+				{
+					throw new FileLoadException (CentralAPI.Current.Translate ("messages.directory.notexist"));
+				}
+			}
+		}
+		
+		private bool IsPascalDirectory (string path)
+		{
+
+			return File.Exists (Path.Combine (path, "PascalABCNET.exe")) && File.Exists (Path.Combine (path, "pabcnetc.exe"));
 		}
 	}
 }

@@ -29,9 +29,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Settings.customSticker = from;
 				canReturn = true;
-			} else
+			}else if (from.Length < 3)
 			{
-				API_Events.showError (CentralAPI.Current.Translate ("messages.name.equal.message"), CentralAPI.Current.Translate ("messages.name.equal.title"));
+				ImagePath.Text = "";
+				Settings.customSticker = "";
+				canReturn = true;
+			}
+			else
+			{
+				API_Events.showError (CentralAPI.Current.Translate ("messages.file.notexist.full"), CentralAPI.Current.Translate ("messages.file.notexist.full2"));
 			}
 			
 			return canReturn;

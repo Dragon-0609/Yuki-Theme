@@ -69,6 +69,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_stickerView.ChangeVisibility (visibility);
 		}
 
+		public bool StickerAvailable ()
+		{
+			return Settings.swSticker && !_stickerModel.IsOriginalImageNull () && !_stickerModel.IsRenderImageNull ();
+		}
+		
 		private void UpdatePosition () => _stickerView.ResetPosition ();
 
 		public void LoadImage (Image image)

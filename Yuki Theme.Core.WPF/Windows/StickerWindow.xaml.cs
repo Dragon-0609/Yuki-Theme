@@ -191,5 +191,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			cursor.Y = -cursor.Y + RenderSize.Height;
 			return (0 < cursor.X && cursor.X < RenderSize.Width) && (0 < cursor.Y && cursor.Y < RenderSize.Height);
 		}*/
+
+
+		public void UpdateStickerVisibility ()
+		{
+			Visibility = _presenter.StickerAvailable () ? Visibility.Visible : Visibility.Hidden;
+		}
 	}
 }

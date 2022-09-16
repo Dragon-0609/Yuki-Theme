@@ -43,6 +43,7 @@
     "settings.general.colorpicker": "Выбор цвета",
     "settings.general.hidehover": "Скрыть при наведении",
     "settings.general.hidedelay": "Скрыть при задержке (ms)",
+    "settings.general.portable": "Портативный режим",
     
     "settings.additional.path": "Путь до PascalABC.NET:",
     "settings.additional.ask": "Спросить если в папке среды PascalABC.NET есть другие темы",
@@ -168,6 +169,7 @@
     "messages.update.invalid": "Zip файл не является Yuki Theme. Пожалуйста, скачайте с Github-а",
     "messages.update.wrong": "Неправильный zip",
     "messages.path.wrong": "Это не путь до среды PascalABC.NET. Выберите путь до среды PascalABC.NET.",
+    "messages.path.wrong.restore": "{0} не путь до среды PascalABC.NET. Путь до среды PascalABC.NET будет сброшено.",
     "messages.path.select": "Выберите папку PascalABC.NET.",
     "messages.path.select.inexport.short": "Путь до PascalABC.NET.",
     "messages.path.select.inexport.full": "Пожалуйста, задайте путь до папки PascalABC.NET.",

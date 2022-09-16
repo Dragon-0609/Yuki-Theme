@@ -60,6 +60,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_stickerWindow.ResetPosition ();
 		}
 
+		internal override void UpdateStickerVisibility () => _stickerWindow.UpdateStickerVisibility ();
+
 		#endregion
 
 		#region Wallpaper

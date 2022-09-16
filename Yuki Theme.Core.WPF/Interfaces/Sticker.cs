@@ -42,6 +42,8 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void LoadImage (Image image);
 
 			void SetStickerSize ();
+			
+			bool StickerAvailable ();
 		}
 	}
 }

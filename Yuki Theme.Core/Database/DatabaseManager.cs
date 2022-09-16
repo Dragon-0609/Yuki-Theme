@@ -11,7 +11,7 @@ namespace Yuki_Theme.Core.Database
 	{
 		private IDatabase _database;
 
-		private readonly Dictionary <int, string> _defaults = new Dictionary <int, string> ()
+		public readonly Dictionary <int, string> _defaults = new Dictionary <int, string> ()
 		{
 			{ SettingsConst.PASCAL_PATH, "empty" },
 			{ SettingsConst.ACTIVE, "empty" },
@@ -57,29 +57,26 @@ namespace Yuki_Theme.Core.Database
 
 		private void InitDatabase ()
 		{
-			if (IsLinux || ForcePortable ())
+			if (IsLinux || IsPortable ())
 				_database = new FileDatabase ();
 			else
 				_database = new WindowsRegistryDatabase ();
 		}
-		
-		private const string APP_NAME = "Yuki Theme";
-		
-		private string GetAppDataDirectory =>
-			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), APP_NAME);
 
-		private bool ForcePortable ()
+		private const string APP_NAME = "Yuki Theme";
+
+		private bool IsPortable ()
 		{
-			return File.Exists (Path.Combine (GetAppDataDirectory, "portable"));
+			return File.Exists (FileDatabase.YUKI_SETTINGS);
 		}
 
 		private void AddDefaults (bool setDefault)
 		{
 			if (setDefault && _database.GetValue (SettingsConst.PASCAL_PATH.ToString ()).Length <= 2)
 			{
-				foreach (KeyValuePair<int,string> pair in _defaults)
+				foreach (KeyValuePair <int, string> pair in _defaults)
 				{
-					SetValue (pair.Key, pair.Value);	
+					SetValue (pair.Key, pair.Value);
 				}
 			}
 		}
@@ -102,10 +99,10 @@ namespace Yuki_Theme.Core.Database
 		public Dictionary <int, string> ReadData ()
 		{
 			Dictionary <int, string> dictionary = new Dictionary <int, string> ();
-			
-			foreach (KeyValuePair<int,string> pair in _defaults)
+
+			foreach (KeyValuePair <int, string> pair in _defaults)
 			{
-				AddToDictionary (ref dictionary, pair.Key, pair.Value);	
+				AddToDictionary (ref dictionary, pair.Key, pair.Value);
 			}
 
 			return dictionary;
@@ -139,7 +136,7 @@ namespace Yuki_Theme.Core.Database
 		public string GetValue (string name, string defaultValue) => _database.GetValue (name, defaultValue);
 
 		public void DeleteValue (string name) => _database.DeleteValue (name);
-		
+
 		public WindowProps ReadLocation ()
 		{
 			string sp = GetLocation ();
@@ -167,10 +164,31 @@ namespace Yuki_Theme.Core.Database
 		{
 			get
 			{
-				int p = (int) Environment.OSVersion.Platform;
+				int p = (int)Environment.OSVersion.Platform;
 				return (p == 4) || (p == 6) || (p == 128);
 			}
 		}
-		
+
+		public void SwapDatabase ()
+		{
+			bool portable = Settings.portableMode;
+			_database.Wipe ();
+			_database = portable ? new FileDatabase () : new WindowsRegistryDatabase ();
+			Settings.SaveData ();
+			string path = FileDatabase.YUKI_SETTINGS;
+			DeletePortableSettings (portable, path);
+		}
+
+		private static void DeletePortableSettings (bool portable, string path)
+		{
+			if (!portable)
+			{
+				if (File.Exists (path))
+				{
+					File.Delete (path);
+				}
+			}
+		}
+
 	}
 }

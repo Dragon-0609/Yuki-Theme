@@ -7,5 +7,6 @@
 		string GetValue (string name);
 		string GetValue (string name, string defaultValue);
 		void DeleteValue (string name);
+		void Wipe ();
 	}
 }

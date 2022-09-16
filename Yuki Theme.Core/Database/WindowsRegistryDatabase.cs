@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using System.Collections.Generic;
+using Microsoft.Win32;
 using Yuki_Theme.Core.Interfaces;
 
 namespace Yuki_Theme.Core.Database
@@ -21,9 +22,10 @@ namespace Yuki_Theme.Core.Database
 		public string GetValue (string name)
 		{
 			string res = "";
-			object value = _key.GetValue (name);
-			if (value != null)
-				res = value as string;
+			if (ValueExists (name))
+			{
+				res = _key.GetValue (name) as string;
+			}
 
 			return res;
 		}
@@ -35,10 +37,29 @@ namespace Yuki_Theme.Core.Database
 				res = defaultValue;
 			return res;
 		}
+		
+		public bool ValueExists(string Value)
+		{
+			try
+			{
+				return _key.GetValue(Value) != null;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 
 		public void DeleteValue (string name)
 		{
-		
+			if (ValueExists (name))
+			{
+				_key.DeleteValue (name);
+			}
+		}
+		public void Wipe ()
+		{
+			Registry.CurrentUser.CreateSubKey (@"SOFTWARE", RegistryKeyPermissionCheck.ReadWriteSubTree)?.DeleteSubKey ("YukiTheme");
 		}
 	}
 }
