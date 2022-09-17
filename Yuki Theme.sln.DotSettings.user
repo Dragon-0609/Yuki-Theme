@@ -56,12 +56,12 @@
 	<s:String x:Key="/Default/Environment/Hierarchy/Build/BuildTool/CustomBuildToolPath/@EntryValue">C:\Program Files\JetBrains\JetBrains Rider 2022.1.2\tools\MSBuild\Current\Bin\MSBuild.exe</s:String>
 	<s:Int64 x:Key="/Default/Environment/Hierarchy/Build/BuildTool/MsbuildVersion/@EntryValue">1114112</s:Int64>
 	<s:Boolean x:Key="/Default/Environment/Hierarchy/EntityFrameworkOptions/IsAlreadyNotifiedAboutEntityFramework/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=293cc2a9_002D3c7a_002D4225_002Db24e_002D40e08d9c2c5d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AddLoadNDeleteTheme" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=293cc2a9_002D3c7a_002D4225_002Db24e_002D40e08d9c2c5d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AddLoadNDeleteTheme" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::98152978-B4E9-4792-89C8-0D51C24D4587::.NETFramework,Version=v4.5.2::Yuki_Theme.Tests.Tests.AddLoadNDeleteTheme&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::98152978-B4E9-4792-89C8-0D51C24D4587::.NETFramework,Version=v4.5.2::Yuki_Theme.Tests.Tests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d70455ba_002D3bb7_002D4b72_002Dab99_002D6735f8bc5b70/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="InitializationAndLoading" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d70455ba_002D3bb7_002D4b72_002Dab99_002D6735f8bc5b70/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="InitializationAndLoading" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::98152978-B4E9-4792-89C8-0D51C24D4587::.NETFramework,Version=v4.5.2::Yuki_Theme.Tests.Tests.InitializationAndLoading&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::98152978-B4E9-4792-89C8-0D51C24D4587::.NETFramework,Version=v4.5.2::Yuki_Theme.Tests.Tests.AddLoadNDeleteTheme&lt;/TestId&gt;&#xD;
