@@ -15,20 +15,25 @@ namespace Yuki_Theme.Core.WPF.Windows
 {
 	public partial class StickerWindow : SnapWindow, Sticker.IView
 	{
-		private Drawing.PointF _relativePosition;
+		internal Drawing.PointF _relativePosition;
 
 		private Sticker.IModel _model;
 
 		private Sticker.IPresenter _presenter;
+		private Point              _anchorPoint;
+		private bool               _inDrag;
+
+		private PositionCalculator _calculator;
 
 		public StickerWindow ()
 		{
 			InitializeComponent ();
 			_model = new StickerModel ();
 			_presenter = new StickerPresenter (_model, this);
+			_calculator = new PositionCalculator (this);
 		}
-		
-		
+
+
 		public static StickerWindow CreateStickerControl (Window parent)
 		{
 			StickerWindow stickerWindow = new StickerWindow
@@ -36,7 +41,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				target = parent,
 				Owner = parent
 			};
-			stickerWindow.ReadData();
+			stickerWindow.ReadData ();
 			return stickerWindow;
 		}
 
@@ -50,7 +55,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Owner = parentForm.Handle
 			};
-			stickerWindow.ReadData();
+			stickerWindow.ReadData ();
 			return stickerWindow;
 		}
 
@@ -79,8 +84,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			if (Equals (image.RawFormat, ImageFormat.Gif))
 			{
 				ImageBehavior.SetAnimatedSource (Sticker, image.ToWPFGIFImage ());
-			}
-			else
+			} else
 				Sticker.Source = image.ToWPFImage ();
 		}
 
@@ -94,8 +98,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 					targetForm.Focus ();
 			}
 		}
-		
-		
+
+
 		public void ReadData ()
 		{
 			_relativePosition = Drawing.PointF.Empty;
@@ -110,8 +114,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 					float x = float.Parse (cc [0]);
 					float y = float.Parse (cc [1]);
 					_relativePosition = new Drawing.PointF (x, y);
-					align = (AnchorStyles) (int.Parse (cc [2]));
-					RelativeUnit un = (RelativeUnit) (int.Parse (cc [3]));
+					align = (AnchorStyles)(int.Parse (cc [2]));
+					RelativeUnit un = (RelativeUnit)(int.Parse (cc [3]));
 					if (unit != un)
 					{
 						float tunitx = Convert.ToInt32 (Owner.Width) / 100f;
@@ -126,7 +130,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				} catch (Exception)
 				{
-					_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point(BORDER_OUTLINE)  : GetMargin ();
+					_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE) : GetMargin ();
 					align = AnchorStyles.Bottom | AnchorStyles.Right;
 				}
 			} else
@@ -150,16 +154,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return new Drawing.Point (margin, margin);
 		}
 
-		private void SetBorderOutline ()
+		internal void SetBorderOutline ()
 		{
-			if (Settings.useCustomSticker)
-			{
-				borderOutlineX = _relativePosition.X;
-				borderOutlineY = _relativePosition.Y;
-			} else
-			{
-				borderOutlineX = borderOutlineY = BORDER_OUTLINE;
-			}
+			borderOutlineX = _relativePosition.X;
+			borderOutlineY = _relativePosition.Y;
+			borderOutlineX = borderOutlineY = BORDER_OUTLINE;
 		}
 
 		public void LoadImage (Drawing.Image image) => _presenter.LoadImage (image);
@@ -170,15 +169,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			if (Settings.hideOnHover)
 			{
-				DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromMilliseconds(Settings.hideDelay));
-				Sticker.BeginAnimation(OpacityProperty, anim);
+				DoubleAnimation anim = new DoubleAnimation (0.01, TimeSpan.FromMilliseconds (Settings.hideDelay));
+				Sticker.BeginAnimation (OpacityProperty, anim);
 			}
 		}
 		private void Sticker_MouseLeave (object sender, MouseEventArgs e)
 		{
 			if (Settings.hideOnHover)
 			{
-				DoubleAnimation anim = new DoubleAnimation (1, TimeSpan.FromMilliseconds(Settings.hideDelay));
+				DoubleAnimation anim = new DoubleAnimation (1, TimeSpan.FromMilliseconds (Settings.hideDelay));
 				Sticker.BeginAnimation (OpacityProperty, anim);
 			}
 		}
@@ -197,5 +196,42 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Visibility = _presenter.StickerAvailable () ? Visibility.Visible : Visibility.Hidden;
 		}
+
+		protected override void OnMouseLeftButtonDown (MouseButtonEventArgs e)
+		{
+			_anchorPoint = e.GetPosition (this);
+			_inDrag = true;
+			CaptureMouse ();
+			e.Handled = true;
+			_calculator.PrepareData ();
+		}
+
+		protected override void OnMouseMove (MouseEventArgs e)
+		{
+			if (_inDrag)
+			{
+				Point currentPoint = e.GetPosition (this);
+				double pointX = this.Left + currentPoint.X - _anchorPoint.X;
+				double pointY = this.Top + currentPoint.Y - _anchorPoint.Y;
+				Console.WriteLine ("I: {0}:{1}", pointX, pointY);
+				_calculator.KeepBounds (ref pointX, ref pointY);
+				Console.WriteLine ("D: {0}:{1}", pointX, pointY);
+				this.Left = pointX;
+				this.Top = pointY; // this is not changing in your case	
+			}
+		}
+
+		protected override void OnMouseLeftButtonUp (MouseButtonEventArgs e)
+		{
+			if (_inDrag)
+			{
+				ReleaseMouseCapture ();
+				_inDrag = false;
+				e.Handled = true;
+				_calculator.SetAligns (e.GetPosition (Owner));
+				_calculator.SaveRelatedPosition ();
+			}
+		}
+
 	}
 }

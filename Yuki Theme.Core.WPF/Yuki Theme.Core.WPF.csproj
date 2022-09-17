@@ -165,6 +165,7 @@
         <Compile Include="Windows\NotificationWindow.xaml.cs">
           <DependentUpon>NotificationWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\PositionCalculator.cs" />
         <Compile Include="Windows\ProgressWindow.xaml.cs">
           <DependentUpon>ProgressWindow.xaml</DependentUpon>
         </Compile>

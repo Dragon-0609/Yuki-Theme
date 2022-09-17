@@ -94,5 +94,23 @@ namespace Yuki_Theme.Core.WPF
 				return AlignmentY.Bottom;
 			return AlignmentY.Center;
 		}
+
+		public static AnchorStyles ConvertToAlign (this AlignmentX align)
+		{
+			if (align == AlignmentX.Left)
+				return AnchorStyles.Left;
+			if (align == AlignmentX.Right)
+				return AnchorStyles.Right;
+			return AnchorStyles.None;
+		}
+
+		public static AnchorStyles ConvertToAlign (this AlignmentY align)
+		{
+			if (align == AlignmentY.Top)
+				return AnchorStyles.Top;
+			if (align == AlignmentY.Bottom)
+				return AnchorStyles.Bottom;
+			return AnchorStyles.None;
+		}
 	}
 }
