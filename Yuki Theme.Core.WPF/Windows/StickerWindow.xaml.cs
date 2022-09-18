@@ -156,9 +156,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal void SetBorderOutline ()
 		{
+			
 			borderOutlineX = _relativePosition.X;
 			borderOutlineY = _relativePosition.Y;
-			borderOutlineX = borderOutlineY = BORDER_OUTLINE;
+			
+			// borderOutlineX = borderOutlineY = BORDER_OUTLINE;
 		}
 
 		public void LoadImage (Drawing.Image image) => _presenter.LoadImage (image);
@@ -213,9 +215,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Point currentPoint = e.GetPosition (this);
 				double pointX = this.Left + currentPoint.X - _anchorPoint.X;
 				double pointY = this.Top + currentPoint.Y - _anchorPoint.Y;
-				Console.WriteLine ("I: {0}:{1}", pointX, pointY);
 				_calculator.KeepBounds (ref pointX, ref pointY);
-				Console.WriteLine ("D: {0}:{1}", pointX, pointY);
 				this.Left = pointX;
 				this.Top = pointY; // this is not changing in your case	
 			}

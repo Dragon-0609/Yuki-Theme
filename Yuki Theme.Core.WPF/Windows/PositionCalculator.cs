@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
 using Point = System.Windows.Point;
@@ -33,26 +34,32 @@ namespace Yuki_Theme.Core.WPF.Windows
 			height = (int)(owner.Height / 2);
 			height3 = (int)(owner.Height / 3);
 			height32 = height3 * 2;
+			Console.WriteLine (unit.ToString ());
+			if (unit == RelativeUnit.Percent)
+			{
+				unitx = (float)(owner.Width / 100);
+				unity = (float)(owner.Height / 100);
+			}
 		}
 		public void KeepBounds (ref double x, ref double y)
 		{
 			Rect owner = window.Owner.GetAbsoluteRect ();
 
-			if (x < owner.Left)
-				x = owner.Left;
+			if (x < owner.Left + _margin.X)
+				x = owner.Left + _margin.X;
 			else
 			{
-				if (x + window.Width > owner.Left + owner.Width)
-					x = owner.Left + owner.Width - window.Width;
+				if (x + window.Width > owner.Left + owner.Width - _margin.X)
+					x = owner.Left + owner.Width - window.Width - _margin.X;
 			}
 
-			if (y < owner.Top)
-				y = owner.Top;
+			if (y < owner.Top + _margin.Y)
+				y = owner.Top + _margin.Y;
 			else
 			{
 
-				if (y + window.Height > owner.Top + owner.Height)
-					y = owner.Top + owner.Height - window.Height;
+				if (y + window.Height > owner.Top + owner.Height - _margin.Y)
+					y = owner.Top + owner.Height - window.Height - _margin.Y;
 			}
 		}
 
@@ -75,25 +82,30 @@ namespace Yuki_Theme.Core.WPF.Windows
 				// Y > Top -> Bottom || Center 
 				window.AlignY = position.Y > height32 ? AlignmentY.Bottom : AlignmentY.Center;
 			}
-
-
+			Console.WriteLine ("{0} - {1}", window.AlignX.ToString (), window.AlignY.ToString ());
 		}
 
 		private float GetRelatedX (Rect owner)
 		{
 			float res = 0;
 			AlignmentX style = window.AlignX;
+			double left = Math.Abs (owner.Left - window.Left);
 			if (style == AlignmentX.Left)
 			{
-				res = (float)((window.Left - _margin.X) / (unit == RelativeUnit.Percent ? unitx : 1));
+				res = (float)left;
 			} else if (style == AlignmentX.Center)
 			{
-				res = (float)((width - (window.Width / 2) - (_margin.X / 2) - window.Left) / (unit == RelativeUnit.Percent ? unitx : 1));
+				Console.WriteLine ("Center: {0}", width);
+				Console.WriteLine ("Window Width: {0}", window.Width / 2);
+				Console.WriteLine ("Left: {0}", left);
+				res = (float)(width - window.Width / 2 - left);
+
 			} else if (style == AlignmentX.Right)
 			{
-				res = (float)((owner.Width - _margin.X - (window.Left + window.Width)) / (unit == RelativeUnit.Percent ? unitx : 1));
+				res = (float)(owner.Width - (left + window.Width));
 			}
-
+			if (unit == RelativeUnit.Percent)
+				res /= unitx;
 			return res;
 		}
 
@@ -101,24 +113,30 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			float res = 0;
 			AlignmentY style = window.AlignY;
+			double top = Math.Abs (owner.Top - window.Top);
 			if (style == AlignmentY.Top)
 			{
-				res = (float)((window.Top - _margin.Y) / (unit == RelativeUnit.Percent ? unity : 1));
+				res = (float)top;
 			} else if (style == AlignmentY.Center)
 			{
-				res = (float)((height - (window.Height / 2) - (_margin.Y / 2) - window.Top) / (unit == RelativeUnit.Percent ? unity : 1));
+				res = (float)(height - window.Height / 2 - top);
 			} else if (style == AlignmentY.Bottom)
 			{
-				res = (float)((owner.Height - _margin.Y - window.Top + window.Height) / (unit == RelativeUnit.Percent ? unity : 1));
+				res = (float)(owner.Height - (top + window.Height));
 			}
-
+			if (unit == RelativeUnit.Percent)
+				res /= unity;
 			return res;
 		}
+
 		public void SaveRelatedPosition ()
 		{
 			Rect owner = window.Owner.GetAbsoluteRect ();
+			Console.WriteLine (owner);
 			window._relativePosition = new PointF (GetRelatedX (owner), GetRelatedY (owner));
+			Console.WriteLine (window._relativePosition.ToString ());
 			window.SetBorderOutline ();
+			window.ResetPosition ();
 		}
 	}
 }
