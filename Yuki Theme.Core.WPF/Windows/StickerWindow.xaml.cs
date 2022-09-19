@@ -4,8 +4,10 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WpfAnimatedGif;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Interfaces;
 using Drawing = System.Drawing;
@@ -25,6 +27,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private PositionCalculator _calculator;
 
+		private GridWindow _grid;
+
 		public StickerWindow ()
 		{
 			InitializeComponent ();
@@ -36,25 +40,16 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public static StickerWindow CreateStickerControl (Window parent)
 		{
-			StickerWindow stickerWindow = new StickerWindow
-			{
-				target = parent,
-				Owner = parent
-			};
+			StickerWindow stickerWindow = new StickerWindow();
+			stickerWindow.SetOwner (parent);
 			stickerWindow.ReadData ();
 			return stickerWindow;
 		}
 
-		public static StickerWindow CreateStickerControl (Form parentForm)
+		public static StickerWindow CreateStickerControl (Form parent)
 		{
-			StickerWindow stickerWindow = new StickerWindow
-			{
-				targetForm = parentForm
-			};
-			WindowInteropHelper helper = new WindowInteropHelper (stickerWindow)
-			{
-				Owner = parentForm.Handle
-			};
+			StickerWindow stickerWindow = new StickerWindow ();
+			stickerWindow.SetOwner (parent);
 			stickerWindow.ReadData ();
 			return stickerWindow;
 		}
@@ -206,6 +201,33 @@ namespace Yuki_Theme.Core.WPF.Windows
 			CaptureMouse ();
 			e.Handled = true;
 			_calculator.PrepareData ();
+			_grid = new GridWindow
+			{
+				AlignX = AlignmentX.Left,
+				AlignY = AlignmentY.Top,
+				borderOutlineX = 0,
+				borderOutlineY = 0
+			};
+			if (target != null)
+			{
+				_grid.SetOwner (target);
+				_grid.Foreground = WPFHelper.borderBrush;
+				Rect rect = target.GetAbsoluteRect ();
+				_grid.Width = rect.Width;
+				_grid.Height = rect.Height;
+			}
+			else
+			{
+				_grid.SetOwner (targetForm);
+				_grid.Foreground = ColorKeeper.bgBorder.ToWPFColor ().ToBrush ();
+				_grid.Width = targetForm.Width;
+				_grid.Height = targetForm.Height;
+			}
+			
+			_grid.ResetPosition ();
+			_grid.Show ();
+			_grid.Focus ();
+			Focus ();
 		}
 
 		protected override void OnMouseMove (MouseEventArgs e)
@@ -228,8 +250,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 				ReleaseMouseCapture ();
 				_inDrag = false;
 				e.Handled = true;
-				_calculator.SetAligns (e.GetPosition (Owner));
-				_calculator.SaveRelatedPosition ();
+				_grid.Close ();
+				Point point = e.GetPosition (Owner);
+				_calculator.SetAligns (point);
+				_calculator.SaveRelatedPosition (point);
 			}
 		}
 

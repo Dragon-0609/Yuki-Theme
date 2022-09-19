@@ -146,6 +146,9 @@
         <Compile Include="Windows\CustomStickerWindow.xaml.cs">
           <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Windows\GridWindow.xaml.cs">
+          <DependentUpon>GridWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Windows\LicenseWindow.xaml.cs">
           <DependentUpon>LicenseWindow.xaml</DependentUpon>
         </Compile>
@@ -219,6 +222,7 @@
         <Page Include="Windows\AboutWindow.xaml" />
         <Page Include="Windows\AddThemeWindow.xaml" />
         <Page Include="Windows\CustomStickerWindow.xaml" />
+        <Page Include="Windows\GridWindow.xaml" />
         <Page Include="Windows\LicenseWindow.xaml" />
         <Page Include="Windows\MainWindow.xaml">
           <Generator>MSBuild:Compile</Generator>

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Media;
 using MessageBox = System.Windows.MessageBox;
 
@@ -252,6 +253,21 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			AlignX = align.AlignX;
 			AlignY = align.AlignY;
+		}
+
+		public void SetOwner (Window parent)
+		{
+			target = parent;
+			Owner = parent;
+		}
+		
+		public void SetOwner (Form parent)
+		{
+			targetForm = parent;
+			WindowInteropHelper helper = new WindowInteropHelper (this)
+			{
+				Owner = parent.Handle
+			};
 		}
 	}
 

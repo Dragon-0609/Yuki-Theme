@@ -91,27 +91,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public static NotificationWindow CreateNotification (Window parent, string title, string content)
 		{
-			NotificationWindow notificationWindow = new NotificationWindow
-			{
-				target = parent,
-				Owner = parent
-			};
+			NotificationWindow notificationWindow = new NotificationWindow ();
+			notificationWindow.SetOwner (parent);
 			notificationWindow.SetContent (title, content);
 
 			return notificationWindow;
 		}
 
-		public static NotificationWindow CreateNotification (Form parentForm, string title, string content)
+		public static NotificationWindow CreateNotification (Form parent, string title, string content)
 		{
-			NotificationWindow notificationWindow = new NotificationWindow
-			{
-				targetForm = parentForm
-			};
-			WindowInteropHelper helper = new WindowInteropHelper (notificationWindow)
-			{
-				Owner = parentForm.Handle
-			};
-
+			NotificationWindow notificationWindow = new NotificationWindow ();
+			notificationWindow.SetOwner (parent);
 			notificationWindow.SetContent (title, content);
 
 			return notificationWindow;

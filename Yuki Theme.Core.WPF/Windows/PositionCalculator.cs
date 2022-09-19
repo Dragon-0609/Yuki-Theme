@@ -85,7 +85,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Console.WriteLine ("{0} - {1}", window.AlignX.ToString (), window.AlignY.ToString ());
 		}
 
-		private float GetRelatedX (Rect owner)
+		private float GetRelatedX (Rect owner, Point point)
 		{
 			float res = 0;
 			AlignmentX style = window.AlignX;
@@ -96,9 +96,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			} else if (style == AlignmentX.Center)
 			{
 				Console.WriteLine ("Center: {0}", width);
-				Console.WriteLine ("Window Width: {0}", window.Width / 2);
-				Console.WriteLine ("Left: {0}", left);
-				res = (float)(width - window.Width / 2 - left);
+				double halfWidth = window.Width / 2;
+				
+				Console.WriteLine ("Window Width: {0}", halfWidth);
+				Console.WriteLine ("Left: {0}", point.X);
+				res = (float)(width - point.X + halfWidth);
 
 			} else if (style == AlignmentX.Right)
 			{
@@ -109,7 +111,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return res;
 		}
 
-		private float GetRelatedY (Rect owner)
+		private float GetRelatedY (Rect owner, Point point)
 		{
 			float res = 0;
 			AlignmentY style = window.AlignY;
@@ -129,11 +131,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return res;
 		}
 
-		public void SaveRelatedPosition ()
+		public void SaveRelatedPosition (Point point)
 		{
 			Rect owner = window.Owner.GetAbsoluteRect ();
 			Console.WriteLine (owner);
-			window._relativePosition = new PointF (GetRelatedX (owner), GetRelatedY (owner));
+			window._relativePosition = new PointF (GetRelatedX (owner, point), GetRelatedY (owner, point));
 			Console.WriteLine (window._relativePosition.ToString ());
 			window.SetBorderOutline ();
 			window.ResetPosition ();
