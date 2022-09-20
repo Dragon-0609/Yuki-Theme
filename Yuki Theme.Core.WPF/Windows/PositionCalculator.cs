@@ -95,12 +95,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				res = (float)left;
 			} else if (style == AlignmentX.Center)
 			{
-				Console.WriteLine ("Center: {0}", width);
-				double halfWidth = window.Width / 2;
-				
-				Console.WriteLine ("Window Width: {0}", halfWidth);
-				Console.WriteLine ("Left: {0}", point.X);
-				res = (float)(width - point.X + halfWidth);
+				res = (float)((point.X - (point.X - left)) - width);
 
 			} else if (style == AlignmentX.Right)
 			{
@@ -121,7 +116,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				res = (float)top;
 			} else if (style == AlignmentY.Center)
 			{
-				res = (float)(height - window.Height / 2 - top);
+				res = (float)((point.Y - (point.Y - top)) - height);
 			} else if (style == AlignmentY.Bottom)
 			{
 				res = (float)(owner.Height - (top + window.Height));
