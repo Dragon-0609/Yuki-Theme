@@ -38,6 +38,7 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			internal abstract void ResetStickerPosition();
 			internal abstract void ChangeSticker(Image image);
 			internal abstract void UpdateStickerVisibility ();
+			internal abstract void ReloadStickerPositionData ();
 
 			internal abstract void CalculateWallpaperSize(Rectangle rectangle);
 

@@ -40,7 +40,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public static StickerWindow CreateStickerControl (Window parent)
 		{
-			StickerWindow stickerWindow = new StickerWindow();
+			StickerWindow stickerWindow = new StickerWindow ();
 			stickerWindow.SetOwner (parent);
 			stickerWindow.ReadData ();
 			return stickerWindow;
@@ -100,6 +100,29 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_relativePosition = Drawing.PointF.Empty;
 			AnchorStyles align;
 			RelativeUnit unit = Settings.unit;
+			align = GetPositioningValues (unit);
+			AlignX = align.ConvertToX ();
+			AlignY = align.ConvertToY ();
+
+			SetBorderOutline ();
+		}
+		
+		
+		private string ConvertLocationToSave ()
+		{
+			string s =
+				$"{_relativePosition.X}|{_relativePosition.Y}|{(int)(AlignX.ConvertToAlign () | AlignY.ConvertToAlign ())}|{(int)Settings.unit}";
+			return s;
+		}
+
+		internal void SaveData ()
+		{
+			Settings.database.UpdateData (SettingsConst.STICKER_POSITION, ConvertLocationToSave ());
+		}
+		
+		private AnchorStyles GetPositioningValues (RelativeUnit unit)
+		{
+			AnchorStyles align;
 			string data = Settings.database.ReadData (SettingsConst.STICKER_POSITION, "");
 			if (data != "")
 			{
@@ -125,36 +148,36 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				} catch (Exception)
 				{
-					_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE) : GetMargin ();
-					align = AnchorStyles.Bottom | AnchorStyles.Right;
+					align = SetDefaultPositions (unit);
 				}
 			} else
 			{
-				_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE) : GetMargin ();
-				align = AnchorStyles.Bottom | AnchorStyles.Right;
+				align = SetDefaultPositions (unit);
 			}
-
-			AlignX = align.ConvertToX ();
-			AlignY = align.ConvertToY ();
-
-			SetBorderOutline ();
+			return align;
 		}
+		private AnchorStyles SetDefaultPositions (RelativeUnit unit)
+		{
+			_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE, BORDER_OUTLINE_Y) : GetMargin ();
+			return AnchorStyles.Bottom | AnchorStyles.Right;
+		}
+		
 		private static Drawing.Point GetMargin ()
 		{
 			int margin = 1;
 			if (Helper.mode == ProductMode.Plugin)
 			{
-				margin = 20;
+				margin = 10;
 			}
 			return new Drawing.Point (margin, margin);
 		}
 
 		internal void SetBorderOutline ()
 		{
-			
+
 			borderOutlineX = _relativePosition.X;
 			borderOutlineY = _relativePosition.Y;
-			
+
 			// borderOutlineX = borderOutlineY = BORDER_OUTLINE;
 		}
 
@@ -196,38 +219,50 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		protected override void OnMouseLeftButtonDown (MouseButtonEventArgs e)
 		{
-			_anchorPoint = e.GetPosition (this);
-			_inDrag = true;
-			CaptureMouse ();
-			e.Handled = true;
-			_calculator.PrepareData ();
-			_grid = new GridWindow
+			if (e.ClickCount == 1)
 			{
-				AlignX = AlignmentX.Left,
-				AlignY = AlignmentY.Top,
-				borderOutlineX = 0,
-				borderOutlineY = 0
-			};
-			if (target != null)
+				StartDragging (e);
+			} else if (e.ClickCount == 2)
 			{
-				_grid.SetOwner (target);
-				_grid.Foreground = WPFHelper.borderBrush;
-				Rect rect = target.GetAbsoluteRect ();
-				_grid.Width = rect.Width;
-				_grid.Height = rect.Height;
+				MouseDoubleClick ();
 			}
-			else
+		}
+		private void StartDragging (MouseButtonEventArgs e)
+		{
+			if (Settings.positioning && !Settings.hideOnHover)
 			{
-				_grid.SetOwner (targetForm);
-				_grid.Foreground = ColorKeeper.bgBorder.ToWPFColor ().ToBrush ();
-				_grid.Width = targetForm.Width;
-				_grid.Height = targetForm.Height;
+				_anchorPoint = e.GetPosition (this);
+				_inDrag = true;
+				CaptureMouse ();
+				e.Handled = true;
+				_calculator.PrepareData ();
+				_grid = new GridWindow
+				{
+					AlignX = AlignmentX.Left,
+					AlignY = AlignmentY.Top,
+					borderOutlineX = 0,
+					borderOutlineY = 0
+				};
+				if (target != null)
+				{
+					_grid.SetOwner (target);
+					_grid.Foreground = WPFHelper.borderBrush;
+					Rect rect = target.GetAbsoluteRect ();
+					_grid.Width = rect.Width;
+					_grid.Height = rect.Height;
+				} else
+				{
+					_grid.SetOwner (targetForm);
+					_grid.Foreground = ColorKeeper.bgBorder.ToWPFColor ().ToBrush ();
+					_grid.Width = targetForm.Width;
+					_grid.Height = targetForm.Height;
+				}
+
+				_grid.ResetPosition ();
+				_grid.Show ();
+				_grid.Focus ();
+				Focus ();
 			}
-			
-			_grid.ResetPosition ();
-			_grid.Show ();
-			_grid.Focus ();
-			Focus ();
 		}
 
 		protected override void OnMouseMove (MouseEventArgs e)
@@ -252,10 +287,19 @@ namespace Yuki_Theme.Core.WPF.Windows
 				e.Handled = true;
 				_grid.Close ();
 				Point point = e.GetPosition (Owner);
+				
 				_calculator.SetAligns (point);
 				_calculator.SaveRelatedPosition (point);
+				Console.WriteLine(_relativePosition.ToString ());
 			}
 		}
 
+		private void MouseDoubleClick ()
+		{
+			if (!Settings.hideOnHover && Settings.positioning)
+			{
+				SaveData ();
+			}
+		}
 	}
 }

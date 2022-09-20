@@ -7,6 +7,6 @@
             mc:Ignorable="d" Background="Transparent" BorderThickness="0" WindowStyle="None" ResizeMode="NoResize"
             AllowsTransparency="True"
             Title="StickerWindow" Height="200" Width="200"
-            MouseEnter="Sticker_MouseEnter" MouseLeave="Sticker_MouseLeave">
+            MouseEnter="Sticker_MouseEnter" MouseLeave="Sticker_MouseLeave"> 
     <Image Name="Sticker" MouseDown="FocusBack" />
 </controls:SnapWindow>

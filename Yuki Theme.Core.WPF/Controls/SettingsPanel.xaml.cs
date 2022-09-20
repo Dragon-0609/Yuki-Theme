@@ -35,18 +35,19 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Window ParentWindow = null;
 		public Form   ParentForm   = null;
 
-		private bool blockLanguageSelection = false;
+		private bool blockLanguageSelection;
 
 		public Action UpdateExternalTranslations;
 
 		public Action                   ExecuteOnLoad;
 		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
 
-
 		public PopupController popupController;
 
 		private bool portable;
 
+		public ChangedSettings settings = new ChangedSettings ();
+		
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
@@ -332,6 +333,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void AllowPositioningCheckedChanged (object sender, RoutedEventArgs e)
 		{
 			ResetMargin.IsEnabled = AllowPositioning.IsChecked == true;
+			if (HideHover.IsChecked != null && (bool)HideHover.IsChecked && AllowPositioning.IsChecked != null && (bool)AllowPositioning.IsChecked)
+				HideHover.IsChecked = false;
 		}
 
 		private void ChooseCustomSticker (object sender, RoutedEventArgs e)
@@ -512,10 +515,12 @@ namespace Yuki_Theme.Core.WPF.Controls
 				}
 			}
 		}
-		
+
 		private void HideHover_CheckedChanged (object sender, RoutedEventArgs e)
 		{
 			HideDelay.IsEnabled = HideHover.IsChecked == true;
+			if (HideHover.IsChecked != null && AllowPositioning.IsChecked != null && (bool)AllowPositioning.IsChecked && (bool)HideHover.IsChecked)
+				AllowPositioning.IsChecked = false;
 		}
 
 
@@ -557,6 +562,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 
 			return File.Exists (Path.Combine (path, "PascalABCNET.exe")) && File.Exists (Path.Combine (path, "pabcnetc.exe"));
+		}
+		private void ResetMargin_Click (object sender, RoutedEventArgs e)
+		{
+			settings.ResetMargins = true;
 		}
 	}
 }

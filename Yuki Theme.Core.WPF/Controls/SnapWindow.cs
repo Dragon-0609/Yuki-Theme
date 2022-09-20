@@ -10,30 +10,31 @@ namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class SnapWindow : Window
 	{
-		public const int BORDER_OUTLINE = 10;
-			
+		public const int BORDER_OUTLINE   = 10;
+		public const int BORDER_OUTLINE_Y = 20;
+
 		public float borderOutlineX = BORDER_OUTLINE;
-		public float borderOutlineY = BORDER_OUTLINE;
-		
+		public float borderOutlineY = BORDER_OUTLINE_Y;
+
 		public Window target;
 		public Form   targetForm;
-		
+
 		public AlignmentX AlignX = AlignmentX.Left;
 		public AlignmentY AlignY = AlignmentY.Top;
-		
+
 		private FormWindowState _formWindowState = FormWindowState.Normal;
 
 		private bool lockState = false;
 
 		private Rect _currentRect;
-		
+
 		public void ResetPosition ()
 		{
 			if (target != null || targetForm != null)
 			{
 				if (target != null)
 					_currentRect = target.GetAbsoluteRect ();
-				
+
 				Left = GetX ();
 				Top = GetY ();
 			}
@@ -46,8 +47,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			WindowStyle = WindowStyle.None;
 			ShowInTaskbar = false;
 		}
-		
-		
+
+
 		#region Get
 
 		private double GetX ()
@@ -57,7 +58,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			if (AlignX == AlignmentX.Left)
 			{
 				res = left + borderOutlineX;
-			}else
+			} else
 			{
 				double width = target != null ? _currentRect.Width : GetWidth ();
 				if (AlignX == AlignmentX.Center)
@@ -79,12 +80,12 @@ namespace Yuki_Theme.Core.WPF.Controls
 			if (AlignY == AlignmentY.Top)
 			{
 				res = top + borderOutlineY;
-			}else
+			} else
 			{
 				double height = target != null ? _currentRect.Height : GetHeight ();
 				if (AlignY == AlignmentY.Center)
 				{
-					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE ? 0 : borderOutlineY);
+					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE_Y ? 0 : borderOutlineY);
 				} else
 				{
 					res = top + height - RenderSize.Height - borderOutlineY;
@@ -93,7 +94,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 			return res;
 		}
-		
+
 
 		private double GetLeft ()
 		{
@@ -110,8 +111,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			else
 				return targetForm.Top;
 		}
-		
-		
+
+
 
 		private double GetWidth ()
 		{
@@ -131,7 +132,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		#endregion
 
-		
+
 		private void BindPosition ()
 		{
 			if (target != null)
@@ -177,7 +178,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 					ResetPosition ();
 				}
 			}
-			
+
 			PositionChanged (sender, e);
 		}
 
@@ -200,7 +201,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				WindowState = WindowState.Normal;
 				if (targetForm.WindowState == FormWindowState.Maximized)
 				{
-					
+
 				}
 			}
 
@@ -243,7 +244,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			UnbindPosition ();
 			base.OnClosed (e);
 		}
-		
+
 		private void SnapWindow_OnLoaded (object sender, RoutedEventArgs e)
 		{
 			BindPosition ();
@@ -260,7 +261,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			target = parent;
 			Owner = parent;
 		}
-		
+
 		public void SetOwner (Form parent)
 		{
 			targetForm = parent;

@@ -10,51 +10,51 @@ namespace Yuki_Theme.Core.WPF.Windows
 {
 	internal class MainModel : Main.Model
 	{
-		
+
 		#region Events
 
 		public override event SetTheme SetTheme;
 		public override event SetTheme StartSettingTheme;
 
-		internal override void InvokeSetTheme()
+		internal override void InvokeSetTheme ()
 		{
 			if (SetTheme != null) SetTheme ();
 		}
 
-		internal override void InvokeStartSettingTheme()
+		internal override void InvokeStartSettingTheme ()
 		{
-			if (StartSettingTheme != null) StartSettingTheme ();	
+			if (StartSettingTheme != null) StartSettingTheme ();
 		}
 
 		#endregion
-		
+
 		#region Sticker
 
 		private StickerWindow _stickerWindow;
 
 
-		internal override void InitSticker(Window window)
+		internal override void InitSticker (Window window)
 		{
 			_stickerWindow = StickerWindow.CreateStickerControl (window);
-			_stickerWindow.Show ();	
+			_stickerWindow.Show ();
 		}
 
-		internal override void LoadSticker()
+		internal override void LoadSticker ()
 		{
-			_stickerWindow.LoadImage(Sticker);
+			_stickerWindow.LoadImage (Sticker);
 		}
 
-		internal override void ReloadSticker()
+		internal override void ReloadSticker ()
 		{
-			_stickerWindow.LoadSticker();
+			_stickerWindow.LoadSticker ();
 		}
 
-		internal override void ChangeSticker(Image image)
+		internal override void ChangeSticker (Image image)
 		{
-			_stickerWindow.LoadImage(image);
+			_stickerWindow.LoadImage (image);
 		}
 
-		internal override void ResetStickerPosition()
+		internal override void ResetStickerPosition ()
 		{
 			_stickerWindow.SetStickerSize ();
 			_stickerWindow.ResetPosition ();
@@ -62,49 +62,53 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void UpdateStickerVisibility () => _stickerWindow.UpdateStickerVisibility ();
 
+		internal override void ReloadStickerPositionData ()
+		{
+			_stickerWindow.ReadData ();
+		}
+
 		#endregion
 
 		#region Wallpaper
 
-		internal override void CalculateWallpaperSize(Rectangle rectangle)
+		internal override void CalculateWallpaperSize (Rectangle rectangle)
 		{
 			if (CalculatedWallpaperSize.Width != rectangle.Width || CalculatedWallpaperSize.Height != rectangle.Height)
 			{
 				CalculatedWallpaperSize = Helper.GetSizes (WallpaperRender.Size, rectangle.Width, rectangle.Height,
-					CentralAPI.Current.currentTheme.align);
+				                                           CentralAPI.Current.currentTheme.align);
 			}
 		}
 
-		internal override bool CanDrawWallpaper() => WallpaperRender != null && Settings.bgImage;
+		internal override bool CanDrawWallpaper () => WallpaperRender != null && Settings.bgImage;
 
-		internal override void ChangeWallpaperOpacity()
+		internal override void ChangeWallpaperOpacity ()
 		{
 			WallpaperRender = WallpaperOriginal != null ? Helper.SetOpacity (WallpaperOriginal, CentralAPI.Current.currentTheme.WallpaperOpacity) : null;
 		}
-		
 
 		#endregion
-		
+
 		#region Highlighter
 
-		internal override void InitHighlighter(FastColoredTextBox box) => highlighter = new Highlighter(box);
+		internal override void InitHighlighter (FastColoredTextBox box) => highlighter = new Highlighter (box);
 
-		internal override void InitializeSyntax() => highlighter.InitializeSyntax ();
-		internal override void UpdateSyntaxColors() => highlighter.UpdateColors();
+		internal override void InitializeSyntax () => highlighter.InitializeSyntax ();
+		internal override void UpdateSyntaxColors () => highlighter.UpdateColors ();
 
-		internal override void ActivateSyntaxColors(string item)
+		internal override void ActivateSyntaxColors (string item)
 		{
 			highlighter.activateColors (item);
 		}
 
 		#endregion
 
-		internal override void ChangeProductMode(ProductMode mode, Action ifPlugin)
+		internal override void ChangeProductMode (ProductMode mode, Action ifPlugin)
 		{
 			if (Helper.mode == null)
 				Helper.mode = mode;
 			else if (Helper.mode == ProductMode.Plugin)
-				ifPlugin();
+				ifPlugin ();
 		}
 
 	}

@@ -154,7 +154,7 @@
                                     <Button Padding="8 2" Margin="0"
                                             Content="{DynamicResource settings.general.positioning.reset}"
                                             Name="ResetMargin"
-                                            Style="{StaticResource ButtonUserControl}" />
+                                            Style="{StaticResource ButtonUserControl}" Click="ResetMargin_Click" />
                                     <Label Padding="0">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="16" VerticalAlignment="Center" Height="16"

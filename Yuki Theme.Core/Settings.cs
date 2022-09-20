@@ -201,4 +201,27 @@ namespace Yuki_Theme.Core
 			}
 		}
 	}
+
+	public class ChangedSettings
+	{
+		public readonly string      Lang;
+		public readonly bool        CustomSticker;
+		public readonly bool        DimensionCap;
+		public readonly int         DimensionCapMax;
+		public readonly bool        ShowSticker;
+		public readonly SettingMode CurrentMode;
+
+		public bool ResetMargins;
+
+		public ChangedSettings ()
+		{
+			Lang = Settings.localization;
+			CustomSticker = Settings.useCustomSticker;
+			DimensionCap = Settings.useDimensionCap;
+			DimensionCapMax = Settings.dimensionCapMax;
+			ShowSticker = Settings.swSticker;
+			CurrentMode = Settings.settingMode;
+		}
+
+	}
 }

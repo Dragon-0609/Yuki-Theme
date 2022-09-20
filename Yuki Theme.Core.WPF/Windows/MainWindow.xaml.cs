@@ -186,18 +186,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Owner = this,
 				popupController = _popupController
 			};
-			
-			string lang = Settings.localization;
-			bool customSticker = Settings.useCustomSticker;
-			bool dimensionCap = Settings.useDimensionCap;
-			int dimensionCapMax = Settings.dimensionCapMax;
-			bool showSticker = Settings.swSticker;
+
 			bool? dialog = settingsWindow.ShowDialog ();
-			SettingMode currentMode = Settings.settingMode;
+			string lang = settingsWindow.SettingsPanelControl.settings.Lang;
 			if (dialog != null && (bool)dialog)
 			{
 				settingsWindow.utilities.SaveSettings ();
-				ApplySettingsChanges (currentMode, showSticker, customSticker, dimensionCap, dimensionCapMax);
+				ApplySettingsChanges (settingsWindow.SettingsPanelControl.settings);
 			} else
 			{
 				Settings.localization = lang;
@@ -208,7 +203,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				UpdateTranslations ();
 			}
-			
+
 		}
 
 		private void Restore ()
@@ -527,37 +522,44 @@ namespace Yuki_Theme.Core.WPF.Windows
 			CentralAPI.Current.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
 			SetOpacityWallpaper ();
 		}
-		
-		private void ApplySettingsChanges (SettingMode currentMode, bool showSticker, bool customSticker, bool dimensionCap, int dimensionCapMax)
+
+		private void ApplySettingsChanges (ChangedSettings settings)
 		{
 			ToggleEditor ();
-			if (currentMode != Settings.settingMode)
+			if (settings.CurrentMode != Settings.settingMode)
 			{
 				Restore ();
 			}
-			
-			if (showSticker != Settings.swSticker)
+
+			if (settings.ShowSticker != Settings.swSticker)
 			{
 				Model.UpdateStickerVisibility ();
 			}
 
-			if (customSticker != Settings.useCustomSticker)
+			if (settings.CustomSticker != Settings.useCustomSticker)
 			{
 				if (Settings.useCustomSticker)
 				{
-					Model.ReloadSticker();	
+					Model.ReloadSticker ();
 				} else
 				{
-					Model.LoadSticker();
+					Model.LoadSticker ();
 				}
 			}
-			
-			if (dimensionCap != Settings.useDimensionCap || Settings.dimensionCapMax != dimensionCapMax)
+
+			if (settings.ResetMargins)
 			{
-				Model.ResetStickerPosition();
+				Settings.database.UpdateData (SettingsConst.STICKER_POSITION, "");
+				Model.ReloadStickerPositionData ();
+				Model.ResetStickerPosition ();
+			}
+
+			if (settings.DimensionCap != Settings.useDimensionCap || Settings.dimensionCapMax != settings.DimensionCapMax)
+			{
+				Model.ResetStickerPosition ();
 			}
 		}
-		
+
 		#endregion
 
 
