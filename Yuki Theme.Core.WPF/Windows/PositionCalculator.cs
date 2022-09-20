@@ -34,7 +34,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 			height = (int)(owner.Height / 2);
 			height3 = (int)(owner.Height / 3);
 			height32 = height3 * 2;
-			Console.WriteLine (unit.ToString ());
 			if (unit == RelativeUnit.Percent)
 			{
 				unitx = (float)(owner.Width / 100);
@@ -82,7 +81,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 				// Y > Top -> Bottom || Center 
 				window.AlignY = position.Y > height32 ? AlignmentY.Bottom : AlignmentY.Center;
 			}
-			Console.WriteLine ("{0} - {1}", window.AlignX.ToString (), window.AlignY.ToString ());
 		}
 
 		private float GetRelatedX (Rect owner, Point point)
@@ -129,9 +127,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public void SaveRelatedPosition (Point point)
 		{
 			Rect owner = window.Owner.GetAbsoluteRect ();
-			Console.WriteLine (owner);
 			window._relativePosition = new PointF (GetRelatedX (owner, point), GetRelatedY (owner, point));
-			Console.WriteLine (window._relativePosition.ToString ());
 			window.SetBorderOutline ();
 			window.ResetPosition ();
 		}
