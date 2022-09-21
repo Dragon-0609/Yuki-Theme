@@ -47,7 +47,7 @@ namespace Yuki_Theme.CLI
 				API_Events.showError = ShowError;
 				API_Events.onRename = ShowInvertSuccess;
 				API_Events.SaveInExport = AskToDelete;
-				Settings.ConnectAndGet ();
+				Settings.Get ();
 				Settings.settingMode = SettingMode.Light;
 				Settings.saveAsOld = true;
 				CentralAPI.Current.LoadSchemes ();

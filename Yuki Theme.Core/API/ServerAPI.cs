@@ -26,7 +26,12 @@ namespace Yuki_Theme.Core.API
 			ActionsDictionary.Add (RELOAD_THEME, message => Restore (bool.Parse (message.Content)));
 			ActionsDictionary.Add (PREVIEW_THEME, message => Preview ((PreviewOptions)message.OtherContent, null));
 			ActionsDictionary.Add (RELEASE_RESOURCES_OK, ResourcesReleased);
+			ActionsDictionary.Add (RELOAD_SETTINGS, ReloadSettings);
 			Server.recieved += ParseMessage;
+		}
+		private void ReloadSettings (Message obj)
+		{
+			Settings.Get ();
 		}
 
 		private void ResourcesReleased (Message message)

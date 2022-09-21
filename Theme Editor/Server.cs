@@ -29,9 +29,10 @@ namespace Theme_Editor
 		private void Init ()
 		{
 			_messages = new Queue <Message> ();
+			ConsoleLogs = true;
+			InitTimer ();
 			InitMessaging ();
 			SetAPI ();
-			InitTimer ();
 		}
 
 		private void SetAPI ()
@@ -39,7 +40,7 @@ namespace Theme_Editor
 			ServerAPI api = new ServerAPI ();
 			CentralAPI.Current = api;
 			Helper.mode = ProductMode.Plugin;
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 			api.Server = this;
 			api.LoadSchemes ();
 			api.AddEvents ();
@@ -70,6 +71,7 @@ namespace Theme_Editor
 			}else
 			{
 				Console.WriteLine ("Client Connected");
+				StartTesting ();
 				SendMessage (TEST_CONNECTION);
 			}
 		}
@@ -83,7 +85,8 @@ namespace Theme_Editor
 
 		private void MessageReceived (NamedPipeConnection <Message, Message> connection, Message message)
 		{
-			Console.WriteLine ($"Received: {message.Id}");
+			string newLine = ConsoleLogs ? "\n" : "";
+			Console.WriteLine ($"{newLine}Received: {message.Id}");
 
 			ParseMessage (message);
 			Application.Current.Dispatcher.Invoke (() =>
@@ -102,7 +105,7 @@ namespace Theme_Editor
 
 		protected override void ConnectionNotEstablished ()
 		{
-
+			CloseServer ();
 		}
 
 		public override void SendMessage (Message message)
@@ -142,6 +145,10 @@ namespace Theme_Editor
 			{
 				case TEST_CONNECTION:
 					SendMessage (TEST_CONNECTION_OK);
+					ConnectionEstablished ();
+					break;
+				case TEST_CONNECTION_OK:
+					ConnectionEstablished ();
 					break;
 
 				case CLOSE_SERVER:

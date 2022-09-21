@@ -13,7 +13,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Interfaces;
-using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
 using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Interfaces;
@@ -21,20 +20,18 @@ using Application = System.Windows.Application;
 using DataFormats = System.Windows.DataFormats;
 using DragEventArgs = System.Windows.DragEventArgs;
 using Drawing = System.Drawing;
-using MessageBox = System.Windows.MessageBox;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Yuki_Theme.Core.WPF.Windows
 {
 	public partial class MainWindow : IColorUpdatable, Main.IView
 	{
-
-		public readonly Main.Model Model;
+		public readonly  Main.Model      Model;
 		private readonly Main.IPresenter _presenter;
-		
+
 		private PopupController _popupController;
 
-		private readonly Drawing.Size _defaultSize = new Drawing.Size(20, 20);
+		private readonly Drawing.Size _defaultSize = new Drawing.Size (20, 20);
 
 		private bool _blockOpacity = false;
 
@@ -42,42 +39,44 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private Timer InstallTrackerTimer;
 
+		public Action onSettingsSaved;
+
 		#region Initialization
 
 		public MainWindow ()
 		{
 			InitializeComponent ();
-			Model = new MainModel();
-			_presenter = new MainPresenter(Model, this, this);
+			Model = new MainModel ();
+			_presenter = new MainPresenter (Model, this, this);
 		}
 
 		private void Init (object sender, RoutedEventArgs e)
 		{
-			ChangeIcon();
-			_presenter.SetAPIActions();
+			ChangeIcon ();
+			_presenter.SetAPIActions ();
 
-			Model.ChangeProductMode(ProductMode.Program, SwitchPluginMode);
+			Model.ChangeProductMode (ProductMode.Program, SwitchPluginMode);
 
-			Model.InitSticker(this);
+			Model.InitSticker (this);
 
-			Model.InitHighlighter(Fstb.box);
-			
-			_presenter.LoadThemesWithApi(Themes, Definitions);
-			
+			Model.InitHighlighter (Fstb.box);
+
+			_presenter.LoadThemesWithApi (Themes, Definitions);
+
 			Model.InitializeSyntax ();
-			
+
 			Fstb.box.Paint += bgImagePaint;
 			ToggleEditor ();
 			UpdateTranslations ();
-			
+
 			InitAdditionalComponents ();
-			Fstb.SetReadOnly();
+			Fstb.SetReadOnly ();
 		}
 
 		private void LoadDefinitionsWithSelection ()
 		{
 			int prevSelectedField = Definitions.SelectedIndex;
-			_presenter.LoadDefinitions(Definitions);
+			_presenter.LoadDefinitions (Definitions);
 			Definitions.SelectedIndex = prevSelectedField != -1 ? prevSelectedField : 0;
 		}
 
@@ -97,11 +96,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
 			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
 			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
-			WPFHelper.SetSVGImage (OpenButton, "import" + add);
-			WPFHelper.SetSVGImage (ResetEditorButton, "refresh" + add);
+			WPFHelper.SetSVGImage (OpenButton, "menu-open" + add);
+			WPFHelper.SetSVGImage (ResetEditorButton, "resetView" + add);
 		}
 
-		
+
 		private void UpdateTranslations ()
 		{
 			WPFHelper.TranslateControls (this, "ui.tooltips.", "main.labels.");
@@ -160,7 +159,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void InsertTheme (ThemeAddition res)
 		{
-			_presenter.InsertTheme(res, Themes);
+			_presenter.InsertTheme (res, Themes);
 		}
 
 		private void ManageThemes ()
@@ -174,7 +173,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			};
 
 			themesWindow.ShowDialog ();
-			_presenter.LoadThemesToUi(Themes, Definitions);
+			_presenter.LoadThemesToUi (Themes, Definitions);
 		}
 
 
@@ -213,13 +212,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			bool clean = _restoredTimes >= 3;
 			_restoredTimes = _restoredTimes >= 3 ? 0 : _restoredTimes + 1;
-			
+
 			CentralAPI.Current.Restore (clean, null);
 			LoadDefinitionsWithSelection ();
-			Model.UpdateSyntaxColors();
+			Model.UpdateSyntaxColors ();
 			UpdateColors ();
 			SetOpacityWallpaper ();
-			Model.LoadSticker();
+			Model.LoadSticker ();
 			LoadSVG ();
 			ReLoadCheckBoxImages ();
 		}
@@ -271,7 +270,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 						ItalicCheckBox.IsChecked = (bool)dic.Bold;
 					}
 
-					Model.ActivateSyntaxColors(Definitions.SelectedItem.ToString());
+					Model.ActivateSyntaxColors (Definitions.SelectedItem.ToString ());
 				} else
 				{
 					ImagePanel.Visibility = Visibility.Visible;
@@ -314,9 +313,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			CentralAPI.Current.ExportTheme (Model.WallpaperOriginal, Model.Sticker, Model.InvokeSetTheme, Model.InvokeStartSettingTheme);
 		}
 
-		private void ImportFile()
+		private void ImportFile ()
 		{
-			_presenter.ImportFile(ImportUIAddition, ImportThemeReset);
+			_presenter.ImportFile (ImportUIAddition, ImportThemeReset);
 		}
 
 		private void ImportFolder ()
@@ -331,8 +330,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 				// MessageBox.Show (CentralAPI.Current.Translate ("main.import.directory"));
 
 				_presenter.PrepareProgressWindow (dialog.FileName);
-				Thread thread = new Thread (() => ImportFolderWithProgress(dialog.FileName));
-				thread.Start();
+				Thread thread = new Thread (() => ImportFolderWithProgress (dialog.FileName));
+				thread.Start ();
 				// Themes.SelectedIndex = Themes.Items.Count - 1;
 			}
 		}
@@ -347,14 +346,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void OpenDownloader ()
 		{
 			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm ();
-			downloaderForm.Show();
+			downloaderForm.Show ();
 		}
 
 		#endregion
 
 
 		#region Core Actions
-		
+
 		private void ImportUIAddition (string fileName)
 		{
 			Dispatcher.Invoke (() => Themes.Items.Add (fileName));
@@ -370,7 +369,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					Restore ();
 			});
 		}
-		
+
 		#endregion
 
 
@@ -378,7 +377,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void SetOpacityWallpaper ()
 		{
-			Model.ChangeWallpaperOpacity();
+			Model.ChangeWallpaperOpacity ();
 
 			Fstb.box.Refresh ();
 		}
@@ -426,7 +425,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					}
 				} else
 				{
-					Model.ChangeSticker(Drawing.Image.FromFile (openFileDialog.FileName));
+					Model.ChangeSticker (Drawing.Image.FromFile (openFileDialog.FileName));
 				}
 
 				ImagePath.Text = openFileDialog.FileName;
@@ -447,7 +446,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				string hex = isBackground ? field.Background : field.Foreground;
 				Drawing.Color color = Drawing.ColorTranslator.FromHtml (hex);
 
-				Drawing.Color selectColor = _presenter.SelectColor(color, out bool save);
+				Drawing.Color selectColor = _presenter.SelectColor (color, out bool save);
 
 				if (save)
 				{
@@ -466,7 +465,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 					if (changed)
 					{
-						Model.UpdateSyntaxColors();
+						Model.UpdateSyntaxColors ();
 						UpdateColors ();
 					}
 				}
@@ -487,10 +486,10 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void bgImagePaint (object sender, PaintEventArgs e)
 		{
-			if (Model.CanDrawWallpaper())
+			if (Model.CanDrawWallpaper ())
 			{
-				Model.CalculateWallpaperSize(Fstb.box.ClientRectangle);
-				
+				Model.CalculateWallpaperSize (Fstb.box.ClientRectangle);
+
 				e.Graphics.DrawImage (Model.WallpaperRender, Model.CalculatedWallpaperSize);
 			}
 		}
@@ -508,7 +507,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					Grid.SetColumnSpan (EditorSide, 1);
 
 					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Visible;
-					
+
 				} else
 				{
 					Grid.SetColumn (EditorSide, 0);
@@ -564,9 +563,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			if (settings.EditorReadOnly != Settings.editorReadOnly)
 			{
-				Fstb.SetReadOnly();
+				Fstb.SetReadOnly ();
 			}
-			
+
 		}
 
 		#endregion
@@ -583,7 +582,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				if (CentralAPI.Current.isEdited) // Ask to save the changes
 				{
 					if (_presenter.SaveInExport (CentralAPI.Current.Translate ("main.theme.edited.full"),
-							CentralAPI.Current.Translate ("main.theme.edited.short")))
+					                             CentralAPI.Current.Translate ("main.theme.edited.short")))
 						Save ();
 				}
 
@@ -619,7 +618,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void MainWindow_OnSizeChanged (object sender, SizeChangedEventArgs e)
 		{
-			_presenter.ChangeTopPanelMargin(TopPanel);
+			_presenter.ChangeTopPanelMargin (TopPanel);
 		}
 
 		private void AddButton_OnClick (object sender, RoutedEventArgs e)
@@ -650,7 +649,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void MainWindow_OnSourceInitialized (object sender, EventArgs e)
 		{
 			if (Helper.mode != ProductMode.Plugin)
-				Settings.ConnectAndGet ();
+				Settings.Get ();
 
 			WindowStartupLocation = WindowStartupLocation.Manual;
 			WindowProps props = Settings.database.ReadLocation ();
@@ -719,7 +718,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Export ();
 		}
-		
+
 		private void ImportButton_OnClick (object sender, RoutedEventArgs e)
 		{
 			ImportFile ();
@@ -734,12 +733,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Close ();
 		}
-		
+
 		private void DownloadButton_OnClick (object sender, RoutedEventArgs e)
 		{
 			OpenDownloader ();
 		}
-		
+
 		#endregion
 
 
@@ -791,19 +790,19 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void MainWindow_OnDrop (object sender, DragEventArgs e)
 		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			if (e.Data.GetDataPresent (DataFormats.FileDrop))
 			{
-				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+				string [] files = (string [])e.Data.GetData (DataFormats.FileDrop);
 				if (files != null && files.Length > 0)
 				{
 					if (files.Length == 1)
 					{
 						CheckFile (files [0], true);
-					}else
+					} else
 					{
 						foreach (string file in files)
 						{
-							CheckFile(file, true);
+							CheckFile (file, true);
 						}
 					}
 				}
@@ -816,8 +815,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				if (IsImage (file))
 				{
-					
-				}else if (IsTheme (file))
+
+				} else if (IsTheme (file))
 				{
 					CentralAPI.Current.ImportTheme (file, true, select, _presenter.ErrorExport, _presenter.AskChoiceParser, ImportUIAddition, ImportThemeReset);
 				} else
@@ -829,13 +828,13 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private bool IsImage (string file)
 		{
-			string ext = Path.GetExtension (file).ToLower();
+			string ext = Path.GetExtension (file).ToLower ();
 			return FileExtensions.ImageExtensions.Contains (ext);
 		}
 
 		private bool IsTheme (string file)
 		{
-			string ext = Path.GetExtension (file).ToLower();
+			string ext = Path.GetExtension (file).ToLower ();
 			return FileExtensions.ThemeExtensions.Contains (ext);
 		}
 
@@ -844,15 +843,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Themes.SelectedIndex = 0;
 		}
 
-		private void SwitchPluginMode()
+		private void SwitchPluginMode ()
 		{
 			PluginButtons.Visibility = Visibility.Visible;
 			ExportButton.Visibility = Visibility.Hidden;
 		}
-		
-		private void ChangeIcon()
+
+		private void ChangeIcon ()
 		{
-			Icon = Helper.GetYukiThemeIconImage(new Drawing.Size(24, 24)).ToWPFImage();
+			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
 		}
 
 		public Window getWindow ()
@@ -860,7 +859,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return this;
 		}
 
-		private void OpenButton_Click(object sender, RoutedEventArgs e)
+		private void OpenButton_Click (object sender, RoutedEventArgs e)
 		{
 			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
 			{
@@ -870,21 +869,21 @@ namespace Yuki_Theme.Core.WPF.Windows
 			};
 			if (openFileDialog.ShowDialog () == true)
 			{
-				Settings.editorSavedFile = File.ReadAllText(openFileDialog.FileName);
-				SaveNReloadEditor();
+				Settings.editorSavedFile = File.ReadAllText (openFileDialog.FileName);
+				SaveNReloadEditor ();
 			}
 		}
 
-		private void ResetEditorButton_Click(object sender, RoutedEventArgs e)
+		private void ResetEditorButton_Click (object sender, RoutedEventArgs e)
 		{
 			Settings.editorSavedFile = "null";
-			SaveNReloadEditor();
+			SaveNReloadEditor ();
 		}
 
-		private void SaveNReloadEditor()
+		private void SaveNReloadEditor ()
 		{
-			Settings.database.UpdateData(SettingsConst.EDITOR_SAVED_FILE, Settings.editorSavedFile);
-			Model.InitializeSyntax();
+			Settings.database.UpdateData (SettingsConst.EDITOR_SAVED_FILE, Settings.editorSavedFile);
+			Model.InitializeSyntax ();
 		}
 	}
 }

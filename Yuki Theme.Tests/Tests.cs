@@ -31,7 +31,7 @@ namespace Yuki_Theme.Tests
 				CommonAPI api = new CommonAPI ();
 				ResetForTests (api);
 				ClearTestThemes ();
-				Settings.ConnectAndGet ();
+				Settings.Get ();
 				api.LoadSchemes ();
 				api.SelectTheme (Helper.GetRandomElement (api.Schemes));
 				Console.WriteLine (api.nameToLoad);
@@ -61,7 +61,7 @@ namespace Yuki_Theme.Tests
 
 				ResetForTests (api);
 				ClearTestThemes ();
-				Settings.ConnectAndGet ();
+				Settings.Get ();
 				api.LoadSchemes ();
 
 				copyFrom = Helper.GetRandomElement (api.Schemes);

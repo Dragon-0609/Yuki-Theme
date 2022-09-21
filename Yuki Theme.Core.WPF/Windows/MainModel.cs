@@ -39,20 +39,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_stickerWindow.Show ();
 		}
 
-		internal override void LoadSticker ()
-		{
-			_stickerWindow.LoadImage (Sticker);
-		}
+		internal override void LoadSticker () => _stickerWindow.LoadImage (Sticker);
 
-		internal override void ReloadSticker ()
-		{
-			_stickerWindow.LoadSticker ();
-		}
+		internal override void ReloadSticker () => _stickerWindow.LoadSticker ();
 
-		internal override void ChangeSticker (Image image)
-		{
-			_stickerWindow.LoadImage (image);
-		}
+		internal override void ChangeSticker (Image image) => _stickerWindow.LoadImage (image);
 
 		internal override void ResetStickerPosition ()
 		{
@@ -62,10 +53,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void UpdateStickerVisibility () => _stickerWindow.UpdateStickerVisibility ();
 
-		internal override void ReloadStickerPositionData ()
-		{
-			_stickerWindow.ReadData ();
-		}
+		internal override void ReloadStickerPositionData () => _stickerWindow.ReadData ();
 
 		#endregion
 

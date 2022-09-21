@@ -58,6 +58,7 @@ namespace Yuki_Theme.Core.Communication
 		public const int OPEN_MAIN_WINDOW     = 9;
 		public const int RELOAD_THEME         = 10;
 		public const int PREVIEW_THEME        = 11;
+		public const int RELOAD_SETTINGS      = 12;
 		
 		public const int SET_PASCAL_PATH  = 30;
 		public const int SET_CURRENT_NAME = 31;

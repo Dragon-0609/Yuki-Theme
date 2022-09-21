@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
@@ -6,6 +7,9 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
+using Point = System.Windows.Point;
 
 namespace Yuki_Theme.Core.WPF
 {
@@ -25,7 +29,7 @@ namespace Yuki_Theme.Core.WPF
 		{
 			return color.ToWinformsColor ().ToHex ();
 		}
-		
+
 		public static Brush ToBrush (this Color color) => new SolidColorBrush (color);
 
 		public static BitmapImage ToWPFImage (this System.Drawing.Image img)
@@ -111,6 +115,13 @@ namespace Yuki_Theme.Core.WPF
 			if (align == AlignmentY.Bottom)
 				return AnchorStyles.Bottom;
 			return AnchorStyles.None;
+		}
+
+		public static Rect ToRect (this Rectangle rectangle, Form form)
+		{
+			return new Rect (form.WindowState == FormWindowState.Maximized ? rectangle.Left : form.Left,
+			                 form.WindowState == FormWindowState.Maximized ? rectangle.Top : form.Top,
+			                 rectangle.Width, rectangle.Height);
 		}
 	}
 }

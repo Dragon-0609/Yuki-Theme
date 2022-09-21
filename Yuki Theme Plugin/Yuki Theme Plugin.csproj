@@ -128,9 +128,9 @@
     <Compile Include="Controls\Helpers\ResourceHelper.cs" />
     <Compile Include="Controls\Helpers\UpdatePageControl.cs" />
     <Compile Include="Controls\Helpers\Win32Helper.cs" />
-    <Compile Include="Controls\PluginOptionsContent.cs" />
-    <Compile Include="Controls\PluginOptionsContent.Designer.cs">
-      <DependentUpon>PluginOptionsContent.cs</DependentUpon>
+    <Compile Include="Controls\PluginSettingsControl.cs" />
+    <Compile Include="Controls\PluginSettingsControl.Designer.cs">
+      <DependentUpon>PluginSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Win32\Enums.cs" />
     <Compile Include="Controls\Win32\NativeMethods.cs" />
@@ -164,8 +164,8 @@
     <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
     <EmbeddedResource Include="Controls\DockStyles\Strings.resx" />
     <EmbeddedResource Include="Controls\Helpers\UpdatePageControl.resx" />
-    <EmbeddedResource Include="Controls\PluginOptionsContent.resx">
-      <DependentUpon>PluginOptionsContent.cs</DependentUpon>
+    <EmbeddedResource Include="Controls\PluginSettingsControl.resx">
+      <DependentUpon>PluginSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

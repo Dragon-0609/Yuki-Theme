@@ -53,7 +53,7 @@ namespace Yuki_Theme.Core
 		/// <summary>
 		/// Get settings
 		/// </summary>
-		public static void ConnectAndGet ()
+		public static void Get ()
 		{
 			Dictionary <int, string> data = database.ReadData ();
 			pascalPath = data [SettingsConst.PASCAL_PATH] == "empty" ? null : data [SettingsConst.PASCAL_PATH];
@@ -62,34 +62,17 @@ namespace Yuki_Theme.Core
 				pascalPath = SettingsConst.CurrentPath;
 			}
 
-			if (pascalPath == null)
-			{
-				string defpas = "";
-				if (Environment.Is64BitOperatingSystem)
-				{
-					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-					if (CentralAPI.Current.IsPascalDirectory (defpas))
-					{
-						pascalPath = defpas;
-					} else
-					{
-						defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
-						if (CentralAPI.Current.IsPascalDirectory (defpas))
-						{
-							pascalPath = defpas;
-						}
-					}
-				} else
-				{
-					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
-					if (CentralAPI.Current.IsPascalDirectory (defpas))
-					{
-						pascalPath = defpas;
-					}
-				}
-			}
+			AutoSetPathToPascal ();
 
-			if (pascalPath == null) pascalPath = "";
+			SetValues (data);
+
+			CentralAPI.Current.selectedItem = data [SettingsConst.ACTIVE];
+			SetOtherValues (data);
+
+			translation.LoadLocalization ();
+		}
+		private static void SetValues (Dictionary <int, string> data)
+		{
 
 			askChoice = bool.Parse (data [SettingsConst.ASK_CHOICE]);
 			update = bool.Parse (data [SettingsConst.AUTO_UPDATE]);
@@ -120,20 +103,51 @@ namespace Yuki_Theme.Core
 			hideDelay = int.Parse (data [SettingsConst.HIDE_DELAY]);
 			portableMode = bool.Parse (data [SettingsConst.PORTABLE_MODE]);
 			editorReadOnly = bool.Parse (data [SettingsConst.EDITOR_READ_ONLY]);
-			editorSavedFile = data[SettingsConst.EDITOR_SAVED_FILE];
+			editorSavedFile = data [SettingsConst.EDITOR_SAVED_FILE];
 
 			localization = data [SettingsConst.LOCALIZATION];
-
-			CentralAPI.Current.selectedItem = data [SettingsConst.ACTIVE];
-			var os = 0;
+		}
+		private static void SetOtherValues (Dictionary <int, string> data)
+		{
+			int os;
 			int.TryParse (data [SettingsConst.CHOICE_INDEX], out os);
 			actionChoice = os;
 			int.TryParse (data [SettingsConst.SETTING_MODE], out os);
 			settingMode = (SettingMode)os;
 			int.TryParse (data [SettingsConst.STICKER_POSITION_UNIT], out os);
 			unit = (RelativeUnit)os;
+		}
+		private static void AutoSetPathToPascal ()
+		{
 
-			translation.LoadLocalization ();
+			if (pascalPath == null)
+			{
+				string defpas = "";
+				if (Environment.Is64BitOperatingSystem)
+				{
+					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
+					if (CentralAPI.Current.IsPascalDirectory (defpas))
+					{
+						pascalPath = defpas;
+					} else
+					{
+						defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFiles) + "PascalABC.NET";
+						if (CentralAPI.Current.IsPascalDirectory (defpas))
+						{
+							pascalPath = defpas;
+						}
+					}
+				} else
+				{
+					defpas = Environment.GetFolderPath (Environment.SpecialFolder.ProgramFilesX86) + "PascalABC.NET";
+					if (CentralAPI.Current.IsPascalDirectory (defpas))
+					{
+						pascalPath = defpas;
+					}
+				}
+			}
+
+			if (pascalPath == null) pascalPath = "";
 		}
 
 		/// <summary>

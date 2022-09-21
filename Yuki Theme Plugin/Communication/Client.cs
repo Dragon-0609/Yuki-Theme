@@ -44,8 +44,8 @@ namespace Yuki_Theme_Plugin.Communication
 			RunServer ();
 			if (!stopClient)
 			{
-				InitMessaging ();
 				InitTimer ();
+				InitMessaging ();
 				StartTesting ();
 			}
 		}
@@ -100,7 +100,7 @@ namespace Yuki_Theme_Plugin.Communication
 		{
 			MessageBox.Show ("Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.", "Couldn't connect to Theme Editor app");
 			CentralAPI.Current = new CommonAPI ();
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 		}
 
 		public override void SendMessage (Message message)
@@ -129,11 +129,15 @@ namespace Yuki_Theme_Plugin.Communication
 			switch (message.Id)
 			{
 				case TEST_CONNECTION:
+					_isConnected = true;
+					SendMessage (TEST_CONNECTION_OK);
+					break;
+				
+				
 				case TEST_CONNECTION_OK:
 					_isConnected = true;
 					_console.WriteToConsole ("Theme editor is running");
 					ConnectionEstablished ();
-					SendMessage (TEST_CONNECTION_OK);
 					break;
 			}
 		}

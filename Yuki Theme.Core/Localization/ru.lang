@@ -103,6 +103,7 @@
     "main.labels.italic": "Курсив",
     "main.labels.bold": "Жирный",
     "main.dragndrop.format": "Формат файла может быть только .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",
+    "main.open.extensions.all": "Файл Pascal",
 
     "ui.tooltips.add.title": "Добавить тему",
     "ui.tooltips.add.message": "Добавить тему путём копирования из\nдругой темы.",
@@ -123,9 +124,9 @@
     "ui.tooltips.downloader.title": "Загрузчик тем",
     "ui.tooltips.downloader.message": "Скачать новые темы\nThe Doki Theme.",
     "ui.tooltips.editor.open.title": "Открыть файл",
-    "ui.tooltips.editor.open.message": "Открыть файл в\nредакторе",
+    "ui.tooltips.editor.open.message": "Открыть файл в редакторе",
     "ui.tooltips.editor.reset.title": "Загрузить файл по умолчанию",
-    "ui.tooltips.editor.reset.message": "Загрузить файл поумолчанию в\nредактор",
+    "ui.tooltips.editor.reset.message": "Загрузить файл по умолчанию в\nредактор",
     
     "about.version": "версия: ",
     "about.changelog": "Список изменений",

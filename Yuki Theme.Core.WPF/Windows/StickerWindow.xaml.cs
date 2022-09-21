@@ -29,6 +29,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private GridWindow _grid;
 
+		public Action <string> WriteToConsole;
+
 		public StickerWindow ()
 		{
 			InitializeComponent ();
@@ -106,8 +108,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 			SetBorderOutline ();
 		}
-		
-		
+
+
 		private string ConvertLocationToSave ()
 		{
 			string s =
@@ -119,7 +121,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		{
 			Settings.database.UpdateData (SettingsConst.STICKER_POSITION, ConvertLocationToSave ());
 		}
-		
+
 		private AnchorStyles GetPositioningValues (RelativeUnit unit)
 		{
 			AnchorStyles align;
@@ -158,10 +160,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 		private AnchorStyles SetDefaultPositions (RelativeUnit unit)
 		{
-			_relativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point (BORDER_OUTLINE, BORDER_OUTLINE_Y) : GetMargin ();
+			_relativePosition = unit == RelativeUnit.Pixel ? 
+				new Drawing.Point (BORDER_OUTLINE_X, Helper.mode == ProductMode.Plugin ? PLUGIN_BORDER_OUTLINE_Y : BORDER_OUTLINE_Y) : GetMargin ();
 			return AnchorStyles.Bottom | AnchorStyles.Right;
 		}
-		
+
 		private static Drawing.Point GetMargin ()
 		{
 			int margin = 1;
@@ -224,7 +227,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				StartDragging (e);
 			} else if (e.ClickCount == 2)
 			{
-				MouseDoubleClick ();
+				MouseDoubleClickAction ();
 			}
 		}
 		private void StartDragging (MouseButtonEventArgs e)
@@ -286,15 +289,23 @@ namespace Yuki_Theme.Core.WPF.Windows
 				_inDrag = false;
 				e.Handled = true;
 				_grid.Close ();
-				Point point = e.GetPosition (Owner);
-				
+
+				Point point = new Point (0, 0);
+
+				if (target != null)
+					point = e.GetPosition (Owner);
+				else if (targetForm != null)
+					point = targetForm.PointToClient (System.Windows.Forms.Cursor.Position).ToWPFPoint ();
+				else
+					throw new NullReferenceException ("Owner wasn't set");
+
 				_calculator.SetAligns (point);
 				_calculator.SaveRelatedPosition (point);
-				Console.WriteLine(_relativePosition.ToString ());
+				Console.WriteLine (_relativePosition.ToString ());
 			}
 		}
 
-		private void MouseDoubleClick ()
+		private void MouseDoubleClickAction ()
 		{
 			if (!Settings.hideOnHover && Settings.positioning)
 			{

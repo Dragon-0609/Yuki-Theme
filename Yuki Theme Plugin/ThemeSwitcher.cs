@@ -146,7 +146,7 @@ namespace Yuki_Theme_Plugin
 					} else
 					{
 						hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
-						plugin._model.CheckStickerVisibility ();
+						plugin._model.UpdateStickerVisibility ();
 					}
 				}
 
@@ -205,7 +205,7 @@ namespace Yuki_Theme_Plugin
 				CentralAPI.Current.SelectTheme (name);
 				CentralAPI.Current.Restore ();
 				hideBG = !CentralAPI.Current.currentTheme.HasWallpaper;
-				plugin._model.CheckStickerVisibility ();
+				plugin._model.UpdateStickerVisibility ();
 				if (needToFullExportTheme)
 				{
 					CentralAPI.Current.Preview (new PreviewOptions (SyntaxType.NULL, true, true), plugin.ReloadLayoutLight);

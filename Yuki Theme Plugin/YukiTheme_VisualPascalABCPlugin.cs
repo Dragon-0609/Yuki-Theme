@@ -63,16 +63,16 @@ namespace Yuki_Theme_Plugin
 		internal      EditorInspector   inspector;
 		internal      IdeComponents     ideComponents = new IdeComponents ();
 
-		
-		internal PluginModel  _model = new PluginModel ();
+
+		internal Plugin.Model _model = new PluginModel ();
 		internal PluginHelper _helper;
 
 		private bool isCommonAPI = false;
 
-		internal bool   bgImage => Settings.bgImage;
-		internal int    imagesEnabled;   // Is enabled Colors.bg image and (or) sticker
-		internal bool   StatusBarNameEnabled; // Name in status bar
-		private  int    lastFocused  = -1;
+		internal bool bgImage => Settings.bgImage;
+		internal int  imagesEnabled;        // Is enabled Colors.bg image and (or) sticker
+		internal bool StatusBarNameEnabled; // Name in status bar
+		private  int  lastFocused = -1;
 
 		public PopupController popupController;
 
@@ -101,23 +101,23 @@ namespace Yuki_Theme_Plugin
 			//Добавляем в меню
 			MenuItems.Add (item1);
 			plugin = this;
-			
+
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
 			_helper = new PluginHelper (ideComponents);
-			
+
 			InitAPI ();
-			
+
 			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 
 			imagesEnabled = 0;
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			StatusBarNameEnabled = Settings.swStatusbar;
-			
+
 			ideComponents.WriteToConsole ("Initialization started.");
-			
+
 			loadWithWaiting ();
 			Initialize ();
 		}
@@ -159,6 +159,7 @@ namespace Yuki_Theme_Plugin
 			currentThemeName.Margin = Padding.Empty;
 			ideComponents.statusBar.Items.Add (currentThemeName);
 			RefreshStatusBar ();
+			_model.WriteToConsole = ideComponents.WriteToConsole;
 			_model.InitSticker (ideComponents.fm);
 			_model.LoadSticker ();
 			// InitializeSticker ();
@@ -189,7 +190,7 @@ namespace Yuki_Theme_Plugin
 				CoreWindow = new MainWindow ();
 				CoreWindow.Model.StartSettingTheme += ReleaseResources;
 				CoreWindow.Model.SetTheme += ReloadLayout;
-				
+
 				CoreWindow.Closed += (_, _) =>
 				{
 					GC.Collect ();
@@ -237,19 +238,19 @@ namespace Yuki_Theme_Plugin
 			ideComponents.WriteToConsole ("Initialization finished.");
 
 			inspector.InjectCodeCompletion ();
-			
+
 			_helper.ShowLicense ();
 			/*MForm.showLicense (Colors.bg, Colors.clr, Colors.bgClick, ideComponents.fm);
 			MForm.showGoogleAnalytics (Colors.bg, Colors.clr, Colors.bgClick, ideComponents.fm);
 			MForm.TrackInstall ();*/
 			AdditionalTools.ShowLicense (WPFHelper.GenerateTag, null, ideComponents.fm);
-			
+
 			AdditionalTools.TrackInstall (ideComponents.fm);
 			if (!_helper.IsUpdated () && Settings.update)
 			{
 				popupController.CheckUpdate ();
 			}
-			
+
 			ToolBarListItem.camouflage = camouflage;
 			ToolBarListItem.manager = manager;
 			SettingsPanelUtilities.items = camouflage.items;
@@ -282,12 +283,12 @@ namespace Yuki_Theme_Plugin
 			highlighting = HighlightingManager.Manager.FindHighlighterForFile ("A.pas");
 			Colors.bgdef = highlighting.GetColorFor ("Default").BackgroundColor;
 			Colors.bg = Helper.DarkerOrLighter (Colors.bgdef, 0.05f);
-			
+
 			Colors.bgClick = Helper.DarkerOrLighter (Colors.bgdef, 0.25f);
 			Colors.bgClick2 = Helper.DarkerOrLighter (Colors.bgdef, 0.4f);
 			Colors.bgClick3 = Helper.DarkerOrLighter (Colors.bgdef, 0.1f);
 			Colors.bgSelection = highlighting.GetColorFor ("Selection").BackgroundColor;
-			
+
 			Colors.bgInactive = Helper.ChangeColorBrightness (Colors.bgdef, -0.3f);
 			Colors.bgBorder = highlighting.GetColorFor ("CaretMarker").Color;
 			Colors.bgType = highlighting.GetColorFor ("EOLMarkers").Color;
@@ -296,19 +297,19 @@ namespace Yuki_Theme_Plugin
 			Colors.clr = Helper.DarkerOrLighter (defaultForeground, 0.2f);
 			Colors.clrHover = Helper.DarkerOrLighter (defaultForeground, 0.6f);
 			Colors.clrKey = highlighting.GetColorFor ("Keywords").Color;
-			
-			
+
+
 			ColorKeeper.bgColor = Colors.bg;
 			ColorKeeper.bgdefColor = Colors.bgdef;
 			ColorKeeper.bgClick = Colors.bgClick;
 			ColorKeeper.bgBorder = Colors.bgBorder;
 			ColorKeeper.selectionColor = Colors.bgSelection;
-			
+
 			ColorKeeper.fgColor = Colors.clr;
 			ColorKeeper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
 			ColorKeeper.fgKeyword = Colors.clrKey;
 			// Helper.selectionColor = highlighting.GetColorFor ("Selection").BackgroundColor;
-			
+
 			_helper.ResetBrushesAndPens ();
 		}
 
@@ -370,7 +371,7 @@ namespace Yuki_Theme_Plugin
 				wallpaperAlign = Alignment.Left;
 			}
 		}
-		
+
 		private void InitAPI ()
 		{
 			AdminTools tools = new AdminTools ();
@@ -410,7 +411,7 @@ namespace Yuki_Theme_Plugin
 
 
 		#region Server Actions
-		
+
 		private void ReleaseResourcesForServer (Message obj)
 		{
 			ReleaseResources ();
@@ -418,7 +419,7 @@ namespace Yuki_Theme_Plugin
 		}
 
 		#endregion
-		
+
 		#region Updates
 
 		private void UpdateColors ()
@@ -565,7 +566,7 @@ namespace Yuki_Theme_Plugin
 		}
 
 		#endregion
-		
+
 
 		internal void RememberCurrentEditor ()
 		{
@@ -596,7 +597,7 @@ namespace Yuki_Theme_Plugin
 
 			docs = null;
 		}
-		
+
 		public void ReleaseResources ()
 		{
 			if (img != null)
@@ -621,23 +622,48 @@ namespace Yuki_Theme_Plugin
 			prop.propertyGrid1.SelectedObject = ideComponents.fm;
 			prop.Show ();
 		}
-		
+
 		private void addToSettings ()
 		{
 			var getopt = ideComponents.fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
 			OptionsContentEngine options = (OptionsContentEngine)getopt.GetValue (ideComponents.fm);
-			options.AddContent (new Controls.PluginOptionsContent (this));
+			options.AddContent (new Controls.PluginSettingsControl (this));
 		}
 
-		internal void SettingsChanged (bool customStickerChanged, bool dimensionChanged)
+		internal void ApplySettings (ChangedSettings settings)
 		{
-			if (customStickerChanged)
+			if (settings.ShowSticker != Settings.swSticker)
 			{
-				_model.LoadSticker ();
-			} else if (dimensionChanged)
+				_model.UpdateStickerVisibility ();
+			}
+
+			if (settings.CustomSticker != Settings.useCustomSticker)
+			{
+				if (Settings.useCustomSticker)
+				{
+					_model.ReloadSticker ();
+				} else
+				{
+					_model.LoadSticker ();
+				}
+			}
+
+			if (settings.DimensionCap != Settings.useDimensionCap)
 			{
 				_model.ReadData ();
 				_model.ResetStickerPosition ();
+			}
+			
+			if (settings.ResetMargins)
+			{
+				Settings.database.UpdateData (SettingsConst.STICKER_POSITION, "");
+				_model.ReloadStickerPositionData ();
+				_model.ResetStickerPosition ();
+			}
+
+			if (!isCommonAPI)
+			{
+				_client.SendMessage (RELOAD_SETTINGS);
 			}
 		}
 

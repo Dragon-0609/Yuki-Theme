@@ -43,14 +43,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private bool portable;
 
 		public ChangedSettings settings = new ChangedSettings ();
-		
+
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
 
 			LoadSVG ();
 		}
-		
+
 		public Thickness InnerMargin
 		{
 			get { return (Thickness)GetValue (InnerMarginProperty); }
@@ -139,7 +139,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			customStickerPath = Settings.customSticker;
 			bool firstSelected = Settings.colorPicker == 0;
 			SRadio (WinformsPicker, firstSelected);
-			SRadio(WPFPicker, !firstSelected);
+			SRadio (WPFPicker, !firstSelected);
 			portable = Settings.portableMode;
 			// LanguageDropdown, Settings.localization
 		}
@@ -204,7 +204,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			Settings.customSticker = customStickerPath;
 			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
 			Settings.hideDelay = HideDelay.GetNumber ();
-			
+
 			if (portable != PortableMode.IsChecked)
 				Settings.database.SwapDatabase ();
 		}
@@ -216,7 +216,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			{
 				KCheck (AskOthers, ref Settings.askChoice);
 				KDrop (ActionDropdown, ref Settings.actionChoice);
-				if (IsPascalDirectory(PascalPath.Text))
+				if (IsPascalDirectory (PascalPath.Text))
 					KText (PascalPath, ref Settings.pascalPath);
 				else
 				{
@@ -360,7 +360,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				{
 					CustomSticker.IsChecked = false;
 				}
-					
+
 			}
 		}
 
@@ -467,14 +467,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void SetToolBarHeight ()
 		{
-			
+
 		}
 
 		private void RestartForUpdate_OnClick (object sender, RoutedEventArgs e)
 		{
 			if (DownloadForm.IsUpdateDownloaded ())
 			{
-				
+
 			} else
 			{
 				API_Events.showError ("Update isn't downloaded!", "Update isn't downloaded");
@@ -483,7 +483,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void CheckUpdate (object sender, RoutedEventArgs e)
 		{
-			
+
 			popupController.CheckUpdate ();
 			// popupController.InitializeAllWindows ();
 			// popupController.df.CheckUpdate ();			
@@ -547,7 +547,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 						if (System.Windows.Forms.MessageBox.Show (CentralAPI.Current.Translate ("messages.path.wrong"), CentralAPI.Current.Translate ("messages.path.select"), MessageBoxButtons.RetryCancel, MessageBoxIcon.Error) == DialogResult.Retry)
 						{
 							co.Title = CentralAPI.Current.Translate ("messages.path.wrong");
-							SelectFolder (co);	
+							SelectFolder (co);
 						}
 					}
 				} else
@@ -556,7 +556,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				}
 			}
 		}
-		
+
 		private bool IsPascalDirectory (string path)
 		{
 
