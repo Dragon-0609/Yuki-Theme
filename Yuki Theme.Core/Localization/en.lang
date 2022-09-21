@@ -9,7 +9,6 @@
     
     "settings.general.background.title": "Background Image",
     "settings.general.background.enabled": "Show Background Image",
-    "settings.general.editor": "Editor Mode",
     "settings.general.fitbywidth": "Auto Fit Background Image by Width",
     "settings.general.fitbywidth.help": "Background Image will be fitted by width if\nit's necessary",
     "settings.general.asktosave": "Always ask to save",
@@ -44,6 +43,10 @@
     "settings.general.hidehover": "Hide on hover",
     "settings.general.hidedelay": "Hide on delay (ms)",
     "settings.general.portable": "Portable Mode",
+    "settings.general.editor.mode": "Editor Mode",
+    "settings.general.editor.readonly": "Read Only",
+    "settings.general.editor.title": "Editor",
+    "settings.general.editor.tip": "To save the file in the editor\npress Control + S in editor",
     
     "settings.additional.path": "Path to PascalABC.NET:",
     "settings.additional.ask": "Ask other themes are in Pascal directory",
@@ -99,8 +102,9 @@
     "main.labels.apply": "Apply",
     "main.labels.italic": "Italic",
     "main.labels.bold": "Bold",
-    "main.dragndrop.format": "File format can be just .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",
-    
+    "main.dragndrop.format": "File format can be just .jpg, .png, .gif, .yukitheme, .yuki, .json, .icls, .xshd!",    "main.import.extensions.all": "All Themes",
+    "main.open.extensions.all": "Pascal File",
+
     "ui.tooltips.add.title": "Add Theme",
     "ui.tooltips.add.message": "Add theme by copying from another\ntheme.",
     "ui.tooltips.manage.title": "Manage Themes",
@@ -119,6 +123,10 @@
     "ui.tooltips.settings.message": "Change Settings.",
     "ui.tooltips.downloader.title": "Theme Downloader",
     "ui.tooltips.downloader.message": "Download new themes\nof The Doki Theme.",
+    "ui.tooltips.editor.open.title": "Open file",
+    "ui.tooltips.editor.open.message": "Open file in editor",
+    "ui.tooltips.editor.reset.title": "Load Default File",
+    "ui.tooltips.editor.reset.message": "Reset file in editor\nto default",
     
     "about.version": "version: ",
     "about.changelog": "Changelog",

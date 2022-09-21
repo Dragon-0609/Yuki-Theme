@@ -71,6 +71,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			UpdateTranslations ();
 			
 			InitAdditionalComponents ();
+			Fstb.SetReadOnly();
 		}
 
 		private void LoadDefinitionsWithSelection ()
@@ -96,6 +97,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
 			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
 			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
+			WPFHelper.SetSVGImage (OpenButton, "import" + add);
+			WPFHelper.SetSVGImage (ResetEditorButton, "refresh" + add);
 		}
 
 		
@@ -495,17 +498,17 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void ToggleEditor ()
 		{
 			Visibility visibility = Settings.Editor ? Visibility.Visible : Visibility.Collapsed;
-
+			EditorSpecificButton.Visibility = !Settings.editorReadOnly ? Visibility.Visible : Visibility.Collapsed;
 			if (Definitions.Visibility != visibility)
 			{
 				Definitions.Visibility = DefSplitter.Visibility = visibility;
-
 				if (Settings.Editor)
 				{
 					Grid.SetColumn (EditorSide, 2);
 					Grid.SetColumnSpan (EditorSide, 1);
 
 					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Visible;
+					
 				} else
 				{
 					Grid.SetColumn (EditorSide, 0);
@@ -558,6 +561,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Model.ResetStickerPosition ();
 			}
+
+			if (settings.EditorReadOnly != Settings.editorReadOnly)
+			{
+				Fstb.SetReadOnly();
+			}
+			
 		}
 
 		#endregion
@@ -851,5 +860,31 @@ namespace Yuki_Theme.Core.WPF.Windows
 			return this;
 		}
 
+		private void OpenButton_Click(object sender, RoutedEventArgs e)
+		{
+			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
+			{
+				Filter = CentralAPI.Current.Translate ("main.open.extensions.all") +
+				         " (*.pas,*.paspart_)|*.pas;*.paspart_",
+				Multiselect = false
+			};
+			if (openFileDialog.ShowDialog () == true)
+			{
+				Settings.editorSavedFile = File.ReadAllText(openFileDialog.FileName);
+				SaveNReloadEditor();
+			}
+		}
+
+		private void ResetEditorButton_Click(object sender, RoutedEventArgs e)
+		{
+			Settings.editorSavedFile = "null";
+			SaveNReloadEditor();
+		}
+
+		private void SaveNReloadEditor()
+		{
+			Settings.database.UpdateData(SettingsConst.EDITOR_SAVED_FILE, Settings.editorSavedFile);
+			Model.InitializeSyntax();
+		}
 	}
 }

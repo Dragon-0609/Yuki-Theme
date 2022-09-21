@@ -62,6 +62,10 @@
             <system:String x:Key="ui.tooltips.settings.message">Change Settings.</system:String>
             <system:String x:Key="ui.tooltips.downloader.title">Theme Downloader</system:String>
             <system:String x:Key="ui.tooltips.downloader.message">Download new themes\nof The Doki Theme.</system:String>
+            <system:String x:Key="ui.tooltips.editor.open.title">Open file</system:String>
+            <system:String x:Key="ui.tooltips.editor.open.message">Open file in editor</system:String>
+            <system:String x:Key="ui.tooltips.editor.reset.title">Load Default File</system:String>
+            <system:String x:Key="ui.tooltips.editor.reset.message">Reset file in\neditor to default</system:String>
 
             <system:String x:Key="main.labels.foreground">Foreground Color:</system:String>
             <system:String x:Key="main.labels.background">Background Color:</system:String>
@@ -215,6 +219,27 @@
                         </StackPanel>
                     </Button.ToolTip>
                 </Button>
+
+                <WrapPanel Name="EditorSpecificButton">
+                    <Button Name="OpenButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                            Click="OpenButton_Click">
+                        <Button.ToolTip>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.editor.open.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.editor.open.message}" />
+                            </StackPanel>
+                        </Button.ToolTip>
+                    </Button>
+                    <Button Name="ResetEditorButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                            Click="ResetEditorButton_Click">
+                        <Button.ToolTip>
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.editor.reset.title}" />
+                                <TextBlock Text="{DynamicResource ui.tooltips.editor.reset.message}" />
+                            </StackPanel>
+                        </Button.ToolTip>
+                    </Button>
+                </WrapPanel>
 
                 <WrapPanel Name="EditorPanels">
                     <Grid Name="ColorPanel" Margin="15 5" Visibility="Visible">
