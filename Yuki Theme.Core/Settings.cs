@@ -41,6 +41,8 @@ namespace Yuki_Theme.Core
 		public static bool         hideOnHover;
 		public static int          hideDelay;
 		public static bool         portableMode;
+		public static bool         editorReadOnly;
+		public static string         editorSavedFile;
 
 		#endregion
 
@@ -117,6 +119,8 @@ namespace Yuki_Theme.Core
 			hideOnHover = bool.Parse (data [SettingsConst.HIDE_ON_HOVER]);
 			hideDelay = int.Parse (data [SettingsConst.HIDE_DELAY]);
 			portableMode = bool.Parse (data [SettingsConst.PORTABLE_MODE]);
+			editorReadOnly = bool.Parse (data [SettingsConst.EDITOR_READ_ONLY]);
+			editorSavedFile = data[SettingsConst.EDITOR_SAVED_FILE];
 
 			localization = data [SettingsConst.LOCALIZATION];
 
@@ -181,6 +185,8 @@ namespace Yuki_Theme.Core
 					{ SettingsConst.HIDE_ON_HOVER, hideOnHover.ToString () },
 					{ SettingsConst.HIDE_DELAY, hideDelay.ToString () },
 					{ SettingsConst.PORTABLE_MODE, portableMode.ToString () },
+					{ SettingsConst.EDITOR_READ_ONLY, editorReadOnly.ToString () },
+					{ SettingsConst.EDITOR_SAVED_FILE, editorSavedFile },
 					{ SettingsConst.LOCALIZATION, localization }
 				};
 				return dict;
@@ -209,6 +215,7 @@ namespace Yuki_Theme.Core
 		public readonly bool        DimensionCap;
 		public readonly int         DimensionCapMax;
 		public readonly bool        ShowSticker;
+		public readonly bool        EditorReadOnly;
 		public readonly SettingMode CurrentMode;
 
 		public bool ResetMargins;
@@ -221,6 +228,7 @@ namespace Yuki_Theme.Core
 			DimensionCapMax = Settings.dimensionCapMax;
 			ShowSticker = Settings.swSticker;
 			CurrentMode = Settings.settingMode;
+			EditorReadOnly = Settings.editorReadOnly;
 		}
 
 	}

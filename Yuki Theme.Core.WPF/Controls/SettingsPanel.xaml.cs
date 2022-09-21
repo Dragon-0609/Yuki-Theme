@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Interop;
-using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.API;
-using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -135,6 +131,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SCheck (StickerDimensionCap, Settings.useDimensionCap);
 			SCheck (HideHover, Settings.hideOnHover);
 			SCheck (PortableMode, Settings.portableMode);
+			SCheck (EditorReadOnly, Settings.editorReadOnly);
 			SDrop (EditorModeDropdown, (int)Settings.settingMode);
 			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
 			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
@@ -199,6 +196,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
 			KCheck (HideHover, ref Settings.hideOnHover);
 			KCheck (PortableMode, ref Settings.portableMode);
+			KCheck (EditorReadOnly, ref Settings.editorReadOnly);
 			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
 
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
@@ -206,6 +204,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			Settings.customSticker = customStickerPath;
 			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
 			Settings.hideDelay = HideDelay.GetNumber ();
+			
 			if (portable != PortableMode.IsChecked)
 				Settings.database.SwapDatabase ();
 		}

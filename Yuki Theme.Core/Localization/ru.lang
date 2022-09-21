@@ -9,7 +9,6 @@
 
     "settings.general.background.title": "Фоновое изображение",
     "settings.general.background.enabled": "Показать обои",
-    "settings.general.editor": "Режим редактора",
     "settings.general.fitbywidth": "Авто подгон обоев по ширине",
     "settings.general.fitbywidth.help": "Фоновое изображение будет подогнан\nпо ширине при необходимости",
     "settings.general.asktosave": "Всегда запросить сохранение",
@@ -44,6 +43,10 @@
     "settings.general.hidehover": "Скрыть при наведении",
     "settings.general.hidedelay": "Скрыть при задержке (ms)",
     "settings.general.portable": "Портативный режим",
+    "settings.general.editor.mode": "Режим редактора",
+    "settings.general.editor.readonly": "Только для чтения",
+    "settings.general.editor.title": "Редактор",
+    "settings.general.editor.tip": "Нажми на Control + S в редакторе чтобы\nсохранить файл",
     
     "settings.additional.path": "Путь до PascalABC.NET:",
     "settings.additional.ask": "Спросить если в папке среды PascalABC.NET есть другие темы",
@@ -119,6 +122,10 @@
     "ui.tooltips.settings.message": "Изменить настройки.",
     "ui.tooltips.downloader.title": "Загрузчик тем",
     "ui.tooltips.downloader.message": "Скачать новые темы\nThe Doki Theme.",
+    "ui.tooltips.editor.open.title": "Открыть файл",
+    "ui.tooltips.editor.open.message": "Открыть файл в\nредакторе",
+    "ui.tooltips.editor.reset.title": "Загрузить файл по умолчанию",
+    "ui.tooltips.editor.reset.message": "Загрузить файл поумолчанию в\nредактор",
     
     "about.version": "версия: ",
     "about.changelog": "Список изменений",

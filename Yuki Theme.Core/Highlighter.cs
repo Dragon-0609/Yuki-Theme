@@ -358,7 +358,7 @@ namespace Yuki_Theme.Core
 
 		public void InitializeSyntax ()
 		{
-			sBox.Text = Placeholder.place;
+			sBox.Text = Settings.editorSavedFile == "null" ? Placeholder.place : Settings.editorSavedFile;
 
 			UpdateColors ();
 		}

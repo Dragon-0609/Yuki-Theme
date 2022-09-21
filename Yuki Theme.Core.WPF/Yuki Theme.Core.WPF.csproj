@@ -102,6 +102,9 @@
         <Compile Include="Controls\ColorPicker\ColorToSolidColorBrushConverter.cs" />
         <Compile Include="Controls\ColorPicker\ColorUtilities.cs" />
         <Compile Include="Controls\ColorPicker\HsvColor.cs" />
+        <Compile Include="Controls\InfoLabel.xaml.cs">
+          <DependentUpon>InfoLabel.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Controls\IntegerUpDown.xaml.cs">
           <DependentUpon>IntegerUpDown.xaml</DependentUpon>
         </Compile>
@@ -203,6 +206,7 @@
         <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
         <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />
         <Page Include="Controls\ColorPicker\Themes\Generic.xaml" />
+        <Page Include="Controls\InfoLabel.xaml" />
         <Page Include="Controls\IntegerUpDown.xaml" />
         <Page Include="Controls\LicenseBox.xaml" />
         <Page Include="Controls\SettingsPanel.xaml" />

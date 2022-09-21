@@ -46,6 +46,8 @@ namespace Yuki_Theme.Core.Database
 			{ SettingsConst.HIDE_ON_HOVER, "true" },
 			{ SettingsConst.HIDE_DELAY, "750" },
 			{ SettingsConst.PORTABLE_MODE, "false" },
+			{ SettingsConst.EDITOR_READ_ONLY, "true" },
+			{ SettingsConst.EDITOR_SAVED_FILE, "null" },
 		};
 
 		public DatabaseManager (bool setDefault)

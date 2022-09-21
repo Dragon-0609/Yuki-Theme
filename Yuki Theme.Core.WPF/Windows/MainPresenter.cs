@@ -126,7 +126,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		
 		public void ChangeTopPanelMargin(WrapPanel topPanel)
 		{
-			if (parent.Width < 680)
+			if (parent.Width < 740)
 			{
 				if (topPanel.HorizontalAlignment != HorizontalAlignment.Center)
 				{
