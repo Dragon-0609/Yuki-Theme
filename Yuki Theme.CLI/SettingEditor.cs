@@ -12,7 +12,7 @@ namespace Yuki_Theme.CLI
 	{
 		internal void ExportSettings (string path)
 		{
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 			string destination;
 			if (path != "null" && Path.HasExtension (path))
 			{
@@ -42,7 +42,7 @@ namespace Yuki_Theme.CLI
 
 		internal void ImportSettings (string path)
 		{
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 			if (path != "null" && File.Exists (path))
 			{
 				try
@@ -61,7 +61,7 @@ namespace Yuki_Theme.CLI
 					}
 
 					Settings.database.UpdateData (dict);
-					Settings.ConnectAndGet ();
+					Settings.Get ();
 					ShowSuccess (CentralAPI.Current.Translate ("cli.success.settings.import.full"),
 					             CentralAPI.Current.Translate ("cli.success.settings.import.short"));
 				} catch (Exception e)
@@ -78,7 +78,7 @@ namespace Yuki_Theme.CLI
 
 		internal void PrintSettings ()
 		{
-			Settings.ConnectAndGet ();
+			Settings.Get ();
 			SortedDictionary <int, string> dict = Settings.PrepareAll;
 			Console.WriteLine ();
 			foreach (KeyValuePair <int, string> pair in dict)

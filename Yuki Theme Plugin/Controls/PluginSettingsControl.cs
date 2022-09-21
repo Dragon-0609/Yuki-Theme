@@ -15,7 +15,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Yuki_Theme_Plugin.Controls
 {
-	public partial class PluginOptionsContent : UserControl, IOptionsContent
+	public partial class PluginSettingsControl : UserControl, IOptionsContent
 	{
 		private YukiTheme_VisualPascalABCPlugin plugin;
 
@@ -23,12 +23,9 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private SettingsPanel _settingsPanel;
 
-		private bool dimensionCap = false;
-		private bool customSticker = false;
-
 		SettingsPanelUtilities utilities;
 		
-		public PluginOptionsContent (YukiTheme_VisualPascalABCPlugin plug)
+		public PluginSettingsControl (YukiTheme_VisualPascalABCPlugin plug)
 		{
 			InitializeComponent ();
 			plugin = plug;
@@ -58,8 +55,6 @@ namespace Yuki_Theme_Plugin.Controls
 		{
 			WPFHelper.InitAppForWinforms ();
 			WPFHelper.ConvertGUIColorsNBrushes ();
-			dimensionCap = Settings.useDimensionCap;
-			customSticker = Settings.useCustomSticker;
 			if (!alreadyShown)
 			{
 				Form parentForm = ExtractOptionsParent ();
@@ -86,10 +81,7 @@ namespace Yuki_Theme_Plugin.Controls
 			alreadyShown = false;
 			utilities ??= new SettingsPanelUtilities (_settingsPanel);
 			utilities.SaveSettings ();
-			if (dimensionCap)
-			{
-				plugin.SettingsChanged (customSticker, dimensionCap);
-			}
+			plugin.ApplySettings (_settingsPanel.settings);
 		}
 
 		private void CancelChanges ()

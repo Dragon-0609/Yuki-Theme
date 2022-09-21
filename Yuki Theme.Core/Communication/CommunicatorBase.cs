@@ -16,6 +16,8 @@ namespace Yuki_Theme.Core.Communication
 		protected Queue<Message> _messages;
 
 		protected bool stopTimer = false;
+
+		protected bool ConsoleLogs = false;
 		
 
 		protected void InitTimer ()
@@ -44,12 +46,19 @@ namespace Yuki_Theme.Core.Communication
 			_timer.Elapsed -= SendMessages;
 			_timer.Elapsed += TestConnection;
 			_timer.Interval = 2000;
+			if (ConsoleLogs)
+				Console.Write("Connection testing started");
 			_timer.Start ();
 		}
 		private void TestConnection (object sender, ElapsedEventArgs e)
 		{
 			if (!stopTimer)
 			{
+				if (ConsoleLogs)
+				{
+					ClearCurrentConsoleLine ();
+					Console.Write ("Testing connection: {0}", tryCount);
+				}
 				if (tryCount < 10)
 				{
 					SendMessage (new Message (MessageTypes.TEST_CONNECTION));
@@ -77,5 +86,13 @@ namespace Yuki_Theme.Core.Communication
 		protected abstract void ConnectionNotEstablished ();
 
 		public abstract void SendMessage (Message message);
+		
+		private void ClearCurrentConsoleLine()
+		{
+			int currentLineCursor = Console.CursorTop;
+			Console.SetCursorPosition(0, Console.CursorTop);
+			Console.Write(new string(' ', Console.WindowWidth)); 
+			Console.SetCursorPosition(0, currentLineCursor);
+		}
 	}
 }

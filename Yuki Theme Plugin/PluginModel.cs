@@ -21,6 +21,7 @@ namespace Yuki_Theme_Plugin
 		internal override void InitSticker (Form form)
 		{
 			_stickerWindow = StickerWindow.CreateStickerControl (form);
+			_stickerWindow.WriteToConsole = WriteToConsole;
 			_stickerWindow.Show ();
 		}
 
@@ -31,15 +32,9 @@ namespace Yuki_Theme_Plugin
 			_stickerWindow.LoadImage (Sticker);
 		}
 
-		internal override void ReloadSticker ()
-		{
-			_stickerWindow.LoadSticker ();
-		}
+		internal override void ReloadSticker () => _stickerWindow.LoadSticker ();
 
-		internal override void ChangeSticker (Image image)
-		{
-			_stickerWindow.LoadImage (image);
-		}
+		internal override void ChangeSticker (Image image) => _stickerWindow.LoadImage (image);
 
 		internal override void ResetStickerPosition ()
 		{
@@ -47,14 +42,12 @@ namespace Yuki_Theme_Plugin
 			_stickerWindow.ResetPosition ();
 		}
 
-		internal override void CheckStickerVisibility ()
-		{
-			_stickerWindow.Visibility = Settings.swSticker && CentralAPI.Current.currentTheme.HasSticker ? Visibility.Visible : Visibility.Hidden;
-		}
+		internal override void ReloadStickerPositionData () => _stickerWindow.ReadData ();
 
 		internal override void Release () => _stickerWindow.Release ();
 
 		internal override void ReadData () => _stickerWindow.ReadData ();
+		internal override void UpdateStickerVisibility () => _stickerWindow.UpdateStickerVisibility ();
 		internal override void UpdateLocation () => _stickerWindow.ResetPosition ();
 
 		internal override void StickerPositioning (bool available) => _stickerWindow.IsEnabled = available;

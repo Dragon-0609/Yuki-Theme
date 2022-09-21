@@ -47,6 +47,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			box.Text = "begin\r\nWriteln(\'Hello World\');\r\nend.";
 			box.Zoom = 100;
 			box.HotkeysMapping.Add(Keys.Control | Keys.S, FCTBAction.CustomAction1);
+			box.HotkeysMapping.Add (Keys.Control | Keys.Y, FCTBAction.Redo);
+			box.HotkeysMapping.Add (Keys.Control | Keys.OemQuestion, FCTBAction.CommentSelected);
 			box.CustomAction += BoxSaveAction;
 			box.SendToBack ();
 		}

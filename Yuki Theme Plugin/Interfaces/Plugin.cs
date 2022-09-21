@@ -32,17 +32,19 @@ namespace Yuki_Theme_Plugin.Interfaces
 
 		public abstract class Model
 		{
-
+			internal Action <string> WriteToConsole;
+			
 			internal abstract void InitSticker (Form form);
 			internal abstract void LoadSticker ();
 			internal abstract void ReloadSticker ();
 			internal abstract void ResetStickerPosition ();
 			internal abstract void ChangeSticker (Image image);
-			internal abstract void CheckStickerVisibility ();
+			internal abstract void UpdateStickerVisibility ();
 			internal abstract void Release ();
 			internal abstract void ReadData ();
 			internal abstract void UpdateLocation ();
 			internal abstract void StickerPositioning (bool available);
+			internal abstract void ReloadStickerPositionData ();
 		}
 	}
 }

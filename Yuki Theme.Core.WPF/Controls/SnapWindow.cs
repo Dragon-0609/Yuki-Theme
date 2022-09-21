@@ -10,10 +10,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class SnapWindow : Window
 	{
-		public const int BORDER_OUTLINE   = 10;
+		public const int BORDER_OUTLINE_X   = 10;
 		public const int BORDER_OUTLINE_Y = 20;
+		public const int PLUGIN_BORDER_OUTLINE_Y = 30;
 
-		public float borderOutlineX = BORDER_OUTLINE;
+		public float borderOutlineX = BORDER_OUTLINE_X;
 		public float borderOutlineY = BORDER_OUTLINE_Y;
 
 		public Window target;
@@ -46,6 +47,8 @@ namespace Yuki_Theme.Core.WPF.Controls
 			ResizeMode = ResizeMode.NoResize;
 			WindowStyle = WindowStyle.None;
 			ShowInTaskbar = false;
+			if (Helper.mode == ProductMode.Plugin && borderOutlineY == BORDER_OUTLINE_Y)
+				borderOutlineY = PLUGIN_BORDER_OUTLINE_Y;
 		}
 
 
@@ -63,7 +66,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 				double width = target != null ? _currentRect.Width : GetWidth ();
 				if (AlignX == AlignmentX.Center)
 				{
-					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE ? 0 : borderOutlineX);
+					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE_X ? 0 : borderOutlineX);
 				} else
 				{
 					res = left + width - RenderSize.Width - borderOutlineX;

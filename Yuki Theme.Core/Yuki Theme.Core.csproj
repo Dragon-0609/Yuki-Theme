@@ -361,6 +361,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\SVG\resetView.svg" />
+    <EmbeddedResource Include="Resources\SVG\resetView_dark.svg" />
+    <EmbeddedResource Include="Resources\SVG\menu-open.svg" />
+    <EmbeddedResource Include="Resources\SVG\menu-open_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter_dark.svg" />

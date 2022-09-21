@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
+using Yuki_Theme.Core.WPF.Controls;
 using Point = System.Windows.Point;
 namespace Yuki_Theme.Core.WPF.Windows
 {
@@ -22,12 +23,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 		public PositionCalculator (StickerWindow window)
 		{
 			this.window = window;
-			_margin = new Point (10, 20);
+			_margin = new Point (SnapWindow.BORDER_OUTLINE_X, SnapWindow.BORDER_OUTLINE_Y);
 		}
 
 		internal void PrepareData ()
 		{
-			Rect owner = window.Owner.GetAbsoluteRect ();
+			Rect owner = GetOwnerRectangle ();
 			width = (int)(owner.Width / 2);
 			width3 = (int)(owner.Width / 3);
 			width32 = width3 * 2;
@@ -42,7 +43,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 		public void KeepBounds (ref double x, ref double y)
 		{
-			Rect owner = window.Owner.GetAbsoluteRect ();
+			Rect owner = GetOwnerRectangle ();
 
 			if (x < owner.Left + _margin.X)
 				x = owner.Left + _margin.X;
@@ -56,10 +57,18 @@ namespace Yuki_Theme.Core.WPF.Windows
 				y = owner.Top + _margin.Y;
 			else
 			{
-
 				if (y + window.Height > owner.Top + owner.Height - _margin.Y)
 					y = owner.Top + owner.Height - window.Height - _margin.Y;
 			}
+		}
+		private Rect GetOwnerRectangle ()
+		{
+			if (window.target != null)
+				return window.Owner.GetAbsoluteRect ();
+			if (window.targetForm != null)
+				return window.targetForm.ClientRectangle.ToRect (window.targetForm);
+
+			throw new NullReferenceException ("Owner wasn't set");
 		}
 
 
@@ -117,7 +126,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				res = (float)((point.Y - (point.Y - top)) - height);
 			} else if (style == AlignmentY.Bottom)
 			{
-				res = (float)(owner.Height - (top + window.Height));
+				res = (float)(owner.Height - (top + window.Height) + (Helper.mode == ProductMode.Plugin ? SnapWindow.PLUGIN_BORDER_OUTLINE_Y : 0));
 			}
 			if (unit == RelativeUnit.Percent)
 				res /= unity;
@@ -126,7 +135,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void SaveRelatedPosition (Point point)
 		{
-			Rect owner = window.Owner.GetAbsoluteRect ();
+			Rect owner = GetOwnerRectangle ();
+
+			if (window.WriteToConsole != null)
+				window.WriteToConsole ($"{owner} | {point}");
+
 			window._relativePosition = new PointF (GetRelatedX (owner, point), GetRelatedY (owner, point));
 			window.SetBorderOutline ();
 			window.ResetPosition ();
