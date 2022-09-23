@@ -49,16 +49,19 @@ namespace Yuki_Theme.Core.Controls
 		public void CallKeyUp (KeyEventArgs e)
 		{
 			OnKeyUp (e);
+			e.Handled = true;
 		}
 		
 		public void CallKeyDown (KeyEventArgs e)
 		{
 			OnKeyDown (e);
+			e.Handled = true;
 		}
 		
 		public void CallKeyPress (KeyPressEventArgs e)
 		{
 			OnKeyPress (e);
+			e.Handled = true;
 		}
 	}
 }

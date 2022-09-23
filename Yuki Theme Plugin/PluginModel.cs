@@ -28,8 +28,8 @@ namespace Yuki_Theme_Plugin
 		internal override void LoadSticker ()
 		{
 			string pth = Path.Combine (Settings.pascalPath, "Highlighting", "sticker.png");
-			Sticker = Image.FromFile (pth);
-			_stickerWindow.LoadImage (Sticker);
+			Sticker = File.Exists(pth) ? Image.FromFile(pth) : null;
+			_stickerWindow.LoadImage(Sticker);
 		}
 
 		internal override void ReloadSticker () => _stickerWindow.LoadSticker ();
