@@ -231,6 +231,7 @@ namespace Yuki_Theme.Core
 		public readonly bool        ShowSticker;
 		public readonly bool        EditorReadOnly;
 		public readonly SettingMode CurrentMode;
+		public readonly RelativeUnit PositionUnit;
 
 		public bool ResetMargins;
 
@@ -243,6 +244,7 @@ namespace Yuki_Theme.Core
 			ShowSticker = Settings.swSticker;
 			CurrentMode = Settings.settingMode;
 			EditorReadOnly = Settings.editorReadOnly;
+			PositionUnit = Settings.unit;
 		}
 
 	}

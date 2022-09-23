@@ -108,6 +108,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			FillProgramValues ();
 			FillPluginValues ();
 			StickerDimensionCap_CheckedChanged (this, null);
+			AllowPositioningCheckedChanged(this, null);
 			HideHover_CheckedChanged (this, null);
 		}
 
@@ -134,6 +135,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			SCheck (EditorReadOnly, Settings.editorReadOnly);
 			SDrop (EditorModeDropdown, (int)Settings.settingMode);
 			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
+			SDrop(PositioningUnit, (int) Settings.unit);
 			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
 			SText (HideDelay.box, Settings.hideDelay.ToString ());
 			customStickerPath = Settings.customSticker;
@@ -198,6 +200,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			KCheck (PortableMode, ref Settings.portableMode);
 			KCheck (EditorReadOnly, ref Settings.editorReadOnly);
 			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
+			KDrop (PositioningUnit, ref Settings.unit);
 
 			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
 			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
@@ -256,6 +259,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private void KDrop (ComboBox dropDown, ref int value)
 		{
 			value = dropDown.SelectedIndex;
+		}
+
+		/// <summary>
+		/// Save Selected Index of combobox to int
+		/// </summary>
+		private void KDrop (ComboBox dropDown, ref RelativeUnit value)
+		{
+			value = (RelativeUnit) dropDown.SelectedIndex;
 		}
 
 		/// <summary>
@@ -331,7 +342,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void AllowPositioningCheckedChanged (object sender, RoutedEventArgs e)
 		{
-			ResetMargin.IsEnabled = AllowPositioning.IsChecked == true;
+			ResetMargin.IsEnabled =  PositioningUnit.IsEnabled = AllowPositioning.IsChecked == true;
 			if (HideHover.IsChecked != null && (bool)HideHover.IsChecked && AllowPositioning.IsChecked != null && (bool)AllowPositioning.IsChecked)
 				HideHover.IsChecked = false;
 		}

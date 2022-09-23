@@ -69,18 +69,19 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			double res = 0;
 			double left = _currentRect.X;
+			double posX = borderOutlineX * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1);
 			if (AlignX == AlignmentX.Left)
 			{
-				res = left + (borderOutlineX * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
+				res = left + posX;
 			} else
 			{
 				double width = _currentRect.Width;
 				if (AlignX == AlignmentX.Center)
 				{
-					res = left + (width / 2) + ((borderOutlineX == BORDER_OUTLINE_X ? 0 : borderOutlineX) * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
+					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE_X ? 0 : posX);
 				} else
 				{
-					res = left + width - RenderSize.Width - (borderOutlineX * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
+					res = left + width - RenderSize.Width - posX;
 				}
 			}
 			
@@ -91,18 +92,19 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			double res = 0;
 			double top = _currentRect.Y;
+			double posY = borderOutlineY * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1);
 			if (AlignY == AlignmentY.Top)
 			{
-				res = top + (borderOutlineY * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
+				res = top + posY;
 			} else
 			{
 				double height = _currentRect.Height;
 				if (AlignY == AlignmentY.Center)
 				{
-					res = top + (height / 2) + ((borderOutlineY == BORDER_OUTLINE_Y ? 0 : borderOutlineY) * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
+					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE_Y ? 0 : posY);
 				} else
 				{
-					res = top + height - RenderSize.Height - (borderOutlineY * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
+					res = top + height - RenderSize.Height - posY;
 				}
 			}
 			
