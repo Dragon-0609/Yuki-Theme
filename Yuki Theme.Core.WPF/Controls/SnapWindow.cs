@@ -19,6 +19,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public Window target;
 		public Form   targetForm;
+		
+		private float           unitx;
+		private float           unity;
 
 		public AlignmentX AlignX = AlignmentX.Left;
 		public AlignmentY AlignY = AlignmentY.Top;
@@ -29,12 +32,20 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private Rect _currentRect;
 
+		protected bool CanUsePercents;
+
 		public void ResetPosition ()
 		{
 			if (target != null || targetForm != null)
 			{
-				if (target != null)
-					_currentRect = target.GetAbsoluteRect ();
+				_currentRect = GetOwnerRectangle();
+				
+				if (CanUsePercents && Settings.unit == RelativeUnit.Percent)
+				{
+					Rect rect = GetOwnerRectangle();
+					unitx = (float) (rect.Width / 100f);
+					unity = (float) (rect.Height / 100f);
+				}
 
 				Left = GetX ();
 				Top = GetY ();
@@ -57,44 +68,44 @@ namespace Yuki_Theme.Core.WPF.Controls
 		private double GetX ()
 		{
 			double res = 0;
-			double left = target != null ? _currentRect.X : GetLeft ();
+			double left = _currentRect.X;
 			if (AlignX == AlignmentX.Left)
 			{
-				res = left + borderOutlineX;
+				res = left + (borderOutlineX * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
 			} else
 			{
-				double width = target != null ? _currentRect.Width : GetWidth ();
+				double width = _currentRect.Width;
 				if (AlignX == AlignmentX.Center)
 				{
-					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE_X ? 0 : borderOutlineX);
+					res = left + (width / 2) + ((borderOutlineX == BORDER_OUTLINE_X ? 0 : borderOutlineX) * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
 				} else
 				{
-					res = left + width - RenderSize.Width - borderOutlineX;
+					res = left + width - RenderSize.Width - (borderOutlineX * (CanUsePercents && Settings.unit == RelativeUnit.Percent ?  unitx : 1));
 				}
 			}
-
+			
 			return res;
 		}
 
 		private double GetY ()
 		{
 			double res = 0;
-			double top = target != null ? _currentRect.Y : GetTop ();
+			double top = _currentRect.Y;
 			if (AlignY == AlignmentY.Top)
 			{
-				res = top + borderOutlineY;
+				res = top + (borderOutlineY * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
 			} else
 			{
-				double height = target != null ? _currentRect.Height : GetHeight ();
+				double height = _currentRect.Height;
 				if (AlignY == AlignmentY.Center)
 				{
-					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE_Y ? 0 : borderOutlineY);
+					res = top + (height / 2) + ((borderOutlineY == BORDER_OUTLINE_Y ? 0 : borderOutlineY) * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
 				} else
 				{
-					res = top + height - RenderSize.Height - borderOutlineY;
+					res = top + height - RenderSize.Height - (borderOutlineY * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1));
 				}
 			}
-
+			
 			return res;
 		}
 
@@ -272,6 +283,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 			{
 				Owner = parent.Handle
 			};
+		}
+		
+		internal Rect GetOwnerRectangle ()
+		{
+			if (target != null)
+				return Owner.GetAbsoluteRect ();
+			if (targetForm != null)
+				return targetForm.ClientRectangle.ToRect (targetForm);
+
+			throw new NullReferenceException ("Owner wasn't set");
 		}
 	}
 

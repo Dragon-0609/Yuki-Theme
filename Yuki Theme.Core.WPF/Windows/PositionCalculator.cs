@@ -28,7 +28,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal void PrepareData ()
 		{
-			Rect owner = GetOwnerRectangle ();
+			Rect owner = window.GetOwnerRectangle ();
 			width = (int)(owner.Width / 2);
 			width3 = (int)(owner.Width / 3);
 			width32 = width3 * 2;
@@ -43,7 +43,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 		public void KeepBounds (ref double x, ref double y)
 		{
-			Rect owner = GetOwnerRectangle ();
+			Rect owner = window.GetOwnerRectangle ();
 
 			if (x < owner.Left + _margin.X)
 				x = owner.Left + _margin.X;
@@ -61,15 +61,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					y = owner.Top + owner.Height - window.Height - _margin.Y;
 			}
 		}
-		private Rect GetOwnerRectangle ()
-		{
-			if (window.target != null)
-				return window.Owner.GetAbsoluteRect ();
-			if (window.targetForm != null)
-				return window.targetForm.ClientRectangle.ToRect (window.targetForm);
 
-			throw new NullReferenceException ("Owner wasn't set");
-		}
 
 
 		public void SetAligns (Point position)
@@ -135,7 +127,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		public void SaveRelatedPosition (Point point)
 		{
-			Rect owner = GetOwnerRectangle ();
+			Rect owner = window.GetOwnerRectangle ();
 
 			if (window.WriteToConsole != null)
 				window.WriteToConsole ($"{owner} | {point}");

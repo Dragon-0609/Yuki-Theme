@@ -37,6 +37,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			_model = new StickerModel ();
 			_presenter = new StickerPresenter (_model, this);
 			_calculator = new PositionCalculator (this);
+			CanUsePercents = true;
 		}
 
 
@@ -107,6 +108,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			AlignY = align.ConvertToY ();
 
 			SetBorderOutline ();
+			ResetPosition();
 		}
 
 
@@ -136,6 +138,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 					_relativePosition = new Drawing.PointF (x, y);
 					align = (AnchorStyles)(int.Parse (cc [2]));
 					RelativeUnit un = (RelativeUnit)(int.Parse (cc [3]));
+					
 					if (unit != un)
 					{
 						float tunitx = Convert.ToInt32 (Owner.Width) / 100f;
@@ -177,7 +180,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal void SetBorderOutline ()
 		{
-
 			borderOutlineX = _relativePosition.X;
 			borderOutlineY = _relativePosition.Y;
 
@@ -301,7 +303,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				_calculator.SetAligns (point);
 				_calculator.SaveRelatedPosition (point);
-				Console.WriteLine (_relativePosition.ToString ());
 			}
 		}
 
