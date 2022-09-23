@@ -152,10 +152,8 @@
                             <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground"
-                                    Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Foreground}" />
-                            <Setter Property="Background"
-                                    Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Tag.BorderBrush}" />
+                            <!-- <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Foreground}" /> -->
+                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
@@ -173,8 +171,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-        </Style.Triggers>
     </Style>
 
     <Style x:Key="DropdownWindow" TargetType="ComboBox" BasedOn="{StaticResource DropdownDefault}">

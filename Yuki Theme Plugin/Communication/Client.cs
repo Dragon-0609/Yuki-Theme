@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core;
@@ -98,7 +99,28 @@ namespace Yuki_Theme_Plugin.Communication
 
 		protected override void ConnectionNotEstablished ()
 		{
-			MessageBox.Show ("Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.", "Couldn't connect to Theme Editor app");
+
+			const string text_en = "Couldn't establish connection between Plugin and Theme Editor. Functionality will be limited.\nYou won't be able to export, edit and do anything that needs admin rights. If the IDE isn't in Program Files, it'll work, else it won't.";
+			const string title_en = "Couldn't connect to Theme Editor app";
+			
+			const string text_ru = "Не удалось установить соединение между плагином и Редактором Тем. Функционал будет ограничен.\nВы не сможете экспортировать, изменять и делать что угодно что требует права администратора. Если IDE не находится в Program Files, тогда функционал будет работать. В противном случае не будет работать.";
+			const string title_ru = "Не удалось подключиться к Редактору Тем";
+			
+			string text;
+			string title;
+			
+			if (CultureInfo.InstalledUICulture.TwoLetterISOLanguageName.ToLower () == "ru")
+			{
+				text = text_ru;
+				title = title_ru;
+			} else
+			{
+				text = text_en;
+				title = title_en;
+			}
+			
+			
+			MessageBox.Show (text, title);
 			CentralAPI.Current = new CommonAPI ();
 			Settings.Get ();
 		}
