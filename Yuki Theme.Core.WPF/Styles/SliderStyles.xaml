@@ -20,10 +20,10 @@
                     <Canvas SnapsToDevicePixels="true">
                         <Grid Height="20" Width="30">
                             <Rectangle x:Name="Background"
-                                       Fill="{Binding Tag.BackgroundClickBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" Stroke="{Binding Tag.BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}"
+                                       Fill="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" Stroke="{Binding Tag.BorderBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}"
                                        Height="20" Width="30"
                                        RadiusX="3" RadiusY="3" />
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ValueBlock"
                                        Foreground="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" FontSize="10"
                                        Text="{Binding Value, RelativeSource={RelativeSource AncestorType={x:Type Slider}}}" />
                         </Grid>
@@ -36,7 +36,7 @@
                             <Setter Property="Fill" TargetName="Background" Value="{Binding Tag.BackgroundClickBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Fill" TargetName="Background" Value="Gray" />
+                            <Setter Property="Foreground" TargetName="ValueBlock" Value="{Binding Tag.SelectionBrush, RelativeSource={RelativeSource FindAncestor, AncestorType=Slider}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

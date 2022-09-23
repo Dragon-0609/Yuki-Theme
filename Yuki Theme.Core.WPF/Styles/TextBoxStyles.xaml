@@ -14,6 +14,9 @@
                             <Setter TargetName="templateBorder" Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType=TextBox}, Path=Tag.BorderBrush}" />
                             <Setter Property="BorderThickness" Value="3" />
                         </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Self}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

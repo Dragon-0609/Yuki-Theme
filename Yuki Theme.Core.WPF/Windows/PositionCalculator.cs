@@ -118,7 +118,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 				res = (float)((point.Y - (point.Y - top)) - height);
 			} else if (style == AlignmentY.Bottom)
 			{
-				res = (float)(owner.Height - (top + window.Height) + (Helper.mode == ProductMode.Plugin ? SnapWindow.PLUGIN_BORDER_OUTLINE_Y : 0));
+				res = (float)(owner.Height - (top + window.Height));
 			}
 			if (unit == RelativeUnit.Percent)
 				res /= unity;
@@ -133,6 +133,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 				window.WriteToConsole ($"{owner} | {point}");
 
 			window._relativePosition = new PointF (GetRelatedX (owner, point), GetRelatedY (owner, point));
+			if (window.WriteToConsole != null)
+				window.WriteToConsole ($"R: {window._relativePosition}");
 			window.SetBorderOutline ();
 			window.ResetPosition ();
 		}
