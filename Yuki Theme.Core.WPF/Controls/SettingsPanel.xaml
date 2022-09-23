@@ -66,6 +66,9 @@
             <system:String x:Key="settings.general.dimension.max.by">Max Size by:</system:String>
             <system:String x:Key="settings.general.dimension.max.by.height">Height</system:String>
             <system:String x:Key="settings.general.dimension.max.by.width">Width</system:String>
+            <system:String x:Key="settings.general.positioning.unit">Position unit</system:String>
+            <system:String x:Key="settings.general.positioning.unit.pixel">Pixel</system:String>
+            <system:String x:Key="settings.general.positioning.unit.percent">Percent</system:String>
             <system:String x:Key="settings.general.mode">Editor Mode:</system:String>
             <system:String x:Key="settings.general.mode.light">Light</system:String>
             <system:String x:Key="settings.general.mode.advanced">Advanced</system:String>
@@ -175,6 +178,20 @@
                                                         Image="{DynamicResource InfoImage}" />
                                 </WrapPanel>
                             </WrapPanel>
+                            <WrapPanel Margin="0 10">
+                                
+                                
+                                
+                                <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
+                                           Text="{DynamicResource settings.general.positioning.unit}" />
+                                <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}"
+                                          Name="PositioningUnit">
+                                    <ComboBoxItem IsSelected="True"
+                                                  Content="{DynamicResource settings.general.positioning.unit.pixel}" />
+                                    <ComboBoxItem
+                                        Content="{DynamicResource settings.general.positioning.unit.percent}" />
+                                </ComboBox>
+                            </WrapPanel>
 
                             <WrapPanel Margin="0 0 6 3">
                                 <Button Padding="8 2" Content="{DynamicResource settings.general.sticker.choose}"
@@ -196,7 +213,7 @@
                                     FontSize="12" Text="750" BorderBrush="DimGray" Padding="2 2"
                                     VerticalAlignment="Center" Width="70" Height="30"
                                     Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
-                                    MinValue="50" DefaultValue="750" MaxValue="5000" ValueChange="50"
+                                    MinValue="100" DefaultValue="750" MaxValue="5000" ValueChange="50"
                                     x:Name="HideDelay" />
                             </WrapPanel>
 

@@ -565,6 +565,12 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Fstb.SetReadOnly ();
 			}
+			
+			if (settings.PositionUnit != Settings.unit)
+			{
+				Model.ReloadStickerPositionData();
+				Model.ResetStickerPosition();
+			}
 
 		}
 

@@ -154,6 +154,8 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground"
                                     Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Foreground}" />
+                            <Setter Property="Background"
+                                    Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Tag.BorderBrush}" />
                         </Trigger>
                         <Trigger Property="IsGrouping" Value="true">
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
