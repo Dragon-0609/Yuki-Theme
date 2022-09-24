@@ -17,7 +17,7 @@ namespace Yuki_Theme.Core.API
 		private List<string> _schemes = new ();
 
 
-		private Dictionary<string, ThemeInfo> _themeInfos = new ();
+		protected Dictionary<string, ThemeInfo> _themeInfos = new ();
 
 		public Theme currentTheme = ThemeFunctions.LoadDefault ();
 
@@ -37,7 +37,7 @@ namespace Yuki_Theme.Core.API
 		internal readonly ThemeFormatBase _newThemeFormat;
 		internal readonly ThemeFormatBase _oldThemeFormat;
 		internal readonly ThemeManager    _themeManager;
-		private readonly  API_Actions     _actions;
+		protected readonly  API_Actions     _actions;
 
 		internal API_Actions Actions => _actions;
 
@@ -81,7 +81,7 @@ namespace Yuki_Theme.Core.API
 		/// <param name="copyFrom">Copy from</param>
 		/// <param name="name">Copy to</param>
 		/// <returns>0 -> Theme isn't added cause of exceptions. 1 -> Theme is added. 2 -> Theme is overriden</returns>
-		public int AddTheme (string copyFrom, string name)
+		public virtual int AddTheme (string copyFrom, string name)
 		{
 			if (name.Length < 3)
 			{

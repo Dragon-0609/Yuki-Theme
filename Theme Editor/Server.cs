@@ -45,6 +45,7 @@ namespace Theme_Editor
 			api.LoadSchemes ();
 			api.AddEvents ();
 			api.AddEvent (OPEN_MAIN_WINDOW, message => App._manager.OpenMainWindow ());
+			api.AddEvent (RELOAD_SETTINGS, message => App._manager.ApplySettingsChanges ((ChangedSettings) message.OtherContent));
 		}
 
 		private void InitMessaging ()

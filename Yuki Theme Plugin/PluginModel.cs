@@ -16,7 +16,7 @@ namespace Yuki_Theme_Plugin
 
 		private StickerWindow _stickerWindow;
 
-		internal Image Sticker;
+		private Image Sticker;
 
 		internal override void InitSticker (Form form)
 		{

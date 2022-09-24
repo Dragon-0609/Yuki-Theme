@@ -44,6 +44,12 @@ namespace Yuki_Theme.Core.Communication
 			return Id + Content.Length > 0 ? $" - {Content}" : "";
 		}
 	}
+	
+	[Serializable]
+	public class MessageContainer
+	{
+		public object [] Objects;
+	}
 
 	public class MessageTypes
 	{
@@ -59,6 +65,8 @@ namespace Yuki_Theme.Core.Communication
 		public const int RELOAD_THEME         = 10;
 		public const int PREVIEW_THEME        = 11;
 		public const int RELOAD_SETTINGS      = 12;
+		public const int ADD_THEME            = 13;
+		public const int THEME_ADDED          = 14;
 		
 		public const int SET_PASCAL_PATH  = 30;
 		public const int SET_CURRENT_NAME = 31;

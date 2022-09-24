@@ -32,11 +32,11 @@ using Resources = Yuki_Theme_Plugin.Properties.Resources;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
 using static Yuki_Theme.Core.Communication.MessageTypes;
-using Message = Yuki_Theme.Core.Communication.Message;
+
 
 namespace Yuki_Theme_Plugin
 {
-	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin, IColorUpdatable, Plugin.IView
+	public class YukiTheme_VisualPascalABCPlugin : Plugin.View, IVisualPascalABCPlugin, IColorUpdatable 
 	{
 		public string Name => "Yuki Theme";
 
@@ -53,7 +53,6 @@ namespace Yuki_Theme_Plugin
 		private Timer tim3;
 
 		internal ToolStripButton       currentThemeName;
-		private  PictureBox            logoBox;
 		internal IHighlightingStrategy highlighting;
 
 		private       IconManager       manager;
@@ -61,26 +60,17 @@ namespace Yuki_Theme_Plugin
 		public static PluginColors      Colors = new PluginColors ();
 		internal      ThemeSwitcher     switcher;
 		internal      EditorInspector   inspector;
-		internal      IdeComponents     ideComponents = new IdeComponents ();
 
 
-		internal Plugin.Model _model = new PluginModel ();
-		internal PluginHelper _helper;
-
-		private bool isCommonAPI = false;
+		internal Plugin.IPresenter _presenter;
 
 		internal bool bgImage => Settings.bgImage;
 		internal int  imagesEnabled;        // Is enabled Colors.bg image and (or) sticker
 		internal bool StatusBarNameEnabled; // Name in status bar
-		private  int  lastFocused = -1;
 
 		public PopupController popupController;
 
 		public static YukiTheme_VisualPascalABCPlugin plugin;
-
-		internal Client _client;
-
-		private MainWindow CoreWindow;
 
 		/// <summary>
 		///     The main entry point for the application.
@@ -97,18 +87,27 @@ namespace Yuki_Theme_Plugin
 
 		public void GetGUI (List <IPluginGUIItem> MenuItems, List <IPluginGUIItem> ToolBarItems)
 		{
-			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", null, Color.Transparent, InitCore);
+			var item1 = new PluginGUIItem ("Yuki Theme", "Yuki Theme", null, Color.Transparent, InitCoreWindow);
 			//Добавляем в меню
 			MenuItems.Add (item1);
 			plugin = this;
-
+			
+			_presenter = new PluginPresenter (this);
+			
 			ideComponents.fm = (Form1)ideComponents.workbench.MainForm;
 			Helper.mode = ProductMode.Plugin;
 			_helper = new PluginHelper (ideComponents);
 
-			InitAPI ();
+			_presenter.InitAPI ();
+		}
 
-			Settings.translation.TryToGetLanguage = GetDefaultLocalization;
+
+		#region Initialization
+
+		
+		internal override void StartIntegration ()
+		{
+			Settings.translation.TryToGetLanguage = _helper.GetDefaultLocalization;
 			Settings.Get ();
 
 			imagesEnabled = 0;
@@ -121,10 +120,7 @@ namespace Yuki_Theme_Plugin
 			loadWithWaiting ();
 			Initialize ();
 		}
-
-
-		#region Initialization
-
+		
 		private void Initialize ()
 		{
 			LoadColors ();
@@ -164,7 +160,7 @@ namespace Yuki_Theme_Plugin
 			_model.LoadSticker ();
 			// InitializeSticker ();
 			ideComponents.fm.Resize += FmOnResize;
-			addToSettings ();
+			_presenter.AddToSettings ();
 		}
 
 		private void InitStyles ()
@@ -172,7 +168,7 @@ namespace Yuki_Theme_Plugin
 			Extender.SetSchema (ideComponents.fm.MainDockPanel);
 		}
 
-		private void InitCore ()
+		private void InitCoreWindow ()
 		{
 			if (!isCommonAPI)
 				_client.SendMessage (OPEN_MAIN_WINDOW);
@@ -188,7 +184,7 @@ namespace Yuki_Theme_Plugin
 			if (CoreWindow == null || PresentationSource.FromVisual (CoreWindow) == null)
 			{
 				CoreWindow = new MainWindow ();
-				CoreWindow.Model.StartSettingTheme += ReleaseResources;
+				CoreWindow.Model.StartSettingTheme += _presenter.ReleaseResources;
 				CoreWindow.Model.SetTheme += ReloadLayout;
 
 				CoreWindow.Closed += (_, _) =>
@@ -214,7 +210,7 @@ namespace Yuki_Theme_Plugin
 			tim3.Tick += load;
 			if (Settings.swLogo)
 			{
-				showLogo ();
+				_presenter.ShowLogo ();
 			} else
 				InitStyles ();
 
@@ -229,7 +225,7 @@ namespace Yuki_Theme_Plugin
 			tim3.Stop ();
 			if (Settings.swLogo)
 			{
-				hideLogo ();
+				_presenter.HideLogo ();
 				InitStyles ();
 			}
 
@@ -372,53 +368,8 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private void InitAPI ()
-		{
-			AdminTools tools = new AdminTools ();
-			if (tools.IsUACEnabled && _helper.IsInProgramFiles ())
-			{
-				InitCommunicator ();
-				if (!isCommonAPI)
-					CentralAPI.Current = new ClientAPI ();
-			} else
-			{
-				isCommonAPI = true;
-				CentralAPI.Current = new CommonAPI ();
-			}
-		}
-
-		private void InitCommunicator ()
-		{
-			if (!isCommonAPI)
-			{
-				_client = new Client (ideComponents, _helper);
-
-				isCommonAPI = CentralAPI.DefaultAPIInited;
-				if (!isCommonAPI)
-				{
-					ClientAPI api = new ClientAPI ();
-					CentralAPI.Current = api;
-					api.Client = _client;
-					api.AddEvents ();
-					api.AddEvent (RELEASE_RESOURCES, ReleaseResourcesForServer);
-					api.AddEvent (APPLY_THEME, _ => ReloadLayout ());
-					api.AddEvent (APPLY_THEME_LIGHT, _ => ReloadLayoutLight ());
-				}
-			}
-		}
-
 		#endregion
 
-
-		#region Server Actions
-
-		private void ReleaseResourcesForServer (Message obj)
-		{
-			ReleaseResources ();
-			_client.SendMessage (RELEASE_RESOURCES_OK);
-		}
-
-		#endregion
 
 		#region Updates
 
@@ -457,12 +408,12 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 		}
 
-		public void ReloadLayout ()
+		public override void ReloadLayout ()
 		{
 			ReloadLayoutAll (false);
 		}
 
-		public void ReloadLayoutLight ()
+		public override void ReloadLayoutLight ()
 		{
 			ReloadLayoutAll (true);
 			if (switcher is { panel_bg: { } })
@@ -478,7 +429,7 @@ namespace Yuki_Theme_Plugin
 			tim.Start ();
 		}
 
-		public void ReloadLayoutAll (bool lightReload)
+		public override void ReloadLayoutAll (bool lightReload)
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes ();
 			if (!lightReload)
@@ -541,132 +492,9 @@ namespace Yuki_Theme_Plugin
 		}
 
 		#endregion
+		
 
-
-		#region Logo Management
-
-		private void showLogo ()
-		{
-			logoBox = new PictureBox ();
-			logoBox.BackColor = Colors.bgdef;
-			logoBox.Image = Resources.YukiTheme;
-			logoBox.Location = new Point (ideComponents.fm.ClientSize.Width / 2 - 50, ideComponents.fm.ClientSize.Height / 2 - 50);
-			logoBox.Name = "logoBox";
-			logoBox.Size = new Size (100, 100);
-			logoBox.SizeMode = PictureBoxSizeMode.Zoom;
-			logoBox.TabIndex = 0;
-			logoBox.TabStop = false;
-			ideComponents.fm.Controls.Add (logoBox);
-		}
-
-		private void hideLogo ()
-		{
-			ideComponents.fm.Controls.Remove (logoBox);
-			logoBox.Dispose ();
-		}
-
-		#endregion
-
-
-		internal void RememberCurrentEditor ()
-		{
-			if (ideComponents.fm.ActiveControl is UpdatePageControl)
-			{
-				UpdatePageControl update = (UpdatePageControl)ideComponents.fm.ActiveControl;
-				lastFocused = update.TabIndex;
-			} else
-			{
-				lastFocused = ideComponents.fm.CurrentCodeFileDocument.TabIndex;
-			}
-		}
-
-		internal void ReFocusCurrentEditor ()
-		{
-			IDockContent [] docs = ideComponents.fm.MainDockPanel.DocumentsToArray ();
-			IDockContent doc = docs [lastFocused];
-			doc.DockHandler.Pane.Focus ();
-			if (doc.DockHandler.Content is UpdatePageControl)
-			{
-				UpdatePageControl update = (UpdatePageControl)doc.DockHandler.Content;
-				update.Focus ();
-			} else
-			{
-				CodeFileDocumentControl cod = (CodeFileDocumentControl)doc.DockHandler.Content;
-				cod.Focus ();
-			}
-
-			docs = null;
-		}
-
-		public void ReleaseResources ()
-		{
-			if (img != null)
-			{
-				img.Dispose ();
-				img = null;
-			}
-
-			_model.Release ();
-		}
-
-		private string GetDefaultLocalization ()
-		{
-			return PascalABCCompiler.StringResourcesLanguage.CurrentLanguageName;
-		}
-
-
-		private void GetWindowProperities ()
-		{
-			Props prop = new Props ();
-			prop.root = ideComponents.fm;
-			prop.propertyGrid1.SelectedObject = ideComponents.fm;
-			prop.Show ();
-		}
-
-		private void addToSettings ()
-		{
-			var getopt = ideComponents.fm.GetType ().GetField ("optionsContentEngine", BindingFlags.NonPublic | BindingFlags.Instance);
-			OptionsContentEngine options = (OptionsContentEngine)getopt.GetValue (ideComponents.fm);
-			options.AddContent (new Controls.PluginSettingsControl (this));
-		}
-
-		internal void ApplySettings (ChangedSettings settings)
-		{
-			if (settings.ShowSticker != Settings.swSticker)
-			{
-				_model.UpdateStickerVisibility ();
-			}
-
-			if (settings.CustomSticker != Settings.useCustomSticker)
-			{
-				if (Settings.useCustomSticker)
-				{
-					_model.ReloadSticker ();
-				} else
-				{
-					_model.LoadSticker ();
-				}
-			}
-
-			if (settings.DimensionCap != Settings.useDimensionCap)
-			{
-				_model.ReadData ();
-				_model.ResetStickerPosition ();
-			}
-			
-			if (settings.ResetMargins)
-			{
-				Settings.database.UpdateData (SettingsConst.STICKER_POSITION, "");
-				_model.ReloadStickerPositionData ();
-				_model.ResetStickerPosition ();
-			}
-
-			if (!isCommonAPI)
-			{
-				_client.SendMessage (RELOAD_SETTINGS);
-			}
-		}
-
+		internal override void Release () => _model.Release ();
 
 		public event ColorUpdate OnColorUpdate;
 	}

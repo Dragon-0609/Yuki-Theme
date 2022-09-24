@@ -81,7 +81,7 @@ namespace Yuki_Theme_Plugin.Controls
 			alreadyShown = false;
 			utilities ??= new SettingsPanelUtilities (_settingsPanel);
 			utilities.SaveSettings ();
-			plugin.ApplySettings (_settingsPanel.settings);
+			plugin._presenter.ApplySettings (_settingsPanel.settings);
 		}
 
 		private void CancelChanges ()

@@ -35,7 +35,7 @@ namespace Yuki_Theme_Plugin
 			{
 				// if (mf == null || mf.IsDisposed)
 				// {
-				plugin.RememberCurrentEditor ();
+				plugin._presenter.RememberCurrentEditor ();
 
 				panel_bg = new CustomPanel (0);
 				panel_bg.Name = "Custom Panel Switcher";
@@ -156,7 +156,7 @@ namespace Yuki_Theme_Plugin
 				themeList?.Dispose ();
 				panel_bg = null;
 
-				plugin.ReFocusCurrentEditor ();
+				plugin._presenter.ReFocusCurrentEditor ();
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace Yuki_Theme_Plugin
 
 					CentralAPI.Current.selectedItem = CentralAPI.Current.nameToLoad;
 					CentralAPI.Current.Restore (false, null);
-					CentralAPI.Current.ExportTheme (null, null, plugin.ReloadLayout, plugin.ReleaseResources, true);
+					CentralAPI.Current.ExportTheme (null, null, plugin.ReloadLayout, plugin._presenter.ReleaseResources, true);
 				}
 
 				needToReturnTheme = false;

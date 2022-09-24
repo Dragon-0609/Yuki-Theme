@@ -3,6 +3,9 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using Yuki_Theme.Core;
+using Yuki_Theme.Core.WPF.Windows;
+using Yuki_Theme_Plugin.Communication;
 namespace Yuki_Theme_Plugin.Interfaces
 {
 	public class Plugin
@@ -10,12 +13,41 @@ namespace Yuki_Theme_Plugin.Interfaces
 
 		internal interface IPresenter
 		{
-
+			
+			
+			void InitAPI ();
+			void InitClientAPI ();
+			void InitCommonAPI ();
+			
+			void RememberCurrentEditor ();
+			void ReFocusCurrentEditor ();
+			void ReleaseResources ();
+			
+			void AddToSettings ();
+			void ApplySettings (ChangedSettings settings);
+			void ShowLogo ();
+			void HideLogo ();
 		}
 
-		internal interface IView
+		public abstract class View
 		{
+			internal IdeComponents ideComponents = new IdeComponents ();
+			internal Plugin.Model  _model        = new PluginModel ();
+			internal PluginHelper  _helper;
+			internal MainWindow    CoreWindow;
 
+			internal Client _client;
+
+			internal abstract void StartIntegration ();
+
+			internal bool isCommonAPI = false;
+			
+			internal abstract void Release ();
+			
+			public abstract void ReloadLayout ();
+			public abstract void ReloadLayoutLight ();
+			public abstract void ReloadLayoutAll (bool lightReload);
+			
 		}
 
 		internal interface IHelper

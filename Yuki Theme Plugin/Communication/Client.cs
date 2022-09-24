@@ -19,6 +19,8 @@ namespace Yuki_Theme_Plugin.Communication
 	{
 		private const string THEME_EDITOR = "Theme_Editor.exe";
 
+		private YukiTheme_VisualPascalABCPlugin _plugin;
+
 		private NamedPipeClient <Message> _client;
 
 		private bool _isConnected = false;
@@ -32,10 +34,11 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private IDispatcher _dispatcher;
 
-		internal Client (IConsole console, IDispatcher dispatcher)
+		internal Client (IConsole console, IDispatcher dispatcher, YukiTheme_VisualPascalABCPlugin plugin)
 		{
 			_console = console;
 			_dispatcher = dispatcher;
+			_plugin = plugin;
 			Init ();
 		}
 
@@ -97,6 +100,12 @@ namespace Yuki_Theme_Plugin.Communication
 			ParseMessage (message);
 		}
 
+		protected override void ConnectionEstablished ()
+		{
+			base.ConnectionEstablished ();
+			_plugin._presenter.InitClientAPI ();
+		}
+
 		protected override void ConnectionNotEstablished ()
 		{
 
@@ -121,8 +130,7 @@ namespace Yuki_Theme_Plugin.Communication
 			
 			
 			MessageBox.Show (text, title);
-			CentralAPI.Current = new CommonAPI ();
-			Settings.Get ();
+			_plugin._presenter.InitCommonAPI ();
 		}
 
 		public override void SendMessage (Message message)
