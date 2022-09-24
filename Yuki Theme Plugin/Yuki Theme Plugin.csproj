@@ -150,6 +150,7 @@
     <Compile Include="PluginModel.cs">
       <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
     </Compile>
+    <Compile Include="PluginPresenter.cs" />
     <Compile Include="Props.cs">
       <SubType>Form</SubType>
     </Compile>

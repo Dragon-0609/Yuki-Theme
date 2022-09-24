@@ -39,8 +39,6 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private Timer InstallTrackerTimer;
 
-		public Action onSettingsSaved;
-
 		#region Initialization
 
 		public MainWindow ()
@@ -525,7 +523,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 			SetOpacityWallpaper ();
 		}
 
-		private void ApplySettingsChanges (ChangedSettings settings)
+		public void ApplySettingsChanges (ChangedSettings settings)
 		{
 			ToggleEditor ();
 			if (settings.CurrentMode != Settings.settingMode)

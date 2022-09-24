@@ -222,6 +222,7 @@ namespace Yuki_Theme.Core
 		}
 	}
 
+	[Serializable]
 	public class ChangedSettings
 	{
 		public readonly string      Lang;

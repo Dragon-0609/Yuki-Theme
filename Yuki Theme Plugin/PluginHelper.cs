@@ -140,5 +140,18 @@ namespace Yuki_Theme_Plugin
 			return path.IndexOf (programfileX86, StringComparison.OrdinalIgnoreCase) >= 0;
 		}
 		
+		public string GetDefaultLocalization ()
+		{
+			return PascalABCCompiler.StringResourcesLanguage.CurrentLanguageName;
+		}
+
+		private void GetWindowProperities ()
+		{
+			Props prop = new Props ();
+			prop.root = YukiTheme_VisualPascalABCPlugin.plugin.ideComponents.fm;
+			prop.propertyGrid1.SelectedObject = YukiTheme_VisualPascalABCPlugin.plugin.ideComponents.fm;
+			prop.Show ();
+		}
+		
 	}
 }

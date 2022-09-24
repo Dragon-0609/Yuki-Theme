@@ -24,7 +24,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private void ChangeDialogButtons ()
 		{
 			Button saveBtn = (Button)Template.FindName ("SaveButton", this);
-			saveBtn.Content = "Rename";
+			saveBtn.Content = CentralAPI.Current.Translate ("messages.rename.title");
 		}
 		
 		private bool TryToRename ()

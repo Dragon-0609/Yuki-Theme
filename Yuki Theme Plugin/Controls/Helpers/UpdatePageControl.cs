@@ -99,7 +99,7 @@ namespace Yuki_Theme_Plugin.Controls.Helpers
 			CentralAPI.Current.Restore (false);
 			CentralAPI.Current.ExportTheme (null, null,
 				YukiTheme_VisualPascalABCPlugin.plugin.ReloadLayout,
-				YukiTheme_VisualPascalABCPlugin.plugin.ReleaseResources, true);
+				YukiTheme_VisualPascalABCPlugin.plugin._presenter.ReleaseResources, true);
 		}
 
 		public string ReadImage ()

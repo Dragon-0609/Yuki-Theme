@@ -45,7 +45,7 @@ namespace Yuki_Theme.Core.Communication
 			tryCount = 0;
 			_timer.Elapsed -= SendMessages;
 			_timer.Elapsed += TestConnection;
-			_timer.Interval = 2000;
+			_timer.Interval = 1000;
 			if (ConsoleLogs)
 				Console.Write("Connection testing started");
 			_timer.Start ();
@@ -74,7 +74,7 @@ namespace Yuki_Theme.Core.Communication
 			}
 		}
 
-		protected void ConnectionEstablished ()
+		protected virtual void ConnectionEstablished ()
 		{
 			_timer.Stop ();
 			_timer.Interval = Interval;

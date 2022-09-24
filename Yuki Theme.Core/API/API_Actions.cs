@@ -12,7 +12,7 @@ using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.API
 {
-	internal sealed class API_Actions
+	public sealed class API_Actions
 	{
 		private readonly ThemeManager    _themeManager;
 		private readonly ThemeFormatBase _newThemeFormat;

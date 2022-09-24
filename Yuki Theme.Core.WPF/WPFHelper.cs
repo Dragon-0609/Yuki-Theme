@@ -20,8 +20,10 @@ namespace Yuki_Theme.Core.WPF
 {
 	public static class WPFHelper
 	{
-		internal static Window      windowForDialogs;
+		public static   Window      windowForDialogs;
 		internal static Func <bool> checkDialog;
+
+		public static int serverResponse = 0;
 
 		#region Colors and Brushes
 

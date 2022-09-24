@@ -26,12 +26,18 @@ namespace Yuki_Theme.Core.API
 			ActionsDictionary.Add (RELOAD_THEME, message => Restore (bool.Parse (message.Content)));
 			ActionsDictionary.Add (PREVIEW_THEME, message => Preview ((PreviewOptions)message.OtherContent, null));
 			ActionsDictionary.Add (RELEASE_RESOURCES_OK, ResourcesReleased);
-			ActionsDictionary.Add (RELOAD_SETTINGS, ReloadSettings);
+			ActionsDictionary.Add (ADD_THEME, AddTheme);
 			Server.recieved += ParseMessage;
 		}
-		private void ReloadSettings (Message obj)
+		private void AddTheme (Message message)
 		{
-			Settings.Get ();
+			object[] container = (object[]) message.OtherContent;
+			string copyFrom = (string) container [0];
+			string name = (string) container [1];
+			string destination = (string) container [2];
+			bool exist = (bool)container [3];
+			_themeManager.AddTheme (copyFrom, name, destination, exist);
+			Server.SendMessage (THEME_ADDED);
 		}
 
 		private void ResourcesReleased (Message message)

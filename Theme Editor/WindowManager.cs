@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using Yuki_Theme.Core;
 using Yuki_Theme.Core.WPF.Windows;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 
@@ -35,6 +36,18 @@ namespace Theme_Editor
 			}
 
 			CoreWindow.Show ();
+		}
+
+		public void ApplySettingsChanges (ChangedSettings settings)
+		{
+			Settings.Get ();
+			if (CoreWindow != null && PresentationSource.FromVisual (CoreWindow) != null)
+			{
+				Application.Current.Dispatcher.Invoke(new Action(() =>
+				{
+					CoreWindow.ApplySettingsChanges (settings);
+				}));
+			}
 		}
 
 		private void ReleaseResources ()
