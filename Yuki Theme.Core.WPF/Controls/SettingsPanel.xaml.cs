@@ -71,14 +71,23 @@ namespace Yuki_Theme.Core.WPF.Controls
 			blockLanguageSelection = false;
 			EnableRestartButton ();
 			UpdateTranslations ();
-			if (ExecuteOnLoad != null)
-				ExecuteOnLoad ();
+			if (IsCommonAPI)
+			{
+				ToolBarDockPanel.Visibility = Visibility.Collapsed;
+				UnavailablePanel.Visibility = Visibility.Visible;
+			} else
+			{
+				if (ExecuteOnLoad != null)
+					ExecuteOnLoad ();	
+			}
 		}
 
 		private void EnableRestartButton ()
 		{
 			RestartForUpdate.IsEnabled = DownloadForm.IsUpdateDownloaded ();
 		}
+
+		internal bool IsCommonAPI => Helper.mode == ProductMode.Plugin && CentralAPI.Current is not CommonAPI;
 
 
 		private void FillLanguageField ()
@@ -420,7 +429,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void UpdateTranslations ()
 		{
-			WPFHelper.TranslateControls (this, "settings.");
+			WPFHelper.TranslateControls (this, "settings.", "plugin.settings.");
 		}
 
 		private void Language_Selection (object sender, SelectionChangedEventArgs e)

@@ -162,6 +162,7 @@
     "plugin.themes": "Themes",
     "plugin.close": "Please, close Yuki Theme window to activate 'Switch theme'",
     "plugin.browser.error": "Couldn't find web browser",
+    "plugin.settings.toolbar": "Tool Bar Camouflage isn't available in App's settings.\nOpen settings in PascalABC.NET, and change there.",
     
     "messages.name.equal.title": "Names are equal",
     "messages.name.equal.message": "Names are equal! Choose another name for 'To' field",

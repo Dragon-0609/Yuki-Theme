@@ -24,7 +24,7 @@ namespace Yuki_Theme_Plugin.Interfaces
 			void ReleaseResources ();
 			
 			void AddToSettings ();
-			void ApplySettings (ChangedSettings settings);
+			void ApplySettings (ChangedSettings settings, bool sync);
 			void ShowLogo ();
 			void HideLogo ();
 		}

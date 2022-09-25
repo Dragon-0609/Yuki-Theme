@@ -17,10 +17,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public void PopulateToolBarList ()
 		{
 			_settingsPanel.IconsList.Items.Clear ();
-			foreach (ToolStripItem item in items)
+			if (items != null)
 			{
-				_settingsPanel.IconsList.Items.Add (
-					new ToolBarListItem (item.ToolTipText, item));
+				foreach (ToolStripItem item in items)
+				{
+					_settingsPanel.IconsList.Items.Add (
+						new ToolBarListItem (item.ToolTipText, item));
+				}
 			}
 			// _settingsPanel.IconsList.Items.Add ();
 		}
@@ -48,7 +51,10 @@ namespace Yuki_Theme.Core.WPF.Controls
 		{
 			_settingsPanel.SaveSettings ();
 			Settings.SaveData ();
-			if (Helper.mode == ProductMode.Plugin)
+			if (_settingsPanel.IsCommonAPI)
+			{
+				
+			}else if (Helper.mode == ProductMode.Plugin)
 				ToolBarListItem.camouflage.SaveData ();
 		}
 	}

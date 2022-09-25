@@ -58,9 +58,9 @@ namespace Yuki_Theme_Plugin
 
 		public void InitClientAPI ()
 		{
-			_view.ideComponents.fm.Invoke ((Action)(() =>
+			_view.ideComponents.RunInUIThread (() =>
 			{
-				_view.isCommonAPI = true;
+				_view.isCommonAPI = false;
 				ClientAPI api = new ClientAPI ();
 				CentralAPI.Current = api;
 				api.Client = _view._client;
@@ -69,10 +69,20 @@ namespace Yuki_Theme_Plugin
 				api.AddEvent (APPLY_THEME, _ => _view.ReloadLayout ());
 				api.AddEvent (APPLY_THEME_LIGHT, _ => _view.ReloadLayoutLight ());
 				api.AddEvent (THEME_ADDED, _ => ThemeAdded ());
+				api.AddEvent (RELOAD_SETTINGS, ReloadSettings);
 				
 				_view.StartIntegration ();
-			}));
+			});
 		}
+		private void ReloadSettings (Message message)
+		{
+			_view.ideComponents.RunInUIThread (() =>
+			{
+				Settings.Get ();
+				ApplySettings ((ChangedSettings)message.OtherContent, false);
+			});
+		}
+		
 		private void ThemeAdded ()
 		{
 			System.Windows.Application.Current.Dispatcher.Invoke (() =>
@@ -182,7 +192,7 @@ namespace Yuki_Theme_Plugin
 			options.AddContent (new Controls.PluginSettingsControl ((YukiTheme_VisualPascalABCPlugin)_view));
 		}
 
-		public void ApplySettings (ChangedSettings settings)
+		public void ApplySettings (ChangedSettings settings, bool sync)
 		{
 			if (settings.ShowSticker != Settings.swSticker)
 			{
@@ -213,7 +223,7 @@ namespace Yuki_Theme_Plugin
 				_view._model.ResetStickerPosition ();
 			}
 
-			if (!_view.isCommonAPI)
+			if (!_view.isCommonAPI && sync)
 			{
 				_view._client.SendMessage (new Message (RELOAD_SETTINGS, settings));
 			} else

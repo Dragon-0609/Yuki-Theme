@@ -162,6 +162,7 @@
     "plugin.themes": "Темы",
     "plugin.close": "Пожалуйста, закройте окно Yuki Theme чтобы использовать 'Поменять Тему'",
     "plugin.browser.error": "Не удалось найти веб-браузер",
+    "plugin.settings.toolbar": "Камуфляж панели инструментов не доступен в\nнастройках приложения. Откройте настройки\nв PascalABC.NET, и меняйте там.",
     
     "messages.name.equal.title": "Имена одинаковы",
     "messages.name.equal.message": "Имена одинаковы! Выберите другое имя для полья 'На'.",

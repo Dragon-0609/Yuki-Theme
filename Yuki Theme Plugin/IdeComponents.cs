@@ -958,6 +958,11 @@ namespace Yuki_Theme_Plugin
 				prop.Show ();
 			}
 		}
+
+		internal void RunInUIThread (Action action)
+		{
+			fm.Invoke (action);
+		}
 		
 		#region Methods_For_Menu
 

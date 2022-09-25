@@ -60,7 +60,7 @@ namespace Yuki_Theme_Plugin.Controls
 				Form parentForm = ExtractOptionsParent ();
 				_settingsPanel = new SettingsPanel ();
 				utilities = new SettingsPanelUtilities (_settingsPanel);
-
+				
 				_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
 				_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
 				_settingsPanel.Background = WPFHelper.bgBrush;
@@ -81,7 +81,7 @@ namespace Yuki_Theme_Plugin.Controls
 			alreadyShown = false;
 			utilities ??= new SettingsPanelUtilities (_settingsPanel);
 			utilities.SaveSettings ();
-			plugin._presenter.ApplySettings (_settingsPanel.settings);
+			plugin._presenter.ApplySettings (_settingsPanel.settings, true);
 		}
 
 		private void CancelChanges ()

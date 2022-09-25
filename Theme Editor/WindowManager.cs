@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.WPF.Windows;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 
@@ -20,6 +21,7 @@ namespace Theme_Editor
 				CoreWindow = new MainWindow ();
 				CoreWindow.Model.StartSettingTheme += ReleaseResources;
 				CoreWindow.Model.SetTheme += ReloadLayout;
+				CoreWindow.OnChangingSettings += ApplySettings;
 
 				CoreWindow.Closed += (sender, args) =>
 				{
@@ -36,6 +38,10 @@ namespace Theme_Editor
 			}
 
 			CoreWindow.Show ();
+		}
+		private void ApplySettings (ChangedSettings settings)
+		{
+			_server.SendMessage (new Message (RELOAD_SETTINGS, settings));
 		}
 
 		public void ApplySettingsChanges (ChangedSettings settings)

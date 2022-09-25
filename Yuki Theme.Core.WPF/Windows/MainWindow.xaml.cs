@@ -39,6 +39,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private Timer InstallTrackerTimer;
 
+		public Action <ChangedSettings> OnChangingSettings;
+
 		#region Initialization
 
 		public MainWindow ()
@@ -569,6 +571,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Model.ReloadStickerPositionData();
 				Model.ResetStickerPosition();
 			}
+
+			if (OnChangingSettings != null)
+				OnChangingSettings (settings);
 
 		}
 

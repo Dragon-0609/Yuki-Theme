@@ -105,6 +105,8 @@
             <system:String x:Key="settings.toolbar.show">Show:</system:String>
             <system:String x:Key="settings.toolbar.right">From Right:</system:String>
             <system:String x:Key="settings.toolbar.reset">Reset</system:String>
+            
+            <system:String x:Key="plugin.settings.toolbar">Tool Bar Camouflage isn't available in App's settings.&amp;#10;Open settings in PascalABC.NET, and change there.</system:String>
 
             <!--<system:String x:Key=""></system:String>
             <system:String x:Key=""></system:String>
@@ -436,37 +438,41 @@
         </TabItem>
 
         <TabItem Header="{DynamicResource settings.toolbar.title}" Name="PluginTool">
-            <DockPanel Margin="2 4" Name="ToolBarDockPanel">
+            <DockPanel Margin="2 4" Name="PluginDockPanel">
+                <DockPanel Name="UnavailablePanel" Margin="0 40 0 0" DockPanel.Dock="Top" Visibility="Collapsed">
+                    <TextBlock Text="{DynamicResource plugin.settings.toolbar}" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap" 
+                               Style="{StaticResource TextBlockUserControl}"/>
+                </DockPanel>
+                <DockPanel Name="ToolBarDockPanel">
+                    <controls:ToolBarList Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
+                                          Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
+                                          SelectionChanged="IconsList_Selection" DockPanel.Dock="Left" Width="150"
+                                          Height="{Binding ElementName=PluginDockPanel, Path=ActualHeight}" />
 
-                <controls:ToolBarList Padding="5" x:Name="IconsList" SelectionMode="Single" BorderThickness="0"
-                                      Style="{StaticResource ListViewUserControl}" x:FieldModifier="public"
-                                      SelectionChanged="IconsList_Selection" DockPanel.Dock="Left" Width="150"
-                                      Height="{Binding ElementName=ToolBarDockPanel, Path=ActualHeight}" />
+                    <StackPanel Orientation="Vertical" Margin="10">
 
-                <StackPanel Orientation="Vertical" Margin="10">
+                        <WrapPanel>
+                            <TextBlock Style="{StaticResource TextBlockUserControl}"
+                                       Text="{DynamicResource settings.toolbar.icon}" />
+                            <Image Width="32" Height="32" Name="ToolBarIcon" x:FieldModifier="public" />
+                        </WrapPanel>
 
-                    <WrapPanel>
-                        <TextBlock Style="{StaticResource TextBlockUserControl}"
-                                   Text="{DynamicResource settings.toolbar.icon}" />
-                        <Image Width="32" Height="32" Name="ToolBarIcon" x:FieldModifier="public" />
-                    </WrapPanel>
+                        <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5"
+                                  Content="{DynamicResource settings.toolbar.show}"
+                                  Name="ToolBarItemShow" x:FieldModifier="public" Checked="ToolBarItemShow_CheckedChanged"
+                                  Unchecked="ToolBarItemShow_CheckedChanged" IsEnabled="False" />
+                        <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5"
+                                  Content="{DynamicResource settings.toolbar.right}"
+                                  Name="ToolBarItemRight" x:FieldModifier="public"
+                                  Checked="ToolBarItemRight_CheckedChanged"
+                                  Unchecked="ToolBarItemRight_CheckedChanged" IsEnabled="False" />
 
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5"
-                              Content="{DynamicResource settings.toolbar.show}"
-                              Name="ToolBarItemShow" x:FieldModifier="public" Checked="ToolBarItemShow_CheckedChanged"
-                              Unchecked="ToolBarItemShow_CheckedChanged" IsEnabled="False" />
-                    <CheckBox Style="{StaticResource CheckBoxUserControl}" Margin="0 5"
-                              Content="{DynamicResource settings.toolbar.right}"
-                              Name="ToolBarItemRight" x:FieldModifier="public"
-                              Checked="ToolBarItemRight_CheckedChanged"
-                              Unchecked="ToolBarItemRight_CheckedChanged" IsEnabled="False" />
-
-                    <Button Padding="8 2" Margin="0 4" Content="{DynamicResource settings.toolbar.reset}"
-                            Name="ResetToolbar"
-                            Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left"
-                            Click="ResetToolbar_OnClick" />
-                </StackPanel>
-
+                        <Button Padding="8 2" Margin="0 4" Content="{DynamicResource settings.toolbar.reset}"
+                                Name="ResetToolbar"
+                                Style="{StaticResource ButtonUserControl}" HorizontalAlignment="Left"
+                                Click="ResetToolbar_OnClick" />
+                    </StackPanel>
+                </DockPanel>
             </DockPanel>
         </TabItem>
 
