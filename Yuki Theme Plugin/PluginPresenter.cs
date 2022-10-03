@@ -70,7 +70,9 @@ namespace Yuki_Theme_Plugin
 				api.AddEvent (APPLY_THEME_LIGHT, _ => _view.ReloadLayoutLight ());
 				api.AddEvent (THEME_ADDED, _ => ThemeAdded ());
 				api.AddEvent (RELOAD_SETTINGS, ReloadSettings);
-				
+				api.AddEvent(GET_TOOL_BAR_ITEMS, _ => GetToolBarItems());
+				api.AddEvent(RESET_TOOL_BAR, _ => _view.camouflage.Reset());
+				api.AddEvent(RELOAD_TOOL_BAR, _ => _view.camouflage.Reload());
 				_view.StartIntegration ();
 			});
 		}
@@ -100,6 +102,11 @@ namespace Yuki_Theme_Plugin
 			_view.isCommonAPI = true;
 			CentralAPI.Current = new CommonAPI ();
 			_view.StartIntegration ();
+		}
+
+		private void GetToolBarItems()
+		{
+			_view.SendMessage(new Message(SET_TOOLBAR_ITEMS, _view.camouflage.ItemInfos));
 		}
 		
 

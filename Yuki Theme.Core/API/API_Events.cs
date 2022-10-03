@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Utils;
 
 namespace Yuki_Theme.Core.API
@@ -20,6 +21,9 @@ namespace Yuki_Theme.Core.API
 		public static Action <Image>              ifHasSticker         = null;
 		public static Action                      ifDoesntHaveSticker  = null;
 		public static Action <string, string>     onRename;
+		public static Action saveToolBarData = null;
+		public static Action<TBarItemInfo[]> FillToolBarList = null;
+
 	}
 
 	[Serializable]

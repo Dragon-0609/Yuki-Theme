@@ -128,6 +128,7 @@
     <Compile Include="Controls\Helpers\ResourceHelper.cs" />
     <Compile Include="Controls\Helpers\UpdatePageControl.cs" />
     <Compile Include="Controls\Helpers\Win32Helper.cs" />
+    <Compile Include="Controls\PBarController.cs" />
     <Compile Include="Controls\PluginSettingsControl.cs" />
     <Compile Include="Controls\PluginSettingsControl.Designer.cs">
       <DependentUpon>PluginSettingsControl.cs</DependentUpon>

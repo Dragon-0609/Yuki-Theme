@@ -10,12 +10,8 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.WPF.Windows;
-using CheckBox = System.Windows.Controls.CheckBox;
-using ComboBox = System.Windows.Controls.ComboBox;
 using Drawing = System.Drawing;
 using MessageBox = System.Windows.MessageBox;
-using RadioButton = System.Windows.Controls.RadioButton;
-using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace Yuki_Theme.Core.WPF.Controls
@@ -23,7 +19,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 	public partial class SettingsPanel : UserControl
 	{
 		private Drawing.Size defaultSmallSize = new Drawing.Size (16, 16);
-		private string       customStickerPath;
+		internal string       customStickerPath;
 
 		private Thickness groupBoxExpanded  = new Thickness (5);
 		private Thickness groupBoxCollapsed = new Thickness (0, 5, 0, 5);
@@ -32,22 +28,21 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public Form   ParentForm   = null;
 
 		private bool blockLanguageSelection;
+		public int lockToolBarCheckboxes = 0;
 
 		public Action UpdateExternalTranslations;
 
-		public Action                   ExecuteOnLoad;
-		public Action <ToolBarListItem> ExecuteOnToolBarItemSelection;
-
 		public PopupController popupController;
 
-		private bool portable;
+		internal bool portable;
 
 		public ChangedSettings settings = new ChangedSettings ();
+		public SettingsPanelUtilities _utilities;
 
 		public SettingsPanel ()
 		{
 			InitializeComponent ();
-
+			_utilities = new SettingsPanelUtilities(this);
 			LoadSVG ();
 		}
 
@@ -66,20 +61,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 			blockLanguageSelection = true;
 			CheckGridSize ();
 			FillLanguageField ();
-			LoadSettings ();
+			_utilities.LoadSettings (this);
 			AddLanguages ();
 			blockLanguageSelection = false;
 			EnableRestartButton ();
 			UpdateTranslations ();
-			if (IsCommonAPI)
-			{
-				ToolBarDockPanel.Visibility = Visibility.Collapsed;
-				UnavailablePanel.Visibility = Visibility.Visible;
-			} else
-			{
-				if (ExecuteOnLoad != null)
-					ExecuteOnLoad ();	
-			}
+			IconsList._panel = this;
+			IconsList.Init(this);
 		}
 
 		private void EnableRestartButton ()
@@ -110,215 +98,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			Resources [name] = WPFHelper.GetSvg (source, idColor, false, size, nameSpace, asm);
 		}
 
-		private void LoadSettings ()
-		{
-			HideFields ();
-			FillGeneralValues ();
-			FillProgramValues ();
-			FillPluginValues ();
-			StickerDimensionCap_CheckedChanged (this, null);
-			AllowPositioningCheckedChanged(this, null);
-			HideHover_CheckedChanged (this, null);
-		}
-
-		private void HideFields ()
+		public void HideFields ()
 		{
 			EditorSettingsPanel.Visibility = Settings.Editor ? Visibility.Visible : Visibility.Collapsed;
 			DoActionPanel.Visibility = Settings.askChoice == true ? Visibility.Collapsed : Visibility.Visible;
 		}
-
-		private void FillGeneralValues ()
-		{
-			SCheck (EditorMode, Settings.Editor);
-			SCheck (ShowSticker, Settings.swSticker);
-			SCheck (AllowPositioning, Settings.positioning);
-			SCheck (CustomSticker, Settings.useCustomSticker);
-			SCheck (ShowBackgroundImage, Settings.bgImage);
-			SCheck (AutoFit, Settings.autoFitByWidth);
-			SCheck (AlwaysAsk, Settings.askToSave);
-			SCheck (AutoUpdate, Settings.update);
-			SCheck (CheckBeta, Settings.Beta);
-			SCheck (StickerDimensionCap, Settings.useDimensionCap);
-			SCheck (HideHover, Settings.hideOnHover);
-			SCheck (PortableMode, Settings.portableMode);
-			SCheck (EditorReadOnly, Settings.editorReadOnly);
-			SDrop (EditorModeDropdown, (int)Settings.settingMode);
-			SDrop (DimensionCapBy, Settings.dimensionCapUnit);
-			SDrop(PositioningUnit, (int) Settings.unit);
-			SText (DimensionCapMax.box, Settings.dimensionCapMax.ToString ());
-			SText (HideDelay.box, Settings.hideDelay.ToString ());
-			customStickerPath = Settings.customSticker;
-			bool firstSelected = Settings.colorPicker == 0;
-			SRadio (WinformsPicker, firstSelected);
-			SRadio (WPFPicker, !firstSelected);
-			portable = Settings.portableMode;
-			// LanguageDropdown, Settings.localization
-		}
-
-		private void FillProgramValues ()
-		{
-			bool isProgram = Helper.mode == ProductMode.Program;
-			HideHeader (isProgram);
-			if (isProgram)
-			{
-				SText (PascalPath, Settings.pascalPath);
-				SCheck (AskOthers, Settings.askChoice);
-				SDrop (ActionDropdown, Settings.actionChoice);
-			}
-		}
-
-		private void FillPluginValues ()
-		{
-			bool isPlugin = Helper.mode == ProductMode.Plugin;
-			HideHeader (!isPlugin);
-			if (isPlugin)
-			{
-				SCheck (LogoStart, Settings.swLogo);
-				SCheck (NameStatusBar, Settings.swStatusbar);
-				SCheck (Preview, Settings.showPreview);
-			}
-		}
-
-		private void HideHeader (bool isProgram)
-		{
-			ProgramAdd.Visibility = isProgram ? Visibility.Visible : Visibility.Collapsed;
-			PluginAdd.Visibility = PluginTool.Visibility = isProgram ? Visibility.Collapsed : Visibility.Visible;
-		}
-
-		public void SaveSettings ()
-		{
-			SaveGeneralSettings ();
-			SaveProgramSettings ();
-			SavePluginSettings ();
-		}
-
-		private void SaveGeneralSettings ()
-		{
-			KCheck (EditorMode, ref Settings.Editor);
-			KCheck (ShowSticker, ref Settings.swSticker);
-			KCheck (AllowPositioning, ref Settings.positioning);
-			KCheck (CustomSticker, ref Settings.useCustomSticker);
-			KCheck (ShowBackgroundImage, ref Settings.bgImage);
-			KCheck (AutoFit, ref Settings.autoFitByWidth);
-			KCheck (AlwaysAsk, ref Settings.askToSave);
-			KCheck (AutoUpdate, ref Settings.update);
-			KCheck (CheckBeta, ref Settings.Beta);
-			KCheck (CheckBeta, ref Settings.Beta);
-			KCheck (StickerDimensionCap, ref Settings.useDimensionCap);
-			KCheck (HideHover, ref Settings.hideOnHover);
-			KCheck (PortableMode, ref Settings.portableMode);
-			KCheck (EditorReadOnly, ref Settings.editorReadOnly);
-			KDrop (DimensionCapBy, ref Settings.dimensionCapUnit);
-			KDrop (PositioningUnit, ref Settings.unit);
-
-			Settings.dimensionCapMax = DimensionCapMax.GetNumber ();
-			Settings.settingMode = (SettingMode)EditorModeDropdown.SelectedIndex;
-			Settings.customSticker = customStickerPath;
-			Settings.colorPicker = WinformsPicker.IsChecked == true ? 0 : 1;
-			Settings.hideDelay = HideDelay.GetNumber ();
-
-			if (portable != PortableMode.IsChecked)
-				Settings.database.SwapDatabase ();
-		}
-
-		private void SaveProgramSettings ()
-		{
-			bool isProgram = Helper.mode == ProductMode.Program;
-			if (isProgram)
-			{
-				KCheck (AskOthers, ref Settings.askChoice);
-				KDrop (ActionDropdown, ref Settings.actionChoice);
-				if (IsPascalDirectory (PascalPath.Text))
-					KText (PascalPath, ref Settings.pascalPath);
-				else
-				{
-					MessageBox.Show (CentralAPI.Current.Translate ("messages.path.wrong.restore", PascalPath.Text));
-					if (!Directory.Exists (Settings.pascalPath))
-						Settings.pascalPath = "";
-				}
-			}
-		}
-
-		private void SavePluginSettings ()
-		{
-			bool isPlugin = Helper.mode == ProductMode.Plugin;
-			if (isPlugin)
-			{
-				KCheck (LogoStart, ref Settings.swLogo);
-				KCheck (NameStatusBar, ref Settings.swStatusbar);
-				KCheck (Preview, ref Settings.showPreview);
-			}
-		}
-
-		#region Helper Methods
-
-		/// <summary>
-		/// Save Checkbox.IsChecked to bool
-		/// </summary>
-		/// <param name="checkBox">Checkbox to save from</param>
-		/// <param name="target">Target to set the bool</param>
-		private void KCheck (CheckBox checkBox, ref bool target)
-		{
-			target = checkBox.IsChecked == true;
-		}
-
-		/// <summary>
-		/// Save Selected Index of combobox to int
-		/// </summary>
-		private void KDrop (ComboBox dropDown, ref int value)
-		{
-			value = dropDown.SelectedIndex;
-		}
-
-		/// <summary>
-		/// Save Selected Index of combobox to int
-		/// </summary>
-		private void KDrop (ComboBox dropDown, ref RelativeUnit value)
-		{
-			value = (RelativeUnit) dropDown.SelectedIndex;
-		}
-
-		/// <summary>
-		/// Save Text of textbox to string
-		/// </summary>
-		private void KText (TextBox textBox, ref string value)
-		{
-			value = textBox.Text;
-		}
-
-		/// <summary>
-		/// Set value of combobox
-		/// </summary>
-		private void SDrop (ComboBox dropDown, int value)
-		{
-			dropDown.SelectedIndex = value;
-		}
-
-		/// <summary>
-		/// Set value of checkbox
-		/// </summary>
-		private void SCheck (CheckBox checkBox, bool value)
-		{
-			checkBox.IsChecked = value;
-		}
-
-		/// <summary>
-		/// Set value of radiobutton
-		/// </summary>
-		private void SRadio (RadioButton radioButton, bool value)
-		{
-			radioButton.IsChecked = value;
-		}
-
-		/// <summary>
-		/// Set value of textbox
-		/// </summary>
-		private void SText (TextBox textBox, string value)
-		{
-			textBox.Text = value;
-		}
-
-		#endregion
 
 		private void AboutButton_OnClick (object sender, RoutedEventArgs e)
 		{
@@ -349,7 +133,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			DoActionPanel.Visibility = AskOthers.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
 		}
 
-		private void AllowPositioningCheckedChanged (object sender, RoutedEventArgs e)
+		public void AllowPositioningCheckedChanged (object sender, RoutedEventArgs e)
 		{
 			ResetMargin.IsEnabled =  PositioningUnit.IsEnabled = AllowPositioning.IsChecked == true;
 			if (HideHover.IsChecked != null && (bool)HideHover.IsChecked && AllowPositioning.IsChecked != null && (bool)AllowPositioning.IsChecked)
@@ -384,7 +168,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			}
 		}
 
-		private void StickerDimensionCap_CheckedChanged (object sender, RoutedEventArgs e)
+		public void StickerDimensionCap_CheckedChanged (object sender, RoutedEventArgs e)
 		{
 			DimensionCapMax.IsEnabled = DimensionCapBy.IsEnabled = StickerDimensionCap.IsChecked == true;
 		}
@@ -448,17 +232,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 			}
 		}
 
-		private void IconsList_Selection (object sender, SelectionChangedEventArgs e)
+		private void IconsList_Selection(object sender, SelectionChangedEventArgs e)
 		{
-			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			if (IconsList.SelectedItem is ToolBarListItem item)
 			{
 				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = true;
-				if (ExecuteOnToolBarItemSelection != null)
-				{
-					ExecuteOnToolBarItemSelection (item);
-				}
-				// ToolBarItemShow.IsChecked = 
-			} else
+				IconsList._controller.UpdateInfo(item);
+			}
+			else
 			{
 				ToolBarItemShow.IsEnabled = ToolBarItemRight.IsEnabled = false;
 			}
@@ -466,23 +247,35 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void ToolBarItemShow_CheckedChanged (object sender, RoutedEventArgs e)
 		{
-			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			if (IconsList.SelectedItem is ToolBarListItem item)
 			{
-				item.IsShown = ToolBarItemShow.IsChecked == true;
+				DoIfLockIs0(() => item.IsShown = ToolBarItemShow.IsChecked == true);
 			}
 		}
 
 		private void ToolBarItemRight_CheckedChanged (object sender, RoutedEventArgs e)
 		{
-			if (IconsList.SelectedItem != null && IconsList.SelectedItem is ToolBarListItem item)
+			if (IconsList.SelectedItem is ToolBarListItem item)
 			{
-				item.IsRight = ToolBarItemRight.IsChecked == true;
+				DoIfLockIs0(() => item.IsRight = ToolBarItemRight.IsChecked == true);
+			}
+		}
+
+		private void DoIfLockIs0(Action action)
+		{
+			if (lockToolBarCheckboxes <= 0)
+			{
+				action();
+			}
+			else
+			{
+				lockToolBarCheckboxes--;
 			}
 		}
 
 		private void ResetToolbar_OnClick (object sender, RoutedEventArgs e)
 		{
-			ToolBarListItem.camouflage.Reset ();
+			IconsList._controller.ResetToolBar();
 		}
 
 		private void SetToolBarHeight ()
@@ -535,7 +328,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			}
 		}
 
-		private void HideHover_CheckedChanged (object sender, RoutedEventArgs e)
+		public void HideHover_CheckedChanged (object sender, RoutedEventArgs e)
 		{
 			HideDelay.IsEnabled = HideHover.IsChecked == true;
 			if (HideHover.IsChecked != null && AllowPositioning.IsChecked != null && (bool)AllowPositioning.IsChecked && (bool)HideHover.IsChecked)
@@ -577,7 +370,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 			}
 		}
 
-		private bool IsPascalDirectory (string path)
+		internal bool IsPascalDirectory (string path)
 		{
 
 			return File.Exists (Path.Combine (path, "PascalABCNET.exe")) && File.Exists (Path.Combine (path, "pabcnetc.exe"));

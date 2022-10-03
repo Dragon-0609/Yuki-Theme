@@ -67,9 +67,14 @@ namespace Yuki_Theme.Core.Communication
 		public const int RELOAD_SETTINGS      = 12;
 		public const int ADD_THEME            = 13;
 		public const int THEME_ADDED          = 14;
+		public const int GET_TOOL_BAR_ITEMS = 15;
+		public const int RESET_TOOL_BAR = 16;
+		public const int RELOAD_TOOL_BAR = 17;
+		public const int SAVE_TOOL_BAR_DATA = 18;
 		
-		public const int SET_PASCAL_PATH  = 30;
+		public const int SET_PASCAL_PATH  = 30;	
 		public const int SET_CURRENT_NAME = 31;
+		public const int SET_TOOLBAR_ITEMS = 32;
 
 
 		public const int CLOSE_SERVER = 66;

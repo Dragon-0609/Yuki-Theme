@@ -51,5 +51,12 @@
 		Height = 0,
 		Width = 1
 	}
+
+	public enum SettingsPanelLocation
+	{
+		IDE,
+		App,
+		None
+	}
 	
 }

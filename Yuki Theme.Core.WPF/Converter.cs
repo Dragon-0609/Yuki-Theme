@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -7,6 +8,8 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Yuki_Theme.Core.Controls;
+using Yuki_Theme.Core.WPF.Controls;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 using Point = System.Windows.Point;
@@ -122,6 +125,18 @@ namespace Yuki_Theme.Core.WPF
 			return new Rect (form.WindowState == FormWindowState.Maximized ? rectangle.Left : form.Left,
 			                 form.WindowState == FormWindowState.Maximized ? rectangle.Top : form.Top,
 			                 rectangle.Width, rectangle.Height);
+		}
+
+		public static string[] GetNames(this TBarItemInfo[] items)
+		{
+			List<string> list = new List<string>();
+
+			foreach (TBarItemInfo item in items)
+			{
+				list.Add(item.Name);
+			}
+			
+			return list.ToArray();
 		}
 	}
 }

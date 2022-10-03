@@ -7,13 +7,16 @@ using System.Windows.Forms;
 using VisualPascalABC;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Utils;
+using Yuki_Theme.Core.WPF.Controls;
 
 namespace Yuki_Theme_Plugin
 {
-	internal class IconManager : IIconManager
+	internal class IconManager
 	{
-		private const    string           IconFolder = "Yuki_Theme_Plugin.Resources.icons";
+		private const    string           IconFolder = IconRenderer.IconFolder;
 		private readonly Form1            fm;
 		private readonly MenuStrip        menu;
 		private readonly ToolStrip        tools;
@@ -106,42 +109,7 @@ namespace Yuki_Theme_Plugin
 			{ "cmHelp", "help" },
 		};
 
-		private readonly string [] _iconsWithDarkVersion =
-		{
-			"menu-cut",
-			"menu-saveall",
-			"menu-paste",
-			"copy",
-			"addFile",
-			"undo",
-			"redo",
-			"stepOut",
-			"traceInto",
-			"console",
-			"intentionBulb",
-			"magicResolve",
-			"menu-open",
-			"restartDebugger",
-			"traceOver",
-			"back",
-			"forward",
-			"print",
-			"projectTab",
-			"close",
-			"find",
-			"findForward",
-			"replace",
-			"moveToBottomLeft",
-			"toolWindowMessages",
-			"dynamicUsages",
-			"showHiddens",
-			"MoveTo2",
-			"gearPlain",
-			"showReadAccess",
-			"showWriteAccess",
-			"externalTools",
-			"help"
-		};
+		private string[] _iconsWithDarkVersion => IconRenderer._iconsWithDarkVersion;
 
 		private readonly string [] _iconsToDelete = { "miExit" };
 
@@ -381,21 +349,6 @@ namespace Yuki_Theme_Plugin
 			}
 
 			return new Tuple <bool, string> (asDark, sad);
-		}
-
-		public Image RenderToolBarItemImage (ToolStripItem btn)
-		{
-			bool asDark = HasDark (btn.AccessibleDescription);
-			string dark = "";
-			if (asDark)
-			{
-				bool isDark = Helper.IsDark (YukiTheme_VisualPascalABCPlugin.Colors.bg);
-				dark = isDark ? "" : "_dark";
-			}
-
-			Assembly a = Assembly.GetExecutingAssembly ();
-			return Helper.RenderSvg (btn.Size, Helper.LoadSvg (btn.AccessibleDescription + dark, a, IconFolder),
-			                         false, Size.Empty, true, YukiTheme_VisualPascalABCPlugin.Colors.bgBorder);
 		}
 	}
 }

@@ -29,6 +29,12 @@ namespace Yuki_Theme.Core.API
 			ActionsDictionary.Add (ADD_THEME, AddTheme);
 			Server.recieved += ParseMessage;
 		}
+
+		public override void SendMessage(Message message)
+		{
+		Server.SendMessage(message);	
+		}
+
 		private void AddTheme (Message message)
 		{
 			object[] container = (object[]) message.OtherContent;

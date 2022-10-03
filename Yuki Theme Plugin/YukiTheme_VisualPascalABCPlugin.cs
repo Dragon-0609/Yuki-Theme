@@ -16,6 +16,7 @@ using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.Utils;
@@ -32,6 +33,7 @@ using Resources = Yuki_Theme_Plugin.Properties.Resources;
 using Size = System.Drawing.Size;
 using Timer = System.Windows.Forms.Timer;
 using static Yuki_Theme.Core.Communication.MessageTypes;
+using Message = Yuki_Theme.Core.Communication.Message;
 
 
 namespace Yuki_Theme_Plugin
@@ -56,7 +58,6 @@ namespace Yuki_Theme_Plugin
 		internal IHighlightingStrategy highlighting;
 
 		private       IconManager       manager;
-		public static ToolBarCamouflage camouflage;
 		public static PluginColors      Colors = new PluginColors ();
 		internal      ThemeSwitcher     switcher;
 		internal      EditorInspector   inspector;
@@ -247,9 +248,15 @@ namespace Yuki_Theme_Plugin
 				popupController.CheckUpdate ();
 			}
 
-			ToolBarListItem.camouflage = camouflage;
-			ToolBarListItem.manager = manager;
-			SettingsPanelUtilities.items = camouflage.items;
+			if (isCommonAPI)
+			{
+				
+			}
+			else
+			{
+				_client.SendMessage(new Message(SET_TOOLBAR_ITEMS, camouflage.ItemInfos));
+			}
+			
 		}
 
 		private void loadSVG ()
@@ -304,6 +311,7 @@ namespace Yuki_Theme_Plugin
 			ColorKeeper.fgColor = Colors.clr;
 			ColorKeeper.fgHover = Helper.DarkerOrLighter (defaultForeground, 0.4f);
 			ColorKeeper.fgKeyword = Colors.clrKey;
+			
 			// Helper.selectionColor = highlighting.GetColorFor ("Selection").BackgroundColor;
 
 			_helper.ResetBrushesAndPens ();
@@ -495,6 +503,8 @@ namespace Yuki_Theme_Plugin
 		
 
 		internal override void Release () => _model.Release ();
+
+		internal override void SendMessage(Message message) => _client?.SendMessage(message);
 
 		public event ColorUpdate OnColorUpdate;
 	}

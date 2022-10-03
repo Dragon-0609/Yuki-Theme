@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
 using Yuki_Theme.Core;
+using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using MessageBox = System.Windows.MessageBox;
@@ -58,11 +59,10 @@ namespace Yuki_Theme_Plugin.Controls
 			if (!alreadyShown)
 			{
 				Form parentForm = ExtractOptionsParent ();
+				Settings.Location = SettingsPanelLocation.IDE;
 				_settingsPanel = new SettingsPanel ();
-				utilities = new SettingsPanelUtilities (_settingsPanel);
-				
-				_settingsPanel.ExecuteOnLoad = utilities.PopulateToolBarList;
-				_settingsPanel.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
+				utilities = _settingsPanel._utilities;
+				API_Events.saveToolBarData = () => plugin.camouflage.SaveData();
 				_settingsPanel.Background = WPFHelper.bgBrush;
 				_settingsPanel.Foreground = WPFHelper.fgBrush;
 				_settingsPanel.Tag = WPFHelper.GenerateTag;
@@ -79,15 +79,15 @@ namespace Yuki_Theme_Plugin.Controls
 		private void SaveSettings ()
 		{
 			alreadyShown = false;
-			utilities ??= new SettingsPanelUtilities (_settingsPanel);
+			utilities ??= _settingsPanel._utilities;
 			utilities.SaveSettings ();
 			plugin._presenter.ApplySettings (_settingsPanel.settings, true);
 		}
 
 		private void CancelChanges ()
 		{
-			utilities ??= new SettingsPanelUtilities (_settingsPanel);
-			utilities.ResetToolBar ();
+			utilities ??= _settingsPanel._utilities;
+			_settingsPanel.IconsList._controller.ReloadToolBar();
 			alreadyShown = false;
 		}
 

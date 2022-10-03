@@ -21,5 +21,7 @@ namespace Yuki_Theme.Core.API
 				ActionsDictionary[message.Id] (message);
 		}
 
+		public abstract void SendMessage(Message message);
+
 	}
 }

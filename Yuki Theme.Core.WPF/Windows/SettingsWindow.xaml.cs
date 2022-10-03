@@ -48,12 +48,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private void IncludeToolBarItems ()
 		{
-			utilities = new SettingsPanelUtilities (SettingsPanelControl);
-			if (Helper.mode == ProductMode.Plugin)
-			{
-				SettingsPanelControl.ExecuteOnLoad = utilities.PopulateToolBarList;
-				SettingsPanelControl.ExecuteOnToolBarItemSelection = utilities.ToolBarItemSelection;
-			}
+			Settings.Location = SettingsPanelLocation.App;
+			utilities = SettingsPanelControl._utilities;
 
 			SettingsPanelControl.Background = WPFHelper.bgBrush;
 			SettingsPanelControl.Foreground = WPFHelper.fgBrush;

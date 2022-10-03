@@ -31,6 +31,11 @@ namespace Yuki_Theme.Core.API
 			Client.recieved += ParseMessage;
 		}
 
+		public override void SendMessage(Message message)
+		{
+			Client.SendMessage(message);
+		}
+
 		public override void SelectTheme (string name)
 		{
 			base.SelectTheme (name);

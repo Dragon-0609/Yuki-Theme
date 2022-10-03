@@ -6,6 +6,8 @@ using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Communication;
+using Message = Yuki_Theme.Core.Communication.Message;
+
 namespace Yuki_Theme_Plugin.Interfaces
 {
 	public class Plugin
@@ -35,6 +37,7 @@ namespace Yuki_Theme_Plugin.Interfaces
 			internal Plugin.Model  _model        = new PluginModel ();
 			internal PluginHelper  _helper;
 			internal MainWindow    CoreWindow;
+			internal ToolBarCamouflage camouflage;
 
 			internal Client _client;
 
@@ -47,7 +50,8 @@ namespace Yuki_Theme_Plugin.Interfaces
 			public abstract void ReloadLayout ();
 			public abstract void ReloadLayoutLight ();
 			public abstract void ReloadLayoutAll (bool lightReload);
-			
+
+			internal abstract void SendMessage(Message message);
 		}
 
 		internal interface IHelper

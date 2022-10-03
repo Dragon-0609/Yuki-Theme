@@ -44,6 +44,8 @@ namespace Yuki_Theme.Core
 		public static bool         editorReadOnly;
 		public static string         editorSavedFile;
 
+		public static SettingsPanelLocation Location = SettingsPanelLocation.None;
+		
 		#endregion
 
 		public static DatabaseManager database = new DatabaseManager (true);

@@ -125,10 +125,16 @@
           <DependentUpon>SnapWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Controls\StyleConfig.cs" />
+        <Compile Include="Controls\TBListController.cs">
+          <DependentUpon>ToolBarList.cs</DependentUpon>
+        </Compile>
         <Compile Include="Controls\ToolBarList.cs" />
-        <Compile Include="Controls\ToolBarListItem.cs" />
+        <Compile Include="Controls\ToolBarListItem.cs">
+          <DependentUpon>ToolBarList.cs</DependentUpon>
+        </Compile>
         <Compile Include="Converter.cs" />
         <Compile Include="FileExtensions.cs" />
+        <Compile Include="Interfaces\IToolBarController.cs" />
         <Compile Include="Interfaces\Main.cs" />
         <Compile Include="Interfaces\Sticker.cs" />
         <Compile Include="Interfaces\UpdateDownloader.cs" />

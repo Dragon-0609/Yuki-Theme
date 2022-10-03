@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Interfaces;
 using WinForms = System.Windows.Forms;
 namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class ToolBarListItem : ListViewItem
 	{
-		public static ICamouflage camouflage;
+		public string itemName;
 
-		public static IIconManager manager;
-		
-		public WinForms.ToolStripItem item;
+		public ToolBarList ParentList;
+		public Size ItemSize;
 
 		public bool IsShown
 		{
-			get => camouflage.IsVisible (item.Name);
-			set => camouflage.SetVisible (item.Name, value);
+			get => ParentList._controller.IsVisible (itemName);
+			set => ParentList._controller.SetVisible (itemName, value);
 		}
 
 		public bool IsRight
 		{
-			get => camouflage.IsRight (item.Name);
-			set => camouflage.SetRight (item.Name, value);
+			get => ParentList._controller.IsRight (itemName);
+			set => ParentList._controller.SetRight (itemName, value);
 		}
 
 		public override string ToString ()
@@ -30,22 +30,25 @@ namespace Yuki_Theme.Core.WPF.Controls
 			return (string)Content;
 		}
 
-		public ToolBarListItem ()
+		public ToolBarListItem (ToolBarList parentList)
 		{
+			ParentList = parentList;
 			Content = "";
-			item = null;
+			itemName = string.Empty;
 		}
 
-		public ToolBarListItem (string text)
+		public ToolBarListItem (string text, ToolBarList parentList)
 		{
+			ParentList = parentList;
 			Content = text;
-			item = null;
+			itemName = string.Empty;
 		}
 
-		public ToolBarListItem (string text, WinForms.ToolStripItem stripItem)
+		public ToolBarListItem (string text, string ItemName, ToolBarList parentList)
 		{
 			Content = text;
-			item = stripItem;
+			itemName = ItemName;
+			ParentList = parentList;
 		}
 
 	}
