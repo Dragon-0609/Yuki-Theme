@@ -47,6 +47,11 @@ namespace Yuki_Theme.Core.WPF.Controls
 			_panel.ToolBarIcon.Source = IconRenderer.RenderToolBarItemImage(GetInfo(item.itemName)).ToWPFImage();
 		}
 
+		public void SetIconContainer()
+		{
+			api.SendMessage(new Message(MessageTypes.GET_ASSEMBLY_NAME));
+		}
+
 		public bool IsVisible(string item)
 		{
 			return _infos.First(info => info.Name == item).IsVisible;

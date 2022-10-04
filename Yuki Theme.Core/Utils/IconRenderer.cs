@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using Yuki_Theme.Core.Controls;
@@ -7,7 +9,7 @@ namespace Yuki_Theme.Core.Utils
 {
 	public static class IconRenderer
 	{
-		public static readonly string [] _iconsWithDarkVersion =
+		public static readonly string[] _iconsWithDarkVersion =
 		{
 			"menu-cut",
 			"menu-saveall",
@@ -45,6 +47,8 @@ namespace Yuki_Theme.Core.Utils
 		};
 
 		public const string IconFolder = "Yuki_Theme_Plugin.Resources.icons";
+
+		public static Assembly IconContainer;
 		
 		private static bool HasDark(string name)
 		{
@@ -61,8 +65,10 @@ namespace Yuki_Theme.Core.Utils
 				dark = isDark ? "" : "_dark";
 			}
 
-			Assembly a = Assembly.GetExecutingAssembly ();
-			return Helper.RenderSvg (info.Size, Helper.LoadSvg (info.AccessibleName + dark, a, IconFolder),
+			if (IconContainer == null)
+				throw new NullReferenceException("IconContainer wasn't set");
+			
+			return Helper.RenderSvg (info.Size, Helper.LoadSvg (info.AccessibleName + dark, IconContainer, IconFolder),
 			                         false, Size.Empty, true, ColorKeeper.bgBorder);
 		}
 	}

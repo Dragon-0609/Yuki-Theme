@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Controls;
@@ -10,6 +11,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 	{
 		internal SettingsPanel _panel;
 		public IToolBarController _controller;
+		public static Action<ToolBarList, Func<SettingsPanel>> InitCustomController;
 		
 		public ToolBarList ()
 		{
@@ -39,10 +41,17 @@ namespace Yuki_Theme.Core.WPF.Controls
 				_controller = new TBListController(this, panel);
 			else if (CentralAPI.Current is CommonAPI)
 			{
-				
+				if (InitCustomController != null)
+					InitCustomController(this, () => panel);
 			}
 
-			_controller.FillList();
+			if (_controller != null)
+			{
+				_controller.FillList();
+				_controller.SetIconContainer();
+			}
+			else
+				MessageBox.Show("Couldn't init ToolBarController");
 		}
 
 	}

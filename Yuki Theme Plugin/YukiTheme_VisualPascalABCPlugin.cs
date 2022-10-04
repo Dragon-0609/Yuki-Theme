@@ -24,6 +24,7 @@ using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Windows;
 using Yuki_Theme_Plugin.Communication;
+using Yuki_Theme_Plugin.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Yuki_Theme_Plugin.Controls.Helpers;
 using Yuki_Theme_Plugin.Interfaces;
@@ -162,6 +163,8 @@ namespace Yuki_Theme_Plugin
 			// InitializeSticker ();
 			ideComponents.fm.Resize += FmOnResize;
 			_presenter.AddToSettings ();
+			ToolBarList.InitCustomController = (list, func) => 
+			list._controller = new PBarController(list, func(), plugin);
 		}
 
 		private void InitStyles ()

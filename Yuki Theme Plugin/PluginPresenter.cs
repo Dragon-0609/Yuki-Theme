@@ -73,9 +73,16 @@ namespace Yuki_Theme_Plugin
 				api.AddEvent(GET_TOOL_BAR_ITEMS, _ => GetToolBarItems());
 				api.AddEvent(RESET_TOOL_BAR, _ => _view.camouflage.Reset());
 				api.AddEvent(RELOAD_TOOL_BAR, _ => _view.camouflage.Reload());
+				api.AddEvent(GET_ASSEMBLY_NAME, GetAssemblyName);
 				_view.StartIntegration ();
 			});
 		}
+
+		private void GetAssemblyName(Message obj)
+		{
+			_view._client.SendMessage(new Message(SET_ASSEMBLY_NAME, Assembly.GetExecutingAssembly().Location));
+		}
+
 		private void ReloadSettings (Message message)
 		{
 			_view.ideComponents.RunInUIThread (() =>

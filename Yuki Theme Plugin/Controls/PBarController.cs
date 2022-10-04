@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
@@ -35,8 +36,12 @@ namespace Yuki_Theme_Plugin.Controls
 			_panel.lockToolBarCheckboxes = 2;
 			_panel.ToolBarItemShow.IsChecked = item.IsShown;
 			_panel.ToolBarItemRight.IsChecked = item.IsRight;
-			_panel.ToolBarIcon.Source = IconRenderer.RenderToolBarItemImage(GetInfo(item.itemName)).ToWPFImage();
+			TBarItemInfo info = GetInfo(item.itemName);
+			_plugin.ideComponents.WriteToConsole(info.AccessibleName);
+			_panel.ToolBarIcon.Source = IconRenderer.RenderToolBarItemImage(info).ToWPFImage();
 		}
+
+		public void SetIconContainer() => IconRenderer.IconContainer = Assembly.GetExecutingAssembly();
 
 		public bool IsVisible(string item)
 		{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Pipes;
+using System.Reflection;
 using System.Windows.Forms;
 using NamedPipeWrapper;
 using Yuki_Theme.Core;
@@ -8,6 +9,7 @@ using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 using Application = System.Windows.Application;
@@ -50,7 +52,13 @@ namespace Theme_Editor
 			api.AddEvent (OPEN_MAIN_WINDOW, message => App._manager.OpenMainWindow ());
 			api.AddEvent (RELOAD_SETTINGS, message => App._manager.ApplySettingsChanges ((ChangedSettings) message.OtherContent));
 			api.AddEvent (SET_TOOLBAR_ITEMS, message => API_Events.FillToolBarList((TBarItemInfo[]) message.OtherContent) );
+			api.AddEvent (SET_ASSEMBLY_NAME, SetAssemblyName );
 			
+		}
+
+		private void SetAssemblyName(Message message)
+		{
+			IconRenderer.IconContainer = Assembly.Load(message.Content);
 		}
 
 		private void InitMessaging ()

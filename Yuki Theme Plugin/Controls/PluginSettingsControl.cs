@@ -69,7 +69,6 @@ namespace Yuki_Theme_Plugin.Controls
 				_settingsPanel.popupController = plugin.popupController;
 				// _settingsPanel.popupController = plugin.popupController;
 				if (parentForm != null) _settingsPanel.ParentForm = parentForm;
-
 				PanelHost.Child = _settingsPanel;
 				Controls.Add (PanelHost);
 				alreadyShown = true;

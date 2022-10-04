@@ -6,6 +6,7 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 	{
 		void FillList();
 		void UpdateInfo(ToolBarListItem item);
+		void SetIconContainer();
 
 		bool IsVisible(string item);
 		bool IsRight(string item);

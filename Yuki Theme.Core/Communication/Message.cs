@@ -71,10 +71,12 @@ namespace Yuki_Theme.Core.Communication
 		public const int RESET_TOOL_BAR = 16;
 		public const int RELOAD_TOOL_BAR = 17;
 		public const int SAVE_TOOL_BAR_DATA = 18;
+		public const int GET_ASSEMBLY_NAME = 19;
 		
 		public const int SET_PASCAL_PATH  = 30;	
 		public const int SET_CURRENT_NAME = 31;
 		public const int SET_TOOLBAR_ITEMS = 32;
+		public const int SET_ASSEMBLY_NAME = 33;
 
 
 		public const int CLOSE_SERVER = 66;

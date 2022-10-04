@@ -23,7 +23,10 @@ namespace Yuki_Theme_Plugin
 		private          ContextMenuStrip context;
 		private          ContextMenuStrip context2;
 
-		private readonly Dictionary <string, string> _iconNames = new ()
+		private string[] _iconsWithDarkVersion => IconRenderer._iconsWithDarkVersion;
+
+
+		public static readonly Dictionary <string, string> _iconNames = new ()
 		{
 			{ "tbNew", "addFile" },
 			{ "miNew", "addFile" },
@@ -108,8 +111,6 @@ namespace Yuki_Theme_Plugin
 			{ "tsHelp", "help" },
 			{ "cmHelp", "help" },
 		};
-
-		private string[] _iconsWithDarkVersion => IconRenderer._iconsWithDarkVersion;
 
 		private readonly string [] _iconsToDelete = { "miExit" };
 
