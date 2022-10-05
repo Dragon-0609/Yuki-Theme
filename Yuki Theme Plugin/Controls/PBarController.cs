@@ -61,11 +61,13 @@ namespace Yuki_Theme_Plugin.Controls
 		public void SetVisible(string item, bool val)
 		{
 			_plugin.camouflage.ItemInfos.First(info => info.Name == item).IsVisible = val;
+			_plugin.camouflage.StartToHide();
 		}
 
 		public void SetRight(string item, bool val)
 		{
 			_plugin.camouflage.ItemInfos.First(info => info.Name == item).IsRight = val;
+			_plugin.camouflage.StartToHide();
 		}
 
 		public void ResetToolBar()

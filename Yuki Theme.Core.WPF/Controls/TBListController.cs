@@ -70,11 +70,13 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public void SetVisible(string item, bool val)
 		{
 			_infos.First(info => info.Name == item).IsVisible = val;
+			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_VISIBILITY, item));
 		}
 
 		public void SetRight(string item, bool val)
 		{
 			_infos.First(info => info.Name == item).IsRight = val;
+			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_ALIGN, item));
 		}
 
 		public void ResetToolBar()

@@ -7,6 +7,7 @@ using VisualPascalABC.OptionsContent;
 using WeifenLuo.WinFormsUI.Docking;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF;
 using Yuki_Theme.Core.WPF.Windows;
@@ -74,6 +75,10 @@ namespace Yuki_Theme_Plugin
 				api.AddEvent(RESET_TOOL_BAR, _ => _view.camouflage.Reset());
 				api.AddEvent(RELOAD_TOOL_BAR, _ => _view.camouflage.Reload());
 				api.AddEvent(GET_ASSEMBLY_NAME, GetAssemblyName);
+				api.AddEvent(SET_TOOL_BAR_VISIBILITY,
+					_ => _view.camouflage.SetItemVisibility((TBarItemInfo) _.OtherContent));
+				api.AddEvent(SET_TOOL_BAR_ALIGN,
+					_ => _view.camouflage.SetItemAlign((TBarItemInfo) _.OtherContent));
 				_view.StartIntegration ();
 			});
 		}

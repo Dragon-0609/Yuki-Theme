@@ -77,6 +77,8 @@ namespace Yuki_Theme.Core.Communication
 		public const int SET_CURRENT_NAME = 31;
 		public const int SET_TOOLBAR_ITEMS = 32;
 		public const int SET_ASSEMBLY_NAME = 33;
+		public const int SET_TOOL_BAR_VISIBILITY = 34;
+		public const int SET_TOOL_BAR_ALIGN = 35;
 
 
 		public const int CLOSE_SERVER = 66;

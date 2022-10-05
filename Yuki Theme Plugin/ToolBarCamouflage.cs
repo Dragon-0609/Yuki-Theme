@@ -242,5 +242,22 @@ namespace Yuki_Theme_Plugin
 				YukiTheme_VisualPascalABCPlugin.plugin._client.SendMessage(new Message(MessageTypes.SET_TOOLBAR_ITEMS, ItemInfos));
 			}
 		}
+
+		public void SetItemVisibility(TBarItemInfo info)
+		{
+			GetItem(info).IsVisible = info.IsVisible;
+			StartToHide();
+		}
+
+		private TBarItemInfo GetItem(TBarItemInfo info)
+		{
+			return ItemInfos.First(i => i.Name == info.Name);
+		}
+
+		public void SetItemAlign(TBarItemInfo info)
+		{
+			GetItem(info).IsRight = info.IsRight;
+			StartToHide();
+		}
 	}
 }
