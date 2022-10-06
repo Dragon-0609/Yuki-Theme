@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki Theme.Core.WPF", "Yuki
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Theme Editor", "Theme Editor\Theme Editor.csproj", "{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App Aggregator", "App Aggregator\App Aggregator.csproj", "{0CDFD4F1-17CC-4F75-8D40-37992A162A99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,5 +64,9 @@ Global
 		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B21FD2DC-2A60-4393-AA9E-0ED734DD7605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CDFD4F1-17CC-4F75-8D40-37992A162A99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CDFD4F1-17CC-4F75-8D40-37992A162A99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CDFD4F1-17CC-4F75-8D40-37992A162A99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CDFD4F1-17CC-4F75-8D40-37992A162A99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

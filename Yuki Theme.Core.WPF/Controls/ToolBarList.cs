@@ -9,49 +9,48 @@ namespace Yuki_Theme.Core.WPF.Controls
 {
 	public class ToolBarList : ListView
 	{
-		internal SettingsPanel _panel;
-		public IToolBarController _controller;
-		public static Action<ToolBarList, Func<SettingsPanel>> InitCustomController;
-		
+		internal      SettingsPanel                              _panel;
+		public        IToolBarController                         _controller;
+		public static Action <ToolBarList, Func <SettingsPanel>> InitCustomController;
+
 		public ToolBarList ()
 		{
 			// DefaultStyleKeyProperty.OverrideMetadata (typeof (Manageable), new FrameworkPropertyMetadata (null));
 		}
-		
-		protected override DependencyObject GetContainerForItemOverride()
+
+		protected override DependencyObject GetContainerForItemOverride ()
 		{
-			return new ToolBarListItem(this);
+			return new ToolBarListItem (this);
 		}
-		
-		public void Init(SettingsPanel panel)
+
+		public void Init (SettingsPanel panel)
 		{
 			if (Helper.mode == ProductMode.Program)
 			{
 				_panel.ToolBarDockPanel.Visibility = Visibility.Collapsed;
 				_panel.UnavailablePanel.Visibility = Visibility.Visible;
-			}else if (Helper.mode == ProductMode.Plugin)
+			} else if (Helper.mode == ProductMode.Plugin)
 			{
-				InitToolBarPlace(panel);
+				InitToolBarPlace (panel);
 			}
 		}
 
-		private void InitToolBarPlace(SettingsPanel panel)
+		private void InitToolBarPlace (SettingsPanel panel)
 		{
 			if (Settings.Location == SettingsPanelLocation.App && CentralAPI.Current is ServerAPI or ClientAPI)
-				_controller = new TBListController(this, panel);
+				_controller = new TBListController (this, panel);
 			else if (CentralAPI.Current is CommonAPI)
 			{
 				if (InitCustomController != null)
-					InitCustomController(this, () => panel);
+					InitCustomController (this, () => panel);
 			}
 
 			if (_controller != null)
 			{
-				_controller.FillList();
-				_controller.SetIconContainer();
-			}
-			else
-				MessageBox.Show("Couldn't init ToolBarController");
+				_controller.FillList ();
+				_controller.SetIconContainer ();
+			} else
+				MessageBox.Show ("Couldn't init ToolBarController");
 		}
 
 	}

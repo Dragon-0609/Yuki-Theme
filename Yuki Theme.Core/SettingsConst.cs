@@ -48,9 +48,9 @@ namespace Yuki_Theme.Core
 		public const int HIDE_ON_HOVER      = 36;
 		public const int HIDE_DELAY         = 37;
 		public const int PORTABLE_MODE      = 38;
-		public const int EDITOR_READ_ONLY = 39;
-		public const int EDITOR_SAVED_FILE = 40;
-		
+		public const int EDITOR_READ_ONLY   = 39;
+		public const int EDITOR_SAVED_FILE  = 40;
+
 		public const  double CURRENT_VERSION     = 8.0;
 		public const  string CURRENT_VERSION_ADD = "beta";
 		public static string CurrentPath         = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
