@@ -3,14 +3,12 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
-using Microsoft.Win32;
 using Yuki_Theme.Core;
 using Yuki_Theme.Core.Database;
 
 namespace Yuki_Installer
 {
-	
-	internal class Program
+	internal class Installer
 	{
 
 		private const string INSTALL_COMMAND   = "install";
@@ -82,7 +80,7 @@ namespace Yuki_Installer
 
 						ReturnThemesToApp (appDirectory, tempDirectory);
 
-						if (DatabaseManager.IsLinux)
+						if (DatabaseManager.IsLinux|| _databaseManager.IsPortable()) 
 						{
 							if (File.Exists (FileDatabase.GetSettingsPath ()))
 							{
@@ -231,13 +229,13 @@ namespace Yuki_Installer
 			Directory.Delete (args [0], true);
 			File.Delete (args [1]);
 			File.Delete (Path.Combine (
-				             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-				             APP_NAME,
-				             INSTALLER_FULL_NAME));
+				Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+				APP_NAME,
+				INSTALLER_FULL_NAME));
 			File.Delete (Path.Combine (
-				             Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-				             APP_NAME,
-				             DEPENDENCIES_FILE));
+				Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
+				APP_NAME,
+				DEPENDENCIES_FILE));
 		}
 
 		
@@ -269,7 +267,6 @@ namespace Yuki_Installer
 				value = "0";
 			return (ProductMode) int.Parse (value);
 		}
-		
 
 		#endregion
 		

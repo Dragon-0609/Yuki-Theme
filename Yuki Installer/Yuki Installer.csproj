@@ -64,9 +64,12 @@
       <Link>CoreParts\WindowProps.cs</Link>
     </Compile>
     <Compile Include="CoreParts\Settings.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Installer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <PropertyGroup>
+  <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+</PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.

@@ -67,7 +67,7 @@ namespace Yuki_Theme.Core.Database
 
 		private const string APP_NAME = "Yuki Theme";
 
-		private bool IsPortable ()
+		internal bool IsPortable ()
 		{
 			return File.Exists (FileDatabase.YUKI_SETTINGS);
 		}
@@ -191,6 +191,8 @@ namespace Yuki_Theme.Core.Database
 				}
 			}
 		}
+
+		public bool IsFileDatabase() => _database is FileDatabase;
 
 	}
 }

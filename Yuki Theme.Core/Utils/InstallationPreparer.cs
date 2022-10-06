@@ -13,14 +13,13 @@ namespace Yuki_Theme.Core.Utils
 	{
 		public const  string FILE_NAMESPACE = "Yuki_Theme.Core.Database.";
 		private const string APP_NAME       = "Yuki Theme";
+		const string INSTALLER_NAME = "Yuki Installer.exe";
 
 		private string GetAppDataDirectory =>
 			Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData), APP_NAME);
 		
 		public void Prepare (bool forceExit)
 		{
-			const string installerName = "Yuki Installer.exe";
-
 			if (Helper.mode == null)
 			{
 				string translation = CentralAPI.Current.Translate ("theme.downloader.errors.group.wrong");
@@ -28,36 +27,17 @@ namespace Yuki_Theme.Core.Utils
 				return;
 			}
 			
-			string path = Path.Combine ( GetAppDataDirectory, installerName);
-			File.Copy (Path.Combine (SettingsConst.CurrentPath, installerName), path, true);
+			string path = Path.Combine ( GetAppDataDirectory, INSTALLER_NAME);
+			File.Copy (Path.Combine (SettingsConst.CurrentPath, INSTALLER_NAME), path, true);
 
 			Settings.database.SetValue ("mode", ((int)Helper.mode).ToString ());
 
 			// Set false to track install again
 			Settings.database.UpdateData (SettingsConst.LOGIN, "false");
 
-			var a = Assembly.GetExecutingAssembly ();
-			using (Stream str = (a.GetManifestResourceStream ($"{FILE_NAMESPACE}files.txt")))
-			{
-				using (FileStream fstream =
-				       File.Create (Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData),
-				                                  APP_NAME, "files.txt")))
-				{
-					str.Seek (0, SeekOrigin.Begin);
-					str.CopyTo (fstream);
-					using (StreamWriter sw = new StreamWriter (fstream))
-					{
-						string pth = FILE_NAMESPACE + (Helper.mode == ProductMode.Program ? "files_program.txt" : "files_plugin.txt");
-						using (StreamReader reader = new StreamReader (a.GetManifestResourceStream (pth)))
-						{
-							string cx = reader.ReadToEnd ();
-							sw.WriteLine ("\n" + cx);
-						}
-					}
-				}
-			}
-
-			if (DatabaseManager.IsLinux)
+			ExtractFilesToDelete();
+	
+			if (DatabaseManager.IsLinux || Settings.database.IsFileDatabase())
 			{
 				if (File.Exists (FileDatabase.GetSettingsPath ()))
 				{
@@ -66,12 +46,50 @@ namespace Yuki_Theme.Core.Utils
 			}
 			
 			Process.Start (path, $"Install \"{Application.ExecutablePath}\"");
+			CloseApp(forceExit);
+		}
+
+		private static void ExtractFilesToDelete()
+		{
+			Assembly a = Assembly.GetExecutingAssembly();
+			using (Stream str = (a.GetManifestResourceStream($"{FILE_NAMESPACE}files.txt")))
+			{
+				using (FileStream fstream =
+					File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+						APP_NAME, "files.txt")))
+				{
+					str.Seek(0, SeekOrigin.Begin);
+					str.CopyTo(fstream);
+					WriteAdditionalFilePaths(fstream, a);
+				}
+			}
+		}
+
+		private static void WriteAdditionalFilePaths(FileStream fstream, Assembly a)
+		{
+			if (Helper.mode is ProductMode.Plugin or ProductMode.Program)
+			{
+				using (StreamWriter sw = new StreamWriter(fstream))
+				{
+					string pth = FILE_NAMESPACE +
+					             (Helper.mode == ProductMode.Program ? "files_program.txt" : "files_plugin.txt");
+					using (StreamReader reader = new StreamReader(a.GetManifestResourceStream(pth)))
+					{
+						string cx = reader.ReadToEnd();
+						sw.WriteLine("\n" + cx);
+					}
+				}
+			}
+		}
+
+		private static void CloseApp(bool forceExit)
+		{
 			if (forceExit)
 			{
 				if (Helper.mode == ProductMode.Program)
-					Application.Exit ();
+					Application.Exit();
 				else if (Helper.mode == ProductMode.Plugin)
-					Environment.Exit (1);
+					Environment.Exit(1);
 			}
 		}
 	}
