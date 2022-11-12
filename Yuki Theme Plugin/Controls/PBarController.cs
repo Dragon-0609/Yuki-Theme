@@ -37,7 +37,6 @@ namespace Yuki_Theme_Plugin.Controls
 			_panel.ToolBarItemShow.IsChecked = item.IsShown;
 			_panel.ToolBarItemRight.IsChecked = item.IsRight;
 			TBarItemInfo info = GetInfo(item.itemName);
-			_plugin.ideComponents.WriteToConsole(info.AccessibleName);
 			_panel.ToolBarIcon.Source = IconRenderer.RenderToolBarItemImage(info).ToWPFImage();
 		}
 

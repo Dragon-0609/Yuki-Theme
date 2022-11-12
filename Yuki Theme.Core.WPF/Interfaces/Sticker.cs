@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows;
+using System.Windows.Forms;
 using Yuki_Theme.Core.WPF.Controls;
 using Size = System.Drawing.Size;
 
@@ -32,6 +33,12 @@ namespace Yuki_Theme.Core.WPF.Interfaces
 			void SetSize (Size size);
 
 			void ResetPosition ();
+
+			bool IsTargetWindowNull();
+			bool IsTargetFormNull();
+
+			Window GetTargetWindow();
+			Form GetTargetForm();
 		}
 		
 		public interface IPresenter

@@ -37,9 +37,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		private void InitToolBarPlace(SettingsPanel panel)
 		{
-			if (Settings.Location == SettingsPanelLocation.App && CentralAPI.Current is ServerAPI or ClientAPI)
+			if (Settings.Location == SettingsPanelLocation.App && IsServerClientAPI())
 				_controller = new TBListController(this, panel);
-			else if (CentralAPI.Current is CommonAPI)
+			else if (CentralAPI.Current is CommonAPI || (Settings.Location == SettingsPanelLocation.IDE && IsServerClientAPI()))
 			{
 				if (InitCustomController != null)
 					InitCustomController(this, () => panel);
@@ -54,5 +54,9 @@ namespace Yuki_Theme.Core.WPF.Controls
 				MessageBox.Show("Couldn't init ToolBarController");
 		}
 
+		private static bool IsServerClientAPI()
+		{
+			return CentralAPI.Current is ServerAPI or ClientAPI;
+		}
 	}
 }

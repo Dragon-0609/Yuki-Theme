@@ -51,9 +51,15 @@ namespace Theme_Editor
 			api.AddEvents ();
 			api.AddEvent (OPEN_MAIN_WINDOW, message => App._manager.OpenMainWindow ());
 			api.AddEvent (RELOAD_SETTINGS, message => App._manager.ApplySettingsChanges ((ChangedSettings) message.OtherContent));
-			api.AddEvent (SET_TOOLBAR_ITEMS, message => API_Events.FillToolBarList((TBarItemInfo[]) message.OtherContent) );
+			api.AddEvent (SET_TOOLBAR_ITEMS, SetToolBarList );
 			api.AddEvent (SET_ASSEMBLY_NAME, SetAssemblyName );
 			
+		}
+
+		private static void SetToolBarList(Message message)
+		{
+			if (API_Events.FillToolBarList != null)
+				API_Events.FillToolBarList((TBarItemInfo[]) message.OtherContent);
 		}
 
 		private void SetAssemblyName(Message message)

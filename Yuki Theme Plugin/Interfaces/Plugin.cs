@@ -68,8 +68,6 @@ namespace Yuki_Theme_Plugin.Interfaces
 
 		public abstract class Model
 		{
-			internal Action <string> WriteToConsole;
-			
 			internal abstract void InitSticker (Form form);
 			internal abstract void LoadSticker ();
 			internal abstract void ReloadSticker ();

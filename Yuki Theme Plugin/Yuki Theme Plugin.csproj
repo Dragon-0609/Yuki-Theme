@@ -151,16 +151,19 @@
     <Compile Include="PluginModel.cs">
       <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
     </Compile>
-    <Compile Include="PluginPresenter.cs" />
-    <Compile Include="Props.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Props.Designer.cs">
-      <DependentUpon>Props.cs</DependentUpon>
+    <Compile Include="PluginPresenter.cs">
+      <DependentUpon>YukiTheme_VisualPascalABCPlugin.cs</DependentUpon>
     </Compile>
     <Compile Include="ThemeSwitcher.cs" />
     <Compile Include="ToolBarCamouflage.cs" />
     <Compile Include="ToolRenderer.cs" />
+    <Compile Include="Utils\OutputConsoleLogger.cs" />
+    <Compile Include="Utils\Props.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utils\Props.Designer.cs">
+      <DependentUpon>Props.cs</DependentUpon>
+    </Compile>
     <Compile Include="YukiTheme_VisualPascalABCPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Controls\DockStyles\Resources.resx" />
@@ -178,7 +181,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Props.resx">
+    <EmbeddedResource Include="Utils\Props.resx">
       <DependentUpon>Props.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

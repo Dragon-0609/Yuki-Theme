@@ -10,10 +10,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 		private Sticker.IModel _stickerModel;
 		private Sticker.IView  _stickerView;
 
+		public static bool AutoRefocus = true;
+		private StickerWindow _window;
+
 		public StickerPresenter (Sticker.IModel stickerModel, Sticker.IView stickerView)
 		{
 			_stickerModel = stickerModel;
 			_stickerView = stickerView;
+			_window = (StickerWindow) _stickerView;
 		}
 
 		public void SetStickerSize ()
@@ -67,11 +71,33 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 
 			_stickerView.ChangeVisibility (visibility);
+			if (AutoRefocus)
+				RefocusParent();
 		}
 
 		public bool StickerAvailable ()
 		{
 			return Settings.swSticker && !_stickerModel.IsOriginalImageNull () && !_stickerModel.IsRenderImageNull ();
+		}
+
+		/// <summary>
+		/// Doesn't Work.
+		/// </summary>
+		private void RefocusParent()
+		{
+			if (!_stickerView.IsTargetWindowNull())
+			{
+				_window.Logger.Write("Sticker parent is Window");
+				_stickerView.GetTargetWindow().Activate();
+			}else if (!_stickerView.IsTargetFormNull())
+			{
+				_stickerView.GetTargetForm().Activate();
+				_window.Logger.Write("Sticker parent is Form");
+			}
+			else
+			{
+				_window.Logger.Write("Sticker doesn't have a parent");
+			}
 		}
 		
 		private void UpdatePosition () => _stickerView.ResetPosition ();

@@ -150,6 +150,8 @@
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="Logger\BaseLogger.cs" />
+    <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="SettingsConst.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />

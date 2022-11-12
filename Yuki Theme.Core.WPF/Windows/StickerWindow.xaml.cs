@@ -7,6 +7,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WpfAnimatedGif;
+using Yuki_Theme.Core.Logger;
 using Yuki_Theme.Core.Utils;
 using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme.Core.WPF.Interfaces;
@@ -29,7 +30,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		private GridWindow _grid;
 
-		public Action <string> WriteToConsole;
+		public BaseLogger Logger;
 
 		public StickerWindow ()
 		{
@@ -76,6 +77,14 @@ namespace Yuki_Theme.Core.WPF.Windows
 			Width = size.Width;
 			Height = size.Height;
 		}
+
+		public bool IsTargetWindowNull() => target == null;
+
+		public bool IsTargetFormNull() => targetForm == null;
+
+		public Window GetTargetWindow() => target;
+
+		public Form GetTargetForm() => targetForm;
 
 		private void ChangeImage (Drawing.Image image)
 		{

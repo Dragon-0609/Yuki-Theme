@@ -4,46 +4,49 @@ using System.Windows;
 using System.Windows.Media;
 using Yuki_Theme.Core.WPF.Controls;
 using Point = System.Windows.Point;
+
 namespace Yuki_Theme.Core.WPF.Windows
 {
 	public class PositionCalculator
 	{
-		private int          width;
-		private int          width3;
-		private int          width32;
-		private int          height;
-		private int          height3;
-		private int          height32;
-		private float        unitx;
-		private float        unity;
-		private Point        _margin;
+		private int width;
+		private int width3;
+		private int width32;
+		private int height;
+		private int height3;
+		private int height32;
+		private float unitx;
+		private float unity;
+		private Point _margin;
 		private RelativeUnit unit => Settings.unit;
 
 		private StickerWindow window;
-		public PositionCalculator (StickerWindow window)
+
+		public PositionCalculator(StickerWindow window)
 		{
 			this.window = window;
-			_margin = new Point (SnapWindow.BORDER_OUTLINE_X, SnapWindow.BORDER_OUTLINE_Y);
+			_margin = new Point(SnapWindow.BORDER_OUTLINE_X, SnapWindow.BORDER_OUTLINE_Y);
 		}
 
-		internal void PrepareData ()
+		internal void PrepareData()
 		{
-			Rect owner = window.GetOwnerRectangle ();
-			width = (int)(owner.Width / 2);
-			width3 = (int)(owner.Width / 3);
+			Rect owner = window.GetOwnerRectangle();
+			width = (int) (owner.Width / 2);
+			width3 = (int) (owner.Width / 3);
 			width32 = width3 * 2;
-			height = (int)(owner.Height / 2);
-			height3 = (int)(owner.Height / 3);
+			height = (int) (owner.Height / 2);
+			height3 = (int) (owner.Height / 3);
 			height32 = height3 * 2;
 			if (unit == RelativeUnit.Percent)
 			{
-				unitx = (float)(owner.Width / 100);
-				unity = (float)(owner.Height / 100);
+				unitx = (float) (owner.Width / 100);
+				unity = (float) (owner.Height / 100);
 			}
 		}
-		public void KeepBounds (ref double x, ref double y)
+
+		public void KeepBounds(ref double x, ref double y)
 		{
-			Rect owner = window.GetOwnerRectangle ();
+			Rect owner = window.GetOwnerRectangle();
 
 			if (x < owner.Left + _margin.X)
 				x = owner.Left + _margin.X;
@@ -63,80 +66,83 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 
 
-
-		public void SetAligns (Point position)
+		public void SetAligns(Point position)
 		{
 			if (position.X < width3) // X - Left
 			{
 				window.AlignX = AlignmentX.Left;
-			} else
+			}
+			else
 			{
 				// X > Left ->  Right || Center 
 				window.AlignX = position.X > width32 ? AlignmentX.Right : AlignmentX.Center;
 			}
+
 			if (position.Y < height3) // Y - Top
 			{
 				window.AlignY = AlignmentY.Top;
-			} else
+			}
+			else
 			{
 				// Y > Top -> Bottom || Center 
 				window.AlignY = position.Y > height32 ? AlignmentY.Bottom : AlignmentY.Center;
 			}
 		}
 
-		private float GetRelatedX (Rect owner, Point point)
+		private float GetRelatedX(Rect owner, Point point)
 		{
 			float res = 0;
 			AlignmentX style = window.AlignX;
-			double left = Math.Abs (owner.Left - window.Left);
+			double left = Math.Abs(owner.Left - window.Left);
 			if (style == AlignmentX.Left)
 			{
-				res = (float)left;
-			} else if (style == AlignmentX.Center)
-			{
-				res = (float)((point.X - (point.X - left)) - width);
-
-			} else if (style == AlignmentX.Right)
-			{
-				res = (float)(owner.Width - (left + window.Width));
+				res = (float) left;
 			}
+			else if (style == AlignmentX.Center)
+			{
+				res = (float) ((point.X - (point.X - left)) - width);
+			}
+			else if (style == AlignmentX.Right)
+			{
+				res = (float) (owner.Width - (left + window.Width));
+			}
+
 			if (unit == RelativeUnit.Percent)
 				res /= unitx;
 			return res;
 		}
 
-		private float GetRelatedY (Rect owner, Point point)
+		private float GetRelatedY(Rect owner, Point point)
 		{
 			float res = 0;
 			AlignmentY style = window.AlignY;
-			double top = Math.Abs (owner.Top - window.Top);
+			double top = Math.Abs(owner.Top - window.Top);
 			if (style == AlignmentY.Top)
 			{
-				res = (float)top;
-			} else if (style == AlignmentY.Center)
-			{
-				res = (float)((point.Y - (point.Y - top)) - height);
-			} else if (style == AlignmentY.Bottom)
-			{
-				res = (float)(owner.Height - (top + window.Height));
+				res = (float) top;
 			}
+			else if (style == AlignmentY.Center)
+			{
+				res = (float) ((point.Y - (point.Y - top)) - height);
+			}
+			else if (style == AlignmentY.Bottom)
+			{
+				res = (float) (owner.Height - (top + window.Height));
+			}
+
 			if (unit == RelativeUnit.Percent)
 				res /= unity;
 			return res;
 		}
 
-		public void SaveRelatedPosition (Point point)
+		public void SaveRelatedPosition(Point point)
 		{
-			Rect owner = window.GetOwnerRectangle ();
-
-			if (window.WriteToConsole != null)
-				window.WriteToConsole ($"{owner} | {point}");
-
-			window._relativePosition = new PointF (GetRelatedX (owner, point), GetRelatedY (owner, point));
-			if (window.WriteToConsole != null)
-				window.WriteToConsole ($"R: {window._relativePosition}");
-			window.SetBorderOutline ();
-			window.ResetPosition ();
+			Rect owner = window.GetOwnerRectangle();
+			window.Logger.Write($"{owner} | {point}");
+			window._relativePosition = new PointF(GetRelatedX(owner, point), GetRelatedY(owner, point));
+			window.Logger.Write($"R: {window._relativePosition}");
+			window.SetBorderOutline();
+			window.ResetPosition();
 		}
 	}
 }

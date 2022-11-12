@@ -21,7 +21,7 @@ namespace Yuki_Theme_Plugin
 		internal override void InitSticker (Form form)
 		{
 			_stickerWindow = StickerWindow.CreateStickerControl (form);
-			_stickerWindow.WriteToConsole = WriteToConsole;
+			_stickerWindow.Logger = OutputConsoleLogger.Instance;
 			_stickerWindow.Show ();
 		}
 

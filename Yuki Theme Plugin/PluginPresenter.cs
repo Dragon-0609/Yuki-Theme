@@ -53,7 +53,7 @@ namespace Yuki_Theme_Plugin
 		{
 			if (!_view.isCommonAPI)
 			{
-				_view._client = new Client (_view.ideComponents, _view._helper, (YukiTheme_VisualPascalABCPlugin) _view);
+				_view._client = new Client (OutputConsoleLogger.Instance, _view._helper, (YukiTheme_VisualPascalABCPlugin) _view);
 			}
 		}
 

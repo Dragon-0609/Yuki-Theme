@@ -69,14 +69,16 @@ namespace Yuki_Theme.Core.WPF.Controls
 
 		public void SetVisible(string item, bool val)
 		{
-			_infos.First(info => info.Name == item).IsVisible = val;
-			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_VISIBILITY, item));
+			TBarItemInfo itemInfo = _infos.First(info => info.Name == item);
+			itemInfo.IsVisible = val;
+			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_VISIBILITY, itemInfo));
 		}
 
 		public void SetRight(string item, bool val)
 		{
-			_infos.First(info => info.Name == item).IsRight = val;
-			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_ALIGN, item));
+			TBarItemInfo itemInfo = _infos.First(info => info.Name == item);
+			itemInfo.IsRight = val;
+			api.SendMessage(new Message(MessageTypes.SET_TOOL_BAR_ALIGN, itemInfo));
 		}
 
 		public void ResetToolBar()

@@ -193,8 +193,11 @@ namespace Yuki_Theme.Core.WPF.Windows
 			string lang = settingsWindow.SettingsPanelControl.settings.Lang;
 			if (dialog != null && (bool)dialog)
 			{
+				StickerPresenter.AutoRefocus = false;
 				settingsWindow.utilities.SaveSettings ();
 				ApplySettingsChanges (settingsWindow.SettingsPanelControl.settings);
+				StickerPresenter.AutoRefocus = true;
+				Focus();
 			} else
 			{
 				Settings.localization = lang;

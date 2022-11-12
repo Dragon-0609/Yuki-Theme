@@ -9,6 +9,7 @@ using Yuki_Theme.Core;
 using Yuki_Theme.Core.API;
 using Yuki_Theme.Core.Communication;
 using Yuki_Theme.Core.Interfaces;
+using Yuki_Theme.Core.Logger;
 using Yuki_Theme_Plugin.Interfaces;
 using static Yuki_Theme.Core.Communication.MessageTypes;
 using Message = Yuki_Theme.Core.Communication.Message;
@@ -30,13 +31,13 @@ namespace Yuki_Theme_Plugin.Communication
 		public event MessageRecieved recieved;
 
 
-		private IConsole _console;
+		private BaseLogger _logger;
 
 		private IDispatcher _dispatcher;
 
-		internal Client (IConsole console, IDispatcher dispatcher, YukiTheme_VisualPascalABCPlugin plugin)
+		internal Client (BaseLogger logger, IDispatcher dispatcher, YukiTheme_VisualPascalABCPlugin plugin)
 		{
-			_console = console;
+			_logger = logger;
 			_dispatcher = dispatcher;
 			_plugin = plugin;
 			Init ();
@@ -61,18 +62,18 @@ namespace Yuki_Theme_Plugin.Communication
 			_client.Error += ErrorRaised;
 			_client.Disconnected += ServerDisconnected;
 			_client.Start ();
-			_console.WriteToConsole ("Client Connected");
+			_logger.Write ("Client Connected");
 		}
 
 		private void ServerDisconnected (NamedPipeConnection <Message, Message> connection)
 		{
 			_client.Stop ();
-			_console.WriteToConsole ("Client is disconnected");
+			_logger.Write ("Client is disconnected");
 		}
 
 		private void ErrorRaised (Exception exception)
 		{
-			_console.WriteToConsole ($"ERROR: {exception}");
+			_logger.Write ($"ERROR: {exception}");
 		}
 
 		private void RunServer ()
@@ -90,7 +91,7 @@ namespace Yuki_Theme_Plugin.Communication
 
 		private void MessageReceived (NamedPipeConnection <Message, Message> connection, Message message)
 		{
-			_console.WriteToConsole ($"Received: {message.Id}");
+			_logger.Write ($"Received: {message.Id}");
 			_dispatcher.InvokeUI (new MethodInvoker (delegate
 			{
 				if (recieved != null)
@@ -166,7 +167,7 @@ namespace Yuki_Theme_Plugin.Communication
 				
 				case TEST_CONNECTION_OK:
 					_isConnected = true;
-					_console.WriteToConsole ("Theme editor is running");
+					_logger.Write ("Theme editor is running");
 					ConnectionEstablished ();
 					break;
 			}

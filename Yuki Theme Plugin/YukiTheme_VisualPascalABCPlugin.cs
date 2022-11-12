@@ -116,13 +116,16 @@ namespace Yuki_Theme_Plugin
 			imagesEnabled += Settings.bgImage ? 1 : 0;
 			imagesEnabled += Settings.swSticker ? 2 : 0;
 			StatusBarNameEnabled = Settings.swStatusbar;
-
-			ideComponents.WriteToConsole ("Initialization started.");
+			
+			OutputConsoleLogger.Console = (IConsole) ideComponents;
+			Logger.Write ("Initialization started.");
 
 			loadWithWaiting ();
 			Initialize ();
 		}
-		
+
+		private static OutputConsoleLogger Logger => OutputConsoleLogger.Instance;
+
 		private void Initialize ()
 		{
 			LoadColors ();
@@ -157,7 +160,6 @@ namespace Yuki_Theme_Plugin
 			currentThemeName.Margin = Padding.Empty;
 			ideComponents.statusBar.Items.Add (currentThemeName);
 			RefreshStatusBar ();
-			_model.WriteToConsole = ideComponents.WriteToConsole;
 			_model.InitSticker (ideComponents.fm);
 			_model.LoadSticker ();
 			// InitializeSticker ();
@@ -175,7 +177,10 @@ namespace Yuki_Theme_Plugin
 		private void InitCoreWindow ()
 		{
 			if (!isCommonAPI)
-				_client.SendMessage (OPEN_MAIN_WINDOW);
+			{
+				Logger.Write($"Sending message: {OPEN_MAIN_WINDOW}");
+				_client.SendMessage(OPEN_MAIN_WINDOW);
+			}
 			else
 			{
 				InitMainWindow ();
@@ -235,7 +240,7 @@ namespace Yuki_Theme_Plugin
 
 			ideComponents.AddMenuItems ();
 
-			ideComponents.WriteToConsole ("Initialization finished.");
+			Logger.Write ("Initialization finished.");
 
 			inspector.InjectCodeCompletion ();
 
