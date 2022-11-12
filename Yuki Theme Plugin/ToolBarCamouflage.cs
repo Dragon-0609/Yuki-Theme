@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ICSharpCode.SharpDevelop;
@@ -8,7 +9,6 @@ using Yuki_Theme.Core.Controls;
 using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Interfaces;
 using Yuki_Theme.Core.WPF;
-using Yuki_Theme.Core.WPF.Controls;
 using Yuki_Theme_Plugin.Controls.DockStyles;
 using Message = Yuki_Theme.Core.Communication.Message;
 
@@ -20,13 +20,13 @@ namespace Yuki_Theme_Plugin
 		public  List <ToolItemGroup> groups;
 		public  List <ToolStripItem> items;
 
-		public TBarItemInfo[] ItemInfos;		
-		
-		private readonly ToolStrip tools;
+		public TBarItemInfo [] ItemInfos;
+
+		private readonly ToolStrip _tools;
 
 		public ToolBarCamouflage (ToolStrip toolStrip)
 		{
-			tools = toolStrip;
+			_tools = toolStrip;
 			items = new List <ToolStripItem> ();
 			groups = new List <ToolItemGroup> ();
 			Init ();
@@ -34,26 +34,25 @@ namespace Yuki_Theme_Plugin
 
 		public void Init ()
 		{
-			ToolItemGroup prev = null;
 			var current = new ToolItemGroup ();
-			List<TBarItemInfo> infos = new();
-			for (var i = 0; i < tools.Items.Count; i++)
+			List <TBarItemInfo> infos = new ();
+			for (var i = 0; i < _tools.Items.Count; i++)
 			{
 				if (current.separator != null)
 				{
-					prev = current;
-					current = new ToolItemGroup {prev = prev};
+					ToolItemGroup prev = current;
+					current = new ToolItemGroup { prev = prev };
 					groups.Add (prev);
 				}
 
-				ToolStripItem item = tools.Items [i];
-				
+				ToolStripItem item = _tools.Items [i];
+
 				if (item.ToolTipText != null && item.Visible &&
-				    item.AccessibleDescription != null && item.AccessibleDescription.Length > 1)
+				    item.AccessibleDescription is { Length: > 1 })
 				{
 					items.Add (item);
 					current.items.Add (item);
-					infos.Add(new TBarItemInfo(item.Name, item.AccessibleDescription, item.ToolTipText, item.Visible, false, item.Size));
+					infos.Add (new TBarItemInfo (item.Name, item.AccessibleDescription, item.ToolTipText, item.Visible, false, item.Size));
 				}
 
 				if (item is ToolStripSeparator)
@@ -64,7 +63,7 @@ namespace Yuki_Theme_Plugin
 			if (!current.IsEmpty ())
 				groups.Add (current);
 			groups [groups.Count - 1].isLast = true;
-			ItemInfos = infos.ToArray();
+			ItemInfos = infos.ToArray ();
 			PopulateList ();
 			StartToHide ();
 		}
@@ -87,7 +86,7 @@ namespace Yuki_Theme_Plugin
 						itemGroup.separator.Alignment = ToolStripItemAlignment.Left;
 					}
 
-				foreach (string s in GetHiddenItems().GetNames())
+				foreach (string s in GetHiddenItems ().GetNames ())
 					if (s.Length > 1)
 						foreach (ToolItemGroup itemGroup in groups)
 						{
@@ -112,7 +111,7 @@ namespace Yuki_Theme_Plugin
 						}
 					}
 
-				foreach (string s in GetRightItems().GetNames())
+				foreach (string s in GetRightItems ().GetNames ())
 					if (s.Length > 1)
 						foreach (var itemGroup in groups)
 							if (itemGroup.HasItem (s))
@@ -138,59 +137,59 @@ namespace Yuki_Theme_Plugin
 			}
 		}
 
-		private TBarItemInfo[] GetHiddenItems()
+		private TBarItemInfo [] GetHiddenItems ()
 		{
-			return ItemInfos.Where(info => !info.IsVisible).ToArray();
+			return ItemInfos.Where (info => !info.IsVisible).ToArray ();
 		}
 
-		private TBarItemInfo[] GetRightItems()
+		private TBarItemInfo [] GetRightItems ()
 		{
-			return ItemInfos.Where(info => info.IsRight).ToArray();
+			return ItemInfos.Where (info => info.IsRight).ToArray ();
 		}
 
 		public void PopulateList ()
 		{
-			string data = database.ReadData (SettingsConst.CAMOUFLAGE_HIDDEN, "");
-			string[] parsed = ParseItemInfos(data);
-			ItemInfos.Where(info => parsed.Contains(info.Name)).ForEach(info => info.IsVisible = false);
+			string data = database.ReadData (SettingsConst.CAMOUFLAGE_HIDDEN);
+			string [] parsed = ParseItemInfos (data);
+			ItemInfos.Where (info => parsed.Contains (info.Name)).ForEach (info => info.IsVisible = false);
 
-			data = database.ReadData (SettingsConst.CAMOUFLAGE_POSITIONS, "");
-			parsed = ParseItemInfos(data);
-			ItemInfos.Where(info => parsed.Contains(info.Name)).ForEach(info => info.IsRight = true);
+			data = database.ReadData (SettingsConst.CAMOUFLAGE_POSITIONS);
+			parsed = ParseItemInfos (data);
+			ItemInfos.Where (info => parsed.Contains (info.Name)).ForEach (info => info.IsRight = true);
 		}
 
-		private string[] ParseItemInfos(string data)
+		private string [] ParseItemInfos (string data)
 		{
 			if (data != "")
 			{
 				if (data.Contains ("|"))
 				{
-					string[] cc = data.Split ('|');
+					string [] cc = data.Split ('|');
 					return cc;
 				} else
 				{
-					if (data != null && data.Length > 1)
-						return new string[] {data};
+					if (data is { Length: > 1 })
+						return new [] { data };
 				}
 			}
 
-			return new string[0];
+			return Array.Empty <string> ();
 		}
 
 		public void SaveData ()
 		{
 			var output = "";
-			TBarItemInfo[] itemsToHide = GetHiddenItems();
-			if (itemsToHide.Length > 0) output = CollectString (itemsToHide.GetNames());
+			TBarItemInfo [] itemsToHide = GetHiddenItems ();
+			if (itemsToHide.Length > 0) output = CollectString (itemsToHide.GetNames ());
 			database.UpdateData (SettingsConst.CAMOUFLAGE_HIDDEN, output);
 			output = "";
-			TBarItemInfo[] itemsToRight = GetHiddenItems();
-			if (itemsToRight.Length > 0) output = CollectString (itemsToRight.GetNames());
+			TBarItemInfo [] itemsToRight = GetHiddenItems ();
+			if (itemsToRight.Length > 0) output = CollectString (itemsToRight.GetNames ());
 
 			database.UpdateData (SettingsConst.CAMOUFLAGE_POSITIONS, output);
 		}
 
-		private string CollectString (string[] list)
+		private string CollectString (string [] list)
 		{
 			var outp = "";
 			foreach (var s in list) outp += $"{s}|";
@@ -201,23 +200,23 @@ namespace Yuki_Theme_Plugin
 
 		public bool IsVisible (string item)
 		{
-			return ItemInfos.First(info => info.Name == item).IsVisible;
+			return ItemInfos.First (info => info.Name == item).IsVisible;
 		}
 
 		public bool IsRight (string item)
 		{
-			return ItemInfos.First(info => info.Name == item).IsRight;
+			return ItemInfos.First (info => info.Name == item).IsRight;
 		}
 
 		public void SetVisible (string item, bool value)
 		{
-			ItemInfos.First(info => info.Name == item).IsVisible = value;
+			ItemInfos.First (info => info.Name == item).IsVisible = value;
 			StartToHide ();
 		}
 
 		public void SetRight (string item, bool value)
 		{
-			ItemInfos.First(info => info.Name == item).IsRight = value;
+			ItemInfos.First (info => info.Name == item).IsRight = value;
 			StartToHide ();
 		}
 
@@ -232,32 +231,32 @@ namespace Yuki_Theme_Plugin
 			StartToHide ();
 		}
 
-		public void Reload()
+		public void Reload ()
 		{
-			Reset();
-			PopulateList();
-			StartToHide();
+			Reset ();
+			PopulateList ();
+			StartToHide ();
 			if (!YukiTheme_VisualPascalABCPlugin.plugin.isCommonAPI)
 			{
-				YukiTheme_VisualPascalABCPlugin.plugin._client.SendMessage(new Message(MessageTypes.SET_TOOLBAR_ITEMS, ItemInfos));
+				YukiTheme_VisualPascalABCPlugin.plugin._client.SendMessage (new Message (MessageTypes.SET_TOOLBAR_ITEMS, ItemInfos));
 			}
 		}
 
-		public void SetItemVisibility(TBarItemInfo info)
+		public void SetItemVisibility (TBarItemInfo info)
 		{
-			GetItem(info).IsVisible = info.IsVisible;
-			StartToHide();
+			GetItem (info).IsVisible = info.IsVisible;
+			StartToHide ();
 		}
 
-		private TBarItemInfo GetItem(TBarItemInfo info)
+		private TBarItemInfo GetItem (TBarItemInfo info)
 		{
-			return ItemInfos.First(i => i.Name == info.Name);
+			return ItemInfos.First (i => i.Name == info.Name);
 		}
 
-		public void SetItemAlign(TBarItemInfo info)
+		public void SetItemAlign (TBarItemInfo info)
 		{
-			GetItem(info).IsRight = info.IsRight;
-			StartToHide();
+			GetItem (info).IsRight = info.IsRight;
+			StartToHide ();
 		}
 	}
 }
