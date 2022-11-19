@@ -12,6 +12,24 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="keyw" TargetType="Run">
+                <Setter Property="Foreground" Value="#7AC040" />
+            </Style>
+            <Style x:Key="meth" TargetType="Run">
+                <Setter Property="Foreground" Value="#901040" />
+            </Style>
+            <Style x:Key="type" TargetType="Run">
+                <Setter Property="Foreground" Value="#901040" />
+            </Style>
+            <Style x:Key="bget" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#8C3590" />
+            </Style>
+            <Style x:Key="bge" TargetType="Run">
+                <Setter Property="Foreground" Value="#8C3590" />
+            </Style>
+            <Style x:Key="str" TargetType="Run">
+                <Setter Property="Foreground" Value="#90841A" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -71,16 +89,34 @@
             <TextBlock Grid.Row="8" Grid.Column="0" Margin="6 0" Text="9" />
             <TextBlock Grid.Row="9" Grid.Column="0" Margin="6 0" Text="10" />
 
-            <TextBlock Grid.Row="0" Grid.Column="1" Margin="8 0" Text="function Add(x, y: integer) : integer;" />
-            <TextBlock Grid.Row="1" Grid.Column="1" Margin="8 0" Text="begin" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Margin="8 0">
+                <Run Style="{DynamicResource keyw}">function</Run>
+                <Run Style="{DynamicResource meth}">Add</Run>
+                (x, y: &#160;<Run Style="{DynamicResource type}">integer</Run>) :
+                &#160;<Run Style="{DynamicResource type}">integer</Run>;
+            </TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="1" Margin="8 0" Text="begin" Style="{DynamicResource bget}" />
             <TextBlock Grid.Row="2" Grid.Column="1" Margin="24 0 0 0" Text="result := x + y;" />
-            <TextBlock Grid.Row="3" Grid.Column="1" Margin="8 0" Text="end;" />
-            <TextBlock Grid.Row="4" Grid.Column="1" Margin="8 0" Text="var a,b : integer;" />
-            <TextBlock Grid.Row="5" Grid.Column="1" Margin="8 0" Text="begin" />
-            <TextBlock Grid.Row="6" Grid.Column="1" Margin="24 0 0 0" Text="Readln (a);" />
-            <TextBlock Grid.Row="7" Grid.Column="1" Margin="24 0 0 0" Text="Readln (b);" />
-            <TextBlock Grid.Row="8" Grid.Column="1" Margin="24 0 0 0" Text="Writeln ('Result: ' + Add (a,b));" />
-            <TextBlock Grid.Row="9" Grid.Column="1" Margin="8 0" Text="end." />
+            <TextBlock Grid.Row="3" Grid.Column="1" Margin="8 0"><Run Style="{DynamicResource bge}">end</Run>;</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="1" Margin="8 0">
+                <Run Style="{DynamicResource keyw}">var</Run>&#160; a,b : &#160;
+                <Run Style="{DynamicResource type}">integer</Run>;
+            </TextBlock>
+            <TextBlock Grid.Row="5" Grid.Column="1" Margin="8 0" Text="begin" Style="{DynamicResource bget}" />
+            <TextBlock Grid.Row="6" Grid.Column="1" Margin="24 0 0 0">
+                <Run Style="{DynamicResource meth}">Readln</Run>
+                &#160;(a);
+            </TextBlock>
+            <TextBlock Grid.Row="7" Grid.Column="1" Margin="24 0 0 0">
+                <Run Style="{DynamicResource meth}">Readln</Run>
+                &#160;(b);
+            </TextBlock>
+            <TextBlock Grid.Row="8" Grid.Column="1" Margin="24 0 0 0">
+                <Run Style="{DynamicResource meth}">Writeln</Run>
+                &#160;(<Run Style="{DynamicResource str}">'Result: '</Run>
+                &#160;+ &#160;<Run Style="{DynamicResource meth}">Add</Run>&#160;(a,b));
+            </TextBlock>
+            <TextBlock Grid.Row="9" Grid.Column="1" Margin="8 0"><Run Style="{DynamicResource bge}">end</Run>.</TextBlock>
         </Grid>
     </Grid>
 </UserControl>

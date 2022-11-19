@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows;
 using FastColoredTextBoxNS;
 using Yuki_Theme.Core.API;
+using Yuki_Theme.Core.Logger;
 using Yuki_Theme.Core.WPF.Interfaces;
 using Image = System.Drawing.Image;
 
@@ -36,6 +37,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 		internal override void InitSticker (Window window)
 		{
 			_stickerWindow = StickerWindow.CreateStickerControl (window);
+			_stickerWindow.Logger = new ConsoleLogger ();
 			_stickerWindow.Show ();
 		}
 
