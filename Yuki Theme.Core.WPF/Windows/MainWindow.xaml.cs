@@ -202,7 +202,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 			{
 				Settings.localization = lang;
 				Settings.translation.LoadLocale (lang);
-				settingsWindow.SettingsPanelControl.IconsList._controller.ReloadToolBar();
+				IToolBarController controller = settingsWindow.SettingsPanelControl.IconsList._controller;
+				if (controller != null)
+					controller.ReloadToolBar();
 			}
 			if (lang != Settings.localization)
 			{

@@ -13,277 +13,51 @@ using TextStyle = FastColoredTextBoxNS.TextStyle;
 
 namespace Yuki_Theme.Core
 {
-	internal class EllipseStyle : Style
+
+	public class Highlighter : HighlighterBase
 	{
-		public override void Draw (Graphics gr, Point position, Range range)
+		private Dictionary<string, ThemeField> localAttributes => API.CentralAPI.Current.currentTheme.Fields;
+
+		private FastColoredTextBox sBox;
+		
+		public Highlighter()
 		{
-			//get size of rectangle
-			var size = GetSizeOfRange (range);
-			//create rectangle
-			var rect = new Rectangle (position, size);
-			//inflate it
-			rect.Inflate (2, 2);
-			//get rounded rectangle
-			var path = GetRoundedRectangle (rect, 10);
-			//draw rounded rectangle
-			gr.DrawPath (Pens.Red, path);
+			
 		}
-	}
-
-	public class Highlighter
-	{
-		#region FSTB Fields
-
-		protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform ();
-
-		//styles
-
-		private Dictionary <string, ThemeField> localAttributes => API.CentralAPI.Current.currentTheme.Fields;
-
-		private       Dictionary <string, Regex>     regexes;
-		public static Dictionary <string, TextStyle> styles;
-
-
-		private Regex currentRegex;
-
-		private EllipseStyle ellipseStyle = new EllipseStyle ();
-
-		public static RegexOptions RegexCompiledOption
-		{
-			get
-			{
-				if (platformType == Platform.X86)
-					return RegexOptions.Compiled;
-				return RegexOptions.None;
-			}
-		}
-
-		public FastColoredTextBox sBox;
-
-		#endregion
-
+		
 		public Highlighter (FastColoredTextBox fs)
 		{
 			sBox = fs;
-			sBox.Clear ();
+			Init();
+		}
+
+		private void Init()
+		{
+			sBox.Clear();
 			sBox.TextChanged += PascalSyntaxHighlight;
 		}
 
 		public void UpdateColors ()
 		{
-			if (styles == null)
-				InitStyles ();
-			bool isLight = Settings.settingMode == SettingMode.Light;
-			foreach (KeyValuePair <string, ThemeField> style in localAttributes)
-			{
-				if (HighlitherUtil.IsInColors (style.Key))
-				{
-					string [] key = new string [] { style.Key.ToLower () };
-					if (isLight)
-						key = ShadowNames.PascalFields [style.Key];
-					foreach (string ki in key)
-					{
-						string kilow = ki.ToLower ();
-
-						if (style.Value.Foreground != null)
-							styles [kilow].ForeBrush = new SolidBrush (Parse (style.Value.Foreground));
-
-						if (style.Value.Background != null)
-							styles [kilow].BackgroundBrush = new SolidBrush (Parse (style.Value.Background));
-
-						if (style.Value.Bold != null)
-						{
-							styles [kilow].FontStyle = collectFontStyle (style.Value);
-						}
-
-						if (kilow == "keywords" || kilow == "keyword")
-						{
-							ColorKeeper.fgKeyword = Parse (style.Value.Foreground);
-						}
-					}
-
-				} else
-				{
-					switch (style.Key)
-					{
-						case "Default" :
-						case "Default Text" :
-						{
-							sBox.BackColor = Parse (style.Value.Background);
-							sBox.ForeColor = Parse (style.Value.Foreground);
-							ColorKeeper.bgdefColor = sBox.BackColor;
-							ColorKeeper.bgColor = Helper.DarkerOrLighter (sBox.BackColor, 0.05f);
-							ColorKeeper.fgColor = Helper.DarkerOrLighter (sBox.ForeColor, 0.2f);
-							ColorKeeper.bgClick = Helper.DarkerOrLighter (sBox.BackColor, 0.25f);
-							ColorKeeper.fgHover = Helper.DarkerOrLighter (sBox.ForeColor, 0.4f);
-						}
-							break;
-						case "Selection" :
-						{
-							ColorKeeper.selectionColor = Parse (style.Value.Background);
-							sBox.SelectionColor = Color.FromArgb (100, ColorKeeper.selectionColor);
-						}
-							break;
-						case "VRuler" :
-						case "Vertical Ruler" :
-						{
-							sBox.ServiceLinesColor = Parse (style.Value.Foreground);
-						}
-							break;
-						case "CaretMarker" :
-						case "Caret" :
-						{
-							sBox.CaretColor = Parse (style.Value.Foreground);
-							ColorKeeper.bgBorder = sBox.CaretColor;
-						}
-							break;
-						case "LineNumbers" :
-						case "Line Number" :
-						{
-							sBox.LineNumberColor = Parse (style.Value.Foreground);
-							sBox.IndentBackColor = Parse (style.Value.Background);
-							sBox.PaddingBackColor = Parse (style.Value.Background);
-						}
-							break;
-						case "FoldMarker" :
-						case "Fold's Rectangle" :
-						{
-							sBox.ServiceColors.CollapseMarkerForeColor = Parse (style.Value.Foreground);
-							sBox.ServiceColors.ExpandMarkerForeColor = Parse (style.Value.Foreground);
-							sBox.ServiceColors.CollapseMarkerBackColor = Parse (style.Value.Background);
-							sBox.ServiceColors.ExpandMarkerBackColor = Parse (style.Value.Background);
-						}
-							break;
-						case "SelectedFoldLine" :
-						case "Selected Fold's Line" :
-						{
-							sBox.ServiceColors.SelectedMarkerBorderColor = Parse (style.Value.Foreground);
-						}
-							break;
-						case "Other Marker" :
-						case "EOLMarkers" :
-						{
-							sBox.BracketsStyle.BackgroundBrush = new SolidBrush (Color.FromArgb (100, Parse (style.Value.Foreground)));
-						}
-							break;
-					}
-				}
-			}
-
-			sBox.Refresh ();
-		}
-
-		private void InitPascalRegex ()
-		{
-			regexes = new Dictionary <string, Regex> ();
-			regexes.Add ("string", new Regex (@"''|'.*?[^\\]'", RegexCompiledOption));
-			regexes.Add ("linecomment", new Regex (@"//.*$", RegexOptions.Multiline | RegexCompiledOption));
-			regexes.Add ("linebigcomment", new Regex (@"////.*$", RegexOptions.Multiline | RegexCompiledOption));
-			regexes.Add ("blockcomment", new Regex (@"({.*})", RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption));
-			regexes.Add ("blockcomment2", new Regex (@"(\(\*.*?\*\))|(.*\*\))",
-			                                         RegexOptions.Singleline | RegexOptions.RightToLeft |
-			                                         RegexCompiledOption));
-			regexes.Add ("digits", new Regex (@"\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b",
-			                                  RegexCompiledOption));
-			regexes.Add ("beginend", new Regex (@"\b(?i)(begin|end)\b", RegexOptions.Singleline | RegexCompiledOption));
-			regexes.Add ("markprevious", new Regex (@"\w+(?=\()", RegexOptions.Singleline | RegexCompiledOption));
-			regexes.Add ("keywords", new Regex (
-				             @"\b(?i)(external|in|array|sequence|yield|auto|static|template|sealed|partial|const|lock|constructor|destructor|downto|file|loop|function|inherited|procedure|operator|property|record|repeat|set|type|then|to|until|uses|var|event|while|params|with|of|label|implicit|explicit|initialization|finalization|where|match|when)\b",
-				             RegexCompiledOption));
-			regexes.Add ("programsections", new Regex (
-				             @"\b(?i)(unit|library|namespace|program|interface|implementation)\b",
-				             RegexCompiledOption));
-			regexes.Add ("punctuation", new Regex (@"[*,.;+-/()<>^&]|(<=)|(>=)|(\[)|(\])", RegexCompiledOption));
-			regexes.Add ("nonreserved1", new Regex (@"\b(?i)(self|result|value)\b", RegexCompiledOption));
-			regexes.Add ("async", new Regex (@"\b(?i)(async|asyncparam)\b", RegexCompiledOption));
-			regexes.Add ("operatorkeywords",
-			             new Regex (@"\b(?i)(or|xor|and|div|mod|shl|shr|not|as|is|new|sizeof|typeof)\b",
-			                        RegexCompiledOption));
-			regexes.Add ("selectionstatements", new Regex (@"\b(?i)(else|if|case)\b", RegexCompiledOption));
-			regexes.Add ("iterationstatements", new Regex (@"\b(?i)(do|for|foreach)\b", RegexCompiledOption));
-			regexes.Add ("exceptionhandlingstatements",
-			             new Regex (@"\b(?i)(except|on|try|finally)\b", RegexCompiledOption));
-			regexes.Add ("raisestatement", new Regex (@"\b(?i)(raise)\b", RegexCompiledOption));
-			regexes.Add ("jumpstatements", new Regex (@"\b(?i)(goto)\b", RegexCompiledOption));
-			regexes.Add ("jumpprocedures", new Regex (@"\b(?i)(break|exit|continue)\b", RegexCompiledOption));
-			regexes.Add ("internalconstant", new Regex (@"\b(?i)(true|false|nill)\b", RegexCompiledOption));
-			regexes.Add ("internaltypes",
-			             new Regex (
-				             @"\b(?i)(boolean|byte|shortint|smallint|word|integer|BigInteger|longword|uint64|cardinal|int64|single|longint|string|char|real|double|pointer|object|decimal)\b",
-				             RegexCompiledOption));
-			regexes.Add ("referencetypes", new Regex (@"\b(?i)(class|interface)\b", RegexCompiledOption));
-			regexes.Add ("modifiers",
-			             new Regex (
-				             @"\b(?i)(abstract|overload|reintroduce|override|extensionmethod|virtual|default|forward)\b",
-				             RegexCompiledOption));
-			regexes.Add ("accessmodifiers",
-			             new Regex (@"\b(?i)(internal|public|protected|private)\b", RegexCompiledOption));
-			regexes.Add ("accesskeywords1",
-			             new Regex (@"\b(?i)(inherited)\b", RegexCompiledOption));
-			regexes.Add ("errorwords", new Regex (@"\b(?i)(TODO|FIXME)\b", RegexCompiledOption));
-			regexes.Add ("warningwords", new Regex (@"\b(?i)(HACK|UNDONE)\b", RegexCompiledOption));
-			regexes.Add ("direcivenames",
-			             new Regex (
-				             @"\b(?i)(apptype|resource|reference|version|product|company|copyright|trademark|mainresource|NullBasedStrings|gendoc)\b",
-				             RegexCompiledOption));
-			regexes.Add ("specialdirecivenames", new Regex (@"\b(?i)(savepcu)\b", RegexCompiledOption));
-			regexes.Add ("direcivevalues", new Regex (@"\s(?i)(console|windows|dll|pcu)\b", RegexCompiledOption));
-		}
-
-		public static void InitStyles ()
-		{
-			styles = new Dictionary <string, TextStyle>
-			{
-				{ "string", new TextStyle (DarkRed, null, FontStyle.Regular) },
-				{ "digits", new TextStyle (Blue, null, FontStyle.Regular) },
-				{ "linebigcomment", new TextStyle (Green, null, FontStyle.Regular) },
-				{ "linecomment", new TextStyle (Green, null, FontStyle.Regular) },
-				{ "blockcomment", new TextStyle (Green, null, FontStyle.Regular) },
-				{ "blockcomment2", new TextStyle (Green, null, FontStyle.Regular) },
-				{ "beginend", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "markprevious", new TextStyle (Red, null, FontStyle.Regular) },
-				{ "keywords", new TextStyle (PowderBlue, null, FontStyle.Bold) },
-				{ "programsections", new TextStyle (PowderBlue, null, FontStyle.Bold) },
-				{ "punctuation", new TextStyle (Red, null, FontStyle.Regular) },
-				{ "nonreserved1", new TextStyle (PowderBlue, null, FontStyle.Regular) },
-				{ "async", new TextStyle (PowderBlue, null, FontStyle.Regular) },
-				{ "operatorkeywords", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "selectionstatements", new TextStyle (Gray, null, FontStyle.Bold) },
-				{ "iterationstatements", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "exceptionhandlingstatements", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "raisestatement", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "jumpstatements", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "jumpprocedures", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "internalconstant", new TextStyle (Red, null, FontStyle.Regular) },
-				{ "internaltypes", new TextStyle (Red, null, FontStyle.Regular) },
-				{ "referencetypes", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "modifiers", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "accessmodifiers", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "accesskeywords1", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "errorwords", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "warningwords", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "direcivenames", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "specialdirecivenames", new TextStyle (Red, null, FontStyle.Bold) },
-				{ "direcivevalues", new TextStyle (Red, null, FontStyle.Regular) }
-			};
+			UpdateColors(sBox, localAttributes, ref _styles);
 		}
 
 		private void LaunchMarker ()
 		{
 			sBox.Range.ClearStyle (ellipseStyle);
 
-			if (currentRegex != null)
+			if (_currentRegex != null)
 			{
-				sBox.Range.SetStyle (ellipseStyle, currentRegex);
+				sBox.Range.SetStyle (ellipseStyle, _currentRegex);
 			}
 		}
 
-		public void activateColors (string str)
+		public void ActivateColors (string str)
 		{
-			currentRegex = null;
-			if (regexes == null)
+			_currentRegex = null;
+			if (_regexes == null)
 				InitPascalRegex ();
-			if (regexes.ContainsKey (str.ToLower ()) || Settings.settingMode == SettingMode.Light)
+			if (_regexes.ContainsKey (str.ToLower ()) || Settings.settingMode == SettingMode.Light)
 			{
 				if (Settings.settingMode == SettingMode.Light)
 				{
@@ -295,29 +69,29 @@ namespace Yuki_Theme.Core
 
 						foreach (string dependency in srt)
 						{
-							if (regexes.ContainsKey (dependency.ToLower ()))
+							if (_regexes.ContainsKey (dependency.ToLower ()))
 							{
 								if (ik == 0)
 								{
-									rgx = $"{regexes [dependency.ToLower ()]}";
+									rgx = $"{_regexes [dependency.ToLower ()]}";
 									ik++;
 								} else if (!Populater.IsEnvironmentColor (dependency))
 								{
-									rgx += $"|{regexes [dependency.ToLower ()]}";
+									rgx += $"|{_regexes [dependency.ToLower ()]}";
 								}
 							}
 						}
 
-						currentRegex = new Regex (rgx, RegexOptions.Multiline | RegexCompiledOption);
+						_currentRegex = new Regex (rgx, RegexOptions.Multiline | RegexCompiledOption);
 					} else
-						currentRegex = regexes [str.ToLower ()];
+						_currentRegex = _regexes [str.ToLower ()];
 				} else
-					currentRegex = regexes [str.ToLower ()];
+					_currentRegex = _regexes [str.ToLower ()];
 			}
 
-			if (currentRegex != null)
+			if (_currentRegex != null)
 			{
-				List <int> sl = sBox.FindLines (currentRegex.ToString (), RegexOptions.Compiled);
+				List <int> sl = sBox.FindLines (_currentRegex.ToString (), RegexOptions.Compiled);
 				if (sl != null && sl.Count > 0)
 				{
 					int ms = (sBox.VisibleRange.ToLine - sBox.VisibleRange.FromLine) / 2;
@@ -336,18 +110,18 @@ namespace Yuki_Theme.Core
 			sBox.RightBracket = ')';
 			//clear style of changed range
 
-			if (styles == null)
-				InitStyles ();
-			TextStyle [] tstyles = new TextStyle [styles.Count];
-			styles.Values.CopyTo (tstyles, 0);
+			if (_styles == null)
+				InitStyles (ref _styles);
+			TextStyle [] tstyles = new TextStyle [_styles.Count];
+			_styles.Values.CopyTo (tstyles, 0);
 			e.ChangedRange.ClearStyle (tstyles);
 
-			if (regexes == null)
+			if (_regexes == null)
 				InitPascalRegex ();
 
 			foreach (string name in HighlitherUtil.names)
 			{
-				e.ChangedRange.SetStyle (styles [name], regexes [name]);
+				e.ChangedRange.SetStyle (_styles [name], _regexes [name]);
 			}
 
 			//clear folding markers
@@ -358,40 +132,7 @@ namespace Yuki_Theme.Core
 
 		public void InitializeSyntax ()
 		{
-			sBox.Text = Settings.editorSavedFile == "null" ? Placeholder.place : Settings.editorSavedFile;
-
-			UpdateColors ();
-		}
-
-		private Color Parse (string str)
-		{
-			return ColorTranslator.FromHtml (str);
-		}
-
-		private string Translate (Color clr)
-		{
-			return ColorTranslator.ToHtml (clr);
-		}
-
-
-		private FontStyle addFontStyle (FontStyle font, FontStyle f2, bool ts)
-		{
-			if (ts)
-			{
-				if (font != FontStyle.Regular)
-					return font | f2;
-				else
-					return f2;
-			} else
-				return font;
-		}
-
-		private FontStyle collectFontStyle (ThemeField val)
-		{
-			FontStyle font = FontStyle.Regular;
-			font = addFontStyle (font, FontStyle.Bold, (bool)val.Bold);
-			font = addFontStyle (font, FontStyle.Italic, (bool)val.Italic);
-			return font;
+			InitializeSyntax(sBox, localAttributes);
 		}
 	}
 }

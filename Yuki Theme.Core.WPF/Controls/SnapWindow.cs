@@ -275,7 +275,14 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public void SetOwner (Window parent)
 		{
 			target = parent;
-			Owner = parent;
+			try
+			{
+				Owner = parent;
+			}
+			catch (InvalidOperationException e)
+			{
+				Console.WriteLine(e);
+			}
 		}
 
 		public void SetOwner (Form parent)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Windows"
         xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
         mc:Ignorable="d"
-        Title="ThemeDownloaderWindow" Height="500" Width="600">
+        Title="ThemeDownloaderWindow" Height="500" Width="840" MinWidth="700" MinHeight="400">
     <Window.Tag>
         <controls:StyleConfig BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F"
                               BorderBrush="#97A0A5"
@@ -15,11 +15,14 @@
                               BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <UniformGrid Columns="2" MaxWidth="1250" VerticalAlignment="Top">
-            <controls:ThemePreview Height="300" MaxWidth="600" Margin="2" />
-            <controls:ThemePreview Height="300" MaxWidth="600" Margin="2" />
-            <controls:ThemePreview Height="300" MaxWidth="600" Margin="2" />
-            <controls:ThemePreview Height="300" MaxWidth="600" Margin="2" />
+        <UniformGrid Columns="2" MaxWidth="1250" VerticalAlignment="Top" Name="Previews">
+            <UniformGrid.Resources>
+                <Style TargetType="controls:ThemePreview">
+                    <Setter Property="Height" Value="300" />
+                    <Setter Property="MaxWidth" Value="600" />
+                    <Setter Property="Margin" Value="2" />
+                </Style>
+            </UniformGrid.Resources>
         </UniformGrid>
     </ScrollViewer>
 </Window>

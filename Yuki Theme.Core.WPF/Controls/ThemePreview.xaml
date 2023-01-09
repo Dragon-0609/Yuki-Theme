@@ -12,24 +12,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="keyw" TargetType="Run">
-                <Setter Property="Foreground" Value="#7AC040" />
-            </Style>
-            <Style x:Key="meth" TargetType="Run">
-                <Setter Property="Foreground" Value="#901040" />
-            </Style>
-            <Style x:Key="type" TargetType="Run">
-                <Setter Property="Foreground" Value="#901040" />
-            </Style>
-            <Style x:Key="bget" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="#8C3590" />
-            </Style>
-            <Style x:Key="bge" TargetType="Run">
-                <Setter Property="Foreground" Value="#8C3590" />
-            </Style>
-            <Style x:Key="str" TargetType="Run">
-                <Setter Property="Foreground" Value="#90841A" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -44,7 +26,7 @@
                 Konosuba
             </TextBlock>
         </Border>
-        <Border Grid.Row="1" BorderBrush="White" BorderThickness="1 0 1 1" Background="DimGray">
+        <Border Grid.Row="1" BorderBrush="White" BorderThickness="1 0 1 1" Background="DimGray" Name="Strip">
             <WrapPanel>
                 <TextBlock Name="ActiveTab" Background="Gray" FontWeight="Bold"
                            Style="{StaticResource GenericThemeTextBlock}">
@@ -55,68 +37,6 @@
                 </TextBlock>
             </WrapPanel>
         </Border>
-        <Grid Grid.Row="2" Background="Black" Name="EditorPanel">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <Line Grid.Column="0" Grid.Row="0" Grid.RowSpan="10" Stroke="White" StrokeThickness="1" X1="24" X2="24"
-                  Y1="0" Y2="{Binding ElementName=ParentControl, Path=Height}" StrokeDashArray="1,2" />
-
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="6 0" Text="1" />
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="6 0" Text="2" />
-            <TextBlock Grid.Row="2" Grid.Column="0" Margin="6 0" Text="3" />
-            <TextBlock Grid.Row="3" Grid.Column="0" Margin="6 0" Text="4" />
-            <TextBlock Grid.Row="4" Grid.Column="0" Margin="6 0" Text="5" />
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="6 0" Text="6" />
-            <TextBlock Grid.Row="6" Grid.Column="0" Margin="6 0" Text="7" />
-            <TextBlock Grid.Row="7" Grid.Column="0" Margin="6 0" Text="8" />
-            <TextBlock Grid.Row="8" Grid.Column="0" Margin="6 0" Text="9" />
-            <TextBlock Grid.Row="9" Grid.Column="0" Margin="6 0" Text="10" />
-
-            <TextBlock Grid.Row="0" Grid.Column="1" Margin="8 0">
-                <Run Style="{DynamicResource keyw}">function</Run>
-                <Run Style="{DynamicResource meth}">Add</Run>
-                (x, y: &#160;<Run Style="{DynamicResource type}">integer</Run>) :
-                &#160;<Run Style="{DynamicResource type}">integer</Run>;
-            </TextBlock>
-            <TextBlock Grid.Row="1" Grid.Column="1" Margin="8 0" Text="begin" Style="{DynamicResource bget}" />
-            <TextBlock Grid.Row="2" Grid.Column="1" Margin="24 0 0 0" Text="result := x + y;" />
-            <TextBlock Grid.Row="3" Grid.Column="1" Margin="8 0"><Run Style="{DynamicResource bge}">end</Run>;</TextBlock>
-            <TextBlock Grid.Row="4" Grid.Column="1" Margin="8 0">
-                <Run Style="{DynamicResource keyw}">var</Run>&#160; a,b : &#160;
-                <Run Style="{DynamicResource type}">integer</Run>;
-            </TextBlock>
-            <TextBlock Grid.Row="5" Grid.Column="1" Margin="8 0" Text="begin" Style="{DynamicResource bget}" />
-            <TextBlock Grid.Row="6" Grid.Column="1" Margin="24 0 0 0">
-                <Run Style="{DynamicResource meth}">Readln</Run>
-                &#160;(a);
-            </TextBlock>
-            <TextBlock Grid.Row="7" Grid.Column="1" Margin="24 0 0 0">
-                <Run Style="{DynamicResource meth}">Readln</Run>
-                &#160;(b);
-            </TextBlock>
-            <TextBlock Grid.Row="8" Grid.Column="1" Margin="24 0 0 0">
-                <Run Style="{DynamicResource meth}">Writeln</Run>
-                &#160;(<Run Style="{DynamicResource str}">'Result: '</Run>
-                &#160;+ &#160;<Run Style="{DynamicResource meth}">Add</Run>&#160;(a,b));
-            </TextBlock>
-            <TextBlock Grid.Row="9" Grid.Column="1" Margin="8 0"><Run Style="{DynamicResource bge}">end</Run>.</TextBlock>
-        </Grid>
+        <local:CodeTextboxHost x:Name="Fstb" Grid.Row="2"></local:CodeTextboxHost>
     </Grid>
 </UserControl>

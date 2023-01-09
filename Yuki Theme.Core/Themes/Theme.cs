@@ -1,4 +1,5 @@
 ﻿// #define CONSOLE_LOGS_ACTIVE
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,66 +12,61 @@ namespace Yuki_Theme.Core.Themes
 {
 	public class Theme
 	{
-		[JsonProperty ("name")]
-		public string Name { get; set; }
+		[JsonProperty("name")] public string Name { get; set; }
 
-		[JsonProperty ("group")]
-		public string Group { get; set; }
+		[JsonProperty("group")] public string Group { get; set; }
 
-		[JsonProperty ("version")]
-		public int Version { get; set; }
+		[JsonProperty("version")] public int Version { get; set; }
 
-		[JsonProperty ("hasWallpaper")]
-		public bool HasWallpaper { get; set; }
+		[JsonProperty("hasWallpaper")] public bool HasWallpaper { get; set; }
 
-		[JsonProperty ("hasSticker")]
-		public bool HasSticker { get; set; }
+		[JsonProperty("hasSticker")] public bool HasSticker { get; set; }
 
-		[JsonProperty ("wallpaperOpacity")]
-		public int WallpaperOpacity { get; set; }
+		[JsonProperty("wallpaperOpacity")] public int WallpaperOpacity { get; set; }
 
-		[JsonProperty ("wallpaperAlign")]
-		public int WallpaperAlign { get; set; }
+		[JsonProperty("wallpaperAlign")] public int WallpaperAlign { get; set; }
 
-		[JsonProperty ("stickerOpacity")]
-		public int StickerOpacity { get; set; }
+		[JsonProperty("stickerOpacity")] public int StickerOpacity { get; set; }
 
-		[DefaultValue ("null")]
-		[JsonProperty ("token", DefaultValueHandling = DefaultValueHandling.Populate)]
+		[DefaultValue("null")]
+		[JsonProperty("token", DefaultValueHandling = DefaultValueHandling.Populate)]
 		public string Token { get; set; }
 
-		[JsonProperty ("fields")]
-		public Dictionary <string, ThemeField> Fields { get; set; }
+		[JsonProperty("fields")] public Dictionary<string, ThemeField> Fields { get; set; }
 
-		[JsonIgnore]
-		public bool isDefault;
+		[JsonIgnore] public bool isDefault;
 
-		[JsonIgnore]
-		public string path;
+		[JsonIgnore] public string path;
 
-		[JsonIgnore]
-		public string fullPath;
+		[JsonIgnore] public string fullPath;
 
 		/// <summary>
 		/// Used for Downloading
 		/// </summary>
-		[JsonIgnore]
-		public string imagePath;
+		[JsonIgnore] public string imagePath;
 
 		/// <summary>
 		/// Used for Downloading
 		/// </summary>
-		[JsonIgnore]
-		public string link;
+		[JsonIgnore] public string link;
 
-		[JsonIgnore]
-		public Alignment align => (Alignment)WallpaperAlign;
+		[JsonIgnore] public Alignment align => (Alignment)WallpaperAlign;
 
 
-		[JsonIgnore]
-		public bool IsOld => API.CentralAPI.Current.ThemeInfos [Name].isOld;
+		[JsonIgnore] public bool IsOld => API.CentralAPI.Current.ThemeInfos[Name].isOld;
 
-		public static bool operator == (Theme t1, Theme t2)
+		public ThemeField GetDefaultColors()
+		{
+			string key = "Default";
+			if (Fields.ContainsKey(key))
+				return Fields[key];
+			key = "Default Text";
+			if (Fields.ContainsKey(key))
+				return Fields[key];
+			return new ThemeField();
+		}
+
+		public static bool operator ==(Theme t1, Theme t2)
 		{
 			if (t1 is null)
 				return t2 is null;
@@ -105,25 +101,25 @@ namespace Yuki_Theme.Core.Themes
 
 			if (isEqual)
 			{
-				isEqual = t1.Fields.ContentEquals (t2.Fields);
+				isEqual = t1.Fields.ContentEquals(t2.Fields);
 			}
 
 			return isEqual;
 		}
 
-		public static bool operator != (Theme t1, Theme t2)
+		public static bool operator !=(Theme t1, Theme t2)
 		{
 			return !(t1 == t2);
 		}
 
-		public override bool Equals (object obj)
+		public override bool Equals(object obj)
 		{
 			return this == (Theme)obj;
 		}
 
-		public void ParseWallpaperAlign (string target)
+		public void ParseWallpaperAlign(string target)
 		{
-			target = target.ToLower ();
+			target = target.ToLower();
 #if CONSOLE_LOGS_ACTIVE
 			Console.WriteLine ("ALIGN: {0}", target);
 #endif
@@ -135,32 +131,32 @@ namespace Yuki_Theme.Core.Themes
 
 	public static class ThemeFunctions
 	{
-		public static bool IsZip (this Theme theme)
+		public static bool IsZip(this Theme theme)
 		{
 			return theme.HasWallpaper || theme.HasWallpaper;
 		}
 
-		public static Theme LoadDefault ()
+		public static Theme LoadDefault()
 		{
-			Theme theme = new Theme ();
+			Theme theme = new Theme();
 			theme.WallpaperAlign = 1;
 			theme.StickerOpacity = 100;
 			theme.WallpaperOpacity = 15;
 			return theme;
 		}
 
-		public static void SetAdditionalInfo (this Theme theme, Dictionary <string, string> additionalInfo)
+		public static void SetAdditionalInfo(this Theme theme, Dictionary<string, string> additionalInfo)
 		{
-			theme.WallpaperAlign = int.Parse (additionalInfo ["align"]);
-			theme.WallpaperOpacity = int.Parse (additionalInfo ["opacity"]);
-			theme.StickerOpacity = int.Parse (additionalInfo ["stickerOpacity"]);
-			theme.Token = additionalInfo ["token"];
-			if (additionalInfo.ContainsKey ("group"))
-				theme.Group = additionalInfo ["group"];
+			theme.WallpaperAlign = int.Parse(additionalInfo["align"]);
+			theme.WallpaperOpacity = int.Parse(additionalInfo["opacity"]);
+			theme.StickerOpacity = int.Parse(additionalInfo["stickerOpacity"]);
+			theme.Token = additionalInfo["token"];
+			if (additionalInfo.ContainsKey("group"))
+				theme.Group = additionalInfo["group"];
 		}
 
-		public static bool ContentEquals (this Dictionary <string, ThemeField> dictionary,
-		                                  Dictionary <string, ThemeField>      otherDictionary)
+		public static bool ContentEquals(this Dictionary<string, ThemeField> dictionary,
+			Dictionary<string, ThemeField> otherDictionary)
 		{
 			bool equality = true;
 
@@ -169,29 +165,31 @@ namespace Yuki_Theme.Core.Themes
 			{
 				Console.WriteLine ("FIRST: {0} => {1}", pair.Key, pair.Value);
 			}*/
-			Dictionary <string, ThemeField> localDictionary;
+			Dictionary<string, ThemeField> localDictionary;
 			if (Settings.settingMode == SettingMode.Light)
 			{
-				localDictionary = new Dictionary <string, ThemeField> ();
-				foreach (KeyValuePair <string, ThemeField> pair in dictionary)
+				localDictionary = new Dictionary<string, ThemeField>();
+				foreach (KeyValuePair<string, ThemeField> pair in dictionary)
 				{
-					string shadowName = ShadowNames.GetShadowName (pair.Key, SyntaxType.Pascal, true);
-					if (!localDictionary.ContainsKey (shadowName))
+					string shadowName = ShadowNames.GetShadowName(pair.Key, SyntaxType.Pascal, true);
+					if (!localDictionary.ContainsKey(shadowName))
 					{
-						localDictionary.Add (shadowName, pair.Value);
+						localDictionary.Add(shadowName, pair.Value);
 					}
 				}
-			} else
+			}
+			else
 			{
 				localDictionary = dictionary;
 			}
 
-			foreach (KeyValuePair <string, ThemeField> pair in localDictionary)
+			foreach (KeyValuePair<string, ThemeField> pair in localDictionary)
 			{
-				if (otherDictionary.ContainsKey (pair.Key))
+				if (otherDictionary.ContainsKey(pair.Key))
 				{
-					equality = pair.Value.IsEqual (otherDictionary [pair.Key]);
-				} else
+					equality = pair.Value.IsEqual(otherDictionary[pair.Key]);
+				}
+				else
 				{
 					equality = false;
 				}

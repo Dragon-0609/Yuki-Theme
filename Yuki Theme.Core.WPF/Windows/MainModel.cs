@@ -88,7 +88,7 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 		internal override void ActivateSyntaxColors (string item)
 		{
-			highlighter.activateColors (item);
+			highlighter.ActivateColors (item);
 		}
 
 		#endregion
