@@ -7,11 +7,19 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" Foreground="White" Name="ParentControl"
              d:DesignWidth="400" d:DesignHeight="200">
+    <UserControl.Tag>
+        <local:StyleConfig BorderColor="#FF994499" SelectionColor="#FF4F4F4F" KeywordColor="#FF4F4F4F"
+                           BorderBrush="#FF994499"
+                           SelectionBrush="#FF4F4F4F" KeywordBrush="#FF4F4F4F" BackgroundClickColor="#FF4F4F4F"
+                           BackgroundClickBrush="#FF4F4F4F" />
+    </UserControl.Tag>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Yuki Theme.Core.WPF;component/Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="/Yuki Theme.Core.WPF;component/Styles/ButtonStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="DownloadImage" UriSource="" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -20,6 +28,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border BorderBrush="White" BorderThickness="1">
             <TextBlock Background="Gray" Name="ThemeName" Style="{StaticResource GenericThemeTextBlock}">
@@ -38,5 +47,16 @@
             </WrapPanel>
         </Border>
         <local:CodeTextboxHost x:Name="Fstb" Grid.Row="2"></local:CodeTextboxHost>
+
+        <Border Grid.Row="3" BorderBrush="White" BorderThickness="1 0 1 1" Background="DimGray" Name="BottomStrip">
+            <WrapPanel HorizontalAlignment="Right">
+                <Button VerticalAlignment="Center" Width="22" Height="22" Margin="0 10 6 15"
+                        Style="{StaticResource ButtonUserControl}" BorderThickness="0" Click="StartDownloading">
+                    <Image Width="20" Height="20" Source="{DynamicResource DownloadImage}" />
+                </Button>
+
+
+            </WrapPanel>
+        </Border>
     </Grid>
 </UserControl>

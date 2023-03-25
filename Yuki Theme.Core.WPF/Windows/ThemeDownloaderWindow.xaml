@@ -14,7 +14,7 @@
                               BackgroundClickBrush="#4F4F4F"
                               BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
     </Window.Tag>
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer Name="Viewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <UniformGrid Columns="2" MaxWidth="1250" VerticalAlignment="Top" Name="Previews">
             <UniformGrid.Resources>
                 <Style TargetType="controls:ThemePreview">

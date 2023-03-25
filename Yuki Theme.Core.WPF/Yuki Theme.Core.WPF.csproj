@@ -215,6 +215,7 @@
         <Compile Include="Windows\UpdateDownloaderWindow.xaml.cs">
           <DependentUpon>UpdateDownloaderWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="WPFColorConverter.cs" />
         <Compile Include="WPFHelper.cs" />
         <Page Include="Controls\ColorPicker\ColorPicker.xaml" />
         <Page Include="Controls\ColorPicker\ColorPickerWindow.xaml" />

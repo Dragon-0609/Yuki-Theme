@@ -21,7 +21,8 @@
                                     Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.BackgroundClickBrush, TargetNullValue=Red, FallbackValue=Red}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
+                            <Setter Property="Foreground"
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -51,7 +52,8 @@
                                     Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.BackgroundClickBrush, TargetNullValue=Red, FallbackValue=Red}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
+                            <Setter Property="Foreground"
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -77,7 +79,8 @@
                                     Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.BackgroundClickBrush, TargetNullValue=Red, FallbackValue=Red}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
+                            <Setter Property="Foreground"
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -156,5 +159,5 @@
         <Setter Property="ToolTipService.ShowDuration" Value="5000" />
         <Setter Property="ToolTipService.InitialShowDelay" Value="750" />
     </Style>
-    
+
 </ResourceDictionary>
