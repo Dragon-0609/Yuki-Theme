@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using YukiTheme;
-using YukiTheme.Engine;
 
-namespace Yuki_Theme.Core.Database
+namespace YukiTheme.Tools
 {
 	internal class FileDatabase
 	{

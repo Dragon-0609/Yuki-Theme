@@ -6,7 +6,7 @@ using YukiTheme.Style.Controls;
 using YukiTheme.Tools;
 using Point = System.Windows.Point;
 
-namespace Yuki_Theme.Core.WPF.Windows
+namespace YukiTheme.Style.Helpers
 {
 	public class PositionCalculator
 	{

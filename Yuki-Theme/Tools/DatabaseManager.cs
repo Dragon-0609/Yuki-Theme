@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Yuki_Theme.Core.Database;
-using Yuki_Theme.Core.Utils;
+using YukiTheme.Style.Helpers;
 
 namespace YukiTheme.Tools
 {

@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{5F9850DC-77D2-4738-9B06-A45EE54376F1}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>YukiTheme</RootNamespace>
+        <AssemblyName>YukiTheme</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="ICSharpCode.Core">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="ICSharpCode.Core.WinForms">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.WinForms.dll</HintPath>
+        </Reference>
+        <Reference Include="ICSharpCode.TextEditor">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
+        </Reference>
+        <Reference Include="PascalABCNET">
+            <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
+        </Reference>
+        <Reference Include="PluginsSupport">
+            <HintPath>..\..\PascalABCNET\bin\PluginsSupport.dll</HintPath>
+        </Reference>
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
+        <Reference Include="System" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Drawing" />
+        <Reference Include="System.Windows.Forms" />
+        <Reference Include="System.Xaml" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="WeifenLuo.WinFormsUI.Docking">
+            <HintPath>..\..\PascalABCNET\bin\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+        </Reference>
+        <Reference Include="WindowsBase" />
+        <Reference Include="WindowsFormsIntegration" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Engine\ColorChanger.cs" />
+        <Compile Include="Engine\ColorReference.cs" />
+        <Compile Include="Engine\DataManager.cs" />
+        <Compile Include="Engine\EditorAlterer.cs" />
+        <Compile Include="Engine\GridManager.cs" />
+        <Compile Include="Engine\IDEAlterer.cs" />
+        <Compile Include="Engine\ImageChanger.cs" />
+        <Compile Include="Engine\OptionsChanger.cs" />
+        <Compile Include="Engine\StickerManager.cs" />
+        <Compile Include="Engine\TextEditorChanger.cs" />
+        <Compile Include="Engine\WallpaperManager.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Style\Controls\GridWindow.xaml.cs" />
+        <Compile Include="Style\Controls\SnapWindow.cs" />
+        <Compile Include="Style\Controls\StickerWindow.xaml.cs" />
+    <Compile Include="Style\Controls\WallpaperWindow.xaml.cs">
+      <DependentUpon>WallpaperWindow.xaml</DependentUpon>
+    </Compile>
+        <Compile Include="Style\Extender.cs" />
+        <Compile Include="Style\Helpers\DockHelper.cs" />
+        <Compile Include="Style\Helpers\DrawHelper.cs" />
+        <Compile Include="Style\Helpers\Enums.cs" />
+    <Compile Include="Style\Helpers\InertButtonBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+        <Compile Include="Style\Helpers\NativeMethods.cs" />
+        <Compile Include="Style\Helpers\PositionCalculator.cs" />
+    <Compile Include="Style\Helpers\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Style\Helpers\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+        <Compile Include="Style\Helpers\Win32Helper.cs" />
+        <Compile Include="Style\Helpers\WindowProps.cs" />
+        <Compile Include="Style\Helpers\WindowsServices.cs" />
+        <Compile Include="Style\MenuRenderer.cs" />
+        <Compile Include="Style\MyTextBox.cs" />
+        <Compile Include="Style\ToolRenderer.cs" />
+    <Compile Include="Style\YukiAutoHideStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+        <Compile Include="Style\YukiDockPaneCaption.cs" />
+    <Compile Include="Style\YukiDockPaneStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+        <Compile Include="Tools\ColorHelper.cs" />
+        <Compile Include="Tools\Converter.cs" />
+        <Compile Include="Tools\DatabaseManager.cs" />
+        <Compile Include="Tools\Enums.cs" />
+        <Compile Include="Tools\FileDatabase.cs" />
+        <Compile Include="Tools\ImageHelper.cs" />
+        <Compile Include="Tools\MiscHelper.cs" />
+        <Compile Include="Tools\SettingsConst.cs" />
+        <Compile Include="Tools\WindowsExtension.cs" />
+        <Compile Include="YukiTheme.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Style\Helpers\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    <EmbeddedResource Include="Style\Helpers\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="image.bmp" />
+      <EmbeddedResource Include="Resources\Icons\yuki128_2.png" />
+      <Content Include="Style\Resources\Close_32.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
+      <Content Include="Style\Resources\Dockindicator_PaneDiamond_Fill.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_Hotspot.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_HotspotIndex.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_Left.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_Right.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PaneDiamond_Top.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelBottom.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelBottom_Active.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelFill.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelFill_Active.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelLeft.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelLeft_Active.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelRight.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelRight_Active.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelTop.bmp" />
+      <Content Include="Style\Resources\DockIndicator_PanelTop_Active.bmp" />
+      <Content Include="Style\Resources\DockPane_AutoHide.bmp" />
+      <Content Include="Style\Resources\DockPane_AutoHide32.bmp" />
+      <Content Include="Style\Resources\DockPane_Close.bmp" />
+      <Content Include="Style\Resources\DockPane_Close32.bmp" />
+      <Content Include="Style\Resources\DockPane_Dock.bmp" />
+      <Content Include="Style\Resources\DockPane_Dock32.bmp" />
+      <Content Include="Style\Resources\DockPane_Option.bmp" />
+      <Content Include="Style\Resources\DockPane_Option32.bmp" />
+      <Content Include="Style\Resources\DockPane_OptionOverflow.bmp" />
+      <Content Include="Style\Resources\Thumbs.db" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Style\Controls\GridWindow.xaml" />
+      <Page Include="Style\Controls\StickerWindow.xaml" />
+      <Page Include="Style\Controls\WallpaperWindow.xaml" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

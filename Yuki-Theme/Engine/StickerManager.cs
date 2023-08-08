@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Media;
-using Yuki_Theme.Core.WPF.Windows;
 using YukiTheme.Style.Controls;
 
 namespace YukiTheme.Engine;

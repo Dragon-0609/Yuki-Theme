@@ -9,7 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace YukiTheme.Style.Helpers {
-    using System;
     
     
     /// <summary>
@@ -22,7 +21,7 @@ namespace YukiTheme.Style.Helpers {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Strings {
+    internal class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +35,7 @@ namespace YukiTheme.Style.Helpers {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("YukiTheme.Style.Helpers.Strings", typeof(Strings).Assembly);
@@ -51,7 +50,7 @@ namespace YukiTheme.Style.Helpers {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +62,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Docking.
         /// </summary>
-        public static string Category_Docking {
+        internal static string Category_Docking {
             get {
                 return ResourceManager.GetString("Category_Docking", resourceCulture);
             }
@@ -72,7 +71,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Docking Notification.
         /// </summary>
-        public static string Category_DockingNotification {
+        internal static string Category_DockingNotification {
             get {
                 return ResourceManager.GetString("Category_DockingNotification", resourceCulture);
             }
@@ -81,7 +80,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Property Changed.
         /// </summary>
-        public static string Category_PropertyChanged {
+        internal static string Category_PropertyChanged {
             get {
                 return ResourceManager.GetString("Category_PropertyChanged", resourceCulture);
             }
@@ -90,7 +89,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to (Float).
         /// </summary>
-        public static string DockAreaEditor_FloatCheckBoxText {
+        internal static string DockAreaEditor_FloatCheckBoxText {
             get {
                 return ResourceManager.GetString("DockAreaEditor_FloatCheckBoxText", resourceCulture);
             }
@@ -99,7 +98,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Determines if end user drag and drop docking is allowed..
         /// </summary>
-        public static string DockContent_AllowEndUserDocking_Description {
+        internal static string DockContent_AllowEndUserDocking_Description {
             get {
                 return ResourceManager.GetString("DockContent_AllowEndUserDocking_Description", resourceCulture);
             }
@@ -108,7 +107,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The size to display the content in auto hide mode. Value &lt; 1 to specify the size in portion; value &gt;= 1 to specify the size in pixel..
         /// </summary>
-        public static string DockContent_AutoHidePortion_Description {
+        internal static string DockContent_AutoHidePortion_Description {
             get {
                 return ResourceManager.GetString("DockContent_AutoHidePortion_Description", resourceCulture);
             }
@@ -117,7 +116,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Enable/Disable the close button of the content..
         /// </summary>
-        public static string DockContent_CloseButton_Description {
+        internal static string DockContent_CloseButton_Description {
             get {
                 return ResourceManager.GetString("DockContent_CloseButton_Description", resourceCulture);
             }
@@ -126,7 +125,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The form must be of type IDockContent..
         /// </summary>
-        public static string DockContent_Constructor_InvalidForm {
+        internal static string DockContent_Constructor_InvalidForm {
             get {
                 return ResourceManager.GetString("DockContent_Constructor_InvalidForm", resourceCulture);
             }
@@ -135,7 +134,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Gets or sets a value indicating in which area of the DockPanel the content allowed to show..
         /// </summary>
-        public static string DockContent_DockAreas_Description {
+        internal static string DockContent_DockAreas_Description {
             get {
                 return ResourceManager.GetString("DockContent_DockAreas_Description", resourceCulture);
             }
@@ -144,7 +143,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when the value of DockState property changed..
         /// </summary>
-        public static string DockContent_DockStateChanged_Description {
+        internal static string DockContent_DockStateChanged_Description {
             get {
                 return ResourceManager.GetString("DockContent_DockStateChanged_Description", resourceCulture);
             }
@@ -153,7 +152,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Indicates the content will be hidden instead of being closed..
         /// </summary>
-        public static string DockContent_HideOnClose_Description {
+        internal static string DockContent_HideOnClose_Description {
             get {
                 return ResourceManager.GetString("DockContent_HideOnClose_Description", resourceCulture);
             }
@@ -162,7 +161,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The desired docking state when first showing..
         /// </summary>
-        public static string DockContent_ShowHint_Description {
+        internal static string DockContent_ShowHint_Description {
             get {
                 return ResourceManager.GetString("DockContent_ShowHint_Description", resourceCulture);
             }
@@ -171,7 +170,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Context menu displayed for the dock pane tab strip..
         /// </summary>
-        public static string DockContent_TabPageContextMenu_Description {
+        internal static string DockContent_TabPageContextMenu_Description {
             get {
                 return ResourceManager.GetString("DockContent_TabPageContextMenu_Description", resourceCulture);
             }
@@ -180,7 +179,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The tab text displayed in the dock pane. If not set, the Text property will be used..
         /// </summary>
-        public static string DockContent_TabText_Description {
+        internal static string DockContent_TabText_Description {
             get {
                 return ResourceManager.GetString("DockContent_TabText_Description", resourceCulture);
             }
@@ -189,7 +188,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The text displayed when mouse hovers over the tab..
         /// </summary>
-        public static string DockContent_ToolTipText_Description {
+        internal static string DockContent_ToolTipText_Description {
             get {
                 return ResourceManager.GetString("DockContent_ToolTipText_Description", resourceCulture);
             }
@@ -198,7 +197,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The provided value is out of range..
         /// </summary>
-        public static string DockContentHandler_AutoHidePortion_OutOfRange {
+        internal static string DockContentHandler_AutoHidePortion_OutOfRange {
             get {
                 return ResourceManager.GetString("DockContentHandler_AutoHidePortion_OutOfRange", resourceCulture);
             }
@@ -207,7 +206,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Value: The value of DockAreas conflicts with current DockState..
         /// </summary>
-        public static string DockContentHandler_DockAreas_InvalidValue {
+        internal static string DockContentHandler_DockAreas_InvalidValue {
             get {
                 return ResourceManager.GetString("DockContentHandler_DockAreas_InvalidValue", resourceCulture);
             }
@@ -216,7 +215,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The pane is invalid. Check the IsFloat and DockPanel properties of this dock pane..
         /// </summary>
-        public static string DockContentHandler_DockPane_InvalidValue {
+        internal static string DockContentHandler_DockPane_InvalidValue {
             get {
                 return ResourceManager.GetString("DockContentHandler_DockPane_InvalidValue", resourceCulture);
             }
@@ -225,7 +224,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The pane is invalid. Check the IsFloat and DockPanel properties of this dock pane..
         /// </summary>
-        public static string DockContentHandler_FloatPane_InvalidValue {
+        internal static string DockContentHandler_FloatPane_InvalidValue {
             get {
                 return ResourceManager.GetString("DockContentHandler_FloatPane_InvalidValue", resourceCulture);
             }
@@ -234,7 +233,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid value, conflicts with DockableAreas  property..
         /// </summary>
-        public static string DockContentHandler_IsFloat_InvalidValue {
+        internal static string DockContentHandler_IsFloat_InvalidValue {
             get {
                 return ResourceManager.GetString("DockContentHandler_IsFloat_InvalidValue", resourceCulture);
             }
@@ -243,7 +242,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The dock state is invalid..
         /// </summary>
-        public static string DockContentHandler_SetDockState_InvalidState {
+        internal static string DockContentHandler_SetDockState_InvalidState {
             get {
                 return ResourceManager.GetString("DockContentHandler_SetDockState_InvalidState", resourceCulture);
             }
@@ -252,7 +251,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The dock panel is null..
         /// </summary>
-        public static string DockContentHandler_SetDockState_NullPanel {
+        internal static string DockContentHandler_SetDockState_NullPanel {
             get {
                 return ResourceManager.GetString("DockContentHandler_SetDockState_NullPanel", resourceCulture);
             }
@@ -261,7 +260,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid beforeContent, it must be contained by the pane..
         /// </summary>
-        public static string DockContentHandler_Show_InvalidBeforeContent {
+        internal static string DockContentHandler_Show_InvalidBeforeContent {
             get {
                 return ResourceManager.GetString("DockContentHandler_Show_InvalidBeforeContent", resourceCulture);
             }
@@ -270,7 +269,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid DockState: Content can not be showed as &quot;Unknown&quot; or &quot;Hidden&quot;..
         /// </summary>
-        public static string DockContentHandler_Show_InvalidDockState {
+        internal static string DockContentHandler_Show_InvalidDockState {
             get {
                 return ResourceManager.GetString("DockContentHandler_Show_InvalidDockState", resourceCulture);
             }
@@ -279,7 +278,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The previous pane is invalid. It can not be null, and its docking state must not be auto-hide..
         /// </summary>
-        public static string DockContentHandler_Show_InvalidPrevPane {
+        internal static string DockContentHandler_Show_InvalidPrevPane {
             get {
                 return ResourceManager.GetString("DockContentHandler_Show_InvalidPrevPane", resourceCulture);
             }
@@ -288,7 +287,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to DockPanel can not be null..
         /// </summary>
-        public static string DockContentHandler_Show_NullDockPanel {
+        internal static string DockContentHandler_Show_NullDockPanel {
             get {
                 return ResourceManager.GetString("DockContentHandler_Show_NullDockPanel", resourceCulture);
             }
@@ -297,7 +296,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The Pane can not be null..
         /// </summary>
-        public static string DockContentHandler_Show_NullPane {
+        internal static string DockContentHandler_Show_NullPane {
             get {
                 return ResourceManager.GetString("DockContentHandler_Show_NullPane", resourceCulture);
             }
@@ -306,7 +305,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid value, check DockableAreas property..
         /// </summary>
-        public static string DockContentHandler_ShowHint_InvalidValue {
+        internal static string DockContentHandler_ShowHint_InvalidValue {
             get {
                 return ResourceManager.GetString("DockContentHandler_ShowHint_InvalidValue", resourceCulture);
             }
@@ -315,7 +314,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Context menu displayed for the dock pane tab strip..
         /// </summary>
-        public static string DockHandler_TabPageContextMenuStrip_Description {
+        internal static string DockHandler_TabPageContextMenuStrip_Description {
             get {
                 return ResourceManager.GetString("DockHandler_TabPageContextMenuStrip_Description", resourceCulture);
             }
@@ -324,7 +323,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Press SHIFT for docking to full side..
         /// </summary>
-        public static string DockIndicator_ToolTipText {
+        internal static string DockIndicator_ToolTipText {
             get {
                 return ResourceManager.GetString("DockIndicator_ToolTipText", resourceCulture);
             }
@@ -333,7 +332,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Content: ActiveContent must be one of the visible contents, or null if there is no visible content..
         /// </summary>
-        public static string DockPane_ActiveContent_InvalidValue {
+        internal static string DockPane_ActiveContent_InvalidValue {
             get {
                 return ResourceManager.GetString("DockPane_ActiveContent_InvalidValue", resourceCulture);
             }
@@ -342,7 +341,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid argument: Content can not be &quot;null&quot;..
         /// </summary>
-        public static string DockPane_Constructor_NullContent {
+        internal static string DockPane_Constructor_NullContent {
             get {
                 return ResourceManager.GetString("DockPane_Constructor_NullContent", resourceCulture);
             }
@@ -351,7 +350,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid argument: The content&apos;s DockPanel can not be &quot;null&quot;..
         /// </summary>
-        public static string DockPane_Constructor_NullDockPanel {
+        internal static string DockPane_Constructor_NullDockPanel {
             get {
                 return ResourceManager.GetString("DockPane_Constructor_NullDockPanel", resourceCulture);
             }
@@ -360,7 +359,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The specified container conflicts with the IsFloat property..
         /// </summary>
-        public static string DockPane_DockTo_InvalidContainer {
+        internal static string DockPane_DockTo_InvalidContainer {
             get {
                 return ResourceManager.GetString("DockPane_DockTo_InvalidContainer", resourceCulture);
             }
@@ -369,7 +368,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The previous pane does not exist in the nested docking pane collection..
         /// </summary>
-        public static string DockPane_DockTo_NoPrevPane {
+        internal static string DockPane_DockTo_NoPrevPane {
             get {
                 return ResourceManager.GetString("DockPane_DockTo_NoPrevPane", resourceCulture);
             }
@@ -378,7 +377,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The container can not be null..
         /// </summary>
-        public static string DockPane_DockTo_NullContainer {
+        internal static string DockPane_DockTo_NullContainer {
             get {
                 return ResourceManager.GetString("DockPane_DockTo_NullContainer", resourceCulture);
             }
@@ -387,7 +386,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The previous pane can not be null when the nested docking pane collection is not empty..
         /// </summary>
-        public static string DockPane_DockTo_NullPrevPane {
+        internal static string DockPane_DockTo_NullPrevPane {
             get {
                 return ResourceManager.GetString("DockPane_DockTo_NullPrevPane", resourceCulture);
             }
@@ -396,7 +395,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The previous pane can not be itself..
         /// </summary>
-        public static string DockPane_DockTo_SelfPrevPane {
+        internal static string DockPane_DockTo_SelfPrevPane {
             get {
                 return ResourceManager.GetString("DockPane_DockTo_SelfPrevPane", resourceCulture);
             }
@@ -405,7 +404,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to FloatWindow property can not be set to &quot;null&quot; when DockState is DockState.Float..
         /// </summary>
-        public static string DockPane_FloatWindow_InvalidValue {
+        internal static string DockPane_FloatWindow_InvalidValue {
             get {
                 return ResourceManager.GetString("DockPane_FloatWindow_InvalidValue", resourceCulture);
             }
@@ -414,7 +413,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Content: Content not within the collection..
         /// </summary>
-        public static string DockPane_SetContentIndex_InvalidContent {
+        internal static string DockPane_SetContentIndex_InvalidContent {
             get {
                 return ResourceManager.GetString("DockPane_SetContentIndex_InvalidContent", resourceCulture);
             }
@@ -423,7 +422,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Index: The index is out of range..
         /// </summary>
-        public static string DockPane_SetContentIndex_InvalidIndex {
+        internal static string DockPane_SetContentIndex_InvalidIndex {
             get {
                 return ResourceManager.GetString("DockPane_SetContentIndex_InvalidIndex", resourceCulture);
             }
@@ -432,7 +431,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The state for the dock pane is invalid..
         /// </summary>
-        public static string DockPane_SetDockState_InvalidState {
+        internal static string DockPane_SetDockState_InvalidState {
             get {
                 return ResourceManager.GetString("DockPane_SetDockState_InvalidState", resourceCulture);
             }
@@ -441,7 +440,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Auto Hide.
         /// </summary>
-        public static string DockPaneCaption_ToolTipAutoHide {
+        internal static string DockPaneCaption_ToolTipAutoHide {
             get {
                 return ResourceManager.GetString("DockPaneCaption_ToolTipAutoHide", resourceCulture);
             }
@@ -450,7 +449,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string DockPaneCaption_ToolTipClose {
+        internal static string DockPaneCaption_ToolTipClose {
             get {
                 return ResourceManager.GetString("DockPaneCaption_ToolTipClose", resourceCulture);
             }
@@ -459,7 +458,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
-        public static string DockPaneCaption_ToolTipOptions {
+        internal static string DockPaneCaption_ToolTipOptions {
             get {
                 return ResourceManager.GetString("DockPaneCaption_ToolTipOptions", resourceCulture);
             }
@@ -468,7 +467,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Content: The content must be auto-hide state and associates with this DockPanel..
         /// </summary>
-        public static string DockPanel_ActiveAutoHideContent_InvalidValue {
+        internal static string DockPanel_ActiveAutoHideContent_InvalidValue {
             get {
                 return ResourceManager.GetString("DockPanel_ActiveAutoHideContent_InvalidValue", resourceCulture);
             }
@@ -477,7 +476,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when the value of ActiveContentProperty changed..
         /// </summary>
-        public static string DockPanel_ActiveContentChanged_Description {
+        internal static string DockPanel_ActiveContentChanged_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ActiveContentChanged_Description", resourceCulture);
             }
@@ -486,7 +485,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when the value of ActiveDocument property changed..
         /// </summary>
-        public static string DockPanel_ActiveDocumentChanged_Description {
+        internal static string DockPanel_ActiveDocumentChanged_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ActiveDocumentChanged_Description", resourceCulture);
             }
@@ -495,7 +494,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when the value of ActivePane property changed..
         /// </summary>
-        public static string DockPanel_ActivePaneChanged_Description {
+        internal static string DockPanel_ActivePaneChanged_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ActivePaneChanged_Description", resourceCulture);
             }
@@ -504,7 +503,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Determines if the drag and drop docking is allowed..
         /// </summary>
-        public static string DockPanel_AllowEndUserDocking_Description {
+        internal static string DockPanel_AllowEndUserDocking_Description {
             get {
                 return ResourceManager.GetString("DockPanel_AllowEndUserDocking_Description", resourceCulture);
             }
@@ -513,7 +512,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Determines if the drag and drop nested docking is allowed..
         /// </summary>
-        public static string DockPanel_AllowEndUserNestedDocking_Description {
+        internal static string DockPanel_AllowEndUserNestedDocking_Description {
             get {
                 return ResourceManager.GetString("DockPanel_AllowEndUserNestedDocking_Description", resourceCulture);
             }
@@ -522,7 +521,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when a content added to the DockPanel..
         /// </summary>
-        public static string DockPanel_ContentAdded_Description {
+        internal static string DockPanel_ContentAdded_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ContentAdded_Description", resourceCulture);
             }
@@ -531,7 +530,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Occurs when a content removed from the DockPanel..
         /// </summary>
-        public static string DockPanel_ContentRemoved_Description {
+        internal static string DockPanel_ContentRemoved_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ContentRemoved_Description", resourceCulture);
             }
@@ -540,7 +539,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The default size of float window..
         /// </summary>
-        public static string DockPanel_DefaultFloatWindowSize_Description {
+        internal static string DockPanel_DefaultFloatWindowSize_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DefaultFloatWindowSize_Description", resourceCulture);
             }
@@ -549,7 +548,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Provides Visual Studio .Net style docking..
         /// </summary>
-        public static string DockPanel_Description {
+        internal static string DockPanel_Description {
             get {
                 return ResourceManager.GetString("DockPanel_Description", resourceCulture);
             }
@@ -558,7 +557,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Size of the bottom docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
-        public static string DockPanel_DockBottomPortion_Description {
+        internal static string DockPanel_DockBottomPortion_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DockBottomPortion_Description", resourceCulture);
             }
@@ -567,7 +566,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Size of the left docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
-        public static string DockPanel_DockLeftPortion_Description {
+        internal static string DockPanel_DockLeftPortion_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DockLeftPortion_Description", resourceCulture);
             }
@@ -576,7 +575,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Size of the right docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
-        public static string DockPanel_DockRightPortion_Description {
+        internal static string DockPanel_DockRightPortion_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DockRightPortion_Description", resourceCulture);
             }
@@ -585,7 +584,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Size of the top docking window. Value &lt; 1 to specify the size in portion; value &gt; 1 to specify the size in pixels..
         /// </summary>
-        public static string DockPanel_DockTopPortion_Description {
+        internal static string DockPanel_DockTopPortion_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DockTopPortion_Description", resourceCulture);
             }
@@ -594,7 +593,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The style of the document window..
         /// </summary>
-        public static string DockPanel_DocumentStyle_Description {
+        internal static string DockPanel_DocumentStyle_Description {
             get {
                 return ResourceManager.GetString("DockPanel_DocumentStyle_Description", resourceCulture);
             }
@@ -603,7 +602,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The DockPanel has already been initialized..
         /// </summary>
-        public static string DockPanel_LoadFromXml_AlreadyInitialized {
+        internal static string DockPanel_LoadFromXml_AlreadyInitialized {
             get {
                 return ResourceManager.GetString("DockPanel_LoadFromXml_AlreadyInitialized", resourceCulture);
             }
@@ -612,7 +611,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The configuration file&apos;s version is invalid..
         /// </summary>
-        public static string DockPanel_LoadFromXml_InvalidFormatVersion {
+        internal static string DockPanel_LoadFromXml_InvalidFormatVersion {
             get {
                 return ResourceManager.GetString("DockPanel_LoadFromXml_InvalidFormatVersion", resourceCulture);
             }
@@ -621,7 +620,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to The XML file format is invalid..
         /// </summary>
-        public static string DockPanel_LoadFromXml_InvalidXmlFormat {
+        internal static string DockPanel_LoadFromXml_InvalidXmlFormat {
             get {
                 return ResourceManager.GetString("DockPanel_LoadFromXml_InvalidXmlFormat", resourceCulture);
             }
@@ -630,7 +629,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid parent form. When using DockingMdi or SystemMdi document style, the DockPanel control must be the child control of the main MDI container form..
         /// </summary>
-        public static string DockPanel_ParentForm_Invalid {
+        internal static string DockPanel_ParentForm_Invalid {
             get {
                 return ResourceManager.GetString("DockPanel_ParentForm_Invalid", resourceCulture);
             }
@@ -639,7 +638,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to DockPanel configuration file. Author: Weifen Luo, all rights reserved..
         /// </summary>
-        public static string DockPanel_Persistor_XmlFileComment1 {
+        internal static string DockPanel_Persistor_XmlFileComment1 {
             get {
                 return ResourceManager.GetString("DockPanel_Persistor_XmlFileComment1", resourceCulture);
             }
@@ -648,7 +647,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to !!! AUTOMATICALLY GENERATED FILE. DO NOT MODIFY !!!.
         /// </summary>
-        public static string DockPanel_Persistor_XmlFileComment2 {
+        internal static string DockPanel_Persistor_XmlFileComment2 {
             get {
                 return ResourceManager.GetString("DockPanel_Persistor_XmlFileComment2", resourceCulture);
             }
@@ -657,7 +656,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Indicates whether the control layout is right-to-left when the RightToLeft property is set to Yes..
         /// </summary>
-        public static string DockPanel_RightToLeftLayout_Description {
+        internal static string DockPanel_RightToLeftLayout_Description {
             get {
                 return ResourceManager.GetString("DockPanel_RightToLeftLayout_Description", resourceCulture);
             }
@@ -666,7 +665,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Index: The index is out of range..
         /// </summary>
-        public static string DockPanel_SetPaneIndex_InvalidIndex {
+        internal static string DockPanel_SetPaneIndex_InvalidIndex {
             get {
                 return ResourceManager.GetString("DockPanel_SetPaneIndex_InvalidIndex", resourceCulture);
             }
@@ -675,7 +674,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Pane: DockPane not within the collection..
         /// </summary>
-        public static string DockPanel_SetPaneIndex_InvalidPane {
+        internal static string DockPanel_SetPaneIndex_InvalidPane {
             get {
                 return ResourceManager.GetString("DockPanel_SetPaneIndex_InvalidPane", resourceCulture);
             }
@@ -684,7 +683,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Determines if the document icon will be displayed in the tab strip..
         /// </summary>
-        public static string DockPanel_ShowDocumentIcon_Description {
+        internal static string DockPanel_ShowDocumentIcon_Description {
             get {
                 return ResourceManager.GetString("DockPanel_ShowDocumentIcon_Description", resourceCulture);
             }
@@ -693,7 +692,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
-        public static string DockPaneStrip_ToolTipClose {
+        internal static string DockPaneStrip_ToolTipClose {
             get {
                 return ResourceManager.GetString("DockPaneStrip_ToolTipClose", resourceCulture);
             }
@@ -702,7 +701,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Window List.
         /// </summary>
-        public static string DockPaneStrip_ToolTipWindowList {
+        internal static string DockPaneStrip_ToolTipWindowList {
             get {
                 return ResourceManager.GetString("DockPaneStrip_ToolTipWindowList", resourceCulture);
             }
@@ -711,7 +710,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid argument: DockPanel can not be &quot;null&quot;..
         /// </summary>
-        public static string FloatWindow_Constructor_NullDockPanel {
+        internal static string FloatWindow_Constructor_NullDockPanel {
             get {
                 return ResourceManager.GetString("FloatWindow_Constructor_NullDockPanel", resourceCulture);
             }
@@ -720,7 +719,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Index: The index is out of range..
         /// </summary>
-        public static string FloatWindow_SetPaneIndex_InvalidIndex {
+        internal static string FloatWindow_SetPaneIndex_InvalidIndex {
             get {
                 return ResourceManager.GetString("FloatWindow_SetPaneIndex_InvalidIndex", resourceCulture);
             }
@@ -729,7 +728,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid Pane: DockPane not within the collection..
         /// </summary>
-        public static string FloatWindow_SetPaneIndex_InvalidPane {
+        internal static string FloatWindow_SetPaneIndex_InvalidPane {
             get {
                 return ResourceManager.GetString("FloatWindow_SetPaneIndex_InvalidPane", resourceCulture);
             }
@@ -738,7 +737,7 @@ namespace YukiTheme.Style.Helpers {
         /// <summary>
         ///   Looks up a localized string similar to Invalid DockPanel..
         /// </summary>
-        public static string IDockDragSource_DockTo_InvalidPanel {
+        internal static string IDockDragSource_DockTo_InvalidPanel {
             get {
                 return ResourceManager.GetString("IDockDragSource_DockTo_InvalidPanel", resourceCulture);
             }

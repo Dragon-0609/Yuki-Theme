@@ -1,4 +1,4 @@
-﻿namespace Yuki_Theme.Core.Utils
+﻿namespace YukiTheme.Style.Helpers
 {
 	public struct WindowProps
 	{
