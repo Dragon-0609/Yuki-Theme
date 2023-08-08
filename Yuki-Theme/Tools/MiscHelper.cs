@@ -51,4 +51,7 @@ public static class MiscHelper
 
 		return res;
 	}
+
+	public static int ToInt(this bool value) => value ? 1 : 0;
+	public static bool ToBool(this int value) => value == 1;
 }

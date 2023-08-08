@@ -23,7 +23,6 @@ public class StickerManager
 		_sticker.SetOwner(targetForm);
 		_sticker.AutoSize = false;
 		UpdateSticker();
-		UpdateOpacity();
 		_sticker.ResetPosition();
 		_sticker.Show();
 		_sticker.Focus();
@@ -37,23 +36,13 @@ public class StickerManager
 		{
 			if (IDEAlterer.HasSticker)
 			{
-				if (hidden)
-				{
-					hidden = false;
-					_sticker.Visibility = Visibility.Visible;
-				}
-
 				_sticker.SetImage(IDEAlterer.GetStickerWPF);
 				_sticker.SetSize();
-			}
-			else
-			{
-				hidden = true;
-				_sticker.Visibility = Visibility.Hidden;
 			}
 
 			UpdateOpacity();
 		}
+		UpdateVisibility();
 	}
 
 	private void UpdateOpacity()
@@ -61,6 +50,42 @@ public class StickerManager
 		if (_sticker != null)
 		{
 			_sticker.Opacity = 1;
+		}
+	}
+
+	public void UpdateVisibility()
+	{
+		if (_sticker == null)
+		{
+			HideWallpaper();
+			return;
+		}
+
+		if (IDEAlterer.CanShowWallpaper)
+		{
+			ShowWallpaper();
+		}
+		else
+		{
+			HideWallpaper();
+		}
+	}
+
+	private void ShowWallpaper()
+	{
+		if (hidden)
+		{
+			hidden = false;
+			_sticker.Visibility = Visibility.Visible;
+		}
+	}
+
+	private void HideWallpaper()
+	{
+		if (!hidden)
+		{
+			hidden = true;
+			_sticker.Visibility = Visibility.Hidden;
 		}
 	}
 }
