@@ -9,7 +9,7 @@ using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
 
-public class ImageChanger
+public class ImageLoader
 {
 	private const string ImagesFolder = "Highlighting";
 	private const string PngFilter = "*.png";

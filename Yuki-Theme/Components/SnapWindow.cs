@@ -3,11 +3,12 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using YukiTheme.Tools;
 
-namespace YukiTheme.Style.Controls
+namespace YukiTheme.Components
 {
 	public class SnapWindow : Window
 	{
@@ -15,21 +16,21 @@ namespace YukiTheme.Style.Controls
 		public const int BORDER_OUTLINE_Y = 20;
 		public const int PLUGIN_BORDER_OUTLINE_Y = 30;
 
-		public float borderOutlineX = BORDER_OUTLINE_X;
-		public float borderOutlineY = BORDER_OUTLINE_Y;
+		public float BorderOutlineX = BORDER_OUTLINE_X;
+		public float BorderOutlineY = BORDER_OUTLINE_Y;
 
-		public Window target;
-		public Form targetForm;
+		public Window Target;
+		public Form TargetForm;
 
-		private float unitx;
-		private float unity;
+		private float _unitx;
+		private float _unity;
 
 		public AlignmentX AlignX = AlignmentX.Left;
 		public AlignmentY AlignY = AlignmentY.Top;
 
 		private FormWindowState _formWindowState = FormWindowState.Normal;
 
-		private bool lockState = false;
+		private bool _lockState = false;
 
 		private Rect _currentRect;
 
@@ -39,15 +40,15 @@ namespace YukiTheme.Style.Controls
 
 		public void ResetPosition()
 		{
-			if (target != null || targetForm != null)
+			if (Target != null || TargetForm != null)
 			{
 				_currentRect = GetOwnerRectangle();
 
 				if (CanUsePercents) //&& Settings.unit == RelativeUnit.Percent
 				{
 					Rect rect = GetOwnerRectangle();
-					unitx = (float)(rect.Width / 100f);
-					unity = (float)(rect.Height / 100f);
+					_unitx = (float)(rect.Width / 100f);
+					_unity = (float)(rect.Height / 100f);
 				}
 
 				Left = GetX();
@@ -68,7 +69,7 @@ namespace YukiTheme.Style.Controls
 			ResizeMode = ResizeMode.NoResize;
 			WindowStyle = WindowStyle.None;
 			ShowInTaskbar = false;
-			borderOutlineY = PLUGIN_BORDER_OUTLINE_Y;
+			BorderOutlineY = PLUGIN_BORDER_OUTLINE_Y;
 		}
 
 
@@ -78,7 +79,7 @@ namespace YukiTheme.Style.Controls
 		{
 			double res = 0;
 			double left = _currentRect.X;
-			double posX = borderOutlineX; // CanUsePercents && Settings.unit == RelativeUnit.Percent ? unitx : * 1; 
+			double posX = BorderOutlineX; // CanUsePercents && Settings.unit == RelativeUnit.Percent ? unitx : * 1; 
 			if (AlignX == AlignmentX.Left)
 			{
 				res = left + posX;
@@ -88,7 +89,7 @@ namespace YukiTheme.Style.Controls
 				double width = _currentRect.Width;
 				if (AlignX == AlignmentX.Center)
 				{
-					res = left + (width / 2) + (borderOutlineX == BORDER_OUTLINE_X ? 0 : posX);
+					res = left + (width / 2) + (BorderOutlineX == BORDER_OUTLINE_X ? 0 : posX);
 				}
 				else
 				{
@@ -103,7 +104,7 @@ namespace YukiTheme.Style.Controls
 		{
 			double res = 0;
 			double top = _currentRect.Y;
-			double posY = borderOutlineY; // * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1);
+			double posY = BorderOutlineY; // * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1);
 			if (AlignY == AlignmentY.Top)
 			{
 				res = top + posY;
@@ -113,7 +114,7 @@ namespace YukiTheme.Style.Controls
 				double height = _currentRect.Height;
 				if (AlignY == AlignmentY.Center)
 				{
-					res = top + (height / 2) + (borderOutlineY == BORDER_OUTLINE_Y ? 0 : posY);
+					res = top + (height / 2) + (BorderOutlineY == BORDER_OUTLINE_Y ? 0 : posY);
 				}
 				else
 				{
@@ -127,35 +128,35 @@ namespace YukiTheme.Style.Controls
 
 		private double GetLeft()
 		{
-			if (target != null)
-				return target.Left;
+			if (Target != null)
+				return Target.Left;
 			else
-				return targetForm.Left;
+				return TargetForm.Left;
 		}
 
 		private double GetTop()
 		{
-			if (target != null)
-				return target.Top;
+			if (Target != null)
+				return Target.Top;
 			else
-				return targetForm.Top;
+				return TargetForm.Top;
 		}
 
 
 		private double GetWidth()
 		{
-			if (target != null)
-				return target.RenderSize.Width;
+			if (Target != null)
+				return Target.RenderSize.Width;
 			else
-				return targetForm.Width;
+				return TargetForm.Width;
 		}
 
 		private double GetHeight()
 		{
-			if (target != null)
-				return target.RenderSize.Height;
+			if (Target != null)
+				return Target.RenderSize.Height;
 			else
-				return targetForm.Height;
+				return TargetForm.Height;
 		}
 
 		#endregion
@@ -163,18 +164,18 @@ namespace YukiTheme.Style.Controls
 
 		private void BindPosition()
 		{
-			if (target != null)
+			if (Target != null)
 			{
-				target.LocationChanged += PositionChanged;
-				target.SizeChanged += PositionChanged;
-				target.StateChanged += OnStateChanged;
-				target.Closing += OnClosing;
+				Target.LocationChanged += PositionChanged;
+				Target.SizeChanged += PositionChanged;
+				Target.StateChanged += OnStateChanged;
+				Target.Closing += OnClosing;
 			}
-			else if (targetForm != null)
+			else if (TargetForm != null)
 			{
-				targetForm.LocationChanged += PositionChanged;
-				targetForm.SizeChanged += PositionOrStateChanged;
-				targetForm.Closing += OnClosing;
+				TargetForm.LocationChanged += PositionChanged;
+				TargetForm.SizeChanged += PositionOrStateChanged;
+				TargetForm.Closing += OnClosing;
 			}
 		}
 
@@ -185,9 +186,9 @@ namespace YukiTheme.Style.Controls
 
 		private void OnStateChanged(object sender, EventArgs e)
 		{
-			if (!lockState)
+			if (!_lockState)
 			{
-				if (target != null)
+				if (Target != null)
 					OnWindowStateChanged(sender, e);
 				else
 					OnFormStateChanged(sender, e);
@@ -196,12 +197,12 @@ namespace YukiTheme.Style.Controls
 
 		private void OnWindowStateChanged(object sender, EventArgs e)
 		{
-			if (target.WindowState == WindowState.Minimized)
+			if (Target.WindowState == WindowState.Minimized)
 				WindowState = WindowState.Minimized;
 			else
 			{
 				WindowState = WindowState.Normal;
-				if (target.WindowState == WindowState.Maximized)
+				if (Target.WindowState == WindowState.Maximized)
 				{
 					// ShowWindowOverWindow ();
 					ResetPosition();
@@ -213,25 +214,25 @@ namespace YukiTheme.Style.Controls
 
 		private void ShowWindowOverWindow()
 		{
-			lockState = true;
-			target.WindowState = WindowState.Minimized;
+			_lockState = true;
+			Target.WindowState = WindowState.Minimized;
 			WindowState = WindowState.Minimized;
-			target.WindowState = WindowState.Maximized;
+			Target.WindowState = WindowState.Maximized;
 			WindowState = WindowState.Normal;
-			lockState = false;
+			_lockState = false;
 		}
 
 		private void OnFormStateChanged(object sender, EventArgs e)
 		{
-			if (targetForm.WindowState == FormWindowState.Minimized)
+			if (TargetForm.WindowState == FormWindowState.Minimized)
 				WindowState = WindowState.Minimized;
 			else
 			{
 				WindowState = WindowState.Normal;
-				if (targetForm.WindowState == FormWindowState.Maximized)
+				if (TargetForm.WindowState == FormWindowState.Maximized)
 				{
 					// WindowState = WindowState.Maximized;
-					targetForm.Focus();
+					TargetForm.Focus();
 					Console.WriteLine("Maximized");
 				}
 			}
@@ -246,9 +247,9 @@ namespace YukiTheme.Style.Controls
 
 		private void PositionOrStateChanged(object sender, EventArgs e)
 		{
-			if (_formWindowState != targetForm.WindowState)
+			if (_formWindowState != TargetForm.WindowState)
 			{
-				_formWindowState = targetForm.WindowState;
+				_formWindowState = TargetForm.WindowState;
 				OnStateChanged(sender, e);
 			}
 			else
@@ -259,16 +260,16 @@ namespace YukiTheme.Style.Controls
 
 		private void UnbindPosition()
 		{
-			if (target != null)
+			if (Target != null)
 			{
-				target.LocationChanged -= PositionChanged;
-				target.SizeChanged -= PositionChanged;
-				target.StateChanged -= OnStateChanged;
+				Target.LocationChanged -= PositionChanged;
+				Target.SizeChanged -= PositionChanged;
+				Target.StateChanged -= OnStateChanged;
 			}
-			else if (targetForm != null)
+			else if (TargetForm != null)
 			{
-				targetForm.LocationChanged -= PositionChanged;
-				targetForm.SizeChanged -= PositionOrStateChanged;
+				TargetForm.LocationChanged -= PositionChanged;
+				TargetForm.SizeChanged -= PositionOrStateChanged;
 			}
 		}
 
@@ -291,7 +292,7 @@ namespace YukiTheme.Style.Controls
 
 		public void SetOwner(Window parent)
 		{
-			target = parent;
+			Target = parent;
 			try
 			{
 				Owner = parent;
@@ -304,9 +305,9 @@ namespace YukiTheme.Style.Controls
 
 		public void SetOwner(Form parent)
 		{
-			targetForm = parent;
-			targetForm.LostFocus += (sender, args) => { Topmost = false; };
-			targetForm.GotFocus += (sender, args) => { Topmost = true; };
+			TargetForm = parent;
+			TargetForm.LostFocus += (sender, args) => { Topmost = false; };
+			TargetForm.GotFocus += (sender, args) => { Topmost = true; };
 			new WindowInteropHelper(this)
 			{
 				Owner = parent.Handle
@@ -315,35 +316,32 @@ namespace YukiTheme.Style.Controls
 
 		internal Rect GetOwnerRectangle()
 		{
-			if (target != null)
+			if (Target != null)
 				return Owner.GetAbsoluteRect();
-			if (targetForm != null)
+			if (TargetForm != null)
 			{
-				if (targetForm.WindowState == FormWindowState.Maximized)
+				if (TargetForm.WindowState == FormWindowState.Maximized)
 				{
 					// var size = targetForm.ClientSize;
 					// return new Rect(0, 0, size.Width, size.Height);
-					Rectangle area = Screen.GetWorkingArea(targetForm);
+					Rectangle area = Screen.GetWorkingArea(TargetForm);
 					return area.ToRect();
 				}
 
-				return new Rectangle(targetForm.Location.X + 2, targetForm.Location.Y, targetForm.Size.Width, targetForm.Size.Height).ToRect();
+				return new Rectangle(TargetForm.Location.X + 2, TargetForm.Location.Y, TargetForm.Size.Width, TargetForm.Size.Height).ToRect();
 			}
 			// return targetForm.ClientRectangle.ToRect(targetForm);
 
 			throw new NullReferenceException("Owner wasn't set");
 		}
-	}
+		
 
-	public class SnapWindowAlign
-	{
-		public AlignmentX AlignX;
-		public AlignmentY AlignY;
-
-		public SnapWindowAlign(AlignmentX x, AlignmentY y)
+		internal void FocusBack(object sender, MouseButtonEventArgs e)
 		{
-			AlignX = x;
-			AlignY = y;
+			if (Target != null)
+				Target.Focus();
+			else if (TargetForm != null)
+				TargetForm.Focus();
 		}
 	}
 }

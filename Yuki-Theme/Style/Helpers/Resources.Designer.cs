@@ -61,6 +61,15 @@ namespace YukiTheme.Style.Helpers {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There&apos;s no {0}.
+        /// </summary>
+        internal static string ColorChanger_GetT_There_s_no__0_ {
+            get {
+                return ResourceManager.GetString("ColorChanger_GetT_There_s_no__0_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap DockIndicator_PaneDiamond {

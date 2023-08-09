@@ -3,7 +3,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using YukiTheme.Style.Helpers;
 
-namespace YukiTheme.Style.Controls
+namespace YukiTheme.Components
 {
 	public partial class WallpaperWindow : SnapWindow
 	{

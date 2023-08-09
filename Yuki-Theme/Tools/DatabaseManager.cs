@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using YukiTheme.Engine;
 
 namespace YukiTheme.Tools
 {
@@ -10,30 +11,31 @@ namespace YukiTheme.Tools
 
         public readonly Dictionary<int, string> _defaults = new()
         {
-            { SettingsConst.AutoUpdate, true.ToInt().ToString() },
-            { SettingsConst.BgImage, true.ToInt().ToString() },
-            { SettingsConst.Sticker, true.ToInt().ToString() },
-            { SettingsConst.StatusBar, true.ToInt().ToString() },
-            { SettingsConst.Logo, true.ToInt().ToString() },
-            { SettingsConst.Beta, true.ToInt().ToString() },
-            { SettingsConst.Login, false.ToInt().ToString() },
-            { SettingsConst.StickerPositionUnit, "1" },
-            { SettingsConst.AllowPositioning, false.ToInt().ToString() },
-            { SettingsConst.ShowGrids, false.ToInt().ToString() },
-            { SettingsConst.UseCustomSticker, false.ToInt().ToString() },
-            { SettingsConst.CustomStickerPath, "" },
-            { SettingsConst.License, false.ToInt().ToString() },
-            { SettingsConst.GoogleAnalytics, false.ToInt().ToString() },
-            { SettingsConst.DonTTrack, false.ToInt().ToString() },
-            { SettingsConst.AutoFitWidth, true.ToInt().ToString() },
-            { SettingsConst.ShowPreview, true.ToInt().ToString() },
-            { SettingsConst.Localization, "unknown" },
-            { SettingsConst.UseDimensionCap, false.ToInt().ToString() },
-            { SettingsConst.DimensionCapMax, "-1" },
-            { SettingsConst.DimensionCapUnit, "0" },
-            { SettingsConst.HideOnHover, true.ToInt().ToString() },
-            { SettingsConst.HideDelay, "750" },
-            { SettingsConst.PortableMode, false.ToInt().ToString() },
+            { SettingsConst.AUTO_UPDATE, true.ToInt().ToString() },
+            { SettingsConst.BG_IMAGE, true.ToInt().ToString() },
+            { SettingsConst.STICKER, true.ToInt().ToString() },
+            { SettingsConst.STATUS_BAR, true.ToInt().ToString() },
+            { SettingsConst.LOGO, true.ToInt().ToString() },
+            { SettingsConst.BETA, true.ToInt().ToString() },
+            { SettingsConst.LOGIN, false.ToInt().ToString() },
+            { SettingsConst.STICKER_POSITION_UNIT, "1" },
+            { SettingsConst.ALLOW_POSITIONING, false.ToInt().ToString() },
+            { SettingsConst.SHOW_GRIDS, false.ToInt().ToString() },
+            { SettingsConst.USE_CUSTOM_STICKER, false.ToInt().ToString() },
+            { SettingsConst.CUSTOM_STICKER_PATH, "" },
+            { SettingsConst.LICENSE, false.ToInt().ToString() },
+            { SettingsConst.GOOGLE_ANALYTICS, false.ToInt().ToString() },
+            { SettingsConst.DON_T_TRACK, false.ToInt().ToString() },
+            { SettingsConst.AUTO_FIT_WIDTH, true.ToInt().ToString() },
+            { SettingsConst.SHOW_PREVIEW, true.ToInt().ToString() },
+            { SettingsConst.LOCALIZATION, "unknown" },
+            { SettingsConst.USE_DIMENSION_CAP, false.ToInt().ToString() },
+            { SettingsConst.DIMENSION_CAP_MAX, "-1" },
+            { SettingsConst.DIMENSION_CAP_UNIT, "0" },
+            { SettingsConst.HIDE_ON_HOVER, true.ToInt().ToString() },
+            { SettingsConst.HIDE_DELAY, "750" },
+            { SettingsConst.PORTABLE_MODE, false.ToInt().ToString() },
+            { SettingsConst.DISCRETE_MODE, false.ToInt().ToString() },
         };
 
         public DatabaseManager()
@@ -49,11 +51,9 @@ namespace YukiTheme.Tools
             _database = new FileDatabase();
         }
 
-        private const string APP_NAME = "Yuki Theme";
-
         private void AddDefaults()
         {
-            if (_database.GetValue(SettingsConst.AutoUpdate.ToString()).Length <= 2)
+            if (_database.GetValue(SettingsConst.BG_IMAGE.ToString()).Length == 0)
             {
                 foreach (KeyValuePair<int, string> pair in _defaults)
                 {
@@ -81,6 +81,11 @@ namespace YukiTheme.Tools
 
         #region Getter
 
+        public bool Load(int key)
+        {
+            return Load(key, int.Parse(_defaults[key]).ToBool());
+        }
+
         public string Load(int key, string defaultValue) => _database.GetValue(key.ToString(), defaultValue);
 
         public int Load(int key, int defaultValue)
@@ -90,12 +95,11 @@ namespace YukiTheme.Tools
 
         public bool Load(int key, bool defaultValue)
         {
-            return int.Parse(_database.GetValue(key.ToString(), defaultValue.ToInt().ToString())).ToBool();
+            string value = _database.GetValue(key.ToString(), defaultValue.ToInt().ToString());
+            return int.Parse(value).ToBool();
         }
 
         private string Load(string key, string defaultValue) => _database.GetValue(key, defaultValue);
-
-        
 
         #endregion
 

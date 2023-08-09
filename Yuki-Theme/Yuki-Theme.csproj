@@ -65,24 +65,33 @@
         <Reference Include="WindowsFormsIntegration" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Components\GridWindow.xaml.cs" />
+        <Compile Include="Components\SnapWindow.cs" />
+        <Compile Include="Components\SnapWindowAlign.cs" />
+        <Compile Include="Components\StickerWindow.xaml.cs" />
+        <Compile Include="Components\ThemeSelectWindow.xaml.cs">
+          <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\WallpaperWindow.xaml.cs">
+          <DependentUpon>WallpaperWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Engine\ColorChanger.cs" />
         <Compile Include="Engine\ColorReference.cs" />
         <Compile Include="Engine\DataManager.cs" />
         <Compile Include="Engine\EditorAlterer.cs" />
+        <Compile Include="Engine\EditorComponents.cs" />
         <Compile Include="Engine\GridManager.cs" />
         <Compile Include="Engine\IDEAlterer.cs" />
-        <Compile Include="Engine\ImageChanger.cs" />
+        <Compile Include="Engine\IDEConsole.cs" />
+        <Compile Include="Engine\ImageLoader.cs" />
+        <Compile Include="Engine\MenuReplacer.cs" />
         <Compile Include="Engine\OptionsChanger.cs" />
         <Compile Include="Engine\StickerManager.cs" />
         <Compile Include="Engine\TextEditorChanger.cs" />
+        <Compile Include="Engine\TheneSelectManager.cs" />
         <Compile Include="Engine\WallpaperManager.cs" />
+        <Compile Include="Engine\WindowManager.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Style\Controls\GridWindow.xaml.cs" />
-        <Compile Include="Style\Controls\SnapWindow.cs" />
-        <Compile Include="Style\Controls\StickerWindow.xaml.cs" />
-    <Compile Include="Style\Controls\WallpaperWindow.xaml.cs">
-      <DependentUpon>WallpaperWindow.xaml</DependentUpon>
-    </Compile>
         <Compile Include="Style\Extender.cs" />
         <Compile Include="Style\Helpers\DockHelper.cs" />
         <Compile Include="Style\Helpers\DrawHelper.cs" />
@@ -106,7 +115,6 @@
         <Compile Include="Style\Helpers\WindowProps.cs" />
         <Compile Include="Style\Helpers\WindowsServices.cs" />
         <Compile Include="Style\MenuRenderer.cs" />
-        <Compile Include="Style\MyTextBox.cs" />
         <Compile Include="Style\ToolRenderer.cs" />
     <Compile Include="Style\YukiAutoHideStrip.cs">
       <SubType>Component</SubType>
@@ -170,9 +178,10 @@
       <Content Include="Style\Resources\Thumbs.db" />
     </ItemGroup>
     <ItemGroup>
-      <Page Include="Style\Controls\GridWindow.xaml" />
-      <Page Include="Style\Controls\StickerWindow.xaml" />
-      <Page Include="Style\Controls\WallpaperWindow.xaml" />
+      <Page Include="Components\GridWindow.xaml" />
+      <Page Include="Components\StickerWindow.xaml" />
+      <Page Include="Components\ThemeSelectWindow.xaml" />
+      <Page Include="Components\WallpaperWindow.xaml" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

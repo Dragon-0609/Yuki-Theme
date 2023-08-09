@@ -5,73 +5,64 @@ using System.Windows.Media;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
+using YukiTheme.Components;
 using YukiTheme.Tools;
+
+// ReSharper disable FieldCanBeMadeReadOnly.Local
+// ReSharper disable FieldCanBeMadeReadOnly.Global
 
 namespace YukiTheme.Engine
 {
     // ReSharper disable once InconsistentNaming
     public class IDEAlterer
     {
-        public static IDEAlterer Alterer;
+        public static IDEAlterer Instance;
 
         public IWorkbench Workbench;
         public Form1 Form1;
-        public ColorChanger ColorChanger;
+        private ColorChanger _colorChanger;
         private EditorAlterer _editorAlterer;
-        private ImageChanger _imageChanger;
+        private ImageLoader _imageLoader;
         private WallpaperManager _wallpaperManager;
         private StickerManager _stickerManager;
-        private Timer _loadingTimer;
+        private ThemeWindowManager _themeSelect;
 
         public IDEAlterer(IWorkbench workbench)
         {
-            Alterer = this;
+            Instance = this;
             Workbench = workbench;
             Form1 = (Form1)Workbench.MainForm;
-            ColorChanger = new ColorChanger();
+            _colorChanger = new ColorChanger();
             _editorAlterer = new EditorAlterer();
-            _imageChanger = new ImageChanger();
+            _imageLoader = new ImageLoader();
             _wallpaperManager = new WallpaperManager();
             _stickerManager = new StickerManager();
+            _themeSelect = new ThemeWindowManager();
             new DatabaseManager();
         }
 
         public void Init()
         {
-            StartLoadingTimer();
             _editorAlterer.GetComponents();
-            /*_editorAlterer.AddMenuItems();*/
-            ColorChanger.GetColors();
-            _imageChanger.LoadImages();
-            _imageChanger.ApplyImages();
+            _colorChanger.GetColors();
+            _imageLoader.LoadImages();
+            _imageLoader.ApplyImages();
             _editorAlterer.AlterMenu();
             _editorAlterer.SubscribeComponents();
             _editorAlterer.ChangeStyles();
-            ColorChanger.UpdateColors();
+            _editorAlterer.StartMenuReplacement();
+            _colorChanger.UpdateColors();
             _wallpaperManager.Show();
             _stickerManager.Show();
         }
 
-        void StartLoadingTimer()
-        {
-            _loadingTimer = new Timer { Interval = 100 };
-            _loadingTimer.Tick += Load;
-            _loadingTimer.Start();
-        }
-
-        private void Load(object sender, EventArgs e)
-        {
-            _loadingTimer.Stop();
-            _editorAlterer.AddMenuItems();
-        }
-
-        private void Reload()
+        public void Reload()
         {
             HighlightingManager.Manager.ReloadSyntaxModes();
-            ColorChanger.GetColors();
-            ColorChanger.UpdateColors();
-            _imageChanger.LoadImages();
-            _imageChanger.ApplyImages();
+            _colorChanger.GetColors();
+            _colorChanger.UpdateColors();
+            _imageLoader.LoadImages();
+            _imageLoader.ApplyImages();
             _wallpaperManager.UpdateWallpaper();
             _stickerManager.UpdateSticker();
         }
@@ -79,22 +70,29 @@ namespace YukiTheme.Engine
         public void UpdateWallpaperVisibility() => _wallpaperManager.UpdateVisibility();
         public void UpdateStickerVisibility() => _stickerManager.UpdateVisibility();
 
+        public void RequestBottomBarUpdate() => _editorAlterer.RequestBottomBarUpdate();
 
-        public static bool HasWallpaper => Alterer._imageChanger.HasImage;
-        public static bool HasSticker => Alterer._imageChanger.HasSticker;
+        public void FocusEditorWindow() => _editorAlterer.FocusEditorWindow();
 
-        public static bool CanShowWallpaper => Alterer._imageChanger.HasImage && GetWallpaperVisibility();
+        public void ShowThemeSelect() => _themeSelect.Show();
 
-        public static bool CanShowSticker => Alterer._imageChanger.HasImage && GetStickerVisibility();
+        public static bool HasWallpaper => Instance._imageLoader.HasImage;
+        public static bool HasSticker => Instance._imageLoader.HasSticker;
 
-        public static bool GetWallpaperVisibility() => DatabaseManager.Instance.Load(SettingsConst.BgImage, true);
+        public static bool CanShowWallpaper => Instance._imageLoader.HasImage && IsWallpaperVisible && !IsDiscreteActive;
 
-        public static bool GetStickerVisibility() => DatabaseManager.Instance.Load(SettingsConst.Sticker, true);
+        public static bool CanShowSticker => Instance._imageLoader.HasImage && IsStickerVisible && !IsDiscreteActive;
 
-        public static Image GetWallpaper => Alterer._imageChanger.GetWallpaper;
-        public static Image GetSticker => Alterer._imageChanger.GetSticker;
+        public static bool IsWallpaperVisible => DatabaseManager.Instance.Load(SettingsConst.BG_IMAGE);
 
-        public static ImageSource GetWallpaperWPF => Alterer._imageChanger.GetWallpaperWPF;
-        public static ImageSource GetStickerWPF => Alterer._imageChanger.GetStickerWPF;
+        public static bool IsStickerVisible => DatabaseManager.Instance.Load(SettingsConst.STICKER);
+
+        public static bool IsDiscreteActive => DatabaseManager.Instance.Load(SettingsConst.DISCRETE_MODE);
+
+        public static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
+        public static Image GetSticker => Instance._imageLoader.GetSticker;
+
+        public static ImageSource GetWallpaperWPF => Instance._imageLoader.GetWallpaperWPF;
+        public static ImageSource GetStickerWPF => Instance._imageLoader.GetStickerWPF;
     }
 }

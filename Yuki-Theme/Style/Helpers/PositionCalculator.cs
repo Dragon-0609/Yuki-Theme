@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
-using YukiTheme.Style.Controls;
+using YukiTheme.Components;
 using YukiTheme.Tools;
 using Point = System.Windows.Point;
 
@@ -139,7 +139,7 @@ namespace YukiTheme.Style.Helpers
 		public void SaveRelatedPosition(Point point)
 		{
 			Rect owner = window.GetOwnerRectangle();
-			window._relativePosition = new PointF(GetRelatedX(owner, point), GetRelatedY(owner, point));
+			window.RelativePosition = new PointF(GetRelatedX(owner, point), GetRelatedY(owner, point));
 			window.SetBorderOutline();
 			window.ResetPosition();
 		}

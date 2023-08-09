@@ -2,7 +2,7 @@
 using System.Windows.Interop;
 using YukiTheme.Style.Helpers;
 
-namespace YukiTheme.Style.Controls
+namespace YukiTheme.Components
 {
 	public partial class GridWindow : SnapWindow
 	{

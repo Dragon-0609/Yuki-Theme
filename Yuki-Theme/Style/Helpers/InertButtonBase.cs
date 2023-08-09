@@ -59,7 +59,7 @@ namespace YukiTheme.Style.Helpers
 		{
 			if (IsMouseOver && Enabled)
 			{
-				e.Graphics.DrawRectangle(ColorChanger.Changer.GetPen(ColorChanger.Foreground), Rectangle.Inflate(ClientRectangle, -1, -1));
+				e.Graphics.DrawRectangle(ColorChanger.Instance.GetPen(ColorChanger.FOREGROUND), Rectangle.Inflate(ClientRectangle, -1, -1));
 			}
 
 			using (ImageAttributes imageAttributes = new ImageAttributes())
@@ -67,7 +67,7 @@ namespace YukiTheme.Style.Helpers
 				ColorMap[] colorMap = new ColorMap[2];
 				colorMap[0] = new ColorMap();
 				colorMap[0].OldColor = Color.FromArgb(0, 0, 0);
-				colorMap[0].NewColor = ColorChanger.Changer.GetColor(ColorChanger.Foreground);
+				colorMap[0].NewColor = ColorChanger.Instance.GetColor(ColorChanger.FOREGROUND);
 				colorMap[1] = new ColorMap();
 				colorMap[1].OldColor = Image.GetPixel(0, 0);
 				colorMap[1].NewColor = Color.Transparent;

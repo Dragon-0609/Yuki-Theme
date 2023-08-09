@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
-using YukiTheme.Style.Controls;
+using YukiTheme.Components;
 using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
@@ -15,10 +15,10 @@ public class GridManager
 		{
 			AlignX = AlignmentX.Left,
 			AlignY = AlignmentY.Top,
-			borderOutlineX = 0,
-			borderOutlineY = 0,
+			BorderOutlineX = 0,
+			BorderOutlineY = 0,
 		};
-		var targetForm = IDEAlterer.Alterer.Form1;
+		var targetForm = IDEAlterer.Instance.Form1;
 		_grid.SetOwner(targetForm);
 		_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
 		_grid.Width = targetForm.Width;
@@ -27,8 +27,8 @@ public class GridManager
 		_grid.ResetPosition();
 		_grid.Show();
 		_grid.Focus();
-		IDEAlterer.Alterer.Form1.Focus();
-		ColorChanger.Changer.UpdatedColors += UpdateColors;
+		IDEAlterer.Instance.Form1.Focus();
+		ColorChanger.Instance.UpdatedColors += UpdateColors;
 	}
 
 	public void UpdateColors()
