@@ -138,6 +138,7 @@
         <Compile Include="Tools\Enums.cs" />
         <Compile Include="Tools\FileDatabase.cs" />
         <Compile Include="Tools\ImageHelper.cs" />
+        <Compile Include="Tools\LinkCreator.cs" />
         <Compile Include="Tools\MiscHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
@@ -164,6 +165,9 @@
       <Content Include="Fonts\SAOWelcomeTT-Regular.ttf" />
       <Content Include="image.bmp" />
       <EmbeddedResource Include="Resources\Icons\yuki128_2.png" />
+      <EmbeddedResource Include="Resources\Default\background.png" />
+      <EmbeddedResource Include="Resources\Default\sticker.png" />
+      <EmbeddedResource Include="Resources\Default\theme.xshd" />
       <Content Include="Style\Resources\Close_32.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />

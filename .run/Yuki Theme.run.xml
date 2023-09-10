@@ -18,7 +18,9 @@
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <method v="2">
       <option name="Build" default="false" projectName="Yuki-Theme" projectPath="file://$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
+      <option name="Build" default="false" projectName="YukiUtility" projectPath="file://$PROJECT_DIR$/YukiUtility/YukiUtility.csproj" />
       <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy Utility" />
     </method>
   </configuration>
 </component>
