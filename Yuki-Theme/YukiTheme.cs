@@ -25,11 +25,6 @@ namespace YukiTheme
 
 		public static string GetCurrentFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-		public void Execute()
-		{
-			Console.WriteLine("Test");
-		}
-
 		internal static void StopTimer()
 		{
 			if (_timer.IsRunning)
@@ -41,19 +36,18 @@ namespace YukiTheme
 
 		public YukiTheme_VisualPascalABCPlugin(IWorkbench Workbench)
 		{
-			Console.WriteLine("Initing Yuki Theme");
 			_alterer = new IDEAlterer(Workbench);
 		}
 
 		public void GetGUI(List<IPluginGUIItem> MenuItems, List<IPluginGUIItem> ToolBarItems)
 		{
-			Console.WriteLine("Adding Yuki Theme");
-			PluginGUIItem Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ImageHelper.Load("yuki128_2.png"), Color.Black, Execute);
+			PluginGUIItem Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ImageHelper.Load("yuki128_2.png"), Color.Black, () => { });
 			MenuItems.Add(Item);
 			_timer = new Stopwatch();
 			_timer.Start();
 			_alterer.Init();
 
+			WpfColorContainer container = new WpfColorContainer();
 			// ToolBarItems.Add(Item);
 		}
 	}

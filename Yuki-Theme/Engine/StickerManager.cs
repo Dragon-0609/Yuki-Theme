@@ -8,8 +8,6 @@ public class StickerManager : WindowManager
 {
     private StickerWindow _sticker;
 
-    private bool hidden = false;
-
     public override void Show()
     {
         _sticker = new StickerWindow()
@@ -22,12 +20,12 @@ public class StickerManager : WindowManager
         var targetForm = IDEAlterer.Instance.Form1;
         _sticker.SetOwner(targetForm);
         _sticker.AutoSize = false;
-        _sticker.ResetPosition();
         _sticker.Show();
         _sticker.Focus();
         IDEAlterer.Instance.Form1.Focus();
-        _sticker.ResetPosition();
         UpdateSticker();
+        _sticker.LoadData();
+        _sticker.ResetPosition();
     }
 
     public override bool IsWindowNull() => _sticker == null;
@@ -53,11 +51,18 @@ public class StickerManager : WindowManager
         UpdateVisibility();
     }
 
+    protected override bool CanShow() => IDEAlterer.CanShowSticker;
+
     private void UpdateOpacity()
     {
         if (!IsWindowNull())
         {
             _sticker.Opacity = 1;
         }
+    }
+
+    public override void ReloadSettings()
+    {
+        UpdateVisibility();
     }
 }

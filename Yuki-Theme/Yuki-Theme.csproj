@@ -53,6 +53,7 @@
         <Reference Include="PresentationFramework" />
         <Reference Include="System" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Data.Linq" />
         <Reference Include="System.Drawing" />
         <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xaml" />
@@ -65,10 +66,18 @@
         <Reference Include="WindowsFormsIntegration" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Components\AlignmentHelper.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Components\GridWindow.xaml.cs" />
+        <Compile Include="Components\PluginSettingsControl.cs" />
+        <Compile Include="Components\PluginSettingsControl.Designer.cs" />
+        <Compile Include="Components\SettingsPanel.xaml.cs" />
+        <Compile Include="Components\SettingsPanelUtilities.cs" />
         <Compile Include="Components\SnapWindow.cs" />
         <Compile Include="Components\SnapWindowAlign.cs" />
         <Compile Include="Components\StickerWindow.xaml.cs" />
+        <Compile Include="Components\Styles\CheckboxStyles.xaml.cs" />
         <Compile Include="Components\ThemeSelectWindow.xaml.cs">
           <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
         </Compile>
@@ -88,7 +97,7 @@
         <Compile Include="Engine\OptionsChanger.cs" />
         <Compile Include="Engine\StickerManager.cs" />
         <Compile Include="Engine\TextEditorChanger.cs" />
-        <Compile Include="Engine\TheneSelectManager.cs" />
+        <Compile Include="Engine\ThemeSelectManager.cs" />
         <Compile Include="Engine\WallpaperManager.cs" />
         <Compile Include="Engine\WindowManager.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -131,10 +140,15 @@
         <Compile Include="Tools\ImageHelper.cs" />
         <Compile Include="Tools\MiscHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
+        <Compile Include="Tools\StickerPosition.cs" />
+        <Compile Include="Tools\StickerPositionConverter.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
+        <Compile Include="Tools\WPFAdapter.cs" />
+        <Compile Include="Tools\WpfColorContainer.cs" />
         <Compile Include="YukiTheme.cs" />
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Include="Components\PluginSettingsControl.resx" />
         <EmbeddedResource Include="Style\Helpers\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -145,6 +159,9 @@
     </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Fonts\Montserrat-Regular.ttf" />
+      <Content Include="Fonts\SAOUITT-Regular.ttf" />
+      <Content Include="Fonts\SAOWelcomeTT-Regular.ttf" />
       <Content Include="image.bmp" />
       <EmbeddedResource Include="Resources\Icons\yuki128_2.png" />
       <Content Include="Style\Resources\Close_32.bmp" />
@@ -179,7 +196,15 @@
     </ItemGroup>
     <ItemGroup>
       <Page Include="Components\GridWindow.xaml" />
+      <Page Include="Components\SettingsPanel.xaml" />
       <Page Include="Components\StickerWindow.xaml" />
+      <Page Include="Components\Styles\ButtonStyles.xaml" />
+      <Page Include="Components\Styles\CheckboxStyles.xaml" />
+      <Page Include="Components\Styles\DropDownStyles.xaml" />
+      <Page Include="Components\Styles\GroupBoxStyles.xaml" />
+      <Page Include="Components\Styles\ScrollViewerStyles.xaml" />
+      <Page Include="Components\Styles\Strings.xaml" />
+      <Page Include="Components\Styles\TextBlockStyles.xaml" />
       <Page Include="Components\ThemeSelectWindow.xaml" />
       <Page Include="Components\WallpaperWindow.xaml" />
     </ItemGroup>

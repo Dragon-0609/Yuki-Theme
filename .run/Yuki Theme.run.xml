@@ -1,8 +1,19 @@
-﻿<component name="ProjectRunConfigurationManager">
+<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Yuki Theme" type="RunNativeExe" factoryName="Native Executable">
-    <option name="EXE_PATH" value="C:/Program Files (x86)/PascalABC.NET/PascalABCNET.exe" />
+    <option name="EXE_PATH" value="$PROJECT_DIR$/../PascalABCNET/bin/PascalABCNET.exe" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="WORKING_DIRECTORY" value="C:/Program Files (x86)/PascalABC.NET" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PascalABCNET/bin" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <method v="2">
+      <option name="Build" default="false" projectName="Yuki-Theme" projectPath="file://$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy" />
+    </method>
+  </configuration>
+  <configuration default="false" name="Yuki Theme" type="RunNativeExe" factoryName="Native Executable">
+    <option name="EXE_PATH" value="$PROJECT_DIR$/../PascalABCNET/bin/PascalABCNET.exe" />
+    <option name="PROGRAM_PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PascalABCNET/bin" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <method v="2">

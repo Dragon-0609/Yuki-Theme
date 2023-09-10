@@ -98,7 +98,7 @@ public class EditorAlterer
         Fm.BackColor = EditorComponents._menu.BackColor =
             EditorComponents._statusBar.BackColor = EditorComponents._toolsPanel.BackColor = EditorComponents._tools.BackColor = color;
         Fm.cmEditor.BackColor = EditorComponents.TextEditor.Parent.BackColor = Fm.CurrentCodeFileDocument.BackColor = Fm.BottomPane.Parent.BackColor = color;
-        EditorComponents._optionsChanger._optionsForm.BackColor = EditorComponents._context2.BackColor = color;
+        EditorComponents._context2.BackColor = color;
     }
 
     private void UpdateBackgroundDefault(Color color)
@@ -108,16 +108,14 @@ public class EditorAlterer
         EditorComponents._outputPanel3.BackColor =
             EditorComponents._outputPanel5.BackColor = EditorComponents._outputPanel1.BackColor = EditorComponents._outputText.BackColor = color;
         EditorComponents._outputOutput.BackColor = Fm.ProjectPane.BackColor = EditorComponents.ErrorsList.BackColor = EditorComponents._compilerConsole.BackColor = color;
-        EditorComponents._optionsChanger._optionsTree.BackColor = color;
     }
 
     private void UpdateForeground(Color color)
     {
         EditorComponents._outputOutput.ForeColor = EditorComponents._outputPanel2.ForeColor = EditorComponents._outputText.ForeColor = EditorComponents._menu.ForeColor = color;
         EditorComponents._statusBar.ForeColor = EditorComponents._toolsPanel.ForeColor = EditorComponents._tools.ForeColor = EditorComponents.ErrorsList.ForeColor = color;
-        EditorComponents._compilerConsole.ForeColor = EditorComponents._optionsChanger._optionsForm.ForeColor = EditorComponents._optionsChanger._optionsTree.ForeColor = color;
+        EditorComponents._compilerConsole.ForeColor = color;
 
-        EditorComponents._optionsChanger._optionsContentContainer.ForeColor = color;
         foreach (ToolStripItem item in EditorComponents._context.Items)
         {
             item.ForeColor = color;
@@ -132,11 +130,10 @@ public class EditorAlterer
     private void UpdateBorder(Color color)
     {
         ChangeButtonColorsStartingFromBorder(color, EditorComponents._outputPanel1.Controls);
-        ChangeButtonColorsStartingFromBorder(color, EditorComponents._optionsChanger._optionsForm.Controls);
     }
 
 
-    private void ChangeButtonColorsStartingFromBorder(Color color, Control.ControlCollection collection)
+    public static void ChangeButtonColorsStartingFromBorder(Color color, Control.ControlCollection collection)
     {
         foreach (Control o in collection)
         {

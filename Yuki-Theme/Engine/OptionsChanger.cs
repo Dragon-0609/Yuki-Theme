@@ -1,36 +1,76 @@
+using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
+using Yuki_Theme_Plugin.Controls;
 using YukiTheme.Tools;
+using static YukiTheme.Engine.ColorChanger;
 
 namespace YukiTheme.Engine;
 
 public class OptionsChanger
 {
+	private static OptionsChanger _instance;
+
+	private Form1 _fm;
 	private OptionsContentEngine _optionsEngine;
-	internal OptionsForm _optionsForm;
-	internal TreeView _optionsTree;
+	private OptionsForm _optionsForm;
+	private TreeView _optionsTree;
 	private Panel _optionsContentPanel;
-	internal GroupBox _optionsContentContainer;
+	private GroupBox _optionsContentContainer;
 	private int _lastIndex = -1;
 	private Rectangle _lastRectangle;
 	private Brush _lastBrush;
-	private Form1 fm;
+	private bool SelectYukiThemeNode = false;
+	private KeyValuePair<TreeNode, IOptionsContent> _pluginNode;
 
 	public void GetOptionsComponents(Form1 form1)
 	{
-		fm = form1;
-		_optionsEngine = fm.GetByReflection<Form1, OptionsContentEngine>("optionsContentEngine");
+		_instance = this;
+		_fm = form1;
+		_optionsEngine = _fm.GetByReflection<OptionsContentEngine>("optionsContentEngine");
+
+		PluginSettingsControl content = new PluginSettingsControl();
+		_optionsEngine.AddContent(content);
 
 		_optionsForm = new OptionsForm(_optionsEngine);
-		_optionsTree = _optionsForm.GetByReflection<OptionsForm, TreeView>("tvContentList");
+		_optionsForm.Shown += SelectPluginNode;
+		_optionsTree = _optionsForm.GetByReflection<TreeView>("tvContentList");
 		_optionsTree.AfterSelect += AfterOptionsTreeSelected;
 
-		_optionsContentPanel = _optionsForm.GetByReflection<OptionsForm, Panel>("contentPanel");
-		_optionsContentContainer = _optionsForm.GetByReflection<OptionsForm, GroupBox>("contentContainer");
+		GetPluginNode(content);
+
+
+		_optionsContentPanel = _optionsForm.GetByReflection<Panel>("contentPanel");
+		_optionsContentContainer = _optionsForm.GetByReflection<GroupBox>("contentContainer");
 
 		_optionsEngine.SetByReflection("optionsWindow", _optionsForm);
+		SubscribeToColors();
+	}
+
+	public static void ShowSettings()
+	{
+		_instance.SelectYukiThemeNode = true;
+		_instance._optionsForm.ShowDialog();
+	}
+
+	private void GetPluginNode(PluginSettingsControl content)
+	{
+		Dictionary<TreeNode, IOptionsContent> nodes = _optionsForm.GetByReflection<Dictionary<TreeNode, IOptionsContent>>("nodes");
+		_pluginNode = nodes.First(n => n.Key.Text == content.ContentName);
+	}
+
+	private void SelectPluginNode(object sender, EventArgs e)
+	{
+		if (SelectYukiThemeNode)
+		{
+			SelectYukiThemeNode = false;
+			_optionsTree.SelectedNode = _pluginNode.Key;
+			_optionsTree.SetByReflection("lastSelectedNode", _pluginNode);
+		}
 	}
 
 	private void AfterOptionsTreeSelected(object sender, TreeViewEventArgs e)
@@ -116,5 +156,30 @@ public class OptionsChanger
 		e.Graphics.FillRectangle(backgroundBrush, rect);
 		e.Graphics.DrawString(text, e.Font, ColorReference.ForegroundBrush(), new Point(rect.X, rect.Y));
 		e.DrawFocusRectangle();
+	}
+
+	private void SubscribeToColors()
+	{
+		Instance.Update += UpdateColors;
+	}
+
+	private void UpdateColors(string key, Color color)
+	{
+		switch (key)
+		{
+			case BG:
+				_optionsForm.BackColor = color;
+				break;
+			case BG_DEF:
+				_optionsTree.BackColor = color;
+				break;
+			case FOREGROUND:
+				_optionsContentContainer.ForeColor = color;
+				_optionsForm.ForeColor = _optionsTree.ForeColor = color;
+				break;
+			case BORDER:
+				EditorAlterer.ChangeButtonColorsStartingFromBorder(color, _optionsForm.Controls);
+				break;
+		}
 	}
 }

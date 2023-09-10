@@ -77,7 +77,9 @@ public class ColorChanger
     private T GetT<T>(string key, Dictionary<string, T> dictionary)
     {
         if (dictionary.TryGetValue(key, out var res)) return res;
+#if LOG
         Console.WriteLine(Resources.ColorChanger_GetT_There_s_no__0_, typeof(T).Name.ToLower());
+#endif
         return default;
     }
 

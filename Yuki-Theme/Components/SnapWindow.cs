@@ -46,9 +46,8 @@ namespace YukiTheme.Components
 
 				if (CanUsePercents) //&& Settings.unit == RelativeUnit.Percent
 				{
-					Rect rect = GetOwnerRectangle();
-					_unitx = (float)(rect.Width / 100f);
-					_unity = (float)(rect.Height / 100f);
+					_unitx = (float)(_currentRect.Width / 100f);
+					_unity = (float)(_currentRect.Height / 100f);
 				}
 
 				Left = GetX();
@@ -58,8 +57,6 @@ namespace YukiTheme.Components
 					Width = _currentRect.Width;
 					Height = _currentRect.Height;
 				}
-
-				// Console.WriteLine($"x: {Left}, y: {Top}, width: {Width}, height: {Height}");
 			}
 		}
 
@@ -79,7 +76,7 @@ namespace YukiTheme.Components
 		{
 			double res = 0;
 			double left = _currentRect.X;
-			double posX = BorderOutlineX; // CanUsePercents && Settings.unit == RelativeUnit.Percent ? unitx : * 1; 
+			double posX = BorderOutlineX * (CanUsePercents ? _unitx : 1);
 			if (AlignX == AlignmentX.Left)
 			{
 				res = left + posX;
@@ -104,7 +101,7 @@ namespace YukiTheme.Components
 		{
 			double res = 0;
 			double top = _currentRect.Y;
-			double posY = BorderOutlineY; // * (CanUsePercents && Settings.unit == RelativeUnit.Percent ? unity : 1);
+			double posY = BorderOutlineY * (CanUsePercents ? _unity : 1);
 			if (AlignY == AlignmentY.Top)
 			{
 				res = top + posY;
@@ -233,7 +230,9 @@ namespace YukiTheme.Components
 				{
 					// WindowState = WindowState.Maximized;
 					TargetForm.Focus();
+#if LOG
 					Console.WriteLine("Maximized");
+#endif
 				}
 			}
 
@@ -299,7 +298,9 @@ namespace YukiTheme.Components
 			}
 			catch (InvalidOperationException e)
 			{
+#if LOG
 				Console.WriteLine(e);
+#endif
 			}
 		}
 
@@ -333,15 +334,6 @@ namespace YukiTheme.Components
 			// return targetForm.ClientRectangle.ToRect(targetForm);
 
 			throw new NullReferenceException("Owner wasn't set");
-		}
-		
-
-		internal void FocusBack(object sender, MouseButtonEventArgs e)
-		{
-			if (Target != null)
-				Target.Focus();
-			else if (TargetForm != null)
-				TargetForm.Focus();
 		}
 	}
 }

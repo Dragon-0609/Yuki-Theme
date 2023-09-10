@@ -41,6 +41,7 @@ namespace YukiTheme.Components
 
         private void Search_OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (ThemeList.SelectedItem == null) return;
             if (e.Key is Key.Enter or Key.Return)
             {
                 SelectTheme(ThemeList.SelectedItem.ToString());
@@ -49,12 +50,15 @@ namespace YukiTheme.Components
 
         private void ThemeList_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (ThemeList.SelectedItem == null) return;
             SelectTheme(ThemeList.SelectedItem.ToString());
         }
 
         public void SelectTheme(string theme)
         {
-            IDEConsole.Log($"Selected: {theme}");
+#if LOG
+            Console.WriteLine($"Selected: {theme}");
+#endif
             OnSelectedTheme();
         }
 

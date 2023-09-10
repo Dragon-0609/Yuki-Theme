@@ -38,4 +38,9 @@ public class ThemeWindowManager : WindowManager
     {
         _themeSelect.Visibility = visibility;
     }
+
+    public override void ReloadSettings()
+    {
+        
+    }
 }

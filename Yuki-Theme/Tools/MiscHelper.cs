@@ -7,7 +7,7 @@ namespace YukiTheme.Tools;
 
 public static class MiscHelper
 {
-	public static T GetByReflection<TF, T>(this TF instance, string key)
+	public static T GetByReflection<T>(this object instance, string key)
 	{
 		FieldInfo getopt = instance.GetType().GetField(key, BindingFlags.NonPublic | BindingFlags.Instance);
 		return (T)getopt?.GetValue(instance);

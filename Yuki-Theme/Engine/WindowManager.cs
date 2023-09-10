@@ -1,51 +1,68 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
 
 public abstract class WindowManager
 {
-    private bool hidden = false;
+	private bool _hidden = false;
 
-    public abstract void Show();
+	public abstract void Show();
 
-    public abstract bool IsWindowNull();
-    public abstract void SetVisibility(Visibility visibility);
+	public abstract bool IsWindowNull();
+	public abstract void SetVisibility(Visibility visibility);
 
 
-    public void UpdateVisibility()
-    {
-        if (IsWindowNull())
-        {
-            HideWallpaper();
-            return;
-        }
+	public void UpdateVisibility()
+	{
+		if (IsWindowNull())
+		{
+			HideWindow();
+			return;
+		}
 
-        if (IDEAlterer.CanShowWallpaper)
-        {
-            if (hidden)
-            {
-                ShowWallpaper();
-            }
-        }
-        else
-        {
-            if (!hidden)
-            {
-                HideWallpaper();
-            }
-        }
-    }
+#if LOG
+		Console.WriteLine($"Can show: {CanShow()}");
+#endif
+		if (CanShow())
+		{
+			if (_hidden)
+			{
+				ShowWindow();
+			}
+		}
+		else
+		{
+			if (!_hidden)
+			{
+				HideWindow();
+			}
+		}
+	}
 
-    private void ShowWallpaper()
-    {
-        hidden = false;
-        SetVisibility(Visibility.Visible);
-    }
+	protected virtual bool CanShow()
+	{
+		return IDEAlterer.CanShowWallpaper;
+	}
 
-    private void HideWallpaper()
-    {
-        hidden = true;
-        SetVisibility(Visibility.Visible);
-    }
+	private void ShowWindow()
+	{
+		_hidden = false;
+#if LOG
+		Console.WriteLine("Showing");
+#endif
+		SetVisibility(Visibility.Visible);
+	}
+
+	private void HideWindow()
+	{
+		_hidden = true;
+#if LOG
+		Console.WriteLine("Hiding");
+#endif
+		SetVisibility(Visibility.Hidden);
+	}
+
+	public abstract void ReloadSettings();
 }

@@ -13,247 +13,237 @@ using Point = System.Windows.Point;
 
 namespace YukiTheme.Components
 {
-    public partial class StickerWindow : SnapWindow
-    {
-        internal Drawing.PointF RelativePosition;
+	public partial class StickerWindow : SnapWindow
+	{
+		internal Drawing.PointF RelativePosition;
 
-        private Point _anchorPoint;
-        private bool _inDrag;
+		private Point _anchorPoint;
+		private bool _inDrag;
 
-        private PositionCalculator _calculator;
+		private PositionCalculator _calculator;
 
-        private GridWindow _grid;
+		private GridWindow _grid;
 
-        public StickerWindow()
-        {
-            InitializeComponent();
-            _calculator = new PositionCalculator(this);
-            CanUsePercents = true;
-        }
+		private AlignmentHelper _helper;
 
-        public static StickerWindow CreateStickerControl(Form parent)
-        {
-            StickerWindow stickerWindow = new StickerWindow();
-            stickerWindow.SetOwner(parent);
-            stickerWindow.ReadData();
-            return stickerWindow;
-        }
+		private StickerPosition PositionInfo
+		{
+			get => new(RelativePosition.X, RelativePosition.Y, GetAlign());
+			set
+			{
+				StickerPosition position = value;
+				RelativePosition = new Drawing.PointF(position.X, position.Y);
+				_helper.SetAlign(position.Align);
+			}
+		}
 
+		public StickerWindow()
+		{
+			InitializeComponent();
+			_calculator = new PositionCalculator(this);
+			CanUsePercents = true;
+			_helper = new AlignmentHelper(this);
+		}
 
-        public void SetSize()
-        {
-            Drawing.Size dimensionSize = ImageHelper.CalculateDimension(IDEAlterer.GetSticker.Size);
-            Width = dimensionSize.Width;
-            Height = dimensionSize.Height;
+		public void SetSize()
+		{
+			Drawing.Size dimensionSize = ImageHelper.CalculateDimension(IDEAlterer.GetSticker.Size);
+			Width = dimensionSize.Width;
+			Height = dimensionSize.Height;
+#if LOG
             Console.WriteLine($"width: {Width}, height: {Height}");
-        }
-
-        public void ReadData()
-        {
-            RelativePosition = Drawing.PointF.Empty;
-            AnchorStyles align;
-            RelativeUnit unit = RelativeUnit.Pixel;
-            align = GetPositioningValues(unit);
-            AlignX = align.ConvertToX();
-            AlignY = align.ConvertToY();
-
-            SetBorderOutline();
-            ResetPosition();
-        }
+#endif
+		}
 
 
-        private string ConvertLocationToSave()
-        {
-            string s = "";
-            // $"{_relativePosition.X}|{_relativePosition.Y}|{(int)(AlignX.ConvertToAlign () | AlignY.ConvertToAlign ())}|{(int)Settings.unit}";
-            return s;
-        }
+		internal void SaveData()
+		{
+			DatabaseManager.Save(SettingsConst.STICKER_POSITION, ConvertToSave());
+		}
 
-        internal void SaveData()
-        {
-            // Settings.database.UpdateData (SettingsConst.STICKER_POSITION, ConvertLocationToSave ());
-        }
+		private string ConvertToSave()
+		{
+			return StickerPositionConverter.ToString(PositionInfo);
+		}
 
-        private AnchorStyles GetPositioningValues(RelativeUnit unit)
-        {
-            AnchorStyles align;
-            string data = "";
-            // string data = Settings.database.ReadData (SettingsConst.STICKER_POSITION, "");
-            if (data != "")
-            {
-                try
-                {
-                    string[] cc = data.Split('|');
-                    float x = float.Parse(cc[0]);
-                    float y = float.Parse(cc[1]);
-                    RelativePosition = new Drawing.PointF(x, y);
-                    align = (AnchorStyles)(int.Parse(cc[2]));
-                    RelativeUnit un = (RelativeUnit)(int.Parse(cc[3]));
+		public void LoadData()
+		{
+			string data = DatabaseManager.Load(SettingsConst.STICKER_POSITION, "");
+			PositionInfo = ConvertToLoad(data);
+			SetBorderOutline();
+		}
 
-                    if (unit != un)
-                    {
-                        float tunitx = Convert.ToInt32(Owner.Width) / 100f;
-                        float tunity = Convert.ToInt32(Owner.Height) / 100f;
-                        if (un == RelativeUnit.Percent)
-                        {
-                            RelativePosition = new Drawing.PointF(RelativePosition.X * tunitx, RelativePosition.Y * tunity);
-                        }
-                        else
-                        {
-                            RelativePosition = new Drawing.PointF(RelativePosition.X / tunitx, RelativePosition.Y / tunity);
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    align = SetDefaultPositions(unit);
-                }
-            }
-            else
-            {
-                align = SetDefaultPositions(unit);
-            }
+		private StickerPosition ConvertToLoad(string data)
+		{
+			StickerPosition position = StickerPositionConverter.FromString(data);
+			return position;
+		}
 
-            return align;
-        }
-
-        private AnchorStyles SetDefaultPositions(RelativeUnit unit)
-        {
-            RelativePosition = unit == RelativeUnit.Pixel ? new Drawing.Point(BORDER_OUTLINE_X, PLUGIN_BORDER_OUTLINE_Y) : GetMargin();
-            return AnchorStyles.Bottom | AnchorStyles.Right;
-        }
-
-        private static Drawing.Point GetMargin()
-        {
-            int margin = 10;
-            return new Drawing.Point(margin, margin);
-        }
-
-        internal void SetBorderOutline()
-        {
-            BorderOutlineX = RelativePosition.X;
-            BorderOutlineY = RelativePosition.Y;
-
-            // borderOutlineX = borderOutlineY = BORDER_OUTLINE;
-        }
+		internal void SetBorderOutline()
+		{
+			BorderOutlineX = RelativePosition.X;
+			BorderOutlineY = RelativePosition.Y;
+		}
 
 
-        private void Sticker_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (false)
-            {
-                DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromMilliseconds(300));
-                Sticker.BeginAnimation(OpacityProperty, anim);
-            }
-        }
+		private void Sticker_MouseEnter(object sender, MouseEventArgs e)
+		{
+			if (DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+			{
+				DoubleAnimation anim = new DoubleAnimation(0.01, TimeSpan.FromMilliseconds(300));
+				Sticker.BeginAnimation(OpacityProperty, anim);
+			}
+		}
 
-        private void Sticker_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (false)
-            {
-                DoubleAnimation anim = new DoubleAnimation(1, TimeSpan.FromMilliseconds(300));
-                Sticker.BeginAnimation(OpacityProperty, anim);
-            }
-        }
+		private void Sticker_MouseLeave(object sender, MouseEventArgs e)
+		{
+			if (DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+			{
+				DoubleAnimation anim = new DoubleAnimation(1, TimeSpan.FromMilliseconds(300));
+				Sticker.BeginAnimation(OpacityProperty, anim);
+			}
+		}
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 1)
-            {
-                StartDragging(e);
-            }
-            else if (e.ClickCount == 2)
-            {
-                MouseDoubleClickAction();
-            }
-        }
+		protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+		{
+			if (e.ClickCount == 1)
+			{
+				StartDragging(e);
+			}
+			else if (e.ClickCount == 2)
+			{
+				MouseDoubleClickAction();
+			}
+		}
 
-        private void StartDragging(MouseButtonEventArgs e)
-        {
-            if (false)
-            {
-                _anchorPoint = e.GetPosition(this);
-                _inDrag = true;
-                CaptureMouse();
-                e.Handled = true;
-                _calculator.PrepareData();
-                _grid = new GridWindow
-                {
-                    AlignX = AlignmentX.Left,
-                    AlignY = AlignmentY.Top,
-                    BorderOutlineX = 0,
-                    BorderOutlineY = 0
-                };
-                if (Target != null)
-                {
-                    _grid.SetOwner(Target);
-                    _grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
-                    Rect rect = Target.GetAbsoluteRect();
-                    _grid.Width = rect.Width;
-                    _grid.Height = rect.Height;
-                }
-                else
-                {
-                    _grid.SetOwner(TargetForm);
-                    _grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
-                    _grid.Width = TargetForm.Width;
-                    _grid.Height = TargetForm.Height;
-                }
+		private void StartDragging(MouseButtonEventArgs e)
+		{
+			if (DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING) && !DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+			{
+				_anchorPoint = e.GetPosition(this);
+				_inDrag = true;
+				CaptureMouse();
+				e.Handled = true;
+				_calculator.PrepareData();
+				_grid = new GridWindow
+				{
+					AlignX = AlignmentX.Left,
+					AlignY = AlignmentY.Top,
+					BorderOutlineX = 0,
+					BorderOutlineY = 0
+				};
+				if (Target != null)
+				{
+					_grid.SetOwner(Target);
+					_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+					Rect rect = Target.GetAbsoluteRect();
+					_grid.Width = rect.Width;
+					_grid.Height = rect.Height;
+				}
+				else
+				{
+					_grid.SetOwner(TargetForm);
+					_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+					_grid.Width = TargetForm.Width;
+					_grid.Height = TargetForm.Height;
+				}
 
-                _grid.ResetPosition();
-                _grid.Show();
-                _grid.Focus();
-                Focus();
-            }
-        }
+				_grid.ResetPosition();
+				_grid.Show();
+				_grid.Focus();
+				Focus();
+			}
+		}
 
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            if (_inDrag)
-            {
-                Point currentPoint = e.GetPosition(this);
-                double pointX = this.Left + currentPoint.X - _anchorPoint.X;
-                double pointY = this.Top + currentPoint.Y - _anchorPoint.Y;
-                _calculator.KeepBounds(ref pointX, ref pointY);
-                this.Left = pointX;
-                this.Top = pointY; // this is not changing in your case	
-            }
-        }
+		protected override void OnMouseMove(MouseEventArgs e)
+		{
+			if (_inDrag)
+			{
+				Point currentPoint = e.GetPosition(this);
+				double pointX = this.Left + currentPoint.X - _anchorPoint.X;
+				double pointY = this.Top + currentPoint.Y - _anchorPoint.Y;
+				_calculator.KeepBounds(ref pointX, ref pointY);
+				this.Left = pointX;
+				this.Top = pointY; // this is not changing in your case	
+			}
+		}
 
-        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
-        {
-            if (_inDrag)
-            {
-                ReleaseMouseCapture();
-                _inDrag = false;
-                e.Handled = true;
-                _grid.Close();
+		protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
+		{
+			if (_inDrag)
+			{
+				ReleaseMouseCapture();
+				_inDrag = false;
+				e.Handled = true;
+				_grid.Close();
 
-                Point point = new Point(0, 0);
+				Point point = new Point(0, 0);
 
-                if (Target != null)
-                    point = e.GetPosition(Owner);
-                else if (TargetForm != null)
-                    point = TargetForm.PointToClient(System.Windows.Forms.Cursor.Position).ToWPFPoint();
-                else
-                    throw new NullReferenceException("Owner wasn't set");
+				if (Target != null)
+					point = e.GetPosition(Owner);
+				else if (TargetForm != null)
+					point = TargetForm.PointToClient(System.Windows.Forms.Cursor.Position).ToWPFPoint();
+				else
+					throw new NullReferenceException("Owner wasn't set");
 
-                _calculator.SetAligns(point);
-                _calculator.SaveRelatedPosition(point);
-            }
-        }
+				_calculator.SetAligns(point);
+				_calculator.SaveRelatedPosition(point);
+			}
+		}
 
-        private void MouseDoubleClickAction()
-        {
-            // if (!Settings.hideOnHover && Settings.positioning)
-            // {
-            // SaveData();
-            // }
-        }
+		private void MouseDoubleClickAction()
+		{
+			// Console.WriteLine("Saving");
+			if (!DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER) && DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING))
+			{
+				Console.WriteLine("Saving");
+				SaveData();
+				ResetPosition();
+			}
+		}
 
-        public void SetImage(ImageSource source)
-        {
-            Sticker.Source = source;
-        }
-    }
+		public void SetImage(ImageSource source)
+		{
+			Sticker.Source = source;
+		}
+
+		private AnchorStyles GetAlign()
+		{
+			AnchorStyles x = AlignX switch
+			{
+				AlignmentX.Left => AnchorStyles.Left,
+				AlignmentX.Center => AnchorStyles.Left | AnchorStyles.Right,
+				AlignmentX.Right => AnchorStyles.Right,
+				_ => AnchorStyles.None
+			};
+			AnchorStyles y = AlignY switch
+			{
+				AlignmentY.Top => AnchorStyles.Top,
+				AlignmentY.Center => AnchorStyles.Top | AnchorStyles.Bottom,
+				AlignmentY.Bottom => AnchorStyles.Bottom,
+				_ => AnchorStyles.None
+			};
+			AnchorStyles res;
+			if (x == AnchorStyles.None)
+				res = y;
+			else
+			{
+				res = x;
+				res |= y;
+			}
+
+			return res;
+		}
+
+		internal void FocusBack(object sender, MouseButtonEventArgs e)
+		{
+			if (!DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING))
+			{
+				if (Target != null)
+					Target.Focus();
+				else if (TargetForm != null)
+					TargetForm.Focus();
+			}
+		}
+	}
 }

@@ -19,7 +19,6 @@ namespace YukiTheme.Style.Helpers
 		private float unitx;
 		private float unity;
 		private Point _margin;
-		private RelativeUnit unit => RelativeUnit.Pixel;
 
 		private StickerWindow window;
 
@@ -38,11 +37,8 @@ namespace YukiTheme.Style.Helpers
 			height = (int)(owner.Height / 2);
 			height3 = (int)(owner.Height / 3);
 			height32 = height3 * 2;
-			if (unit == RelativeUnit.Percent)
-			{
-				unitx = (float)(owner.Width / 100);
-				unity = (float)(owner.Height / 100);
-			}
+			unitx = (float)(owner.Width / 100);
+			unity = (float)(owner.Height / 100);
 		}
 
 		public void KeepBounds(ref double x, ref double y)
@@ -108,8 +104,7 @@ namespace YukiTheme.Style.Helpers
 				res = (float)(owner.Width - (left + window.Width));
 			}
 
-			if (unit == RelativeUnit.Percent)
-				res /= unitx;
+			res /= unitx;
 			return res;
 		}
 
@@ -131,8 +126,7 @@ namespace YukiTheme.Style.Helpers
 				res = (float)(owner.Height - (top + window.Height));
 			}
 
-			if (unit == RelativeUnit.Percent)
-				res /= unity;
+			res /= unity;
 			return res;
 		}
 
@@ -141,6 +135,7 @@ namespace YukiTheme.Style.Helpers
 			Rect owner = window.GetOwnerRectangle();
 			window.RelativePosition = new PointF(GetRelatedX(owner, point), GetRelatedY(owner, point));
 			window.SetBorderOutline();
+			
 			window.ResetPosition();
 		}
 	}

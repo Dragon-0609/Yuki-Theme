@@ -1,112 +1,109 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using YukiTheme.Engine;
 
 namespace YukiTheme.Tools
 {
-    public class DatabaseManager
-    {
-        public static DatabaseManager Instance;
+	public class DatabaseManager
+	{
+		public static DatabaseManager Instance;
 
-        private FileDatabase _database;
+		private FileDatabase _database;
 
-        public readonly Dictionary<int, string> _defaults = new()
-        {
-            { SettingsConst.AUTO_UPDATE, true.ToInt().ToString() },
-            { SettingsConst.BG_IMAGE, true.ToInt().ToString() },
-            { SettingsConst.STICKER, true.ToInt().ToString() },
-            { SettingsConst.STATUS_BAR, true.ToInt().ToString() },
-            { SettingsConst.LOGO, true.ToInt().ToString() },
-            { SettingsConst.BETA, true.ToInt().ToString() },
-            { SettingsConst.LOGIN, false.ToInt().ToString() },
-            { SettingsConst.STICKER_POSITION_UNIT, "1" },
-            { SettingsConst.ALLOW_POSITIONING, false.ToInt().ToString() },
-            { SettingsConst.SHOW_GRIDS, false.ToInt().ToString() },
-            { SettingsConst.USE_CUSTOM_STICKER, false.ToInt().ToString() },
-            { SettingsConst.CUSTOM_STICKER_PATH, "" },
-            { SettingsConst.LICENSE, false.ToInt().ToString() },
-            { SettingsConst.GOOGLE_ANALYTICS, false.ToInt().ToString() },
-            { SettingsConst.DON_T_TRACK, false.ToInt().ToString() },
-            { SettingsConst.AUTO_FIT_WIDTH, true.ToInt().ToString() },
-            { SettingsConst.SHOW_PREVIEW, true.ToInt().ToString() },
-            { SettingsConst.LOCALIZATION, "unknown" },
-            { SettingsConst.USE_DIMENSION_CAP, false.ToInt().ToString() },
-            { SettingsConst.DIMENSION_CAP_MAX, "-1" },
-            { SettingsConst.DIMENSION_CAP_UNIT, "0" },
-            { SettingsConst.HIDE_ON_HOVER, true.ToInt().ToString() },
-            { SettingsConst.HIDE_DELAY, "750" },
-            { SettingsConst.PORTABLE_MODE, false.ToInt().ToString() },
-            { SettingsConst.DISCRETE_MODE, false.ToInt().ToString() },
-        };
+		public readonly Dictionary<int, string> _defaults = new()
+		{
+			{ SettingsConst.AUTO_UPDATE, true.ToInt().ToString() },
+			{ SettingsConst.BG_IMAGE, true.ToInt().ToString() },
+			{ SettingsConst.STICKER, true.ToInt().ToString() },
+			{ SettingsConst.STATUS_BAR, true.ToInt().ToString() },
+			{ SettingsConst.LOGO, true.ToInt().ToString() },
+			{ SettingsConst.BETA, true.ToInt().ToString() },
+			{ SettingsConst.LOGIN, false.ToInt().ToString() },
+			{ SettingsConst.STICKER_POSITION_UNIT, "1" },
+			{ SettingsConst.ALLOW_POSITIONING, false.ToInt().ToString() },
+			{ SettingsConst.SHOW_GRIDS, false.ToInt().ToString() },
+			{ SettingsConst.USE_CUSTOM_STICKER, false.ToInt().ToString() },
+			{ SettingsConst.CUSTOM_STICKER_PATH, "" },
+			{ SettingsConst.LICENSE, false.ToInt().ToString() },
+			{ SettingsConst.GOOGLE_ANALYTICS, false.ToInt().ToString() },
+			{ SettingsConst.DON_T_TRACK, false.ToInt().ToString() },
+			{ SettingsConst.AUTO_FIT_WIDTH, true.ToInt().ToString() },
+			{ SettingsConst.SHOW_PREVIEW, true.ToInt().ToString() },
+			{ SettingsConst.LOCALIZATION, "unknown" },
+			{ SettingsConst.USE_DIMENSION_CAP, false.ToInt().ToString() },
+			{ SettingsConst.DIMENSION_CAP_MAX, "-1" },
+			{ SettingsConst.DIMENSION_CAP_UNIT, "0" },
+			{ SettingsConst.HIDE_ON_HOVER, true.ToInt().ToString() },
+			{ SettingsConst.HIDE_DELAY, "750" },
+			{ SettingsConst.PORTABLE_MODE, false.ToInt().ToString() },
+			{ SettingsConst.DISCRETE_MODE, false.ToInt().ToString() },
+		};
 
-        public DatabaseManager()
-        {
-            Instance = this;
-            InitDatabase();
+		public DatabaseManager()
+		{
+			Instance = this;
+			InitDatabase();
 
-            AddDefaults();
-        }
+			AddDefaults();
+		}
 
-        private void InitDatabase()
-        {
-            _database = new FileDatabase();
-        }
+		private void InitDatabase()
+		{
+			_database = new FileDatabase();
+		}
 
-        private void AddDefaults()
-        {
-            if (_database.GetValue(SettingsConst.BG_IMAGE.ToString()).Length == 0)
-            {
-                foreach (KeyValuePair<int, string> pair in _defaults)
-                {
-                    Save(pair.Key, pair.Value);
-                }
-            }
-        }
+		private void AddDefaults()
+		{
+			if (_database.GetValue(SettingsConst.BG_IMAGE.ToString()).Length == 0)
+			{
+				foreach (KeyValuePair<int, string> pair in _defaults)
+				{
+					Save(pair.Key, pair.Value);
+				}
+			}
+		}
 
-        #region Setter
+		#region Setter
 
-        public void Save(int name, int value) => Save(name.ToString(), value.ToString());
-        public void Save(int name, bool value) => Save(name.ToString(), value.ToInt().ToString());
+		public static void Save(int name, int value) => Instance.Save(name.ToString(), value.ToString());
+		public static void Save(int name, bool value) => Instance.Save(name.ToString(), value.ToInt().ToString());
+		public static void Save(int name, string value) => Instance.Save(name.ToString(), value);
 
-        public void Save(int name, string value)
-        {
-            Save(name.ToString(), value);
-        }
+		private void Save(string name, string value)
+		{
+			_database.SetValue(name, value);
+		}
 
-        private void Save(string name, string value)
-        {
-            _database.SetValue(name, value);
-        }
+		#endregion
 
-        #endregion
+		#region Getter
 
-        #region Getter
+		public static bool Load(int key)
+		{
+			return Load(key, int.Parse(Instance._defaults[key]).ToBool());
+		}
 
-        public bool Load(int key)
-        {
-            return Load(key, int.Parse(_defaults[key]).ToBool());
-        }
+		public static string Load(int key, string defaultValue) => Instance._database.GetValue(key.ToString(), defaultValue);
 
-        public string Load(int key, string defaultValue) => _database.GetValue(key.ToString(), defaultValue);
+		public static int Load(int key, int defaultValue)
+		{
+			return int.Parse(Instance._database.GetValue(key.ToString(), defaultValue.ToString()));
+		}
 
-        public int Load(int key, int defaultValue)
-        {
-            return int.Parse(_database.GetValue(key.ToString(), defaultValue.ToString()));
-        }
+		public static bool Load(int key, bool defaultValue)
+		{
+			string value = Instance._database.GetValue(key.ToString(), defaultValue.ToInt().ToString());
+			return int.Parse(value).ToBool();
+		}
 
-        public bool Load(int key, bool defaultValue)
-        {
-            string value = _database.GetValue(key.ToString(), defaultValue.ToInt().ToString());
-            return int.Parse(value).ToBool();
-        }
+		private static string Load(string key, string defaultValue) => Instance._database.GetValue(key, defaultValue);
 
-        private string Load(string key, string defaultValue) => _database.GetValue(key, defaultValue);
-
-        #endregion
+		#endregion
 
 
-        public void Delete(int key)
-        {
-            _database.DeleteValue(key.ToString());
-        }
-    }
+		public void Delete(int key)
+		{
+			_database.DeleteValue(key.ToString());
+		}
+	}
 }
