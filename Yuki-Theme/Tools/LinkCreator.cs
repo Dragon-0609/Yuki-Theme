@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 
@@ -7,80 +8,111 @@ namespace YukiTheme.Tools;
 
 public class LinkCreator
 {
-	private string _folder;
+    private string _folder;
 
-	public bool CheckLinks()
-	{
-		_folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "YukiTheme");
+    public bool CheckLinks()
+    {
+        _folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "YukiTheme");
 
-		if (!Directory.Exists(_folder))
-		{
-			Directory.CreateDirectory(_folder);
-		}
+        if (!Directory.Exists(_folder))
+        {
+            Directory.CreateDirectory(_folder);
+        }
 
-		string themeExtension = "theme.xshd";
-		string stickerExtension = "sticker.png";
-		string backgroundExtension = "background.png";
-		CheckFiles();
-		if (File.Exists(GetHighlighting(themeExtension)) && File.Exists(GetHighlighting(backgroundExtension)) && File.Exists(GetHighlighting(stickerExtension)))
-		{
-			return false;
-		}
+        string themeExtension = "theme.xshd";
+        string stickerExtension = "sticker.png";
+        string backgroundExtension = "background.png";
+        CheckFiles();
+        if (IsValid(themeExtension, false) && IsValid(backgroundExtension, true) && IsValid(stickerExtension, true))
+        {
+            return false;
+        }
 
-		RunUtility();
+        RunUtility();
 
-		return true;
-	}
+        return true;
+    }
 
-	private void CheckFiles()
-	{
-		string themeExtension = "theme.xshd";
-		string stickerExtension = "sticker.png";
-		string backgroundExtension = "background.png";
+    private bool IsValid(string nameAndExtension, bool isImage)
+    {
+        string path = GetHighlighting(nameAndExtension);
+        bool valid = true;
 
-		string theme = Path.Combine(_folder, themeExtension);
-		if (!File.Exists(theme))
-		{
-			CopyDefault(themeExtension);
-		}
+        if (isImage)
+        {
+            try
+            {
+                Image.FromFile(path).Dispose();
+            }
+            catch
+            {
+                valid = false;
+            }
+        }
+        else
+        {
+            try
+            {
+                File.ReadAllText(path);
+            }
+            catch
+            {
+                valid = false;
+            }
+        }
 
-		string background = Path.Combine(_folder, backgroundExtension);
-		if (!File.Exists(background))
-		{
-			CopyDefault(backgroundExtension);
-		}
+        return valid;
+    }
 
-		string sticker = Path.Combine(_folder, stickerExtension);
-		if (!File.Exists(sticker))
-		{
-			CopyDefault(stickerExtension);
-		}
-	}
+    private void CheckFiles()
+    {
+        string themeExtension = "theme.xshd";
+        string stickerExtension = "sticker.png";
+        string backgroundExtension = "background.png";
 
-	private void CopyDefault(string file)
-	{
-		string resource = $"YukiTheme.Resources.Default.{file}";
+        string theme = Path.Combine(_folder, themeExtension);
+        if (!File.Exists(theme))
+        {
+            CopyDefault(themeExtension);
+        }
 
-		Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+        string background = Path.Combine(_folder, backgroundExtension);
+        if (!File.Exists(background))
+        {
+            CopyDefault(backgroundExtension);
+        }
 
-		using (var fileStream = File.Create(Path.Combine(_folder, file)))
-		{
-			stream.Seek(0, SeekOrigin.Begin);
-			stream.CopyTo(fileStream);
-			stream.Close();
-		}
-	}
+        string sticker = Path.Combine(_folder, stickerExtension);
+        if (!File.Exists(sticker))
+        {
+            CopyDefault(stickerExtension);
+        }
+    }
 
-	private void RunUtility()
-	{
-		var psi = new ProcessStartInfo(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
-		psi.CreateNoWindow = true;
-		psi.UseShellExecute = false;
-		Process.Start(psi).WaitForExit();
-	}
+    private void CopyDefault(string file)
+    {
+        string resource = $"YukiTheme.Resources.Default.{file}";
 
-	private static string GetHighlighting(string file)
-	{
-		return Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "Highlighting", file);
-	}
+        Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+
+        using (var fileStream = File.Create(Path.Combine(_folder, file)))
+        {
+            stream.Seek(0, SeekOrigin.Begin);
+            stream.CopyTo(fileStream);
+            stream.Close();
+        }
+    }
+
+    private void RunUtility()
+    {
+        var psi = new ProcessStartInfo(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
+        psi.CreateNoWindow = true;
+        psi.UseShellExecute = false;
+        Process.Start(psi).WaitForExit();
+    }
+
+    private static string GetHighlighting(string file)
+    {
+        return Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "Highlighting", file);
+    }
 }

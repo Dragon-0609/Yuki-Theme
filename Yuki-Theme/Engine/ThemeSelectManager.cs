@@ -1,6 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Forms.Integration;
 using System.Windows.Media;
 using YukiTheme.Components;
+using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
 
@@ -10,6 +12,8 @@ public class ThemeWindowManager : WindowManager
 
     public override void Show()
     {
+        WpfConverter.ConvertGuiColorsNBrushes();
+
         _themeSelect = new ThemeSelectWindow()
         {
             AlignX = AlignmentX.Left,
@@ -23,13 +27,12 @@ public class ThemeWindowManager : WindowManager
         _themeSelect.Height = targetForm.Height;
         _themeSelect.AutoSize = true;
         _themeSelect.ResetPosition();
+        ElementHost.EnableModelessKeyboardInterop(_themeSelect);
         _themeSelect.Show();
         _themeSelect.Focus();
-        _themeSelect.SelectedTheme += () =>
-        {
-            IDEConsole.Log("Selected theme");
-        };
+        _themeSelect.SelectedTheme += (name) => { IDEConsole.Log($"Selected {name}"); };
         IDEAlterer.Instance.Form1.Focus();
+        _themeSelect.Search.Focus();
     }
 
     public override bool IsWindowNull() => _themeSelect == null;
@@ -41,6 +44,5 @@ public class ThemeWindowManager : WindowManager
 
     public override void ReloadSettings()
     {
-        
     }
 }

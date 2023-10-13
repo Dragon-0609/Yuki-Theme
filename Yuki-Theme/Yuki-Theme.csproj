@@ -74,6 +74,7 @@
         <Compile Include="Components\PluginSettingsControl.Designer.cs" />
         <Compile Include="Components\SettingsPanel.xaml.cs" />
         <Compile Include="Components\SettingsPanelUtilities.cs" />
+        <Compile Include="Components\SilentTextBox.cs" />
         <Compile Include="Components\SnapWindow.cs" />
         <Compile Include="Components\SnapWindowAlign.cs" />
         <Compile Include="Components\StickerWindow.xaml.cs" />
@@ -206,9 +207,11 @@
       <Page Include="Components\Styles\CheckboxStyles.xaml" />
       <Page Include="Components\Styles\DropDownStyles.xaml" />
       <Page Include="Components\Styles\GroupBoxStyles.xaml" />
+      <Page Include="Components\Styles\ListViewStyles.xaml" />
       <Page Include="Components\Styles\ScrollViewerStyles.xaml" />
       <Page Include="Components\Styles\Strings.xaml" />
       <Page Include="Components\Styles\TextBlockStyles.xaml" />
+      <Page Include="Components\Styles\TextBoxStyles.xaml" />
       <Page Include="Components\ThemeSelectWindow.xaml" />
       <Page Include="Components\WallpaperWindow.xaml" />
     </ItemGroup>

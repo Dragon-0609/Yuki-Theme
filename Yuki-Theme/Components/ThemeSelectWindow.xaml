@@ -6,17 +6,34 @@
                        xmlns:components="clr-namespace:YukiTheme.Components"
                        mc:Ignorable="d" Background="#66000000" BorderThickness="0" WindowStyle="None" ResizeMode="NoResize"
                        AllowsTransparency="True"
-                       Title="StickerWindow" Height="300" Width="600">
+                       Title="StickerWindow" Height="300" Width="600" MouseUp="ThemeSelectWindow_OnMouseUp">
 
-    <Grid>
-        <Grid Width="200" Height="200" Background="#333333">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBox Name="Search" TextChanged="OnSearchTextChanged" KeyDown="Search_OnKeyDown">Search</TextBox>
-            <ListView Grid.Row="1" Name="ThemeList" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False" Background="#232323" MouseDown="ThemeList_OnMouseDown" />
-        </Grid>
+    <Window.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBoxStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ListViewStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid MouseUp="Grid_OnMouseUp">
+        <Border Name="Border" Width="200" Height="200" Background="#333333" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <components:SilentTextBox x:Name="Search" FontSize="14" BorderThickness="0 0 0 1" Padding="1" Style="{StaticResource TextBoxDefault}"
+                                          TextChanged="OnSearchTextChanged" KeyDown="Search_OnKeyDown" PreviewKeyDown="Search_OnPreviewKeyDown">
+                    Search
+                </components:SilentTextBox>
+                <ListView Grid.Row="1" Name="ThemeList" FontSize="14" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                           MouseDown="ThemeList_OnMouseDown" Style="{StaticResource ListStyle}"  MouseLeftButtonUp="ThemeList_OnMouseLeftButtonUp" />
+            </Grid>
+        </Border>
     </Grid>
 
 </components:SnapWindow>
