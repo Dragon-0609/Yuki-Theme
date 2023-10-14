@@ -39,6 +39,8 @@ namespace YukiTheme.Engine
 			_stickerManager = new StickerManager();
 			_themeSelect = new ThemeWindowManager();
 			new DatabaseManager();
+			new PluginEvents();
+			new DokiExporter();
 		}
 
 		public void Init()

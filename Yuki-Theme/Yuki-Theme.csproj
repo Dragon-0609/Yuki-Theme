@@ -70,6 +70,7 @@
           <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Components\GridWindow.xaml.cs" />
+        <Compile Include="Components\NameBar.cs" />
         <Compile Include="Components\PluginSettingsControl.cs" />
         <Compile Include="Components\PluginSettingsControl.Designer.cs" />
         <Compile Include="Components\SettingsPanel.xaml.cs" />
@@ -88,6 +89,7 @@
         <Compile Include="Engine\ColorChanger.cs" />
         <Compile Include="Engine\ColorReference.cs" />
         <Compile Include="Engine\DataManager.cs" />
+        <Compile Include="Engine\DokiExporter.cs" />
         <Compile Include="Engine\EditorAlterer.cs" />
         <Compile Include="Engine\EditorComponents.cs" />
         <Compile Include="Engine\GridManager.cs" />
@@ -96,6 +98,7 @@
         <Compile Include="Engine\ImageLoader.cs" />
         <Compile Include="Engine\MenuReplacer.cs" />
         <Compile Include="Engine\OptionsChanger.cs" />
+        <Compile Include="Engine\PluginEvents.cs" />
         <Compile Include="Engine\StickerManager.cs" />
         <Compile Include="Engine\TextEditorChanger.cs" />
         <Compile Include="Engine\ThemeSelectManager.cs" />
@@ -144,6 +147,7 @@
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
         <Compile Include="Tools\StickerPositionConverter.cs" />
+        <Compile Include="Tools\ThemeNameExtractor.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
         <Compile Include="Tools\WPFAdapter.cs" />
         <Compile Include="Tools\WpfColorContainer.cs" />
@@ -214,6 +218,11 @@
       <Page Include="Components\Styles\TextBoxStyles.xaml" />
       <Page Include="Components\ThemeSelectWindow.xaml" />
       <Page Include="Components\WallpaperWindow.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Resources\Stickers\" />
+      <Folder Include="Resources\Themes\" />
+      <Folder Include="Resources\Wallpapers\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
