@@ -1,0 +1,93 @@
+{
+  "id": "b0340303-0a5a-4a20-9b9c-fc8ce9880078",
+  "name": "Sayori Dark",
+  "displayName": "Š̸̘͚̼͎̯̙̣̱̎̋̐͒a̴̖̟̠̳̤͙̟͂̂͑̐͜ỷ̵̧̨̞̠̖̠o̴̧͍̗̬̎̓͆̔͝ͅr̴̡̮̟͈͠ͅi̴̡̨͓͈̬̗̺̍́̃̇̓",
+  "dark": true,
+  "author": "Unthrottled",
+  "group": "Literature Club",
+  "stickers": {
+    "default": {
+      "name": "sayori_dark.png",
+      "anchor": "center",
+      "opacity": 7
+    },
+    "secondary": {
+      "name": "sayori_dark_normal.png",
+      "anchor": "center",
+      "opacity": 7
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#01CFE7"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#17243c",
+    "lineNumberColor": "#666879",
+    "completionWindowBackground": "#32393F",
+    "baseIconColor": "#5B777F",
+    "contrastColor": "#1B323F",
+    "nonProjectFileScopeColor": "#131b2a",
+    "secondaryBackground": "#131d2d",
+    "selectionForeground": "#9CF5FF",
+    "inactiveBackground": "#1b254b",
+    "inactiveBackgroundDarker": "#1d2650",
+    "headerColor": "#0e1b2f",
+    "baseBackground": "#0E1D31",
+    "borderColor": "#1a1c2d",
+    "buttonColor": "#18303f",
+    "selectionInactive": "#1d274b",
+    "identifierHighlight": "#1f3050",
+    "selectionBackground": "#234164",
+    "searchBackground": "#2F617B",
+    "searchForeground": "#fefefe",
+    "buttonFont": "#26A8E8",
+    "foregroundColor": "#bbbbbb",
+    "startColor": "#0A74BB",
+    "highlightColor": "#232e3f",
+    "disabledColor": "#4b4b57",
+    "accentColorTransparent": "#00BCD45A",
+    "accentColorLessTransparent": "#00BCD49A",
+    "accentColorMoreTransparent": "#00BCD42A",
+    "accentColor": "#00BCD4",
+    "accentContrastColor": "#12131f",
+    "infoForeground": "#3a9fb1",
+    "stopColor": "#11FFFD",
+    "testScopeColor": "#122325",
+    "popupMask": "#EAEAF00A",
+    "codeBlock": "#1B1D31",
+    "textEditorBackground": "#111b2d",
+    "foldedTextBackground": "#1b2346",
+    "errorColor": "#ff0000",
+    "constantColor": "#A486FD",
+    "classNameColor": "#52FFA3",
+    "htmlTagColor": "#7DA6FF",
+    "stringColor": "#FF89BA",
+    "keyColor": "#FFF37C",
+    "keywordColor": "#3F77EF",
+    "iconAccent": "#6ee4f8",
+    "iconAccentCompliment": "#1785ff",
+    "iconBaseBlend": "#5a95ff",
+    "iconSecondaryBlend": "#73b1f8",
+    "iconBlendCompliment": "#ff4c8a",
+    "iconDiversification": "#ffde8b",
+    "dokiLogoAccent": "#6ee4f8",
+    "dokiLogoAccentContrast": "#138193",
+    "diff.deleted": "#2E313D",
+    "lightEditorColor": "#152036",
+    "breakpointColor": "#252d32",
+    "breakpointActiveColor": "#1a452c",
+    "fileBlue": "#103056",
+    "fileGray": "#202b3b",
+    "fileRose": "#30213e",
+    "fileOrange": "#2d2826",
+    "fileViolet": "#1e224d",
+    "fileYellow": "#2b352f",
+    "fileRed": "#2a1c2d",
+    "filePurple": "#1c1c46"
+  },
+  "characterId": "19326648-3b6a-450c-b741-ca67f39ed691"
+}

@@ -51,14 +51,13 @@ namespace Yuki_Theme_Plugin.Controls
 
 		private void InitSettingsPanel()
 		{
+			WpfConverter.ConvertGuiColorsNBrushes();
 			if (!alreadyShown)
 			{
 				WpfConverter.InitAppForWinforms();
-				WpfConverter.ConvertGuiColorsNBrushes();
 				// Form parentForm = ExtractOptionsParent();
 				// Settings.Location = SettingsPanelLocation.IDE;
 				_settingsPanel = new SettingsPanel();
-				_settingsPanel.GetColors();
 				var utilities = _settingsPanel.Utilities;
 
 				// API_Events.saveToolBarData = () => plugin.camouflage.SaveData();
@@ -76,6 +75,7 @@ namespace Yuki_Theme_Plugin.Controls
 				_settingsPanel.Height = Height;
 				
 			}
+			_settingsPanel.GetColors();
 		}
 
 		private void SaveSettings()

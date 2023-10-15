@@ -13,16 +13,7 @@ namespace YukiTheme.Components
 	{
 		private const string PLACEHOLDER_TEXT = "Search...";
 
-		private List<string> _themes = new()
-		{
-			"Azure Lane: Essex",
-			"ReZero: Emily Dark",
-			"ReZero: Emily Light",
-			"ReZero: Ram",
-			"ReZero: Rem",
-			"SAO: Asuna Dark",
-			"SAO: Asuna Light"
-		};
+		private readonly string[] _themes = ThemeNames.Themes;
 
 		public event Action<string> SelectedTheme;
 
@@ -45,6 +36,8 @@ namespace YukiTheme.Components
 			{
 				ThemeList.SelectedItem = name;
 			}
+
+			FocusToCurrent();
 		}
 
 		private void SearchOnLostFocus(object sender, RoutedEventArgs e)
@@ -144,6 +137,7 @@ namespace YukiTheme.Components
 				{
 					ThemeList.SelectedIndex = Math.Min(ThemeList.SelectedIndex + 1, ThemeList.Items.Count - 1);
 				}
+				FocusToCurrent();
 			}
 
 			if (e.Key is Key.Up)
@@ -156,10 +150,16 @@ namespace YukiTheme.Components
 				{
 					ThemeList.SelectedIndex = Math.Max(ThemeList.SelectedIndex - 1, 0);
 				}
+				FocusToCurrent();
 			}
 
 			if (e.Key is Key.Escape)
 				Close();
+		}
+
+		private void FocusToCurrent()
+		{
+			ThemeList.ScrollIntoView(ThemeList.SelectedItem);
 		}
 
 		private void ThemeList_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

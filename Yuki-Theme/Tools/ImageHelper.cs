@@ -7,36 +7,14 @@ namespace YukiTheme.Tools
 {
 	public static class ImageHelper
 	{
-		public static Image Load(string icon, string nameSpace = "Icons.")
-		{
-			Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"YukiTheme.Resources.{nameSpace}{icon}");
-			return Image.FromStream(stream);
-		}
-
-		public static void Save(string path, string name, string nameSpace)
-		{
-			using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"YukiTheme.Resources.{nameSpace}{name}"))
-			{
-				if (stream == null) throw new InvalidOperationException("File not found");
-				if (File.Exists(path))
-				{
-					File.Delete(path);
-				}
-
-				using (FileStream file = File.Create(path))
-				{
-					file.Position = 0;
-					stream.CopyTo(file);
-				}
-			}
-		}
+		
 
 		public static Size CalculateDimension(Size value)
 		{
 			Size size = value;
 			int capMax = 300;
 			double aspect = 0;
-			if (false)
+			if (false) // Dimension available
 			{
 				if (true)
 				{

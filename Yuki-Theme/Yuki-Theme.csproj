@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -42,6 +41,9 @@
         </Reference>
         <Reference Include="ICSharpCode.TextEditor">
             <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
+        </Reference>
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
         <Reference Include="PascalABCNET">
             <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
@@ -139,15 +141,20 @@
         <Compile Include="Tools\ColorHelper.cs" />
         <Compile Include="Tools\Converter.cs" />
         <Compile Include="Tools\DatabaseManager.cs" />
+        <Compile Include="Tools\DokiKeysObtainer.cs" />
+        <Compile Include="Tools\DokiKeysTranslator.cs" />
+        <Compile Include="Tools\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
         <Compile Include="Tools\FileDatabase.cs" />
         <Compile Include="Tools\ImageHelper.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
         <Compile Include="Tools\MiscHelper.cs" />
+        <Compile Include="Tools\ResourceHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
         <Compile Include="Tools\StickerPositionConverter.cs" />
         <Compile Include="Tools\ThemeNameExtractor.cs" />
+        <Compile Include="Tools\ThemeNames.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
         <Compile Include="Tools\WPFAdapter.cs" />
         <Compile Include="Tools\WpfColorContainer.cs" />
@@ -173,6 +180,95 @@
       <EmbeddedResource Include="Resources\Default\background.png" />
       <EmbeddedResource Include="Resources\Default\sticker.png" />
       <EmbeddedResource Include="Resources\Default\theme.xshd" />
+      <EmbeddedResource Include="Resources\Templates\Template.xshd" />
+      <EmbeddedResource Include="Resources\Themes\Essex.json" />
+      <EmbeddedResource Include="Resources\Themes\Aqua.json" />
+      <EmbeddedResource Include="Resources\Themes\Astolfo.json" />
+      <EmbeddedResource Include="Resources\Themes\Asuna Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Asuna Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Azuki.json" />
+      <EmbeddedResource Include="Resources\Themes\Beatrice.json" />
+      <EmbeddedResource Include="Resources\Themes\C.C..json" />
+      <EmbeddedResource Include="Resources\Themes\Chocola.json" />
+      <EmbeddedResource Include="Resources\Themes\Christmas Chocola.json" />
+      <EmbeddedResource Include="Resources\Themes\Cinnamon.json" />
+      <EmbeddedResource Include="Resources\Themes\Coconut.json" />
+      <EmbeddedResource Include="Resources\Themes\Darkness Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Darkness Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Echidna.json" />
+      <EmbeddedResource Include="Resources\Themes\Emilia Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Emilia Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Gasai Yuno.json" />
+      <EmbeddedResource Include="Resources\Themes\Genos.json" />
+      <EmbeddedResource Include="Resources\Themes\Gray.json" />
+      <EmbeddedResource Include="Resources\Themes\Hanekawa Tsubasa.json" />
+      <EmbeddedResource Include="Resources\Themes\Hatsune Miku.json" />
+      <EmbeddedResource Include="Resources\Themes\Hayase Nagatoro.json" />
+      <EmbeddedResource Include="Resources\Themes\Hinata Shoyo.json" />
+      <EmbeddedResource Include="Resources\Themes\Hiro Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Hiro x Zero Two.json" />
+      <EmbeddedResource Include="Resources\Themes\Ibuki Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Ibuki Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Ishtar Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Ishtar Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Jabami Yumeko.json" />
+      <EmbeddedResource Include="Resources\Themes\Jahy.json" />
+      <EmbeddedResource Include="Resources\Themes\Kanna.json" />
+      <EmbeddedResource Include="Resources\Themes\Katsuragi Misato.json" />
+      <EmbeddedResource Include="Resources\Themes\Kirino.json" />
+      <EmbeddedResource Include="Resources\Themes\Konata.json" />
+      <EmbeddedResource Include="Resources\Themes\Kurisu.json" />
+      <EmbeddedResource Include="Resources\Themes\Mai Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Mai Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Maika.json" />
+      <EmbeddedResource Include="Resources\Themes\Maple Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Maple Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Megumin.json" />
+      <EmbeddedResource Include="Resources\Themes\Miia.json" />
+      <EmbeddedResource Include="Resources\Themes\Misaka Mikoto.json" />
+      <EmbeddedResource Include="Resources\Themes\Monika Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Monika Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Nadeshiko.json" />
+      <EmbeddedResource Include="Resources\Themes\Nakano Ichika.json" />
+      <EmbeddedResource Include="Resources\Themes\Nakano Itsuki.json" />
+      <EmbeddedResource Include="Resources\Themes\Nakano Miku.json" />
+      <EmbeddedResource Include="Resources\Themes\Nakano Yotsuba.json" />
+      <EmbeddedResource Include="Resources\Themes\Natsuki Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Natsuki Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Nino Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Ram.json" />
+      <EmbeddedResource Include="Resources\Themes\Raphtalia.json" />
+      <EmbeddedResource Include="Resources\Themes\Rei.json" />
+      <EmbeddedResource Include="Resources\Themes\Rem.json" />
+      <EmbeddedResource Include="Resources\Themes\Rias Crimson.json" />
+      <EmbeddedResource Include="Resources\Themes\Rias Onyx.json" />
+      <EmbeddedResource Include="Resources\Themes\Rimuru Tempest.json" />
+      <EmbeddedResource Include="Resources\Themes\Rory Mercury.json" />
+      <EmbeddedResource Include="Resources\Themes\Ryuko Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Ryuko Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Sagiri.json" />
+      <EmbeddedResource Include="Resources\Themes\Satsuki Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Satsuki Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Sayori Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Sayori Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Senko.json" />
+      <EmbeddedResource Include="Resources\Themes\Shigure.json" />
+      <EmbeddedResource Include="Resources\Themes\Shima Rin.json" />
+      <EmbeddedResource Include="Resources\Themes\Sonoda Umi.json" />
+      <EmbeddedResource Include="Resources\Themes\Takanashi Rikka.json" />
+      <EmbeddedResource Include="Resources\Themes\Tohru.json" />
+      <EmbeddedResource Include="Resources\Themes\Tohsaka Rin.json" />
+      <EmbeddedResource Include="Resources\Themes\Tomori Nao.json" />
+      <EmbeddedResource Include="Resources\Themes\Vanilla.json" />
+      <EmbeddedResource Include="Resources\Themes\Yukihira Soma.json" />
+      <EmbeddedResource Include="Resources\Themes\Yukinoshita Yukino.json" />
+      <EmbeddedResource Include="Resources\Themes\Yuri Dark.json" />
+      <EmbeddedResource Include="Resources\Themes\Yuri Light.json" />
+      <EmbeddedResource Include="Resources\Themes\Yuzuriha Inori.json" />
+      <EmbeddedResource Include="Resources\Themes\Zero Two Dark Obsidian.json" />
+      <EmbeddedResource Include="Resources\Themes\Zero Two Dark Rose.json" />
+      <EmbeddedResource Include="Resources\Themes\Zero Two Light Lily.json" />
+      <EmbeddedResource Include="Resources\Themes\Zero Two Light Sakura.json" />
       <Content Include="Style\Resources\Close_32.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
@@ -224,13 +320,8 @@
       <Folder Include="Resources\Themes\" />
       <Folder Include="Resources\Wallpapers\" />
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
-
+    <ItemGroup>
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

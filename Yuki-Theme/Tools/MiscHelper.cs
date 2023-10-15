@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using VisualPascalABC.OptionsContent;
@@ -54,4 +55,16 @@ public static class MiscHelper
 
 	public static int ToInt(this bool value) => value ? 1 : 0;
 	public static bool ToBool(this int value) => value == 1;
+
+
+
+	public static string Replace(this string origin, Dictionary<string, string> toReplace)
+	{
+		foreach (KeyValuePair<string,string> pair in toReplace)
+		{
+			origin = origin.Replace(pair.Key, pair.Value);
+		}
+
+		return origin;
+	}
 }

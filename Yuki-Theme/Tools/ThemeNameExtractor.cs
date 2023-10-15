@@ -10,9 +10,14 @@ public static class ThemeNameExtractor
 	public static string Extract()
 	{
 		string name = "";
+		
+		string path = GetThemeName();
 
-		string path = Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "Highlighting", "theme.xshd");
-
+		if (!File.Exists(path))
+		{
+			return "Unknown";
+		}
+		
 		XmlDocument docu = new XmlDocument();
 		docu.Load(path);
 
@@ -35,5 +40,10 @@ public static class ThemeNameExtractor
 		}
 
 		return name;
+	}
+
+	private static string GetThemeName()
+	{
+		return Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "Highlighting", "theme.xshd");
 	}
 }

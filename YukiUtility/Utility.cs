@@ -46,6 +46,8 @@ namespace YukiUtility
                 DeleteFromHighlighting(stickerExtension);
                 CreateSymbolicLink(GetHighlighting(stickerExtension), sticker, SymbolicLink.File);
             }
+
+            Console.ReadLine();
         }
 
         private static void DeleteFromHighlighting(string fileName)
