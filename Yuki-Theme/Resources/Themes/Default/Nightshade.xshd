@@ -1,0 +1,319 @@
+﻿<?xml version="1.0"?>
+<!-- syntaxdefinition for PascalABC.NET (c) Ivan Bondarev, Stanislav Mikhalkovich -->
+<SyntaxDefinition name="PascalABC.NET" extensions=".pas;.paspart_">
+    <Environment>
+        <Default color="#F6F3E7" bgcolor="#000000"/>
+        <Selection bgcolor="#2546DD"/>
+        <VRuler color="#555753"/>
+        <InvalidLines color="Red"/>
+        <CaretMarker color="#C5C4FE"/>
+        <LineNumbers color="#3D3D3D" bgcolor="#000000"/>
+        <FoldLine color="#555753"/>
+        <FoldMarker color="#BCBC89" bgcolor="#000000"/>
+        <SelectedFoldLine color="#3D3D3D" bgcolor="#FFFFFF"/>
+        <EOLMarkers color="#888A85"/>
+        <SpaceMarkers color="#888A85"/>
+        <TabMarkers color="#888A85"/>
+    </Environment>
+    <Properties>
+        <Property name="LineComment" value="//"/>
+    </Properties>
+    <Digits name="Digits" bold="false" italic="false" color="#FF72FC"/>
+    <RuleSets>
+        <RuleSet ignorecase="true">
+            <Delimiters>&lt;&gt;~!%^*()-+=|\/{}[]:;"' , .?</Delimiters>
+            <Span name="LineBigComment" rule="CommentMarkerSet" bold="false" italic="false" color="#7C7C7C" stopateol="true">
+                <Begin>////</Begin>
+            </Span>
+            <Span name="LineComment" rule="CommentMarkerSet" bold="false" italic="false" color="#7C7C7C" stopateol="true">
+                <Begin>//@!/@</Begin>
+            </Span>
+            <Span name="LineComment" bold="false" italic="false" color="#7C7C7C" stopateol="true">
+                <Begin>///@!/@</Begin>
+            </Span>
+            <!-- <Span name = "CompilerDirectives" rule = "CompilerDirectivesSet" bold = "false" italic = "false" color = "Black" stopateol = "true">
+                       <Begin>#</Begin>
+                  </Span> -->
+            <Span name="BlockComment" rule="CommentMarkerSet" bold="false" italic="false" color="#7C7C7C" stopateol="false">
+                <Begin>{@!$@</Begin>
+                <End>}</End>
+            </Span>
+            <Span name="BlockComment" bold="false" italic="false" color="#7C7C7C" stopateol="false">
+                <Begin>{$</Begin>
+                <End>}</End>
+            </Span>
+            <Span name="BlockComment2" rule="CommentMarkerSet" bold="false" italic="false" color="#7C7C7C" stopateol="false">
+                <Begin>(*</Begin>
+                <End>*)</End>
+            </Span>
+            <Span name="String" bold="false" italic="false" color="#A7FF60" stopateol="true">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <!--<Span name="InterpolatedString" rule="StringInterpolation" bold="false" italic="false" color="Blue" stopateol="true">
+                      <Begin>$'</Begin>
+                      <End>'</End>
+                  </Span>-->
+            <!--
+                  <Span name="AccessModifiers" bold="false" italic="false" color="Red" stopateol="true">
+                      <Begin></Begin>
+                      <End></End>
+                  </Span>-->
+            <!--
+      
+                  <KeyWords name="ShortProgram" bold="false" italic="false" color="Green">
+                      <Key word="##"/>
+                      <Key word="###"/>
+                  </KeyWords>-->
+            <MarkPrevious color="#F6F3E7" bold="false" italic="false">(</MarkPrevious>
+            <KeyWords name="KeyWords" bold="false" italic="false" color="#FFFFB6">
+                <Key word="external"/>
+                <Key word="in"/>
+                <Key word="array"/>
+                <Key word="sequence"/>
+                <Key word="yield"/>
+                <Key word="case"/>
+                <Key word="class"/>
+                <Key word="auto"/>
+                <Key word="static"/>
+                <Key word="template"/>
+                <Key word="sealed"/>
+                <Key word="partial"/>
+                <Key word="const"/>
+                <Key word="lock"/>
+                <Key word="constructor"/>
+                <Key word="destructor"/>
+                <Key word="downto"/>
+                <Key word="do"/>
+                <Key word="else"/>
+                <Key word="file"/>
+                <Key word="for"/>
+                <Key word="loop"/>
+                <Key word="function"/>
+                <Key word="if"/>
+                <Key word="inherited"/>
+                <Key word="procedure"/>
+                <Key word="operator"/>
+                <Key word="property"/>
+                <Key word="record"/>
+                <Key word="repeat"/>
+                <Key word="set"/>
+                <Key word="type"/>
+                <Key word="then"/>
+                <Key word="to"/>
+                <Key word="until"/>
+                <Key word="uses"/>
+                <Key word="var"/>
+                <Key word="event"/>
+                <Key word="while"/>
+                <Key word="params"/>
+                <Key word="with"/>
+                <Key word="of"/>
+                <Key word="label"/>
+                <Key word="implicit"/>
+                <Key word="explicit"/>
+                <Key word="initialization"/>
+                <Key word="finalization"/>
+                <Key word="where"/>
+                <Key word="match"/>
+                <Key word="when"/>
+            </KeyWords>
+            <KeyWords name="ProgramSections" bold="false" italic="false" color="#FFFFB6">
+                <Key word="unit"/>
+                <Key word="library"/>
+                <Key word="namespace"/>
+                <Key word="program"/>
+                <Key word="interface"/>
+                <Key word="implementation"/>
+            </KeyWords>
+            <KeyWords name="BeginEnd" bold="false" italic="false" color="#96CAFD">
+                <Key word="begin"/>
+                <Key word="end"/>
+            </KeyWords>
+            <KeyWords name="Special" bold="true" italic="false" color="Red">
+                <Key word="•"/>
+            </KeyWords>
+            <KeyWords name="Async" bold="false" italic="false" color="#FFFFB6">
+                <Key word="async"/>
+                <Key word="asyncparam"/>
+            </KeyWords>
+            <KeyWords name="Punctuation" bold="false" italic="false" color="#A7FF60">
+                <Key word=","/>
+                <Key word="."/>
+                <Key word=";"/>
+                <Key word="("/>
+                <Key word=")"/>
+                <Key word="["/>
+                <Key word="]"/>
+                <Key word="+"/>
+                <Key word="-"/>
+                <Key word="/"/>
+                <Key word="*"/>
+                <Key word="&lt;"/>
+                <Key word="&gt;"/>
+                <Key word="&lt;="/>
+                <Key word="&gt;="/>
+                <Key word="^"/>
+                <Key word="="/>
+                <Key word="&amp;"/>
+            </KeyWords>
+            <KeyWords name="AccessKeywords1" bold="false" italic="false" color="#FFFFB6">
+                <Key word="inherited"/>
+            </KeyWords>
+            <KeyWords name="NonReserved1" bold="false" italic="false" color="#FFFFB6">
+                <Key word="self"/>
+                <Key word="result"/>
+                <Key word="value"/>
+            </KeyWords>
+            <KeyWords name="OperatorKeywords" bold="false" italic="false" color="#FFFFB6">
+                <Key word="or"/>
+                <Key word="xor"/>
+                <Key word="and"/>
+                <Key word="div"/>
+                <Key word="mod"/>
+                <Key word="shl"/>
+                <Key word="shr"/>
+                <Key word="not"/>
+                <Key word="as"/>
+                <Key word="is"/>
+                <Key word="new"/>
+                <Key word="sizeof"/>
+                <Key word="typeof"/>
+            </KeyWords>
+            <KeyWords name="SelectionStatements" bold="false" italic="false" color="#6698CC">
+                <Key word="else"/>
+                <Key word="if"/>
+                <Key word="case"/>
+            </KeyWords>
+            <KeyWords name="IterationStatements" bold="false" italic="false" color="#6698CC">
+                <Key word="do"/>
+                <Key word="for"/>
+                <Key word="foreach"/>
+            </KeyWords>
+            <KeyWords name="ExceptionHandlingStatements" bold="false" italic="false" color="#6698CC">
+                <Key word="except"/>
+                <Key word="on"/>
+                <Key word="try"/>
+                <Key word="finally"/>
+            </KeyWords>
+            <KeyWords name="RaiseStatement" bold="false" italic="false" color="#6698CC">
+                <Key word="raise"/>
+            </KeyWords>
+            <KeyWords name="JumpStatements" bold="false" italic="false" color="#FFFFB6">
+                <Key word="goto"/>
+            </KeyWords>
+            <KeyWords name="JumpProcedures" bold="false" italic="false" color="#FFFFB6">
+                <Key word="break"/>
+                <Key word="exit"/>
+                <Key word="continue"/>
+            </KeyWords>
+            <KeyWords name="InternalConstant" bold="false" italic="false" color="#DF8963">
+                <Key word="true"/>
+                <Key word="false"/>
+                <Key word="nil"/>
+            </KeyWords>
+            <KeyWords name="InternalTypes" bold="false" italic="false" color="#FFFFB6">
+                <Key word="boolean"/>
+                <Key word="byte"/>
+                <Key word="shortint"/>
+                <Key word="smallint"/>
+                <Key word="word"/>
+                <Key word="integer"/>
+                <Key word="BigInteger"/>
+                <Key word="longword"/>
+                <Key word="uint64"/>
+                <Key word="cardinal"/>
+                <Key word="int64"/>
+                <Key word="single"/>
+                <Key word="longint"/>
+                <Key word="string"/>
+                <Key word="char"/>
+                <Key word="real"/>
+                <Key word="double"/>
+                <Key word="pointer"/>
+                <Key word="object"/>
+                <Key word="decimal"/>
+            </KeyWords>
+            <KeyWords name="ReferenceTypes" bold="false" italic="false" color="#FFFFB6">
+                <Key word="class"/>
+                <Key word="interface"/>
+            </KeyWords>
+            <KeyWords name="Modifiers" bold="false" italic="false" color="#FFFFB6">
+                <Key word="abstract"/>
+                <Key word="overload"/>
+                <Key word="reintroduce"/>
+                <Key word="override"/>
+                <Key word="extensionmethod"/>
+                <Key word="virtual"/>
+                <Key word="default"/>
+                <Key word="forward"/>
+            </KeyWords>
+            <KeyWords name="AccessModifiers" bold="false" italic="false" color="#FFFFB6">
+                <Key word="internal"/>
+                <Key word="public"/>
+                <Key word="protected"/>
+                <Key word="private"/>
+            </KeyWords>
+            <!--			<KeyWords name = "AccessModifiers" bold="true" italic="false" color="Black">-->
+            <!--				<Key word = "\w+\(" />-->
+            <!--			</KeyWords>-->
+        </RuleSet>
+        <RuleSet name="CommentMarkerSet" ignorecase="true">
+            <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+            <KeyWords name="ErrorWords" bold="false" italic="false" color="#FFFFB6">
+                <Key word="TODO"/>
+                <Key word="FIXME"/>
+            </KeyWords>
+            <KeyWords name="WarningWords" bold="false" italic="false" color="#FFFFB6">
+                <Key word="HACK"/>
+                <Key word="UNDONE"/>
+            </KeyWords>
+        </RuleSet>
+        <RuleSet name="CompilerDirectivesSet" ignorecase="true">
+            <Delimiters>&lt;&gt;~!@%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+            <Span name="String" bold="false" italic="false" color="#A7FF60" stopateol="true">
+                <Begin>'</Begin>
+                <End>'</End>
+            </Span>
+            <KeyWords name="DireciveNames" bold="false" italic="false" color="#FFFFB6">
+                <Key word="apptype"/>
+                <Key word="resource"/>
+                <Key word="reference"/>
+                <Key word="version"/>
+                <Key word="product"/>
+                <Key word="company"/>
+                <Key word="copyright"/>
+                <Key word="trademark"/>
+                <Key word="mainresource"/>
+                <Key word="NullBasedStrings"/>
+                <Key word="gendoc"/>
+            </KeyWords>
+            <KeyWords name="SpecialDireciveNames" bold="false" italic="false" color="#FFFFB6">
+                <Key word="savepcu"/>
+            </KeyWords>
+            <KeyWords name="DireciveValues" bold="false" italic="false" color="#FFFFB6">
+                <Key word="console"/>
+                <Key word="windows"/>
+                <Key word="dll"/>
+                <Key word="pcu"/>
+                <Key word="false"/>
+                <Key word="true"/>
+            </KeyWords>
+        </RuleSet>
+        <RuleSet name="StringInterpolation" ignorecase="true">
+            <Span name="String" rule="Default" bold="false" italic="false" color="#A7FF60" stopateol="true">
+                <Begin>{</Begin>
+                <End>}</End>
+            </Span>
+        </RuleSet>
+        <RuleSet name="Default" ignorecase="true" reference="PascalABC.NET">
+            <Delimiters>&lt;&gt;~!%^*()-+=|\#/{}[]:;"' , .?</Delimiters>
+        </RuleSet>
+    </RuleSets>
+    <!--name:Nightshade-->
+    <!--align:2-->
+    <!--opacity:15-->
+    <!--sopacity:100-->
+    <!--hasImage:False-->
+    <!--hasSticker:False-->
+</SyntaxDefinition>

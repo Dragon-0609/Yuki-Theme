@@ -1,0 +1,90 @@
+{
+  "id": "9a310731-ab2d-40f5-b502-fa5419f799a2",
+  "name": "Monika Light",
+  "displayName": "Monika",
+  "dark": false,
+  "author": "Unthrottled",
+  "group": "Literature Club",
+  "stickers": {
+    "default": {
+      "name": "just_monika.png",
+      "anchor": "center",
+      "opacity": 10
+    },
+    "secondary": {
+      "name": "just_monika_joy.png",
+      "anchor": "center",
+      "opacity": 10
+    }
+  },
+  "overrides": {
+    "editorScheme": {
+      "colors": {
+        "accentColor": "#20AF6F"
+      }
+    }
+  },
+  "colors": {
+    "caretRow": "#dcf7e0",
+    "lineNumberColor": "#8CAA8E",
+    "completionWindowBackground": "#e7e5ea",
+    "baseIconColor": "#838b83",
+    "contrastColor": "#d0f6cf",
+    "nonProjectFileScopeColor": "#f7fbf0",
+    "secondaryBackground": "#edffec",
+    "selectionForeground": "#393d45",
+    "inactiveBackground": "#e6eee4",
+    "inactiveBackgroundDarker": "#e3ede1",
+    "headerColor": "#f2fff0",
+    "baseBackground": "#f3fff4",
+    "borderColor": "#e2eee3",
+    "buttonColor": "#d8eed9",
+    "selectionInactive": "#def9e2",
+    "identifierHighlight": "#def9e2",
+    "selectionBackground": "#a9ecac",
+    "selectionBackgroundTransparent": "#a0d2a733",
+    "searchBackground": "#B9F4FF",
+    "searchForeground": "#393d45",
+    "buttonFont": "#252427",
+    "foregroundColor": "#252427",
+    "startColor": "#5FAA51",
+    "highlightColor": "#e0ffe1",
+    "disabledColor": "#a2cba3",
+    "accentColorTransparent": "#388E3C5A",
+    "accentColorLessTransparent": "#388E3C9A",
+    "accentColorMoreTransparent": "#388E3C2A",
+    "accentColor": "#388E3C",
+    "infoForeground": "#3b753d",
+    "stopColor": "#5EEF1B",
+    "testScopeColor": "#dcf6e1",
+    "popupMask": "#f2fff030",
+    "codeBlock": "#eaf6eb",
+    "textEditorBackground": "#f2fff0",
+    "foldedTextBackground": "#def6f3",
+    "classNameColor": "#9A9E20",
+    "keyColor": "#6D71DC",
+    "stringColor": "#da832e",
+    "htmlTagColor": "#1E8225",
+    "constantColor": "#4C94D6",
+    "keywordColor": "#2BBA37",
+    "iconAccent": "#6eaf1f",
+    "iconAccentCompliment": "#58c7a9",
+    "iconBaseBlend": "#3fa778",
+    "iconSecondaryBlend": "#1c7851",
+    "iconBlendCompliment": "#194704",
+    "iconDiversification": "#4a55ce",
+    "diff.deleted": "#DFEFE6",
+    "lightEditorColor": "#e5fae6",
+    "breakpointColor": "#f6fbc5",
+    "breakpointActiveColor": "#baffb1",
+    "fileBlue": "#c9e9f3",
+    "fileGray": "#d9e4d8",
+    "fileRose": "#e9cfd6",
+    "fileOrange": "#eed7ad",
+    "fileViolet": "#e4dfef",
+    "fileYellow": "#e8efb3",
+    "fileRed": "#e7baaf",
+    "filePurple": "#c9b9e6"
+  },
+  "characterId": "d7de2bcd-cd68-411f-bd6c-e54ab6c7b009"
+}
