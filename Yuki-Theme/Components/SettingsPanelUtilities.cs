@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using YukiTheme.Components;
+using YukiTheme.Engine;
 using YukiTheme.Tools;
 
 namespace Yuki_Theme.Core.WPF.Controls
@@ -41,6 +42,7 @@ namespace Yuki_Theme.Core.WPF.Controls
 		public void ResetStickerMargin()
 		{
 			DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
+			PluginEvents.Instance.OnStickerMarginReset();
 		}
 
 		private void SaveGeneralSettings()

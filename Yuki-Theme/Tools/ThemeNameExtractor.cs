@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using YukiTheme.Engine;
 
@@ -7,17 +9,22 @@ namespace YukiTheme.Tools;
 
 public static class ThemeNameExtractor
 {
-	public static string Extract()
+	public static List<ThemeLoadInfo> Infos = new();
+
+	public static void ListenToReload()
 	{
-		string name = "";
-		
+		PluginEvents.Instance.Reload += LoadThemeInfo;
+	}
+	
+	public static void LoadThemeInfo()
+	{
 		string path = GetThemeName();
 
 		if (!File.Exists(path))
 		{
-			return "Unknown";
+			return;
 		}
-		
+
 		XmlDocument docu = new XmlDocument();
 		docu.Load(path);
 
@@ -25,21 +32,19 @@ public static class ThemeNameExtractor
 		XmlNodeList comms = nod.SelectNodes("//comment()");
 
 		if (comms != null)
+		{
 			foreach (XmlComment comm in comms)
 			{
-				if (comm.Value.StartsWith("name"))
+				IEnumerable<ThemeLoadInfo> filteredInfos = Infos.Where(i => comm.Value.StartsWith(i.Key));
+				if (filteredInfos.Any())
 				{
-					name = comm.Value.Substring(5);
-					break;
+					foreach (ThemeLoadInfo info in filteredInfos)
+					{
+						info.Value(comm.Value.Substring(info.CutNumber));
+					}
 				}
 			}
-
-		if (name == "")
-		{
-			if (nod.Attributes != null) name = nod.Attributes["name"].Value;
 		}
-
-		return name;
 	}
 
 	private static string GetThemeName()

@@ -20,11 +20,11 @@ public class ImageLoader
     private string _wallpaperName = "background";
     private string _stickerName = "sticker";
 
-    public bool HasImage => _wallpaper != null;
+    public bool HasImage => _wallpaper is { Height: > 10 };
     public Image GetWallpaper => _wallpaper;
     public Image GetSticker => _sticker;
 
-    public bool HasSticker => _sticker != null;
+    public bool HasSticker => _sticker is { Height: > 10 };
 
     public ImageSource GetWallpaperWPF => _wallpaperSource;
     public ImageSource GetStickerWPF => _stickerSource;
@@ -85,6 +85,11 @@ public class ImageLoader
                 _sticker = Image.FromFile(stickerFileName);
             }
         }
+    }
+
+    public void ReleaseImages()
+    {
+        RemoveLastImage();
     }
 
     public void ApplyImages()

@@ -164,6 +164,7 @@ namespace YukiTheme.Style
 			         ControlStyles.AllPaintingInWmPaint |
 			         ControlStyles.OptimizedDoubleBuffer, true);
 			BackColor = ColorReference.BackgroundDefaultColor();
+			PluginEvents.Instance.Reload += Invalidate;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)

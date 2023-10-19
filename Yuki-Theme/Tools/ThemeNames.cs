@@ -1,8 +1,22 @@
-﻿using System.Collections.Generic;
+﻿namespace YukiTheme.Tools;
 
-namespace YukiTheme.Tools;
+public static class DefaultThemeNames
+{
+    public static string[] Themes { get; } =
+    {
+        "Darcula",
+        "Dracula",
+        "Github Dark",
+        "Github Light",
+        "Monokai Dark",
+        "Monokai Light",
+        "Nightshade",
+        "Oblivion",
+        "Shades of Purple"
+    };
+}
 
-public static class ThemeNames
+public static class DokiThemeNames
 {
     public static string[] Themes { get; } =
     {
@@ -26,8 +40,8 @@ public static class ThemeNames
         "DR: Mioda Ibuki Dark",
         "DR: Mioda Ibuki Light",
         "DTWMMN: Hayase Nagatoro",
-        "DxD: Rias: Crimson",
-        "DxD: Rias: Onyx",
+        "DxD: Rias Crimson",
+        "DxD: Rias Onyx",
         "EroManga: Sagiri",
         "EVA: Katsuragi Misato",
         "EVA: Rei",

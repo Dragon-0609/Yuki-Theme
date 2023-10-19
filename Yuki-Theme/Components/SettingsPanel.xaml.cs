@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using Yuki_Theme.Core.WPF.Controls;
+using YukiTheme.Engine;
 using YukiTheme.Tools;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -10,6 +12,7 @@ namespace YukiTheme.Components
 	{
 		public SettingsPanelUtilities Utilities;
 		private bool _resetStickerMargin = false;
+		private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
 
 		public SettingsPanel()
 		{
@@ -17,7 +20,24 @@ namespace YukiTheme.Components
 			_resetStickerMargin = false;
 			Utilities = new SettingsPanelUtilities(this);
 			Utilities.LoadSettings();
-			Themes.ItemsSource = new List<string> { "Item 1", "Item 2", "Item 3" };
+			Themes.ItemsSource = _themes;
+			SelectCurrentTheme();
+		}
+
+		private void SelectCurrentTheme()
+		{
+			string name = NameBar.ThemeName;
+			// IDEConsole.Log(name);
+			if (Themes.Items.Contains(name))
+			{
+				Themes.SelectedItem = name;
+			}
+			else
+			{
+				Themes.SelectedIndex = 0;
+			}
+
+			Themes.ScrollToCenterOfView(Themes.SelectedItem);
 		}
 
 		public void GetColors()
@@ -42,8 +62,16 @@ namespace YukiTheme.Components
 		{
 			Utilities.SaveSettings();
 			if (_resetStickerMargin)
+			{
+				IDEConsole.Log("Resetting");
 				Utilities.ResetStickerMargin();
+			}
+
 			_resetStickerMargin = false;
+			if (Themes.SelectedItem.ToString() != NameBar.ThemeName)
+			{
+				PluginEvents.Instance.OnThemeChanged(Themes.SelectedItem.ToString());
+			}
 		}
 	}
 }

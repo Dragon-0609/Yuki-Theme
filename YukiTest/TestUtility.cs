@@ -1,7 +1,13 @@
+using System;
+using Newtonsoft.Json.Linq;
+
 namespace YukiTest
 {
-	public class TestUtility
+	public static class TestUtility
 	{
-		
+		public static void Validate(this JToken token, string message)
+		{
+			if (token == null) throw new NullReferenceException(message);
+		}
 	}
 }

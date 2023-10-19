@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.IO;
 using System.Linq;
 using YukiTheme.Engine;
@@ -27,7 +27,7 @@ public class DokiExporter : Exporter
         ExportFiles(Normalize(name));
     }
 
-    private string Normalize(string name)
+    public static string Normalize(string name)
     {
         string output = name;
         if (name.Contains(": "))

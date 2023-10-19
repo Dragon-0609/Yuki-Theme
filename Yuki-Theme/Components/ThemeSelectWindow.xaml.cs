@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
@@ -13,7 +14,7 @@ namespace YukiTheme.Components
 	{
 		private const string PLACEHOLDER_TEXT = "Search...";
 
-		private readonly string[] _themes = ThemeNames.Themes;
+		private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
 
 		public event Action<string> SelectedTheme;
 
@@ -30,11 +31,15 @@ namespace YukiTheme.Components
 
 		private void SelectCurrentTheme()
 		{
-			string name = ThemeNameExtractor.Extract();
-			IDEConsole.Log(name);
+			string name = NameBar.ThemeName;
+			// IDEConsole.Log(name);
 			if (ThemeList.Items.Contains(name))
 			{
 				ThemeList.SelectedItem = name;
+			}
+			else
+			{
+				ThemeList.SelectedIndex = 0;
 			}
 
 			FocusToCurrent();
@@ -57,8 +62,8 @@ namespace YukiTheme.Components
 		public void GetColors()
 		{
 			Foreground = WpfColorContainer.Instance.ForegroundBrush;
-			ThemeList.Background = Search.Background = WpfColorContainer.Instance.BackgroundBrush;
-			ThemeList.Foreground = Search.Foreground = Foreground;
+			ThemesName.Background = ThemeList.Background = Search.Background = WpfColorContainer.Instance.BackgroundBrush;
+			ThemesName.Foreground = ThemeList.Foreground = Search.Foreground = Foreground;
 			ThemeList.Tag = Search.Tag = Tag = WpfColorContainer.Instance;
 			Border.BorderBrush = WpfColorContainer.Instance.BorderBrush;
 		}
@@ -78,6 +83,8 @@ namespace YukiTheme.Components
 				if (found.Any())
 				{
 					ThemeList.ItemsSource = found;
+					if (ThemeList.SelectedIndex == -1)
+						ThemeList.SelectedIndex = 0;
 				}
 				else
 				{
@@ -137,6 +144,7 @@ namespace YukiTheme.Components
 				{
 					ThemeList.SelectedIndex = Math.Min(ThemeList.SelectedIndex + 1, ThemeList.Items.Count - 1);
 				}
+
 				FocusToCurrent();
 			}
 
@@ -150,7 +158,23 @@ namespace YukiTheme.Components
 				{
 					ThemeList.SelectedIndex = Math.Max(ThemeList.SelectedIndex - 1, 0);
 				}
+
 				FocusToCurrent();
+			}
+
+			if (e.Key is Key.PageUp)
+			{
+				DependencyObject item = ThemeList.ItemContainerGenerator.ContainerFromIndex(0);
+				ScrollBar.PageUpCommand.Execute(ThemeList, item as IInputElement);
+
+				ThemeList.SelectedIndex = Math.Max(ThemeList.SelectedIndex - 9, 0);
+			}
+
+			if (e.Key is Key.PageDown)
+			{
+				DependencyObject item = ThemeList.ItemContainerGenerator.ContainerFromIndex(0);
+				ScrollBar.PageDownCommand.Execute(ThemeList, item as IInputElement);
+				ThemeList.SelectedIndex = Math.Min(ThemeList.SelectedIndex + 9, ThemeList.Items.Count - 1);
 			}
 
 			if (e.Key is Key.Escape)
@@ -159,7 +183,7 @@ namespace YukiTheme.Components
 
 		private void FocusToCurrent()
 		{
-			ThemeList.ScrollIntoView(ThemeList.SelectedItem);
+			ThemeList.ScrollToCenterOfView(ThemeList.SelectedItem);
 		}
 
 		private void ThemeList_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

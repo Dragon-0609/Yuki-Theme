@@ -71,7 +71,7 @@ public class MenuReplacer
 
 			// Image icon = Helper.GetYukiThemeIconImage(new Size(32, 32));
 
-			ToolStripMenuItem main = new("Yuki Theme", null);
+			ToolStripMenuItem main = new("Yuki Theme", _menuSettings.Image);
 
 			var quiet = CreateMenuItem("Toggle Discreet Mode", ToggleQuiet, Keys.Alt | Keys.A, "Alt + A");
 
@@ -167,12 +167,13 @@ public class MenuReplacer
 #if LOG
         Console.WriteLine("resetting position");
 #endif
+		DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
+		PluginEvents.Instance.OnStickerMarginReset();
 	}
 
 	private void ShowSettings(object sender, EventArgs e)
 	{
 		OptionsChanger.ShowSettings();
-		
 	}
 
 	private void ShowUpdatePage(object sender, EventArgs e)

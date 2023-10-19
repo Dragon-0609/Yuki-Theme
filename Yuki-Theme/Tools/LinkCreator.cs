@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using YukiTheme.Engine;
 
 namespace YukiTheme.Tools;
 
@@ -28,6 +29,7 @@ public class LinkCreator
             return false;
         }
 
+        IDEAlterer.ReleaseImages();
         RunUtility();
 
         return true;
@@ -37,6 +39,10 @@ public class LinkCreator
     {
         string path = GetHighlighting(nameAndExtension);
         bool valid = true;
+
+        IDEConsole.Log($"{path} is symlink: {IsSymbolic(path)}");
+
+        if (!IsSymbolic(path)) return false;
 
         if (isImage)
         {
@@ -64,6 +70,13 @@ public class LinkCreator
         return valid;
     }
 
+    private bool IsSymbolic(string path)
+    {
+        if (!File.Exists(path)) return false;
+        FileInfo pathInfo = new FileInfo(path);
+        return pathInfo.Attributes.HasFlag(FileAttributes.ReparsePoint);
+    }
+
     private void CheckFiles()
     {
         string themeExtension = "theme.xshd";
@@ -73,29 +86,29 @@ public class LinkCreator
         string theme = Path.Combine(_folder, themeExtension);
         if (!File.Exists(theme))
         {
-            CopyDefault(themeExtension);
+            CopyDefault(themeExtension, _folder);
         }
 
         string background = Path.Combine(_folder, backgroundExtension);
         if (!File.Exists(background))
         {
-            CopyDefault(backgroundExtension);
+            CopyDefault(backgroundExtension, _folder);
         }
 
         string sticker = Path.Combine(_folder, stickerExtension);
         if (!File.Exists(sticker))
         {
-            CopyDefault(stickerExtension);
+            CopyDefault(stickerExtension, _folder);
         }
     }
 
-    private void CopyDefault(string file)
+    internal static void CopyDefault(string file, string folder)
     {
         string resource = $"YukiTheme.Resources.Default.{file}";
 
         Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
 
-        using (var fileStream = File.Create(Path.Combine(_folder, file)))
+        using (var fileStream = File.Create(Path.Combine(folder, file)))
         {
             stream.Seek(0, SeekOrigin.Begin);
             stream.CopyTo(fileStream);
@@ -106,8 +119,8 @@ public class LinkCreator
     private void RunUtility()
     {
         var psi = new ProcessStartInfo(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
-        psi.CreateNoWindow = true;
-        psi.UseShellExecute = false;
+        // psi.CreateNoWindow = true;
+        // psi.UseShellExecute = false;
         Process.Start(psi).WaitForExit();
     }
 

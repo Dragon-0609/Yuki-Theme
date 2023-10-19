@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components;
@@ -8,7 +10,8 @@ namespace YukiTheme.Engine;
 public class WallpaperManager : WindowManager
 {
 	private WallpaperWindow _wallpaper;
-
+	private float _opacity = 0.1f;
+	private string _align = "center";
 
 	public override void Show()
 	{
@@ -28,6 +31,26 @@ public class WallpaperManager : WindowManager
 		_wallpaper.Show();
 		_wallpaper.Focus();
 		UpdateWallpaper();
+
+		ThemeNameExtractor.Infos.Add(new ThemeLoadInfo("opacity", 8, opacity =>
+		{
+			try
+			{
+				_opacity = ((float)int.Parse(opacity)) / 100;
+			}
+			catch (Exception)
+			{
+				throw new InvalidDataException($"\"{opacity}\"");
+			}
+
+			UpdateOpacity();
+		}));
+		ThemeNameExtractor.Infos.Add(new ThemeLoadInfo("align", 6, align =>
+		{
+			_align = align;
+			UpdateAlign();
+		}));
+
 		IDEAlterer.Instance.Form1.Focus();
 	}
 
@@ -50,6 +73,7 @@ public class WallpaperManager : WindowManager
 			UpdateOpacity();
 		}
 
+		_wallpaper.ResetPosition();
 		UpdateVisibility();
 	}
 
@@ -59,12 +83,37 @@ public class WallpaperManager : WindowManager
 	{
 		if (!IsWindowNull())
 		{
-			_wallpaper.Opacity = 0.1f;
+			_wallpaper.Opacity = _opacity;
+		}
+	}
+
+	private void UpdateAlign()
+	{
+		if (!IsWindowNull())
+		{
+			_wallpaper.Wallpaper.HorizontalAlignment = GetXAlign();
+			IDEConsole.Log($"{_wallpaper.AlignX}, {_align}, {_wallpaper.BorderOutlineX}, {_wallpaper.BorderOutlineY}");
+			_wallpaper.ResetPosition();
+		}
+	}
+
+	private HorizontalAlignment GetXAlign()
+	{
+		switch (_align)
+		{
+			case "left":
+				return HorizontalAlignment.Left;
+			case "center":
+				return HorizontalAlignment.Center;
+			case "right":
+				return HorizontalAlignment.Right;
+			default:
+				return HorizontalAlignment.Center;
 		}
 	}
 
 	public override void ReloadSettings()
 	{
-        UpdateVisibility();
+		UpdateVisibility();
 	}
 }

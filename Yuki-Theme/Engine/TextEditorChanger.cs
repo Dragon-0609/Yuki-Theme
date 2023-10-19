@@ -147,13 +147,13 @@ public class TextEditorChanger
     {
         foreach (AbstractMargin margins in _editorComponents.TextArea.LeftMargins)
         {
-            if (margins is IconBarMargin)
+            if (margins is IconBarMargin margin)
             {
-                _margin = (IconBarMargin)margins;
+                _margin = margin;
             }
-            else if (margins is FoldMargin)
+            else if (margins is FoldMargin foldMargin)
             {
-                _foldmargin = (FoldMargin)margins;
+                _foldmargin = foldMargin;
             }
         }
     }

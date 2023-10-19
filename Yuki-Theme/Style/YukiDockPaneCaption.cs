@@ -213,6 +213,7 @@ namespace YukiTheme.Style
 			m_toolTip = new ToolTip(Components);
 
 			ResumeLayout();
+			PluginEvents.Instance.Reload += Invalidate;
 		}
 
 		protected override void Dispose(bool disposing)

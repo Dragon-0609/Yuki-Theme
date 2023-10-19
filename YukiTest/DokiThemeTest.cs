@@ -7,7 +7,7 @@ using YukiTheme.Tools;
 namespace YukiTest
 {
 	[TestFixture]
-	public class DokiTest
+	public class DokiThemeTest
 	{
 		[Test]
 		public void TestDokiThemeFiles()
@@ -37,9 +37,9 @@ namespace YukiTest
 			ValidateImage(themeName, "Stickers.");
 		}
 
-		private static void ValidateImage(string themeName, string Namespace)
+		private static void ValidateImage(string themeName, string @namespace)
 		{
-			Image image = ResourceHelper.LoadImage($"{themeName}.png", Namespace);
+			Image image = ResourceHelper.LoadImage($"{themeName}.png", @namespace);
 			Assert.True(image != null);
 
 			image.Dispose();

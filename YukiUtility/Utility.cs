@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace YukiUtility
 {
@@ -10,6 +11,18 @@ namespace YukiUtility
         private static string GetCurrentFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public static void Main()
+        {
+            try
+            {
+                ValidateLinks();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error: {e.Message}");
+            }
+        }
+
+        private static void ValidateLinks()
         {
             string themeExtension = "theme.xshd";
             string stickerExtension = "sticker.png";
@@ -46,8 +59,6 @@ namespace YukiUtility
                 DeleteFromHighlighting(stickerExtension);
                 CreateSymbolicLink(GetHighlighting(stickerExtension), sticker, SymbolicLink.File);
             }
-
-            Console.ReadLine();
         }
 
         private static void DeleteFromHighlighting(string fileName)

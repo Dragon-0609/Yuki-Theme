@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YukiUtility", "YukiUtility\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DokiNameNormalizer", "DokiNameNormalizer\DokiNameNormalizer.csproj", "{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YukiTest", "YukiTest\YukiTest.csproj", "{C568C585-D39A-4B98-852A-EC7BBBC52CA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

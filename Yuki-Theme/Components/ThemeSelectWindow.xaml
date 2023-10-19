@@ -20,18 +20,21 @@
     </Window.Resources>
 
     <Grid MouseUp="Grid_OnMouseUp">
-        <Border Name="Border" Width="200" Height="200" Background="#333333" BorderThickness="1">
+        <Border Name="Border" Width="250" Height="250" Background="#333333" BorderThickness="1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <components:SilentTextBox x:Name="Search" FontSize="14" BorderThickness="0 0 0 1" Padding="1" Style="{StaticResource TextBoxDefault}"
+                <TextBlock Name="ThemesName"  FontSize="14" TextAlignment="Center" Padding="0 4 0 4">Themes</TextBlock>
+
+                <components:SilentTextBox Grid.Row="1" x:Name="Search" FontSize="14" BorderThickness="0 2 0 1" Padding="1" Style="{StaticResource TextBoxDefault}"
                                           TextChanged="OnSearchTextChanged" KeyDown="Search_OnKeyDown" PreviewKeyDown="Search_OnPreviewKeyDown">
                     Search
                 </components:SilentTextBox>
-                <ListView Grid.Row="1" Name="ThemeList" FontSize="14" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
-                           MouseDown="ThemeList_OnMouseDown" Style="{StaticResource ListStyle}"  MouseLeftButtonUp="ThemeList_OnMouseLeftButtonUp" />
+                <ListView Grid.Row="2" Name="ThemeList" FontSize="14" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="False"
+                          MouseDown="ThemeList_OnMouseDown" Style="{StaticResource ListStyle}" MouseLeftButtonUp="ThemeList_OnMouseLeftButtonUp" />
             </Grid>
         </Border>
     </Grid>

@@ -384,6 +384,7 @@ namespace YukiTheme.Style
 			m_selectMenu = new ContextMenuStrip(Components);
 
 			ResumeLayout();
+			PluginEvents.Instance.Reload += Invalidate;
 		}
 
 		protected override void Dispose(bool disposing)

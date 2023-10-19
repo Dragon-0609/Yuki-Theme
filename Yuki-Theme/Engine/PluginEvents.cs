@@ -9,6 +9,8 @@ public class PluginEvents
 	public event ThemeChange ThemeChanged;
 	public event Action Reload;
 
+	public event Action StickerMarginReset;
+
 	public delegate void ThemeChange(string name);
 
 	public PluginEvents()
@@ -20,8 +22,14 @@ public class PluginEvents
 	{
 		ThemeChanged?.Invoke(name);
 	}
+
 	public void OnReload()
 	{
 		Reload?.Invoke();
+	}
+
+	public void OnStickerMarginReset()
+	{
+		StickerMarginReset?.Invoke();
 	}
 }
