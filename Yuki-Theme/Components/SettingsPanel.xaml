@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tools="clr-namespace:YukiTheme.Tools"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
              mc:Ignorable="d"
              d:DesignHeight="405" d:DesignWidth="253" Background="Gray">
     <UserControl.Resources>
@@ -15,10 +17,12 @@
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/GroupBoxStyles.xaml" />
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ButtonStyles.xaml" />
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBoxStyles.xaml" />
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/CheckboxStyles.xaml" />
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ScrollViewerStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20,20">
@@ -47,9 +51,22 @@
                                   HorizontalAlignment="Left" Name="ShowSticker" />
 
                         <WrapPanel Margin="0 5 6 3" HorizontalAlignment="Left" Name="PositioningPanel">
-                            <CheckBox Content="{DynamicResource settings.general.positioning.enabled}"
-                                      Style="{StaticResource CheckBoxUserControl}"
-                                      VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning" />
+
+                            <StackPanel>
+                                <CheckBox Content="{DynamicResource settings.general.positioning.enabled}"
+                                          Style="{StaticResource CheckBoxUserControl}"
+                                          VerticalAlignment="Top" Margin="0 0 20 0" Name="AllowPositioning" />
+
+                                <Label Padding="2">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="16" VerticalAlignment="Center" Height="16"
+                                               Source="{DynamicResource InfoImage}"
+                                               Margin="0 0 6 0" />
+                                        <TextBlock Style="{StaticResource TextBlockUserControl}" Width="160"
+                                                   Text="{DynamicResource settings.general.positioning.save}" />
+                                    </StackPanel>
+                                </Label>
+                            </StackPanel>
 
                             <WrapPanel Orientation="Vertical">
                                 <Button Padding="8 2" Margin="0"
@@ -93,11 +110,11 @@
                                 <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
                                            VerticalAlignment="Center"
                                            Text="{DynamicResource settings.general.dimension.max.px}" />
-                                <!--<controls:IntegerUpDown
+                                <controls:IntegerUpDown
                                         FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
                                         VerticalAlignment="Center" Width="70" Height="30"
                                         Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
-                                        MinValue="-1" MaxValue="2000" ValueChange="5" x:Name="DimensionCapMax" />-->
+                                        MinValue="-1" MaxValue="2000" ValueChange="5" x:Name="DimensionCapMax" />
                             </WrapPanel>
                             <WrapPanel Margin="0 5">
                                 <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
