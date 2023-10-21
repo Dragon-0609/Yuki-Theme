@@ -100,7 +100,7 @@ public class TextEditorChanger
 
     private void CtrlOnPaint(object sender, PaintEventArgs e)
     {
-        e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush, e.ClipRectangle);
+        // e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush, e.ClipRectangle);
     }
 
 
@@ -140,6 +140,15 @@ public class TextEditorChanger
         }
     }
 
+    
+
+    private void UpdateMarkerBGOnCaretPositionChanged(object sender, EventArgs e)
+    {
+        if (!VisualPABCSingleton.MainForm.UserOptions.HighlightOperatorBrackets ||
+            WorkbenchServiceFactory.DebuggerManager.IsRunning)
+            return;
+        CodeCompletionHighlighter.UpdateMarkers(textEditor.ActiveTextAreaControl.TextArea);
+    }
 
     #region Margins
 
