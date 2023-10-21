@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Svg</id>
+    <version>3.4.4</version>
+    <authors>davescriven, jvenema, mrbean-bremen, H1Gdev, Wiesław Šoltés, owaits, ddpruitt, Ralf1108, Tebjan Halm, and others</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MS-PL</license>
+    <licenseUrl>https://licenses.nuget.org/MS-PL</licenseUrl>
+    <icon>svg-logo-v.png</icon>
+    <projectUrl>https://github.com/svg-net/SVG</projectUrl>
+    <iconUrl>https://www.w3.org/Icons/SVG/svg-logo-v.png</iconUrl>
+    <description>Public fork of the C# SVG rendering library on codeplex: https://svg.codeplex.com/
+      This started out as a minor modification to enable the writing of proper SVG strings. But now after almost two years we have so many fixes and improvements that we decided to share our current codebase to the public in order to improve it even further.
+      So please feel free to fork it and open pull requests for any fix, improvement or feature you add.
+      License: Microsoft Public License: https://svg.codeplex.com/license</description>
+    <releaseNotes>Fixed security issue, minor bug fixes (see Release Notes: http://svg-net.github.io/SVG/doc/ReleaseNotes.html).</releaseNotes>
+    <copyright>Copyright © vvvv.org</copyright>
+    <tags>svg, vector graphics, rendering</tags>
+    <repository type="git" url="https://github.com/svg-net/SVG.git" commit="696ad7c32d78ec4ddbe564c75a6ab824fa6d018d" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="ExCSS" version="4.1.4" exclude="Build,Analyzers" />
+        <dependency id="Fizzler" version="1.2.1" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="ExCSS" version="4.1.4" exclude="Build,Analyzers" />
+        <dependency id="Fizzler" version="1.2.1" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.3" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.ObjectModel" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="runtime.osx.10.10-x64.CoreCompat.System.Drawing" version="5.8.64" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net5.0">
+        <dependency id="ExCSS" version="4.1.4" exclude="Build,Analyzers" />
+        <dependency id="Fizzler" version="1.2.1" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.3" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.ObjectModel" version="4.3.0" exclude="Build,Analyzers" />
+        <dependency id="runtime.osx.10.10-x64.CoreCompat.System.Drawing" version="5.8.64" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="ExCSS" version="4.1.4" exclude="Build,Analyzers" />
+        <dependency id="Fizzler" version="1.2.1" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.3" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.ObjectModel" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="ExCSS" version="4.1.4" exclude="Build,Analyzers" />
+        <dependency id="Fizzler" version="1.2.1" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.3" exclude="Build,Analyzers" />
+        <dependency id="System.Memory" version="4.5.4" exclude="Build,Analyzers" />
+        <dependency id="System.ObjectModel" version="4.3.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.6.2" />
+      <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.6.2" />
+      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.6.2" />
+      <frameworkAssembly assemblyName="System.Drawing" targetFramework=".NETFramework4.6.2" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework4.6.2" />
+      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.6.2" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

@@ -135,7 +135,7 @@ namespace YukiTheme.Components
 				if (Target != null)
 				{
 					_grid.SetOwner(Target);
-					_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+					_grid.Foreground = ColorReference.BorderColor.ToWPFColor().ToBrush();
 					Rect rect = Target.GetAbsoluteRect();
 					_grid.Width = rect.Width;
 					_grid.Height = rect.Height;
@@ -143,7 +143,7 @@ namespace YukiTheme.Components
 				else
 				{
 					_grid.SetOwner(TargetForm);
-					_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+					_grid.Foreground = ColorReference.BorderColor.ToWPFColor().ToBrush();
 					_grid.Width = TargetForm.Width;
 					_grid.Height = TargetForm.Height;
 				}

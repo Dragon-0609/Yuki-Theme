@@ -20,7 +20,7 @@ public class GridManager
 		};
 		var targetForm = IDEAlterer.Instance.Form1;
 		_grid.SetOwner(targetForm);
-		_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+		_grid.Foreground = ColorReference.BorderColor.ToWPFColor().ToBrush();
 		_grid.Width = targetForm.Width;
 		_grid.Height = targetForm.Height;
 
@@ -35,7 +35,7 @@ public class GridManager
 	{
 		if (_grid != null)
 		{
-			_grid.Foreground = ColorReference.BorderColor().ToWPFColor().ToBrush();
+			_grid.Foreground = ColorReference.BorderColor.ToWPFColor().ToBrush();
 		}
 	}
 }

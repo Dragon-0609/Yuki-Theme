@@ -111,14 +111,14 @@ namespace YukiTheme.Style
 
 		private static int TabGapBetween => _TabGapBetween;
 
-		private static Brush BrushTabBackground => ColorReference.BackgroundBrush();
+		private static Brush BrushTabBackground => ColorReference.BackgroundBrush;
 
 
-		private static Brush BrushTabPressBackground => ColorReference.BackgroundClickBrush();
+		private static Brush BrushTabPressBackground => ColorReference.BackgroundClickBrush;
 
-		private static Pen PenTabBorder => ColorReference.BackgroundClick3Pen();
+		private static Pen PenTabBorder => ColorReference.BackgroundClick3Pen;
 
-		private static Brush BrushTabText => ColorReference.ForegroundBrush();
+		private static Brush BrushTabText => ColorReference.ForegroundBrush;
 
 		#endregion
 
@@ -163,14 +163,14 @@ namespace YukiTheme.Style
 			         ControlStyles.UserPaint |
 			         ControlStyles.AllPaintingInWmPaint |
 			         ControlStyles.OptimizedDoubleBuffer, true);
-			BackColor = ColorReference.BackgroundDefaultColor();
+			BackColor = ColorReference.BackgroundDefaultColor;
 			PluginEvents.Instance.Reload += Invalidate;
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (BackColor != ColorReference.BackgroundDefaultColor())
-				BackColor = ColorReference.BackgroundDefaultColor();
+			if (BackColor != ColorReference.BackgroundDefaultColor)
+				BackColor = ColorReference.BackgroundDefaultColor;
 			Graphics g = e.Graphics;
 			DrawTabStrip(g);
 		}

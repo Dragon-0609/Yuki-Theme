@@ -33,6 +33,12 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="ExCSS, Version=4.1.4.0, Culture=neutral, PublicKeyToken=bdbe16be9b936b9a, processorArchitecture=MSIL">
+          <HintPath>..\packages\ExCSS.4.1.4\lib\net452\ExCSS.dll</HintPath>
+        </Reference>
+        <Reference Include="Fizzler, Version=1.2.1.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
+          <HintPath>..\packages\Fizzler.1.2.1\lib\netstandard2.0\Fizzler.dll</HintPath>
+        </Reference>
         <Reference Include="ICSharpCode.Core">
             <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.dll</HintPath>
         </Reference>
@@ -42,6 +48,7 @@
         <Reference Include="ICSharpCode.TextEditor">
             <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
         </Reference>
+        <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
           <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
@@ -53,10 +60,28 @@
         </Reference>
         <Reference Include="PresentationCore" />
         <Reference Include="PresentationFramework" />
+        <Reference Include="Svg, Version=3.4.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+          <HintPath>..\packages\Svg.3.4.4\lib\net462\Svg.dll</HintPath>
+        </Reference>
         <Reference Include="System" />
+        <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Data.Linq" />
         <Reference Include="System.Drawing" />
+        <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web" />
         <Reference Include="System.Windows.Forms" />
         <Reference Include="System.Xaml" />
         <Reference Include="System.Xml" />
@@ -94,6 +119,7 @@
         <Compile Include="Engine\EditorAlterer.cs" />
         <Compile Include="Engine\EditorComponents.cs" />
         <Compile Include="Engine\GridManager.cs" />
+        <Compile Include="Engine\IconAlterer.cs" />
         <Compile Include="Engine\IDEAlterer.cs" />
         <Compile Include="Engine\IDEConsole.cs" />
         <Compile Include="Engine\ImageLoader.cs" />
@@ -150,6 +176,7 @@
         <Compile Include="Tools\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
         <Compile Include="Tools\FileDatabase.cs" />
+        <Compile Include="Tools\IconRenderer.cs" />
         <Compile Include="Tools\ImageHelper.cs" />
         <Compile Include="Tools\ItemsControlExtensions.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
@@ -158,6 +185,7 @@
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
         <Compile Include="Tools\StickerPositionConverter.cs" />
+        <Compile Include="Tools\SvgRenderer.cs" />
         <Compile Include="Tools\ThemeLoadInfo.cs" />
         <Compile Include="Tools\ThemeNameExtractor.cs" />
         <Compile Include="Tools\ThemeNames.cs" />
@@ -460,6 +488,116 @@
       <EmbeddedResource Include="Resources\Wallpapers\Zero Two Dark Rose.png" />
       <EmbeddedResource Include="Resources\Wallpapers\Zero Two Light Lily.png" />
       <EmbeddedResource Include="Resources\Wallpapers\Zero Two Light Sakura.png" />
+      <EmbeddedResource Include="Resources\Icons\svg\addFile.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\addFile_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\addFile_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\back.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\back_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\back_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\close.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\close_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\close_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\compile.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\console.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\console_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\console_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\copy.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\copy_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\copy_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\cwmPermissionEdit.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\execute.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\export.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\export_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\export_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\externalTools.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\externalTools_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\externalTools_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\find.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\findForward.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\findForward_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\findForward_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\find_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\find_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\forceRefresh.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\forward.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\forward_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\forward_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\gearPlain.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\gearPlain_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\gearPlain_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\help.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\help_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\help_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\intentionBulb.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\intentionBulb_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\intentionBulb_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\magicResolve.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\magicResolve_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\magicResolve_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-cut.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-cut_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-cut_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-open.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-open_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-open_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-paste.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-paste_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-paste_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-saveall.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-saveall_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\menu-saveall_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\MoveTo2.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\MoveTo2_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\MoveTo2_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\notificationError.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\print.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\print_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\print_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\projectTab.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\projectTab_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\projectTab_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\redo.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\redo_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\redo_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\replace.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\replace_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\replace_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\restartDebugger.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\restartDebugger_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\restartDebugger_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\runAll.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showHiddens.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showHiddens_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showHiddens_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showReadAccess.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showReadAccess_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showReadAccess_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\startDebugger.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\stepOut.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\stepOut_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\stepOut_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\suspend.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceInto.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceInto_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceInto_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceOver.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceOver_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\traceOver_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\undo.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\undo_dark.svg" />
+      <EmbeddedResource Include="Resources\Icons\svg\undo_disabled.svg" />
       <Content Include="Style\Resources\Close_32.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />

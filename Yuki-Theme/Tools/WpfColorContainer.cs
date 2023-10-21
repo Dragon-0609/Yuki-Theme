@@ -29,13 +29,13 @@ public class WpfColorContainer
 
 	public void GetColorsAndBrushes()
 	{
-		BackgroundColor = ColorReference.BackgroundColor().ToWPFColor();
-		BackgroundDefaultColor = ColorReference.BackgroundDefaultColor().ToWPFColor();
-		BackgroundClickColor = ColorReference.BackgroundClickColor().ToWPFColor();
-		ForegroundColor = ColorReference.ForegroundColor().ToWPFColor();
-		BorderColor = ColorReference.BorderColor().ToWPFColor();
-		SelectionColor = ColorReference.SelectionColor().ToWPFColor();
-		KeywordColor = ColorReference.KeywordColor().ToWPFColor();
+		BackgroundColor = ColorReference.BackgroundColor.ToWPFColor();
+		BackgroundDefaultColor = ColorReference.BackgroundDefaultColor.ToWPFColor();
+		BackgroundClickColor = ColorReference.BackgroundClickColor.ToWPFColor();
+		ForegroundColor = ColorReference.ForegroundColor.ToWPFColor();
+		BorderColor = ColorReference.BorderColor.ToWPFColor();
+		SelectionColor = ColorReference.SelectionColor.ToWPFColor();
+		KeywordColor = ColorReference.KeywordColor.ToWPFColor();
 		BackgroundBrush = BackgroundColor.ToBrush();
 		BackgroundDefaultBrush = BackgroundDefaultColor.ToBrush();
 		BackgroundClickBrush = BackgroundClickColor.ToBrush();

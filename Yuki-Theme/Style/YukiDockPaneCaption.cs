@@ -299,15 +299,15 @@ namespace YukiTheme.Style
 			}
 		}
 
-		private static Color ActiveBackColorGradientBegin => ColorReference.BackgroundInactiveColor();
+		private static Color ActiveBackColorGradientBegin => ColorReference.BackgroundInactiveColor;
 
-		private static Color ActiveBackColorGradientEnd => ColorReference.BackgroundInactiveColor();
+		private static Color ActiveBackColorGradientEnd => ColorReference.BackgroundInactiveColor;
 
-		private static Color InactiveBackColor => ColorReference.BackgroundColor();
+		private static Color InactiveBackColor => ColorReference.BackgroundColor;
 
-		private static Color ActiveTextColor => ColorReference.ForegroundColor();
+		private static Color ActiveTextColor => ColorReference.ForegroundColor;
 
-		private static Color InactiveTextColor => ColorReference.ForegroundHoverColor();
+		private static Color InactiveTextColor => ColorReference.ForegroundHoverColor;
 
 		private Color TextColor => DockPane.IsActivated ? ActiveTextColor : InactiveTextColor;
 

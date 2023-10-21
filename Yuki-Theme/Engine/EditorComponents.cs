@@ -38,6 +38,7 @@ public class EditorComponents
 	private readonly OptionsChanger _optionsChanger = new();
 
 	private NameBar _nameBar;
+	private IconAlterer _alterer;
 
 	public EditorComponents()
 	{
@@ -57,6 +58,9 @@ public class EditorComponents
 		_optionsChanger.GetOptionsComponents(Fm);
 
 		GetAboutForm();
+
+		_alterer = new IconAlterer(_tools, _menu, _context, _context2, Fm);
+		PluginEvents.Instance.Reload += _alterer.UpdateColors;
 		// TreeGridView watchList = _debugVariablesListWindow.\
 	}
 
@@ -123,5 +127,10 @@ public class EditorComponents
 		e.Graphics.FillRectangle(ColorChanger.Instance.GetBrush(ColorChanger.BG_DEF), e.Bounds);
 
 		e.Graphics.DrawString(e.Header.Text, e.Font, ColorChanger.Instance.GetBrush(ColorChanger.FOREGROUND), e.Bounds);
+	}
+
+	public void UpdateIconColors()
+	{
+		_alterer.UpdateColors();
 	}
 }

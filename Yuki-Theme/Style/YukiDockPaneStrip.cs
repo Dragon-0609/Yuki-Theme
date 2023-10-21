@@ -348,21 +348,21 @@ namespace YukiTheme.Style
 		private static Pen PenDocumentTabInactiveBorder => SystemPens.GrayText;
 
 
-		private static Brush BrushToolWindowActiveBackground => ColorReference.BackgroundClick3Brush();
+		private static Brush BrushToolWindowActiveBackground => ColorReference.BackgroundClick3Brush;
 
-		private static Brush BrushToolWindowHoverBackground => ColorReference.BackgroundClickBrush();
+		private static Brush BrushToolWindowHoverBackground => ColorReference.BackgroundClickBrush;
 
-		private static Brush BrushDocumentActiveBackground => ColorReference.BackgroundClick3Brush();
+		private static Brush BrushDocumentActiveBackground => ColorReference.BackgroundClick3Brush;
 
-		private static Brush BrushDocumentInactiveBackground => ColorReference.BackgroundDefaultBrush();
+		private static Brush BrushDocumentInactiveBackground => ColorReference.BackgroundDefaultBrush;
 
-		private static Color ColorToolWindowActiveText => ColorReference.ForegroundColor();
+		private static Color ColorToolWindowActiveText => ColorReference.ForegroundColor;
 
-		private static Color ColorDocumentActiveText => ColorReference.ForegroundColor();
+		private static Color ColorDocumentActiveText => ColorReference.ForegroundColor;
 
-		private static Color ColorToolWindowInactiveText => ColorReference.ForegroundColor();
+		private static Color ColorToolWindowInactiveText => ColorReference.ForegroundColor;
 
-		private static Color ColorDocumentInactiveText => ColorReference.ForegroundColor();
+		private static Color ColorDocumentInactiveText => ColorReference.ForegroundColor;
 
 		private int currentIndex = -1;
 		private List<Tab> oldTabs = new List<Tab>();
@@ -498,8 +498,8 @@ namespace YukiTheme.Style
 
 		protected override void OnPaint(PaintEventArgs e)
 		{
-			if (BackColor != ColorReference.BackgroundDefaultColor())
-				BackColor = ColorReference.BackgroundDefaultColor();
+			if (BackColor != ColorReference.BackgroundDefaultColor)
+				BackColor = ColorReference.BackgroundDefaultColor;
 			base.OnPaint(e);
 			CalculateTabs();
 			if (Appearance == DockPane.AppearanceStyle.Document && DockPane.ActiveContent != null)
@@ -839,7 +839,7 @@ namespace YukiTheme.Style
 				if (rectTab.IntersectsWith(rectTabOnly))
 					DrawTab(g, tabActive, rectTab);
 				if (DockPane.IsActiveDocumentPane)
-					g.DrawLine(ColorReference.BorderThickPen(), rectTab.Left, rectTab.Bottom,
+					g.DrawLine(ColorReference.BorderThickPen, rectTab.Left, rectTab.Bottom,
 						rectTab.Right, rectTab.Bottom);
 			}
 		}

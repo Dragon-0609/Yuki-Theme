@@ -72,6 +72,8 @@ public class EditorAlterer
         };
     }
 
+    public void UpdateIconColors() => _editorComponents.UpdateIconColors();
+
     public void StartMenuReplacement()
     {
         _menuReplacer.AddMenuItemsWithDelay(EditorComponents._menu);
@@ -147,8 +149,8 @@ public class EditorAlterer
 
     internal static void UpdateButton(Color color, Button b)
     {
-        b.BackColor = ColorReference.BackgroundDefaultColor();
-        b.ForeColor = ColorReference.ForegroundColor();
+        b.BackColor = ColorReference.BackgroundDefaultColor;
+        b.ForeColor = ColorReference.ForegroundColor;
         b.FlatAppearance.BorderColor = color;
         b.FlatStyle = FlatStyle.Flat;
     }
@@ -192,41 +194,41 @@ public class EditorAlterer
 
     private void UpdateAboutForm(object senderaw, EventArgs eaw)
     {
-        EditorComponents._aboutBox.BackColor = ColorReference.BackgroundColor();
-        EditorComponents._aboutBox.ForeColor = ColorReference.ForegroundColor();
+        EditorComponents._aboutBox.BackColor = ColorReference.BackgroundColor;
+        EditorComponents._aboutBox.ForeColor = ColorReference.ForegroundColor;
         Button btn = null;
         foreach (Control cont in EditorComponents._aboutBox.Controls)
         {
             if (cont is LinkLabel link)
             {
-                link.LinkColor = ColorReference.ForegroundColor();
-                link.ActiveLinkColor = ColorReference.ForegroundHoverColor();
+                link.LinkColor = ColorReference.ForegroundColor;
+                link.ActiveLinkColor = ColorReference.ForegroundHoverColor;
             }
             else if (cont is Button button)
                 btn = button;
             else if (cont is GroupBox group)
             {
-                group.ForeColor = ColorReference.ForegroundColor();
+                group.ForeColor = ColorReference.ForegroundColor;
                 foreach (Control groupControl in group.Controls)
                 {
                     if (groupControl is LinkLabel label)
                     {
-                        label.LinkColor = ColorReference.ForegroundColor();
-                        label.ActiveLinkColor = ColorReference.TypeColor();
+                        label.LinkColor = ColorReference.ForegroundColor;
+                        label.ActiveLinkColor = ColorReference.TypeColor;
                     }
                     else if (groupControl is ListView view)
                     {
                         view.OwnerDraw = true;
                         view.DrawColumnHeader += EditorComponents.ErrorListHeaderDrawer;
                         view.DrawItem += (_, e) => { e.DrawDefault = true; };
-                        view.BackColor = ColorReference.BackgroundColor();
-                        view.ForeColor = ColorReference.ForegroundColor();
+                        view.BackColor = ColorReference.BackgroundColor;
+                        view.ForeColor = ColorReference.ForegroundColor;
                     }
                 }
             }
             else if (cont is TableLayoutPanel table)
             {
-                table.ForeColor = ColorReference.ForegroundColor();
+                table.ForeColor = ColorReference.ForegroundColor;
                 foreach (Control flowLayout in table.Controls)
                 {
                     if (flowLayout is FlowLayoutPanel)
@@ -235,7 +237,7 @@ public class EditorAlterer
                         {
                             if (tblControl is Label)
                             {
-                                tblControl.ForeColor = tblControl.Name.Contains("Version") ? ColorReference.BorderColor() : ColorReference.ForegroundColor();
+                                tblControl.ForeColor = tblControl.Name.Contains("Version") ? ColorReference.BorderColor : ColorReference.ForegroundColor;
                             }
                         }
                     }
@@ -244,17 +246,17 @@ public class EditorAlterer
         }
 
 
-        btn.BackColor = ColorReference.BackgroundColor();
-        btn.ForeColor = ColorReference.ForegroundColor();
+        btn.BackColor = ColorReference.BackgroundColor;
+        btn.ForeColor = ColorReference.ForegroundColor;
         btn.FlatStyle = FlatStyle.Flat;
         btn.UseVisualStyleBackColor = false;
-        btn.FlatAppearance.MouseOverBackColor = ColorReference.BackgroundClickColor();
+        btn.FlatAppearance.MouseOverBackColor = ColorReference.BackgroundClickColor;
     }
 
 
     private void PaintOnToolBar(object sender, PaintEventArgs e)
     {
-        e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen(), e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width,
+        e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen, e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width,
             e.ClipRectangle.Y);
     }
 }

@@ -25,7 +25,7 @@ namespace YukiTheme.Style
 			bounds.Y = bounds.Height / 4;
 			bounds.X = bounds.Width / 2;
 			bounds.Height -= bounds.Height / 4;
-			e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen(), bounds.X, bounds.Y, bounds.X, bounds.Height);
+			e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen, bounds.X, bounds.Y, bounds.X, bounds.Height);
 		}
 	}
 }

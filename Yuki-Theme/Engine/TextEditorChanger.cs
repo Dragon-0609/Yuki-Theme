@@ -42,7 +42,7 @@ public class TextEditorChanger
     {
         if (_margin != null)
         {
-            e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush(), _margin.DrawingPosition.X,
+            e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush, _margin.DrawingPosition.X,
                 _margin.DrawingPosition.Y,
                 _margin.DrawingPosition.Width, _margin.DrawingPosition.Height);
             var inside =
@@ -71,7 +71,7 @@ public class TextEditorChanger
         if (_foldmargin != null)
         {
             SetMarginPosition();
-            e.Graphics.DrawLine(BrushRegistry.GetDotPen(ColorReference.BackgroundDefaultColor(), ColorReference.BorderColor()),
+            e.Graphics.DrawLine(BrushRegistry.GetDotPen(ColorReference.BackgroundDefaultColor, ColorReference.BorderColor),
                 _foldmargin.DrawingPosition.X,
                 _foldmargin.DrawingPosition.Y,
                 _foldmargin.DrawingPosition.X,
@@ -100,7 +100,7 @@ public class TextEditorChanger
 
     private void CtrlOnPaint(object sender, PaintEventArgs e)
     {
-        e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush(), e.ClipRectangle);
+        e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush, e.ClipRectangle);
     }
 
 
@@ -122,7 +122,7 @@ public class TextEditorChanger
             _editorComponents.TextEditor = Fm.CurrentCodeFileDocument.TextEditor;
             _editorComponents.TextArea = _editorComponents.TextEditor.ActiveTextAreaControl.TextArea;
             SetMargin();
-            _editorComponents.TextEditor.Parent.BackColor = ColorReference.BackgroundColor();
+            _editorComponents.TextEditor.Parent.BackColor = ColorReference.BackgroundColor;
             try
             {
                 _editorComponents.TextEditor.Controls[1].Paint += CtrlOnPaint;
@@ -132,7 +132,7 @@ public class TextEditorChanger
             {
             }
 
-            Fm.CurrentCodeFileDocument.BackColor = ColorReference.BackgroundColor();
+            Fm.CurrentCodeFileDocument.BackColor = ColorReference.BackgroundColor;
 
             _editorComponents.TextArea.Paint += PaintBg;
             _editorComponents.TextArea.Refresh();

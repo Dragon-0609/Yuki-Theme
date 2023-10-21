@@ -84,31 +84,31 @@ public class OptionsChanger
 		{
 			if (controlControl is Label)
 			{
-				controlControl.ForeColor = ColorReference.ForegroundColor();
+				controlControl.ForeColor = ColorReference.ForegroundColor;
 			}
 			else if (controlControl is Button button)
 			{
-				button.ForeColor = ColorReference.ForegroundColor();
-				button.BackColor = ColorReference.BackgroundColor();
-				EditorAlterer.UpdateButton(ColorReference.BorderColor(), button);
+				button.ForeColor = ColorReference.ForegroundColor;
+				button.BackColor = ColorReference.BackgroundColor;
+				EditorAlterer.UpdateButton(ColorReference.BorderColor, button);
 			}
 			else if (controlControl is CheckBox checkBox)
 			{
-				checkBox.BackColor = ColorReference.BackgroundColor();
-				checkBox.ForeColor = ColorReference.ForegroundColor();
+				checkBox.BackColor = ColorReference.BackgroundColor;
+				checkBox.ForeColor = ColorReference.ForegroundColor;
 			}
 			else if (controlControl is ComboBox comboBox)
 			{
-				comboBox.BackColor = ColorReference.BackgroundColor();
-				comboBox.ForeColor = ColorReference.ForegroundColor();
+				comboBox.BackColor = ColorReference.BackgroundColor;
+				comboBox.ForeColor = ColorReference.ForegroundColor;
 				comboBox.DrawMode = DrawMode.OwnerDrawFixed;
 				comboBox.DrawItem += comboBox1_DrawItem;
 			}
 			else if (controlControl is TextBox textBox)
 			{
 				textBox.BorderStyle = BorderStyle.FixedSingle;
-				textBox.BackColor = ColorReference.BackgroundColor();
-				textBox.ForeColor = ColorReference.ForegroundColor();
+				textBox.BackColor = ColorReference.BackgroundColor;
+				textBox.ForeColor = ColorReference.ForegroundColor;
 			}
 			else
 			{
@@ -123,7 +123,7 @@ public class OptionsChanger
 		if (!comboBox.DroppedDown)
 		{
 			if (e.Index >= 0)
-				DrawComboBoxItem(e, e.Bounds, ColorReference.BackgroundBrush(), comboBox.Items[e.Index].ToString());
+				DrawComboBoxItem(e, e.Bounds, ColorReference.BackgroundBrush, comboBox.Items[e.Index].ToString());
 			return;
 		}
 
@@ -136,15 +136,15 @@ public class OptionsChanger
 		if (_lastIndex >= 0)
 		{
 			if (_lastIndex < comboBox.Items.Count)
-				DrawComboBoxItem(e, _lastRectangle, ColorReference.BackgroundBrush(), comboBox.Items[_lastIndex].ToString());
+				DrawComboBoxItem(e, _lastRectangle, ColorReference.BackgroundBrush, comboBox.Items[_lastIndex].ToString());
 			_lastIndex = -1;
 		}
 
 		e.DrawBackground();
 		string text = comboBox.Items[e.Index].ToString();
 
-		_lastBrush = ColorReference.BackgroundBrush();
-		if (comboBox.SelectedIndex == e.Index) _lastBrush = ColorReference.SelectionBrush();
+		_lastBrush = ColorReference.BackgroundBrush;
+		if (comboBox.SelectedIndex == e.Index) _lastBrush = ColorReference.SelectionBrush;
 		DrawComboBoxItem(e, e.Bounds, _lastBrush, text);
 
 		_lastRectangle = e.Bounds;
@@ -154,7 +154,7 @@ public class OptionsChanger
 	private static void DrawComboBoxItem(DrawItemEventArgs e, Rectangle rect, Brush backgroundBrush, string text)
 	{
 		e.Graphics.FillRectangle(backgroundBrush, rect);
-		e.Graphics.DrawString(text, e.Font, ColorReference.ForegroundBrush(), new Point(rect.X, rect.Y));
+		e.Graphics.DrawString(text, e.Font, ColorReference.ForegroundBrush, new Point(rect.X, rect.Y));
 		e.DrawFocusRectangle();
 	}
 

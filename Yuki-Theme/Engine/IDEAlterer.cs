@@ -27,7 +27,7 @@ namespace YukiTheme.Engine
 		private WallpaperManager _wallpaperManager;
 		private StickerManager _stickerManager;
 		private ThemeWindowManager _themeSelect;
-        
+		
 		public IDEAlterer(IWorkbench workbench)
 		{
 			Instance = this;
@@ -60,6 +60,7 @@ namespace YukiTheme.Engine
 			_stickerManager.Show();
 			ListenToThemeChange();
 			ThemeNameExtractor.LoadThemeInfo();
+			_editorAlterer.UpdateIconColors();
 		}
 
 		private void StartExporter()
