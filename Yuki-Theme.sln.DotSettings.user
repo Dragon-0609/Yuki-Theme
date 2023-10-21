@@ -1,6 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CCodeCompletion_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CCompiler_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CLocalization_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CParserTools_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Cexcss_002E4_002E1_002E4_005Clib_005Cnet452_005CExCSS_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Cexcss_002E4_002E2_002E4_005Clib_005Cnet48_005CExCSS_002Edll/@EntryIndexedValue">True</s:Boolean>

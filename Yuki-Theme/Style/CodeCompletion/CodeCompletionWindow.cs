@@ -13,7 +13,7 @@ using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using ICSharpCode.TextEditor.Gui.CompletionWindow;
 
-namespace Yuki_Theme_Plugin.Controls.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion
 {
 	public class YukiCodeCompletionWindow : AbstractCompletionWindow
 	{

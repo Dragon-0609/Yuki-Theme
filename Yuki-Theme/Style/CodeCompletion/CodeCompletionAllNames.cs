@@ -5,7 +5,7 @@ using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using KeywordKind = PascalABCCompiler.Parsers.KeywordKind;
 
-namespace Yuki_Theme_Plugin.Controls.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion
 {
 	public class CodeCompletionAllNames : CodeCompletionAllNamesAction
 	{

@@ -51,6 +51,9 @@
         <Reference Include="ICSharpCode.TextEditor">
             <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
         </Reference>
+        <Reference Include="Localization">
+          <HintPath>..\..\PascalABCNET\bin\Localization.dll</HintPath>
+        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
           <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -124,6 +127,7 @@
         <Compile Include="Engine\DataManager.cs" />
         <Compile Include="Engine\EditorAlterer.cs" />
         <Compile Include="Engine\EditorComponents.cs" />
+        <Compile Include="Engine\EditorInspector.cs" />
         <Compile Include="Engine\GridManager.cs" />
         <Compile Include="Engine\IconAlterer.cs" />
         <Compile Include="Engine\IDEAlterer.cs" />
@@ -144,10 +148,12 @@
         <Compile Include="Export\PlainExporter.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionAllNames.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionHighlighter.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionKeyHandler.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionListView.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionWindow.cs" />
         <Compile Include="Style\Extender.cs" />
+        <Compile Include="Style\Helpers\Bookmarks.cs" />
         <Compile Include="Style\Helpers\DockHelper.cs" />
         <Compile Include="Style\Helpers\DrawHelper.cs" />
         <Compile Include="Style\Helpers\Enums.cs" />
