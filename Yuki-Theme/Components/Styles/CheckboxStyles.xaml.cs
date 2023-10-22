@@ -1,41 +1,32 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using Drawing = System.Drawing; 
+﻿using System.Windows;
+using YukiTheme.Tools;
 
-namespace Yuki_Theme.Core.WPF.Styles
+namespace YukiTheme.Components.Styles
 {
 	public partial class CheckboxStyles : ResourceDictionary
 	{
-		private Drawing.Size defaultSize = new Drawing.Size (20, 20);
-		
-		public CheckboxStyles ()
+		public CheckboxStyles()
 		{
-			InitializeComponent ();
-			LoadSVG ();
+			InitializeComponent();
+			LoadSVG();
 		}
 
 		private void LoadSVG()
 		{
-			/*Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
-			var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
-
-			this.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
-			this.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
-			this.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
-			this.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
-			this.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
-			this.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);*/
+			this.SetResourceSvg("checkBoxDefault", "checkBox", false);
+			this.SetResourceSvg("checkBoxDisabled", "checkBoxDisabled", true);
+			this.SetResourceSvg("checkBoxFocused", "checkBoxFocused", false);
+			this.SetResourceSvg("checkBoxSelected", "checkBoxSelected", false);
+			this.SetResourceSvg("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", true);
+			this.SetResourceSvg("checkBoxSelectedFocused", "checkBoxSelectedFocused", false);
 		}
 
-		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
+		private void SaveButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			/*bool can = true;
 			if (WPFHelper.checkDialog != null)
 				can = WPFHelper.checkDialog ();
-			
+
 			if (can)
 				WPFHelper.windowForDialogs.DialogResult = true;*/
 		}

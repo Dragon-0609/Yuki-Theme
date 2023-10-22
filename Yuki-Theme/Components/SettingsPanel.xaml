@@ -19,6 +19,9 @@
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/CheckboxStyles.xaml" />
                 <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ScrollViewerStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <BitmapImage x:Key="InfoImage" UriSource="" />
+            
         </ResourceDictionary>
 
     </UserControl.Resources>

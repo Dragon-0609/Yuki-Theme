@@ -198,6 +198,7 @@
         <Compile Include="Tools\ItemsControlExtensions.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
         <Compile Include="Tools\MiscHelper.cs" />
+        <Compile Include="Tools\ResourceDictionaryHelper.cs" />
         <Compile Include="Tools\ResourceHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
@@ -615,6 +616,13 @@
       <EmbeddedResource Include="Resources\Icons\svg\undo.svg" />
       <EmbeddedResource Include="Resources\Icons\svg\undo_dark.svg" />
       <EmbeddedResource Include="Resources\Icons\svg\undo_disabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBox.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBoxDisabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBoxFocused.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBoxSelected.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBoxSelectedDisabled.svg" />
+      <EmbeddedResource Include="Resources\Icons\checkBoxSelectedFocused.svg" />
+      <EmbeddedResource Include="Resources\Icons\balloonInformation.svg" />
       <Content Include="Style\Resources\Close_32.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />

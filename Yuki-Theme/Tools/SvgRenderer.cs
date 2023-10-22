@@ -16,6 +16,15 @@ public struct SvgRenderInfo
 	public bool CustomColor;
 	public Color Clr;
 
+	public SvgRenderInfo(SvgDocument svg)
+	{
+		Svg = svg;
+		Custom = false;
+		CSize = Size.Empty;
+		CustomColor = false;
+		Clr = Color.White;
+	}
+	
 	public SvgRenderInfo(SvgDocument svg, bool custom, Size cSize, bool customColor, Color clr)
 	{
 		Svg = svg;
@@ -99,6 +108,11 @@ public static class SvgRenderer
 		}
 
 		return svg.Draw(im.Width, im.Height);
+	}
+
+	public static Image RenderSvg(Size im, SvgRenderInfo context, Dictionary<string, Color> rewrite)
+	{
+		return RenderSvg(im, context.Svg, rewrite, context.CustomColor, context.Clr);
 	}
 
 	private static string GetResourcePath(string name, string nameSpace)

@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Yuki_Theme.Core.WPF.Controls;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
+using Size = System.Drawing.Size;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace YukiTheme.Components
@@ -22,7 +23,19 @@ namespace YukiTheme.Components
 			Utilities.LoadSettings();
 			Themes.ItemsSource = _themes;
 			SelectCurrentTheme();
+			LoadSvg();
 		}
+
+		private void LoadSvg()
+		{
+			SetResourceSvg("InfoImage", "balloonInformation");
+		}
+
+		private void SetResourceSvg(string name, string source)
+		{
+			Resources[name] = SvgRenderer.RenderSvg(new Size(16, 16), new SvgRenderInfo(SvgRenderer.LoadSvg(source, "Icons."))).ToWPFImage();
+		}
+
 
 		private void SelectCurrentTheme()
 		{

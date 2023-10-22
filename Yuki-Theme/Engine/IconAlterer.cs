@@ -227,7 +227,6 @@ namespace YukiTheme.Engine
 			foreach (ToolStripItem control in _tools.Items)
 				if (control is ToolStripButton { AccessibleDescription: { Length: > 2 } })
 					BtnOnEnabledChanged(control, EventArgs.Empty);
-			Console.WriteLine("Rendering menu");
 			foreach (ToolStripMenuItem control in _menu.Items)
 			{
 				foreach (ToolStripItem item in control.DropDownItems)
@@ -235,7 +234,6 @@ namespace YukiTheme.Engine
 						MenuOnEnabledChanged(item, EventArgs.Empty);
 			}
 
-			Console.WriteLine("Rendering context");
 			foreach (ToolStripItem item in _context.Items)
 			{
 				if (item is ToolStripMenuItem { AccessibleDescription: { Length: > 2 } })
