@@ -8,7 +8,7 @@ public class StickerManager : WindowManager
 {
     private StickerWindow _sticker;
 
-    public override void Show()
+    internal override void Show()
     {
         _sticker = new StickerWindow()
         {
@@ -34,14 +34,14 @@ public class StickerManager : WindowManager
         UpdateCap();
     }
 
-    public override bool IsWindowNull() => _sticker == null;
+    internal override bool IsWindowNull() => _sticker == null;
 
-    public override void SetVisibility(Visibility visibility)
+    internal override void SetVisibility(Visibility visibility)
     {
         _sticker.Visibility = visibility;
     }
 
-    public void UpdateSticker()
+    internal void UpdateSticker()
     {
         if (!IsWindowNull())
         {
@@ -68,7 +68,7 @@ public class StickerManager : WindowManager
         }
     }
 
-    public override void ReloadSettings()
+    internal override void ReloadSettings()
     {
         UpdateVisibility();
         UpdateCap();

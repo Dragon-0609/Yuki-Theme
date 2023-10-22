@@ -4,8 +4,8 @@ namespace YukiTheme.Components;
 
 public class SnapWindowAlign
 {
-    public AlignmentX AlignX;
-    public AlignmentY AlignY;
+    internal AlignmentX AlignX;
+    internal AlignmentY AlignY;
 
     public SnapWindowAlign(AlignmentX x, AlignmentY y)
     {

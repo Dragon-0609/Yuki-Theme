@@ -13,7 +13,7 @@ public class WallpaperManager : WindowManager
 	private float _opacity = 0.1f;
 	private string _align = "center";
 
-	public override void Show()
+	internal override void Show()
 	{
 		_wallpaper = new WallpaperWindow()
 		{
@@ -54,14 +54,14 @@ public class WallpaperManager : WindowManager
 		IDEAlterer.Instance.Form1.Focus();
 	}
 
-	public override bool IsWindowNull() => _wallpaper == null;
+	internal override bool IsWindowNull() => _wallpaper == null;
 
-	public override void SetVisibility(Visibility visibility)
+	internal override void SetVisibility(Visibility visibility)
 	{
 		_wallpaper.Visibility = visibility;
 	}
 
-	public void UpdateWallpaper()
+	internal void UpdateWallpaper()
 	{
 		if (!IsWindowNull())
 		{
@@ -112,7 +112,7 @@ public class WallpaperManager : WindowManager
 		}
 	}
 
-	public override void ReloadSettings()
+	internal override void ReloadSettings()
 	{
 		UpdateVisibility();
 	}

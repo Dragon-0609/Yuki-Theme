@@ -31,7 +31,7 @@ public class GridManager
 		ColorChanger.Instance.UpdatedColors += UpdateColors;
 	}
 
-	public void UpdateColors()
+	private void UpdateColors()
 	{
 		if (_grid != null)
 		{

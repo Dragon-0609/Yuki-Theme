@@ -8,13 +8,13 @@ public abstract class WindowManager
 {
 	private bool _hidden = false;
 
-	public abstract void Show();
+	internal abstract void Show();
 
-	public abstract bool IsWindowNull();
-	public abstract void SetVisibility(Visibility visibility);
+	internal abstract bool IsWindowNull();
+	internal abstract void SetVisibility(Visibility visibility);
 
 
-	public void UpdateVisibility()
+	internal void UpdateVisibility()
 	{
 		if (IsWindowNull())
 		{
@@ -64,5 +64,5 @@ public abstract class WindowManager
 		SetVisibility(Visibility.Hidden);
 	}
 
-	public abstract void ReloadSettings();
+	internal abstract void ReloadSettings();
 }

@@ -22,7 +22,7 @@ public class TextEditorChanger
 	private EditorInspector _editorInspector;
 	private Form1 Fm => IDEAlterer.Instance.Form1;
 
-	public void Init(EditorComponents editor)
+	internal void Init(EditorComponents editor)
 	{
 		_editorComponents = editor;
 		SetMargin();
@@ -151,7 +151,7 @@ public class TextEditorChanger
 			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += RemoveErrorMarksOnCaretPositionChanged;
 
 			_editorInspector.InspectBrackets();
-			
+
 			_editorComponents.TextArea.Refresh();
 			IDEAlterer.Instance.RequestBottomBarUpdate();
 
@@ -159,6 +159,15 @@ public class TextEditorChanger
 		}
 	}
 
+	internal void InjectCompletion()
+	{
+		_editorInspector.InjectCodeCompletion();
+	}
+
+	internal void StartInspectingBrackets()
+	{
+		_editorInspector.InspectBrackets();
+	}
 
 	private void UpdateMarkerBGOnCaretPositionChanged(object sender, EventArgs e)
 	{

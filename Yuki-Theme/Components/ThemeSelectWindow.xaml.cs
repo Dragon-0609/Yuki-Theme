@@ -16,7 +16,7 @@ namespace YukiTheme.Components
 
 		private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
 
-		public event Action<string> SelectedTheme;
+		internal event Action<string> SelectedTheme;
 
 		public ThemeSelectWindow()
 		{
@@ -59,7 +59,7 @@ namespace YukiTheme.Components
 			}
 		}
 
-		public void GetColors()
+		private void GetColors()
 		{
 			Foreground = WpfColorContainer.Instance.ForegroundBrush;
 			ThemesName.Background = ThemeList.Background = Search.Background = WpfColorContainer.Instance.BackgroundBrush;
@@ -108,7 +108,7 @@ namespace YukiTheme.Components
 			SelectTheme(ThemeList.SelectedItem.ToString());
 		}
 
-		public void SelectTheme(string theme)
+		private void SelectTheme(string theme)
 		{
 #if LOG
             Console.WriteLine($"Selected: {theme}");

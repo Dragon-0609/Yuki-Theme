@@ -12,7 +12,7 @@ namespace YukiTheme.Components
 			InitializeComponent();
 		}
 
-		public void SetImage(ImageSource source)
+		internal void SetImage(ImageSource source)
 		{
 			Wallpaper.Source = source;
 		}

@@ -12,21 +12,21 @@ namespace YukiTheme.Components
 {
 	public class SnapWindow : Window
 	{
-		public const int BORDER_OUTLINE_X = 10;
-		public const int BORDER_OUTLINE_Y = 20;
-		public const int PLUGIN_BORDER_OUTLINE_Y = 30;
+		internal const int BORDER_OUTLINE_X = 10;
+		internal const int BORDER_OUTLINE_Y = 20;
+		private const int PLUGIN_BORDER_OUTLINE_Y = 30;
 
-		public float BorderOutlineX = BORDER_OUTLINE_X;
-		public float BorderOutlineY = BORDER_OUTLINE_Y;
+		internal float BorderOutlineX = BORDER_OUTLINE_X;
+		internal float BorderOutlineY = BORDER_OUTLINE_Y;
 
-		public Window Target;
-		public Form TargetForm;
+		protected Window Target;
+		protected Form TargetForm;
 
 		private float _unitx;
 		private float _unity;
 
-		public AlignmentX AlignX = AlignmentX.Left;
-		public AlignmentY AlignY = AlignmentY.Top;
+		internal AlignmentX AlignX = AlignmentX.Left;
+		internal AlignmentY AlignY = AlignmentY.Top;
 
 		private FormWindowState _formWindowState = FormWindowState.Normal;
 
@@ -36,9 +36,9 @@ namespace YukiTheme.Components
 
 		protected bool CanUsePercents;
 
-		public bool AutoSize;
+		internal bool AutoSize;
 
-		public void ResetPosition()
+		internal void ResetPosition()
 		{
 			if (Target != null || TargetForm != null)
 			{
@@ -283,13 +283,13 @@ namespace YukiTheme.Components
 			BindPosition();
 		}
 
-		public void SetAlign(SnapWindowAlign align)
+		internal void SetAlign(SnapWindowAlign align)
 		{
 			AlignX = align.AlignX;
 			AlignY = align.AlignY;
 		}
 
-		public void SetOwner(Window parent)
+		internal void SetOwner(Window parent)
 		{
 			Target = parent;
 			try
@@ -304,7 +304,7 @@ namespace YukiTheme.Components
 			}
 		}
 
-		public void SetOwner(Form parent)
+		internal void SetOwner(Form parent)
 		{
 			TargetForm = parent;
 			TargetForm.LostFocus += (sender, args) => { Topmost = false; };

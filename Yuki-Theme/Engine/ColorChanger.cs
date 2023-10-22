@@ -10,20 +10,20 @@ namespace YukiTheme.Engine;
 
 public class ColorChanger
 {
-    public static ColorChanger Instance;
-    public const string BG = "bg";
-    public const string BG_DEF = "bgdef";
-    public const string CLICK_BG = "click_bg";
-    public const string CLICK_BG2 = "click_bg2";
-    public const string CLICK_BG3 = "click_bg3";
-    public const string SELECTION = "selection";
-    public const string BG_INACTIVE = "bg_inactive";
-    public const string BORDER = "border";
-    public const string BORDER_THICK = "border_thick";
-    public const string TYPE = "type";
-    public const string FOREGROUND = "foreground";
-    public const string FG_HOVER = "fg_hover";
-    public const string KEYWORD = "keyword";
+    internal static ColorChanger Instance;
+    internal const string BG = "bg";
+    internal const string BG_DEF = "bgdef";
+    internal const string CLICK_BG = "click_bg";
+    internal const string CLICK_BG2 = "click_bg2";
+    internal const string CLICK_BG3 = "click_bg3";
+    internal const string SELECTION = "selection";
+    internal const string BG_INACTIVE = "bg_inactive";
+    internal const string BORDER = "border";
+    internal const string BORDER_THICK = "border_thick";
+    internal const string TYPE = "type";
+    internal const string FOREGROUND = "foreground";
+    internal const string FG_HOVER = "fg_hover";
+    internal const string KEYWORD = "keyword";
 
     private Dictionary<string, Color> _colors = new()
     {
@@ -52,7 +52,7 @@ public class ColorChanger
     };
 
     public Action<string, Color> Update = (key, color) => { };
-    public Action UpdatedColors = () => { };
+    internal Action UpdatedColors = () => { };
 
     public ColorChanger()
     {
@@ -83,7 +83,7 @@ public class ColorChanger
         return default;
     }
 
-    public void GetColors()
+    internal void GetColors()
     {
         IHighlightingStrategy highlighting = HighlightingManager.Manager.FindHighlighterForFile("A.pas");
         Color bgdef = highlighting.GetColorFor("Default").BackgroundColor;
@@ -153,7 +153,7 @@ public class ColorChanger
         _pens.Add(key, new Pen(_colors[key], thickness));
     }
 
-    public void UpdateColors()
+    internal void UpdateColors()
     {
         foreach (string key in _keys)
         {
@@ -167,7 +167,7 @@ public class ColorChanger
 
     #region Color Management
 
-    public static Color ChangeColorBrightness(Color color, float correctionFactor)
+    private static Color ChangeColorBrightness(Color color, float correctionFactor)
     {
         float red = (float)color.R;
         float green = (float)color.G;
@@ -190,13 +190,13 @@ public class ColorChanger
         return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
     }
 
-    public static bool IsDark(Color clr)
+    private static bool IsDark(Color clr)
     {
         bool dark = ((clr.R + clr.G + clr.B) / 3 < 127);
         return dark;
     }
 
-    public static Color DarkerOrLighter(Color clr, float percent = 0)
+    private static Color DarkerOrLighter(Color clr, float percent = 0)
     {
         if (IsDark(clr))
             return ChangeColorBrightness(clr, percent);

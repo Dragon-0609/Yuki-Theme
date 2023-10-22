@@ -14,13 +14,13 @@ namespace Yuki_Theme.Core.WPF.Controls
             _settingsPanel = panel;
         }
 
-        public void LoadSettings()
+        internal void LoadSettings()
         {
             FillGeneralValues();
         }
 
 
-        public void FillGeneralValues()
+        private void FillGeneralValues()
         {
             LoadCheckBox(SettingsConst.STICKER, _settingsPanel.ShowSticker);
             LoadCheckBox(SettingsConst.HIDE_ON_HOVER, _settingsPanel.HideHover);
@@ -33,7 +33,7 @@ namespace Yuki_Theme.Core.WPF.Controls
             // LanguageDropdown, Settings.localization
         }
 
-        public void SaveSettings()
+        internal void SaveSettings()
         {
             SaveCheckBox(SettingsConst.STICKER, _settingsPanel.ShowSticker);
             SaveCheckBox(SettingsConst.HIDE_ON_HOVER, _settingsPanel.HideHover);
@@ -41,7 +41,7 @@ namespace Yuki_Theme.Core.WPF.Controls
             SaveNumberBox(SettingsConst.DIMENSION_CAP_MAX, _settingsPanel.DimensionCapMax.GetNumber());
         }
 
-        public void ResetStickerMargin()
+        internal void ResetStickerMargin()
         {
             DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
             PluginEvents.Instance.OnStickerMarginReset();

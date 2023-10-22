@@ -21,7 +21,7 @@ namespace YukiTheme.Engine
 		private string[] IconsWithDarkVersion => IconRenderer._iconsWithDarkVersion;
 
 
-		public static readonly Dictionary<string, string> _iconNames = new()
+		private static readonly Dictionary<string, string> _iconNames = new()
 		{
 			{ "tbNew", "addFile" },
 			{ "miNew", "addFile" },
@@ -219,7 +219,7 @@ namespace YukiTheme.Engine
 			return new SvgRenderInfo(SvgRenderer.LoadSvg(description + rest), false, Size.Empty, true, ColorReference.BorderColor);
 		}
 
-		public void UpdateColors()
+		internal void UpdateColors()
 		{
 			internalchanges = true;
 			foreach (ToolStripItem control in _tools.Items)

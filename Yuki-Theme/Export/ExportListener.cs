@@ -4,7 +4,7 @@ namespace YukiTheme.Export;
 
 public class ExportListener
 {
-    public static ExportListener Instance;
+    internal static ExportListener Instance;
 
     private Exporter _exporter;
 
@@ -14,7 +14,7 @@ public class ExportListener
         PluginEvents.Instance.ThemeChanged += ThemeChanged;
     }
 
-    public void SetExporter(Exporter exporter)
+    internal void SetExporter(Exporter exporter)
     {
         _exporter = exporter;
     }

@@ -27,7 +27,7 @@ public class OptionsChanger
 	private bool SelectYukiThemeNode = false;
 	private KeyValuePair<TreeNode, IOptionsContent> _pluginNode;
 
-	public void GetOptionsComponents(Form1 form1)
+	internal void GetOptionsComponents(Form1 form1)
 	{
 		_instance = this;
 		_fm = form1;
@@ -51,7 +51,7 @@ public class OptionsChanger
 		SubscribeToColors();
 	}
 
-	public static void ShowSettings()
+	internal static void ShowSettings()
 	{
 		_instance.SelectYukiThemeNode = true;
 		_instance._optionsForm.ShowDialog();

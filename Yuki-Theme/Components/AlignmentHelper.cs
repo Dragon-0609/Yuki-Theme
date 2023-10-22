@@ -1,8 +1,6 @@
 using System;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
-using YukiTheme.Tools;
 
 namespace YukiTheme.Components;
 
@@ -16,7 +14,7 @@ public class AlignmentHelper
 		_window = window;
 	}
 
-	public void SetAlign(AnchorStyles align)
+	internal void SetAlign(AnchorStyles align)
 	{
 		_context = align;
 		SetAlignX();
@@ -54,8 +52,8 @@ public class AlignmentHelper
 
 	private struct AlignConditions
 	{
-		public Enum Left;
-		public Enum Right;
+		internal Enum Left;
+		internal Enum Right;
 
 		public AlignConditions(Enum left, Enum right)
 		{
@@ -66,9 +64,9 @@ public class AlignmentHelper
 
 	private struct AlignResults
 	{
-		public readonly Enum First;
-		public readonly Enum Center;
-		public readonly Enum Last;
+		internal readonly Enum First;
+		internal readonly Enum Center;
+		internal readonly Enum Last;
 
 		public AlignResults(Enum first, Enum center, Enum last)
 		{

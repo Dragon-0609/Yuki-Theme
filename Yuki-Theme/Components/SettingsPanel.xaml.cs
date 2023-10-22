@@ -40,7 +40,7 @@ namespace YukiTheme.Components
 			Themes.ScrollToCenterOfView(Themes.SelectedItem);
 		}
 
-		public void GetColors()
+		internal void GetColors()
 		{
 			Background = WpfColorContainer.Instance.BackgroundBrush;
 			Foreground = WpfColorContainer.Instance.ForegroundBrush;
@@ -58,7 +58,7 @@ namespace YukiTheme.Components
 		{
 		}
 
-		public void SaveSettings()
+		internal void SaveSettings()
 		{
 			Utilities.SaveSettings();
 			if (_resetStickerMargin)

@@ -7,7 +7,7 @@ namespace YukiTheme.Components;
 
 public class NameBar
 {
-	public static string ThemeName;
+	internal static string ThemeName;
 
 	private ToolStripButton _currentThemeName;
 
@@ -33,5 +33,5 @@ public class NameBar
 		_currentThemeName.Text = name;
 	}
 
-	public ToolStripItem GetControl() => _currentThemeName;
+	internal ToolStripItem GetControl() => _currentThemeName;
 }

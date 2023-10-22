@@ -19,8 +19,8 @@ namespace YukiTheme.Engine
 	{
 		public static IDEAlterer Instance;
 
-		public IWorkbench Workbench;
-		public Form1 Form1;
+		internal IWorkbench Workbench;
+		internal Form1 Form1;
 		private ColorChanger _colorChanger;
 		private EditorAlterer _editorAlterer;
 		private ImageLoader _imageLoader;
@@ -45,7 +45,7 @@ namespace YukiTheme.Engine
 			StartExporter();
 		}
 
-		public void Init()
+		internal void Init()
 		{
 			_editorAlterer.GetComponents();
 			_colorChanger.GetColors();
@@ -74,7 +74,7 @@ namespace YukiTheme.Engine
 			PluginEvents.Instance.ThemeChanged += (name) => Reload();
 		}
 
-		public void Reload()
+		internal void Reload()
 		{
 			HighlightingManager.Manager.ReloadSyntaxModes();
 			_colorChanger.GetColors();
@@ -86,43 +86,43 @@ namespace YukiTheme.Engine
 			PluginEvents.Instance.OnReload();
 		}
 
-		public void ReloadSettings()
+		internal void ReloadSettings()
 		{
 			_wallpaperManager.ReloadSettings();
 			_stickerManager.ReloadSettings();
 		}
 
-		public void UpdateWallpaperVisibility() => _wallpaperManager.UpdateVisibility();
-		public void UpdateStickerVisibility() => _stickerManager.UpdateVisibility();
+		internal void UpdateWallpaperVisibility() => _wallpaperManager.UpdateVisibility();
+		internal void UpdateStickerVisibility() => _stickerManager.UpdateVisibility();
 
-		public void RequestBottomBarUpdate() => _editorAlterer.RequestBottomBarUpdate();
+		internal void RequestBottomBarUpdate() => _editorAlterer.RequestBottomBarUpdate();
 
-		public void FocusEditorWindow() => _editorAlterer.FocusEditorWindow();
+		internal void FocusEditorWindow() => _editorAlterer.FocusEditorWindow();
 
-		public void ShowThemeSelect() => _themeSelect.Show();
+		internal void ShowThemeSelect() => _themeSelect.Show();
 
-		public static bool HasWallpaper => Instance._imageLoader.HasImage;
-		public static bool HasSticker => Instance._imageLoader.HasSticker;
+		internal static bool HasWallpaper => Instance._imageLoader.HasImage;
+		internal static bool HasSticker => Instance._imageLoader.HasSticker;
 
-		public static bool CanShowWallpaper => Instance._imageLoader.HasImage && IsWallpaperVisible && !IsDiscreteActive;
+		internal static bool CanShowWallpaper => Instance._imageLoader.HasImage && IsWallpaperVisible && !IsDiscreteActive;
 
-		public static bool CanShowSticker => Instance._imageLoader.HasImage && IsStickerVisible && !IsDiscreteActive;
+		internal static bool CanShowSticker => Instance._imageLoader.HasImage && IsStickerVisible && !IsDiscreteActive;
 
-		public static bool IsWallpaperVisible => DatabaseManager.Load(SettingsConst.BG_IMAGE);
+		internal static bool IsWallpaperVisible => DatabaseManager.Load(SettingsConst.BG_IMAGE);
 
-		public static bool IsStickerVisible => DatabaseManager.Load(SettingsConst.STICKER);
+		internal static bool IsStickerVisible => DatabaseManager.Load(SettingsConst.STICKER);
 
-		public static bool IsDiscreteActive => DatabaseManager.Load(SettingsConst.DISCRETE_MODE);
+		internal static bool IsDiscreteActive => DatabaseManager.Load(SettingsConst.DISCRETE_MODE);
 
-		public static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
-		public static Image GetSticker => Instance._imageLoader.GetSticker;
+		internal static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
+		internal static Image GetSticker => Instance._imageLoader.GetSticker;
 
-		public static ImageSource GetWallpaperWPF => Instance._imageLoader.GetWallpaperWPF;
-		public static ImageSource GetStickerWPF => Instance._imageLoader.GetStickerWPF;
+		internal static ImageSource GetWallpaperWPF => Instance._imageLoader.GetWallpaperWPF;
+		internal static ImageSource GetStickerWPF => Instance._imageLoader.GetStickerWPF;
 
-		public static void ReleaseImages() => Instance._imageLoader.ReleaseImages();
+		internal static void ReleaseImages() => Instance._imageLoader.ReleaseImages();
 
-		public static void ReloadImages()
+		internal static void ReloadImages()
 		{
 			Instance._imageLoader.LoadImages();
 			Instance._imageLoader.ApplyImages();

@@ -44,7 +44,7 @@ public class EditorComponents
 	{
 	}
 
-	public void GetComponents()
+	internal void GetComponents()
 	{
 		GetMainComponenets();
 
@@ -129,7 +129,7 @@ public class EditorComponents
 		e.Graphics.DrawString(e.Header.Text, e.Font, ColorChanger.Instance.GetBrush(ColorChanger.FOREGROUND), e.Bounds);
 	}
 
-	public void UpdateIconColors()
+	internal void UpdateIconColors()
 	{
 		_alterer.UpdateColors();
 	}

@@ -4,31 +4,31 @@ namespace YukiTheme.Engine;
 
 public class PluginEvents
 {
-	public static PluginEvents Instance;
+	internal static PluginEvents Instance;
 
-	public event ThemeChange ThemeChanged;
-	public event Action Reload;
+	internal event ThemeChange ThemeChanged;
+	internal event Action Reload;
 
-	public event Action StickerMarginReset;
+	internal event Action StickerMarginReset;
 
-	public delegate void ThemeChange(string name);
+	internal delegate void ThemeChange(string name);
 
-	public PluginEvents()
+	internal PluginEvents()
 	{
 		Instance = this;
 	}
 
-	public void OnThemeChanged(string name)
+	internal void OnThemeChanged(string name)
 	{
 		ThemeChanged?.Invoke(name);
 	}
 
-	public void OnReload()
+	internal void OnReload()
 	{
 		Reload?.Invoke();
 	}
 
-	public void OnStickerMarginReset()
+	internal void OnStickerMarginReset()
 	{
 		StickerMarginReset?.Invoke();
 	}

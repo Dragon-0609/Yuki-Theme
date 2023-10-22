@@ -20,14 +20,14 @@ public class ImageLoader
     private string _wallpaperName = "background";
     private string _stickerName = "sticker";
 
-    public bool HasImage => _wallpaper is { Height: > 10 };
-    public Image GetWallpaper => _wallpaper;
-    public Image GetSticker => _sticker;
+    internal bool HasImage => _wallpaper is { Height: > 10 };
+    internal Image GetWallpaper => _wallpaper;
+    internal Image GetSticker => _sticker;
 
-    public bool HasSticker => _sticker is { Height: > 10 };
+    internal bool HasSticker => _sticker is { Height: > 10 };
 
-    public ImageSource GetWallpaperWPF => _wallpaperSource;
-    public ImageSource GetStickerWPF => _stickerSource;
+    internal ImageSource GetWallpaperWPF => _wallpaperSource;
+    internal ImageSource GetStickerWPF => _stickerSource;
 
     private void RemoveLastImage()
     {
@@ -48,7 +48,7 @@ public class ImageLoader
         _stickerSource = null;
     }
 
-    public void LoadImages()
+    internal void LoadImages()
     {
         RemoveLastImage();
         string[] png = Directory.GetFiles(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, ImagesFolder), PngFilter);
@@ -87,12 +87,12 @@ public class ImageLoader
         }
     }
 
-    public void ReleaseImages()
+    internal void ReleaseImages()
     {
         RemoveLastImage();
     }
 
-    public void ApplyImages()
+    internal void ApplyImages()
     {
         if (_wallpaper != null)
         {
@@ -101,7 +101,7 @@ public class ImageLoader
         }
     }
 
-    public Image SetImageOpacity(Image image, float opacity)
+    internal Image SetImageOpacity(Image image, float opacity)
     {
         try
         {

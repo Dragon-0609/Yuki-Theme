@@ -12,7 +12,7 @@ public class MenuReplacer
 	private MenuStrip _menu;
 	private Timer _loadingTimer;
 
-	public void AddMenuItemsWithDelay(MenuStrip menu)
+	internal void AddMenuItemsWithDelay(MenuStrip menu)
 	{
 		_menu = menu;
 		StartLoadingTimer();

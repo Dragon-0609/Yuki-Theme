@@ -45,7 +45,7 @@ namespace YukiTheme.Components
 			_helper = new AlignmentHelper(this);
 		}
 
-		public void SetSize()
+		internal void SetSize()
 		{
 			Drawing.Size dimensionSize = ImageHelper.CalculateDimension(IDEAlterer.GetSticker.Size);
 			Width = dimensionSize.Width;
@@ -66,7 +66,7 @@ namespace YukiTheme.Components
 			return StickerPositionConverter.ToString(PositionInfo);
 		}
 
-		public void LoadData()
+		internal void LoadData()
 		{
 			string data = DatabaseManager.Load(SettingsConst.STICKER_POSITION, "");
 			PositionInfo = ConvertToLoad(data);
@@ -202,7 +202,7 @@ namespace YukiTheme.Components
 			}
 		}
 
-		public void SetImage(ImageSource source)
+		internal void SetImage(ImageSource source)
 		{
 			Sticker.Source = source;
 		}

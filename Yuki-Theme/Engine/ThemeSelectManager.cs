@@ -10,7 +10,7 @@ public class ThemeWindowManager : WindowManager
 {
     private ThemeSelectWindow _themeSelect;
 
-    public override void Show()
+    internal override void Show()
     {
         WpfConverter.ConvertGuiColorsNBrushes();
 
@@ -43,14 +43,14 @@ public class ThemeWindowManager : WindowManager
         PluginEvents.Instance.OnThemeChanged(name);
     }
 
-    public override bool IsWindowNull() => _themeSelect == null;
+    internal override bool IsWindowNull() => _themeSelect == null;
 
-    public override void SetVisibility(Visibility visibility)
+    internal override void SetVisibility(Visibility visibility)
     {
         _themeSelect.Visibility = visibility;
     }
 
-    public override void ReloadSettings()
+    internal override void ReloadSettings()
     {
     }
 }
