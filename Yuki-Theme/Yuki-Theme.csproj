@@ -106,6 +106,7 @@
           <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Components\GridWindow.xaml.cs" />
+        <Compile Include="Components\IntegerUpDown.xaml.cs" />
         <Compile Include="Components\NameBar.cs" />
         <Compile Include="Components\PluginSettingsControl.cs" />
         <Compile Include="Components\PluginSettingsControl.Designer.cs" />
@@ -646,6 +647,7 @@
     </ItemGroup>
     <ItemGroup>
       <Page Include="Components\GridWindow.xaml" />
+      <Page Include="Components\IntegerUpDown.xaml" />
       <Page Include="Components\SettingsPanel.xaml" />
       <Page Include="Components\StickerWindow.xaml" />
       <Page Include="Components\Styles\ButtonStyles.xaml" />
