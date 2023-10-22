@@ -51,6 +51,7 @@
         <Compile Include="DefaultResourcesTest.cs" />
         <Compile Include="DefaultThemeTest.cs" />
         <Compile Include="DokiThemeTest.cs" />
+        <Compile Include="IconLoadTest.cs" />
         <Compile Include="Tests.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TestUtility.cs" />

@@ -3,11 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:tools="clr-namespace:YukiTheme.Tools"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="405" d:DesignWidth="253" Background="Gray">
+             d:DesignHeight="253" d:DesignWidth="405" Background="Gray">
     <UserControl.Resources>
 
         <ResourceDictionary>
@@ -111,10 +109,10 @@
                                            VerticalAlignment="Center"
                                            Text="{DynamicResource settings.general.dimension.max.px}" />
                                 <controls:IntegerUpDown
-                                        FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
-                                        VerticalAlignment="Center" Width="70" Height="30"
-                                        Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
-                                        MinValue="-1" MaxValue="2000" ValueChange="5" x:Name="DimensionCapMax" />
+                                    FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
+                                    VerticalAlignment="Center" Width="70" Height="30"
+                                    Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
+                                    MinValue="-1" MaxValue="2000" ValueChange="5" x:Name="DimensionCapMax" />
                             </WrapPanel>
                             <WrapPanel Margin="0 5">
                                 <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"

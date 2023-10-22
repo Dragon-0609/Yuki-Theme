@@ -28,7 +28,7 @@ namespace YukiTest
 		private void LoadResource(string key, string value)
 		{
 			Stream stream = ResourceHelper.LoadStream(key, value);
-			Assert.True(stream != null);
+			Assert.NotNull(stream);
 			stream.Dispose();
 		}
 	}

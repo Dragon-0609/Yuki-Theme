@@ -13,7 +13,7 @@
     <system:String x:Key="settings.general.sticker.custom">Use Custom Sticker</system:String>
     <system:String x:Key="settings.general.positioning.enabled">Allow Positioning</system:String>
     <system:String x:Key="settings.general.positioning.reset">Reset Sticker Margin</system:String>
-    <system:String x:Key="settings.general.positioning.save">Double click sticker&amp;#10;to save current position.</system:String>
+    <system:String x:Key="settings.general.positioning.save">Double click sticker to save current position.</system:String>
     <system:String x:Key="settings.general.dimension.title">Sticker Dimension Cap</system:String>
     <system:String x:Key="settings.general.dimension.enable">Enable Sticker Dimension Cap</system:String>
     <system:String x:Key="settings.general.dimension.max.px">Max Size (px)</system:String>

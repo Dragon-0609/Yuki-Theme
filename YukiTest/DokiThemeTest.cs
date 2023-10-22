@@ -40,7 +40,7 @@ namespace YukiTest
 		private static void ValidateImage(string themeName, string @namespace)
 		{
 			Image image = ResourceHelper.LoadImage($"{themeName}.png", @namespace);
-			Assert.True(image != null);
+			Assert.NotNull(image);
 
 			image.Dispose();
 		}

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using YukiTheme.Engine;
+﻿using System.Collections.Generic;
 
 namespace YukiTheme.Tools
 {
 	public class DatabaseManager
 	{
-		public static DatabaseManager Instance;
+		private static DatabaseManager _instance;
 
 		private FileDatabase _database;
 
-		public readonly Dictionary<int, string> _defaults = new()
+		private readonly Dictionary<int, string> _defaults = new()
 		{
 			{ SettingsConst.AUTO_UPDATE, true.ToInt().ToString() },
 			{ SettingsConst.BG_IMAGE, true.ToInt().ToString() },
@@ -41,7 +39,7 @@ namespace YukiTheme.Tools
 
 		public DatabaseManager()
 		{
-			Instance = this;
+			_instance = this;
 			InitDatabase();
 
 			AddDefaults();
@@ -65,9 +63,9 @@ namespace YukiTheme.Tools
 
 		#region Setter
 
-		public static void Save(int name, int value) => Instance.Save(name.ToString(), value.ToString());
-		public static void Save(int name, bool value) => Instance.Save(name.ToString(), value.ToInt().ToString());
-		public static void Save(int name, string value) => Instance.Save(name.ToString(), value);
+		public static void Save(int name, int value) => _instance.Save(name.ToString(), value.ToString());
+		public static void Save(int name, bool value) => _instance.Save(name.ToString(), value.ToInt().ToString());
+		public static void Save(int name, string value) => _instance.Save(name.ToString(), value);
 
 		private void Save(string name, string value)
 		{
@@ -80,23 +78,23 @@ namespace YukiTheme.Tools
 
 		public static bool Load(int key)
 		{
-			return Load(key, int.Parse(Instance._defaults[key]).ToBool());
+			return Load(key, int.Parse(_instance._defaults[key]).ToBool());
 		}
 
-		public static string Load(int key, string defaultValue) => Instance._database.GetValue(key.ToString(), defaultValue);
+		public static string Load(int key, string defaultValue) => _instance._database.GetValue(key.ToString(), defaultValue);
 
 		public static int Load(int key, int defaultValue)
 		{
-			return int.Parse(Instance._database.GetValue(key.ToString(), defaultValue.ToString()));
+			return int.Parse(_instance._database.GetValue(key.ToString(), defaultValue.ToString()));
 		}
 
 		public static bool Load(int key, bool defaultValue)
 		{
-			string value = Instance._database.GetValue(key.ToString(), defaultValue.ToInt().ToString());
+			string value = _instance._database.GetValue(key.ToString(), defaultValue.ToInt().ToString());
 			return int.Parse(value).ToBool();
 		}
 
-		private static string Load(string key, string defaultValue) => Instance._database.GetValue(key, defaultValue);
+		private static string Load(string key, string defaultValue) => _instance._database.GetValue(key, defaultValue);
 
 		#endregion
 

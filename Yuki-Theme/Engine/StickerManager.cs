@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components;
+using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
 
@@ -78,6 +79,8 @@ public class StickerManager : WindowManager
     {
         if (!IsWindowNull())
         {
+            _sticker.SetSize();
+            _sticker.ResetPosition();
         }
     }
 }

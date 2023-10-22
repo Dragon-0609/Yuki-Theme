@@ -10,7 +10,7 @@ using YukiTheme.Tools;
 
 namespace YukiTheme.Engine
 {
-	internal class IconAlterer
+	public class IconAlterer
 	{
 		private readonly Form1 _fm;
 		private readonly MenuStrip _menu;
@@ -19,6 +19,8 @@ namespace YukiTheme.Engine
 		private ContextMenuStrip _context2;
 
 		private string[] IconsWithDarkVersion => IconRenderer._iconsWithDarkVersion;
+
+		public static string[] IconNames => _iconNames.Select(i => i.Value).ToArray();
 
 
 		private static readonly Dictionary<string, string> _iconNames = new()
@@ -111,7 +113,7 @@ namespace YukiTheme.Engine
 
 		private bool internalchanges;
 
-		public IconAlterer(ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip, ContextMenuStrip contextMenuStrip2,
+		internal IconAlterer(ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip, ContextMenuStrip contextMenuStrip2,
 			Form1 form)
 		{
 			_tools = toolStrip;
