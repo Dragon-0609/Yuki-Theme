@@ -126,7 +126,7 @@ namespace YukiTheme.Style.CodeCompletion
 			SetLocation();
 			
 			if (declarationViewWindow == null) {
-				declarationViewWindow = new DeclarationWindow(parentForm);
+				declarationViewWindow = new DeclarationPopup(parentForm);
 				declarationViewWindow.in_completion_list = true;
 				declarationViewWindow.Font = new Font(VisualPascalABC.Constants.CompletionWindowDeclarationViewWindowFontName, declarationViewWindow.Font.Size);
 			}            

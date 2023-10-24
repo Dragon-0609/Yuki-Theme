@@ -87,69 +87,75 @@ namespace Yuki_Theme_Plugin
 			_editor.TextArea.Paint -= InspectBracketsPaint;
 		}
 
-		internal void InspectBracketsPaint(object sender, PaintEventArgs e)
+		private void InspectBracketsPaint(object sender, PaintEventArgs e)
 		{
 			Graphics g = e.Graphics;
 			if (_editor.TextArea.TextView.Highlight != null && _editor.TextArea.TextView.Highlight.OpenBrace != null && _editor.TextArea.TextView.Highlight.CloseBrace != null)
 			{
-				int lineNumber = _editor.TextArea.Caret.Line;
-				LineSegment currentLine = _editor.TextArea.Document.GetLineSegment(lineNumber);
-				int currentWordOffset = 0;
-				int startColumn = 0;
+				// int lineNumber = _editor.TextArea.Caret.Line;
+				DrawLine(_editor.TextArea.TextView.Highlight.OpenBrace.Y, g);
+				DrawLine(_editor.TextArea.TextView.Highlight.CloseBrace.Y, g);
+			}
+		}
+		private void DrawLine(int lineNumber, Graphics g)
+		{
 
-				if (_editor.TextEditor.TextEditorProperties.EnableFolding)
+			LineSegment currentLine = _editor.TextArea.Document.GetLineSegment(lineNumber);
+			int currentWordOffset = 0;
+			int startColumn = 0;
+
+			if (_editor.TextEditor.TextEditorProperties.EnableFolding)
+			{
+				List<FoldMarker> starts = _editor.TextArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
+				if (starts != null && starts.Count > 0)
 				{
-					List<FoldMarker> starts = _editor.TextArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
-					if (starts != null && starts.Count > 0)
+					FoldMarker firstFolding = (FoldMarker)starts[0];
+					foreach (FoldMarker fm in starts)
 					{
-						FoldMarker firstFolding = (FoldMarker)starts[0];
-						foreach (FoldMarker fm in starts)
+						if (fm.StartColumn < firstFolding.StartColumn)
 						{
-							if (fm.StartColumn < firstFolding.StartColumn)
-							{
-								firstFolding = fm;
-							}
+							firstFolding = fm;
 						}
-
-						startColumn = firstFolding.EndColumn;
 					}
+
+					startColumn = firstFolding.EndColumn;
 				}
+			}
 
-				MethodInfo draw = typeof(TextView).GetMethod("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo draw = typeof(TextView).GetMethod("DrawDocumentWord", BindingFlags.NonPublic | BindingFlags.Instance);
 
-				TextWord currentWord;
-				int drawingX = _editor.TextArea.TextView.DrawingPosition.X;
+			TextWord currentWord;
+			int drawingX = _editor.TextArea.TextView.DrawingPosition.X;
 
-				for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
+			for (int wordIdx = 0; wordIdx < currentLine.Words.Count; wordIdx++)
+			{
+				currentWord = currentLine.Words[wordIdx];
+				int realPosX = _editor.TextArea.TextView.GetDrawingXPos(lineNumber, currentWordOffset) + drawingX;
+				if (currentWordOffset < startColumn || realPosX < drawingX)
 				{
-					currentWord = currentLine.Words[wordIdx];
-					int realPosX = _editor.TextArea.TextView.GetDrawingXPos(lineNumber, currentWordOffset) + drawingX;
-					if (currentWordOffset < startColumn || realPosX < drawingX)
-					{
-						currentWordOffset += currentWord.Length;
-						continue;
-					}
-
-					if (_editor.TextArea.TextView.Highlight.OpenBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
-					    _editor.TextArea.TextView.Highlight.CloseBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
-					{
-						int xpos = realPosX;
-						int liny = _editor.TextArea.TextView.DrawingPosition.Top + (lineNumber - _editor.TextArea.TextView.FirstVisibleLine) * _editor.TextArea.TextView.FontHeight -
-						           _editor.TextArea.TextView.VisibleLineDrawingRemainder;
-
-						draw.Invoke(_editor.TextArea.TextView, new object[]
-						{
-							g,
-							currentWord.Word,
-							new Point(xpos, liny),
-							currentWord.GetFont(_editor.TextArea.TextView.TextEditorProperties.FontContainer),
-							currentWord.Color,
-							ColorReference.TypeBrush
-						});
-					}
-
 					currentWordOffset += currentWord.Length;
+					continue;
 				}
+
+				if (_editor.TextArea.TextView.Highlight.OpenBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.OpenBrace.X == currentWordOffset ||
+					_editor.TextArea.TextView.Highlight.CloseBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.CloseBrace.X == currentWordOffset)
+				{
+					int xpos = realPosX;
+					int liny = _editor.TextArea.TextView.DrawingPosition.Top + (lineNumber - _editor.TextArea.TextView.FirstVisibleLine) * _editor.TextArea.TextView.FontHeight -
+						_editor.TextArea.TextView.VisibleLineDrawingRemainder;
+
+					draw.Invoke(_editor.TextArea.TextView, new object[]
+					{
+						g,
+						currentWord.Word,
+						new Point(xpos, liny),
+						currentWord.GetFont(_editor.TextArea.TextView.TextEditorProperties.FontContainer),
+						currentWord.Color,
+						ColorReference.TypeBrush
+					});
+				}
+
+				currentWordOffset += currentWord.Length;
 			}
 		}
 

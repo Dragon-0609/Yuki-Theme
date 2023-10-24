@@ -139,7 +139,7 @@ namespace YukiTheme.Style.CodeCompletion
 						(IInsightDataProvider)constructor.Invoke(new object[] { -1, false, key });
 					if (_insightWindow == null || _insightWindow.InsightProviderStackLength == 0)
 					{
-						_insightWindow = new PABCNETInsightWindow(VisualPABCSingleton.MainForm, _editor);
+						_insightWindow = new InsightPopup(VisualPABCSingleton.MainForm, _editor);
 						_insightWindow.Font = new Font(Constants.CompletionInsightWindowFontName, _insightWindow.Font.Size);
 						_insightWindow.Closed += CloseInsightWindow;
 					}

@@ -153,6 +153,14 @@
         <Compile Include="Style\CodeCompletion\CodeCompletionKeyHandler.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionListView.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionWindow.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationPopup.cs" />
+        <Compile Include="Style\CodeCompletion\InsightPopup.cs" />
+        <Compile Include="Style\CodeCompletion\TipPainter.cs" />
+        <Compile Include="Style\CodeCompletion\TipPainterTools.cs" />
+        <Compile Include="Style\CodeCompletion\TipSection.cs" />
+        <Compile Include="Style\CodeCompletion\TipSpacer.cs" />
+        <Compile Include="Style\CodeCompletion\TipSplitter.cs" />
+        <Compile Include="Style\CodeCompletion\TipText.cs" />
         <Compile Include="Style\Extender.cs" />
         <Compile Include="Style\Helpers\Bookmarks.cs" />
         <Compile Include="Style\Helpers\DockHelper.cs" />

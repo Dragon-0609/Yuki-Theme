@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
@@ -6,10 +7,54 @@ namespace YukiTheme.Tools;
 
 public static class MiscHelper
 {
-	public static T GetByReflection<T>(this object instance, string key)
+	public static T GetByReflection<T>(this object instance, string key, bool isPublic = false)
 	{
-		FieldInfo getopt = instance.GetType().GetField(key, BindingFlags.NonPublic | BindingFlags.Instance);
-		return (T)getopt?.GetValue(instance);
+		return GetByReflection<T>(instance.GetType(), instance, key, isPublic);
+	}
+
+	private static T GetByReflection<T>(Type type, object instance, string key, bool isPublic)
+	{
+		FieldInfo getopt = type.GetField(key, (isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
+		if (getopt == null)
+		{
+			if (type.BaseType != null)
+			{
+				return GetByReflection<T>(type.BaseType, instance, key, isPublic);
+			}
+			else
+			{
+				throw new NullReferenceException("Field not found");
+			}
+		}
+		else
+		{
+			return (T)getopt?.GetValue(instance);
+		}
+	}
+
+	public static T GetPropertyByReflection<T>(this object instance, string key)
+	{
+		return GetPropertyByReflection<T>(instance.GetType(), instance, key);
+	}
+
+	private static T GetPropertyByReflection<T>(Type type, object instance, string key)
+	{
+		PropertyInfo getopt = type.GetProperty(key, BindingFlags.NonPublic | BindingFlags.Instance);
+		if (getopt == null)
+		{
+			if (type.BaseType != null)
+			{
+				return GetPropertyByReflection<T>(type.BaseType, instance, key);
+			}
+			else
+			{
+				throw new NullReferenceException("Property not found");
+			}
+		}
+		else
+		{
+			return (T)getopt?.GetValue(instance);
+		}
 	}
 
 	public static void SetByReflection<T>(this T instance, string key, object value)
@@ -22,6 +67,12 @@ public static class MiscHelper
 	{
 		MethodInfo methodInfo = instance.GetType().GetMethod(key, BindingFlags.NonPublic | BindingFlags.Instance);
 		methodInfo.Invoke(instance, new[] { value });
+	}
+
+	public static T CallFunctionByReflection<T>(this object instance, string key)
+	{
+		MethodInfo methodInfo = instance.GetType().GetMethod(key, BindingFlags.NonPublic | BindingFlags.Instance);
+		return (T)methodInfo.Invoke(instance, null);
 	}
 
 	public static Rectangle GetSizes(Size ima, int mWidth, int mHeight, Alignment align)
@@ -58,7 +109,7 @@ public static class MiscHelper
 
 	public static string Replace(this string origin, Dictionary<string, string> toReplace)
 	{
-		foreach (KeyValuePair<string,string> pair in toReplace)
+		foreach (KeyValuePair<string, string> pair in toReplace)
 		{
 			origin = origin.Replace(pair.Key, pair.Value);
 		}
