@@ -631,6 +631,13 @@
       <EmbeddedResource Include="Resources\Icons\checkBoxSelectedDisabled.svg" />
       <EmbeddedResource Include="Resources\Icons\checkBoxSelectedFocused.svg" />
       <EmbeddedResource Include="Resources\Icons\balloonInformation.svg" />
+      <EmbeddedResource Include="Resources\Icons\heart.svg" />
+      <EmbeddedResource Include="Resources\Icons\gearPlain.svg" />
+      <EmbeddedResource Include="Resources\Icons\wallpaper.svg" />
+      <EmbeddedResource Include="Resources\Icons\quiet.svg" />
+      <EmbeddedResource Include="Resources\Icons\switch.svg" />
+      <EmbeddedResource Include="Resources\Icons\yuki_theme.svg" />
+      <EmbeddedResource Include="Resources\Icons\positioning.svg" />
       <Content Include="Style\Resources\Close_32.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
       <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
