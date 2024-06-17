@@ -107,6 +107,8 @@
     "ui.tooltips.restore.message": "Сбросить тему на изначальное\nсостояние. Вы можете использовать её\nесли изменили не то полье.",
     "ui.tooltips.export.title": "Экспорт темы",
     "ui.tooltips.export.message": "Экспортировать тему на PascalABC.NET.",
+    "ui.tooltips.export.unity.title": "Экспорт темы для Unity",
+    "ui.tooltips.export.unity.message": "Экспортировать тему на Unity",
     "ui.tooltips.import.title": "Импорт темы",
     "ui.tooltips.import.message": "Импортировать тему из файла.\nПоддерживаемые расширения:\n.yukitheme, .json, .xshd",
     "ui.tooltips.import_directory.title": "Импорт тем из папки",

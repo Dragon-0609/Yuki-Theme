@@ -26,35 +26,35 @@ namespace Yuki_Theme.Core.WPF.Windows
 	{
 		private bool blockedThemeSelector = true;
 
-		private Highlighter       highlighter;
+		private Highlighter highlighter;
 		private Drawing.Rectangle oldV = Drawing.Rectangle.Empty;
 
-		private Thickness minMargin  = new Thickness (0);
-		private Thickness normMargin = new Thickness (24, 0, 0, 0);
+		private Thickness minMargin = new Thickness(0);
+		private Thickness normMargin = new Thickness(24, 0, 0, 0);
 
-		private Drawing.Image img  = null;
+		private Drawing.Image img = null;
 		private Drawing.Image img2 = null;
 		private Drawing.Image img3 = null;
 		private Drawing.Image img4 = null;
-		private string []     themes;
+		private string[] themes;
 
 		public event SetTheme setTheme;
 		public event SetTheme startSettingTheme;
 
-		private Drawing.Size defaultSize = new Drawing.Size (20, 20);
+		private Drawing.Size defaultSize = new Drawing.Size(20, 20);
 
 		private bool BlockOpacity = false;
 
-		#region Initialization
+#region Initialization
 
-		public MainWindow ()
+		public MainWindow()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
-		private void Init (object sender, RoutedEventArgs e)
+		private void Init(object sender, RoutedEventArgs e)
 		{
-			Icon = Helper.GetYukiThemeIconImage (new Drawing.Size (24, 24)).ToWPFImage ();
+			Icon = Helper.GetYukiThemeIconImage(new Drawing.Size(24, 24)).ToWPFImage();
 			CLI_Actions.ifHasImage = ifHasImage;
 			CLI_Actions.ifDoesntHave = ifDoesntHave;
 			CLI_Actions.ifHasSticker = ifHasSticker;
@@ -72,72 +72,74 @@ namespace Yuki_Theme.Core.WPF.Windows
 				ExportButton.Visibility = Visibility.Hidden;
 			}
 
-			highlighter = new Highlighter (Fstb.box);
-			load_schemes ();
-			highlighter.InitializeSyntax ();
+			highlighter = new Highlighter(Fstb.box);
+			load_schemes();
+			highlighter.InitializeSyntax();
 			Fstb.box.Paint += bgImagePaint;
-			ToggleEditor ();
-			ShowLicense ();
-			UpdateTranslations ();
+			ToggleEditor();
+			ShowLicense();
+			UpdateTranslations();
 		}
 
-		private void load_schemes ()
+		private void load_schemes()
 		{
-			CLI.load_schemes ();
-			LoadThemes ();
+			CLI.load_schemes();
+			LoadThemes();
 		}
 
-		public void LoadThemes ()
+		public void LoadThemes()
 		{
 			blockedThemeSelector = true;
-			Themes.Items.Clear ();
-			themes = CLI.schemes.ToArray ();
+			Themes.Items.Clear();
+			themes = CLI.schemes.ToArray();
 			foreach (string theme in themes)
 			{
-				Themes.Items.Add (theme);
+				Themes.Items.Add(theme);
 			}
 
 			blockedThemeSelector = false;
 			// MessageBox.Show (CLI.isDefaultTheme.Count.ToString ());
-			if (Themes.Items.Contains (CLI.selectedItem))
+			if (Themes.Items.Contains(CLI.selectedItem))
 				Themes.SelectedItem = CLI.selectedItem;
 			else
 				Themes.SelectedIndex = 0;
 
-			CLI.restore (false, null);
-			LoadDefinitions ();
+			CLI.restore(false, null);
+			LoadDefinitions();
 		}
 
-		private void LoadDefinitions ()
+		private void LoadDefinitions()
 		{
-			Definitions.Items.Clear ();
-			foreach (string definition in CLI.names.ToArray ())
+			Definitions.Items.Clear();
+			foreach (string definition in CLI.names.ToArray())
 			{
-				Definitions.Items.Add (definition);
+				Definitions.Items.Add(definition);
 			}
 		}
 
-		private void LoadDefinitionsWithSelection ()
+		private void LoadDefinitionsWithSelection()
 		{
 			int prevSelectedField = Definitions.SelectedIndex;
-			LoadDefinitions ();
+			LoadDefinitions();
 			Definitions.SelectedIndex = prevSelectedField != -1 ? prevSelectedField : 0;
 		}
 
-		private void LoadSticker ()
+		private void LoadSticker()
 		{
 			if (Settings.swSticker)
 			{
-				if (Settings.useCustomSticker && Settings.customSticker.Exist ())
+				if (Settings.useCustomSticker && Settings.customSticker.Exist())
 				{
-					img4 = Drawing.Image.FromFile (Settings.customSticker);
-				} else
+					img4 = Drawing.Image.FromFile(Settings.customSticker);
+				}
+				else
 				{
 					if (img3 != null)
 					{
 						img4 = img3;
 						Sticker.Visibility = Visibility.Visible;
-					} else
+					}
+					else
 					{
 						img4 = null;
 						Sticker.Visibility = Visibility.Hidden;
@@ -146,43 +148,46 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				if (img4 != null)
 				{
-					SetStickerSize ();
-					Sticker.Source = img4.ToWPFImage ();
-					Popup.UpdatePopupPosition ();
-				} else
+					SetStickerSize();
+					Sticker.Source = img4.ToWPFImage();
+					Popup.UpdatePopupPosition();
+				}
+				else
 				{
 					Popup.Visibility = Visibility.Hidden;
 				}
-			} else
+			}
+			else
 			{
 				Popup.Visibility = Visibility.Hidden;
 			}
 		}
 
-		private void LoadSVG ()
+		private void LoadSVG()
 		{
-			string add = Helper.IsDark (Helper.bgColor) ? "" : "_dark";
-			WPFHelper.SetSVGImage (AddButton, "add" + add);
-			WPFHelper.SetSVGImage (ManageButton, "listFiles" + add);
-			WPFHelper.SetSVGImage (SaveButton, "menu-saveall");
-			WPFHelper.SetSVGImage (RestoreButton, "refresh" + add);
-			WPFHelper.SetSVGImage (ExportButton, "export" + add);
-			WPFHelper.SetSVGImage (ImportButton, "import" + add);
-			WPFHelper.SetSVGImage (ImportDirectoryButton, "traceInto" + add, true, Helper.bgBorder);
-			WPFHelper.SetSVGImage (SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
-			WPFHelper.SetSVGImage (DownloaderButton, "smartStepInto" + add, true, Helper.bgBorder);
-			WPFHelper.SetSVGImage (ImagePathButton, "moreHorizontal" + add);
-			WPFHelper.SetSVGImage (LAlignButton, "positionLeft" + add);
-			WPFHelper.SetSVGImage (CAlignButton, "positionCenter" + add);
-			WPFHelper.SetSVGImage (RAlignButton, "positionRight" + add);
+			string add = Helper.IsDark(Helper.bgColor) ? "" : "_dark";
+			WPFHelper.SetSVGImage(AddButton, "add" + add);
+			WPFHelper.SetSVGImage(ManageButton, "listFiles" + add);
+			WPFHelper.SetSVGImage(SaveButton, "menu-saveall");
+			WPFHelper.SetSVGImage(RestoreButton, "refresh" + add);
+			WPFHelper.SetSVGImage(ExportButton, "export" + add);
+			WPFHelper.SetSVGImage(ExportUnityButton, "export" + add);
+			WPFHelper.SetSVGImage(ImportButton, "import" + add);
+			WPFHelper.SetSVGImage(ImportDirectoryButton, "traceInto" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage(SettingsButton, "gearPlain" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage(DownloaderButton, "smartStepInto" + add, true, Helper.bgBorder);
+			WPFHelper.SetSVGImage(ImagePathButton, "moreHorizontal" + add);
+			WPFHelper.SetSVGImage(LAlignButton, "positionLeft" + add);
+			WPFHelper.SetSVGImage(CAlignButton, "positionCenter" + add);
+			WPFHelper.SetSVGImage(RAlignButton, "positionRight" + add);
 		}
 
-		private void UpdateTranslations ()
+		private void UpdateTranslations()
 		{
-			WPFHelper.TranslateControls (this, "ui.tooltips.", "main.labels.");
+			WPFHelper.TranslateControls(this, "ui.tooltips.", "main.labels.");
 		}
 
-		private void ReLoadCheckBoxImages ()
+		private void ReLoadCheckBoxImages()
 		{
 			try
 			{
@@ -192,99 +197,99 @@ namespace Yuki_Theme.Core.WPF.Windows
 					if (Helper.mode == ProductMode.Program)
 					{
 						mergedDict =
-							Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault (
-								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
-					} else if (Helper.mode == ProductMode.Plugin)
+							Application.Current.MainWindow.Resources.MergedDictionaries.FirstOrDefault(
+								md => md.Source.ToString().Contains("CheckboxStyles.xaml"));
+					}
+					else if (Helper.mode == ProductMode.Plugin)
 					{
 						mergedDict =
-							Application.Current.Resources.MergedDictionaries.FirstOrDefault (
-								md => md.Source.ToString ().Contains ("CheckboxStyles.xaml"));
+							Application.Current.Resources.MergedDictionaries.FirstOrDefault(
+								md => md.Source.ToString().Contains("CheckboxStyles.xaml"));
 					}
 
 					if (mergedDict != null)
 					{
-						Dictionary <string, Drawing.Color> idColors = WPFHelper.GenerateBGColors ();
-						var disabledIdColors = WPFHelper.GenerateDisabledBGColors ();
-						mergedDict.SetResourceSvg ("checkBoxDefault", "checkBox", idColors, defaultSize);
-						mergedDict.SetResourceSvg ("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
-						mergedDict.SetResourceSvg ("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
-						mergedDict.SetResourceSvg ("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
-						mergedDict.SetResourceSvg ("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
-						mergedDict.SetResourceSvg ("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
+						Dictionary<string, Drawing.Color> idColors = WPFHelper.GenerateBGColors();
+						var disabledIdColors = WPFHelper.GenerateDisabledBGColors();
+						mergedDict.SetResourceSvg("checkBoxDefault", "checkBox", idColors, defaultSize);
+						mergedDict.SetResourceSvg("checkBoxDisabled", "checkBoxDisabled", disabledIdColors, defaultSize);
+						mergedDict.SetResourceSvg("checkBoxFocused", "checkBoxFocused", idColors, defaultSize);
+						mergedDict.SetResourceSvg("checkBoxSelected", "checkBoxSelected", idColors, defaultSize);
+						mergedDict.SetResourceSvg("checkBoxSelectedDisabled", "checkBoxSelectedDisabled", disabledIdColors, defaultSize);
+						mergedDict.SetResourceSvg("checkBoxSelectedFocused", "checkBoxSelectedFocused", idColors, defaultSize);
 					}
 				}
-			} catch (Exception e)
+			}
+			catch (Exception e)
 			{
-				Console.WriteLine ($"ERORR >> {e.Message}\nTRACE >> {e.StackTrace}, {e.ToString ()}");
+				Console.WriteLine($"ERORR >> {e.Message}\nTRACE >> {e.StackTrace}, {e.ToString()}");
 			}
 		}
 
-		#endregion
+#endregion
 
 
-		#region Main Methods
+#region Main Methods
 
-		private void AddTheme ()
+		private void AddTheme()
 		{
-			ThemeAddition res = WPFHelper.AddTheme (this, Themes.SelectedItem.ToString ());
+			ThemeAddition res = WPFHelper.AddTheme(this, Themes.SelectedItem.ToString());
 			if (res.save != null && (bool)res.save)
 			{
-				InsertTheme (res);
+				InsertTheme(res);
 			}
 		}
 
-		private void InsertTheme (ThemeAddition res)
+		private void InsertTheme(ThemeAddition res)
 		{
 			if (res.result == 1)
 			{
-				List <string> customThemes = new List <string> ();
+				List<string> customThemes = new List<string>();
 
 				foreach (string item in themes)
 				{
 					if (!CLI.ThemeInfos[item].isDefault)
 					{
-						customThemes.Add (item);
+						customThemes.Add(item);
 					}
 				}
 
-				customThemes.Add (res.to);
-				customThemes.Sort ();
-				int index = customThemes.IndexOf (res.to);
+				customThemes.Add(res.to);
+				customThemes.Sort();
+				int index = customThemes.IndexOf(res.to);
 				int index2 = 0;
 
 				if (index >= 1)
 				{
-					string prevTheme = customThemes [index - 1];
-					index2 = Array.IndexOf (themes, prevTheme) + 1;
-				} else
+					string prevTheme = customThemes[index - 1];
+					index2 = Array.IndexOf(themes, prevTheme) + 1;
+				}
+				else
 				{
 					int mx = customThemes.Count > 2 ? 1 : 0;
-					string prevTheme = CLI.schemes [CLI.schemes.IndexOf (customThemes [mx]) - 1];
-					index2 = Array.IndexOf (themes, prevTheme) + 1;
+					string prevTheme = CLI.schemes[CLI.schemes.IndexOf(customThemes[mx]) - 1];
+					index2 = Array.IndexOf(themes, prevTheme) + 1;
 				}
 
-				Themes.Items.Insert (index2, res.to);
+				Themes.Items.Insert(index2, res.to);
 				Themes.SelectedIndex = index2;
-				themes = CLI.schemes.ToArray ();
+				themes = CLI.schemes.ToArray();
 			}
 		}
 
-		private void ManageThemes ()
+		private void ManageThemes()
 		{
 			ManageThemesWindow themesWindow = new ManageThemesWindow
 			{
-				Background = WPFHelper.bgBrush,
-				Foreground = WPFHelper.fgBrush,
-				Tag = Tag,
-				Owner = this
+				Background = WPFHelper.bgBrush, Foreground = WPFHelper.fgBrush, Tag = Tag, Owner = this
 			};
 
-			themesWindow.ShowDialog ();
-			LoadThemes ();
+			themesWindow.ShowDialog();
+			LoadThemes();
 		}
 
 
-		private void OpenSettings ()
+		private void OpenSettings()
 		{
 			SettingsWindow settingsWindow = new SettingsWindow
 			{
@@ -295,82 +300,86 @@ namespace Yuki_Theme.Core.WPF.Windows
 				Owner = this
 			};
 			string lang = Settings.localization;
-			bool? dialog = settingsWindow.ShowDialog ();
+			bool? dialog = settingsWindow.ShowDialog();
 			SettingMode currentMode = Settings.settingMode;
 			if (dialog != null && (bool)dialog)
 			{
-				settingsWindow.utilities.SaveSettings ();
-				ToggleEditor ();
+				settingsWindow.utilities.SaveSettings();
+				ToggleEditor();
 				if (currentMode != Settings.settingMode)
 				{
-					Restore ();
+					Restore();
 				}
 
-				
+
 				if (settingsWindow.customSticker)
 				{
-					LoadSticker ();
-				}else if (settingsWindow.dimensionCap)
-				{
-					SetStickerSize ();
+					LoadSticker();
 				}
-			} else
+				else if (settingsWindow.dimensionCap)
+				{
+					SetStickerSize();
+				}
+			}
+			else
 			{
 				Settings.localization = lang;
-				Settings.translation.LoadLocale (lang);
-				settingsWindow.utilities.ResetToolBar ();
+				Settings.translation.LoadLocale(lang);
+				settingsWindow.utilities.ResetToolBar();
 			}
 			if (lang != Settings.localization)
 			{
-				UpdateTranslations ();
+				UpdateTranslations();
 			}
 		}
 
-		private void Restore ()
+		private void Restore()
 		{
-			CLI.restore (false, null);
-			LoadDefinitionsWithSelection ();
-			highlighter.updateColors ();
-			updateColors ();
-			SetOpacityWallpaper ();
-			LoadSticker ();
-			LoadSVG ();
-			ReLoadCheckBoxImages ();
+			CLI.restore(false, null);
+			LoadDefinitionsWithSelection();
+			highlighter.updateColors();
+			updateColors();
+			SetOpacityWallpaper();
+			LoadSticker();
+			LoadSVG();
+			ReLoadCheckBoxImages();
 		}
 
-		private void SelectField ()
+		private void SelectField()
 		{
 			if (Definitions.SelectedItem != null)
 			{
 				ColorPanel.Visibility = Visibility.Collapsed;
 				ImagePanel.Visibility = Visibility.Collapsed;
-				if (IsColorField ())
+				if (IsColorField())
 				{
 					ColorPanel.Visibility = Visibility.Visible;
 					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled =
-						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) && !CLI.currentTheme.isDefault;
+						Highlighter.isInNames(Definitions.SelectedItem.ToString()) && !CLI.currentTheme.isDefault;
 
 					BoldCheckBox.Visibility = ItalicCheckBox.Visibility =
-						Highlighter.isInNames (Definitions.SelectedItem.ToString ()) ? Visibility.Visible : Visibility.Collapsed;
+						Highlighter.isInNames(Definitions.SelectedItem.ToString()) ? Visibility.Visible : Visibility.Collapsed;
 
-					ThemeField dic = CLI.currentTheme.Fields [Definitions.SelectedItem.ToString ()];
+					ThemeField dic = CLI.currentTheme.Fields[Definitions.SelectedItem.ToString()];
 
 					if (dic.Foreground != null)
 					{
-						ColorPanel.Resources ["ForeBrush"] =
-							new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Foreground).ToWPFColor ());
+						ColorPanel.Resources["ForeBrush"] =
+							new SolidColorBrush(Drawing.ColorTranslator.FromHtml(dic.Foreground).ToWPFColor());
 						FGColorPanel.Visibility = Visibility.Visible;
-					} else
+					}
+					else
 					{
 						FGColorPanel.Visibility = Visibility.Hidden;
 					}
 
 					if (dic.Background != null)
 					{
-						ColorPanel.Resources ["BackBrush"] =
-							new SolidColorBrush (Drawing.ColorTranslator.FromHtml (dic.Background).ToWPFColor ());
+						ColorPanel.Resources["BackBrush"] =
+							new SolidColorBrush(Drawing.ColorTranslator.FromHtml(dic.Background).ToWPFColor());
 						BGColorPanel.Visibility = Visibility.Visible;
-					} else
+					}
+					else
 					{
 						BGColorPanel.Visibility = Visibility.Hidden;
 					}
@@ -385,8 +394,9 @@ namespace Yuki_Theme.Core.WPF.Windows
 						ItalicCheckBox.IsChecked = (bool)dic.Bold;
 					}
 
-					highlighter.activateColors (Definitions.SelectedItem.ToString ());
-				} else
+					highlighter.activateColors(Definitions.SelectedItem.ToString());
+				}
+				else
 				{
 					ImagePanel.Visibility = Visibility.Visible;
 					AlignPanel.Visibility = Visibility.Collapsed;
@@ -394,18 +404,19 @@ namespace Yuki_Theme.Core.WPF.Windows
 					ImagePath.Text = "";
 					BlockOpacity = true;
 					OpacitySlider.Value = 0;
-					if (IsWallpaperDefinition ())
+					if (IsWallpaperDefinition())
 					{
 						AlignPanel.Visibility = Visibility.Visible;
 						OpacityPanel.Visibility = Visibility.Visible;
-						ShowAlignSelection ();
+						ShowAlignSelection();
 
 						if (CLI.currentTheme.HasWallpaper)
 						{
 							ImagePath.Text = "wallpaper.png";
 							OpacitySlider.Value = CLI.currentTheme.WallpaperOpacity;
 						}
-					} else
+					}
+					else
 					{
 						if (CLI.currentTheme.HasSticker)
 						{
@@ -418,167 +429,173 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		private void Save ()
+		private void Save()
 		{
-			CLI.save (img2, img3);
+			CLI.save(img2, img3);
 		}
 
-		private void Export ()
+		private void Export()
 		{
-			CLI.export (img2, img3, setThemeDelegate, startSettingThemeDelegate);
+			CLI.export(img2, img3, setThemeDelegate, startSettingThemeDelegate);
 		}
 
-		private void ImportFile ()
+		private void ExportUnity()
+		{
+			CLI.export_to_unity(setThemeDelegate, startSettingThemeDelegate);
+		}
+
+		private void ImportFile()
 		{
 			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
 			{
-				Filter = CLI.Translate ("main.import.extensions.all") +
+				Filter = CLI.Translate("main.import.extensions.all") +
 				         " (*.icls,*.yukitheme,*.yuki,*.json,*.xshd)|*.icls;*.yukitheme;*.yuki;*.json;*.xshd|JetBrains IDE Scheme(*.icls)|*.icls|Yuki Theme(*.yukitheme,*.yuki)|*.yukitheme;*.yuki|Doki Theme(*.json)|*.json|Pascal syntax highlighting(*.xshd)|*.xshd"
 			};
-			if (openFileDialog.ShowDialog () == true)
+			if (openFileDialog.ShowDialog() == true)
 			{
-				MainParser.Parse (openFileDialog.FileName, true, true, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+				MainParser.Parse(openFileDialog.FileName, true, true, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
 			}
 		}
 
-		private void ImportFolder ()
+		private void ImportFolder()
 		{
-			CommonOpenFileDialog co = new CommonOpenFileDialog ();
+			CommonOpenFileDialog co = new CommonOpenFileDialog();
 			co.IsFolderPicker = true;
 			co.Multiselect = false;
-			CommonFileDialogResult res = co.ShowDialog ();
+			CommonFileDialogResult res = co.ShowDialog();
 			if (res == CommonFileDialogResult.Ok)
 			{
-				MessageBox.Show (CLI.Translate ("main.import.directory"));
-				string [] fls = Directory.GetFiles (co.FileName, "*.json", SearchOption.TopDirectoryOnly);
+				MessageBox.Show(CLI.Translate("main.import.directory"));
+				string[] fls = Directory.GetFiles(co.FileName, "*.json", SearchOption.TopDirectoryOnly);
 				foreach (string fl in fls)
 				{
-					MainParser.Parse (fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+					MainParser.Parse(fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
 				}
 
-				fls = Directory.GetFiles (co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
+				fls = Directory.GetFiles(co.FileName, "*.icls", SearchOption.TopDirectoryOnly);
 				foreach (string fl in fls)
 				{
-					MainParser.Parse (fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
+					MainParser.Parse(fl, true, false, ErrorExport, AskChoiceParser, ImportUIAddition, ImportThemeReset);
 				}
 
 				Themes.SelectedIndex = Themes.Items.Count - 1;
 			}
 		}
 
-		private void OpenDownloader ()
+		private void OpenDownloader()
 		{
-			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm ();
+			ThemeDownloaderForm downloaderForm = new ThemeDownloaderForm();
 			downloaderForm.Show();
 		}
 
-		#endregion
+#endregion
 
 
-		#region Core Actions
+#region Core Actions
 
-		public void ifHasImage (Drawing.Image imgc)
+		public void ifHasImage(Drawing.Image imgc)
 		{
 			img2 = imgc;
 			oldV = Drawing.Rectangle.Empty;
 			// bgtext = "wallpaper.png";
 		}
 
-		public void ifDoesntHave ()
+		public void ifDoesntHave()
 		{
 			img = null;
 			img2 = null;
 		}
 
-		public void ifHasSticker (Drawing.Image imgc)
+		public void ifHasSticker(Drawing.Image imgc)
 		{
 			img3 = imgc;
 			// sttext = "sticker.png";
 		}
 
-		public void ifDoesntHaveSticker ()
+		public void ifDoesntHaveSticker()
 		{
 			img3 = null;
 			img4 = null;
 			// sttext = "";
 		}
 
-		public void hasProblem (string content)
+		public void hasProblem(string content)
 		{
-			MessageBox.Show (
-				content, CLI.Translate ("messages.theme.invalid.short"), MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show(
+				content, CLI.Translate("messages.theme.invalid.short"), MessageBoxButton.OK, MessageBoxImage.Error);
 			Themes.SelectedIndex = 0;
 		}
 
-		public bool SaveInExport (string content, string title)
+		public bool SaveInExport(string content, string title)
 		{
-			return MessageBox.Show (content, title,
-			                        MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
+			return MessageBox.Show(content, title,
+				MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
 		}
 
-		public void FinishExport (string content, string title)
+		public void FinishExport(string content, string title)
 		{
-			MessageBox.Show (content, title);
+			MessageBox.Show(content, title);
 		}
 
-		public void ErrorExport (string content, string title)
+		public void ErrorExport(string content, string title)
 		{
-			MessageBox.Show (content, title, MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 
-		private bool AskChoiceParser (string content, string title)
+		private bool AskChoiceParser(string content, string title)
 		{
-			return MessageBox.Show (content,
-			                        title,
-			                        MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+			return MessageBox.Show(content,
+				title,
+				MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 		}
 
-		private void ImportUIAddition (string fileName)
+		private void ImportUIAddition(string fileName)
 		{
-			Themes.Items.Add (fileName);
+			Themes.Items.Add(fileName);
 		}
 
-		private void ImportThemeReset (string fileName)
+		private void ImportThemeReset(string fileName)
 		{
-			if (Themes.SelectedItem.ToString () != fileName)
+			if (Themes.SelectedItem.ToString() != fileName)
 				Themes.SelectedItem = fileName;
 			else
-				Restore ();
+				Restore();
 		}
 
-		#endregion
+#endregion
 
 
-		#region Helper Methods
+#region Helper Methods
 
-		private void SetOpacityWallpaper ()
+		private void SetOpacityWallpaper()
 		{
 			if (img2 != null)
 			{
-				img = Helper.SetOpacity (img2, CLI.currentTheme.WallpaperOpacity);
-			} else
+				img = Helper.SetOpacity(img2, CLI.currentTheme.WallpaperOpacity);
+			}
+			else
 			{
 				img = null;
 			}
 
-			Fstb.box.Refresh ();
+			Fstb.box.Refresh();
 		}
 
-		private bool IsColorField ()
+		private bool IsColorField()
 		{
 			if (Definitions.SelectedItem == null)
 				return true;
-			return !ShadowNames.imageNames.Contains (Definitions.SelectedItem.ToString ());
+			return !ShadowNames.imageNames.Contains(Definitions.SelectedItem.ToString());
 		}
 
-		private void SetAlign (Alignment align)
+		private void SetAlign(Alignment align)
 		{
 			CLI.currentTheme.WallpaperAlign = (int)align;
-			ShowAlignSelection ();
-			Fstb.box.Refresh ();
+			ShowAlignSelection();
+			Fstb.box.Refresh();
 		}
 
-		private void ShowAlignSelection ()
+		private void ShowAlignSelection()
 		{
 			LAlignButton.IsSelected = CAlignButton.IsSelected = RAlignButton.IsSelected = false;
 
@@ -590,72 +607,71 @@ namespace Yuki_Theme.Core.WPF.Windows
 				RAlignButton.IsSelected = true;
 		}
 
-		private void ChangeImage ()
+		private void ChangeImage()
 		{
 			Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog
 			{
 				Filter = "PNG (*.png)|*.png"
 			};
-			if (openFileDialog.ShowDialog () == true)
+			if (openFileDialog.ShowDialog() == true)
 			{
-				if (IsWallpaperDefinition ())
+				if (IsWallpaperDefinition())
 				{
 					if (openFileDialog.FileName != ImagePath.Text)
 					{
-						img2 = Drawing.Image.FromFile (openFileDialog.FileName);
-						SetOpacityWallpaper ();
+						img2 = Drawing.Image.FromFile(openFileDialog.FileName);
+						SetOpacityWallpaper();
 					}
-				} else
+				}
+				else
 				{
-					img3 = Drawing.Image.FromFile (openFileDialog.FileName);
-					LoadSticker ();
+					img3 = Drawing.Image.FromFile(openFileDialog.FileName);
+					LoadSticker();
 				}
 
 				ImagePath.Text = openFileDialog.FileName;
 			}
 		}
 
-		private bool IsWallpaperDefinition ()
+		private bool IsWallpaperDefinition()
 		{
-			return ShadowNames.imageNames [0] == Definitions.SelectedItem.ToString ();
+			return ShadowNames.imageNames[0] == Definitions.SelectedItem.ToString();
 		}
 
-		private void ChangeColor (bool isBackground)
+		private void ChangeColor(bool isBackground)
 		{
 			if (Definitions.SelectedItem != null)
 			{
-				string definition = Definitions.SelectedItem.ToString ();
-				ThemeField field = CLI.currentTheme.Fields [definition];
+				string definition = Definitions.SelectedItem.ToString();
+				ThemeField field = CLI.currentTheme.Fields[definition];
 				string hex = isBackground ? field.Background : field.Foreground;
-				Drawing.Color color = Drawing.ColorTranslator.FromHtml (hex);
+				Drawing.Color color = Drawing.ColorTranslator.FromHtml(hex);
 				Drawing.Color ncolor = Drawing.Color.Empty;
 				bool save = false;
 				if (Settings.colorPicker == 0)
 				{
-					ColorPicker picker = new ColorPicker ();
+					ColorPicker picker = new ColorPicker();
 					picker.allowSave = !CLI.currentTheme.isDefault;
 					picker.MainColor = color;
-					NativeWindow win32Parent = new NativeWindow ();
-					win32Parent.AssignHandle (new WindowInteropHelper (this).Handle);
+					NativeWindow win32Parent = new NativeWindow();
+					win32Parent.AssignHandle(new WindowInteropHelper(this).Handle);
 
-					if (picker.ShowDialog (win32Parent) == System.Windows.Forms.DialogResult.OK)
+					if (picker.ShowDialog(win32Parent) == System.Windows.Forms.DialogResult.OK)
 					{
 						save = true;
 						ncolor = picker.MainColor;
 					}
-				} else
+				}
+				else
 				{
 					ColorPickerWindow picker = new ColorPickerWindow
 					{
-						allowSave = !CLI.currentTheme.isDefault,
-						MainColor = color.ToWPFColor (),
-						Owner = this,
-						Tag = Tag
+						allowSave = !CLI.currentTheme.isDefault, MainColor = color.ToWPFColor(), Owner = this, Tag = Tag
 					};
-					if (picker.ShowDialog () == true)
+					if (picker.ShowDialog() == true)
 					{
 						save = true;
-						ncolor = picker.MainColor.ToWinformsColor ();
+						ncolor = picker.MainColor.ToWinformsColor();
 					}
 
 					WPFHelper.checkDialog = null;
@@ -669,64 +685,66 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 					if (isBackground)
 					{
-						field.Background = ncolor.ToHex ();
-						BGButton.Background = new SolidColorBrush (ncolor.ToWPFColor ());
-					} else
+						field.Background = ncolor.ToHex();
+						BGButton.Background = new SolidColorBrush(ncolor.ToWPFColor());
+					}
+					else
 					{
-						field.Foreground = ncolor.ToHex ();
-						FGButton.Background = new SolidColorBrush (ncolor.ToWPFColor ());
+						field.Foreground = ncolor.ToHex();
+						FGButton.Background = new SolidColorBrush(ncolor.ToWPFColor());
 					}
 
 					if (changed)
 					{
-						highlighter.updateColors ();
-						updateColors ();
+						highlighter.updateColors();
+						updateColors();
 					}
 				}
 			}
 		}
 
 
-		public void startSettingThemeDelegate ()
+		public void startSettingThemeDelegate()
 		{
-			if (startSettingTheme != null) startSettingTheme ();
+			if (startSettingTheme != null) startSettingTheme();
 		}
 
-		public void setThemeDelegate ()
+		public void setThemeDelegate()
 		{
-			if (setTheme != null) setTheme ();
+			if (setTheme != null) setTheme();
 		}
 
-		public void updateColors ()
+		public void updateColors()
 		{
-			WPFHelper.ConvertGUIColorsNBrushes ();
+			WPFHelper.ConvertGUIColorsNBrushes();
 
 			Background = WPFHelper.bgBrush;
 			Foreground = WPFHelper.fgBrush;
 			Window.Tag = WPFHelper.GenerateTag;
 		}
 
-		private void bgImagePaint (object sender, PaintEventArgs e)
+		private void bgImagePaint(object sender, PaintEventArgs e)
 		{
 			if (img != null && Settings.bgImage)
 			{
 				if (oldV.Width != Fstb.box.ClientRectangle.Width || oldV.Height != Fstb.box.ClientRectangle.Height)
 				{
-					oldV = Helper.GetSizes (img.Size, Fstb.box.ClientRectangle.Width, Fstb.box.ClientRectangle.Height,
-					                        CLI.currentTheme.align);
+					oldV = Helper.GetSizes(img.Size, Fstb.box.ClientRectangle.Width, Fstb.box.ClientRectangle.Height,
+						CLI.currentTheme.align);
 				}
 
-				e.Graphics.DrawImage (img, oldV);
+				e.Graphics.DrawImage(img, oldV);
 			}
 		}
 
-		private void ToggleEditor ()
+		private void ToggleEditor()
 		{
 			Visibility visibility;
 			if (Settings.Editor)
 			{
 				visibility = Visibility.Visible;
-			} else
+			}
+			else
 			{
 				visibility = Visibility.Collapsed;
 			}
@@ -737,14 +755,15 @@ namespace Yuki_Theme.Core.WPF.Windows
 
 				if (Settings.Editor)
 				{
-					Grid.SetColumn (EditorSide, 2);
-					Grid.SetColumnSpan (EditorSide, 1);
+					Grid.SetColumn(EditorSide, 2);
+					Grid.SetColumnSpan(EditorSide, 1);
 
 					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Visible;
-				} else
+				}
+				else
 				{
-					Grid.SetColumn (EditorSide, 0);
-					Grid.SetColumnSpan (EditorSide, 3);
+					Grid.SetColumn(EditorSide, 0);
+					Grid.SetColumnSpan(EditorSide, 3);
 
 					EditorButtons1.Visibility = EditorButtons2.Visibility = EditorPanels.Visibility = Visibility.Collapsed;
 				}
@@ -752,69 +771,69 @@ namespace Yuki_Theme.Core.WPF.Windows
 		}
 
 
-		private void ChangeOpacityBySlider ()
+		private void ChangeOpacityBySlider()
 		{
-			CLI.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt ();
-			SetOpacityWallpaper ();
+			CLI.currentTheme.WallpaperOpacity = OpacitySlider.Value.ToInt();
+			SetOpacityWallpaper();
 		}
 
-		private void SetStickerSize ()
+		private void SetStickerSize()
 		{
-			Drawing.Size dimensionSize = Helper.CalculateDimension (img4.Size);
+			Drawing.Size dimensionSize = Helper.CalculateDimension(img4.Size);
 			Popup.Width = Sticker.Width = dimensionSize.Width;
 			Popup.Height = Sticker.Height = dimensionSize.Height;
 		}
-		
-		#endregion
+
+#endregion
 
 
-		#region Control Events
+#region Control Events
 
-		private void Theme_Changed (object sender, SelectionChangedEventArgs e)
+		private void Theme_Changed(object sender, SelectionChangedEventArgs e)
 		{
 			if (!blockedThemeSelector)
 			{
-				bool cnd = CLI.SelectTheme (Themes.SelectedItem.ToString ());
+				bool cnd = CLI.SelectTheme(Themes.SelectedItem.ToString());
 
 				if (cnd)
 				{
 					if (CLI.isEdited) // Ask to save the changes
 					{
-						if (SaveInExport (CLI.Translate ("main.theme.edited.full"), CLI.Translate ("main.theme.edited.short")))
-							Save ();
+						if (SaveInExport(CLI.Translate("main.theme.edited.full"), CLI.Translate("main.theme.edited.short")))
+							Save();
 					}
-					Restore ();
-					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CLI.isDefault ();
-					LoadDefinitionsWithSelection ();
+					Restore();
+					BoldCheckBox.IsEnabled = ItalicCheckBox.IsEnabled = ImagePanel.IsEnabled = !CLI.isDefault();
+					LoadDefinitionsWithSelection();
 
-					SelectField ();
-					CLI.selectedItem = Themes.SelectedItem.ToString ();
-					Settings.database.UpdateData (Settings.ACTIVE, CLI.selectedItem);
+					SelectField();
+					CLI.selectedItem = Themes.SelectedItem.ToString();
+					Settings.database.UpdateData(Settings.ACTIVE, CLI.selectedItem);
 				}
 			}
 		}
 
-		private void Definitions_SelectionChanged (object sender, SelectionChangedEventArgs e)
+		private void Definitions_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			SelectField ();
+			SelectField();
 		}
 
-		private void LAlignButton_OnClick (object sender, RoutedEventArgs e)
+		private void LAlignButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			SetAlign (Alignment.Left);
+			SetAlign(Alignment.Left);
 		}
 
-		private void CAlignButton_OnClick (object sender, RoutedEventArgs e)
+		private void CAlignButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			SetAlign (Alignment.Center);
+			SetAlign(Alignment.Center);
 		}
 
-		private void RAlignButton_OnClick (object sender, RoutedEventArgs e)
+		private void RAlignButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			SetAlign (Alignment.Right);
+			SetAlign(Alignment.Right);
 		}
 
-		private void MainWindow_OnSizeChanged (object sender, SizeChangedEventArgs e)
+		private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
 		{
 			if (Width < 680)
 			{
@@ -823,7 +842,8 @@ namespace Yuki_Theme.Core.WPF.Windows
 					TopPanel.HorizontalAlignment = HorizontalAlignment.Center;
 					TopPanel.Margin = minMargin;
 				}
-			} else
+			}
+			else
 			{
 				if (TopPanel.HorizontalAlignment == HorizontalAlignment.Center)
 				{
@@ -833,38 +853,38 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		private void AddButton_OnClick (object sender, RoutedEventArgs e)
+		private void AddButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			AddTheme ();
+			AddTheme();
 		}
 
-		private void RestoreButton_OnClick (object sender, RoutedEventArgs e)
+		private void RestoreButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			Restore ();
+			Restore();
 		}
 
-		private void ManageButton_OnClick (object sender, RoutedEventArgs e)
+		private void ManageButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ManageThemes ();
+			ManageThemes();
 		}
 
-		private void SettingsButton_OnClick (object sender, RoutedEventArgs e)
+		private void SettingsButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			OpenSettings ();
+			OpenSettings();
 		}
 
-		private void SaveButton_OnClick (object sender, RoutedEventArgs e)
+		private void SaveButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			Save ();
+			Save();
 		}
 
-		private void MainWindow_OnSourceInitialized (object sender, EventArgs e)
+		private void MainWindow_OnSourceInitialized(object sender, EventArgs e)
 		{
 			if (Helper.mode != ProductMode.Plugin)
-				Settings.connectAndGet ();
+				Settings.connectAndGet();
 
 			WindowStartupLocation = WindowStartupLocation.Manual;
-			WindowProps props = Settings.database.ReadLocation ();
+			WindowProps props = Settings.database.ReadLocation();
 
 			this.Top = props.Top;
 			this.Left = props.Left;
@@ -882,105 +902,107 @@ namespace Yuki_Theme.Core.WPF.Windows
 			}
 		}
 
-		private void MainWindow_OnClosing (object sender, CancelEventArgs e)
+		private void MainWindow_OnClosing(object sender, CancelEventArgs e)
 		{
-			Settings.database.SaveLocation (new WindowProps ()
+			Settings.database.SaveLocation(new WindowProps()
 			{
-				Left = this.Left.ToInt (),
-				Top = this.Top.ToInt (),
-				Width = this.Width.ToInt (),
-				Height = this.Height.ToInt (),
+				Left = this.Left.ToInt(),
+				Top = this.Top.ToInt(),
+				Width = this.Width.ToInt(),
+				Height = this.Height.ToInt(),
 				Maximized = WindowState == WindowState.Maximized
 			});
 		}
 
-		private void ImagePathButton_OnClick (object sender, RoutedEventArgs e)
+		private void ImagePathButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ChangeImage ();
+			ChangeImage();
 		}
 
-		private void OpacitySlider_OnValueChanged (object sender, RoutedPropertyChangedEventArgs <double> e)
+		private void OpacitySlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			if (!BlockOpacity)
 			{
-				ChangeOpacityBySlider ();
+				ChangeOpacityBySlider();
 			}
 		}
 
-		private void OpacitySlider_OnDragStarted (object sender, DragStartedEventArgs e)
+		private void OpacitySlider_OnDragStarted(object sender, DragStartedEventArgs e)
 		{
 			if (sender is Slider)
 				BlockOpacity = true;
 		}
 
-		private void OpacitySlider_OnDragCompleted (object sender, DragCompletedEventArgs e)
+		private void OpacitySlider_OnDragCompleted(object sender, DragCompletedEventArgs e)
 		{
 			if (sender is Slider)
 			{
 				BlockOpacity = false;
-				ChangeOpacityBySlider ();
+				ChangeOpacityBySlider();
 			}
 		}
 
-		private void BackgroundButton_OnClick (object sender, RoutedEventArgs e)
+		private void BackgroundButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ChangeColor (true);
+			ChangeColor(true);
 		}
 
-		private void ForegroundButton_OnClick (object sender, RoutedEventArgs e)
+		private void ForegroundButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ChangeColor (false);
+			ChangeColor(false);
 		}
 
-		private void ExportButton_OnClick (object sender, RoutedEventArgs e)
+		private void ExportButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			Export ();
-		}
-		
-		private void ImportButton_OnClick (object sender, RoutedEventArgs e)
-		{
-			ImportFile ();
+			Export();
 		}
 
-		private void ImportDirectoryButton_OnClick (object sender, RoutedEventArgs e)
+		private void ExportUnityButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			ImportFolder ();
+			ExportUnity();
 		}
 
-		private void Close_OnClick (object sender, RoutedEventArgs e)
+		private void ImportButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			this.Close ();
+			ImportFile();
 		}
-		
-		private void DownloadButton_OnClick (object sender, RoutedEventArgs e)
-		{
-			OpenDownloader ();
-		}
-		
-		#endregion
 
-		private void ShowLicense ()
+		private void ImportDirectoryButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			ImportFolder();
+		}
+
+		private void Close_OnClick(object sender, RoutedEventArgs e)
+		{
+			this.Close();
+		}
+
+		private void DownloadButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			OpenDownloader();
+		}
+
+#endregion
+
+		private void ShowLicense()
 		{
 			if (!Settings.license)
 			{
-				LicenseWindow licenseWindow = new LicenseWindow ()
+				LicenseWindow licenseWindow = new LicenseWindow()
 				{
-					Background = WPFHelper.bgBrush,
-					Foreground = WPFHelper.fgBrush,
-					BorderBrush = WPFHelper.borderBrush,
-					Tag = Tag
+					Background = WPFHelper.bgBrush, Foreground = WPFHelper.fgBrush, BorderBrush = WPFHelper.borderBrush, Tag = Tag
 				};
 				licenseWindow.Owner = this;
 				licenseWindow.Closed += (a, b) =>
 				{
-					GC.Collect ();
-					GC.WaitForPendingFinalizers ();
+					GC.Collect();
+					GC.WaitForPendingFinalizers();
 				};
 
-				licenseWindow.ShowDialog ();
-				
+				licenseWindow.ShowDialog();
+
 				Settings.license = true;
-				Settings.database.UpdateData (Settings.LICENSE, "True");
+				Settings.database.UpdateData(Settings.LICENSE, "True");
 			}
 		}
 	}
