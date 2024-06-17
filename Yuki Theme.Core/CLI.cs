@@ -6,13 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
-using Yuki_Theme.Core.Database;
 using Yuki_Theme.Core.Formats;
-using Yuki_Theme.Core.Forms;
 using Yuki_Theme.Core.Parsers;
 using Yuki_Theme.Core.Themes;
-using static Yuki_Theme.Core.CLI;
 using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Yuki_Theme.Core
@@ -20,60 +18,60 @@ namespace Yuki_Theme.Core
 	public static class CLI
 	{
 
-		#region Public Fields
+#region Public Fields
 
-		public static List <string>                  names      = new ();
-		public static List <string>                  schemes    = new ();
-		public static Dictionary <string, ThemeInfo> ThemeInfos = new ();
+		public static List<string> names = new();
+		public static List<string> schemes = new();
+		public static Dictionary<string, ThemeInfo> ThemeInfos = new();
 
-		public static Theme currentTheme = ThemeFunctions.LoadDefault ();
+		public static Theme currentTheme = ThemeFunctions.LoadDefault();
 
-		#region ThemeLoading
+#region ThemeLoading
 
 		public static string nameToLoad;
 		public static string pathToLoad;
 
-		#endregion
+#endregion
 
 		public static string selectedItem = "empty";
-		public static string currentPath  = Path.GetDirectoryName (Assembly.GetEntryAssembly ()?.Location);
-		public static bool   isEdited;
+		public static string currentPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
+		public static bool isEdited;
 		public static string groupName = "";
 
-		#endregion
+#endregion
 
 
-		#region Main Commands
+#region Main Commands
 
 		/// <summary>
 		/// Load Themes from default themes and from 'Themes' directory
 		/// </summary>
 		/// <param name="ifZero">If there isn't any theme, ask to set it</param>
-		public static void load_schemes (Func <string> ifZero = null)
+		public static void load_schemes(Func<string> ifZero = null)
 		{
-			schemes.Clear ();
-			ThemeInfos.Clear ();
-			DefaultThemes.Clear ();
-			DefaultThemes.addDefaultThemes ();
-			DefaultThemes.addExternalThemes ();
-			schemes.AddRange (DefaultThemes.names);
-			Helper.CreateThemeDirectory ();
-			if (Directory.Exists (Path.Combine (currentPath, "Themes")))
+			schemes.Clear();
+			ThemeInfos.Clear();
+			DefaultThemes.Clear();
+			DefaultThemes.addDefaultThemes();
+			DefaultThemes.addExternalThemes();
+			schemes.AddRange(DefaultThemes.names);
+			Helper.CreateThemeDirectory();
+			if (Directory.Exists(Path.Combine(currentPath, "Themes")))
 			{
-				LoadSchemesByExtension (Helper.FILE_EXTENSTION_OLD);
-				LoadSchemesByExtension (Helper.FILE_EXTENSTION_NEW);
+				LoadSchemesByExtension(Helper.FILE_EXTENSTION_OLD);
+				LoadSchemesByExtension(Helper.FILE_EXTENSTION_NEW);
 			}
 
 			if (schemes.Count == 0)
 			{
 				if (ifZero != null)
 				{
-					string sm = ifZero ();
+					string sm = ifZero();
 					if (sm != null)
 					{
-						nameToLoad = Path.GetFileNameWithoutExtension (sm);
-						File.Copy (sm, pathToFile (pathToLoad, true));
-						schemes.Add (nameToLoad);
+						nameToLoad = Path.GetFileNameWithoutExtension(sm);
+						File.Copy(sm, pathToFile(pathToLoad, true));
+						schemes.Add(nameToLoad);
 					}
 				}
 			}
@@ -85,76 +83,78 @@ namespace Yuki_Theme.Core
 		/// <param name="copyFrom">Copy from</param>
 		/// <param name="name">Copy to</param>
 		/// <returns>0 -> Theme isn't added cause of exceptions. 1 -> Theme is added. 2 -> Theme is overrided</returns>
-		public static int add (string copyFrom, string name)
+		public static int add(string copyFrom, string name)
 		{
 			if (name.Length < 3)
 			{
-				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
+				if (CLI_Actions.showError != null) CLI_Actions.showError(Translate("messages.name.short.full"), Translate("messages.name.short.short"));
 				return 0;
 			}
 
-			string path = Helper.ConvertNameToPath (name);
-			string destination = pathToFile (path, ThemeInfos [copyFrom].isOld);
-			Helper.CreateThemeDirectory ();
+			string path = Helper.ConvertNameToPath(name);
+			string destination = pathToFile(path, ThemeInfos[copyFrom].isOld);
+			Helper.CreateThemeDirectory();
 
 			bool exist = false;
 
-			if (File.Exists (destination))
+			if (File.Exists(destination))
 			{
-				if (!CLI_Actions.SaveInExport (Translate ("messages.file.exist.override.full"), Translate ("messages.file.exist.override.short")))
+				if (!CLI_Actions.SaveInExport(Translate("messages.file.exist.override.full"), Translate("messages.file.exist.override.short")))
 				{
-					if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.exist.full"), Translate ("messages.name.exist.short"));
+					if (CLI_Actions.showError != null) CLI_Actions.showError(Translate("messages.name.exist.full"), Translate("messages.name.exist.short"));
 					return 0;
 				}
 
 				exist = true;
-				File.Delete (destination);
+				File.Delete(destination);
 			}
 
-			if (!DefaultThemes.isDefault (name))
+			if (!DefaultThemes.isDefault(name))
 			{
 				string pth = "";
-				if (CopyTheme (copyFrom, name, destination, out pth, true)) return 0;
+				if (CopyTheme(copyFrom, name, destination, out pth, true)) return 0;
 				if (!exist)
 				{
-					schemes.Add (name);
-					AddThemeInfo (
+					schemes.Add(name);
+					AddThemeInfo(
 						name,
-						new ThemeInfo (false, ThemeInfos [copyFrom].isOld, ThemeLocation.File, Translate ("messages.theme.group.custom")));
+						new ThemeInfo(false, ThemeInfos[copyFrom].isOld, ThemeLocation.File, Translate("messages.theme.group.custom")));
 				}
 
 				if (Helper.mode == ProductMode.CLI)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess (Translate ("messages.theme.duplicate"), Translate ("messages.buttons.done"));
+						CLI_Actions.showSuccess(Translate("messages.theme.duplicate"), Translate("messages.buttons.done"));
 
 				return exist ? 2 : 1;
-			} else
+			}
+			else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError (Translate ("messages.name.default.full"), Translate ("messages.name.default.short"));
+					CLI_Actions.showError(Translate("messages.name.default.full"), Translate("messages.name.default.short"));
 
 				return 0;
 			}
 		}
 
-		public static bool CopyTheme (string copyFrom, string themeName, string destination, out string path, bool check)
+		public static bool CopyTheme(string copyFrom, string themeName, string destination, out string path, bool check)
 		{
-			if (check && ThemeInfos [copyFrom].location == ThemeLocation.Memory)
+			if (check && ThemeInfos[copyFrom].location == ThemeLocation.Memory)
 			{
-				path = pathToMemory (copyFrom);
+				path = pathToMemory(copyFrom);
 				if (path == null)
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError (Translate ("messages.theme.memory.notfound.full"), Translate ("messages.theme.memory.notfound.short"));
+						CLI_Actions.showError(Translate("messages.theme.memory.notfound.full"), Translate("messages.theme.memory.notfound.short"));
 
 					return true;
 				}
 
-				CopyFromMemory (copyFrom, copyFrom, destination);
-			} else
+				CopyFromMemory(copyFrom, copyFrom, destination);
+			}
+			else
 			{
-				path = pathToFile (Helper.ConvertNameToPath (copyFrom), ThemeInfos [copyFrom].isOld);
-				File.Copy (path, destination);
+				path = pathToFile(Helper.ConvertNameToPath(copyFrom), ThemeInfos[copyFrom].isOld);
+				File.Copy(path, destination);
 			}
 
 			return false;
@@ -167,36 +167,38 @@ namespace Yuki_Theme.Core
 		/// <param name="askD">Ask to delete</param>
 		/// <param name="afterAsk">Do action after asked</param>
 		/// <param name="afterDelete">Do action after deleted</param>
-		public static void remove (string                  name, Func <string, string, bool> askD, Func <string, object> afterAsk = null,
-		                           Action <string, object> afterDelete = null)
+		public static void remove(string name, Func<string, string, bool> askD, Func<string, object> afterAsk = null,
+			Action<string, object> afterDelete = null)
 		{
-			Helper.CreateThemeDirectory ();
-			string sft = Helper.ConvertNameToPath (name);
+			Helper.CreateThemeDirectory();
+			string sft = Helper.ConvertNameToPath(name);
 			if (!ThemeInfos[name].isDefault)
 			{
-				if (File.Exists (pathToFile (sft, ThemeInfos [name].isOld)))
+				if (File.Exists(pathToFile(sft, ThemeInfos[name].isOld)))
 				{
-					if (askD (Translate ("messages.delete.full", name), Translate ("messages.delete.short")))
+					if (askD(Translate("messages.delete.full", name), Translate("messages.delete.short")))
 					{
 						object bn = null;
-						if (afterAsk != null) bn = afterAsk (sft);
+						if (afterAsk != null) bn = afterAsk(sft);
 
-						Settings.SaveData ();
-						File.Delete (pathToFile (sft, ThemeInfos [name].isOld));
-						schemes.Remove (sft);
-						ThemeInfos.Remove (sft);
-						if (afterDelete != null) afterDelete (sft, bn);
+						Settings.SaveData();
+						File.Delete(pathToFile(sft, ThemeInfos[name].isOld));
+						schemes.Remove(sft);
+						ThemeInfos.Remove(sft);
+						if (afterDelete != null) afterDelete(sft, bn);
 					}
-				} else
+				}
+				else
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError (Translate ("messages.theme.file.notfound.full"),
-						                       Translate ("messages.theme.file.notfound.short"));
+						CLI_Actions.showError(Translate("messages.theme.file.notfound.full"),
+							Translate("messages.theme.file.notfound.short"));
 				}
-			} else
+			}
+			else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError (Translate ("messages.theme.default.full"), Translate ("messages.theme.default.short"));
+					CLI_Actions.showError(Translate("messages.theme.default.full"), Translate("messages.theme.default.short"));
 			}
 		}
 
@@ -205,13 +207,13 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
-		public static void save (Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void save(Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			Helper.CreateThemeDirectory ();
-			Console.WriteLine ("{0}, {1}", nameToLoad, isDefault ());
-			if (!isDefault ())
+			Helper.CreateThemeDirectory();
+			Console.WriteLine("{0}, {1}", nameToLoad, isDefault());
+			if (!isDefault())
 			{
-				SaveTheme (currentTheme, img2, img3, wantToKeep);
+				SaveTheme(currentTheme, img2, img3, wantToKeep);
 				if (isEdited) isEdited = false;
 			}
 		}
@@ -223,129 +225,193 @@ namespace Yuki_Theme.Core
 		/// <param name="img3">Sticker</param>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
 		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
-		public static void export (Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
+		public static void export(Image img2, Image img3, Action setTheme = null, Action startSettingTheme = null, bool wantToKeep = false)
 		{
-			AskToSaveInExport (img2, img3, wantToKeep);
+			AskToSaveInExport(img2, img3, wantToKeep);
 
 			if (Settings.pascalPath.Length < 6 && Helper.mode != ProductMode.Plugin)
 			{
-				CLI_Actions.setPath (Translate ("messages.path.select.inexport.full"), Translate ("messages.path.select.inexport.short"));
+				CLI_Actions.setPath(Translate("messages.path.select.inexport.full"), Translate("messages.path.select.inexport.short"));
 			}
 
 			if (Settings.pascalPath.Length > 6 || Helper.mode == ProductMode.Plugin)
 			{
 				if (startSettingTheme != null)
-					startSettingTheme ();
-				var files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
-				var path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
+					startSettingTheme();
+				var files = Directory.GetFiles(Path.Combine(Settings.pascalPath, "Highlighting"), "*.xshd");
+				var path = Path.Combine(Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
 				if (files != null && files.Length > 0)
 				{
-					string [] unknownThemes = IdentifySyntaxHighlightings (files);
+					string[] unknownThemes = IdentifySyntaxHighlightings(files);
 					// Console.WriteLine ("UNKNOWN: " + unknownThemes.Length);
 					if (unknownThemes.Length == 0)
 					{
-						DeleteFiles (files);
-					} else
+						DeleteFiles(files);
+					}
+					else
 					{
 						var result = 2;
 						if (Helper.mode != ProductMode.Plugin && Helper.mode != ProductMode.CLI)
 						{
 							if (Settings.askChoice)
 							{
-								result = CLI_Actions.AskChoice ();
-							} else
+								result = CLI_Actions.AskChoice();
+							}
+							else
 							{
 								switch (Settings.actionChoice)
 								{
-									case 0 :
+									case 0:
 									{
 										result = 0;
 									}
 										break;
-									case 1 :
+									case 1:
 									{
 										result = 1;
 									}
 										break;
 								}
 							}
-						} else
+						}
+						else
 						{
 							result = 0;
 						}
 
 						if (result != 2)
 						{
-							if (result == 1) CopyFiles (unknownThemes);
-							DeleteFiles (unknownThemes);
+							if (result == 1) CopyFiles(unknownThemes);
+							DeleteFiles(unknownThemes);
 						}
 					}
 
-					files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.png");
-					DeleteFiles (files);
+					files = Directory.GetFiles(Path.Combine(Settings.pascalPath, "Highlighting"), "*.png");
+					DeleteFiles(files);
 				}
 
 				if (currentTheme.isDefault && ThemeInfos[currentTheme.Name].location == ThemeLocation.Memory)
 				{
-					CopyFromMemory (currentTheme.path, currentTheme.Name, path, true);
-				} else
+					CopyFromMemory(currentTheme.path, currentTheme.Name, path, true);
+				}
+				else
 				{
-					ExportTheme (path);
+					ExportTheme(path);
 				}
 
-				PrepareToExport (path);
+				PrepareToExport(path);
 
 				if (Helper.mode != ProductMode.Plugin)
 					if (CLI_Actions.showSuccess != null)
-						CLI_Actions.showSuccess (Translate ("messages.export.success"), Translate ("messages.buttons.done"));
+						CLI_Actions.showSuccess(Translate("messages.export.success"), Translate("messages.buttons.done"));
 
 				Helper.currentTheme = currentTheme.Name;
 				if (setTheme != null)
-					setTheme ();
-			} else
+					setTheme();
+			}
+			else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError (Translate ("messages.export.error.full"), Translate ("messages.export.error.short"));
+					CLI_Actions.showError(Translate("messages.export.error.full"), Translate("messages.export.error.short"));
 			}
+		}
+
+		/// <summary>
+		/// Export current theme to pascal directory
+		/// </summary>
+		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
+		/// <param name="startSettingTheme">When start to export. You can use it to release old images</param>
+		public static void export_to_unity(Action startSettingTheme = null, Action setTheme = null)
+		{
+
+			CommonOpenFileDialog co = new CommonOpenFileDialog();
+			co.IsFolderPicker = true;
+			co.Multiselect = false;
+			co.Title = "Set directory to save theme";
+
+			CommonFileDialogResult res = co.ShowDialog();
+			if (res != CommonFileDialogResult.Ok)
+			{
+				return;
+			}
+
+			string path = co.FileName;
+			Console.WriteLine($"Path {path}");
+			if (path.Length > 3)
+			{
+				path = Path.Combine(path, $"{Helper.ConvertNameToPathUnity(currentTheme.Name)}.json");
+				if (startSettingTheme != null)
+					startSettingTheme();
+
+				if (currentTheme.isDefault && ThemeInfos[currentTheme.Name].location == ThemeLocation.Memory)
+				{
+					CopyFromMemory(currentTheme.path, currentTheme.Name, path, false, true);
+				}
+				else
+				{
+					ExportTheme(path);
+				}
+				
+				ReConvertForUnity(path);
+
+				if (Helper.mode != ProductMode.Plugin)
+					if (CLI_Actions.showSuccess != null)
+						CLI_Actions.showSuccess(Translate("messages.export.success"), Translate("messages.buttons.done"));
+
+				Helper.currentTheme = currentTheme.Name;
+				if (setTheme != null)
+					setTheme();
+			}
+			else
+			{
+				if (CLI_Actions.showError != null)
+					CLI_Actions.showError(Translate("messages.export.error.full"), Translate("messages.export.error.short"));
+			}
+		}
+
+		private static void ReConvertForUnity(string path)
+		{
+			MainParser.ConvertForUnity(path);
 		}
 
 		/// <summary>
 		/// Export just .xshd file without images. It can be used for preview a theme
 		/// </summary>
 		/// <param name="setTheme">After theme has been set. You can use it to apply changes</param>
-		public static void preview (SyntaxType syntax, bool needToDelete, Action setTheme = null)
+		public static void preview(SyntaxType syntax, bool needToDelete, Action setTheme = null)
 		{
-			var path = Path.Combine (Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
+			var path = Path.Combine(Settings.pascalPath, "Highlighting", $"{pathToLoad}.xshd");
 			if (needToDelete)
 			{
-				var files = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.xshd");
+				var files = Directory.GetFiles(Path.Combine(Settings.pascalPath, "Highlighting"), "*.xshd");
 				if (files != null && files.Length > 0)
 				{
-					DeleteFiles (files);
+					DeleteFiles(files);
 				}
 			}
 
 			if (syntax != SyntaxType.NULL)
 			{
-				string dir = Path.GetDirectoryName (path);
-				MergeSyntax (dir, syntax);
-			} else
+				string dir = Path.GetDirectoryName(path);
+				MergeSyntax(dir, syntax);
+			}
+			else
 			{
-				PrepareToExport (path);
+				PrepareToExport(path);
 			}
 
 			Helper.currentTheme = currentTheme.Name;
 			if (setTheme != null)
-				setTheme ();
+				setTheme();
 		}
 
 		/// <summary>
 		/// Import theme
 		/// </summary>
 		/// <param name="path">Theme from</param>
-		public static void import (string path, Func <string, string, bool> exist)
+		public static void import(string path, Func<string, string, bool> exist)
 		{
-			MainParser.Parse (path, true, true, CLI_Actions.showError, exist);
+			MainParser.Parse(path, true, true, CLI_Actions.showError, exist);
 		}
 
 		/// <summary>
@@ -354,52 +420,57 @@ namespace Yuki_Theme.Core
 		/// <param name="from">From</param>
 		/// <param name="to">To</param>
 		/// <returns>0 -> error. 1 -> success</returns>
-		public static int rename (string from, string to)
+		public static int rename(string from, string to)
 		{
 			if (to.Length < 3)
 			{
-				if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.short.full"), Translate ("messages.name.short.short"));
+				if (CLI_Actions.showError != null) CLI_Actions.showError(Translate("messages.name.short.full"), Translate("messages.name.short.short"));
 				return 0;
 			}
 
-			if (!ThemeInfos [from].isDefault)
+			if (!ThemeInfos[from].isDefault)
 			{
-				string fromP = Helper.ConvertNameToPath (from);
-				string toP = Helper.ConvertNameToPath (to);
-				
-				string fromPath = pathToFile (toP, ThemeInfos [from].isOld);
-				string toPath = pathToFile (toP, ThemeInfos [from].isOld);
-				
-				if (!File.Exists (fromP))
+				string fromP = Helper.ConvertNameToPath(from);
+				string toP = Helper.ConvertNameToPath(to);
+
+				string fromPath = pathToFile(toP, ThemeInfos[from].isOld);
+				string toPath = pathToFile(toP, ThemeInfos[from].isOld);
+
+				if (!File.Exists(fromP))
 				{
 					if (CLI_Actions.showError != null)
-						CLI_Actions.showError (Translate ("messages.theme.notexist.full"), Translate ("messages.theme.notexist.short"));
-				} else {
-					if (!File.Exists (toPath))
+						CLI_Actions.showError(Translate("messages.theme.notexist.full"), Translate("messages.theme.notexist.short"));
+				}
+				else
+				{
+					if (!File.Exists(toPath))
 					{
-						if (!DefaultThemes.isDefault (to))
+						if (!DefaultThemes.isDefault(to))
 						{
-							File.Move (fromPath, toPath);
-							WriteName (toPath, to);
+							File.Move(fromPath, toPath);
+							WriteName(toPath, to);
 
-							ThemeInfos.RenameKey (from, to);
+							ThemeInfos.RenameKey(from, to);
 
-							if (CLI_Actions.onRename != null) CLI_Actions.onRename (from, to);
+							if (CLI_Actions.onRename != null) CLI_Actions.onRename(from, to);
 							return 1;
-						} else
+						}
+						else
 						{
 							if (CLI_Actions.showError != null)
-								CLI_Actions.showError (Translate ("messages.name.default.full"), Translate ("messages.name.default.short"));
+								CLI_Actions.showError(Translate("messages.name.default.full"), Translate("messages.name.default.short"));
 						}
-					} else
+					}
+					else
 					{
-						if (CLI_Actions.showError != null) CLI_Actions.showError (Translate ("messages.name.exist.full"), Translate ("messages.name.exist.short"));
+						if (CLI_Actions.showError != null) CLI_Actions.showError(Translate("messages.name.exist.full"), Translate("messages.name.exist.short"));
 					}
 				}
-			} else
+			}
+			else
 			{
 				if (CLI_Actions.showError != null)
-					CLI_Actions.showError (Translate ("messages.theme.default.full"), Translate ("messages.theme.default.short"));
+					CLI_Actions.showError(Translate("messages.theme.default.full"), Translate("messages.theme.default.short"));
 			}
 			return 0;
 		}
@@ -410,18 +481,18 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="wantClean">Do you want to clean garbage?</param>
 		/// <param name="onSelect">Action, after populating list</param>
-		public static void restore (bool wantClean = true, Action onSelect = null)
+		public static void restore(bool wantClean = true, Action onSelect = null)
 		{
 			isEdited = false;
 			if (currentTheme.Fields != null)
-				currentTheme.Fields.Clear ();
-			names.Clear ();
-			Console.WriteLine ("\nCLI.NameToLoad: {0}", nameToLoad);
-			populateList (onSelect);
+				currentTheme.Fields.Clear();
+			names.Clear();
+			Console.WriteLine("\nCLI.NameToLoad: {0}", nameToLoad);
+			populateList(onSelect);
 			if (wantClean)
 			{
-				GC.Collect ();
-				GC.WaitForPendingFinalizers ();
+				GC.Collect();
+				GC.WaitForPendingFinalizers();
 			}
 		}
 
@@ -429,51 +500,54 @@ namespace Yuki_Theme.Core
 		/// Populate list with values. For example Default Background color, Default Foreground color and etc. 
 		/// </summary>
 		/// <param name="onSelect">Action, after populating list</param>
-		public static void populateList (Action onSelect = null)
+		public static void populateList(Action onSelect = null)
 		{
 			if (ThemeInfos[nameToLoad].isOld)
 			{
-				OldThemeFormat.LoadThemeToCLI ();
-			} else
+				OldThemeFormat.LoadThemeToCLI();
+			}
+			else
 			{
-				NewThemeFormat.LoadThemeToCLI ();
+				NewThemeFormat.LoadThemeToCLI();
 			}
 
 			if (onSelect != null)
-				onSelect ();
+				onSelect();
 		}
 
-		public static Theme GetTheme (string name)
+		public static Theme GetTheme(string name)
 		{
-			if (ThemeInfos.ContainsKey (name))
+			if (ThemeInfos.ContainsKey(name))
 			{
 				Theme theme;
-				if (ThemeInfos [name].isOld)
+				if (ThemeInfos[name].isOld)
 				{
-					theme = OldThemeFormat.populateList (name, false);
-				} else
+					theme = OldThemeFormat.populateList(name, false);
+				}
+				else
 				{
-					theme = NewThemeFormat.populateList (name, false);
+					theme = NewThemeFormat.populateList(name, false);
 				}
 
 				return theme;
-			} else
+			}
+			else
 			{
 				return null;
 			}
 		}
 
-		private static Stream GetStreamFromMemory (string file, string name)
+		private static Stream GetStreamFromMemory(string file, string name)
 		{
-			IThemeHeader header = DefaultThemes.headers [name];
+			IThemeHeader header = DefaultThemes.headers[name];
 			Assembly a = header.Location;
-			if (file.Contains (":"))
+			if (file.Contains(":"))
 			{
-				file = Helper.ConvertNameToPath (file);
+				file = Helper.ConvertNameToPath(file);
 			}
 
-			string ext = Helper.GetExtension (ThemeInfos [name].isOld);
-			Stream stream = a.GetManifestResourceStream ($"{header.ResourceHeader}.{file}" + ext);
+			string ext = Helper.GetExtension(ThemeInfos[name].isOld);
+			Stream stream = a.GetManifestResourceStream($"{header.ResourceHeader}.{file}" + ext);
 			return stream;
 		}
 
@@ -484,33 +558,42 @@ namespace Yuki_Theme.Core
 		/// <param name="name">Copy from (theme name)</param>
 		/// <param name="path">Copy to path</param>
 		/// <param name="extract">Do you want to extract background image and sticker?</param>
-		public static void CopyFromMemory (string file, string name, string path, bool extract = false)
+		public static void CopyFromMemory(string file, string name, string path, bool extract = false, bool autoExtractTheme = false)
 		{
-			Stream stream = GetStreamFromMemory (file, name);
-			string nxp = extract ? path + "A" : path;
-			using (var fs = new FileStream (nxp, FileMode.Create))
+			Stream stream = GetStreamFromMemory(file, name);
+			string nxp = extract || autoExtractTheme ? path + "A" : path;
+			using (var fs = new FileStream(nxp, FileMode.Create))
 			{
-				stream.Seek (0, SeekOrigin.Begin);
-				stream.CopyTo (fs);
+				stream.Seek(0, SeekOrigin.Begin);
+				stream.CopyTo(fs);
 			}
 
 			if (extract)
 			{
-				if (Helper.IsZip (stream))
+				if (Helper.IsZip(stream))
 				{
-					CleanDestination ();
-					Tuple <bool, Image> img = Helper.GetImage (nxp);
-					Tuple <bool, Image> sticker = Helper.GetSticker (nxp);
+					CleanDestination();
+					Tuple<bool, Image> img = Helper.GetImage(nxp);
+					Tuple<bool, Image> sticker = Helper.GetSticker(nxp);
 
-					Helper.ExtractZip (nxp, path, img.Item1, sticker.Item1, false);
-					File.Delete (nxp);
+					Helper.ExtractZip(nxp, path, img.Item1, sticker.Item1, false);
+					File.Delete(nxp);
 					return;
 				}
 
-				File.Move (nxp, path);
+				File.Move(nxp, path);
+			}
+			else if (autoExtractTheme)
+			{
+				if (Helper.IsZip(stream))
+				{
+					Helper.ExtractZip(nxp, path, false, false, true);
+					File.Delete(nxp);
+				}
+
 			}
 
-			stream.Dispose ();
+			stream.Dispose();
 		}
 
 
@@ -519,54 +602,55 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="path">Full path to theme</param>
 		/// <param name="name">New name of the theme</param>
-		public static void WriteName (string path, string name)
+		public static void WriteName(string path, string name)
 		{
-			if (IsOldTheme (path))
+			if (IsOldTheme(path))
 			{
-				OldThemeFormat.WriteName (path, name);
-			} else
+				OldThemeFormat.WriteName(path, name);
+			}
+			else
 			{
-				NewThemeFormat.WriteName (path, name);
+				NewThemeFormat.WriteName(path, name);
 			}
 		}
 
-		public static bool SelectTheme (string name)
+		public static bool SelectTheme(string name)
 		{
 			nameToLoad = name;
-			pathToLoad = Helper.ConvertNameToPath (name);
-			Console.WriteLine ("IsDefault: {0}", ThemeInfos [name].isOld);
+			pathToLoad = Helper.ConvertNameToPath(name);
+			Console.WriteLine("IsDefault: {0}", ThemeInfos[name].isOld);
 			return true;
 		}
 
-		#endregion
+#endregion
 
-		#region Path Generators
+#region Path Generators
 
-		public static string pathToFile (string pathLoad, bool old)
+		public static string pathToFile(string pathLoad, bool old)
 		{
-			return Path.Combine (currentPath, "Themes", $"{pathLoad}{Helper.GetExtension (old)}");
+			return Path.Combine(currentPath, "Themes", $"{pathLoad}{Helper.GetExtension(old)}");
 		}
-		
-		public static string pathToMemory (string name)
+
+		public static string pathToMemory(string name)
 		{
-			IThemeHeader header = DefaultThemes.headers [name];
+			IThemeHeader header = DefaultThemes.headers[name];
 			string file = name;
-			if (file.Contains (":"))
+			if (file.Contains(":"))
 			{
-				file = Helper.ConvertNameToPath (file);
+				file = Helper.ConvertNameToPath(file);
 			}
 
-			return $"{header.ResourceHeader}.{file}{Helper.GetExtension (ThemeInfos[name].isOld)}";
+			return $"{header.ResourceHeader}.{file}{Helper.GetExtension(ThemeInfos[name].isOld)}";
 		}
 
-		#endregion
+#endregion
 
-		public static string GetPath (string name)
+		public static string GetPath(string name)
 		{
-			string path = Helper.ConvertNameToPath (name);
-			
-			
-			
+			string path = Helper.ConvertNameToPath(name);
+
+
+
 			return path;
 		}
 
@@ -575,9 +659,9 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="path">Path</param>
 		/// <returns>True if it is Pascal Directory</returns>
-		public static bool isPasalDirectory (string path)
+		public static bool isPasalDirectory(string path)
 		{
-			return Directory.Exists (Path.Combine (path, "Highlighting"));
+			return Directory.Exists(Path.Combine(path, "Highlighting"));
 		}
 
 		/// <summary>
@@ -585,12 +669,12 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="path">Path to the theme</param>
 		/// <returns>Name of the theme</returns>
-		public static string GetNameOfTheme (string path)
+		public static string GetNameOfTheme(string path)
 		{
 			// Console.WriteLine ("Path to get theme name: {0}", path);
-			if (IsNewTheme (path))
-				return NewThemeFormat.GetNameOfTheme (path);
-			return OldThemeFormat.GetNameOfTheme (path);
+			if (IsNewTheme(path))
+				return NewThemeFormat.GetNameOfTheme(path);
+			return OldThemeFormat.GetNameOfTheme(path);
 		}
 
 		/// <summary>
@@ -598,12 +682,12 @@ namespace Yuki_Theme.Core
 		/// </summary>
 		/// <param name="path">Path to the theme</param>
 		/// <returns>Is Token valid and group name</returns>
-		public static Tuple<bool, string> VerifyToken (string path)
+		public static Tuple<bool, string> VerifyToken(string path)
 		{
-			if (path == "" || path.Length < 5) return new Tuple <bool, string> (false, "");
-			if (IsNewTheme (path))
-				return NewThemeFormat.VerifyToken (path);
-			return OldThemeFormat.VerifyToken (path);
+			if (path == "" || path.Length < 5) return new Tuple<bool, string>(false, "");
+			if (IsNewTheme(path))
+				return NewThemeFormat.VerifyToken(path);
+			return OldThemeFormat.VerifyToken(path);
 		}
 
 		/// <summary>
@@ -613,95 +697,95 @@ namespace Yuki_Theme.Core
 		/// <param name="img2">Background image</param>
 		/// <param name="img3">Sticker</param>
 		/// <param name="wantToKeep">Want to keep old wallpaper and sticker if file is exist</param>
-		public static void SaveTheme (Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
+		public static void SaveTheme(Theme themeToSave, Image img2 = null, Image img3 = null, bool wantToKeep = false)
 		{
-			if (!isDefault ())
+			if (!isDefault())
 			{
 				if (themeToSave.IsOld)
-					OldThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
+					OldThemeFormat.saveTheme(themeToSave, img2, img3, wantToKeep);
 				else
-					NewThemeFormat.saveTheme (themeToSave, img2, img3, wantToKeep);
+					NewThemeFormat.saveTheme(themeToSave, img2, img3, wantToKeep);
 			}
 		}
 
 
-		public static void PrepareToExport (string path)
+		public static void PrepareToExport(string path)
 		{
-			string dir = Path.GetDirectoryName (path);
+			string dir = Path.GetDirectoryName(path);
 			// Console.WriteLine(currentTheme.Fields["Method"].ToString ());
-			foreach (SyntaxType syntax in (SyntaxType [])Enum.GetValues (typeof (SyntaxType)))
+			foreach (SyntaxType syntax in (SyntaxType[])Enum.GetValues(typeof(SyntaxType)))
 			{
 				if (syntax != SyntaxType.NULL)
-					MergeSyntax (dir, syntax);
+					MergeSyntax(dir, syntax);
 			}
 		}
 
-		private static void MergeSyntax (string dir, SyntaxType syntax)
+		private static void MergeSyntax(string dir, SyntaxType syntax)
 		{
-			string destination = Path.Combine (dir, $"{pathToLoad}_{syntax}.xshd");
-			ExtractSyntaxTemplate (syntax, destination);
+			string destination = Path.Combine(dir, $"{pathToLoad}_{syntax}.xshd");
+			ExtractSyntaxTemplate(syntax, destination);
 
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, currentTheme);
-			Console.WriteLine (syntax.ToString ());
-			MergeFiles (destination, localDic);
+			Dictionary<string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames(syntax, currentTheme);
+			Console.WriteLine(syntax.ToString());
+			MergeFiles(destination, localDic);
 		}
 
-		public static void ExtractSyntaxTemplate (SyntaxType syntax, string destination)
+		public static void ExtractSyntaxTemplate(SyntaxType syntax, string destination)
 		{
-			Assembly a = GetCore ();
-			Stream stream = a.GetManifestResourceStream ($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString ()}.xshd");
-			using (var fs = new FileStream (destination, FileMode.Create))
+			Assembly a = GetCore();
+			Stream stream = a.GetManifestResourceStream($"Yuki_Theme.Core.Resources.Syntax_Templates.{syntax.ToString()}.xshd");
+			using (var fs = new FileStream(destination, FileMode.Create))
 			{
-				stream.Seek (0, SeekOrigin.Begin);
-				stream.CopyTo (fs);
+				stream.Seek(0, SeekOrigin.Begin);
+				stream.CopyTo(fs);
 			}
 		}
 
-		public static void MergeFiles (string path, Dictionary <string, ThemeField> local)
+		public static void MergeFiles(string path, Dictionary<string, ThemeField> local)
 		{
-			var doc = new XmlDocument ();
-			doc.Load (path);
+			var doc = new XmlDocument();
+			doc.Load(path);
 
-			MergeFiles (local, currentTheme, ref doc);
+			MergeFiles(local, currentTheme, ref doc);
 
-			doc.Save (path);
+			doc.Save(path);
 		}
 
-		public static void LoadFieldsAndMergeFiles (string content, string path, Theme theme)
+		public static void LoadFieldsAndMergeFiles(string content, string path, Theme theme)
 		{
-			var doc = new XmlDocument ();
-			doc.LoadXml (content);
+			var doc = new XmlDocument();
+			doc.LoadXml(content);
 
-			Dictionary <string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames (SyntaxType.Pascal, currentTheme);
+			Dictionary<string, ThemeField> localFields = ThemeField.GetThemeFieldsWithRealNames(SyntaxType.Pascal, currentTheme);
 
-			MergeFiles (localFields, theme, ref doc);
+			MergeFiles(localFields, theme, ref doc);
 
-			OldThemeFormat.SaveXML (null, null, true, theme.IsZip (), ref doc, path);
+			OldThemeFormat.SaveXML(null, null, true, theme.IsZip(), ref doc, path);
 		}
 
-		public static void MergeFiles (Dictionary <string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
+		public static void MergeFiles(Dictionary<string, ThemeField> fields, Theme themeToMerge, ref XmlDocument doc)
 		{
-			OldThemeFormat.MergeThemeFieldsWithFile (fields, doc);
+			OldThemeFormat.MergeThemeFieldsWithFile(fields, doc);
 
-			OldThemeFormat.MergeCommentsWithFile (themeToMerge, doc);
+			OldThemeFormat.MergeCommentsWithFile(themeToMerge, doc);
 		}
 
-		
-		public static Dictionary <string, ThemeField> ConvertToRealNames (SyntaxType syntax)
+
+		public static Dictionary<string, ThemeField> ConvertToRealNames(SyntaxType syntax)
 		{
-			Dictionary <string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames (syntax, currentTheme);
+			Dictionary<string, ThemeField> localDic = ThemeField.GetThemeFieldsWithRealNames(syntax, currentTheme);
 			return localDic;
 		}
-		
+
 		/// <summary>
 		/// Clean destination before export. Delete background image and sticker 
 		/// </summary>
-		private static void CleanDestination ()
+		private static void CleanDestination()
 		{
-			var fil = Directory.GetFiles (Path.Combine (Settings.pascalPath, "Highlighting"), "*.png");
+			var fil = Directory.GetFiles(Path.Combine(Settings.pascalPath, "Highlighting"), "*.png");
 			foreach (string s in fil)
 			{
-				File.Delete (s);
+				File.Delete(s);
 			}
 		}
 
@@ -709,13 +793,13 @@ namespace Yuki_Theme.Core
 		/// Copy files to <code>Themes</code> directory
 		/// </summary>
 		/// <param name="files">Files to be copied</param>
-		private static void CopyFiles (string [] files)
+		private static void CopyFiles(string[] files)
 		{
 			foreach (var file in files)
 			{
-				var fs = Path.Combine (currentPath, "Themes", Path.GetFileNameWithoutExtension (file) + Helper.FILE_EXTENSTION_OLD);
-				if (!File.Exists (fs))
-					File.Copy (file, fs);
+				var fs = Path.Combine(currentPath, "Themes", Path.GetFileNameWithoutExtension(file) + Helper.FILE_EXTENSTION_OLD);
+				if (!File.Exists(fs))
+					File.Copy(file, fs);
 			}
 		}
 
@@ -723,38 +807,38 @@ namespace Yuki_Theme.Core
 		/// Export theme to the path (pascal directory)
 		/// </summary>
 		/// <param name="path">Path</param>
-		private static void ExportTheme (string path)
+		private static void ExportTheme(string path)
 		{
 			string source = currentTheme.fullPath;
-			bool iszip = Helper.IsZip (source);
+			bool iszip = Helper.IsZip(source);
 			if (!iszip)
 			{
 				// File.Copy (source, path, true);
 				return;
 			}
 
-			CleanDestination ();
+			CleanDestination();
 
-			Tuple <bool, Image> img = Helper.GetImage (source);
-			Tuple <bool, Image> sticker = Helper.GetSticker (source);
+			Tuple<bool, Image> img = Helper.GetImage(source);
+			Tuple<bool, Image> sticker = Helper.GetSticker(source);
 
-			Helper.ExtractZip (source, path, img.Item1, sticker.Item1, false);
+			Helper.ExtractZip(source, path, img.Item1, sticker.Item1, false);
 		}
 
-		
-		
-		
+
+
+
 
 		/// <summary>
 		/// Delete files if exist
 		/// </summary>
 		/// <param name="files"></param>
-		private static void DeleteFiles (string [] files)
+		private static void DeleteFiles(string[] files)
 		{
 			foreach (var file in files)
 			{
-				if (File.Exists (file))
-					File.Delete (file);
+				if (File.Exists(file))
+					File.Delete(file);
 			}
 		}
 
@@ -762,24 +846,24 @@ namespace Yuki_Theme.Core
 		/// Get this assembly
 		/// </summary>
 		/// <returns></returns>
-		public static Assembly GetCore ()
+		public static Assembly GetCore()
 		{
-			return Assembly.GetExecutingAssembly ();
+			return Assembly.GetExecutingAssembly();
 		}
 
-		private static Assembly GetAssemblyByName (string name)
+		private static Assembly GetAssemblyByName(string name)
 		{
-			return AppDomain.CurrentDomain.GetAssemblies ()
-			                .SingleOrDefault (assembly => assembly.GetName ().Name == name);
+			return AppDomain.CurrentDomain.GetAssemblies()
+				.SingleOrDefault(assembly => assembly.GetName().Name == name);
 		}
 
 		/// <summary>
 		/// Is current theme in default themes
 		/// </summary>
 		/// <returns></returns>
-		public static bool isDefault ()
+		public static bool isDefault()
 		{
-			return DefaultThemes.isDefault (nameToLoad);
+			return DefaultThemes.isDefault(nameToLoad);
 		}
 
 
@@ -791,122 +875,134 @@ namespace Yuki_Theme.Core
 		/// <param name="name">New Name</param>
 		/// <param name="oldName">Old Name</param>
 		/// <returns>If it's done, it will return true</returns>
-		public static bool ReGenerateTheme (string path, string oldPath, string name, string oldName, bool forceRegenerate)
+		public static bool ReGenerateTheme(string path, string oldPath, string name, string oldName, bool forceRegenerate)
 		{
-			if ((IsOldTheme (path) && IsOldTheme (oldPath)) || (!IsOldTheme (path) && !IsOldTheme (oldPath)))
+			if ((IsOldTheme(path) && IsOldTheme(oldPath)) || (!IsOldTheme(path) && !IsOldTheme(oldPath)))
 				return false;
-			if (!IsOldTheme (oldPath) && (Settings.saveAsOld || forceRegenerate))
-				ReGenerateFromNew (path, oldPath, name, oldName);
+			if (!IsOldTheme(oldPath) && (Settings.saveAsOld || forceRegenerate))
+				ReGenerateFromNew(path, oldPath, name, oldName);
 			else
-				ReGenerateFromOld (path, oldPath, name, oldName);
+				ReGenerateFromOld(path, oldPath, name, oldName);
 			return true;
 		}
 
-		private static void ReGenerateFromOld (string path, string oldPath, string name, string oldName)
+		private static void ReGenerateFromOld(string path, string oldPath, string name, string oldName)
 		{
-			Theme theme = new Theme ();
-			theme.Fields = new Dictionary <string, ThemeField> ();
-			var doc = new XmlDocument ();
-			try
-			{
-				bool isDef = DefaultThemes.isDefault (oldName);
-				OldThemeFormat.loadThemeToPopulate (ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
-				                                    false, true);
-			} catch
-			{
+			bool iszip;
+			if (ConvertFromOldToNewJson(oldPath, name, oldName, out Theme theme))
 				return;
+
+			string json = JsonConvert.SerializeObject(theme, Formatting.Indented);
+			if (DefaultThemes.isDefault(oldName))
+			{
+				Stream stream = GetStreamFromMemory(oldName, oldName);
+				iszip = Helper.IsZip(stream);
+				stream.Dispose();
 			}
-
-			List <string> namesList = new List <string> ();
-
-			OldThemeFormat.PopulateDictionaryFromDoc (doc, ref theme, ref namesList);
-
-			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
-			if (!theme.Fields.ContainsKey (methdoName))
+			else
 			{
-				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "Keywords";
-				theme.Fields.Add (methdoName, new ThemeField () { Foreground = theme.Fields [keywordName].Foreground });
-			}
-
-			Dictionary <string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc (doc);
-			string al = additionalInfo ["align"];
-			string op = additionalInfo ["opacity"];
-			string sop = additionalInfo ["stickerOpacity"];
-			theme.Name = name;
-			theme.Group = "";
-			theme.Version = Convert.ToInt32 (Settings.current_version);
-			theme.WallpaperOpacity = int.Parse (op);
-			theme.StickerOpacity = int.Parse (sop);
-			theme.WallpaperAlign = int.Parse (al);
-			string json = JsonConvert.SerializeObject (theme, Formatting.Indented);
-			bool iszip = false;
-
-			if (DefaultThemes.isDefault (oldName))
-			{
-				Stream stream = GetStreamFromMemory (oldName, oldName);
-				iszip = Helper.IsZip (stream);
-				stream.Dispose ();
-			} else
-			{
-				iszip = Helper.IsZip (oldPath);
+				iszip = Helper.IsZip(oldPath);
 			}
 
 			if (!iszip)
-				File.WriteAllText (path, json);
+				File.WriteAllText(path, json);
 			else
 			{
-				Helper.UpdateZip (path, json, null, true, null, true, "", false);
+				Helper.UpdateZip(path, json, null, true, null, true, "", false);
 			}
 		}
-
-		private static void ReGenerateFromNew (string path, string oldPath, string name, string oldName)
+		private static bool ConvertFromOldToNewJson(string oldPath, string name, string oldName, out Theme theme)
 		{
-			bool isDefaultTheme = DefaultThemes.isDefault (oldName);
-			string json = NewThemeFormat.loadThemeToPopulate (isDefaultTheme ? oldName : oldPath, false, isDefaultTheme, Helper.FILE_EXTENSTION_NEW);
-			Theme theme = JsonConvert.DeserializeObject <Theme> (json);
+
+			theme = new Theme();
+			theme.Fields = new Dictionary<string, ThemeField>();
+			var doc = new XmlDocument();
+			try
+			{
+				bool isDef = DefaultThemes.isDefault(oldName);
+				OldThemeFormat.loadThemeToPopulate(ref doc, isDef ? oldName : oldPath, false, isDef, ref theme, Helper.FILE_EXTENSTION_OLD,
+					false, true);
+			}
+			catch
+			{
+				return true;
+			}
+
+			List<string> namesList = new List<string>();
+
+			OldThemeFormat.PopulateDictionaryFromDoc(doc, ref theme, ref namesList);
+
+			string methdoName = Settings.settingMode == SettingMode.Light ? "Method" : "MarkPrevious";
+			if (!theme.Fields.ContainsKey(methdoName))
+			{
+				string keywordName = Settings.settingMode == SettingMode.Light ? "Keyword" : "Keywords";
+				theme.Fields.Add(methdoName, new ThemeField()
+				{
+					Foreground = theme.Fields[keywordName].Foreground
+				});
+			}
+
+			Dictionary<string, string> additionalInfo = OldThemeFormat.GetAdditionalInfoFromDoc(doc);
+			string al = additionalInfo["align"];
+			string op = additionalInfo["opacity"];
+			string sop = additionalInfo["stickerOpacity"];
 			theme.Name = name;
 			theme.Group = "";
-			var a = GetCore ();
+			theme.Version = Convert.ToInt32(Settings.current_version);
+			theme.WallpaperOpacity = int.Parse(op);
+			theme.StickerOpacity = int.Parse(sop);
+			theme.WallpaperAlign = int.Parse(al);
+			return false;
+		}
+
+		private static void ReGenerateFromNew(string path, string oldPath, string name, string oldName)
+		{
+			bool isDefaultTheme = DefaultThemes.isDefault(oldName);
+			string json = NewThemeFormat.loadThemeToPopulate(isDefaultTheme ? oldName : oldPath, false, isDefaultTheme, Helper.FILE_EXTENSTION_NEW);
+			Theme theme = JsonConvert.DeserializeObject<Theme>(json);
+			theme.Name = name;
+			theme.Group = "";
+			var a = GetCore();
 			string str = "";
 			;
-			using (StreamReader reader = new StreamReader (a.GetManifestResourceStream (Helper.PASCALTEMPLATE)))
+			using (StreamReader reader = new StreamReader(a.GetManifestResourceStream(Helper.PASCALTEMPLATE)))
 			{
-				str = reader.ReadToEnd ();
+				str = reader.ReadToEnd();
 			}
 
 			// Console.WriteLine ("REGENERATION...");
-			LoadFieldsAndMergeFiles (str, path, theme);
+			LoadFieldsAndMergeFiles(str, path, theme);
 		}
 
-		public static bool IsOldTheme (string path)
+		public static bool IsOldTheme(string path)
 		{
-			return path.ToLower ().EndsWith (Helper.FILE_EXTENSTION_OLD);
+			return path.ToLower().EndsWith(Helper.FILE_EXTENSTION_OLD);
 		}
 
-		private static bool IsNewTheme (string path)
+		private static bool IsNewTheme(string path)
 		{
-			return path.ToLower ().EndsWith (Helper.FILE_EXTENSTION_NEW);
+			return path.ToLower().EndsWith(Helper.FILE_EXTENSTION_NEW);
 		}
 
-		private static void LoadSchemesByExtension (string extension)
+		private static void LoadSchemesByExtension(string extension)
 		{
-			foreach (string file in Directory.GetFiles (Path.Combine (currentPath, "Themes"), "*" + extension, SearchOption.TopDirectoryOnly))
+			foreach (string file in Directory.GetFiles(Path.Combine(currentPath, "Themes"), "*" + extension, SearchOption.TopDirectoryOnly))
 			{
-				string pts = Path.GetFileNameWithoutExtension (file);
+				string pts = Path.GetFileNameWithoutExtension(file);
 
-				Tuple <bool, string> tokenVerification = VerifyToken (file);
+				Tuple<bool, string> tokenVerification = VerifyToken(file);
 				bool isValidToken = tokenVerification.Item1;
 				string groupName = tokenVerification.Item2;
-				
-				if (!DefaultThemes.isDefault (pts) || isValidToken)
+
+				if (!DefaultThemes.isDefault(pts) || isValidToken)
 				{
 					bool has = false;
-					if (pts.Contains ("__"))
+					if (pts.Contains("__"))
 					{
-						string stee = Path.Combine (currentPath, "Themes", $"{pts}{extension}");
-						pts = GetNameOfTheme (stee);
-						
-						if (DefaultThemes.isDefault (pts))
+						string stee = Path.Combine(currentPath, "Themes", $"{pts}{extension}");
+						pts = GetNameOfTheme(stee);
+
+						if (DefaultThemes.isDefault(pts))
 						{
 							has = true;
 						}
@@ -915,92 +1011,94 @@ namespace Yuki_Theme.Core
 					{
 						if (!has && pts.Length > 0)
 						{
-							schemes.Add (pts);
-							AddThemeInfo (
+							schemes.Add(pts);
+							AddThemeInfo(
 								pts,
-								new ThemeInfo (false, IsOldTheme (file), ThemeLocation.File,
-								               groupName == "" ? Translate ("messages.theme.group.custom") : groupName));
+								new ThemeInfo(false, IsOldTheme(file), ThemeLocation.File,
+									groupName == "" ? Translate("messages.theme.group.custom") : groupName));
 						}
-					} else
+					}
+					else
 					{
 						// Console.WriteLine ("Token valid");
-						ForcelyAddToDefaults (pts, file, groupName);
+						ForcelyAddToDefaults(pts, file, groupName);
 					}
 				}
 			}
 		}
 
-		private static void ForcelyAddToDefaults (string name, string file, string group)
+		private static void ForcelyAddToDefaults(string name, string file, string group)
 		{
-			if (!schemes.Contains (name))
+			if (!schemes.Contains(name))
 			{
-				int index = GetIndexForInsert (name, group);
+				int index = GetIndexForInsert(name, group);
 				if (index != -1)
-					schemes.Insert (index, name);
+					schemes.Insert(index, name);
 				else
-					schemes.Add (name);
-				DefaultThemes.categories.Add (name, group);
-				if (!DefaultThemes.categoriesList.Contains (group))
+					schemes.Add(name);
+				DefaultThemes.categories.Add(name, group);
+				if (!DefaultThemes.categoriesList.Contains(group))
 				{
-					DefaultThemes.categoriesList.Add (group);
+					DefaultThemes.categoriesList.Add(group);
 				}
 			}
 
-			ThemeInfo info = new ThemeInfo (true, IsOldTheme (file), ThemeLocation.File, group, true);
-			if (ThemeInfos.ContainsKey (name))
-				ThemeInfos [name] = info;
+			ThemeInfo info = new ThemeInfo(true, IsOldTheme(file), ThemeLocation.File, group, true);
+			if (ThemeInfos.ContainsKey(name))
+				ThemeInfos[name] = info;
 			else
-				ThemeInfos.Add (name, info);
-			
-			if (!DefaultThemes.names.Contains (name))
-				DefaultThemes.names.Add (name);
+				ThemeInfos.Add(name, info);
+
+			if (!DefaultThemes.names.Contains(name))
+				DefaultThemes.names.Add(name);
 
 			// Console.WriteLine ("{0}\n\n", ThemeInfos [name]);
 
 		}
 
-		private static void AskToSaveInExport (Image img2, Image img3, bool wantToKeep)
+		private static void AskToSaveInExport(Image img2, Image img3, bool wantToKeep)
 		{
-			if (!isDefault () && Helper.mode != ProductMode.Plugin && isEdited)
+			if (!isDefault() && Helper.mode != ProductMode.Plugin && isEdited)
 			{
-				if (CLI_Actions.SaveInExport ("messages.theme.save.full", "messages.theme.save.short"))
-					save (img2, img3, wantToKeep);
-			} else if (!isDefault ())
+				if (CLI_Actions.SaveInExport("messages.theme.save.full", "messages.theme.save.short"))
+					save(img2, img3, wantToKeep);
+			}
+			else if (!isDefault())
 			{
-				save (img2, img3, wantToKeep);
+				save(img2, img3, wantToKeep);
 			}
 		}
 
-		public static void AddThemeInfo (string name, ThemeInfo themeInfo)
+		public static void AddThemeInfo(string name, ThemeInfo themeInfo)
 		{
-			ThemeInfos.Add (name, themeInfo);
+			ThemeInfos.Add(name, themeInfo);
 		}
 
-		private static int GetIndexForInsert (string forName, string group)
+		private static int GetIndexForInsert(string forName, string group)
 		{
 			int result = -1;
 
-			string target = DefaultThemes.categories.Where (item => item.Value == group).Select (item => item.Key).FirstOrDefault();
+			string target = DefaultThemes.categories.Where(item => item.Value == group).Select(item => item.Key).FirstOrDefault();
 
 			if (target is { Length: > 1 })
 			{
-				result = FindIndex (forName, target);
+				result = FindIndex(forName, target);
 			}
 
 			return result;
 		}
 
-		private static int FindIndex (string forName, string target)
+		private static int FindIndex(string forName, string target)
 		{
 			int res = -1;
 
-			if (DefaultThemes.headers.ContainsKey (target))
+			if (DefaultThemes.headers.ContainsKey(target))
 			{
-				IThemeHeader header = DefaultThemes.headers [target];
-				List <string> themes = header.ThemeNames.Keys.ToList ();
-				themes.Add (forName);
-				themes.Sort ();
-				res = themes.FindIndex (tg => tg == forName);
+				IThemeHeader header = DefaultThemes.headers[target];
+				List<string> themes = header.ThemeNames.Keys.ToList();
+				themes.Add(forName);
+				themes.Sort();
+				res = themes.FindIndex(tg => tg == forName);
 				if (res > 1)
 					res = res - 1;
 				else
@@ -1011,8 +1109,8 @@ namespace Yuki_Theme.Core
 
 				if (res != -1)
 				{
-					string targ2 = themes [res];
-					res = schemes.FindIndex (item => item == targ2);
+					string targ2 = themes[res];
+					res = schemes.FindIndex(item => item == targ2);
 
 					if (res + 1 < schemes.Count)
 					{
@@ -1024,37 +1122,37 @@ namespace Yuki_Theme.Core
 			return res;
 		}
 
-		private static string [] IdentifySyntaxHighlightings (string [] files)
+		private static string[] IdentifySyntaxHighlightings(string[] files)
 		{
-			List <string> unknowThemes = new List <string> ();
+			List<string> unknowThemes = new List<string>();
 			foreach (string file in files)
 			{
-				string name = OldThemeFormat.GetNameOfTheme (file);
+				string name = OldThemeFormat.GetNameOfTheme(file);
 				if (name.Length > 0)
 				{
-					if (!schemes.Contains (name))
+					if (!schemes.Contains(name))
 					{
-						unknowThemes.Add (file);
+						unknowThemes.Add(file);
 					}
 				}
 			}
 
-			return unknowThemes.ToArray ();
+			return unknowThemes.ToArray();
 		}
 
-		public static string Translate (string key)
+		public static string Translate(string key)
 		{
-			return Settings.translation.GetText (key);
+			return Settings.translation.GetText(key);
 		}
 
-		public static string Translate (string key, string p1)
+		public static string Translate(string key, string p1)
 		{
-			return Settings.translation.GetText (key).Replace ("{0}", p1);
+			return Settings.translation.GetText(key).Replace("{0}", p1);
 		}
 
-		public static string Translate (string key, string p1, string p2)
+		public static string Translate(string key, string p1, string p2)
 		{
-			return Settings.translation.GetText (key).Replace ("{0}", p1).Replace ("{1}", p2);
+			return Settings.translation.GetText(key).Replace("{0}", p1).Replace("{1}", p2);
 		}
 	}
 }

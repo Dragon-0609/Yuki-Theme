@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Yuki_Theme.Core;
 
 public static class CLI_Actions
 {
 	public static Func <string, string, bool> SaveInExport;
-	public static Action <string, string>     setPath;
-	public static Action <string, string>     showSuccess;
-	public static Action <string, string>     showError;
+	public static Action<string, string> setPath = (s, s1) => MessageBox.Show(s, s1);
+	public static Action<string, string> showSuccess = (s, s1) => MessageBox.Show(s, s1);
+	public static Action <string, string>     showError = (s, s1) => MessageBox.Show(s, s1);
 	public static Func <int>                  AskChoice;
 	public static Action <string>             hasProblem           = null;
 	public static Action                      onBGIMAGEChange      = null;

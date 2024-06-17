@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Yuki_Theme.Core</RootNamespace>
     <AssemblyName>Yuki Theme.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -137,6 +137,7 @@
       <DependentUpon>ThemeDownloaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Localization\Localization.cs" />
+    <Compile Include="Parsers\UnityParser.cs" />
     <Compile Include="ThemeInfo.cs" />
     <Compile Include="Themes\DefaultThemesHeader.cs" />
     <Compile Include="Themes\ExternalThemeManager.cs" />
@@ -350,6 +351,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\UnityTemplate.json" />
     <EmbeddedResource Include="Resources\SVG\positionRight_dark.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter.svg" />
     <EmbeddedResource Include="Resources\SVG\positionCenter_dark.svg" />

@@ -53,6 +53,8 @@
             <system:String x:Key="ui.tooltips.restore.message">Restore the Theme to default\ncase. You can use it if you\nchanged wrong field.</system:String>
             <system:String x:Key="ui.tooltips.export.title">Export the Theme</system:String>
             <system:String x:Key="ui.tooltips.export.message">Export the Theme to PascalABC.NET.</system:String>
+            <system:String x:Key="ui.tooltips.export.unity.title">Export the Theme to Unity</system:String>
+            <system:String x:Key="ui.tooltips.export.unity.message">Export the Theme to Unity</system:String>
             <system:String x:Key="ui.tooltips.import.title">Import Theme</system:String>
             <system:String x:Key="ui.tooltips.import.message">Import theme from file.\nAcceptable extensions:\n.yukitheme, .json, .xshd</system:String>
             <system:String x:Key="ui.tooltips.import_directory.title">Import Theme Directory</system:String>
@@ -165,6 +167,16 @@
 
                 <Button Name="ExportButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
                         Click="ExportButton_OnClick">
+                    <Button.ToolTip>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.export.title}" />
+                            <TextBlock Text="{DynamicResource ui.tooltips.export.message}" />
+                        </StackPanel>
+                    </Button.ToolTip>
+                </Button>
+
+                <Button Name="ExportUnityButton" VerticalAlignment="Top" BorderThickness="0" Style="{StaticResource ToolTipButton24}"
+                        Click="ExportUnityButton_OnClick">
                     <Button.ToolTip>
                         <StackPanel>
                             <TextBlock Style="{StaticResource ToolTipBlocks}" Text="{DynamicResource ui.tooltips.export.title}" />
