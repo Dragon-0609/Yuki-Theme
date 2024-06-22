@@ -36,13 +36,8 @@ public class UnityParser : AbstractParser
 				"toolbarbuttonRight", "ProjectBrowserIconAreaBg",
 				"SceneTopBarBg", "MiniPopup",
 				"TV Selection", "ExposablePopupMenu",
-				"minibutton", " ToolbarSearchTextField"
-			})
-		},
-		{
-			"Keyword_darker", (true, new[]
-			{
-				"dockHeader", "TV LineBold"
+				"minibutton", " ToolbarSearchTextField",
+				"WhiteBackground", "dockHeader", "TV LineBold"
 			})
 		},
 		{
