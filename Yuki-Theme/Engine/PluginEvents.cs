@@ -6,17 +6,15 @@ public class PluginEvents
 {
 	internal static PluginEvents Instance;
 
-	internal event ThemeChange ThemeChanged;
-	internal event Action Reload;
-
-	internal event Action StickerMarginReset;
-
-	internal delegate void ThemeChange(string name);
-
 	internal PluginEvents()
 	{
 		Instance = this;
 	}
+
+	internal event ThemeChange ThemeChanged;
+	internal event Action Reload;
+
+	internal event Action StickerMarginReset;
 
 	internal void OnThemeChanged(string name)
 	{
@@ -32,4 +30,6 @@ public class PluginEvents
 	{
 		StickerMarginReset?.Invoke();
 	}
+
+	internal delegate void ThemeChange(string name);
 }

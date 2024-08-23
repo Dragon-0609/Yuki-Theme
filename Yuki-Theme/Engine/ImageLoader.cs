@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -11,126 +9,116 @@ namespace YukiTheme.Engine;
 
 public class ImageLoader
 {
-    private const string ImagesFolder = "Highlighting";
-    private const string PngFilter = "*.png";
-    private Image _wallpaper;
-    private Image _sticker;
-    private ImageSource _wallpaperSource;
-    private ImageSource _stickerSource;
-    private string _wallpaperName = "background";
-    private string _stickerName = "sticker";
+	private const string ImagesFolder = "Highlighting";
+	private const string PngFilter = "*.png";
+	private readonly string _stickerName = "sticker";
+	private readonly string _wallpaperName = "background";
 
-    internal bool HasImage => _wallpaper is { Height: > 10 };
-    internal Image GetWallpaper => _wallpaper;
-    internal Image GetSticker => _sticker;
+	internal bool HasImage => GetWallpaper is { Height: > 10 };
+	internal Image GetWallpaper { get; private set; }
 
-    internal bool HasSticker => _sticker is { Height: > 10 };
+	internal Image GetSticker { get; private set; }
 
-    internal ImageSource GetWallpaperWPF => _wallpaperSource;
-    internal ImageSource GetStickerWPF => _stickerSource;
+	internal bool HasSticker => GetSticker is { Height: > 10 };
 
-    private void RemoveLastImage()
-    {
-        if (_wallpaper != null)
-        {
-            _wallpaper.Dispose();
-            _wallpaper = null;
-        }
+	internal ImageSource GetWallpaperWPF { get; private set; }
 
-        _wallpaperSource = null;
+	internal ImageSource GetStickerWPF { get; private set; }
 
-        if (_sticker != null)
-        {
-            _sticker.Dispose();
-            _sticker = null;
-        }
+	private void RemoveLastImage()
+	{
+		if (GetWallpaper != null)
+		{
+			GetWallpaper.Dispose();
+			GetWallpaper = null;
+		}
 
-        _stickerSource = null;
-    }
+		GetWallpaperWPF = null;
 
-    internal void LoadImages()
-    {
-        RemoveLastImage();
-        string[] png = Directory.GetFiles(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, ImagesFolder), PngFilter);
-        if (png.Length > 0)
-        {
-            var wallpaperCondition = png.Where(p => Path.GetFileNameWithoutExtension(p).ToLower() == _wallpaperName);
-            string wallpaperFileName;
-            string stickerFileName;
-            var ordered = png.OrderByDescending(p => new FileInfo(p).Length);
-            if (wallpaperCondition.Any())
-            {
-                wallpaperFileName = wallpaperCondition.First();
-            }
-            else
-            {
-                wallpaperFileName = ordered.First();
-            }
+		if (GetSticker != null)
+		{
+			GetSticker.Dispose();
+			GetSticker = null;
+		}
 
-            _wallpaper = Image.FromFile(wallpaperFileName);
+		GetStickerWPF = null;
+	}
 
-            if (png.Length > 1)
-            {
-                var stickerCondition = png.Where(p => Path.GetFileNameWithoutExtension(p).ToLower() == _stickerName);
+	internal void LoadImages()
+	{
+		RemoveLastImage();
+		var png = Directory.GetFiles(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, ImagesFolder), PngFilter);
+		if (png.Length > 0)
+		{
+			var wallpaperCondition = png.Where(p => Path.GetFileNameWithoutExtension(p).ToLower() == _wallpaperName);
+			string wallpaperFileName;
+			string stickerFileName;
+			var ordered = png.OrderByDescending(p => new FileInfo(p).Length);
+			if (wallpaperCondition.Any())
+				wallpaperFileName = wallpaperCondition.First();
+			else
+				wallpaperFileName = ordered.First();
 
-                if (stickerCondition.Any())
-                {
-                    stickerFileName = stickerCondition.First();
-                }
-                else
-                {
-                    stickerFileName = ordered.Skip(1).First();
-                }
+			GetWallpaper = Image.FromFile(wallpaperFileName);
 
-                _sticker = Image.FromFile(stickerFileName);
-            }
-        }
-    }
+			if (png.Length > 1)
+			{
+				var stickerCondition = png.Where(p => Path.GetFileNameWithoutExtension(p).ToLower() == _stickerName);
 
-    internal void ReleaseImages()
-    {
-        RemoveLastImage();
-    }
+				if (stickerCondition.Any())
+					stickerFileName = stickerCondition.First();
+				else
+					stickerFileName = ordered.Skip(1).First();
 
-    internal void ApplyImages()
-    {
-        if (_wallpaper != null)
-        {
-            _wallpaperSource = _wallpaper.ToWPFImage();
-            _stickerSource = _sticker.ToWPFImage();
-        }
-    }
+				GetSticker = Image.FromFile(stickerFileName);
+			}
+		}
+	}
 
-    internal Image SetImageOpacity(Image image, float opacity)
-    {
-        try
-        {
-            Bitmap bmp = new Bitmap(image.Width, image.Height);
+	internal void ReleaseImages()
+	{
+		RemoveLastImage();
+	}
 
-            opacity = opacity == 0 ? opacity : opacity / 100f;
+	internal void ApplyImages()
+	{
+		if (GetWallpaper != null)
+		{
+			GetWallpaperWPF = GetWallpaper.ToWPFImage();
+			GetStickerWPF = GetSticker.ToWPFImage();
+		}
+	}
 
-            using (Graphics gfx = Graphics.FromImage(bmp))
-            {
-                ColorMatrix matrix = new ColorMatrix
-                {
-                    Matrix33 = opacity
-                };
+	internal Image SetImageOpacity(Image image, float opacity)
+	{
+		try
+		{
+			var bmp = new Bitmap(image.Width, image.Height);
+
+			opacity = opacity == 0 ? opacity : opacity / 100f;
+
+			using (var gfx = Graphics.FromImage(bmp))
+			{
+				var matrix = new ColorMatrix
+				{
+					Matrix33 = opacity
+				};
 
 
-                ImageAttributes attributes = new ImageAttributes();
+				var attributes = new ImageAttributes();
 
 
-                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+				attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-                gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
-                image.Dispose();
-            }
+				gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+				image.Dispose();
+			}
 
-            return bmp;
-        }
-        catch
-        {
-            return image;
-        }
-    }
+			return bmp;
+		}
+		catch
+		{
+			return image;
+		}
+	}
 }

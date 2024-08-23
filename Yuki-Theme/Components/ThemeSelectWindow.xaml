@@ -27,7 +27,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Name="ThemesName"  FontSize="14" TextAlignment="Center" Padding="0 4 0 4">Themes</TextBlock>
+                <TextBlock Name="ThemesName" FontSize="14" TextAlignment="Center" Padding="0 4 0 4">Themes</TextBlock>
 
                 <components:SilentTextBox Grid.Row="1" x:Name="Search" FontSize="14" BorderThickness="0 2 0 1" Padding="1" Style="{StaticResource TextBoxDefault}"
                                           TextChanged="OnSearchTextChanged" KeyDown="Search_OnKeyDown" PreviewKeyDown="Search_OnPreviewKeyDown">

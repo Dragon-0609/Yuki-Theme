@@ -17,6 +17,7 @@
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\fizzler.1.3.0\lib\netstandard2.0\Fizzler.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\excss.4.1.4\lib\net452\ExCSS.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\User\AppData\Local\JetBrains\Rider2022.1\resharper-host\temp\Rider\vAny\CoverageData\_Yuki-Theme.1115810442\Snapshot\snapshot.utdcvr</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8355adb5_002D3688_002D4761_002D8915_002D817782f22df9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

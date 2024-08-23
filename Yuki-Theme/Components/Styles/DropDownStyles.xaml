@@ -78,7 +78,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="DropdownDefault" TargetType="{x:Type ComboBox}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -104,8 +104,7 @@
                             Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Foreground}"
                             IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
                             ClickMode="Press"
-                            Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Tag}">
-                        </ToggleButton>
+                            Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}, Path=Tag}" />
                         <ContentPresenter Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}"
                                           ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
@@ -174,14 +173,18 @@
     </Style>
 
     <Style x:Key="DropdownWindow" TargetType="ComboBox" BasedOn="{StaticResource DropdownDefault}">
-        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Tag.BackgroundDefaultBrush, TargetNullValue=White, FallbackValue=White}" />
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Foreground, TargetNullValue=White, FallbackValue=White}" />
+        <Setter Property="Background"
+                Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Tag.BackgroundDefaultBrush, TargetNullValue=White, FallbackValue=White}" />
+        <Setter Property="Foreground"
+                Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Foreground, TargetNullValue=White, FallbackValue=White}" />
         <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag}" />
     </Style>
 
     <Style x:Key="DropdownUserControl" TargetType="ComboBox" BasedOn="{StaticResource DropdownDefault}">
-        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BackgroundDefaultBrush, TargetNullValue=White, FallbackValue=White}" />
-        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground, TargetNullValue=White, FallbackValue=White}" />
+        <Setter Property="Background"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag.BackgroundDefaultBrush, TargetNullValue=White, FallbackValue=White}" />
+        <Setter Property="Foreground"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground, TargetNullValue=White, FallbackValue=White}" />
         <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}" />
     </Style>
 

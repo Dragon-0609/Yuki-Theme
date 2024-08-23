@@ -9,17 +9,17 @@ public static class ResourceHelper
 {
 	public static Image LoadImage(string name, string nameSpace = "Icons.")
 	{
-		Stream stream = LoadStream(name, nameSpace);
+		var stream = LoadStream(name, nameSpace);
 
 		return Image.FromStream(stream);
 	}
 
 	public static string LoadString(string name, string nameSpace = "Icons.")
 	{
-		Stream stream = LoadStream(name, nameSpace);
+		var stream = LoadStream(name, nameSpace);
 
 		string output;
-		using (StreamReader reader = new StreamReader(stream))
+		using (var reader = new StreamReader(stream))
 		{
 			output = reader.ReadToEnd();
 		}
@@ -29,7 +29,7 @@ public static class ResourceHelper
 
 	public static Stream LoadStream(string name, string nameSpace = "Icons.")
 	{
-		Stream stream = GetResource(name, nameSpace);
+		var stream = GetResource(name, nameSpace);
 		stream.Validate(GetResourcePath(name, nameSpace));
 		return stream;
 	}
@@ -42,15 +42,12 @@ public static class ResourceHelper
 
 	public static void Save(string path, string name, string nameSpace)
 	{
-		using (Stream stream = GetResource(name, nameSpace))
+		using (var stream = GetResource(name, nameSpace))
 		{
 			stream.Validate(GetResourcePath(name, nameSpace));
-			if (File.Exists(path))
-			{
-				File.Delete(path);
-			}
+			if (File.Exists(path)) File.Delete(path);
 
-			using (FileStream file = File.Create(path))
+			using (var file = File.Create(path))
 			{
 				file.Position = 0;
 				stream.CopyTo(file);

@@ -6,8 +6,8 @@ namespace YukiTheme.Components;
 
 public class AlignmentHelper
 {
-	private SnapWindow _window;
 	private AnchorStyles _context;
+	private readonly SnapWindow _window;
 
 	public AlignmentHelper(SnapWindow window)
 	{
@@ -23,24 +23,24 @@ public class AlignmentHelper
 
 	private void SetAlignX()
 	{
-		AlignConditions conditions = new AlignConditions(AnchorStyles.Left, AnchorStyles.Right);
-		AlignResults results = new AlignResults(AlignmentX.Left, AlignmentX.Center, AlignmentX.Right);
+		var conditions = new AlignConditions(AnchorStyles.Left, AnchorStyles.Right);
+		var results = new AlignResults(AlignmentX.Left, AlignmentX.Center, AlignmentX.Right);
 
 		ConditionalAlignSet(conditions, results, val => _window.AlignX = (AlignmentX)val);
 	}
 
 	private void SetAlignY()
 	{
-		AlignConditions conditions = new AlignConditions(AnchorStyles.Top, AnchorStyles.Bottom);
-		AlignResults results = new AlignResults(AlignmentY.Top, AlignmentY.Center, AlignmentY.Bottom);
+		var conditions = new AlignConditions(AnchorStyles.Top, AnchorStyles.Bottom);
+		var results = new AlignResults(AlignmentY.Top, AlignmentY.Center, AlignmentY.Bottom);
 
 		ConditionalAlignSet(conditions, results, val => _window.AlignY = (AlignmentY)val);
 	}
 
 	private void ConditionalAlignSet(AlignConditions conditions, AlignResults results, Action<Enum> setTarget)
 	{
-		bool hasLeft = _context.HasFlag(conditions.Left);
-		bool hasRight = _context.HasFlag(conditions.Right);
+		var hasLeft = _context.HasFlag(conditions.Left);
+		var hasRight = _context.HasFlag(conditions.Right);
 
 		if (hasLeft)
 			setTarget(hasRight ? results.Center : results.First);
@@ -52,8 +52,8 @@ public class AlignmentHelper
 
 	private struct AlignConditions
 	{
-		internal Enum Left;
-		internal Enum Right;
+		internal readonly Enum Left;
+		internal readonly Enum Right;
 
 		public AlignConditions(Enum left, Enum right)
 		{

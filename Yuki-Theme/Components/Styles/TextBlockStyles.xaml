@@ -11,7 +11,7 @@
                 Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" />
     </Style>
     <Style x:Key="GenericThemeTextBlock" TargetType="TextBlock">
-        <Setter Property="Padding" Value="18 4" /> 
+        <Setter Property="Padding" Value="18 4" />
         <Setter Property="TextAlignment" Value="Center" />
     </Style>
 </ResourceDictionary>

@@ -53,12 +53,12 @@ public static class DokiKeysObtainer
 		{ "Don't Toy with me Miss Nagatoro", "DTWMMN: " },
 		{ "Miscellaneous", "Misc: " },
 		{ "Yuru Camp", "YuruCamp: " },
-		{ "NekoPara", "NekoPara: " },
+		{ "NekoPara", "NekoPara: " }
 	};
 
 	private static string ConvertGroup(string st)
 	{
-		string res = st;
+		var res = st;
 		if (GroupNames.ContainsKey(st))
 			res = GroupNames[st];
 		return res;
@@ -67,29 +67,26 @@ public static class DokiKeysObtainer
 
 	public static void Obtain(string themeName, ParseKey parse)
 	{
-		string content = ResourceHelper.LoadString($"{themeName}.json", "Themes.Doki.");
+		var content = ResourceHelper.LoadString($"{themeName}.json", "Themes.Doki.");
 
-		JObject json = JObject.Parse(content);
+		var json = JObject.Parse(content);
 
 		json.Validate("Json is null");
 
-		string name = GetThemeName(json);
+		var name = GetThemeName(json);
 		parse("name", name);
 
 		parse("align", json["stickers"]?["default"]?["anchor"]?.ToString());
 		parse("opacity", json["stickers"]?["default"]?["opacity"]?.ToString());
 
-		bool isDark = IsDark(json);
+		var isDark = IsDark(json);
 
 		AddDefaults(isDark, parse);
 
-		JToken colorsToken = json["colors"];
+		var colorsToken = json["colors"];
 		colorsToken.Validate("Colors not found");
 
-		foreach (JToken colorToken in colorsToken!)
-		{
-			ParseColor(colorToken, parse);
-		}
+		foreach (var colorToken in colorsToken!) ParseColor(colorToken, parse);
 	}
 
 	private static bool IsDark(JObject json)
@@ -112,7 +109,7 @@ public static class DokiKeysObtainer
 
 	private static void ParseColor(JToken colorToken, ParseKey parse)
 	{
-		JProperty color = (JProperty)colorToken;
+		var color = (JProperty)colorToken;
 		parse(color.Name, color.Value.ToString());
 	}
 

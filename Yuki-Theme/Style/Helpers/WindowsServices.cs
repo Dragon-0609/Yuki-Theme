@@ -5,14 +5,14 @@ namespace YukiTheme.Style.Helpers;
 
 public static class WindowsServices
 {
-	const int WS_EX_TRANSPARENT = 0x00000020;
-	const int GWL_EXSTYLE = (-20);
+	private const int WS_EX_TRANSPARENT = 0x00000020;
+	private const int GWL_EXSTYLE = -20;
 
 	[DllImport("user32.dll")]
-	static extern int GetWindowLong(IntPtr hwnd, int index);
+	private static extern int GetWindowLong(IntPtr hwnd, int index);
 
 	[DllImport("user32.dll")]
-	static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+	private static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
 
 	public static void SetWindowExTransparent(IntPtr hwnd)
 	{

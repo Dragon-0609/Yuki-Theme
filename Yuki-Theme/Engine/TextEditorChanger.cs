@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor;
-using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using Yuki_Theme_Plugin;
 using YukiTheme.Style.Helpers;
@@ -14,12 +13,12 @@ namespace YukiTheme.Engine;
 
 public class TextEditorChanger
 {
-	private IconBarMargin _margin;
-	private FoldMargin _foldmargin;
 	private Timer _documentUpdator;
-	private Rectangle _oldSizeOfTextEditor = Rectangle.Empty;
 	private EditorComponents _editorComponents;
 	private EditorInspector _editorInspector;
+	private FoldMargin _foldmargin;
+	private IconBarMargin _margin;
+	private Rectangle _oldSizeOfTextEditor = Rectangle.Empty;
 	private Form1 Fm => IDEAlterer.Instance.Form1;
 
 	internal void Init(EditorComponents editor)
@@ -36,7 +35,7 @@ public class TextEditorChanger
 
 		_editorInspector = new EditorInspector(_editorComponents);
 
-		_documentUpdator = new Timer() { Interval = 2 };
+		_documentUpdator = new Timer { Interval = 2 };
 		_documentUpdator.Tick += (sender, r) =>
 		{
 			_documentUpdator.Stop();
@@ -57,19 +56,17 @@ public class TextEditorChanger
 				typeof(IconBarMargin).GetMethod("IsLineInsideRegion",
 					BindingFlags.Static | BindingFlags.NonPublic);
 			// paint icons
-			foreach (Bookmark mark in _editorComponents.TextArea.Document.BookmarkManager.Marks)
+			foreach (var mark in _editorComponents.TextArea.Document.BookmarkManager.Marks)
 			{
-				int lineNumber = _editorComponents.TextArea.Document.GetVisibleLine(mark.LineNumber);
-				int lineHeight = _editorComponents.TextArea.TextView.FontHeight;
-				int yPos = (int)(lineNumber * lineHeight) - _editorComponents.TextArea.VirtualTop.Y;
+				var lineNumber = _editorComponents.TextArea.Document.GetVisibleLine(mark.LineNumber);
+				var lineHeight = _editorComponents.TextArea.TextView.FontHeight;
+				var yPos = lineNumber * lineHeight - _editorComponents.TextArea.VirtualTop.Y;
 				if ((bool)inside.Invoke(
 					    null, new object[] { yPos, yPos + lineHeight, _margin.DrawingPosition.Y, _margin.DrawingPosition.Height }))
 				{
 					if (lineNumber == _editorComponents.TextArea.Document.GetVisibleLine(mark.LineNumber - 1))
-					{
 						// marker is inside folded region, do not draw it
 						continue;
-					}
 
 					mark.Draw(_margin, e.Graphics, new Point(0, yPos));
 				}
@@ -87,21 +84,17 @@ public class TextEditorChanger
 		}
 
 		if (false) //IDEAlterer.HasWallpaper)
-		{
 			DrawWallpaperInEditor(e);
-		}
 	}
 
 	private void DrawWallpaperInEditor(PaintEventArgs e)
 	{
-		Size vm = _editorComponents.TextEditor.ClientSize;
+		var vm = _editorComponents.TextEditor.ClientSize;
 		var img = IDEAlterer.GetWallpaper;
 
 		if (_oldSizeOfTextEditor.Width != vm.Width ||
 		    _oldSizeOfTextEditor.Height != vm.Height)
-		{
 			_oldSizeOfTextEditor = MiscHelper.GetSizes(img.Size, vm.Width, vm.Height, Alignment.Center);
-		}
 
 		e.Graphics.DrawImage(img, _oldSizeOfTextEditor);
 	}
@@ -187,37 +180,25 @@ public class TextEditorChanger
 
 	internal void SetMargin()
 	{
-		foreach (AbstractMargin margins in _editorComponents.TextArea.LeftMargins)
-		{
+		foreach (var margins in _editorComponents.TextArea.LeftMargins)
 			if (margins is IconBarMargin margin)
-			{
 				_margin = margin;
-			}
-			else if (margins is FoldMargin foldMargin)
-			{
-				_foldmargin = foldMargin;
-			}
-		}
+			else if (margins is FoldMargin foldMargin) _foldmargin = foldMargin;
 	}
 
 	internal void SetMarginPosition()
 	{
-		int currentXPos = 0;
-		foreach (AbstractMargin margins in _editorComponents.TextArea.LeftMargins)
+		var currentXPos = 0;
+		foreach (var margins in _editorComponents.TextArea.LeftMargins)
 		{
-			Rectangle marginRectangle = new Rectangle(currentXPos, 0, margins.Size.Width, _editorComponents.TextArea.Height);
-			if (margins.IsVisible || margins is FoldMargin)
-			{
-				currentXPos += margins.DrawingPosition.Width;
-			}
+			var marginRectangle = new Rectangle(currentXPos, 0, margins.Size.Width, _editorComponents.TextArea.Height);
+			if (margins.IsVisible || margins is FoldMargin) currentXPos += margins.DrawingPosition.Width;
 
 			if (margins is FoldMargin)
 			{
 				if (marginRectangle != _margin.DrawingPosition)
-				{
 					// Be sure that the line has valid rectangle
 					_foldmargin.DrawingPosition = marginRectangle;
-				}
 
 				break;
 			}

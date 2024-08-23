@@ -1,7 +1,5 @@
-namespace YukiTheme.Engine
+namespace YukiTheme.Engine;
+
+public class DataManager
 {
-	public class DataManager
-	{
-		
-	}
 }

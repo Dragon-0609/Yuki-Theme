@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Windows.Forms;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
@@ -9,7 +8,7 @@ public class NameBar
 {
 	internal static string ThemeName;
 
-	private ToolStripButton _currentThemeName;
+	private readonly ToolStripButton _currentThemeName;
 
 	public NameBar()
 	{
@@ -33,5 +32,8 @@ public class NameBar
 		_currentThemeName.Text = name;
 	}
 
-	internal ToolStripItem GetControl() => _currentThemeName;
+	internal ToolStripItem GetControl()
+	{
+		return _currentThemeName;
+	}
 }

@@ -8,61 +8,61 @@ using VisualPascalABCPlugins;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 
-namespace YukiTheme
+namespace YukiTheme;
+
+//имя класса *_VisualPascalABCPlugin
+// ReSharper disable once InconsistentNaming
+public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 {
-	//имя класса *_VisualPascalABCPlugin
-	// ReSharper disable once InconsistentNaming
-	public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
+	private static YukiTheme_VisualPascalABCPlugin _instance;
+
+	private static Stopwatch _timer;
+
+	private readonly IDEAlterer _alterer;
+	private bool _reload;
+
+	public YukiTheme_VisualPascalABCPlugin(IWorkbench Workbench)
 	{
-		private static YukiTheme_VisualPascalABCPlugin _instance;
+		_instance = this;
+		_alterer = new IDEAlterer(Workbench);
+	}
 
-		private static Stopwatch _timer;
+	public static string GetCurrentFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+	public string Name => "Yuki Theme";
 
-		private IDEAlterer _alterer;
-		public string Name => "Yuki Theme";
+	public string Version => "1.0";
 
-		public string Version => "1.0";
+	public string Copyright => "Copyright © 2021-2023 by Dragon-LV";
 
-		public string Copyright => "Copyright © 2021-2023 by Dragon-LV";
-		private bool _reload = false;
+	public void GetGUI(List<IPluginGUIItem> MenuItems, List<IPluginGUIItem> ToolBarItems)
+	{
+		var Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ResourceHelper.LoadImage("yuki128_2.png"), Color.Black, () => { });
+		MenuItems.Add(Item);
+		Console.WriteLine("Adding");
+		_timer = new Stopwatch();
+		_timer.Start();
+		_alterer.Init();
 
-		public static string GetCurrentFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-
-		internal static void StopTimer()
+		LinkCreator creator = new();
+		if (creator.CheckLinks())
 		{
-			if (_timer.IsRunning)
-			{
-				_timer.Stop();
-				Console.WriteLine($"Elapsed time: {_timer.ElapsedMilliseconds} ms");
-
-				if (_instance._reload)
-					_instance._alterer.Reload();
-			}
+			_reload = true;
+			_alterer.Reload();
 		}
 
-		public YukiTheme_VisualPascalABCPlugin(IWorkbench Workbench)
+		new WpfColorContainer();
+		// ToolBarItems.Add(Item);
+	}
+
+	internal static void StopTimer()
+	{
+		if (_timer.IsRunning)
 		{
-			_instance = this;
-			_alterer = new IDEAlterer(Workbench);
-		}
+			_timer.Stop();
+			Console.WriteLine($"Elapsed time: {_timer.ElapsedMilliseconds} ms");
 
-		public void GetGUI(List<IPluginGUIItem> MenuItems, List<IPluginGUIItem> ToolBarItems)
-		{
-			PluginGUIItem Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ResourceHelper.LoadImage("yuki128_2.png"), Color.Black, () => { });
-			MenuItems.Add(Item);
-			_timer = new Stopwatch();
-			_timer.Start();
-			_alterer.Init();
-
-			LinkCreator creator = new();
-			if (creator.CheckLinks())
-			{
-				_reload = true;
-				_alterer.Reload();
-			}
-
-			new WpfColorContainer();
-			// ToolBarItems.Add(Item);
+			if (_instance._reload)
+				_instance._alterer.Reload();
 		}
 	}
 }

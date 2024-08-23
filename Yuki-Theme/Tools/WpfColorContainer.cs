@@ -7,6 +7,11 @@ public class WpfColorContainer
 {
 	public static WpfColorContainer Instance;
 
+	public WpfColorContainer()
+	{
+		Instance = this;
+	}
+
 	public Color BackgroundColor { get; set; }
 	public Color BackgroundDefaultColor { get; set; }
 	public Color BackgroundClickColor { get; set; }
@@ -21,11 +26,6 @@ public class WpfColorContainer
 	public Brush BorderBrush { get; set; }
 	public Brush SelectionBrush { get; set; }
 	public Brush KeywordBrush { get; set; }
-
-	public WpfColorContainer()
-	{
-		Instance = this;
-	}
 
 	public void GetColorsAndBrushes()
 	{

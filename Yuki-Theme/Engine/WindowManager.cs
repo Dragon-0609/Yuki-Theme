@@ -1,12 +1,10 @@
-﻿using System;
-using System.Windows;
-using YukiTheme.Tools;
+﻿using System.Windows;
 
 namespace YukiTheme.Engine;
 
 public abstract class WindowManager
 {
-	private bool _hidden = false;
+	private bool _hidden;
 
 	internal abstract void Show();
 
@@ -27,17 +25,11 @@ public abstract class WindowManager
 #endif
 		if (CanShow())
 		{
-			if (_hidden)
-			{
-				ShowWindow();
-			}
+			if (_hidden) ShowWindow();
 		}
 		else
 		{
-			if (!_hidden)
-			{
-				HideWindow();
-			}
+			if (!_hidden) HideWindow();
 		}
 	}
 

@@ -9,18 +9,18 @@ namespace YukiTheme.Engine;
 
 public class WallpaperManager : WindowManager
 {
-	private WallpaperWindow _wallpaper;
-	private float _opacity = 0.1f;
 	private string _align = "center";
+	private float _opacity = 0.1f;
+	private WallpaperWindow _wallpaper;
 
 	internal override void Show()
 	{
-		_wallpaper = new WallpaperWindow()
+		_wallpaper = new WallpaperWindow
 		{
 			AlignX = AlignmentX.Left,
 			AlignY = AlignmentY.Top,
 			BorderOutlineX = 0,
-			BorderOutlineY = 0,
+			BorderOutlineY = 0
 		};
 		var targetForm = IDEAlterer.Instance.Form1;
 		_wallpaper.SetOwner(targetForm);
@@ -36,7 +36,7 @@ public class WallpaperManager : WindowManager
 		{
 			try
 			{
-				_opacity = ((float)int.Parse(opacity)) / 100;
+				_opacity = (float)int.Parse(opacity) / 100;
 			}
 			catch (Exception)
 			{
@@ -54,7 +54,10 @@ public class WallpaperManager : WindowManager
 		IDEAlterer.Instance.Form1.Focus();
 	}
 
-	internal override bool IsWindowNull() => _wallpaper == null;
+	internal override bool IsWindowNull()
+	{
+		return _wallpaper == null;
+	}
 
 	internal override void SetVisibility(Visibility visibility)
 	{
@@ -65,10 +68,7 @@ public class WallpaperManager : WindowManager
 	{
 		if (!IsWindowNull())
 		{
-			if (IDEAlterer.HasWallpaper)
-			{
-				_wallpaper.SetImage(IDEAlterer.GetWallpaperWPF);
-			}
+			if (IDEAlterer.HasWallpaper) _wallpaper.SetImage(IDEAlterer.GetWallpaperWPF);
 
 			UpdateOpacity();
 		}
@@ -77,14 +77,14 @@ public class WallpaperManager : WindowManager
 		UpdateVisibility();
 	}
 
-	protected override bool CanShow() => IDEAlterer.CanShowWallpaper;
+	protected override bool CanShow()
+	{
+		return IDEAlterer.CanShowWallpaper;
+	}
 
 	private void UpdateOpacity()
 	{
-		if (!IsWindowNull())
-		{
-			_wallpaper.Opacity = _opacity;
-		}
+		if (!IsWindowNull()) _wallpaper.Opacity = _opacity;
 	}
 
 	private void UpdateAlign()

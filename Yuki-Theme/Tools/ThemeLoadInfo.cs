@@ -4,8 +4,8 @@ namespace YukiTheme.Tools;
 
 public class ThemeLoadInfo
 {
-	public string Key;
 	public int CutNumber;
+	public string Key;
 	public Action<string> Value;
 
 	public ThemeLoadInfo(string key, int cutNumber, Action<string> value)

@@ -4,41 +4,41 @@ namespace YukiTheme.Tools;
 
 public class DokiThemeCollector
 {
-    public string Get(string name)
-    {
-        Dictionary<string, string> keys = GetKeys(name);
-        return ReplaceKeys(keys);
-    }
+	public string Get(string name)
+	{
+		var keys = GetKeys(name);
+		return ReplaceKeys(keys);
+	}
 
-    private Dictionary<string, string> GetKeys(string name)
-    {
-        Dictionary<string, string> keys = new Dictionary<string, string>();
-        Dictionary<string, string> colors = new Dictionary<string, string>();
+	private Dictionary<string, string> GetKeys(string name)
+	{
+		var keys = new Dictionary<string, string>();
+		var colors = new Dictionary<string, string>();
 
-        DokiKeysObtainer.Obtain(name, (key, color) => keys[key] = color);
+		DokiKeysObtainer.Obtain(name, (key, color) => keys[key] = color);
 
-        foreach (KeyValuePair<string, string> pair in keys)
-        {
-            colors.Add(GetTranslation(pair.Key).ToUpper(), pair.Value);
-        }
+		foreach (var pair in keys) colors.Add(GetTranslation(pair.Key).ToUpper(), pair.Value);
 
-        return colors;
-    }
+		return colors;
+	}
 
 
-    private string GetTranslation(string key) => DokiKeysTranslator.GetTranslation(key);
+	private string GetTranslation(string key)
+	{
+		return DokiKeysTranslator.GetTranslation(key);
+	}
 
-    private string ReplaceKeys(Dictionary<string, string> keys)
-    {
-        string template = GetTemplate();
+	private string ReplaceKeys(Dictionary<string, string> keys)
+	{
+		var template = GetTemplate();
 
-        template = template.Replace(keys);
+		template = template.Replace(keys);
 
-        return template;
-    }
+		return template;
+	}
 
-    private string GetTemplate()
-    {
-        return ResourceHelper.LoadString("Template.xshd", "Templates.");
-    }
+	private string GetTemplate()
+	{
+		return ResourceHelper.LoadString("Template.xshd", "Templates.");
+	}
 }

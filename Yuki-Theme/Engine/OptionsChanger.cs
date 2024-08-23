@@ -16,16 +16,16 @@ public class OptionsChanger
 	private static OptionsChanger _instance;
 
 	private Form1 _fm;
+	private Brush _lastBrush;
+	private int _lastIndex = -1;
+	private Rectangle _lastRectangle;
+	private GroupBox _optionsContentContainer;
+	private Panel _optionsContentPanel;
 	private OptionsContentEngine _optionsEngine;
 	private OptionsForm _optionsForm;
 	private TreeView _optionsTree;
-	private Panel _optionsContentPanel;
-	private GroupBox _optionsContentContainer;
-	private int _lastIndex = -1;
-	private Rectangle _lastRectangle;
-	private Brush _lastBrush;
-	private bool SelectYukiThemeNode = false;
 	private KeyValuePair<TreeNode, IOptionsContent> _pluginNode;
+	private bool SelectYukiThemeNode;
 
 	internal void GetOptionsComponents(Form1 form1)
 	{
@@ -33,7 +33,7 @@ public class OptionsChanger
 		_fm = form1;
 		_optionsEngine = _fm.GetByReflection<OptionsContentEngine>("optionsContentEngine");
 
-		PluginSettingsControl content = new PluginSettingsControl();
+		var content = new PluginSettingsControl();
 		_optionsEngine.AddContent(content);
 
 		_optionsForm = new OptionsForm(_optionsEngine);
@@ -59,7 +59,7 @@ public class OptionsChanger
 
 	private void GetPluginNode(PluginSettingsControl content)
 	{
-		Dictionary<TreeNode, IOptionsContent> nodes = _optionsForm.GetByReflection<Dictionary<TreeNode, IOptionsContent>>("nodes");
+		var nodes = _optionsForm.GetByReflection<Dictionary<TreeNode, IOptionsContent>>("nodes");
 		_pluginNode = nodes.First(n => n.Key.Text == content.ContentName);
 	}
 
@@ -81,7 +81,6 @@ public class OptionsChanger
 	internal void SetColorsToAllChildren(Control.ControlCollection collection)
 	{
 		foreach (Control controlControl in collection)
-		{
 			if (controlControl is Label)
 			{
 				controlControl.ForeColor = ColorReference.ForegroundColor;
@@ -114,12 +113,11 @@ public class OptionsChanger
 			{
 				SetColorsToAllChildren(controlControl.Controls);
 			}
-		}
 	}
 
 	private void comboBox1_DrawItem(object sender, DrawItemEventArgs e)
 	{
-		ComboBox comboBox = (ComboBox)sender;
+		var comboBox = (ComboBox)sender;
 		if (!comboBox.DroppedDown)
 		{
 			if (e.Index >= 0)
@@ -141,7 +139,7 @@ public class OptionsChanger
 		}
 
 		e.DrawBackground();
-		string text = comboBox.Items[e.Index].ToString();
+		var text = comboBox.Items[e.Index].ToString();
 
 		_lastBrush = ColorReference.BackgroundBrush;
 		if (comboBox.SelectedIndex == e.Index) _lastBrush = ColorReference.SelectionBrush;

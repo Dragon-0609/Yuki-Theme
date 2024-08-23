@@ -2,20 +2,19 @@
 using System.Windows.Interop;
 using YukiTheme.Style.Helpers;
 
-namespace YukiTheme.Components
-{
-	public partial class GridWindow : SnapWindow
-	{
-		public GridWindow()
-		{
-			InitializeComponent();
-		}
+namespace YukiTheme.Components;
 
-		protected override void OnSourceInitialized(EventArgs e)
-		{
-			base.OnSourceInitialized(e);
-			var hwnd = new WindowInteropHelper(this).Handle;
-			WindowsServices.SetWindowExTransparent(hwnd);
-		}
+public partial class GridWindow : SnapWindow
+{
+	public GridWindow()
+	{
+		InitializeComponent();
+	}
+
+	protected override void OnSourceInitialized(EventArgs e)
+	{
+		base.OnSourceInitialized(e);
+		var hwnd = new WindowInteropHelper(this).Handle;
+		WindowsServices.SetWindowExTransparent(hwnd);
 	}
 }

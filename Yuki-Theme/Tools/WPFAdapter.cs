@@ -12,13 +12,13 @@ public static class WpfConverter
 		{
 			Console.WriteLine("Application Inited");
 
-			new Application()
+			new Application
 			{
 				ShutdownMode = ShutdownMode.OnExplicitShutdown
 			};
-			ResourceDictionary rd = new ResourceDictionary();
+			var rd = new ResourceDictionary();
 
-			FontFamily saoFont = new FontFamily(
+			var saoFont = new FontFamily(
 				new Uri("pack://application:,,,/Fonts/"), "#SAO UI TT Regular"
 			);
 			rd.Add("SAOFont", saoFont);

@@ -8,9 +8,9 @@ public static class ColorHelper
 
 	public static Color ChangeColorBrightness(Color color, float correctionFactor)
 	{
-		float red = (float)color.R;
-		float green = (float)color.G;
-		float blue = (float)color.B;
+		float red = color.R;
+		float green = color.G;
+		float blue = color.B;
 
 		if (correctionFactor < 0)
 		{
@@ -31,7 +31,7 @@ public static class ColorHelper
 
 	public static bool IsDark(Color clr)
 	{
-		bool dark = ((clr.R + clr.G + clr.B) / 3 < 127);
+		var dark = (clr.R + clr.G + clr.B) / 3 < 127;
 		return dark;
 	}
 
@@ -39,8 +39,7 @@ public static class ColorHelper
 	{
 		if (IsDark(clr))
 			return ChangeColorBrightness(clr, percent);
-		else
-			return ChangeColorBrightness(clr, -percent);
+		return ChangeColorBrightness(clr, -percent);
 	}
 
 	#endregion

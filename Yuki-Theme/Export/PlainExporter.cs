@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 
@@ -7,27 +6,31 @@ namespace YukiTheme.Export;
 
 public class PlainExporter : Exporter
 {
-    protected override Exporter Next { get; } = new ExternalExporter();
-    protected override bool HasTheme(string name) => DefaultThemeNames.Themes.Contains(name);
+	protected override Exporter Next { get; } = new ExternalExporter();
 
-    protected override void ExportTheme(string name)
-    {
-        ExportDefinition(name);
-        ClearWallpaperAndSticker();
-    }
+	protected override bool HasTheme(string name)
+	{
+		return DefaultThemeNames.Themes.Contains(name);
+	}
 
-    private void ExportDefinition(string name)
-    {
-        string content = ResourceHelper.LoadString($"{name}.xshd", "Themes.Default.");
-        ExportThemeFile(content);
-    }
+	protected override void ExportTheme(string name)
+	{
+		ExportDefinition(name);
+		ClearWallpaperAndSticker();
+	}
 
-    private void ClearWallpaperAndSticker()
-    {
-        DeleteIfExist(BackgroundName);
-        DeleteIfExist(StickerName);
+	private void ExportDefinition(string name)
+	{
+		var content = ResourceHelper.LoadString($"{name}.xshd", "Themes.Default.");
+		ExportThemeFile(content);
+	}
 
-        LinkCreator.CopyDefault(BackgroundName, _folder);
-        LinkCreator.CopyDefault(StickerName, _folder);
-    }
+	private void ClearWallpaperAndSticker()
+	{
+		DeleteIfExist(BackgroundName);
+		DeleteIfExist(StickerName);
+
+		LinkCreator.CopyDefault(BackgroundName, _folder);
+		LinkCreator.CopyDefault(StickerName, _folder);
+	}
 }

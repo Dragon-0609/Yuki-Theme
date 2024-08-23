@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Yuki_Theme.Core.WPF.Controls"
              mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="70"
              PreviewTextInput="TextInputChecker"
@@ -18,9 +17,12 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0" Padding="0 2" TextAlignment="Left" VerticalAlignment="Center" PreviewTextInput="TextInputChecker" Name="box" Style="{DynamicResource TextBoxUserControl}" />
-        <RepeatButton Grid.Row="0" Grid.Column="1" Margin="0" Content="▲" FontSize="10" Padding="0" Delay="500" Interval="100" Style="{DynamicResource RepeatButtonUserControl}" Click="UpClick" />
-        <RepeatButton Grid.Row="1" Grid.Column="1" Margin="0" Content="▼" FontSize="10" Padding="0" Delay="500" Interval="100" Style="{DynamicResource RepeatButtonUserControl}" Click="DownClick" />
+        <TextBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Margin="0" Padding="0 2" TextAlignment="Left" VerticalAlignment="Center" PreviewTextInput="TextInputChecker"
+                 Name="box" Style="{DynamicResource TextBoxUserControl}" />
+        <RepeatButton Grid.Row="0" Grid.Column="1" Margin="0" Content="▲" FontSize="10" Padding="0" Delay="500" Interval="100" Style="{DynamicResource RepeatButtonUserControl}"
+                      Click="UpClick" />
+        <RepeatButton Grid.Row="1" Grid.Column="1" Margin="0" Content="▼" FontSize="10" Padding="0" Delay="500" Interval="100" Style="{DynamicResource RepeatButtonUserControl}"
+                      Click="DownClick" />
 
     </Grid>
 </UserControl>

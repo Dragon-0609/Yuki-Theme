@@ -4,6 +4,7 @@ namespace YukiTheme.Engine;
 
 public static class ColorReference
 {
+	public static readonly Color ChangedTab = Color.FromArgb(65, 229, 85);
 	public static Color ForegroundColor => ColorChanger.Instance.GetColor(ColorChanger.FOREGROUND);
 	public static Color ForegroundHoverColor => ColorChanger.Instance.GetColor(ColorChanger.FG_HOVER);
 	public static Color KeywordColor => ColorChanger.Instance.GetColor(ColorChanger.KEYWORD);
@@ -17,8 +18,6 @@ public static class ColorReference
 	public static Color BorderColor => ColorChanger.Instance.GetColor(ColorChanger.BORDER);
 	public static Color SelectionColor => ColorChanger.Instance.GetColor(ColorChanger.SELECTION);
 	public static Color TypeColor => ColorChanger.Instance.GetColor(ColorChanger.TYPE);
-
-	public static readonly Color ChangedTab = Color.FromArgb(65, 229, 85);
 
 	public static Brush ForegroundBrush => ColorChanger.Instance.GetBrush(ColorChanger.FOREGROUND);
 

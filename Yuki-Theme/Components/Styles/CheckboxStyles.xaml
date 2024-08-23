@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    x:Class="YukiTheme.Components.Styles.CheckboxStyles"
-                    x:ClassModifier="public">
+                    x:Class="YukiTheme.Components.Styles.CheckboxStyles">
     <ImageSource x:Key="checkBoxDefault" />
     <ImageSource x:Key="checkBoxDisabled" />
     <ImageSource x:Key="checkBoxFocused" />
@@ -48,7 +47,7 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="CheckMark" Property="Source" Value="{DynamicResource checkBoxDisabled}" />
                         </MultiTrigger>
-                        
+
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsChecked" Value="False" />
@@ -72,7 +71,7 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="CheckMark" Property="Source" Value="{DynamicResource checkBoxDisabled}" />
                         </MultiTrigger>
-                        
+
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsChecked" Value="True" />
@@ -95,8 +94,8 @@
                                 <Condition Property="IsEnabled" Value="False" />
                             </MultiTrigger.Conditions>
                             <Setter TargetName="CheckMark" Property="Source" Value="{DynamicResource checkBoxSelectedDisabled}" />
-                        </MultiTrigger>     
-                        
+                        </MultiTrigger>
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -106,7 +105,7 @@
     <Style x:Key="CheckBoxWindow" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Foreground}" />
     </Style>
-    
+
     <Style x:Key="CheckBoxUserControl" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckDefault}">
         <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Foreground}" />
     </Style>

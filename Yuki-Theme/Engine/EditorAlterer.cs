@@ -1,42 +1,32 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
-using AdvancedDataGridView;
-using ICSharpCode.TextEditor;
-using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
-using VisualPascalABC.OptionsContent;
-using VisualPascalABCPlugins;
 using YukiTheme.Style;
-using YukiTheme.Tools;
 using static YukiTheme.Engine.ColorChanger;
 
 namespace YukiTheme.Engine;
 
 public class EditorAlterer
 {
-	private Form1 Fm => IDEAlterer.Instance.Form1;
+	private readonly TextEditorChanger _editorChanger = new();
 
-	private EditorComponents EditorComponents => _editorComponents;
-
-	private TextEditorChanger _editorChanger = new();
-
-	private MenuReplacer _menuReplacer = new();
-	private readonly EditorComponents _editorComponents;
+	private readonly MenuReplacer _menuReplacer = new();
 
 	public EditorAlterer()
 	{
-		_editorComponents = new EditorComponents();
+		EditorComponents = new EditorComponents();
 	}
+
+	private Form1 Fm => IDEAlterer.Instance.Form1;
+
+	private EditorComponents EditorComponents { get; }
 
 	internal void GetComponents()
 	{
-		_editorComponents.GetComponents();
-		_editorChanger.Init(_editorComponents);
-		_editorComponents._aboutBox.Shown += UpdateAboutForm;
+		EditorComponents.GetComponents();
+		_editorChanger.Init(EditorComponents);
+		EditorComponents._aboutBox.Shown += UpdateAboutForm;
 	}
 
 	internal void SubscribeComponents()
@@ -74,7 +64,10 @@ public class EditorAlterer
 		};
 	}
 
-	internal void UpdateIconColors() => _editorComponents.UpdateIconColors();
+	internal void UpdateIconColors()
+	{
+		EditorComponents.UpdateIconColors();
+	}
 
 	internal void StartMenuReplacement()
 	{
@@ -85,7 +78,7 @@ public class EditorAlterer
 	{
 		Fm.Focus();
 		Fm.SetFocusToEditor();
-		Timer timer = new Timer();
+		var timer = new Timer();
 		timer.Interval = 10;
 		timer.Tick += (sender, args) =>
 		{
@@ -120,15 +113,9 @@ public class EditorAlterer
 		EditorComponents._statusBar.ForeColor = EditorComponents._toolsPanel.ForeColor = EditorComponents._tools.ForeColor = EditorComponents.ErrorsList.ForeColor = color;
 		EditorComponents._compilerConsole.ForeColor = color;
 
-		foreach (ToolStripItem item in EditorComponents._context.Items)
-		{
-			item.ForeColor = color;
-		}
+		foreach (ToolStripItem item in EditorComponents._context.Items) item.ForeColor = color;
 
-		foreach (ToolStripItem item in EditorComponents._context2.Items)
-		{
-			item.ForeColor = color;
-		}
+		foreach (ToolStripItem item in EditorComponents._context2.Items) item.ForeColor = color;
 	}
 
 	private void UpdateBorder(Color color)
@@ -140,13 +127,11 @@ public class EditorAlterer
 	internal static void ChangeButtonColorsStartingFromBorder(Color color, Control.ControlCollection collection)
 	{
 		foreach (Control o in collection)
-		{
 			if (o is Button)
 			{
-				Button b = (Button)o;
+				var b = (Button)o;
 				UpdateButton(color, b);
 			}
-		}
 	}
 
 	internal static void UpdateButton(Color color, Button b)
@@ -168,12 +153,15 @@ public class EditorAlterer
 		EditorComponents._menu.Renderer = EditorComponents._menuRenderer;
 		EditorComponents._context.Renderer = EditorComponents._menuRenderer;
 		EditorComponents._context2.Renderer = EditorComponents._menuRenderer;
-		ToolRenderer toolrenderer = new ToolRenderer();
+		var toolrenderer = new ToolRenderer();
 		EditorComponents._tools.Renderer = toolrenderer;
 		EditorComponents._tools.Paint += PaintOnToolBar;
 	}
 
-	internal void RequestBottomBarUpdate() => UpdateBottomTextPanel();
+	internal void RequestBottomBarUpdate()
+	{
+		UpdateBottomTextPanel();
+	}
 
 
 	private void RefreshEditorColors()
@@ -189,7 +177,7 @@ public class EditorAlterer
 
 	private void UpdateBottomTextPanel()
 	{
-		RichTextBox oldInputPanel = EditorComponents._outputTextBoxs[Fm.CurrentCodeFileDocument];
+		var oldInputPanel = EditorComponents._outputTextBoxs[Fm.CurrentCodeFileDocument];
 		oldInputPanel.BackColor = Instance.GetColor(BG_DEF);
 		oldInputPanel.BorderStyle = BorderStyle.None;
 	}
@@ -200,19 +188,19 @@ public class EditorAlterer
 		EditorComponents._aboutBox.ForeColor = ColorReference.ForegroundColor;
 		Button btn = null;
 		foreach (Control cont in EditorComponents._aboutBox.Controls)
-		{
 			if (cont is LinkLabel link)
 			{
 				link.LinkColor = ColorReference.ForegroundColor;
 				link.ActiveLinkColor = ColorReference.ForegroundHoverColor;
 			}
 			else if (cont is Button button)
+			{
 				btn = button;
+			}
 			else if (cont is GroupBox group)
 			{
 				group.ForeColor = ColorReference.ForegroundColor;
 				foreach (Control groupControl in group.Controls)
-				{
 					if (groupControl is LinkLabel label)
 					{
 						label.LinkColor = ColorReference.ForegroundColor;
@@ -226,26 +214,16 @@ public class EditorAlterer
 						view.BackColor = ColorReference.BackgroundColor;
 						view.ForeColor = ColorReference.ForegroundColor;
 					}
-				}
 			}
 			else if (cont is TableLayoutPanel table)
 			{
 				table.ForeColor = ColorReference.ForegroundColor;
 				foreach (Control flowLayout in table.Controls)
-				{
 					if (flowLayout is FlowLayoutPanel)
-					{
 						foreach (Control tblControl in flowLayout.Controls)
-						{
 							if (tblControl is Label)
-							{
 								tblControl.ForeColor = tblControl.Name.Contains("Version") ? ColorReference.BorderColor : ColorReference.ForegroundColor;
-							}
-						}
-					}
-				}
 			}
-		}
 
 
 		btn.BackColor = ColorReference.BackgroundColor;

@@ -1,9 +1,8 @@
-﻿namespace YukiTheme.Tools
+﻿namespace YukiTheme.Tools;
+
+public enum Alignment
 {
-	public enum Alignment : int
-	{
-		Left   = 1000,
-		Center = 2,
-		Right  = 1
-	}
+	Left = 1000,
+	Center = 2,
+	Right = 1
 }

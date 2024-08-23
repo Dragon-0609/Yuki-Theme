@@ -11,15 +11,12 @@ public static class StickerPositionConverter
 
 	public static StickerPosition FromString(string data)
 	{
-		if (data.Length < 4)
-		{
-			return new StickerPosition(5, 5, AnchorStyles.Bottom | AnchorStyles.Right);
-		}
+		if (data.Length < 4) return new StickerPosition(5, 5, AnchorStyles.Bottom | AnchorStyles.Right);
 
-		string[] cc = data.Split('|');
-		float x = float.Parse(cc[0]);
-		float y = float.Parse(cc[1]);
-		AnchorStyles align = (AnchorStyles)int.Parse(cc[2]);
+		var cc = data.Split('|');
+		var x = float.Parse(cc[0]);
+		var y = float.Parse(cc[1]);
+		var align = (AnchorStyles)int.Parse(cc[2]);
 
 		return new StickerPosition(x, y, align);
 	}

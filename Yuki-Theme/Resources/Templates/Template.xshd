@@ -68,20 +68,20 @@
             </Span>-->
 
 
-<!--
-            <Span name="AccessModifiers" bold="false" italic="false" color="Red" stopateol="true">
-                <Begin></Begin>
-                <End></End>
-            </Span>-->
-			<!--
+            <!--
+                        <Span name="AccessModifiers" bold="false" italic="false" color="Red" stopateol="true">
+                            <Begin></Begin>
+                            <End></End>
+                        </Span>-->
+            <!--
 
             <KeyWords name="ShortProgram" bold="false" italic="false" color="Green">
                 <Key word="##"/>
                 <Key word="###"/>
             </KeyWords>-->
-            
+
             <MarkPrevious color="METHOD" bold="false" italic="false">(</MarkPrevious>
-            
+
             <KeyWords name="KeyWords" bold="true" italic="false" color="KEYWORD">
                 <Key word="external"/>
                 <Key word="in"/>
@@ -285,16 +285,16 @@
                 <Key word="default"/>
                 <Key word="forward"/>
             </KeyWords>
-			
-			<KeyWords name = "AccessModifiers" bold="true" italic="false" color="KEYWORD">
-				<Key word = "internal" />
-				<Key word = "public" />
-				<Key word = "protected" />
-				<Key word = "private" />
-			</KeyWords>
-<!--			<KeyWords name = "AccessModifiers" bold="true" italic="false" color="Black">-->
-<!--				<Key word = "\w+\(" />-->
-<!--			</KeyWords>-->
+
+            <KeyWords name="AccessModifiers" bold="true" italic="false" color="KEYWORD">
+                <Key word="internal"/>
+                <Key word="public"/>
+                <Key word="protected"/>
+                <Key word="private"/>
+            </KeyWords>
+            <!--			<KeyWords name = "AccessModifiers" bold="true" italic="false" color="Black">-->
+            <!--				<Key word = "\w+\(" />-->
+            <!--			</KeyWords>-->
 
         </RuleSet>
 

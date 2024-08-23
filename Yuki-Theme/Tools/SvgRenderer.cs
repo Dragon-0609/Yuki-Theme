@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -24,7 +23,7 @@ public struct SvgRenderInfo
 		CustomColor = false;
 		Clr = Color.White;
 	}
-	
+
 	public SvgRenderInfo(SvgDocument svg, bool custom, Size cSize, bool customColor, Color clr)
 	{
 		Svg = svg;
@@ -37,14 +36,14 @@ public struct SvgRenderInfo
 
 public static class SvgRenderer
 {
-	private static Size Standart32 = new Size(32, 32);
+	private static readonly Size Standart32 = new(32, 32);
 
 	public static SvgDocument LoadSvg(string name, string nameSpace = "Icons.svg.")
 	{
 		var doc = new XmlDocument();
 		if (!name.EndsWith(".svg")) name += ".svg";
 		doc.Load(ResourceHelper.LoadStream(name, nameSpace));
-		SvgDocument svg = SvgDocument.Open(doc);
+		var svg = SvgDocument.Open(doc);
 		return svg;
 	}
 
@@ -65,7 +64,7 @@ public static class SvgRenderer
 	public static void RenderSvg(Form im, SvgRenderInfo context)
 	{
 		// im.Icon?.Dispose ();
-		IntPtr ptr = ((Bitmap)RenderSvg(Standart32, context)).GetHicon();
+		var ptr = ((Bitmap)RenderSvg(Standart32, context)).GetHicon();
 
 		im.Icon = Icon.FromHandle(ptr);
 		// DestroyIcon (ptr);
@@ -87,8 +86,7 @@ public static class SvgRenderer
 
 		if (!context.Custom)
 			return context.Svg.Draw(im.Width, im.Height);
-		else
-			return context.Svg.Draw(context.CSize.Width, context.CSize.Height);
+		return context.Svg.Draw(context.CSize.Width, context.CSize.Height);
 	}
 
 	public static Image RenderSvg(Size im, SvgDocument svg, Dictionary<string, Color> idColors, bool customColor = false, Color clr = default)
@@ -99,13 +97,11 @@ public static class SvgRenderer
 			svg.Color = new SvgColourServer(ColorReference.ForegroundColor);
 
 		if (idColors != null)
-		{
-			foreach (KeyValuePair<string, Color> idColor in idColors)
+			foreach (var idColor in idColors)
 			{
-				SvgElement element = svg.GetElementById(idColor.Key);
+				var element = svg.GetElementById(idColor.Key);
 				element.Fill = new SvgColourServer(idColor.Value);
 			}
-		}
 
 		return svg.Draw(im.Width, im.Height);
 	}

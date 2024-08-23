@@ -14,36 +14,27 @@ public static class ThemeNameExtractor
 	{
 		PluginEvents.Instance.Reload += LoadThemeInfo;
 	}
-	
+
 	public static void LoadThemeInfo()
 	{
-		string path = GetThemeName();
+		var path = GetThemeName();
 
-		if (!File.Exists(path))
-		{
-			return;
-		}
+		if (!File.Exists(path)) return;
 
-		XmlDocument docu = new XmlDocument();
+		var docu = new XmlDocument();
 		docu.Load(path);
 
-		XmlNode nod = docu.SelectSingleNode("/SyntaxDefinition");
-		XmlNodeList comms = nod.SelectNodes("//comment()");
+		var nod = docu.SelectSingleNode("/SyntaxDefinition");
+		var comms = nod.SelectNodes("//comment()");
 
 		if (comms != null)
-		{
 			foreach (XmlComment comm in comms)
 			{
-				IEnumerable<ThemeLoadInfo> filteredInfos = Infos.Where(i => comm.Value.StartsWith(i.Key));
+				var filteredInfos = Infos.Where(i => comm.Value.StartsWith(i.Key));
 				if (filteredInfos.Any())
-				{
-					foreach (ThemeLoadInfo info in filteredInfos)
-					{
+					foreach (var info in filteredInfos)
 						info.Value(comm.Value.Substring(info.CutNumber));
-					}
-				}
 			}
-		}
 	}
 
 	private static string GetThemeName()

@@ -11,38 +11,35 @@ namespace YukiTheme.Engine;
 
 public class EditorComponents
 {
-	private Form1 Fm => IDEAlterer.Instance.Form1;
-	internal MenuStrip _menu;
-	internal StatusStrip _statusBar;
-	internal Panel _toolsPanel;
-	internal ToolStrip _tools;
-	internal CodeFileDocumentTextEditorControl TextEditor;
-	internal TextArea TextArea;
+	private readonly OptionsChanger _optionsChanger = new();
+	internal AboutBox _aboutBox;
+	private IconAlterer _alterer;
+	internal TextBox _compilerConsole;
 	internal ContextMenuStrip _context;
 	internal ContextMenuStrip _context2;
-	private Control _outputWindow;
-	internal Panel _outputPanel2;
-	internal Panel _outputPanel6;
-	internal RichTextBox _outputOutput;
-	internal Panel _outputInput;
-	internal Panel _outputPanel4;
-	internal Panel _outputPanel3;
-	internal Panel _outputPanel5;
-	internal Panel _outputPanel1;
-	internal TextBox _outputText;
-	internal ListView ErrorsList;
-	internal TextBox _compilerConsole;
-	internal Dictionary<ICodeFileDocument, RichTextBox> _outputTextBoxs;
+	internal MenuStrip _menu;
 	internal MenuRenderer _menuRenderer;
-	internal AboutBox _aboutBox;
-	private readonly OptionsChanger _optionsChanger = new();
 
 	private NameBar _nameBar;
-	private IconAlterer _alterer;
+	internal Panel _outputInput;
+	internal RichTextBox _outputOutput;
+	internal Panel _outputPanel1;
+	internal Panel _outputPanel2;
+	internal Panel _outputPanel3;
+	internal Panel _outputPanel4;
+	internal Panel _outputPanel5;
+	internal Panel _outputPanel6;
+	internal TextBox _outputText;
+	internal Dictionary<ICodeFileDocument, RichTextBox> _outputTextBoxs;
+	private Control _outputWindow;
+	internal StatusStrip _statusBar;
+	internal ToolStrip _tools;
+	internal Panel _toolsPanel;
+	internal ListView ErrorsList;
+	internal TextArea TextArea;
+	internal CodeFileDocumentTextEditorControl TextEditor;
 
-	public EditorComponents()
-	{
-	}
+	private Form1 Fm => IDEAlterer.Instance.Form1;
 
 	internal void GetComponents()
 	{
@@ -97,17 +94,17 @@ public class EditorComponents
 		_outputInput.BorderStyle = BorderStyle.None;
 
 
-		ErrorsListWindowForm erw = (ErrorsListWindowForm)IDEAlterer.Instance.Workbench.ErrorsListWindow;
+		var erw = (ErrorsListWindowForm)IDEAlterer.Instance.Workbench.ErrorsListWindow;
 		ErrorsList = (ListView)erw.Controls.Find("lvErrorsList", false)[0];
 		ErrorsList.OwnerDraw = true;
 		ErrorsList.DrawColumnHeader += ErrorListHeaderDrawer;
 		ErrorsList.DrawItem += (sender, e) => { e.DrawDefault = true; };
 
 
-		CompilerConsoleWindowForm cons = (CompilerConsoleWindowForm)IDEAlterer.Instance.Workbench.CompilerConsoleWindow;
+		var cons = (CompilerConsoleWindowForm)IDEAlterer.Instance.Workbench.CompilerConsoleWindow;
 		_compilerConsole = (TextBox)cons.Controls.Find("CompilerConsole", false)[0];
 
-		FieldInfo fp = typeof(Form1).GetField("OutputTextBoxs", BindingFlags.Instance | BindingFlags.NonPublic);
+		var fp = typeof(Form1).GetField("OutputTextBoxs", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		_outputTextBoxs = (Dictionary<ICodeFileDocument, RichTextBox>)fp.GetValue(Fm);
 
