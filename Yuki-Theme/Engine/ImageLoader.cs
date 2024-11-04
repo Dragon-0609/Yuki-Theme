@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -47,7 +48,8 @@ public class ImageLoader
 	internal void LoadImages()
 	{
 		RemoveLastImage();
-		var png = Directory.GetFiles(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, ImagesFolder), PngFilter);
+		var png = Directory.GetFiles(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, ImagesFolder),
+			PngFilter);
 		if (png.Length > 0)
 		{
 			var wallpaperCondition = png.Where(p => Path.GetFileNameWithoutExtension(p).ToLower() == _wallpaperName);
@@ -58,6 +60,8 @@ public class ImageLoader
 				wallpaperFileName = wallpaperCondition.First();
 			else
 				wallpaperFileName = ordered.First();
+
+			Console.WriteLine($"File size: {new FileInfo(wallpaperFileName).Length}");
 
 			GetWallpaper = Image.FromFile(wallpaperFileName);
 
@@ -110,7 +114,8 @@ public class ImageLoader
 
 				attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-				gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attributes);
+				gfx.DrawImage(image, new Rectangle(0, 0, bmp.Width, bmp.Height), 0, 0, image.Width, image.Height,
+					GraphicsUnit.Pixel, attributes);
 				image.Dispose();
 			}
 

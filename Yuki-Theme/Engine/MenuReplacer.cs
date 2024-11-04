@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using VisualPascalABC;
+using Yuki_Theme_Plugin;
 using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
@@ -28,6 +30,7 @@ public class MenuReplacer
 	private ToolStripMenuItem _stick;
 	private ToolStripMenuItem _switchTheme;
 	private ToolStripMenuItem _updatePage;
+	private ToolStripMenuItem _props;
 
 	internal void AddMenuItemsWithDelay(MenuStrip menu)
 	{
@@ -91,6 +94,8 @@ public class MenuReplacer
 			_resetStickerPosition = CreateMenuItem("Reset Sticker Margins", ResetStickerPosition);
 			_updatePage = CreateMenuItem("Show Update Notification", ShowUpdatePage);
 
+			// _props = CreateMenuItem("UI Debug", OpenProps);
+
 			UpdateMenuIcons();
 			_updatePage.Image = _menuSettings.Image;
 
@@ -102,8 +107,16 @@ public class MenuReplacer
 			main.DropDownItems.Add(_menuSettings);
 			main.DropDownItems.Add(_resetStickerPosition);
 			main.DropDownItems.Add(_updatePage);
+			// main.DropDownItems.Add(_props);
 			MoveIconToTop(ow, main);
 		}
+	}
+
+	private void OpenProps(object sender, EventArgs e)
+	{
+		var props = new Props();
+		props.propertyGrid1.SelectedObject = props.root = ReferenceForm.Instance; //IDEAlterer.Instance.Form1;
+		props.Show();
 	}
 
 	private void UpdateMenuIcons()
@@ -126,9 +139,9 @@ public class MenuReplacer
 		if (item2 != null) item2.Image = image;
 	}
 
-	private static void CleanMenuItemIcon(ToolStripMenuItem item1)
+	private static void CleanMenuItemIcon(ToolStripMenuItem item)
 	{
-		if (item1 is { Image: { } }) item1.Image.Dispose();
+		if (item is { Image: not null }) item.Image.Dispose();
 	}
 
 	private void FindPluginItem()
@@ -198,7 +211,8 @@ public class MenuReplacer
 
 	private void StickersPositioning(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.ALLOW_POSITIONING, DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING, false));
+		DatabaseManager.Save(SettingsConst.ALLOW_POSITIONING,
+			DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING, false));
 	}
 
 	private void ResetStickerPosition(object sender, EventArgs e)
@@ -260,9 +274,12 @@ public class MenuReplacer
 			_baseIcons[icon] = null;
 		}
 
+		color = Color.White;
 		var document = SvgRenderer.LoadSvg(icon, "Icons.");
-		var context = new SvgRenderInfo(document, false, Size.Empty, color != default, color == default ? Color.Red : color);
+		var context = new SvgRenderInfo(document, false, Size.Empty, color != default,
+			color == default ? Color.Red : color);
 		var image = SvgRenderer.RenderSvg(new Size(32, 32), context);
+
 		_baseIcons[icon] = image;
 		return image;
 	}

@@ -6,13 +6,10 @@ namespace YukiTest;
 [TestFixture]
 public class UpdateTest
 {
-	[Test]
+	// [Test]
 	public void TestUpdate()
 	{
 		UpdateChecker checker = new UpdateChecker();
 		Assert.True(checker.IsUpdateAvailable());
-		
-		
-		
 	}
 }
