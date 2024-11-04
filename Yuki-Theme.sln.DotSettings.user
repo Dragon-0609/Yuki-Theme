@@ -1,4 +1,14 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005Cpascalabcnet_002Dmaster_005Cbin_005CSvg_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CExCSS_002E4_002E2_002E3_005Clib_005Cnet48_005CExCSS_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CNewtonsoft_002EJson_002E13_002E0_002E3_005Clib_005Cnet45_005CNewtonsoft_002EJson_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CSvg_002E3_002E4_002E7_005Clib_005Cnet472_005CSvg_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CSvg_002E3_002E4_002E7_005Clib_005Cnet481_005CSvg_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CSystem_002EBuffers_002E4_002E5_002E1_005Clib_005Cnet461_005CSystem_002EBuffers_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CSystem_002EMemory_002E4_002E5_002E5_005Clib_005Cnet461_005CSystem_002EMemory_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Csystem_002Enumerics_002Evectors_002E4_002E5_002E0_005Clib_005Cnet46_005CSystem_002ENumerics_002EVectors_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005CSystem_002ERuntime_002ECompilerServices_002EUnsafe_002E4_002E5_002E3_005Clib_005Cnet461_005CSystem_002ERuntime_002ECompilerServices_002EUnsafe_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=C_003A_005CData_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Csystem_002Eruntime_002Ecompilerservices_002Eunsafe_002E6_002E0_002E0_005Clib_005Cnet461_005CSystem_002ERuntime_002ECompilerServices_002EUnsafe_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CCodeCompletion_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CCompiler_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CPascalABCNET_005Cbin_005CLocalization_002Edll/@EntryIndexedValue">True</s:Boolean>
@@ -17,7 +27,7 @@
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\fizzler.1.3.0\lib\netstandard2.0\Fizzler.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\excss.4.1.4\lib\net452\ExCSS.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\User\AppData\Local\JetBrains\Rider2022.1\resharper-host\temp\Rider\vAny\CoverageData\_Yuki-Theme.1115810442\Snapshot\snapshot.utdcvr</s:String>
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8355adb5_002D3688_002D4761_002D8915_002D817782f22df9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

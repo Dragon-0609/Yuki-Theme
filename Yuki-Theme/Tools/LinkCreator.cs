@@ -21,8 +21,10 @@ public class LinkCreator
 		var stickerExtension = "sticker.png";
 		var backgroundExtension = "background.png";
 		CheckFiles();
-		if (IsValid(themeExtension, false) && IsValid(backgroundExtension, true) && IsValid(stickerExtension, true)) return false;
+		if (IsValid(themeExtension, false) && IsValid(backgroundExtension, true) &&
+		    IsValid(stickerExtension, true)) return false;
 
+		IDEConsole.Log($"Running utility");
 		IDEAlterer.ReleaseImages();
 		RunUtility();
 
@@ -74,12 +76,15 @@ public class LinkCreator
 		var backgroundExtension = "background.png";
 
 		var theme = Path.Combine(_folder, themeExtension);
+		Console.WriteLine($"Does exist: {theme}, {!File.Exists(theme)}");
 		if (!File.Exists(theme)) CopyDefault(themeExtension, _folder);
 
 		var background = Path.Combine(_folder, backgroundExtension);
+		Console.WriteLine($"Does exist: {background}, {!File.Exists(background)}");
 		if (!File.Exists(background)) CopyDefault(backgroundExtension, _folder);
 
 		var sticker = Path.Combine(_folder, stickerExtension);
+		Console.WriteLine($"Does exist: {sticker}, {!File.Exists(sticker)}");
 		if (!File.Exists(sticker)) CopyDefault(stickerExtension, _folder);
 	}
 
@@ -99,10 +104,14 @@ public class LinkCreator
 
 	private void RunUtility()
 	{
-		var psi = new ProcessStartInfo(Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
+		var psi = new ProcessStartInfo(
+			Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
 		// psi.CreateNoWindow = true;
 		// psi.UseShellExecute = false;
-		Process.Start(psi).WaitForExit();
+		bool exited = Process.Start(psi).WaitForExit(5000);
+		if (!exited)
+		{
+		}
 	}
 
 	private static string GetHighlighting(string file)

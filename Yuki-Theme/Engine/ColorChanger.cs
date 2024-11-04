@@ -45,13 +45,19 @@ public class ColorChanger
 
 	private string[] _keys =
 	{
-		BG, BG_DEF, CLICK_BG, CLICK_BG2, CLICK_BG3, SELECTION, BG_INACTIVE, BORDER, BORDER_THICK, TYPE, FOREGROUND, FG_HOVER, KEYWORD
+		BG, BG_DEF, CLICK_BG, CLICK_BG2, CLICK_BG3, SELECTION, BG_INACTIVE, BORDER, BORDER_THICK, TYPE, FOREGROUND,
+		FG_HOVER, KEYWORD
 	};
 
 	private Dictionary<string, Pen> _pens = new();
 
-	public Action<string, Color> Update = (key, color) => { };
-	internal Action UpdatedColors = () => { };
+	public Action<string, Color> Update = (key, color) =>
+	{
+	};
+
+	internal Action UpdatedColors = () =>
+	{
+	};
 
 	public ColorChanger()
 	{

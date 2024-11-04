@@ -32,26 +32,27 @@ public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 
 	public string Version => "1.0";
 
-	public string Copyright => "Copyright © 2021-2023 by Dragon-LV";
+	public string Copyright => "Copyright © 2021-2024 by Dragon-LV";
 
 	public void GetGUI(List<IPluginGUIItem> MenuItems, List<IPluginGUIItem> ToolBarItems)
 	{
-		var Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ResourceHelper.LoadImage("yuki128_2.png"), Color.Black, () => { });
+		var Item = new PluginGUIItem("Yuki Theme", "Yuki Theme", ResourceHelper.LoadImage("yuki128_2.png"), Color.Black,
+			() =>
+			{
+			});
 		MenuItems.Add(Item);
-		Console.WriteLine("Adding");
+		LinkCreator creator = new();
+		if (creator.CheckLinks())
+		{
+		}
+
 		_timer = new Stopwatch();
 		_timer.Start();
 		_alterer.Init();
 
-		LinkCreator creator = new();
-		if (creator.CheckLinks())
-		{
-			_reload = true;
-			_alterer.Reload();
-		}
 
 		new WpfColorContainer();
-		// ToolBarItems.Add(Item);
+		ToolBarItems.Add(Item);
 	}
 
 	internal static void StopTimer()

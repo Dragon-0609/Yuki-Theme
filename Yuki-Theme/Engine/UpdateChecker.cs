@@ -10,7 +10,9 @@ namespace YukiTheme.Engine;
 
 public class UpdateChecker
 {
-	private const string USER_AGENT = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
+	private const string USER_AGENT =
+		"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
+
 	private const string STABLE_URL = "https://api.github.com/repos/dragon-0609/yuki-theme/releases";
 	private readonly string _githubUrl = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 	private bool _isAvailable = false;
@@ -45,7 +47,7 @@ public class UpdateChecker
 				var json = await response.Content.ReadAsStringAsync();
 				JObject jresponse;
 
-				jresponse = (JObject)JArray.Parse (json).First;
+				jresponse = (JObject)JArray.Parse(json).First;
 
 				var tg = jresponse["tag_name"].ToString();
 
@@ -55,7 +57,7 @@ public class UpdateChecker
 
 				var nextVer = double.Parse(nextVersion, CultureInfo.InvariantCulture);
 				_isAvailable = IsNewVersion(nextVer) || (Math.Abs(SettingsConst.CURRENT_VERSION - nextVer) < 1 &&
-				                                                           SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
+				                                         SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
 				if (_isAvailable) PrepareForDownloading(jresponse);
 				// afterParsing(available);
 			}

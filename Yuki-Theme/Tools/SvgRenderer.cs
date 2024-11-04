@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using Svg;
@@ -42,7 +43,8 @@ public static class SvgRenderer
 	{
 		var doc = new XmlDocument();
 		if (!name.EndsWith(".svg")) name += ".svg";
-		doc.Load(ResourceHelper.LoadStream(name, nameSpace));
+		Stream stream = ResourceHelper.LoadStream(name, nameSpace);
+		doc.Load(stream);
 		var svg = SvgDocument.Open(doc);
 		return svg;
 	}
@@ -74,7 +76,9 @@ public static class SvgRenderer
 	{
 		im.Image?.Dispose();
 
-		im.Image = RenderSvg(im.Size, context);
+		Image svg = RenderSvg(im.Size, context);
+		IDEConsole.Log($"Loaded not null: {svg != null}");
+		im.Image = svg;
 	}
 
 	public static Image RenderSvg(Size im, SvgRenderInfo context)
@@ -86,10 +90,12 @@ public static class SvgRenderer
 
 		if (!context.Custom)
 			return context.Svg.Draw(im.Width, im.Height);
-		return context.Svg.Draw(context.CSize.Width, context.CSize.Height);
+		var svg = context.Svg.Draw(context.CSize.Width, context.CSize.Height);
+		return svg;
 	}
 
-	public static Image RenderSvg(Size im, SvgDocument svg, Dictionary<string, Color> idColors, bool customColor = false, Color clr = default)
+	public static Image RenderSvg(Size im, SvgDocument svg, Dictionary<string, Color> idColors,
+		bool customColor = false, Color clr = default)
 	{
 		if (customColor)
 			svg.Color = new SvgColourServer(clr);

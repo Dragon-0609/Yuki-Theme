@@ -6,21 +6,21 @@
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <method v="2">
-      <option name="Build" default="false" projectName="Yuki-Theme" projectPath="file://$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
+      <option name="Build" default="false" projectName="Yuki-Theme" projectPath="$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
       <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy" />
     </method>
   </configuration>
   <configuration default="false" name="Yuki Theme" type="RunNativeExe" factoryName="Native Executable">
-    <option name="EXE_PATH" value="$PROJECT_DIR$/../PascalABCNET/bin/PascalABCNET.exe" />
+    <option name="EXE_PATH" value="$PROJECT_DIR$/../pascalabcnet-master/bin/PascalABCNET.exe" />
     <option name="PROGRAM_PARAMETERS" value="" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../PascalABCNET/bin" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../pascalabcnet-master/bin" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <method v="2">
-      <option name="Build" default="false" projectName="Yuki-Theme" projectPath="file://$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
-      <option name="Build" default="false" projectName="YukiUtility" projectPath="file://$PROJECT_DIR$/YukiUtility/YukiUtility.csproj" />
-      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy Utility" />
-      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_Copy Utility" />
+      <option name="Build" default="false" projectName="Yuki-Theme" projectPath="$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
+      <option name="Build" default="false" projectName="YukiUtility" projectPath="$PROJECT_DIR$/YukiUtility/YukiUtility.csproj" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_copy" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_copyUtility" />
     </method>
   </configuration>
 </component>

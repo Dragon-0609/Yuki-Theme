@@ -5,6 +5,7 @@ using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
 using YukiTheme.Components;
+using YukiTheme.Components.TempForm;
 using YukiTheme.Style;
 
 namespace YukiTheme.Engine;
@@ -32,12 +33,19 @@ public class EditorComponents
 	internal TextBox _outputText;
 	internal Dictionary<ICodeFileDocument, RichTextBox> _outputTextBoxs;
 	private Control _outputWindow;
+	internal ProjectExplorerForm _projectWindow;
+	internal TreeView _tvProjectExplorer;
+	internal Control _projectSplitter;
 	internal StatusStrip _statusBar;
 	internal ToolStrip _tools;
 	internal Panel _toolsPanel;
 	internal ListView ErrorsList;
 	internal TextArea TextArea;
 	internal CodeFileDocumentTextEditorControl TextEditor;
+
+	internal ReferenceForm _referenceWindow;
+	internal Control _referenceList;
+	internal TabControl _referenceTabsController;
 
 	private Form1 Fm => IDEAlterer.Instance.Form1;
 
@@ -80,6 +88,7 @@ public class EditorComponents
 	private void GetBottomComponents()
 	{
 		_outputWindow = (Control)IDEAlterer.Instance.Workbench.OutputWindow;
+		TryToGetProjectWindow();
 		_outputPanel2 = (Panel)_outputWindow.Controls.Find("panel2", false)[0];
 		_outputPanel6 = (Panel)_outputPanel2.Controls.Find("panel6", false)[0];
 		_outputOutput = (RichTextBox)_outputPanel6.Controls.Find("outputTextBox", false)[0];
@@ -98,8 +107,12 @@ public class EditorComponents
 		ErrorsList = (ListView)erw.Controls.Find("lvErrorsList", false)[0];
 		ErrorsList.OwnerDraw = true;
 		ErrorsList.DrawColumnHeader += ErrorListHeaderDrawer;
-		ErrorsList.DrawItem += (sender, e) => { e.DrawDefault = true; };
+		ErrorsList.DrawItem += (sender, e) =>
+		{
+			e.DrawDefault = true;
+		};
 
+		GetReferenceForm();
 
 		var cons = (CompilerConsoleWindowForm)IDEAlterer.Instance.Workbench.CompilerConsoleWindow;
 		_compilerConsole = (TextBox)cons.Controls.Find("CompilerConsole", false)[0];
@@ -112,6 +125,38 @@ public class EditorComponents
 
 		_statusBar.Items.Add(_nameBar.GetControl());
 		_statusBar.Renderer = new ToolRenderer();
+	}
+
+	private void GetReferenceForm()
+	{
+		_referenceWindow = ReferenceForm.Instance;
+		if (ReferenceWindowClone.Get(_referenceWindow, nameof(ReferenceWindowClone.lvGac), out ListView lv))
+		{
+			_referenceList = lv;
+		}
+
+		if (ReferenceWindowClone.Get(_referenceWindow, nameof(ReferenceWindowClone.tabControl1),
+			    out TabControl tabControl1))
+		{
+			_referenceTabsController = tabControl1;
+		}
+	}
+
+	private void TryToGetProjectWindow()
+	{
+		FieldInfo field = IDEAlterer.Instance.Form1.GetType()
+			.GetField("ProjectExplorerWindow", BindingFlags.NonPublic | BindingFlags.Instance);
+		if (field == null) return;
+		_projectWindow = (ProjectExplorerForm)field.GetValue(IDEAlterer.Instance.Form1);
+		if (_projectWindow != null)
+		{
+			_tvProjectExplorer = (TreeView)_projectWindow.Controls.Find("tvProjectExplorer", false)[0];
+			_projectSplitter = _projectWindow.Parent.Parent.Controls[0];
+		}
+		else
+		{
+			_tvProjectExplorer = null;
+		}
 	}
 
 	private void GetAboutForm()

@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using VisualPascalABC;
+using YukiTheme.Components.TempForm;
 using YukiTheme.Style;
 using static YukiTheme.Engine.ColorChanger;
 
@@ -93,34 +95,80 @@ public class EditorAlterer
 	private void UpdateBackground(Color color)
 	{
 		Fm.BackColor = EditorComponents._menu.BackColor =
-			EditorComponents._statusBar.BackColor = EditorComponents._toolsPanel.BackColor = EditorComponents._tools.BackColor = color;
-		Fm.cmEditor.BackColor = EditorComponents.TextEditor.Parent.BackColor = Fm.CurrentCodeFileDocument.BackColor = Fm.BottomPane.Parent.BackColor = color;
+			EditorComponents._statusBar.BackColor =
+				EditorComponents._toolsPanel.BackColor = EditorComponents._tools.BackColor = color;
+		Fm.cmEditor.BackColor = EditorComponents.TextEditor.Parent.BackColor =
+			Fm.CurrentCodeFileDocument.BackColor = Fm.BottomPane.Parent.BackColor = color;
 		EditorComponents._context2.BackColor = color;
+		if (EditorComponents._projectWindow != null)
+		{
+			EditorComponents._projectSplitter.BackColor = color;
+		}
+
+		// TODO: Later change colors for references window
+
+		if (EditorComponents._referenceList != null)
+		{
+			EditorComponents._referenceList.BackColor = color;
+		}
+
+		if (EditorComponents._referenceTabsController != null)
+		{
+			EditorComponents._referenceTabsController.BackColor = color;
+		}
 	}
 
 	private void UpdateBackgroundDefault(Color color)
 	{
 		EditorComponents._outputPanel2.BackColor =
-			EditorComponents._outputPanel6.BackColor = EditorComponents._outputInput.BackColor = EditorComponents._outputPanel4.BackColor = color;
+			EditorComponents._outputPanel6.BackColor = EditorComponents._outputInput.BackColor =
+				EditorComponents._outputPanel4.BackColor = color;
 		EditorComponents._outputPanel3.BackColor =
-			EditorComponents._outputPanel5.BackColor = EditorComponents._outputPanel1.BackColor = EditorComponents._outputText.BackColor = color;
-		EditorComponents._outputOutput.BackColor = Fm.ProjectPane.BackColor = EditorComponents.ErrorsList.BackColor = EditorComponents._compilerConsole.BackColor = color;
+			EditorComponents._outputPanel5.BackColor = EditorComponents._outputPanel1.BackColor =
+				EditorComponents._outputText.BackColor = color;
+		EditorComponents._outputOutput.BackColor = Fm.ProjectPane.BackColor =
+			EditorComponents.ErrorsList.BackColor = EditorComponents._compilerConsole.BackColor = color;
+
+		if (EditorComponents._projectWindow != null)
+		{
+			EditorComponents._tvProjectExplorer.BackColor = color;
+		}
+
+		EditorComponents._referenceWindow.BackColor = color;
 	}
 
 	private void UpdateForeground(Color color)
 	{
-		EditorComponents._outputOutput.ForeColor = EditorComponents._outputPanel2.ForeColor = EditorComponents._outputText.ForeColor = EditorComponents._menu.ForeColor = color;
-		EditorComponents._statusBar.ForeColor = EditorComponents._toolsPanel.ForeColor = EditorComponents._tools.ForeColor = EditorComponents.ErrorsList.ForeColor = color;
+		EditorComponents._outputOutput.ForeColor = EditorComponents._outputPanel2.ForeColor =
+			EditorComponents._outputText.ForeColor = EditorComponents._menu.ForeColor = color;
+		EditorComponents._statusBar.ForeColor = EditorComponents._toolsPanel.ForeColor =
+			EditorComponents._tools.ForeColor = EditorComponents.ErrorsList.ForeColor = color;
 		EditorComponents._compilerConsole.ForeColor = color;
 
 		foreach (ToolStripItem item in EditorComponents._context.Items) item.ForeColor = color;
 
 		foreach (ToolStripItem item in EditorComponents._context2.Items) item.ForeColor = color;
+
+		if (EditorComponents._projectWindow != null)
+		{
+			EditorComponents._tvProjectExplorer.ForeColor = color;
+		}
+
+		if (EditorComponents._referenceList != null)
+		{
+			EditorComponents._referenceList.ForeColor = color;
+		}
+
+		if (EditorComponents._referenceTabsController != null)
+		{
+			EditorComponents._referenceTabsController.ForeColor = color;
+		}
 	}
 
 	private void UpdateBorder(Color color)
 	{
 		ChangeButtonColorsStartingFromBorder(color, EditorComponents._outputPanel1.Controls);
+		ChangeButtonColorsStartingFromBorder(color, EditorComponents._referenceWindow.Controls);
 	}
 
 
@@ -210,7 +258,10 @@ public class EditorAlterer
 					{
 						view.OwnerDraw = true;
 						view.DrawColumnHeader += EditorComponents.ErrorListHeaderDrawer;
-						view.DrawItem += (_, e) => { e.DrawDefault = true; };
+						view.DrawItem += (_, e) =>
+						{
+							e.DrawDefault = true;
+						};
 						view.BackColor = ColorReference.BackgroundColor;
 						view.ForeColor = ColorReference.ForegroundColor;
 					}
@@ -222,7 +273,9 @@ public class EditorAlterer
 					if (flowLayout is FlowLayoutPanel)
 						foreach (Control tblControl in flowLayout.Controls)
 							if (tblControl is Label)
-								tblControl.ForeColor = tblControl.Name.Contains("Version") ? ColorReference.BorderColor : ColorReference.ForegroundColor;
+								tblControl.ForeColor = tblControl.Name.Contains("Version")
+									? ColorReference.BorderColor
+									: ColorReference.ForegroundColor;
 			}
 
 
@@ -236,7 +289,8 @@ public class EditorAlterer
 
 	private void PaintOnToolBar(object sender, PaintEventArgs e)
 	{
-		e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen, e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width,
+		e.Graphics.DrawLine(ColorReference.BackgroundClick3Pen, e.ClipRectangle.X, e.ClipRectangle.Y,
+			e.ClipRectangle.Width,
 			e.ClipRectangle.Y);
 	}
 }
