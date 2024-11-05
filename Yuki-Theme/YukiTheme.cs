@@ -30,7 +30,9 @@ public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 	public static string GetCurrentFolder => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 	public string Name => "Yuki Theme";
 
-	public string Version => "1.0";
+	public string Version => "9.0 Alpha";
+
+	public static string VersionStatic => _instance.Version;
 
 	public string Copyright => "Copyright © 2021-2024 by Dragon-LV";
 
@@ -52,7 +54,7 @@ public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 
 
 		new WpfColorContainer();
-		ToolBarItems.Add(Item);
+		// ToolBarItems.Add(Item);
 	}
 
 	internal static void StopTimer()

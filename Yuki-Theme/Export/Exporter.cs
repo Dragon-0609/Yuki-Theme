@@ -5,7 +5,9 @@ namespace YukiTheme.Engine;
 
 public abstract class Exporter
 {
-	protected readonly string _folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "YukiTheme");
+	protected readonly string _folder =
+		Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments), "YukiTheme");
+
 	protected readonly string BackgroundName = "background.png";
 
 

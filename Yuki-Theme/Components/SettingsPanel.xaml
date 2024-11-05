@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:controls="clr-namespace:Yuki_Theme.Core.WPF.Controls"
+             xmlns:components="clr-namespace:YukiTheme.Components"
              mc:Ignorable="d"
              d:DesignHeight="253" d:DesignWidth="405" Background="Gray">
     <UserControl.Resources>
@@ -30,7 +30,8 @@
 
             <WrapPanel>
                 <TextBlock Text="Current theme: " />
-                <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}" Name="Themes" SelectedIndex="0" />
+                <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}" Name="Themes"
+                          SelectedIndex="0" />
             </WrapPanel>
 
             <GroupBox Margin="0 5" Header="{DynamicResource settings.general.sticker.title}"
@@ -72,7 +73,8 @@
                             <WrapPanel Orientation="Vertical">
                                 <Button Padding="8 2" Margin="0"
                                         Content="{DynamicResource settings.general.positioning.reset}"
-                                        Name="ResetMargin" Style="{StaticResource ButtonUserControl}" Click="ResetMargin_Click" />
+                                        Name="ResetMargin" Style="{StaticResource ButtonUserControl}"
+                                        Click="ResetMargin_Click" />
                                 <!-- <controls:InfoLabel Text="{DynamicResource settings.general.positioning.save}" Image="{DynamicResource InfoImage}" /> -->
                             </WrapPanel>
                         </WrapPanel>
@@ -111,7 +113,7 @@
                                 <TextBlock Margin="4 0 4 0" Style="{StaticResource TextBlockUserControl}"
                                            VerticalAlignment="Center"
                                            Text="{DynamicResource settings.general.dimension.max.px}" />
-                                <controls:IntegerUpDown
+                                <components:IntegerUpDown
                                     FontSize="12" Text="-1" BorderBrush="DimGray" Padding="2 2"
                                     VerticalAlignment="Center" Width="70" Height="30"
                                     Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
@@ -133,6 +135,10 @@
 
                 </Grid>
             </GroupBox>
+
+            <WrapPanel>
+                <TextBlock Name="VersionText" Text="Version" />
+            </WrapPanel>
 
         </StackPanel>
     </ScrollViewer>

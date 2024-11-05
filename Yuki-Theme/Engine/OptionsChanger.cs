@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
-using Yuki_Theme_Plugin.Controls;
+using YukiTheme.Components;
 using YukiTheme.Tools;
 using static YukiTheme.Engine.ColorChanger;
 
@@ -26,6 +26,7 @@ public class OptionsChanger
 	private TreeView _optionsTree;
 	private KeyValuePair<TreeNode, IOptionsContent> _pluginNode;
 	private bool SelectYukiThemeNode;
+	private PluginSettingsControl _content;
 
 	internal void GetOptionsComponents(Form1 form1)
 	{
@@ -33,15 +34,15 @@ public class OptionsChanger
 		_fm = form1;
 		_optionsEngine = _fm.GetByReflection<OptionsContentEngine>("optionsContentEngine");
 
-		var content = new PluginSettingsControl();
-		_optionsEngine.AddContent(content);
+		_content = new PluginSettingsControl();
+		_optionsEngine.AddContent(_content);
 
 		_optionsForm = new OptionsForm(_optionsEngine);
 		_optionsForm.Shown += SelectPluginNode;
 		_optionsTree = _optionsForm.GetByReflection<TreeView>("tvContentList");
 		_optionsTree.AfterSelect += AfterOptionsTreeSelected;
 
-		GetPluginNode(content);
+		GetPluginNode(_content);
 
 
 		_optionsContentPanel = _optionsForm.GetByReflection<Panel>("contentPanel");
@@ -62,6 +63,8 @@ public class OptionsChanger
 		var nodes = _optionsForm.GetByReflection<Dictionary<TreeNode, IOptionsContent>>("nodes");
 		_pluginNode = nodes.First(n => n.Key.Text == content.ContentName);
 	}
+
+	public Form GetSettingsParent() => _content.ExtractOptionsParent();
 
 	private void SelectPluginNode(object sender, EventArgs e)
 	{
@@ -134,7 +137,8 @@ public class OptionsChanger
 		if (_lastIndex >= 0)
 		{
 			if (_lastIndex < comboBox.Items.Count)
-				DrawComboBoxItem(e, _lastRectangle, ColorReference.BackgroundBrush, comboBox.Items[_lastIndex].ToString());
+				DrawComboBoxItem(e, _lastRectangle, ColorReference.BackgroundBrush,
+					comboBox.Items[_lastIndex].ToString());
 			_lastIndex = -1;
 		}
 

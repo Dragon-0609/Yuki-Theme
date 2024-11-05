@@ -4,7 +4,8 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:components="clr-namespace:YukiTheme.Components"
-                       mc:Ignorable="d" Background="Transparent" BorderThickness="0" WindowStyle="None" ResizeMode="NoResize"
+                       mc:Ignorable="d" Background="Transparent" BorderThickness="0" WindowStyle="None"
+                       ResizeMode="NoResize"
                        AllowsTransparency="True"
                        Title="StickerWindow" Height="200" Width="200"
                        MouseEnter="Sticker_MouseEnter" MouseLeave="Sticker_MouseLeave">

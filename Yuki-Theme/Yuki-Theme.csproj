@@ -103,6 +103,9 @@
         <Compile Include="Components\AlignmentHelper.cs">
             <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Components\CustomStickerWindow.xaml.cs">
+          <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Components\GridWindow.xaml.cs"/>
         <Compile Include="Components\IntegerUpDown.xaml.cs"/>
         <Compile Include="Components\NameBar.cs"/>
@@ -110,11 +113,12 @@
         <Compile Include="Components\PluginSettingsControl.Designer.cs"/>
         <Compile Include="Components\SettingsPanel.xaml.cs"/>
         <Compile Include="Components\SettingsPanelUtilities.cs"/>
-        <Compile Include="Components\SilentTextBox.cs"/>
-        <Compile Include="Components\SnapWindow.cs"/>
-        <Compile Include="Components\SnapWindowAlign.cs"/>
-        <Compile Include="Components\StickerWindow.xaml.cs"/>
-        <Compile Include="Components\Styles\CheckboxStyles.xaml.cs"/>
+        <Compile Include="Components\Setting\SettingItem.cs" />
+        <Compile Include="Components\SilentTextBox.cs" />
+        <Compile Include="Components\SnapWindow.cs" />
+        <Compile Include="Components\SnapWindowAlign.cs" />
+        <Compile Include="Components\StickerWindow.xaml.cs" />
+        <Compile Include="Components\Styles\CheckboxStyles.xaml.cs" />
         <Compile Include="Components\TempForm\ReferenceWindowClone.cs" />
         <Compile Include="Components\ThemeSelectWindow.xaml.cs">
             <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
@@ -673,6 +677,7 @@
         <Content Include="Style\Resources\Thumbs.db" />
     </ItemGroup>
     <ItemGroup>
+        <Page Include="Components\CustomStickerWindow.xaml" />
         <Page Include="Components\GridWindow.xaml" />
         <Page Include="Components\IntegerUpDown.xaml" />
         <Page Include="Components\SettingsPanel.xaml" />

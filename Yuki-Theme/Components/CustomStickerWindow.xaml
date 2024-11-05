@@ -1,0 +1,70 @@
+﻿<Window x:Class="YukiTheme.Components.CustomStickerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:components="clr-namespace:YukiTheme.Components"
+        xmlns:tools="clr-namespace:YukiTheme.Tools"
+        mc:Ignorable="d" BorderThickness="0" WindowStyle="None"
+        ResizeMode="NoResize" Title="CustomStickerWindow" Height="120" Width="400">
+    <Window.Tag>
+        <tools:WpfColorContainer BorderColor="#97A0A5" SelectionColor="#4F4F4F" KeywordColor="#4F4F4F"
+                                 BorderBrush="#97A0A5" SelectionBrush="#4F4F4F" KeywordBrush="#4F4F4F"
+                                 BackgroundClickColor="#4F4F4F" BackgroundClickBrush="#4F4F4F"
+                                 BackgroundDefaultColor="#323232" BackgroundDefaultBrush="#323232" />
+    </Window.Tag>
+
+    <Window.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/Strings.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBoxStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Center" FontSize="20" Style="{StaticResource TextBlockWindow}">Custom Sticker</TextBlock>
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="35" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Name="ImagePath" Margin="10 0 0 0" FontSize="12" Text=""
+                     Padding="2 0" VerticalAlignment="Center" Height="25"
+                     Style="{StaticResource TextBoxWindow}" />
+            <Button Grid.Column="1" Margin="0 0 5 0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25"
+                    Height="25"
+                    Click="SelectImageClicked">
+                ...
+            </Button>
+
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 5 0 5">
+
+            <Button Click="ClickedSave" Margin="0 0 20 0" Width="80" VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                Save
+            </Button>
+            <Button Click="ClickedCancel" Margin="0 0 20 0" Width="80" VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+                Cancel
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Window>

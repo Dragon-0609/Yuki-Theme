@@ -92,7 +92,6 @@ public class WallpaperManager : WindowManager
 		if (!IsWindowNull())
 		{
 			_wallpaper.Wallpaper.HorizontalAlignment = GetXAlign();
-			IDEConsole.Log($"{_wallpaper.AlignX}, {_align}, {_wallpaper.BorderOutlineX}, {_wallpaper.BorderOutlineY}");
 			_wallpaper.ResetPosition();
 		}
 	}

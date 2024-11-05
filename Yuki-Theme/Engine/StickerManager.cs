@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components;
+using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;
 
@@ -32,6 +33,8 @@ public class StickerManager : WindowManager
 			_sticker.ResetPosition();
 		};
 		UpdateCap();
+
+		PluginEvents.Instance.CustomStickerPathChanged += UpdateSticker;
 	}
 
 	internal override bool IsWindowNull()

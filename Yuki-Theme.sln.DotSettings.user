@@ -21,6 +21,7 @@
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Csystem_002Ememory_002E4_002E5_002E5_005Clib_005Cnet461_005CSystem_002EMemory_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Csystem_002Enumerics_002Evectors_002E4_002E5_002E0_005Clib_005Cnet46_005CSystem_002ENumerics_002EVectors_002Edll/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CPersonal_005CDocuments_005CC_0023_005CYuki_002DTheme_005Cpackages_005Csystem_002Eruntime_002Ecompilerservices_002Eunsafe_002E6_002E0_002E0_005Clib_005Cnet461_005CSystem_002ERuntime_002ECompilerServices_002EUnsafe_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/CustomTools/CustomToolsData/@EntryValue"></s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\svg.3.4.4\lib\net462\Svg.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\Personal\Documents\C#\Yuki-Theme\packages\system.memory.4.5.5\lib\net461\System.Memory.dll" /&gt;&#xD;

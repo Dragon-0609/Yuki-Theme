@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Windows.Forms;
 using System.Windows.Media;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
@@ -30,6 +31,7 @@ public class IDEAlterer
 		Instance = this;
 		Workbench = workbench;
 		Form1 = (Form1)Workbench.MainForm;
+		new PluginEvents();
 		_colorChanger = new ColorChanger();
 		_editorAlterer = new EditorAlterer();
 		_imageLoader = new ImageLoader();
@@ -37,13 +39,12 @@ public class IDEAlterer
 		_stickerManager = new StickerManager();
 		_themeSelect = new ThemeWindowManager();
 		new DatabaseManager();
-		new PluginEvents();
 		ThemeNameExtractor.ListenToReload();
 		StartExporter();
 	}
 
 	internal static bool HasWallpaper => Instance._imageLoader.HasImage;
-	internal static bool HasSticker => Instance._imageLoader.HasSticker;
+	internal static bool HasSticker => HasCurrentSticker();
 
 	internal static bool CanShowWallpaper => Instance._imageLoader.HasImage && IsWallpaperVisible && !IsDiscreteActive;
 
@@ -56,10 +57,10 @@ public class IDEAlterer
 	internal static bool IsDiscreteActive => DatabaseManager.Load(SettingsConst.DISCRETE_MODE);
 
 	internal static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
-	internal static Image GetSticker => Instance._imageLoader.GetSticker;
+	internal static Image GetSticker => GetCurrentSticker();
 
 	internal static ImageSource GetWallpaperWPF => Instance._imageLoader.GetWallpaperWPF;
-	internal static ImageSource GetStickerWPF => Instance._imageLoader.GetStickerWPF;
+	internal static ImageSource GetStickerWPF => GetCurrentStickerWpf();
 
 	internal void Init()
 	{
@@ -142,5 +143,30 @@ public class IDEAlterer
 	{
 		Instance._imageLoader.LoadImages();
 		Instance._imageLoader.ApplyImages();
+	}
+
+	public Form GetSettingsParent() => _editorAlterer.GetSettingsParent();
+
+	private static Image GetCurrentSticker()
+	{
+		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		                 Instance._imageLoader.HasCustomSticker;
+		return hasCustom ? Instance._imageLoader.GetCustomSticker : Instance._imageLoader.GetSticker;
+	}
+
+	private static ImageSource GetCurrentStickerWpf()
+	{
+		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		                 Instance._imageLoader.HasCustomSticker;
+		return hasCustom
+			? Instance._imageLoader.GetCustomStickerWPF
+			: Instance._imageLoader.GetStickerWPF;
+	}
+
+	private static bool HasCurrentSticker()
+	{
+		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		                 Instance._imageLoader.HasCustomSticker;
+		return hasCustom ? Instance._imageLoader.HasCustomSticker : Instance._imageLoader.HasSticker;
 	}
 }

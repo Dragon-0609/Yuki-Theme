@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -19,12 +20,20 @@ public class ImageLoader
 	internal Image GetWallpaper { get; private set; }
 
 	internal Image GetSticker { get; private set; }
+	internal Image GetCustomSticker { get; private set; }
 
 	internal bool HasSticker => GetSticker is { Height: > 10 };
+	internal bool HasCustomSticker => GetCustomSticker != null;
 
 	internal ImageSource GetWallpaperWPF { get; private set; }
 
 	internal ImageSource GetStickerWPF { get; private set; }
+	internal ImageSource GetCustomStickerWPF { get; private set; }
+
+	public ImageLoader()
+	{
+		PluginEvents.Instance.CustomStickerPathChanged += ReLoadCustomSticker;
+	}
 
 	private void RemoveLastImage()
 	{
@@ -43,6 +52,8 @@ public class ImageLoader
 		}
 
 		GetStickerWPF = null;
+
+		ReleaseCustomSticker();
 	}
 
 	internal void LoadImages()
@@ -77,6 +88,26 @@ public class ImageLoader
 				GetSticker = Image.FromFile(stickerFileName);
 			}
 		}
+
+		LoadCustomSticker();
+	}
+
+	private void LoadCustomSticker()
+	{
+		var stickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		if (File.Exists(stickerPath))
+		{
+			GetCustomSticker = Image.FromFile(stickerPath);
+			Console.WriteLine($"Loaded {stickerPath}");
+			Console.WriteLine($"{GetCustomSticker.Width}/{GetCustomSticker.Height}");
+		}
+	}
+
+	internal void ReLoadCustomSticker()
+	{
+		ReleaseCustomSticker();
+		LoadCustomSticker();
+		ApplyCustomSticker();
 	}
 
 	internal void ReleaseImages()
@@ -90,6 +121,16 @@ public class ImageLoader
 		{
 			GetWallpaperWPF = GetWallpaper.ToWPFImage();
 			GetStickerWPF = GetSticker.ToWPFImage();
+		}
+
+		ApplyCustomSticker();
+	}
+
+	private void ApplyCustomSticker()
+	{
+		if (GetCustomSticker != null)
+		{
+			GetCustomStickerWPF = GetCustomSticker.ToWPFImage();
 		}
 	}
 
@@ -125,5 +166,16 @@ public class ImageLoader
 		{
 			return image;
 		}
+	}
+
+	private void ReleaseCustomSticker()
+	{
+		if (GetCustomSticker != null)
+		{
+			GetCustomSticker.Dispose();
+			GetCustomSticker = null;
+		}
+
+		GetCustomStickerWPF = null;
 	}
 }

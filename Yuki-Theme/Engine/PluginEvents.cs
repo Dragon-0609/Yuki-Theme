@@ -15,6 +15,7 @@ public class PluginEvents
 	internal event Action Reload;
 
 	internal event Action StickerMarginReset;
+	internal event Action CustomStickerPathChanged;
 
 	internal void OnThemeChanged(string name)
 	{
@@ -29,6 +30,11 @@ public class PluginEvents
 	internal void OnStickerMarginReset()
 	{
 		StickerMarginReset?.Invoke();
+	}
+
+	internal void OnCustomStickerPathChanged()
+	{
+		CustomStickerPathChanged?.Invoke();
 	}
 
 	internal delegate void ThemeChange(string name);

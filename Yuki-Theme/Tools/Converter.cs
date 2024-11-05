@@ -132,6 +132,7 @@ public static class Converter
 	public static Rect ToRect(this Rectangle rectangle, Form form)
 	{
 		return new Rect(form.WindowState == FormWindowState.Maximized ? rectangle.Left : form.Left + 2,
-			form.WindowState == FormWindowState.Maximized ? rectangle.Top : form.Top, rectangle.Width, rectangle.Height);
+			form.WindowState == FormWindowState.Maximized ? rectangle.Top : form.Top, rectangle.Width,
+			rectangle.Height);
 	}
 }
