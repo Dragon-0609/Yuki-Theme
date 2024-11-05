@@ -8,7 +8,6 @@ Yuki Theme.Core/yuki.png
 Yuki Theme.Core/yuki128.png
 Yuki Theme.Core/yuki_new.png
 Yuki Theme/icon_old.ico
-packages/System.Globalization.4.3.0
 packages/CommonMark.NET.0.15.1
 packages/Cyotek.Windows.Forms.ColorPicker.2.0.0-beta.6
 packages/Fizzler.1.2.1
@@ -27,3 +26,6 @@ packages/System.Diagnostics.Tools.4.3.0
 packages/System.Diagnostics.Tracing.4.3.0
 packages/System.Drawing.Common.5.0.2
 packages/System.Globalization.4.3.0
+packages/ExCSS.4.2.3
+packages/svg.3.4.4
+packages/System.Memory.4.5.4
