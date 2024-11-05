@@ -1,0 +1,46 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <system:String x:Key="settings.general.background.title">Background Image</system:String>
+    <system:String x:Key="settings.general.background.enabled">Show Background Image</system:String>
+    <system:String x:Key="settings.general.fitbywidth">Auto Fit Background Image by Width</system:String>
+    <system:String x:Key="settings.general.fitbywidth.help">Background Image will be fitted by width if&amp;#10;it's necessary</system:String>
+    <system:String x:Key="settings.general.asktosave">Always ask to save</system:String>
+    <system:String x:Key="settings.general.asktosave.help">If theme is edited, ask before changing to another</system:String>
+    <system:String x:Key="settings.general.sticker.title">Sticker</system:String>
+    <system:String x:Key="settings.general.sticker.enabled">Show Sticker</system:String>
+    <system:String x:Key="settings.general.sticker.choose">Choose Image</system:String>
+    <system:String x:Key="settings.general.sticker.custom">Use Custom Sticker</system:String>
+    <system:String x:Key="settings.general.positioning.enabled">Allow Positioning</system:String>
+    <system:String x:Key="settings.general.positioning.reset">Reset Sticker Margin</system:String>
+    <system:String x:Key="settings.general.positioning.save">Double click sticker to save current position.</system:String>
+    <system:String x:Key="settings.general.dimension.title">Sticker Dimension Cap</system:String>
+    <system:String x:Key="settings.general.dimension.enable">Enable Sticker Dimension Cap</system:String>
+    <system:String x:Key="settings.general.dimension.max.px">Max Size (px)</system:String>
+    <system:String x:Key="settings.general.dimension.max.by">Max Size by:</system:String>
+    <system:String x:Key="settings.general.dimension.max.by.height">Height</system:String>
+    <system:String x:Key="settings.general.dimension.max.by.width">Width</system:String>
+    <system:String x:Key="settings.general.positioning.unit">Position unit</system:String>
+    <system:String x:Key="settings.general.positioning.unit.pixel">Pixel</system:String>
+    <system:String x:Key="settings.general.positioning.unit.percent">Percent</system:String>
+    <system:String x:Key="settings.general.mode">Editor Mode:</system:String>
+    <system:String x:Key="settings.general.mode.light">Light</system:String>
+    <system:String x:Key="settings.general.mode.advanced">Advanced</system:String>
+    <system:String x:Key="settings.general.others">Other Settings</system:String>
+    <system:String x:Key="settings.general.update.auto">Auto Check Updates</system:String>
+    <system:String x:Key="settings.general.update.check">Check</system:String>
+    <system:String x:Key="settings.general.update.install">Update&amp;#10;Manually</system:String>
+    <system:String x:Key="settings.general.update.restart">Restart for update</system:String>
+    <system:String x:Key="settings.general.update.beta">Check Beta Versions</system:String>
+    <system:String x:Key="settings.general.about">About</system:String>
+    <system:String x:Key="settings.general.language">Language:</system:String>
+    <system:String x:Key="settings.general.colorpicker">Color Picker</system:String>
+    <system:String x:Key="settings.general.hidehover">Hide on hover</system:String>
+    <system:String x:Key="settings.general.hidedelay">Hide on delay (ms)</system:String>
+    <system:String x:Key="settings.general.portable">Portable Mode</system:String>
+    <system:String x:Key="settings.general.editor.readonly">Read Only</system:String>
+    <system:String x:Key="settings.general.editor.title">Editor</system:String>
+    <system:String x:Key="settings.general.editor.mode">Editor Mode</system:String>
+    <system:String x:Key="settings.general.editor.tip">To save the file in the editor&amp;#10;press Control + S in editor</system:String>
+
+</ResourceDictionary>

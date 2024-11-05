@@ -1,0 +1,707 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{5F9850DC-77D2-4738-9B06-A45EE54376F1}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>YukiTheme</RootNamespace>
+        <AssemblyName>YukiTheme</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="CodeCompletion">
+            <HintPath>..\..\PascalABCNET\bin\CodeCompletion.dll</HintPath>
+        </Reference>
+        <Reference Include="ExCSS">
+          <HintPath>..\packages\ExCSS.4.2.3\lib\net48\ExCSS.dll</HintPath>
+        </Reference>
+        <Reference Include="ICSharpCode.Core">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="ICSharpCode.Core.WinForms">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.WinForms.dll</HintPath>
+        </Reference>
+        <Reference Include="ICSharpCode.TextEditor">
+            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
+        </Reference>
+        <Reference Include="Localization">
+            <HintPath>..\..\PascalABCNET\bin\Localization.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib"/>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="ParserTools">
+            <HintPath>..\..\PascalABCNET\bin\ParserTools.dll</HintPath>
+        </Reference>
+        <Reference Include="PascalABCNET">
+            <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
+        </Reference>
+        <Reference Include="PluginsSupport">
+            <HintPath>..\..\PascalABCNET\bin\PluginsSupport.dll</HintPath>
+        </Reference>
+        <Reference Include="PresentationCore"/>
+        <Reference Include="PresentationFramework"/>
+        <Reference Include="Svg">
+          <HintPath>..\packages\Svg.3.4.7\lib\net472\Svg.dll</HintPath>
+        </Reference>
+        <Reference Include="System"/>
+        <Reference Include="System.Buffers">
+          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Data.Linq"/>
+        <Reference Include="System.Drawing"/>
+        <Reference Include="System.Memory">
+          <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics.Vectors">
+          <HintPath>..\packages\system.numerics.vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe">
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Web"/>
+        <Reference Include="System.Windows.Forms"/>
+        <Reference Include="System.Xaml"/>
+        <Reference Include="System.Xml"/>
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="WeifenLuo.WinFormsUI.Docking">
+            <HintPath>..\..\PascalABCNET\bin\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+        </Reference>
+        <Reference Include="WindowsBase"/>
+        <Reference Include="WindowsFormsIntegration"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Components\AlignmentHelper.cs">
+            <DependentUpon>StickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\CustomStickerWindow.xaml.cs">
+          <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\GridWindow.xaml.cs"/>
+        <Compile Include="Components\IntegerUpDown.xaml.cs"/>
+        <Compile Include="Components\NameBar.cs"/>
+        <Compile Include="Components\PluginSettingsControl.cs"/>
+        <Compile Include="Components\PluginSettingsControl.Designer.cs"/>
+        <Compile Include="Components\SettingsPanel.xaml.cs"/>
+        <Compile Include="Components\SettingsPanelUtilities.cs"/>
+        <Compile Include="Components\Setting\SettingItem.cs" />
+        <Compile Include="Components\SilentTextBox.cs" />
+        <Compile Include="Components\SnapWindow.cs" />
+        <Compile Include="Components\SnapWindowAlign.cs" />
+        <Compile Include="Components\StickerWindow.xaml.cs" />
+        <Compile Include="Components\Styles\CheckboxStyles.xaml.cs" />
+        <Compile Include="Components\TempForm\ReferenceWindowClone.cs" />
+        <Compile Include="Components\ThemeSelectWindow.xaml.cs">
+            <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\WallpaperWindow.xaml.cs">
+            <DependentUpon>WallpaperWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Engine\ColorChanger.cs" />
+        <Compile Include="Engine\ColorReference.cs" />
+        <Compile Include="Engine\DataManager.cs" />
+        <Compile Include="Engine\EditorAlterer.cs" />
+        <Compile Include="Engine\EditorComponents.cs" />
+        <Compile Include="Engine\EditorInspector.cs" />
+        <Compile Include="Engine\GridManager.cs" />
+        <Compile Include="Engine\IconAlterer.cs" />
+        <Compile Include="Engine\IDEAlterer.cs" />
+        <Compile Include="Engine\IDEConsole.cs" />
+        <Compile Include="Engine\ImageLoader.cs" />
+        <Compile Include="Engine\MenuReplacer.cs" />
+        <Compile Include="Engine\OptionsChanger.cs" />
+        <Compile Include="Engine\PluginEvents.cs" />
+        <Compile Include="Engine\StickerManager.cs" />
+        <Compile Include="Engine\TextEditorChanger.cs" />
+        <Compile Include="Engine\ThemeSelectManager.cs" />
+        <Compile Include="Engine\UpdateChecker.cs" />
+        <Compile Include="Engine\WallpaperManager.cs" />
+        <Compile Include="Engine\WindowManager.cs" />
+        <Compile Include="Export\DokiExporter.cs" />
+        <Compile Include="Export\Exporter.cs" />
+        <Compile Include="Export\ExportListener.cs" />
+        <Compile Include="Export\ExternalExporter.cs" />
+        <Compile Include="Export\PlainExporter.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionAllNames.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionHighlighter.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionKeyHandler.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionListView.cs" />
+        <Compile Include="Style\CodeCompletion\CodeCompletionWindow.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationPopup.cs" />
+        <Compile Include="Style\CodeCompletion\InsightPopup.cs" />
+        <Compile Include="Style\CodeCompletion\TipPainter.cs" />
+        <Compile Include="Style\CodeCompletion\TipPainterTools.cs" />
+        <Compile Include="Style\CodeCompletion\TipSection.cs" />
+        <Compile Include="Style\CodeCompletion\TipSpacer.cs" />
+        <Compile Include="Style\CodeCompletion\TipSplitter.cs" />
+        <Compile Include="Style\CodeCompletion\TipText.cs" />
+        <Compile Include="Style\Extender.cs" />
+        <Compile Include="Style\Helpers\Bookmarks.cs" />
+        <Compile Include="Style\Helpers\DockHelper.cs" />
+        <Compile Include="Style\Helpers\DrawHelper.cs" />
+        <Compile Include="Style\Helpers\Enums.cs" />
+        <Compile Include="Style\Helpers\InertButtonBase.cs">
+            <SubType>Component</SubType>
+        </Compile>
+        <Compile Include="Style\Helpers\NativeMethods.cs" />
+        <Compile Include="Style\Helpers\PositionCalculator.cs" />
+        <Compile Include="Style\Helpers\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Include="Style\Helpers\Strings.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Strings.resx</DependentUpon>
+        </Compile>
+        <Compile Include="Style\Helpers\Win32Helper.cs" />
+        <Compile Include="Style\Helpers\WindowProps.cs" />
+        <Compile Include="Style\Helpers\WindowsServices.cs" />
+        <Compile Include="Style\MenuRenderer.cs" />
+        <Compile Include="Style\ToolRenderer.cs" />
+        <Compile Include="Style\YukiAutoHideStrip.cs">
+            <SubType>Component</SubType>
+        </Compile>
+        <Compile Include="Style\YukiDockPaneCaption.cs" />
+        <Compile Include="Style\YukiDockPaneStrip.cs">
+            <SubType>Component</SubType>
+        </Compile>
+        <Compile Include="Tools\ColorHelper.cs" />
+        <Compile Include="Tools\Converter.cs" />
+        <Compile Include="Tools\Database\DatabaseHelper.cs" />
+        <Compile Include="Tools\Database\DatabaseManager.cs" />
+        <Compile Include="Tools\Database\FileDatabase.cs" />
+        <Compile Include="Tools\Database\IDatabase.cs" />
+        <Compile Include="Tools\DokiKeysObtainer.cs" />
+        <Compile Include="Tools\DokiKeysTranslator.cs" />
+        <Compile Include="Tools\DokiThemeCollector.cs" />
+        <Compile Include="Tools\Enums.cs" />
+        <Compile Include="Tools\IconRenderer.cs" />
+        <Compile Include="Tools\ImageHelper.cs" />
+        <Compile Include="Tools\ItemsControlExtensions.cs" />
+        <Compile Include="Tools\LinkCreator.cs" />
+        <Compile Include="Tools\MiscHelper.cs" />
+        <Compile Include="Tools\Props.cs" />
+        <Compile Include="Tools\Props.Designer.cs" />
+        <Compile Include="Tools\ResourceDictionaryHelper.cs" />
+        <Compile Include="Tools\ResourceHelper.cs" />
+        <Compile Include="Tools\SettingsConst.cs" />
+        <Compile Include="Tools\StickerPosition.cs" />
+        <Compile Include="Tools\StickerPositionConverter.cs" />
+        <Compile Include="Tools\SvgRenderer.cs" />
+        <Compile Include="Tools\ThemeLoadInfo.cs" />
+        <Compile Include="Tools\ThemeNameExtractor.cs" />
+        <Compile Include="Tools\ThemeNames.cs" />
+        <Compile Include="Tools\WindowsExtension.cs" />
+        <Compile Include="Tools\WPFAdapter.cs" />
+        <Compile Include="Tools\WpfColorContainer.cs" />
+        <Compile Include="YukiTheme.cs" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Components\PluginSettingsControl.resx" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Aqua.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Astolfo.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Asuna Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Asuna Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Azuki.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Beatrice.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\C.C..json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Chocola.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Christmas Chocola.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Cinnamon.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Coconut.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Darkness Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Darkness Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Echidna.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Emilia Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Emilia Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Essex.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Gasai Yuno.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Genos.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Gray.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hanekawa Tsubasa.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hatsune Miku.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hayase Nagatoro.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hinata Shoyo.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hiro.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Hiro x Zero Two.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Mioda Ibuki Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Mioda Ibuki Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Ishtar Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Ishtar Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Jabami Yumeko.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Jahy.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Kanna.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Katsuragi Misato.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Kirino.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Konata.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Makise Kurisu.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Mai Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Mai Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Maika.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Maple Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Maple Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Megumin.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Miia.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Misaka Mikoto.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Monika Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Monika Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nadeshiko.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nakano Ichika.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nakano Itsuki.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nakano Miku.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nakano Yotsuba.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Natsuki Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Natsuki Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Nakano Nino.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Ram.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Raphtalia.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rei.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rem.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rias Crimson.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rias Onyx.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rimuru Tempest.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Rory Mercury.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Ryuko Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Ryuko Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Sagiri.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Satsuki Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Satsuki Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Sayori Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Sayori Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Senko.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Shigure.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Shima Rin.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Sonoda Umi.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Takanashi Rikka.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Tohru.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Tohsaka Rin.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Tomori Nao.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Vanilla.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Yukihira Soma.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Yukinoshita Yukino.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Yuri Dark.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Yuri Light.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Yuzuriha Inori.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Zero Two Dark Obsidian.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Zero Two Dark Rose.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Zero Two Light Lily.json" />
+        <EmbeddedResource Include="Resources\Themes\Doki\Zero Two Light Sakura.json" />
+        <EmbeddedResource Include="Style\Helpers\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Style\Helpers\Strings.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="Fonts\Montserrat-Regular.ttf" />
+        <Content Include="Fonts\SAOUITT-Regular.ttf" />
+        <Content Include="Fonts\SAOWelcomeTT-Regular.ttf" />
+        <Content Include="image.bmp" />
+        <EmbeddedResource Include="Resources\Icons\yuki128_2.png" />
+        <EmbeddedResource Include="Resources\Default\background.png" />
+        <EmbeddedResource Include="Resources\Default\sticker.png" />
+        <EmbeddedResource Include="Resources\Default\theme.xshd" />
+        <EmbeddedResource Include="Resources\Templates\Template.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Darcula.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Dracula.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Github Dark.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Github Light.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Monokai Dark.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Monokai Light.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Nightshade.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Oblivion.xshd" />
+        <EmbeddedResource Include="Resources\Themes\Default\Shades of Purple.xshd" />
+        <EmbeddedResource Include="Resources\Stickers\Aqua.png" />
+        <EmbeddedResource Include="Resources\Stickers\Astolfo.png" />
+        <EmbeddedResource Include="Resources\Stickers\Asuna Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Asuna Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Azuki.png" />
+        <EmbeddedResource Include="Resources\Stickers\Beatrice.png" />
+        <EmbeddedResource Include="Resources\Stickers\C.C..png" />
+        <EmbeddedResource Include="Resources\Stickers\Chocola.png" />
+        <EmbeddedResource Include="Resources\Stickers\Christmas Chocola.png" />
+        <EmbeddedResource Include="Resources\Stickers\Cinnamon.png" />
+        <EmbeddedResource Include="Resources\Stickers\Coconut.png" />
+        <EmbeddedResource Include="Resources\Stickers\Darkness Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Darkness Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Echidna.png" />
+        <EmbeddedResource Include="Resources\Stickers\Emilia Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Emilia Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Essex.png" />
+        <EmbeddedResource Include="Resources\Stickers\Gasai Yuno.png" />
+        <EmbeddedResource Include="Resources\Stickers\Genos.png" />
+        <EmbeddedResource Include="Resources\Stickers\Gray.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hanekawa Tsubasa.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hatsune Miku.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hayase Nagatoro.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hinata Shoyo.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hiro x Zero Two.png" />
+        <EmbeddedResource Include="Resources\Stickers\Hiro.png" />
+        <EmbeddedResource Include="Resources\Stickers\Ishtar Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Ishtar Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Jabami Yumeko.png" />
+        <EmbeddedResource Include="Resources\Stickers\Jahy.png" />
+        <EmbeddedResource Include="Resources\Stickers\Kanna.png" />
+        <EmbeddedResource Include="Resources\Stickers\Katsuragi Misato.png" />
+        <EmbeddedResource Include="Resources\Stickers\Kirino.png" />
+        <EmbeddedResource Include="Resources\Stickers\Konata.png" />
+        <EmbeddedResource Include="Resources\Stickers\Mai Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Mai Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Maika.png" />
+        <EmbeddedResource Include="Resources\Stickers\Makise Kurisu.png" />
+        <EmbeddedResource Include="Resources\Stickers\Maple Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Maple Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Megumin.png" />
+        <EmbeddedResource Include="Resources\Stickers\Miia.png" />
+        <EmbeddedResource Include="Resources\Stickers\Mioda Ibuki Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Mioda Ibuki Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Misaka Mikoto.png" />
+        <EmbeddedResource Include="Resources\Stickers\Monika Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Monika Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nadeshiko.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nakano Ichika.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nakano Itsuki.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nakano Miku.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nakano Nino.png" />
+        <EmbeddedResource Include="Resources\Stickers\Nakano Yotsuba.png" />
+        <EmbeddedResource Include="Resources\Stickers\Natsuki Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Natsuki Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Ram.png" />
+        <EmbeddedResource Include="Resources\Stickers\Raphtalia.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rei.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rem.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rias Crimson.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rias Onyx.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rimuru Tempest.png" />
+        <EmbeddedResource Include="Resources\Stickers\Rory Mercury.png" />
+        <EmbeddedResource Include="Resources\Stickers\Ryuko Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Ryuko Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Sagiri.png" />
+        <EmbeddedResource Include="Resources\Stickers\Satsuki Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Satsuki Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Sayori Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Sayori Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Senko.png" />
+        <EmbeddedResource Include="Resources\Stickers\Shigure.png" />
+        <EmbeddedResource Include="Resources\Stickers\Shima Rin.png" />
+        <EmbeddedResource Include="Resources\Stickers\Sonoda Umi.png" />
+        <EmbeddedResource Include="Resources\Stickers\Takanashi Rikka.png" />
+        <EmbeddedResource Include="Resources\Stickers\Tohru.png" />
+        <EmbeddedResource Include="Resources\Stickers\Tohsaka Rin.png" />
+        <EmbeddedResource Include="Resources\Stickers\Tomori Nao.png" />
+        <EmbeddedResource Include="Resources\Stickers\Vanilla.png" />
+        <EmbeddedResource Include="Resources\Stickers\Yukihira Soma.png" />
+        <EmbeddedResource Include="Resources\Stickers\Yukinoshita Yukino.png" />
+        <EmbeddedResource Include="Resources\Stickers\Yuri Dark.png" />
+        <EmbeddedResource Include="Resources\Stickers\Yuri Light.png" />
+        <EmbeddedResource Include="Resources\Stickers\Yuzuriha Inori.png" />
+        <EmbeddedResource Include="Resources\Stickers\Zero Two Dark Obsidian.png" />
+        <EmbeddedResource Include="Resources\Stickers\Zero Two Dark Rose.png" />
+        <EmbeddedResource Include="Resources\Stickers\Zero Two Light Lily.png" />
+        <EmbeddedResource Include="Resources\Stickers\Zero Two Light Sakura.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Aqua.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Astolfo.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Asuna Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Asuna Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Azuki.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Beatrice.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\C.C..png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Chocola.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Christmas Chocola.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Cinnamon.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Coconut.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Darkness Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Darkness Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Echidna.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Emilia Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Emilia Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Essex.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Gasai Yuno.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Genos.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Gray.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hanekawa Tsubasa.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hatsune Miku.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hayase Nagatoro.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hinata Shoyo.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hiro x Zero Two.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Hiro.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Ishtar Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Ishtar Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Jabami Yumeko.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Jahy.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Kanna.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Katsuragi Misato.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Kirino.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Konata.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Mai Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Mai Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Maika.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Makise Kurisu.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Maple Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Maple Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Megumin.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Miia.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Mioda Ibuki Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Mioda Ibuki Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Misaka Mikoto.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Monika Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Monika Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nadeshiko.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nakano Ichika.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nakano Itsuki.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nakano Miku.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nakano Nino.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Nakano Yotsuba.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Natsuki Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Natsuki Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Ram.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Raphtalia.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rei.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rem.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rias Crimson.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rias Onyx.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rimuru Tempest.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Rory Mercury.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Ryuko Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Ryuko Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Sagiri.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Satsuki Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Satsuki Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Sayori Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Sayori Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Senko.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Shigure.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Shima Rin.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Sonoda Umi.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Takanashi Rikka.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Tohru.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Tohsaka Rin.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Tomori Nao.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Vanilla.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Yukihira Soma.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Yukinoshita Yukino.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Yuri Dark.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Yuri Light.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Yuzuriha Inori.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Zero Two Dark Obsidian.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Zero Two Dark Rose.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Zero Two Light Lily.png" />
+        <EmbeddedResource Include="Resources\Wallpapers\Zero Two Light Sakura.png" />
+        <EmbeddedResource Include="Resources\Icons\svg\addFile.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\addFile_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\addFile_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\back.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\back_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\back_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\close.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\close_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\close_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\compile.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\console.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\console_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\console_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\copy.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\copy_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\copy_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\cwmPermissionEdit.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\dynamicUsages_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\execute.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\export.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\export_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\export_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\externalTools.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\externalTools_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\externalTools_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\find.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\findForward.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\findForward_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\findForward_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\find_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\find_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\forceRefresh.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\forward.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\forward_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\forward_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\gearPlain.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\gearPlain_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\gearPlain_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\help.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\help_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\help_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\intentionBulb.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\intentionBulb_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\intentionBulb_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\magicResolve.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\magicResolve_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\magicResolve_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-cut.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-cut_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-cut_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-open.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-open_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-open_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-paste.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-paste_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-paste_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-saveall.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-saveall_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\menu-saveall_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\MoveTo2.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\MoveTo2_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\MoveTo2_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\moveToBottomLeft_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\notificationError.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\print.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\print_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\print_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\projectTab.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\projectTab_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\projectTab_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\redo.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\redo_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\redo_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\replace.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\replace_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\replace_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\restartDebugger.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\restartDebugger_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\restartDebugger_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\runAll.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showHiddens.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showHiddens_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showHiddens_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showReadAccess.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showReadAccess_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showReadAccess_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\showWriteAccess_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\startDebugger.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\stepOut.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\stepOut_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\stepOut_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\suspend.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\toolWindowMessages_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceInto.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceInto_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceInto_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceOver.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceOver_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\traceOver_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\undo.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\undo_dark.svg" />
+        <EmbeddedResource Include="Resources\Icons\svg\undo_disabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBox.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBoxDisabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBoxFocused.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBoxSelected.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBoxSelectedDisabled.svg" />
+        <EmbeddedResource Include="Resources\Icons\checkBoxSelectedFocused.svg" />
+        <EmbeddedResource Include="Resources\Icons\balloonInformation.svg" />
+        <EmbeddedResource Include="Resources\Icons\heart.svg" />
+        <EmbeddedResource Include="Resources\Icons\gearPlain.svg" />
+        <EmbeddedResource Include="Resources\Icons\wallpaper.svg" />
+        <EmbeddedResource Include="Resources\Icons\quiet.svg" />
+        <EmbeddedResource Include="Resources\Icons\switch.svg" />
+        <EmbeddedResource Include="Resources\Icons\yuki_theme.svg" />
+        <EmbeddedResource Include="Resources\Icons\positioning.svg" />
+        <Content Include="Style\Resources\Close_32.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
+        <Content Include="Style\Resources\Dockindicator_PaneDiamond_Fill.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_Hotspot.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_HotspotIndex.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_Left.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_Right.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PaneDiamond_Top.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelBottom.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelBottom_Active.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelFill.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelFill_Active.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelLeft.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelLeft_Active.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelRight.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelRight_Active.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelTop.bmp" />
+        <Content Include="Style\Resources\DockIndicator_PanelTop_Active.bmp" />
+        <Content Include="Style\Resources\DockPane_AutoHide.bmp" />
+        <Content Include="Style\Resources\DockPane_AutoHide32.bmp" />
+        <Content Include="Style\Resources\DockPane_Close.bmp" />
+        <Content Include="Style\Resources\DockPane_Close32.bmp" />
+        <Content Include="Style\Resources\DockPane_Dock.bmp" />
+        <Content Include="Style\Resources\DockPane_Dock32.bmp" />
+        <Content Include="Style\Resources\DockPane_Option.bmp" />
+        <Content Include="Style\Resources\DockPane_Option32.bmp" />
+        <Content Include="Style\Resources\DockPane_OptionOverflow.bmp" />
+        <Content Include="Style\Resources\Thumbs.db" />
+    </ItemGroup>
+    <ItemGroup>
+        <Page Include="Components\CustomStickerWindow.xaml" />
+        <Page Include="Components\GridWindow.xaml" />
+        <Page Include="Components\IntegerUpDown.xaml" />
+        <Page Include="Components\SettingsPanel.xaml" />
+        <Page Include="Components\StickerWindow.xaml" />
+        <Page Include="Components\Styles\ButtonStyles.xaml" />
+        <Page Include="Components\Styles\CheckboxStyles.xaml" />
+        <Page Include="Components\Styles\DropDownStyles.xaml" />
+        <Page Include="Components\Styles\GroupBoxStyles.xaml" />
+        <Page Include="Components\Styles\ListViewStyles.xaml" />
+        <Page Include="Components\Styles\ScrollViewerStyles.xaml" />
+        <Page Include="Components\Styles\Strings.xaml" />
+        <Page Include="Components\Styles\TextBlockStyles.xaml" />
+        <Page Include="Components\Styles\TextBoxStyles.xaml" />
+        <Page Include="Components\ThemeSelectWindow.xaml" />
+        <Page Include="Components\WallpaperWindow.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Interface" />
+        <Folder Include="Resources\Stickers\" />
+        <Folder Include="Resources\Themes\" />
+        <Folder Include="Resources\Wallpapers\" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="packages.config"/>
+    </ItemGroup>
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>
+</Project>

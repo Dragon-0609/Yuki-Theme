@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yuki-Theme", "Yuki-Theme\Yuki-Theme.csproj", "{5F9850DC-77D2-4738-9B06-A45EE54376F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YukiUtility", "YukiUtility\YukiUtility.csproj", "{A6E38446-0A5F-4FBC-AA8F-8A43F807799E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DokiNameNormalizer", "DokiNameNormalizer\DokiNameNormalizer.csproj", "{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YukiTest", "YukiTest\YukiTest.csproj", "{C568C585-D39A-4B98-852A-EC7BBBC52CA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YukiUpdater", "YukiUpdater\YukiUpdater.csproj", "{93B87CDF-D6CD-4BEF-BBDB-A4455D3E0A97}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5F9850DC-77D2-4738-9B06-A45EE54376F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9850DC-77D2-4738-9B06-A45EE54376F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9850DC-77D2-4738-9B06-A45EE54376F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9850DC-77D2-4738-9B06-A45EE54376F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6E38446-0A5F-4FBC-AA8F-8A43F807799E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6E38446-0A5F-4FBC-AA8F-8A43F807799E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6E38446-0A5F-4FBC-AA8F-8A43F807799E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6E38446-0A5F-4FBC-AA8F-8A43F807799E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4891119-BA10-4A5A-9EAC-DE8255CCE1B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C568C585-D39A-4B98-852A-EC7BBBC52CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B87CDF-D6CD-4BEF-BBDB-A4455D3E0A97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B87CDF-D6CD-4BEF-BBDB-A4455D3E0A97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B87CDF-D6CD-4BEF-BBDB-A4455D3E0A97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B87CDF-D6CD-4BEF-BBDB-A4455D3E0A97}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
