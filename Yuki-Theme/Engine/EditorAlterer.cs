@@ -293,4 +293,6 @@ public class EditorAlterer
 			e.ClipRectangle.Width,
 			e.ClipRectangle.Y);
 	}
+
+	public Form GetSettingsParent() => EditorComponents.GetSettingsParent();
 }

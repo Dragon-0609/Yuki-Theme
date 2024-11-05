@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Yuki_Theme.Core.WPF.Controls;
+namespace YukiTheme.Components;
 
 public partial class IntegerUpDown : UserControl
 {

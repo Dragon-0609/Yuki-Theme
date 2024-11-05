@@ -25,6 +25,14 @@ internal class FileDatabase : IDatabase
 			_dictionary.Add(name, value);
 		else
 			_dictionary[name] = value;
+	}
+
+	public void SetValueWithSave(string name, string value)
+	{
+		if (!_dictionary.ContainsKey(name))
+			_dictionary.Add(name, value);
+		else
+			_dictionary[name] = value;
 		Save();
 	}
 
@@ -67,15 +75,29 @@ internal class FileDatabase : IDatabase
 		}
 	}
 
+	public void SaveAll() => Save();
+
 	private void Save()
 	{
 		string output = DatabaseHelper.SaveData(_dictionary);
+		if (!Directory.Exists(GetSettingsDirectory()))
+		{
+			Directory.CreateDirectory(GetSettingsDirectory());
+		}
+
 		File.WriteAllText(GetSettingsPath(), output, Encoding.UTF8);
 	}
 
 
 	internal static string GetSettingsPath()
 	{
-		return Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, YUKI_SETTINGS);
+		// return Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, YUKI_SETTINGS);
+		return Path.Combine(GetSettingsDirectory(), YUKI_SETTINGS);
+	}
+
+	private static string GetSettingsDirectory()
+	{
+		string roamingFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+		return Path.Combine(roamingFolder, "YukiTheme");
 	}
 }

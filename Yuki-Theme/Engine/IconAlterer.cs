@@ -104,7 +104,7 @@ public class IconAlterer
 	private readonly ContextMenuStrip _context;
 	private readonly ContextMenuStrip _context2;
 
-	private bool internalchanges;
+	private bool _internalchanges;
 
 	internal IconAlterer(ToolStrip toolStrip, MenuStrip menuStrip, ContextMenuStrip contextMenuStrip,
 		ContextMenuStrip contextMenuStrip2,
@@ -192,7 +192,7 @@ public class IconAlterer
 		{
 			var rest = GetState(btn);
 
-			if (rest.Item1 || internalchanges)
+			if (rest.Item1 || _internalchanges)
 			{
 				SvgRenderer.RenderSvg(btn, AquireContext(btn.AccessibleDescription, rest.Item2));
 			}
@@ -206,10 +206,8 @@ public class IconAlterer
 			var rest = GetState(btn);
 
 
-			if (rest.Item1 || internalchanges)
+			if (rest.Item1 || _internalchanges)
 			{
-				// MessageBox.Show (btn.Name);
-				IDEConsole.Log($"Loading svg: {btn.AccessibleDescription}");
 				SvgRenderer.RenderSvg(btn, AquireContext(btn.AccessibleDescription, rest.Item2));
 			}
 		}
@@ -223,7 +221,7 @@ public class IconAlterer
 
 	internal void UpdateColors()
 	{
-		internalchanges = true;
+		_internalchanges = true;
 		foreach (ToolStripItem control in _tools.Items)
 			if (control is ToolStripButton { AccessibleDescription: { Length: > 2 } })
 				BtnOnEnabledChanged(control, EventArgs.Empty);
@@ -245,7 +243,7 @@ public class IconAlterer
 			if (content.DockHandler.Form.AccessibleDescription is { Length: > 2 })
 				UpdateIcon(content.DockHandler.Form);
 
-		internalchanges = false;
+		_internalchanges = false;
 	}
 
 	private string GetIconName(string str)

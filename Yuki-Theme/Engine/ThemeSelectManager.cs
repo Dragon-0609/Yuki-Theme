@@ -39,7 +39,6 @@ public class ThemeWindowManager : WindowManager
 
 	private void ThemeSelected(string name)
 	{
-		IDEConsole.Log($"Selected {name}");
 		PluginEvents.Instance.OnThemeChanged(name);
 	}
 

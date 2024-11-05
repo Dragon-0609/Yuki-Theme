@@ -36,8 +36,6 @@ public class LinkCreator
 		var path = GetHighlighting(nameAndExtension);
 		var valid = true;
 
-		IDEConsole.Log($"{path} is symlink: {IsSymbolic(path)}");
-
 		if (!IsSymbolic(path)) return false;
 
 		if (isImage)

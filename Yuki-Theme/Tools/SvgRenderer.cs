@@ -77,7 +77,6 @@ public static class SvgRenderer
 		im.Image?.Dispose();
 
 		Image svg = RenderSvg(im.Size, context);
-		IDEConsole.Log($"Loaded not null: {svg != null}");
 		im.Image = svg;
 	}
 

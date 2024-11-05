@@ -1,17 +1,35 @@
-﻿using System.Windows.Controls;
-using YukiTheme.Components;
+﻿using System.Collections.Generic;
+using YukiTheme.Components.Setting;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 
-namespace Yuki_Theme.Core.WPF.Controls;
+namespace YukiTheme.Components;
 
 public class SettingsPanelUtilities
 {
 	private readonly SettingsPanel _settingsPanel;
+	private SettingItem[] _items;
 
 	public SettingsPanelUtilities(SettingsPanel panel)
 	{
 		_settingsPanel = panel;
+		InitComponents();
+	}
+
+	private void InitComponents()
+	{
+		List<SettingItem> items =
+		[
+			_settingsPanel.ShowSticker.ConvertToItem(SettingsConst.STICKER),
+			_settingsPanel.HideHover.ConvertToItem(SettingsConst.HIDE_ON_HOVER),
+			_settingsPanel.AllowPositioning.ConvertToItem(SettingsConst.ALLOW_POSITIONING),
+			_settingsPanel.StickerDimensionCap.ConvertToItem(SettingsConst.USE_DIMENSION_CAP),
+			_settingsPanel.DimensionCapMax.ConvertToItem(SettingsConst.DIMENSION_CAP_MAX),
+			_settingsPanel.DimensionCapBy.ConvertToItem(SettingsConst.DIMENSION_CAP_UNIT),
+			_settingsPanel.CustomSticker.ConvertToItem(SettingsConst.USE_CUSTOM_STICKER),
+		];
+
+		_items = items.ToArray();
 	}
 
 	internal void LoadSettings()
@@ -22,26 +40,21 @@ public class SettingsPanelUtilities
 
 	private void FillGeneralValues()
 	{
-		LoadCheckBox(SettingsConst.STICKER, _settingsPanel.ShowSticker);
-		LoadCheckBox(SettingsConst.HIDE_ON_HOVER, _settingsPanel.HideHover);
-		LoadCheckBox(SettingsConst.ALLOW_POSITIONING, _settingsPanel.AllowPositioning);
-		LoadCheckBox(SettingsConst.USE_DIMENSION_CAP, _settingsPanel.StickerDimensionCap);
-		LoadNumberBox(SettingsConst.DIMENSION_CAP_MAX, _settingsPanel.DimensionCapMax);
-		LoadDropDown(SettingsConst.DIMENSION_CAP_UNIT, _settingsPanel.DimensionCapBy);
-		// SCheck (_settingsPanel.EditorMode, Settings.Editor);
-		// SDrop (_settingsPanel.EditorModeDropdown, (int)Settings.settingMode);
-		// SRadio (_settingsPanel.WinformsPicker, firstSelected);
+		foreach (SettingItem item in _items)
+		{
+			item.Load();
+		}
 		// LanguageDropdown, Settings.localization
 	}
 
 	internal void SaveSettings()
 	{
-		SaveCheckBox(SettingsConst.STICKER, _settingsPanel.ShowSticker);
-		SaveCheckBox(SettingsConst.HIDE_ON_HOVER, _settingsPanel.HideHover);
-		SaveCheckBox(SettingsConst.ALLOW_POSITIONING, _settingsPanel.AllowPositioning);
-		SaveCheckBox(SettingsConst.USE_DIMENSION_CAP, _settingsPanel.StickerDimensionCap);
-		SaveNumberBox(SettingsConst.DIMENSION_CAP_MAX, _settingsPanel.DimensionCapMax.GetNumber());
-		SaveDropDown(SettingsConst.DIMENSION_CAP_UNIT, _settingsPanel.DimensionCapBy);
+		foreach (SettingItem item in _items)
+		{
+			item.Save();
+		}
+
+		DatabaseManager.SaveAll();
 	}
 
 	internal void ResetStickerMargin()
@@ -50,64 +63,8 @@ public class SettingsPanelUtilities
 		PluginEvents.Instance.OnStickerMarginReset();
 	}
 
-	private void SaveGeneralSettings()
+	public void ReLoadCustomSticker()
 	{
-		// KCheck(_settingsPanel.EditorMode, ref Settings.Editor);
-		// KDrop(_settingsPanel.DimensionCapBy, ref Settings.dimensionCapUnit);
+		PluginEvents.Instance.OnCustomStickerPathChanged();
 	}
-
-	private void SaveProgramSettings()
-	{
-		// KText(_settingsPanel.PascalPath, ref Settings.pascalPath);
-	}
-
-	#region Helper Methods
-
-	private void SaveCheckBox(int key, CheckBox checkBox)
-	{
-		DatabaseManager.Save(key, checkBox.IsChecked == true);
-	}
-
-
-	private void SaveDropDown(ComboBox dropDown, ref int value)
-	{
-		value = dropDown.SelectedIndex;
-	}
-
-
-	private void SaveNumberBox(int key, int value)
-	{
-		DatabaseManager.Save(key, value);
-	}
-
-
-	private void SaveDropDown(int key, ComboBox dropDown)
-	{
-		DatabaseManager.Save(key, dropDown.SelectedIndex);
-	}
-
-
-	private void LoadCheckBox(int key, CheckBox checkBox)
-	{
-		checkBox.IsChecked = DatabaseManager.Load(key, false);
-	}
-
-
-	private void LoadRadioButton(RadioButton radioButton, bool value)
-	{
-		radioButton.IsChecked = value;
-	}
-
-
-	private void LoadNumberBox(int key, IntegerUpDown textBox)
-	{
-		textBox.box.Text = DatabaseManager.Load(key, 0).ToString();
-	}
-
-	private void LoadDropDown(int key, ComboBox dropDown)
-	{
-		dropDown.SelectedIndex = DatabaseManager.Load(key, 0);
-	}
-
-	#endregion
 }

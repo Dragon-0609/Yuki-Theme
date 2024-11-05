@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Yuki_Theme.Core.WPF.Controls;
+using System.Windows.Interop;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 using Size = System.Drawing.Size;
@@ -14,6 +14,8 @@ public partial class SettingsPanel : UserControl
 	private bool _resetStickerMargin;
 	public SettingsPanelUtilities Utilities;
 
+	private string _customStickerPath;
+
 	public SettingsPanel()
 	{
 		InitializeComponent();
@@ -23,6 +25,8 @@ public partial class SettingsPanel : UserControl
 		Themes.ItemsSource = _themes;
 		SelectCurrentTheme();
 		LoadSvg();
+		_customStickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		VersionText.Text = $"Version: {YukiTheme_VisualPascalABCPlugin.VersionStatic}";
 	}
 
 	private void LoadSvg()
@@ -32,7 +36,8 @@ public partial class SettingsPanel : UserControl
 
 	private void SetResourceSvg(string name, string source)
 	{
-		Resources[name] = SvgRenderer.RenderSvg(new Size(16, 16), new SvgRenderInfo(SvgRenderer.LoadSvg(source, "Icons."))).ToWPFImage();
+		Resources[name] = SvgRenderer
+			.RenderSvg(new Size(16, 16), new SvgRenderInfo(SvgRenderer.LoadSvg(source, "Icons."))).ToWPFImage();
 	}
 
 
@@ -64,18 +69,44 @@ public partial class SettingsPanel : UserControl
 
 	private void ChooseCustomSticker(object sender, RoutedEventArgs e)
 	{
+		CustomStickerWindow stickerWindow = new CustomStickerWindow
+		{
+			Tag = Tag,
+			Background = Background,
+			Foreground = Foreground
+		};
+		stickerWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+		WindowInteropHelper helper = new WindowInteropHelper(stickerWindow);
+		helper.Owner = IDEAlterer.Instance.GetSettingsParent().Handle;
+
+		stickerWindow.ImagePath.Text = _customStickerPath;
+		if (stickerWindow.ShowDialog() == true)
+		{
+			_customStickerPath = stickerWindow.ImagePath.Text;
+		}
 	}
 
 	internal void SaveSettings()
 	{
+		bool customStickerEnabled = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false);
 		Utilities.SaveSettings();
+		string prevStickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		DatabaseManager.Save(SettingsConst.CUSTOM_STICKER_PATH, _customStickerPath);
+
 		if (_resetStickerMargin)
 		{
-			IDEConsole.Log("Resetting");
 			Utilities.ResetStickerMargin();
 		}
 
+		if (prevStickerPath != _customStickerPath ||
+		    customStickerEnabled != DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false))
+		{
+			Utilities.ReLoadCustomSticker();
+		}
+
 		_resetStickerMargin = false;
-		if (Themes.SelectedItem.ToString() != NameBar.ThemeName) PluginEvents.Instance.OnThemeChanged(Themes.SelectedItem.ToString());
+		if (Themes.SelectedItem.ToString() != NameBar.ThemeName)
+			PluginEvents.Instance.OnThemeChanged(Themes.SelectedItem.ToString());
 	}
 }

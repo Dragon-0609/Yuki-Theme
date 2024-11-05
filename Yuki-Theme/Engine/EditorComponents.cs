@@ -175,4 +175,6 @@ public class EditorComponents
 	{
 		_alterer.UpdateColors();
 	}
+
+	public Form GetSettingsParent() => _optionsChanger.GetSettingsParent();
 }

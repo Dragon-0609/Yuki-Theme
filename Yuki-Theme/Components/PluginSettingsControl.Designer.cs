@@ -1,4 +1,4 @@
-﻿namespace Yuki_Theme_Plugin.Controls
+﻿namespace YukiTheme.Components
 {
     partial class PluginSettingsControl
     {

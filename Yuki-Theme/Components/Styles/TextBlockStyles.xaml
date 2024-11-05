@@ -3,7 +3,7 @@
     <Style x:Key="TextBlockWindow" TargetType="TextBlock">
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Foreground"
-                Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground}" />
+                Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Foreground, FallbackValue=White}" />
     </Style>
     <Style x:Key="TextBlockUserControl" TargetType="TextBlock">
         <Setter Property="TextWrapping" Value="Wrap" />

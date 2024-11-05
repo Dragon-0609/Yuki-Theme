@@ -80,9 +80,34 @@ public class DatabaseManager
 		_instance.Save(name.ToString(), value);
 	}
 
+	public static void SaveOptimized(int name, int value)
+	{
+		_instance.SaveOptimized(name.ToString(), value.ToString());
+	}
+
+	public static void SaveOptimized(int name, bool value)
+	{
+		_instance.SaveOptimized(name.ToString(), value.ToInt().ToString());
+	}
+
+	public static void SaveOptimized(int name, string value)
+	{
+		_instance.SaveOptimized(name.ToString(), value);
+	}
+
 	private void Save(string name, string value)
 	{
+		_database.SetValueWithSave(name, value);
+	}
+
+	private void SaveOptimized(string name, string value)
+	{
 		_database.SetValue(name, value);
+	}
+
+	public static void SaveAll()
+	{
+		_instance._database.SaveAll();
 	}
 
 	#endregion
