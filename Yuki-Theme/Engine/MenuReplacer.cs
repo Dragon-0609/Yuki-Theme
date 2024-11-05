@@ -29,7 +29,7 @@ public class MenuReplacer
 	private ToolStripMenuItem _resetStickerPosition;
 	private ToolStripMenuItem _stick;
 	private ToolStripMenuItem _switchTheme;
-	private ToolStripMenuItem _updatePage;
+	// private ToolStripMenuItem _updatePage;
 	private ToolStripMenuItem _props;
 
 	internal void AddMenuItemsWithDelay(MenuStrip menu)
@@ -92,12 +92,12 @@ public class MenuReplacer
 			_enablePositioning = CreateMenuItem("Enable Stickers Positioning", StickersPositioning);
 
 			_resetStickerPosition = CreateMenuItem("Reset Sticker Margins", ResetStickerPosition);
-			_updatePage = CreateMenuItem("Show Update Notification", ShowUpdatePage);
+			// _updatePage = CreateMenuItem("Show Update Notification", ShowUpdatePage);
 
 			// _props = CreateMenuItem("UI Debug", OpenProps);
 
 			UpdateMenuIcons();
-			_updatePage.Image = _menuSettings.Image;
+			// _updatePage.Image = _menuSettings.Image;
 
 			main.DropDownItems.Add(_stick);
 			main.DropDownItems.Add(_backimage);
@@ -106,7 +106,7 @@ public class MenuReplacer
 			main.DropDownItems.Add(_switchTheme);
 			main.DropDownItems.Add(_menuSettings);
 			main.DropDownItems.Add(_resetStickerPosition);
-			main.DropDownItems.Add(_updatePage);
+			// main.DropDownItems.Add(_updatePage);
 			// main.DropDownItems.Add(_props);
 			MoveIconToTop(ow, main);
 		}
