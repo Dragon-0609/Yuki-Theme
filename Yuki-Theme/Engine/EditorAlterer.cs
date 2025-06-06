@@ -14,6 +14,7 @@ public class EditorAlterer
 	private readonly TextEditorChanger _editorChanger = new();
 
 	private readonly MenuReplacer _menuReplacer = new();
+	private readonly PluginInjector _pluginInjector = new();
 
 	public EditorAlterer()
 	{
@@ -74,6 +75,11 @@ public class EditorAlterer
 	internal void StartMenuReplacement()
 	{
 		_menuReplacer.AddMenuItemsWithDelay(EditorComponents._menu);
+	}
+
+	internal void InjectToOtherPlugins()
+	{
+		_pluginInjector.InjectWithDelay(EditorComponents._menu);
 	}
 
 	internal void FocusEditorWindow()

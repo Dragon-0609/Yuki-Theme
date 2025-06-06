@@ -78,45 +78,9 @@ public class OptionsChanger
 
 	private void AfterOptionsTreeSelected(object sender, TreeViewEventArgs e)
 	{
-		SetColorsToAllChildren(_optionsContentPanel.Controls);
+		ColorHelper.SetColorsToAllChildren(_optionsContentPanel.Controls, false, comboBox1_DrawItem);
 	}
 
-	internal void SetColorsToAllChildren(Control.ControlCollection collection)
-	{
-		foreach (Control controlControl in collection)
-			if (controlControl is Label)
-			{
-				controlControl.ForeColor = ColorReference.ForegroundColor;
-			}
-			else if (controlControl is Button button)
-			{
-				button.ForeColor = ColorReference.ForegroundColor;
-				button.BackColor = ColorReference.BackgroundColor;
-				EditorAlterer.UpdateButton(ColorReference.BorderColor, button);
-			}
-			else if (controlControl is CheckBox checkBox)
-			{
-				checkBox.BackColor = ColorReference.BackgroundColor;
-				checkBox.ForeColor = ColorReference.ForegroundColor;
-			}
-			else if (controlControl is ComboBox comboBox)
-			{
-				comboBox.BackColor = ColorReference.BackgroundColor;
-				comboBox.ForeColor = ColorReference.ForegroundColor;
-				comboBox.DrawMode = DrawMode.OwnerDrawFixed;
-				comboBox.DrawItem += comboBox1_DrawItem;
-			}
-			else if (controlControl is TextBox textBox)
-			{
-				textBox.BorderStyle = BorderStyle.FixedSingle;
-				textBox.BackColor = ColorReference.BackgroundColor;
-				textBox.ForeColor = ColorReference.ForegroundColor;
-			}
-			else
-			{
-				SetColorsToAllChildren(controlControl.Controls);
-			}
-	}
 
 	private void comboBox1_DrawItem(object sender, DrawItemEventArgs e)
 	{
