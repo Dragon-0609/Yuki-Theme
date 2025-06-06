@@ -43,11 +43,6 @@ You can easily change theme by using `switch theme`. To use it, press <code>Ctrl
 
 Also, you can easily hide background image and sticker by pressing `Alt + A`. To show them, just press `Alt + A` again. To easily enter to `Yuki Theme` window, press `Alt + S`.
 
-#### Icons
-Icons of the IDE are changed to JetBrains' icons. 
-
-![photo](https://raw.githubusercontent.com/Dragon-0609/Yuki-Theme/29c7d5998ca733b27995556138bcfa97727b782e/Screenshots/toolbar.png)
-
 ### Default Themes
 - Darcula (from JetBrains IDEA)
 - Dracula
@@ -170,9 +165,6 @@ Help make this plugin better!
 В 4-ой версии с лёгкостью можете менять тему с помощью `switch theme`. Чтобы использовать её, нажмите <code>Ctrl + `</code> (внизу Esc) в паскаль . После этого появиться маленький панель в центре.
 
 А ещё, вы можете без проблем скрыть фоновое изображение и стикер нажимая `Alt + A`. Чтобы показать их, вновь нажмите `Alt + A`. Чтобы с лёгкостью открыть окно `Yuki Theme`, нажмите `Alt + S`.
-
-#### Иконки
-Иконки IDE изменены на иконки от JetBrains.
 
 ![photo](https://raw.githubusercontent.com/Dragon-0609/Yuki-Theme/29c7d5998ca733b27995556138bcfa97727b782e/Screenshots/toolbar.png)
 
