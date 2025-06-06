@@ -12,17 +12,25 @@ public partial class ThemeSelectWindow : SnapWindow
 {
 	private const string PLACEHOLDER_TEXT = "Search...";
 
-	private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
+	private string[] _themes =
+		DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).Union(YukiThemeNames.Themes).ToArray();
 
 	public ThemeSelectWindow()
 	{
 		InitializeComponent();
+		YukiThemeNames.Update();
 		ThemeList.ItemsSource = _themes;
 		GetColors();
 		Search.SilentText = PLACEHOLDER_TEXT;
 		Search.GotFocus += SearchOnGotFocus;
 		Search.LostFocus += SearchOnLostFocus;
 		SelectCurrentTheme();
+	}
+
+	public void UpdateThemeList()
+	{
+		YukiThemeNames.Update();
+		ThemeList.ItemsSource = _themes;
 	}
 
 	internal event Action<string> SelectedTheme;

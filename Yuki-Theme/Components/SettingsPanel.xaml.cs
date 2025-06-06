@@ -10,7 +10,9 @@ namespace YukiTheme.Components;
 
 public partial class SettingsPanel : UserControl
 {
-	private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
+	private static string[] _themes =>
+		DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).Union(YukiThemeNames.Themes).ToArray();
+
 	private bool _resetStickerMargin;
 	public SettingsPanelUtilities Utilities;
 
@@ -22,6 +24,7 @@ public partial class SettingsPanel : UserControl
 		_resetStickerMargin = false;
 		Utilities = new SettingsPanelUtilities(this);
 		Utilities.LoadSettings();
+		YukiThemeNames.Update();
 		Themes.ItemsSource = _themes;
 		SelectCurrentTheme();
 		LoadSvg();
@@ -108,5 +111,11 @@ public partial class SettingsPanel : UserControl
 		_resetStickerMargin = false;
 		if (Themes.SelectedItem.ToString() != NameBar.ThemeName)
 			PluginEvents.Instance.OnThemeChanged(Themes.SelectedItem.ToString());
+	}
+
+	public void UpdateThemeNames()
+	{
+		YukiThemeNames.Update();
+		Themes.ItemsSource = _themes;
 	}
 }

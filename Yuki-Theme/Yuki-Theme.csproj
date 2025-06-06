@@ -83,6 +83,8 @@
         <Reference Include="System.Data.Linq"/>
         <Reference Include="System.Design" />
         <Reference Include="System.Drawing"/>
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.IO.Compression.FileSystem" />
         <Reference Include="System.Memory">
           <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
         </Reference>
@@ -210,35 +212,40 @@
         <Compile Include="Style\YukiDockPaneStrip.cs">
             <SubType>Component</SubType>
         </Compile>
-        <Compile Include="Tools\ColorHelper.cs" />
         <Compile Include="Tools\Converter.cs" />
         <Compile Include="Tools\Database\DatabaseHelper.cs" />
         <Compile Include="Tools\Database\DatabaseManager.cs" />
         <Compile Include="Tools\Database\FileDatabase.cs" />
         <Compile Include="Tools\Database\IDatabase.cs" />
-        <Compile Include="Tools\DokiKeysObtainer.cs" />
-        <Compile Include="Tools\DokiKeysTranslator.cs" />
-        <Compile Include="Tools\DokiThemeCollector.cs" />
+        <Compile Include="Tools\Doki\DokiKeysObtainer.cs" />
+        <Compile Include="Tools\Doki\DokiKeysTranslator.cs" />
+        <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
+        <Compile Include="Tools\Helpers\ColorHelper.cs" />
+        <Compile Include="Tools\Helpers\ImageHelper.cs" />
+        <Compile Include="Tools\Helpers\MiscHelper.cs" />
+        <Compile Include="Tools\Helpers\ResourceDictionaryHelper.cs" />
+        <Compile Include="Tools\Helpers\ResourceHelper.cs" />
+        <Compile Include="Tools\Helpers\ZipHelper.cs" />
         <Compile Include="Tools\IconRenderer.cs" />
-        <Compile Include="Tools\ImageHelper.cs" />
         <Compile Include="Tools\ItemsControlExtensions.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
-        <Compile Include="Tools\MiscHelper.cs" />
         <Compile Include="Tools\Props.cs" />
         <Compile Include="Tools\Props.Designer.cs" />
-        <Compile Include="Tools\ResourceDictionaryHelper.cs" />
-        <Compile Include="Tools\ResourceHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
         <Compile Include="Tools\StickerPositionConverter.cs" />
         <Compile Include="Tools\SvgRenderer.cs" />
+        <Compile Include="Tools\ThemeDefinitions\Theme.cs" />
+        <Compile Include="Tools\ThemeDefinitions\ThemeField.cs" />
         <Compile Include="Tools\ThemeLoadInfo.cs" />
         <Compile Include="Tools\ThemeNameExtractor.cs" />
         <Compile Include="Tools\ThemeNames.cs" />
+        <Compile Include="Tools\ThemesLocation.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
         <Compile Include="Tools\WPFAdapter.cs" />
         <Compile Include="Tools\WpfColorContainer.cs" />
+        <Compile Include="Tools\YukiThemeCollector.cs" />
         <Compile Include="YukiTheme.cs" />
     </ItemGroup>
     <ItemGroup>

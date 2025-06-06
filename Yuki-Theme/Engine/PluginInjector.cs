@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using CodeTemplatesPlugin;
-using Fluent;
-using Fluent.Lists;
 using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using YukiTheme.Tools;
@@ -91,14 +88,13 @@ namespace YukiTheme.Engine
 
 			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
 
-			PluginGUIItemExecuteDelegate execute =
-				(PluginGUIItemExecuteDelegate)plugin.GetType().GetField("executeDelegate", flags).GetValue(plugin);
+			var execute = plugin.GetByReflection<PluginGUIItemExecuteDelegate>("executeDelegate");
 
 			object pluginCore = execute.Target;
 
 			Console.WriteLine($"Plugin Core: {pluginCore.GetType()}");
 
-			_ctForm = (DockContent)pluginCore.GetType().GetField("ctForm", flags).GetValue(pluginCore);
+			_ctForm = pluginCore.GetByReflection<DockContent>("ctForm", false);
 
 
 			_ctForm.Closed += ClosedCtForm;
