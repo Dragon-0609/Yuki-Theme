@@ -1,4 +1,7 @@
-﻿namespace YukiTheme.Tools;
+﻿using System.Collections.Generic;
+using ExCSS;
+
+namespace YukiTheme.Tools;
 
 public static class DefaultThemeNames
 {
@@ -109,4 +112,20 @@ public static class DokiThemeNames
 		"YuruCamp: Nadeshiko",
 		"YuruCamp: Shima Rin"
 	};
+}
+
+public static class YukiThemeNames
+{
+	public static IReadOnlyList<string> Themes => _themes;
+	private static List<string> _themes;
+
+	static YukiThemeNames()
+	{
+		CheckForChanges();
+	}
+
+	public static void CheckForChanges()
+	{
+		
+	}
 }

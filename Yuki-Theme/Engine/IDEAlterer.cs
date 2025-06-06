@@ -72,6 +72,7 @@ public class IDEAlterer
 		_editorAlterer.SubscribeComponents();
 		_editorAlterer.ChangeStyles();
 		_editorAlterer.StartMenuReplacement();
+		_editorAlterer.InjectToOtherPlugins();
 		_colorChanger.UpdateColors();
 		_wallpaperManager.Show();
 		_stickerManager.Show();

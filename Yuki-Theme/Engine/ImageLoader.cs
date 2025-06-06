@@ -99,7 +99,6 @@ public class ImageLoader
 		{
 			GetCustomSticker = Image.FromFile(stickerPath);
 			Console.WriteLine($"Loaded {stickerPath}");
-			Console.WriteLine($"{GetCustomSticker.Width}/{GetCustomSticker.Height}");
 		}
 	}
 
