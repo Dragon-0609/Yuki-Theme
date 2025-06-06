@@ -1,5 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Documents;
 using ExCSS;
+using Newtonsoft.Json;
+using YukiTheme.Tools.ThemeDefinitions;
 
 namespace YukiTheme.Tools;
 
@@ -117,15 +123,74 @@ public static class DokiThemeNames
 public static class YukiThemeNames
 {
 	public static IReadOnlyList<string> Themes => _themes;
-	private static List<string> _themes;
+	private static List<string> _themes = new();
+
+	private static Dictionary<string, string> _themeLocations = new();
 
 	static YukiThemeNames()
 	{
-		CheckForChanges();
+		Update();
 	}
 
-	public static void CheckForChanges()
+	public static void Update()
 	{
-		
+		_themes.Clear();
+		_themeLocations.Clear();
+		string[] paths = ThemesLocation.Paths;
+		foreach (string path in paths)
+		{
+			if (!Directory.Exists(path)) continue;
+			string[] themes = Directory.GetFiles(path, "*.yuki", SearchOption.AllDirectories);
+			if (themes.Length == 0) continue;
+
+			foreach (string theme in themes)
+			{
+				string themeFile = Path.Combine(path, theme);
+				if (!TryGetThemeName(themeFile, out string name)) continue;
+
+				_themes.Add(name);
+				_themeLocations.Add(name, themeFile);
+			}
+		}
+	}
+
+	public static bool TryGetThemeFileLocation(string name, out string path)
+	{
+		return _themeLocations.TryGetValue(name, out path);
+	}
+
+	private static bool TryGetThemeName(string path, out string name)
+	{
+		name = "";
+		if (TryGetThemeContent(path, out var theme))
+		{
+			name = theme.Name;
+			return true;
+		}
+
+		return false;
+	}
+
+	public static bool TryGetThemeContent(string path, out Theme theme)
+	{
+		theme = null;
+		if (!File.Exists(path)) return false;
+
+		if (ZipHelper.TryGetContent(path, "theme.json", out string content))
+		{
+			if (string.IsNullOrEmpty(content)) return false;
+
+			try
+			{
+				theme = JsonConvert.DeserializeObject<Theme>(content);
+				return true;
+			}
+			catch (Exception e)
+			{
+				return false;
+			}
+		}
+
+		return false;
 	}
 }

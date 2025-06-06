@@ -10,6 +10,6 @@ public class UpdateTest
 	public void TestUpdate()
 	{
 		UpdateChecker checker = new UpdateChecker();
-		Assert.True(checker.IsUpdateAvailable());
+		Assert.True(checker.IsUpdateAvailable(testing: true));
 	}
 }

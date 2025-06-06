@@ -31,6 +31,6 @@ public static class SettingsConst
 	public const int PORTABLE_MODE = 26;
 	public const int DISCRETE_MODE = 27;
 
-	public const double CURRENT_VERSION = 7.0;
+	public const double CURRENT_VERSION = 9.0;
 	public const string CURRENT_VERSION_ADD = "alpha";
 }
