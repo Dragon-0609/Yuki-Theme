@@ -7,144 +7,158 @@
 
 using System.Drawing;
 using System.Windows.Forms;
-using ICSharpCode.TextEditor.Gui.InsightWindow;
-using YukiTheme.Tools;
 
-namespace YukiTheme.Style.CodeCompletion;
-
-internal static class TipPainter
+namespace YukiTheme.Style.CodeCompletion
 {
-	private const float HorizontalBorder = 2;
-	private const float VerticalBorder = 1;
-	private static RectangleF workingArea = RectangleF.Empty;
-
-	//static StringFormat centerTipFormat = CreateTipStringFormat();
-
-	public static Size GetTipSize(Control control, Graphics graphics, Font font, string description)
+	static class TipPainter
 	{
-		return GetTipSize(control, graphics, new TipText(graphics, font, description));
-	}
-
-	public static Size GetTipSize(Control control, Graphics graphics, TipSection tipData)
-	{
-		var tipSize = Size.Empty;
-		var tipSizeF = SizeF.Empty;
-
-		if (workingArea == RectangleF.Empty)
+		const float HorizontalBorder = 2;
+		const float VerticalBorder   = 1;
+		static RectangleF workingArea = RectangleF.Empty;
+		
+		//static StringFormat centerTipFormat = CreateTipStringFormat();
+		
+		public static Size GetTipSize(Control control, Graphics graphics, Font font, string description)
 		{
-			var ownerForm = control.FindForm();
-			if (ownerForm.Owner != null) ownerForm = ownerForm.Owner;
-
-			workingArea = Screen.GetWorkingArea(ownerForm);
+			return GetTipSize(control, graphics, new TipText (graphics, font, description));
 		}
-
-		PointF screenLocation = control.PointToScreen(Point.Empty);
-		var maxLayoutSize = new SizeF(workingArea.Right /*- screenLocation.X*/ - HorizontalBorder * 2,
-			workingArea.Bottom /*- screenLocation.Y*/ - VerticalBorder * 2);
-
-		var global_max_x = workingArea.Right - HorizontalBorder * 2;
-
-		if (maxLayoutSize.Width > 0 && maxLayoutSize.Height > 0)
+		
+		public static Size GetTipSize(Control control, Graphics graphics, TipSection tipData)
 		{
-			/*graphics.TextRenderingHint =
-			TextRenderingHint.AntiAliasGridFit;*/
-			tipData.GlobalMaxX = global_max_x;
-			tipData.SetMaximumSize(maxLayoutSize);
-			//if (tipData.LeftOffset > 0) 
-			//	control.Left = control.Left - tipData.LeftOffset;
-			tipSizeF = tipData.GetRequiredSize();
-			tipData.SetAllocatedSize(tipSizeF);
-
-			tipSizeF += new SizeF(HorizontalBorder * 2,
-				VerticalBorder * 2);
-			tipSize = Size.Ceiling(tipSizeF);
+			Size tipSize = Size.Empty;
+			SizeF tipSizeF = SizeF.Empty;
+			
+			if (workingArea == RectangleF.Empty) {
+				Form ownerForm = control.FindForm();
+				if (ownerForm.Owner != null) {
+					ownerForm = ownerForm.Owner;
+				}
+				
+				workingArea = Screen.GetWorkingArea(ownerForm);
+			}
+			
+			PointF screenLocation = control.PointToScreen(Point.Empty);
+			SizeF maxLayoutSize = new SizeF(workingArea.Right /*- screenLocation.X*/ - HorizontalBorder * 2,
+			                                workingArea.Bottom /*- screenLocation.Y*/ - VerticalBorder * 2);
+			
+			float global_max_x = workingArea.Right - HorizontalBorder * 2;
+			
+			if (maxLayoutSize.Width > 0 && maxLayoutSize.Height > 0) {
+				/*graphics.TextRenderingHint =
+				TextRenderingHint.AntiAliasGridFit;*/
+				tipData.GlobalMaxX = global_max_x;
+				tipData.SetMaximumSize(maxLayoutSize);
+				//if (tipData.LeftOffset > 0) 
+				//	control.Left = control.Left - tipData.LeftOffset;
+				tipSizeF = tipData.GetRequiredSize();
+				tipData.SetAllocatedSize(tipSizeF);
+				
+				tipSizeF += new SizeF(HorizontalBorder * 2,
+				                      VerticalBorder   * 2);
+				tipSize = Size.Ceiling(tipSizeF);
+			}
+			if (control is YukiInsightWindow)
+			{
+				Rectangle rect = Rectangle.Ceiling(workingArea);
+				Point pt = (control as YukiInsightWindow).GetCusorCoord();
+				if (pt.X + tipSize.Width > rect.Width)
+				{
+					control.Location = new Point(rect.Width-tipSize.Width,pt.Y);
+				}
+			}
+			else
+			{
+				Rectangle rect = Rectangle.Ceiling(workingArea);
+				Point pt = control.Location;
+				if (pt.X + tipSize.Width > rect.Width)
+				{
+					control.Location = new Point(rect.Width-tipSize.Width,pt.Y);
+				}
+			}
+			if (control.ClientSize != tipSize) {
+				control.ClientSize = tipSize;
+			}
+			
+			return tipSize;
 		}
-
-		if (control is PABCNETInsightWindow)
+		
+		public static Size DrawTip(Control control, Graphics graphics, Font font, string description)
 		{
-			var rect = Rectangle.Ceiling(workingArea);
-			var pt = (control as PABCNETInsightWindow).CallFunctionByReflection<Point>("GetCusorCoord");
-			if (pt.X + tipSize.Width > rect.Width) control.Location = new Point(rect.Width - tipSize.Width, pt.Y);
+			return DrawTip(control, graphics, new TipText (graphics, font, description));
 		}
-		else
+		
+		public static Size DrawTip(Control control, Graphics graphics, TipSection tipData)
 		{
-			var rect = Rectangle.Ceiling(workingArea);
-			var pt = control.Location;
-			if (pt.X + tipSize.Width > rect.Width) control.Location = new Point(rect.Width - tipSize.Width, pt.Y);
-		}
-
-		if (control.ClientSize != tipSize) control.ClientSize = tipSize;
-
-		return tipSize;
-	}
-
-	public static Size DrawTip(Control control, Graphics graphics, Font font, string description)
-	{
-		return DrawTip(control, graphics, new TipText(graphics, font, description));
-	}
-
-	public static Size DrawTip(Control control, Graphics graphics, TipSection tipData)
-	{
-		var tipSize = Size.Empty;
-		var tipSizeF = SizeF.Empty;
-
-		PointF screenLocation = control.PointToScreen(Point.Empty);
-
-		if (workingArea == RectangleF.Empty)
-		{
-			var ownerForm = control.FindForm();
-			if (ownerForm.Owner != null) ownerForm = ownerForm.Owner;
-
-			workingArea = Screen.GetWorkingArea(ownerForm);
-		}
-
-		var maxLayoutSize = new SizeF(workingArea.Right /*- screenLocation.X*/ - HorizontalBorder * 2,
-			workingArea.Bottom /*- screenLocation.Y*/ - VerticalBorder * 2);
-		if (maxLayoutSize.Width > 0 && maxLayoutSize.Height > 0)
-		{
-			/*graphics.TextRenderingHint =
-			TextRenderingHint.AntiAliasGridFit;*/
-
-			tipData.SetMaximumSize(maxLayoutSize);
-			tipSizeF = tipData.GetRequiredSize();
-			tipData.SetAllocatedSize(tipSizeF);
-
-			tipSizeF += new SizeF(HorizontalBorder * 2,
-				VerticalBorder * 2);
-			tipSize = Size.Ceiling(tipSizeF);
-		}
-
-		if (control is PABCNETInsightWindow)
-		{
-			var rect = Rectangle.Ceiling(workingArea);
-			var pt = (control as PABCNETInsightWindow).CallFunctionByReflection<Point>("GetCusorCoord");
-			if (pt.X + tipSize.Width > rect.Width) control.Location = new Point(rect.Width - tipSize.Width, pt.Y);
-		}
-		else
-		{
-			var rect = Rectangle.Ceiling(workingArea);
-			var pt = control.Location;
-			if (pt.X + tipSize.Width > rect.Width) control.Location = rect.Width - tipSize.Width > 0 ? new Point(rect.Width - tipSize.Width, pt.Y) : new Point(10, pt.Y);
-		}
-
-		if (control.ClientSize != tipSize) control.ClientSize = tipSize;
-
-		if (tipSize != Size.Empty)
-		{
-			var borderRectangle = new Rectangle
+			Size tipSize = Size.Empty;
+			SizeF tipSizeF = SizeF.Empty;
+			
+			PointF screenLocation = control.PointToScreen(Point.Empty);
+			
+			if (workingArea == RectangleF.Empty) {
+				Form ownerForm = control.FindForm();
+				if (ownerForm.Owner != null) {
+					ownerForm = ownerForm.Owner;
+				}
+				
+				workingArea = Screen.GetWorkingArea(ownerForm);
+			}
+				
+			SizeF maxLayoutSize = new SizeF(workingArea.Right /*- screenLocation.X*/ - HorizontalBorder * 2,
+			                                workingArea.Bottom /*- screenLocation.Y*/ - VerticalBorder * 2);
+			if (maxLayoutSize.Width > 0 && maxLayoutSize.Height > 0) {
+				/*graphics.TextRenderingHint =
+				TextRenderingHint.AntiAliasGridFit;*/
+				
+				tipData.SetMaximumSize(maxLayoutSize);
+				tipSizeF = tipData.GetRequiredSize();
+				tipData.SetAllocatedSize(tipSizeF);
+				
+				tipSizeF += new SizeF(HorizontalBorder * 2,
+				                      VerticalBorder   * 2);
+				tipSize = Size.Ceiling(tipSizeF);
+			}
+			
+			if (control is YukiInsightWindow)
+			{
+				Rectangle rect = Rectangle.Ceiling(workingArea);
+				Point pt = (control as YukiInsightWindow).GetCusorCoord();
+				if (pt.X + tipSize.Width > rect.Width)
+				{
+					control.Location = new Point(rect.Width-tipSize.Width,pt.Y);
+				}
+			}
+			else
+			{
+				Rectangle rect = Rectangle.Ceiling(workingArea);
+				Point pt = control.Location;
+				if (pt.X + tipSize.Width > rect.Width)
+				{
+					if (rect.Width-tipSize.Width > 0)
+					control.Location = new Point(rect.Width-tipSize.Width,pt.Y);
+					else
+					control.Location = new Point(10,pt.Y);
+				}
+			}
+			
+			if (control.ClientSize != tipSize) {
+				control.ClientSize = tipSize;
+			}
+			
+			if (tipSize != Size.Empty) {
+				Rectangle borderRectangle = new Rectangle
 				(Point.Empty, tipSize - new Size(1, 1));
-
-			var displayRectangle = new RectangleF
-			(HorizontalBorder, VerticalBorder,
-				tipSizeF.Width - HorizontalBorder * 2,
-				tipSizeF.Height - VerticalBorder * 2);
-
-			// DrawRectangle draws from Left to Left + Width. A bug? :-/
-			graphics.DrawRectangle(SystemPens.WindowFrame,
-				borderRectangle);
-			tipData.Draw(new PointF(HorizontalBorder, VerticalBorder));
+				
+				RectangleF displayRectangle = new RectangleF
+				(HorizontalBorder, VerticalBorder,
+				 tipSizeF.Width - HorizontalBorder * 2,
+				 tipSizeF.Height - VerticalBorder * 2);
+				
+				// DrawRectangle draws from Left to Left + Width. A bug? :-/
+				graphics.DrawRectangle(SystemPens.WindowFrame,
+				                       borderRectangle);
+				tipData.Draw(new PointF(HorizontalBorder, VerticalBorder));
+			}
+			return tipSize;
 		}
-
-		return tipSize;
 	}
 }

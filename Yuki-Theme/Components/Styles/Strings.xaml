@@ -42,5 +42,8 @@
     <system:String x:Key="settings.general.editor.title">Editor</system:String>
     <system:String x:Key="settings.general.editor.mode">Editor Mode</system:String>
     <system:String x:Key="settings.general.editor.tip">To save the file in the editor&amp;#10;press Control + S in editor</system:String>
+    <system:String x:Key="settings.general.completion">Declarations and completion font size:</system:String>
+    <system:String x:Key="settings.general.completion.editor">Same as editor size</system:String>
+    <system:String x:Key="settings.general.completion.custom">Set</system:String>
 
 </ResourceDictionary>

@@ -20,8 +20,12 @@ public class SettingsPanelUtilities
 	{
 		List<SettingItem> items =
 		[
+			_settingsPanel.ShowBackground.ConvertToItem(SettingsConst.BG_IMAGE),
+			_settingsPanel.CompletionFont.ConvertToItem(SettingsConst.COMPLETION_FONT, 8),
+			_settingsPanel.CompletionFontSameAsEditor.ConvertToItem(SettingsConst.COMPLETION_FONT_AS_EDITOR),
 			_settingsPanel.ShowSticker.ConvertToItem(SettingsConst.STICKER),
 			_settingsPanel.HideHover.ConvertToItem(SettingsConst.HIDE_ON_HOVER),
+			_settingsPanel.HideDelay.ConvertToItem(SettingsConst.HIDE_DELAY),
 			_settingsPanel.AllowPositioning.ConvertToItem(SettingsConst.ALLOW_POSITIONING),
 			_settingsPanel.StickerDimensionCap.ConvertToItem(SettingsConst.USE_DIMENSION_CAP),
 			_settingsPanel.DimensionCapMax.ConvertToItem(SettingsConst.DIMENSION_CAP_MAX),
@@ -54,12 +58,12 @@ public class SettingsPanelUtilities
 			item.Save();
 		}
 
-		DatabaseManager.SaveAll();
+		DataSaver.SaveAll();
 	}
 
 	internal void ResetStickerMargin()
 	{
-		DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
+		DataSaver.Save(SettingsConst.STICKER_POSITION, "");
 		PluginEvents.Instance.OnStickerMarginReset();
 	}
 

@@ -301,4 +301,6 @@ public class EditorAlterer
 	}
 
 	public Form GetSettingsParent() => EditorComponents.GetSettingsParent();
+
+	public float EditorFontSize => _editorChanger.EditorFontSize;
 }

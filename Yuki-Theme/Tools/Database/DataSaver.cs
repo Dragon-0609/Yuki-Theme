@@ -2,9 +2,9 @@
 
 namespace YukiTheme.Tools;
 
-public class DatabaseManager
+public class DataSaver
 {
-	private static DatabaseManager _instance;
+	private static DataSaver _instance;
 
 	private readonly Dictionary<int, string> _defaults = new()
 	{
@@ -32,12 +32,13 @@ public class DatabaseManager
 		{ SettingsConst.HIDE_ON_HOVER, true.ToInt().ToString() },
 		{ SettingsConst.HIDE_DELAY, "750" },
 		{ SettingsConst.PORTABLE_MODE, false.ToInt().ToString() },
-		{ SettingsConst.DISCRETE_MODE, false.ToInt().ToString() }
+		{ SettingsConst.DISCRETE_MODE, false.ToInt().ToString() },
+		{ SettingsConst.COMPLETION_FONT_AS_EDITOR, 8.ToString() }
 	};
 
 	private IDatabase _database;
 
-	public DatabaseManager()
+	public DataSaver()
 	{
 		_instance = this;
 		InitDatabase();
@@ -127,6 +128,13 @@ public class DatabaseManager
 	public static int Load(int key, int defaultValue)
 	{
 		return int.Parse(_instance._database.GetValue(key.ToString(), defaultValue.ToString()));
+	}
+
+	public static int Load(int key, int defaultValue, int min)
+	{
+		int load = int.Parse(_instance._database.GetValue(key.ToString(), defaultValue.ToString()));
+		if (load < min) load = min;
+		return load;
 	}
 
 	public static bool Load(int key, bool defaultValue)

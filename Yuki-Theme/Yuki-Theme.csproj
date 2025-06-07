@@ -63,7 +63,7 @@
             <HintPath>..\..\PascalABCNET\bin\ParserTools.dll</HintPath>
         </Reference>
         <Reference Include="PascalABCNET">
-            <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
+          <HintPath>..\..\pascalabcnet-master\bin\PascalABCNET.exe</HintPath>
         </Reference>
         <Reference Include="PluginsSupport">
             <HintPath>..\..\PascalABCNET\bin\PluginsSupport.dll</HintPath>
@@ -172,8 +172,10 @@
         <Compile Include="Style\CodeCompletion\CodeCompletionKeyHandler.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionListView.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionWindow.cs" />
-        <Compile Include="Style\CodeCompletion\DeclarationPopup.cs" />
-        <Compile Include="Style\CodeCompletion\InsightPopup.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationViewWindow.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationWindow.cs" />
+        <Compile Include="Style\CodeCompletion\InsightWindow.cs" />
+        <Compile Include="Style\CodeCompletion\PseudoDataProvider.cs" />
         <Compile Include="Style\CodeCompletion\TipPainter.cs" />
         <Compile Include="Style\CodeCompletion\TipPainterTools.cs" />
         <Compile Include="Style\CodeCompletion\TipSection.cs" />
@@ -214,7 +216,7 @@
         </Compile>
         <Compile Include="Tools\Converter.cs" />
         <Compile Include="Tools\Database\DatabaseHelper.cs" />
-        <Compile Include="Tools\Database\DatabaseManager.cs" />
+        <Compile Include="Tools\Database\DataSaver.cs" />
         <Compile Include="Tools\Database\FileDatabase.cs" />
         <Compile Include="Tools\Database\IDatabase.cs" />
         <Compile Include="Tools\Doki\DokiKeysObtainer.cs" />
@@ -222,6 +224,7 @@
         <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
         <Compile Include="Tools\Helpers\ColorHelper.cs" />
+        <Compile Include="Tools\Helpers\CompletionFontSizeFinder.cs" />
         <Compile Include="Tools\Helpers\ImageHelper.cs" />
         <Compile Include="Tools\Helpers\MiscHelper.cs" />
         <Compile Include="Tools\Helpers\ResourceDictionaryHelper.cs" />

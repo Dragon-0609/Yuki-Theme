@@ -12,9 +12,10 @@ public static class MiscHelper
 		return GetByReflection<T>(instance.GetType(), instance, key, isPublic);
 	}
 
-	private static T GetByReflection<T>(Type type, object instance, string key, bool isPublic)
+	public static T GetByReflection<T>(Type type, object instance, string key, bool isPublic)
 	{
-		var getopt = type.GetField(key, (isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
+		var getopt = type.GetField(key,
+			(isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
 		if (getopt == null)
 		{
 			if (type.BaseType != null)
@@ -43,9 +44,15 @@ public static class MiscHelper
 		return (T)getopt?.GetValue(instance);
 	}
 
-	public static void SetByReflection<T>(this T instance, string key, object value)
+	public static void SetByReflection<T>(this T instance, string key, object value, bool isPublic = false)
 	{
-		var getopt = instance.GetType().GetField(key, BindingFlags.NonPublic | BindingFlags.Instance);
+		SetByReflection(instance, typeof(T), key, value, isPublic);
+	}
+
+	public static void SetByReflection<T>(this T instance, Type type, string key, object value, bool isPublic = false)
+	{
+		var getopt = type.GetField(key,
+			(isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
 		getopt?.SetValue(instance, value);
 	}
 
@@ -104,5 +111,22 @@ public static class MiscHelper
 		foreach (var pair in toReplace) origin = origin.Replace(pair.Key, pair.Value);
 
 		return origin;
+	}
+
+	public static float Lerp(float a, float b, float t)
+	{
+		return a + (b - a) * t;
+	}
+
+	public static float InverseLerp(float a, float b, float value)
+	{
+		return (value - a) / (b - a);
+	}
+
+	public static int Clamp(int value, int min, int max)
+	{
+		if (value < min) return min;
+		if (value > max) return max;
+		return value;
 	}
 }

@@ -20,6 +20,7 @@
       <option name="Build" default="false" projectName="Yuki-Theme" projectPath="$PROJECT_DIR$/Yuki-Theme/Yuki-Theme.csproj" />
       <option name="Build" default="false" projectName="YukiUtility" projectPath="$PROJECT_DIR$/YukiUtility/YukiUtility.csproj" />
       <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_copy to pascal" />
+      <option name="ToolBeforeRunTask" enabled="true" actionId="Tool_External Tools_copy debug symbols" />
     </method>
   </configuration>
 </component>

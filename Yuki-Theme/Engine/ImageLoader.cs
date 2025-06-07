@@ -94,7 +94,7 @@ public class ImageLoader
 
 	private void LoadCustomSticker()
 	{
-		var stickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		var stickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
 		if (File.Exists(stickerPath))
 		{
 			GetCustomSticker = Image.FromFile(stickerPath);

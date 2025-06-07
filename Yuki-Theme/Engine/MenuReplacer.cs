@@ -191,7 +191,7 @@ public class MenuReplacer
 
 	private void ToggleWallpaper(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.BG_IMAGE, !IDEAlterer.IsWallpaperVisible);
+		DataSaver.Save(SettingsConst.BG_IMAGE, !IDEAlterer.IsWallpaperVisible);
 		IDEAlterer.Instance.UpdateWallpaperVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
 		UpdateMenuIcon(WALLPAPER_KEY, true, _backimage);
@@ -199,7 +199,7 @@ public class MenuReplacer
 
 	private void ToggleSticker(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.STICKER, !IDEAlterer.IsStickerVisible);
+		DataSaver.Save(SettingsConst.STICKER, !IDEAlterer.IsStickerVisible);
 		IDEAlterer.Instance.UpdateStickerVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
 		UpdateMenuIcon(STICKER_KEY, true, _stick);
@@ -207,7 +207,7 @@ public class MenuReplacer
 
 	private void ToggleQuiet(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.DISCRETE_MODE, !IDEAlterer.IsDiscreteActive);
+		DataSaver.Save(SettingsConst.DISCRETE_MODE, !IDEAlterer.IsDiscreteActive);
 		IDEAlterer.Instance.UpdateWallpaperVisibility();
 		IDEAlterer.Instance.UpdateStickerVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
@@ -216,13 +216,13 @@ public class MenuReplacer
 
 	private void StickersPositioning(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.ALLOW_POSITIONING,
-			DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING, false));
+		DataSaver.Save(SettingsConst.ALLOW_POSITIONING,
+			DataSaver.Load(SettingsConst.ALLOW_POSITIONING, false));
 	}
 
 	private void ResetStickerPosition(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
+		DataSaver.Save(SettingsConst.STICKER_POSITION, "");
 		PluginEvents.Instance.OnStickerMarginReset();
 	}
 

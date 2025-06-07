@@ -23,6 +23,7 @@ public class EditorInspector
 		_editor = editor;
 	}
 
+
 	internal void SubscribeCompletion()
 	{
 		// Console.WriteLine ("Unsubscribed");
@@ -30,8 +31,9 @@ public class EditorInspector
 		_ht[_editor.TextEditor] = handler;
 
 		_editor.TextEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
-		_editor.TextEditor.Disposed += handler.CloseCodeCompletionWindow;
-		ChangeEditorShortcutForCompletition();
+		// handler.AttachCaretPositionChanged();
+		_editor.TextEditor.Disposed += handler.OnCodeCompletionWindowClosed;
+		ChangeEditorShortcutForCompletion();
 
 		EventAdd(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea),
 			"KeyEventHandler",
@@ -50,10 +52,19 @@ public class EditorInspector
 			.GetMethod("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
 		if (handler == null) return false;
 
+
+		/*
+		editor.ActiveTextAreaControl.TextArea.KeyEventHandler += h.TextAreaKeyEventHandler;
+		editor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += h.CaretPositionChangedEventHandler;
+		*/
+
 		handler = null;
 
 		EventRemove(target.GetType(), "TextAreaKeyEventHandler", target, typeof(TextArea), "KeyEventHandler",
 			_editor.TextEditor.ActiveTextAreaControl.TextArea);
+
+		EventRemove(target.GetType(), "CaretPositionChangedEventHandler", target, typeof(Caret), "PositionChanged",
+			_editor.TextEditor.ActiveTextAreaControl.TextArea.Caret);
 
 		EventRemove(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea),
 			"KeyEventHandler",
@@ -65,7 +76,7 @@ public class EditorInspector
 		return true;
 	}
 
-	internal void ChangeEditorShortcutForCompletition()
+	internal void ChangeEditorShortcutForCompletion()
 	{
 		ChangeShortcut(Keys.Space | Keys.Control, new CodeCompletionAllNames());
 	}
