@@ -8,11 +8,11 @@ public static class ImageHelper
 	public static Size CalculateDimension(Size value)
 	{
 		var size = value;
-		var capMax = DatabaseManager.Load(SettingsConst.DIMENSION_CAP_MAX, 300);
+		var capMax = DataSaver.Load(SettingsConst.DIMENSION_CAP_MAX, 300);
 		double aspect = 0;
-		if (DatabaseManager.Load(SettingsConst.USE_DIMENSION_CAP))
+		if (DataSaver.Load(SettingsConst.USE_DIMENSION_CAP))
 		{
-			if (DatabaseManager.Load(SettingsConst.DIMENSION_CAP_UNIT, 0) == 0)
+			if (DataSaver.Load(SettingsConst.DIMENSION_CAP_UNIT, 0) == 0)
 			{
 				if (size.Height > capMax)
 				{

@@ -30,6 +30,8 @@ public static class SettingsConst
 	public const int HIDE_DELAY = 25;
 	public const int PORTABLE_MODE = 26;
 	public const int DISCRETE_MODE = 27;
+	public const int COMPLETION_FONT = 28;
+	public const int COMPLETION_FONT_AS_EDITOR = 29;
 
 	public const double CURRENT_VERSION = 9.0;
 	public const string CURRENT_VERSION_ADD = "alpha";

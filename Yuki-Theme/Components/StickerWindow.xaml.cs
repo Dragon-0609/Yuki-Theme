@@ -56,7 +56,7 @@ public partial class StickerWindow : SnapWindow
 
 	internal void SaveData()
 	{
-		DatabaseManager.Save(SettingsConst.STICKER_POSITION, ConvertToSave());
+		DataSaver.Save(SettingsConst.STICKER_POSITION, ConvertToSave());
 	}
 
 	private string ConvertToSave()
@@ -66,7 +66,7 @@ public partial class StickerWindow : SnapWindow
 
 	internal void LoadData()
 	{
-		var data = DatabaseManager.Load(SettingsConst.STICKER_POSITION, "");
+		var data = DataSaver.Load(SettingsConst.STICKER_POSITION, "");
 		PositionInfo = ConvertToLoad(data);
 		SetBorderOutline();
 	}
@@ -86,7 +86,7 @@ public partial class StickerWindow : SnapWindow
 
 	private void Sticker_MouseEnter(object sender, MouseEventArgs e)
 	{
-		if (DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+		if (DataSaver.Load(SettingsConst.HIDE_ON_HOVER))
 		{
 			var anim = new DoubleAnimation(0.01, TimeSpan.FromMilliseconds(300));
 			Sticker.BeginAnimation(OpacityProperty, anim);
@@ -95,7 +95,7 @@ public partial class StickerWindow : SnapWindow
 
 	private void Sticker_MouseLeave(object sender, MouseEventArgs e)
 	{
-		if (DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+		if (DataSaver.Load(SettingsConst.HIDE_ON_HOVER))
 		{
 			var anim = new DoubleAnimation(1, TimeSpan.FromMilliseconds(300));
 			Sticker.BeginAnimation(OpacityProperty, anim);
@@ -111,7 +111,7 @@ public partial class StickerWindow : SnapWindow
 
 	private void StartDragging(MouseButtonEventArgs e)
 	{
-		if (DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING) && !DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER))
+		if (DataSaver.Load(SettingsConst.ALLOW_POSITIONING) && !DataSaver.Load(SettingsConst.HIDE_ON_HOVER))
 		{
 			_anchorPoint = e.GetPosition(this);
 			_inDrag = true;
@@ -187,7 +187,7 @@ public partial class StickerWindow : SnapWindow
 	private void MouseDoubleClickAction()
 	{
 		// Console.WriteLine("Saving");
-		if (!DatabaseManager.Load(SettingsConst.HIDE_ON_HOVER) && DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING))
+		if (!DataSaver.Load(SettingsConst.HIDE_ON_HOVER) && DataSaver.Load(SettingsConst.ALLOW_POSITIONING))
 		{
 			Console.WriteLine("Saving");
 			SaveData();
@@ -232,7 +232,7 @@ public partial class StickerWindow : SnapWindow
 
 	internal void FocusBack(object sender, MouseButtonEventArgs e)
 	{
-		if (!DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING))
+		if (!DataSaver.Load(SettingsConst.ALLOW_POSITIONING))
 		{
 			if (Target != null)
 				Target.Focus();
