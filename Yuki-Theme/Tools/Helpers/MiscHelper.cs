@@ -12,18 +12,28 @@ public static class MiscHelper
 		return GetByReflection<T>(instance.GetType(), instance, key, isPublic);
 	}
 
+	public static object GetByReflection(this object instance, string key, bool isPublic = false)
+	{
+		return GetByReflection(instance.GetType(), instance, key, isPublic);
+	}
+
 	public static T GetByReflection<T>(Type type, object instance, string key, bool isPublic)
+	{
+		return (T)GetByReflection(type, instance, key, isPublic);
+	}
+
+	public static object GetByReflection(Type type, object instance, string key, bool isPublic)
 	{
 		var getopt = type.GetField(key,
 			(isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
 		if (getopt == null)
 		{
 			if (type.BaseType != null)
-				return GetByReflection<T>(type.BaseType, instance, key, isPublic);
+				return GetByReflection(type.BaseType, instance, key, isPublic);
 			throw new NullReferenceException("Field not found");
 		}
 
-		return (T)getopt?.GetValue(instance);
+		return getopt?.GetValue(instance);
 	}
 
 	public static T GetPropertyByReflection<T>(this object instance, string key)
@@ -51,15 +61,20 @@ public static class MiscHelper
 
 	public static void SetByReflection<T>(this T instance, Type type, string key, object value, bool isPublic = false)
 	{
-		var getopt = type.GetField(key,
-			(isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance);
+		BindingFlags flags = (isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance;
+		var getopt = type.GetField(key, flags);
 		getopt?.SetValue(instance, value);
+		if (getopt == null)
+			Console.WriteLine($"{key} not found in {type.Name}");
 	}
 
-	public static void CallByReflection<T>(this T instance, string key, object value)
+	public static void CallByReflection<T>(this T instance, string key, object value, bool isPublic = false)
 	{
-		var methodInfo = instance.GetType().GetMethod(key, BindingFlags.NonPublic | BindingFlags.Instance);
-		methodInfo.Invoke(instance, new[] { value });
+		BindingFlags flags = (isPublic ? BindingFlags.Public : BindingFlags.NonPublic) | BindingFlags.Instance;
+		var methodInfo = instance.GetType().GetMethod(key, flags);
+		object[] parameters = value == null ? null : new[] { value };
+
+		methodInfo.Invoke(instance, parameters);
 	}
 
 	public static T CallFunctionByReflection<T>(this object instance, string key)
