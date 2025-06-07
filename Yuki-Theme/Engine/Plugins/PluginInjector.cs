@@ -1,34 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using VisualPascalABCPlugins;
-using WeifenLuo.WinFormsUI.Docking;
-using YukiTheme.Tools;
+using YukiTheme.Engine.Processors;
 
 namespace YukiTheme.Engine
 {
 	public class PluginInjector
 	{
-		private const string CODE_TEMPLATES_PLUGIN = "VPP_CODE_TEMPLATES_PLUGIN";
 		private MenuStrip _menu;
 		private Timer _loadingTimer;
 
-		private string[] _pluginsToInject =
-		[
-			CODE_TEMPLATES_PLUGIN
-		];
-
 		private event Action OnColorUpdate;
 
-		private ToolStripMenuItem _codeTemplates;
-		private DockContent _ctForm;
+		private InjectorProcessor[] _processors;
+
+		private bool _inited = false;
 
 		public void InjectWithDelay(MenuStrip menu)
 		{
 			_menu = menu;
+			Init();
 			StartLoadingTimer();
+		}
+
+		private void Init()
+		{
+			if (_inited) return;
+			_inited = true;
+
+			_processors =
+			[
+				new CodeTemplateProcessor()
+			];
+			foreach (var processor in _processors)
+			{
+				OnColorUpdate += processor.OnColorUpdate;
+			}
 		}
 
 		private void StartLoadingTimer()
@@ -66,54 +75,13 @@ namespace YukiTheme.Engine
 			{
 				if (item.Tag is PluginGUIItem plugin)
 				{
-					if (plugin.Text.StartsWith(CODE_TEMPLATES_PLUGIN))
+					InjectorProcessor processor = _processors.FirstOrDefault(p => plugin.Text.StartsWith(p.Name));
+					if (processor != null)
 					{
-						InjectToCodeTemplates(item);
+						processor.Process(item);
 					}
 				}
 			}
-		}
-
-		private void InjectToCodeTemplates(ToolStripMenuItem item)
-		{
-			_codeTemplates = item;
-			item.Click += CodeTemplatesClicked;
-		}
-
-		private void CodeTemplatesClicked(object sender, EventArgs e)
-		{
-			if (_codeTemplates.Tag is not PluginGUIItem plugin) return;
-
-			_codeTemplates.Click -= CodeTemplatesClicked;
-
-			BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
-
-			var execute = plugin.GetByReflection<PluginGUIItemExecuteDelegate>("executeDelegate");
-
-			object pluginCore = execute.Target;
-
-			Console.WriteLine($"Plugin Core: {pluginCore.GetType()}");
-
-			_ctForm = pluginCore.GetByReflection<DockContent>("ctForm", false);
-
-
-			_ctForm.Closed += ClosedCtForm;
-			OnColorUpdate += UpdateCtColors;
-			UpdateCtColors();
-
-			_ctForm.Hide();
-			_ctForm.Show();
-		}
-
-		private void ClosedCtForm(object sender, EventArgs e)
-		{
-			OnColorUpdate -= UpdateCtColors;
-		}
-
-		private void UpdateCtColors()
-		{
-			Console.WriteLine($"Updating ct colors");
-			ColorHelper.SetColors(_ctForm, true, null);
 		}
 
 		private List<ToolStripMenuItem> FindPluginsToInject()
@@ -142,7 +110,7 @@ namespace YukiTheme.Engine
 
 		private bool IsPluginToInject(PluginGUIItem plugin)
 		{
-			return _pluginsToInject.Any(p => plugin.Text.Contains(p));
+			return _processors.Any(p => plugin.Text.Contains(p.Name));
 		}
 
 		private void UpdateColors()

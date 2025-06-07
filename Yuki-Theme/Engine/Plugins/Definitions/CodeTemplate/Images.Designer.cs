@@ -1,4 +1,4 @@
-﻿namespace CodeTemplatesPlugin
+﻿namespace YukiTheme.Engine.Plugins.Definitions.CodeTemplate
 {
     partial class Images
     {
