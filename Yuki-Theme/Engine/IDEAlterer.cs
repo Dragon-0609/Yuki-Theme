@@ -23,6 +23,7 @@ public class IDEAlterer
 	private ThemeWindowManager _themeSelect;
 	private WallpaperManager _wallpaperManager;
 	internal Form1 Form1;
+	private IDEWindowsColorChanger _ideColorChanger;
 
 	internal IWorkbench Workbench;
 
@@ -38,6 +39,7 @@ public class IDEAlterer
 		_wallpaperManager = new WallpaperManager();
 		_stickerManager = new StickerManager();
 		_themeSelect = new ThemeWindowManager();
+		_ideColorChanger = new IDEWindowsColorChanger();
 		new DataSaver();
 		ThemeNameExtractor.ListenToReload();
 		StartExporter();
@@ -73,6 +75,7 @@ public class IDEAlterer
 		_editorAlterer.ChangeStyles();
 		_editorAlterer.StartMenuReplacement();
 		_editorAlterer.InjectToOtherPlugins();
+		_ideColorChanger.Subscribe();
 		_colorChanger.UpdateColors();
 		_wallpaperManager.Show();
 		_stickerManager.Show();

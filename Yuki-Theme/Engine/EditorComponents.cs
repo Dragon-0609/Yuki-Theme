@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor;
@@ -19,7 +20,7 @@ public class EditorComponents
 	internal ContextMenuStrip _context;
 	internal ContextMenuStrip _context2;
 	internal MenuStrip _menu;
-	internal MenuRenderer _menuRenderer;
+	internal static MenuRenderer _menuRenderer;
 
 	private NameBar _nameBar;
 	internal Panel _outputInput;
@@ -48,6 +49,8 @@ public class EditorComponents
 	internal TabControl _referenceTabsController;
 
 	private Form1 Fm => IDEAlterer.Instance.Form1;
+
+	private event Action OnMenuRendererReady;
 
 	internal void GetComponents()
 	{
@@ -102,6 +105,7 @@ public class EditorComponents
 		_outputOutput.BorderStyle = BorderStyle.None;
 		_outputInput.BorderStyle = BorderStyle.None;
 
+		ChangeContextMenuRenderer(_outputWindow);
 
 		var erw = (ErrorsListWindowForm)IDEAlterer.Instance.Workbench.ErrorsListWindow;
 		ErrorsList = (ListView)erw.Controls.Find("lvErrorsList", false)[0];
@@ -111,6 +115,7 @@ public class EditorComponents
 		{
 			e.DrawDefault = true;
 		};
+		ChangeContextMenuRenderer(erw);
 
 		GetReferenceForm();
 
@@ -121,10 +126,39 @@ public class EditorComponents
 
 		_outputTextBoxs = (Dictionary<ICodeFileDocument, RichTextBox>)fp.GetValue(Fm);
 
+		ChangeContextMenuRenderer(cons);
+
 		_nameBar = new NameBar();
 
 		_statusBar.Items.Add(_nameBar.GetControl());
 		_statusBar.Renderer = new ToolRenderer();
+	}
+
+	private void ChangeContextMenuRenderer(Control control)
+	{
+		Console.WriteLine(
+			$"Checking {control.Name}, found: {control.ContextMenuStrip != null}, {control.ContextMenu != null}");
+		if (control.ContextMenuStrip != null)
+		{
+			OnMenuRendererReady += () => control.ContextMenuStrip.Renderer = _menuRenderer;
+		}
+		else if (control.ContextMenu != null)
+		{
+			Console.WriteLine($"Checking {control.Name} for menu, found: {true}");
+		}
+
+		foreach (Control child in control.Controls)
+		{
+			ChangeContextMenuRenderer(child);
+		}
+	}
+
+	internal void MenuRendererReady()
+	{
+		OnMenuRendererReady?.Invoke();
+		OnMenuRendererReady = () =>
+		{
+		};
 	}
 
 	private void GetReferenceForm()

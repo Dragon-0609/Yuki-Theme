@@ -144,6 +144,7 @@
         <Compile Include="Engine\IconAlterer.cs" />
         <Compile Include="Engine\IDEAlterer.cs" />
         <Compile Include="Engine\IDEConsole.cs" />
+        <Compile Include="Engine\IDEWindowsColorChanger.cs" />
         <Compile Include="Engine\ImageLoader.cs" />
         <Compile Include="Engine\MenuReplacer.cs" />
         <Compile Include="Engine\OptionsChanger.cs" />
@@ -225,6 +226,7 @@
         <Compile Include="Tools\Doki\DokiKeysTranslator.cs" />
         <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
+        <Compile Include="Tools\HandleWindowFinding.cs" />
         <Compile Include="Tools\Helpers\ColorHelper.cs" />
         <Compile Include="Tools\Helpers\CompletionFontSizeFinder.cs" />
         <Compile Include="Tools\Helpers\ImageHelper.cs" />

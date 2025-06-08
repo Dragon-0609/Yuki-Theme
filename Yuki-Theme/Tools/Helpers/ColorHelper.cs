@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
+using AdvancedDataGridView;
 using Fluent;
 using Fluent.Lists;
+using ICSharpCode.TextEditor;
+using VisualPascalABC;
 using YukiTheme.Components;
 using YukiTheme.Engine;
 
@@ -50,6 +55,12 @@ public static class ColorHelper
 
 	#endregion
 
+	private static List<TreeGridView> _processedTrees = new();
+
+	private static List<CodeFileDocumentTextEditorControl> _processedEditors = new();
+	private static FoldMargin _foldmargin;
+	private static IconBarMargin _margin;
+
 	internal static void SetColorsToAllChildren(Control.ControlCollection collection, bool updateLabelBackground,
 		DrawItemEventHandler comboBoxDrawer)
 	{
@@ -67,6 +78,23 @@ public static class ColorHelper
 		/*
 		backColor = Color.Red;
 		foreColor = Color.Yellow;*/
+
+		if (control.ContextMenuStrip != null)
+		{
+			ContextMenuStrip strip = control.ContextMenuStrip;
+			strip.BackColor = backColor;
+			strip.ForeColor = foreColor;
+			if (strip.Renderer != EditorComponents._menuRenderer)
+			{
+				strip.Renderer = EditorComponents._menuRenderer;
+			}
+
+			foreach (ToolStripItem item in strip.Items)
+			{
+				item.BackColor = backColor;
+				item.ForeColor = foreColor;
+			}
+		}
 
 		if (control is Label)
 		{
@@ -101,6 +129,38 @@ public static class ColorHelper
 			textBox.BackColor = backColor;
 			textBox.ForeColor = foreColor;
 		}
+		else if (control is TreeGridView tree)
+		{
+			tree.BackColor = backColor;
+			tree.ForeColor = foreColor;
+			tree.BackgroundColor = backColor;
+			tree.GridColor = ColorReference.BorderColor;
+			if (!_processedTrees.Contains(tree))
+			{
+				DataGridViewCellStyle style = new DataGridViewCellStyle();
+				style.BackColor = backColor;
+				style.ForeColor = foreColor;
+
+				tree.DefaultCellStyle = style;
+				tree.RowsDefaultCellStyle = style;
+				tree.ColumnHeadersDefaultCellStyle = style;
+				tree.RowHeadersDefaultCellStyle = style;
+
+				_processedTrees.Add(tree);
+			}
+		}
+		else if (control is CodeFileDocumentTextEditorControl code)
+		{
+			code.BackColor = backColor;
+			code.ForeColor = foreColor;
+			code.Parent.BackColor = backColor;
+			if (!_processedEditors.Contains(code))
+			{
+				SetMargin(code.ActiveTextAreaControl.TextArea);
+				code.ActiveTextAreaControl.TextArea.Paint += PaintBg;
+				_processedEditors.Add(code);
+			}
+		}
 		else
 		{
 			if (control is Form)
@@ -125,4 +185,80 @@ public static class ColorHelper
 			SetColorsToAllChildren(control.Controls, updateLabelBackground, comboBoxDrawer);
 		}
 	}
+
+
+	private static void PaintBg(object sender, PaintEventArgs e)
+	{
+		TextArea area = (TextArea)sender;
+		if (_margin != null)
+		{
+			e.Graphics.FillRectangle(ColorReference.BackgroundDefaultBrush, _margin.DrawingPosition.X,
+				_margin.DrawingPosition.Y,
+				_margin.DrawingPosition.Width, _margin.DrawingPosition.Height);
+			var inside =
+				typeof(IconBarMargin).GetMethod("IsLineInsideRegion",
+					BindingFlags.Static | BindingFlags.NonPublic);
+			// paint icons
+			foreach (var mark in area.Document.BookmarkManager.Marks)
+			{
+				var lineNumber = area.Document.GetVisibleLine(mark.LineNumber);
+				var lineHeight = area.TextView.FontHeight;
+				var yPos = lineNumber * lineHeight - area.VirtualTop.Y;
+				if ((bool)inside.Invoke(
+					    null,
+					    new object[]
+						    { yPos, yPos + lineHeight, _margin.DrawingPosition.Y, _margin.DrawingPosition.Height }))
+				{
+					if (lineNumber == area.Document.GetVisibleLine(mark.LineNumber - 1))
+						// marker is inside folded region, do not draw it
+						continue;
+
+					mark.Draw(_margin, e.Graphics, new Point(0, yPos));
+				}
+			}
+		}
+
+		if (_foldmargin != null)
+		{
+			SetMarginPosition(area);
+			e.Graphics.DrawLine(
+				BrushRegistry.GetDotPen(ColorReference.BackgroundDefaultColor, ColorReference.BorderColor),
+				_foldmargin.DrawingPosition.X,
+				_foldmargin.DrawingPosition.Y,
+				_foldmargin.DrawingPosition.X,
+				_foldmargin.DrawingPosition.Height);
+		}
+	}
+
+
+	#region Margins
+
+	internal static void SetMargin(TextArea area)
+	{
+		foreach (var margins in area.LeftMargins)
+			if (margins is IconBarMargin margin)
+				_margin = margin;
+			else if (margins is FoldMargin foldMargin) _foldmargin = foldMargin;
+	}
+
+	internal static void SetMarginPosition(TextArea area)
+	{
+		var currentXPos = 0;
+		foreach (var margins in area.LeftMargins)
+		{
+			var marginRectangle = new Rectangle(currentXPos, 0, margins.Size.Width, area.Height);
+			if (margins.IsVisible || margins is FoldMargin) currentXPos += margins.DrawingPosition.Width;
+
+			if (margins is FoldMargin)
+			{
+				if (marginRectangle != _margin.DrawingPosition)
+					// Be sure that the line has valid rectangle
+					_foldmargin.DrawingPosition = marginRectangle;
+
+				break;
+			}
+		}
+	}
+
+	#endregion
 }
