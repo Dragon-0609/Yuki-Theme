@@ -1,5 +1,3 @@
-using System;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -58,18 +56,18 @@ namespace YukiTheme.Export
 		private void ExportWallpaper()
 		{
 			DeleteIfExist(BackgroundName);
-			SaveImageToFolder("background.png", Path.Combine(_folder, BackgroundName));
+			SaveImageToFolder(BackgroundName, Path.Combine(_folder, BackgroundName));
 		}
 
 		private void ExportSticker()
 		{
 			DeleteIfExist(StickerName);
-			SaveImageToFolder("sticker.png", Path.Combine(_folder, StickerName));
+			SaveImageToFolder(StickerName, Path.Combine(_folder, StickerName));
 		}
 
 		private void SaveImageToFolder(string fileName, string savePath)
 		{
-			if (ZipHelper.TryGetImage(_themeToExport, fileName, out Stream stream))
+			if (ZipHelper.TryGetImage(_themeToExport, fileName, out Stream stream, out var zip))
 			{
 				using (var file = File.Create(savePath))
 				{
@@ -78,6 +76,11 @@ namespace YukiTheme.Export
 				}
 
 				stream.Dispose();
+				zip.Dispose();
+			}
+			else
+			{
+				LinkCreator.CopyDefault(fileName, _folder);
 			}
 		}
 	}

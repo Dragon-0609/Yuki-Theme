@@ -65,6 +65,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8355adb5_002D3688_002D4761_002D8915_002D817782f22df9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_002DTheme_002FEngine_002FPlugins_002FDefinitions_002FCompilerController_002FCompilerInformation/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_002DTheme_002FStyle_002FHelpers_002FResources/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Yuki_002DTheme_002FStyle_002FHelpers_002FStrings/@EntryIndexedValue">True</s:Boolean>
 	

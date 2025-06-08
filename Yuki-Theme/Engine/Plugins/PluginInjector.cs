@@ -32,7 +32,10 @@ namespace YukiTheme.Engine
 
 			_processors =
 			[
-				new CodeTemplateProcessor()
+				new CodeTemplateProcessor(),
+				new CompilerControllerProcessor(),
+				new InternalErrorReportProcessor(),
+				new LanguageConverterProcessor(),
 			];
 			foreach (var processor in _processors)
 			{

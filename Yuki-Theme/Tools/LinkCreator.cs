@@ -74,15 +74,12 @@ public class LinkCreator
 		var backgroundExtension = "background.png";
 
 		var theme = Path.Combine(_folder, themeExtension);
-		Console.WriteLine($"Does exist: {theme}, {!File.Exists(theme)}");
 		if (!File.Exists(theme)) CopyDefault(themeExtension, _folder);
 
 		var background = Path.Combine(_folder, backgroundExtension);
-		Console.WriteLine($"Does exist: {background}, {!File.Exists(background)}");
 		if (!File.Exists(background)) CopyDefault(backgroundExtension, _folder);
 
 		var sticker = Path.Combine(_folder, stickerExtension);
-		Console.WriteLine($"Does exist: {sticker}, {!File.Exists(sticker)}");
 		if (!File.Exists(sticker)) CopyDefault(stickerExtension, _folder);
 	}
 

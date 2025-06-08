@@ -14,8 +14,7 @@ namespace YukiTheme.Engine.Processors
 {
 	public class CodeTemplateProcessor : InjectorProcessor
 	{
-		private const string CODE_TEMPLATES_PLUGIN = "VPP_CODE_TEMPLATES_PLUGIN";
-		public override string Name => CODE_TEMPLATES_PLUGIN;
+		public override string Name => CodeTemplates_.StringsPrefix;
 
 		private object _ctForm;
 		private DockContent _form;
@@ -26,11 +25,7 @@ namespace YukiTheme.Engine.Processors
 
 			object pluginCore = execute.Target;
 
-			Console.WriteLine($"Plugin Core: {pluginCore.GetType()}");
-
-			_ctForm = pluginCore.GetByReflection("ctForm", false);
-
-			Console.WriteLine($"Type: {_ctForm.GetType().Name}, core type: {pluginCore.GetType().Name}");
+			_ctForm = pluginCore.GetByReflection(nameof(CodeTemplates_.ctForm), false);
 
 			_form = ((DockContent)_ctForm);
 

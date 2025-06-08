@@ -9,6 +9,8 @@ namespace YukiTheme.Engine.Processors
 		private ToolStripMenuItem _item;
 		public abstract string Name { get; }
 
+		protected virtual bool InjectImmediate => false;
+
 		protected event Action ColorUpdated;
 
 		protected abstract void Process(PluginGUIItem plugin);
@@ -16,7 +18,14 @@ namespace YukiTheme.Engine.Processors
 		public void Process(ToolStripMenuItem item)
 		{
 			_item = item;
-			item.Click += Clicked;
+			if (InjectImmediate)
+			{
+				Process(_item.Tag as PluginGUIItem);
+			}
+			else
+			{
+				item.Click += Clicked;
+			}
 		}
 
 		private void Clicked(object sender, EventArgs e)

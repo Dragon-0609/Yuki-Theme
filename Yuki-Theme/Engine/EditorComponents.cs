@@ -136,15 +136,9 @@ public class EditorComponents
 
 	private void ChangeContextMenuRenderer(Control control)
 	{
-		Console.WriteLine(
-			$"Checking {control.Name}, found: {control.ContextMenuStrip != null}, {control.ContextMenu != null}");
 		if (control.ContextMenuStrip != null)
 		{
 			OnMenuRendererReady += () => control.ContextMenuStrip.Renderer = _menuRenderer;
-		}
-		else if (control.ContextMenu != null)
-		{
-			Console.WriteLine($"Checking {control.Name} for menu, found: {true}");
 		}
 
 		foreach (Control child in control.Controls)
