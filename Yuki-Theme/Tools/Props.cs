@@ -52,9 +52,11 @@ namespace Yuki_Theme_Plugin
 			{
 				// MessageBox.Show ("Dock Pane");
 				DockPane dock = (DockPane)ct;
+				int number = 0;
 				foreach (DockPane nestedPane in dock.NestedPanesContainer.NestedPanes)
 				{
-					listBox1.Items.Add($"[{nestedPane.Name}] >_ ({nestedPane.GetHashCode()})");
+					listBox1.Items.Add($"[{nestedPane.Name}] -{number}- >_ ({nestedPane.GetHashCode()})");
+					number++;
 				}
 
 				AddControls(dock.Controls);
@@ -70,7 +72,7 @@ namespace Yuki_Theme_Plugin
 			int u = 0;
 			foreach (Control control in col)
 			{
-				listBox1.Items.Add($"[{control.Name}] > ({control.GetHashCode()})");
+				listBox1.Items.Add($"[{control.Name}] -{u}- > ({control.GetHashCode()})");
 				max++;
 				// MessageBox.Show ($"Item child: {u}");
 				GC.Collect();

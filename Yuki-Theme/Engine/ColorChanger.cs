@@ -51,11 +51,11 @@ public class ColorChanger
 
 	private Dictionary<string, Pen> _pens = new();
 
-	public Action<string, Color> Update = (key, color) =>
+	public event Action<string, Color> Update = (key, color) =>
 	{
 	};
 
-	internal Action UpdatedColors = () =>
+	internal event Action UpdatedColors = () =>
 	{
 	};
 

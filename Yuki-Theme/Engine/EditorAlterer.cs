@@ -111,8 +111,6 @@ public class EditorAlterer
 			EditorComponents._projectSplitter.BackColor = color;
 		}
 
-		// TODO: Later change colors for references window
-
 		if (EditorComponents._referenceList != null)
 		{
 			EditorComponents._referenceList.BackColor = color;
@@ -210,6 +208,7 @@ public class EditorAlterer
 		var toolrenderer = new ToolRenderer();
 		EditorComponents._tools.Renderer = toolrenderer;
 		EditorComponents._tools.Paint += PaintOnToolBar;
+		EditorComponents.MenuRendererReady();
 	}
 
 	internal void RequestBottomBarUpdate()
