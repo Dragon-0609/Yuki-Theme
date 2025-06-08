@@ -154,9 +154,23 @@
         <Compile Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesPlugin.cs" />
         <Compile Include="Engine\Plugins\Definitions\CodeTemplate\Images.cs" />
         <Compile Include="Engine\Plugins\Definitions\CodeTemplate\Images.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerControllerPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\CompilerInternalErrorReport.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\CompilerInternalErrorReport.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\ErrorReport.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\ErrorReport.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\InternalErrorReportPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\LanguageConverterPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\TextFormatterForm.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\TextFormatterForm.Designer.cs" />
         <Compile Include="Engine\Plugins\PluginInjector.cs" />
         <Compile Include="Engine\Plugins\Processors\CodeTemplateProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\ComplilerControllerProcessor.cs" />
         <Compile Include="Engine\Plugins\Processors\InjectorProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\InternalErrorReportProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\LanguageConverterProcessor.cs" />
         <Compile Include="Engine\StickerManager.cs" />
         <Compile Include="Engine\TextEditorChanger.cs" />
         <Compile Include="Engine\ThemeSelectManager.cs" />
@@ -260,6 +274,8 @@
         <EmbeddedResource Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesForm.resx">
           <DependentUpon>CodeTemplatesForm.cs</DependentUpon>
         </EmbeddedResource>
+        <EmbeddedResource Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.resx" />
+        <EmbeddedResource Include="Resources\Templates\YukiTemplate.xshd" />
         <EmbeddedResource Include="Resources\Themes\Doki\Aqua.json" />
         <EmbeddedResource Include="Resources\Themes\Doki\Astolfo.json" />
         <EmbeddedResource Include="Resources\Themes\Doki\Asuna Dark.json" />

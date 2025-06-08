@@ -32,15 +32,15 @@ namespace YukiTheme.Tools
 			return false;
 		}
 
-		public static bool TryGetImage(string path, string fileName, out Stream image)
+		public static bool TryGetImage(string path, string fileName, out Stream image, out ZipArchive zip)
 		{
 			image = null;
 			try
 			{
-				using ZipArchive zipFile = ZipFile.OpenRead(path);
+				ZipArchive zipFile = ZipFile.OpenRead(path);
 
 				ZipArchiveEntry imageFile = zipFile.GetEntry(fileName);
-
+				zip = zipFile;
 				if (imageFile != null)
 				{
 					image = imageFile.Open();
@@ -53,6 +53,7 @@ namespace YukiTheme.Tools
 					$"Something went wrong on reading {path} {fileName} file. Make sure it is a valid zip file. \nException: {e.Message}");
 			}
 
+			zip = null;
 			return false;
 		}
 	}

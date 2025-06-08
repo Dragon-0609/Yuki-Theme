@@ -10,7 +10,7 @@ namespace YukiTheme.Engine.Plugins.Definitions.CodeTemplate
 		private Images images = new Images();
 		public VisualPascalABC.Form1 MainForm;
 		IWorkbench workbench;
-		private CodeTemplatesForm ctForm = new CodeTemplatesForm();
+		public CodeTemplatesForm ctForm = new CodeTemplatesForm();
 		private bool firstTime = true;
 
 		public CodeTemplates_(IWorkbench workbench)

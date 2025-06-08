@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AdvancedDataGridView;
 using Fluent;
@@ -58,6 +59,7 @@ public static class ColorHelper
 	private static List<TreeGridView> _processedTrees = new();
 
 	private static List<CodeFileDocumentTextEditorControl> _processedEditors = new();
+	private static List<ComboBox> _processedDropdowns = new();
 	private static FoldMargin _foldmargin;
 	private static IconBarMargin _margin;
 
@@ -96,11 +98,21 @@ public static class ColorHelper
 			}
 		}
 
-		if (control is Label)
+		if (control is LinkLabel link)
+		{
+			link.LinkColor = foreColor;
+			link.ActiveLinkColor = ColorReference.ForegroundHoverColor;
+		}
+		else if (control is Label)
 		{
 			control.ForeColor = foreColor;
 			if (updateLabelBackground)
 				control.BackColor = backColor;
+		}
+		else if (control is NumericUpDown numeric)
+		{
+			control.ForeColor = foreColor;
+			control.BackColor = backColor;
 		}
 		else if (control is Button button)
 		{
@@ -117,10 +129,11 @@ public static class ColorHelper
 		{
 			comboBox.BackColor = backColor;
 			comboBox.ForeColor = foreColor;
-			if (comboBoxDrawer != null)
+			if (!_processedDropdowns.Contains(comboBox) && comboBoxDrawer != null)
 			{
 				comboBox.DrawMode = DrawMode.OwnerDrawFixed;
 				comboBox.DrawItem += comboBoxDrawer;
+				_processedDropdowns.Add(comboBox);
 			}
 		}
 		else if (control is TextBox textBox)
@@ -148,6 +161,17 @@ public static class ColorHelper
 
 				_processedTrees.Add(tree);
 			}
+		}
+		else if (control is TableLayoutPanel table)
+		{
+			table.ForeColor = ColorReference.ForegroundColor;
+			foreach (Control flowLayout in table.Controls)
+				if (flowLayout is FlowLayoutPanel)
+					foreach (Control tblControl in flowLayout.Controls)
+						if (tblControl is Label)
+							tblControl.ForeColor = tblControl.Name.Contains("Version")
+								? ColorReference.BorderColor
+								: ColorReference.ForegroundColor;
 		}
 		else if (control is CodeFileDocumentTextEditorControl code)
 		{
@@ -180,6 +204,10 @@ public static class ColorHelper
 					listEx.SeparatorColor = ColorReference.BorderColor;
 					listEx.ListViewSelectionColor = ColorReference.SelectionColor;
 				}
+			}
+			else if (control is GroupBox)
+			{
+				control.ForeColor = foreColor;
 			}
 
 			SetColorsToAllChildren(control.Controls, updateLabelBackground, comboBoxDrawer);

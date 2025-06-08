@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using VisualPascalABC;
 using YukiTheme.Components.TempForm;
 using YukiTheme.Style;
+using YukiTheme.Tools;
 using static YukiTheme.Engine.ColorChanger;
 
 namespace YukiTheme.Engine;
@@ -192,6 +193,8 @@ public class EditorAlterer
 		b.ForeColor = ColorReference.ForegroundColor;
 		b.FlatAppearance.BorderColor = color;
 		b.FlatStyle = FlatStyle.Flat;
+		b.UseVisualStyleBackColor = false;
+		b.FlatAppearance.MouseOverBackColor = ColorReference.BackgroundClickColor;
 	}
 
 	internal void ChangeStyles()
@@ -240,6 +243,7 @@ public class EditorAlterer
 		EditorComponents._aboutBox.BackColor = ColorReference.BackgroundColor;
 		EditorComponents._aboutBox.ForeColor = ColorReference.ForegroundColor;
 		Button btn = null;
+
 		foreach (Control cont in EditorComponents._aboutBox.Controls)
 			if (cont is LinkLabel link)
 			{

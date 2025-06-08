@@ -38,6 +38,10 @@ namespace YukiTheme.Tools
 				{
 					_keys.Add("SELECTION", field.Background);
 				}
+				else if (key == "Vertical Ruler")
+				{
+					_keys.Add("VERTICAL_RULER", field.Foreground);
+				}
 				else if (key == "Caret")
 				{
 					_keys.Add("ACCENT", field.Foreground);
@@ -45,6 +49,20 @@ namespace YukiTheme.Tools
 				else if (key == "Line Number")
 				{
 					_keys.Add("LINE_COLOR", field.Foreground);
+					_keys.Add("LINE_BG", field.Background);
+				}
+				else if (key == "Fold's Line")
+				{
+					_keys.Add("FOLD_LINE", field.Foreground);
+				}
+				else if (key == "Fold's Rectangle")
+				{
+					_keys.Add("FOLD_COLOR", field.Foreground);
+					_keys.Add("FOLD_BG", field.Background);
+				}
+				else if (key == "Selected Fold's Line")
+				{
+					_keys.Add("SELECTED_FOLDS_COLOR", field.Foreground);
 				}
 				else if (key == "Other Marker")
 				{
@@ -70,6 +88,14 @@ namespace YukiTheme.Tools
 				{
 					_keys.Add("KEYWORD", field.Foreground);
 				}
+				else if (key == "If, else Statements")
+				{
+					_keys.Add("IFELSE", field.Foreground);
+				}
+				else if (key == "Iteration Statements")
+				{
+					_keys.Add("ITERATIONS", field.Foreground);
+				}
 				else if (key == "Begin, End")
 				{
 					_keys.Add("KEYS", field.Foreground);
@@ -90,7 +116,7 @@ namespace YukiTheme.Tools
 
 		private string GetTemplate()
 		{
-			return ResourceHelper.LoadString("Template.xshd", "Templates.");
+			return ResourceHelper.LoadString("YukiTemplate.xshd", "Templates.");
 		}
 	}
 }

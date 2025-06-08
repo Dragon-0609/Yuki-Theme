@@ -35,7 +35,6 @@ namespace YukiTheme.Engine
 
 		private void AddToUpdate(Control target)
 		{
-			Console.WriteLine($"Adding {target.Name} to update");
 			_controlsToUpdate.Add(target);
 		}
 
@@ -43,7 +42,6 @@ namespace YukiTheme.Engine
 		{
 			foreach (var control in _controlsToUpdate)
 			{
-				Console.WriteLine($"Updating {control.Name} colors");
 				ColorHelper.SetColors(control, false, null);
 			}
 		}
