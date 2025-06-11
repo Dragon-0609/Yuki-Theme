@@ -7,9 +7,7 @@
 ## English
 
 This program helps to customize PascalABC.NET IDE. By this program you can apply default popular color schemes like: `Darcula`, `Monokai` and etc.
-Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl.
-
-Or, you can make your own color scheme by clicking `plus` button.
+Also, it includes `Doki Theme`, with over 50 themes, I think you will find the best girl. 
 
 Before 
 
@@ -124,7 +122,6 @@ Help make this plugin better!
 Это программа для людей, которые хотят изменить (кастомизация) PascalABC.NET IDE. С помощью этой программы вы можете выбрать любую встроенную популярную тему, как:  `Darcula`, `Monokai` и др.
 А ещё, программа включает в себя `Doki Theme`, с более чем 50 тем, думаю вы найдёте лучшую девушку.
 
-Или вы можете создать свою тему кликая `плюс` кнопку. Также, вы можете импортировать свою световую схему из любой IDE от JetBrains, кликая `Импорт`.
 
 До
 
