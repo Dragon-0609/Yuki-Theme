@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using AdvancedDataGridView;
-using Fluent;
-using Fluent.Lists;
 using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using YukiTheme.Components;
