@@ -17,15 +17,17 @@ public class UpdateChecker
 	private readonly string _githubUrl = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
 	private bool _isAvailable = false;
 
-	public bool IsUpdateAvailable()
+	private const double TEST_VERSION = 6.0;
+
+	public bool IsUpdateAvailable(bool testing = false)
 	{
 		_isAvailable = false;
 
-		CheckVersion().Wait();
+		CheckVersion(testing).Wait();
 		return _isAvailable;
 	}
 
-	public async Task CheckVersion()
+	public async Task CheckVersion(bool testing)
 	{
 		// try
 		// {
@@ -56,17 +58,23 @@ public class UpdateChecker
 				nextVersion = ParseVersion(hasBeta, tg);
 
 				var nextVer = double.Parse(nextVersion, CultureInfo.InvariantCulture);
-				_isAvailable = IsNewVersion(nextVer) || (Math.Abs(SettingsConst.CURRENT_VERSION - nextVer) < 1 &&
-				                                         SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
+				_isAvailable = IsNewVersion(nextVer, testing) ||
+				               (Math.Abs(GetVersion(testing) - nextVer) < 1 &&
+				                SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
 				if (_isAvailable) PrepareForDownloading(jresponse);
 				// afterParsing(available);
 			}
 		}
 	}
 
-	private bool IsNewVersion(double nextVer)
+	private bool IsNewVersion(double nextVer, bool testing)
 	{
-		return SettingsConst.CURRENT_VERSION < nextVer;
+		return GetVersion(testing) < nextVer;
+	}
+
+	private static double GetVersion(bool testing)
+	{
+		return testing ? TEST_VERSION : SettingsConst.CURRENT_VERSION;
 	}
 
 	private void PrepareForDownloading(JObject jresponse)

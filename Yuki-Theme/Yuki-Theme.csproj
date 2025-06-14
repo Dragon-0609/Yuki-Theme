@@ -33,6 +33,7 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Accessibility" />
         <Reference Include="CodeCompletion">
             <HintPath>..\..\PascalABCNET\bin\CodeCompletion.dll</HintPath>
         </Reference>
@@ -59,7 +60,7 @@
             <HintPath>..\..\PascalABCNET\bin\ParserTools.dll</HintPath>
         </Reference>
         <Reference Include="PascalABCNET">
-            <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
+          <HintPath>..\..\pascalabcnet-master\bin\PascalABCNET.exe</HintPath>
         </Reference>
         <Reference Include="PluginsSupport">
             <HintPath>..\..\PascalABCNET\bin\PluginsSupport.dll</HintPath>
@@ -70,23 +71,27 @@
           <HintPath>..\packages\Svg.3.4.7\lib\net472\Svg.dll</HintPath>
         </Reference>
         <Reference Include="System"/>
-        <Reference Include="System.Buffers">
-          <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+        <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
         </Reference>
+        <Reference Include="System.Configuration" />
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Data.Linq"/>
+        <Reference Include="System.Design" />
         <Reference Include="System.Drawing"/>
-        <Reference Include="System.Memory">
-          <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.IO.Compression.FileSystem" />
+        <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
         </Reference>
         <Reference Include="System.Net.Http"/>
         <Reference Include="System.Numerics" />
-        <Reference Include="System.Numerics.Vectors">
-          <HintPath>..\packages\system.numerics.vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+        <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
         </Reference>
-        <Reference Include="System.Runtime.CompilerServices.Unsafe">
-          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
         </Reference>
         <Reference Include="System.Web"/>
         <Reference Include="System.Windows.Forms"/>
@@ -108,6 +113,7 @@
         </Compile>
         <Compile Include="Components\GridWindow.xaml.cs"/>
         <Compile Include="Components\IntegerUpDown.xaml.cs"/>
+        <Compile Include="Components\ListViewExt.cs" />
         <Compile Include="Components\NameBar.cs"/>
         <Compile Include="Components\PluginSettingsControl.cs"/>
         <Compile Include="Components\PluginSettingsControl.Designer.cs"/>
@@ -128,7 +134,6 @@
         </Compile>
         <Compile Include="Engine\ColorChanger.cs" />
         <Compile Include="Engine\ColorReference.cs" />
-        <Compile Include="Engine\DataManager.cs" />
         <Compile Include="Engine\EditorAlterer.cs" />
         <Compile Include="Engine\EditorComponents.cs" />
         <Compile Include="Engine\EditorInspector.cs" />
@@ -136,10 +141,33 @@
         <Compile Include="Engine\IconAlterer.cs" />
         <Compile Include="Engine\IDEAlterer.cs" />
         <Compile Include="Engine\IDEConsole.cs" />
+        <Compile Include="Engine\IDEWindowsColorChanger.cs" />
         <Compile Include="Engine\ImageLoader.cs" />
         <Compile Include="Engine\MenuReplacer.cs" />
         <Compile Include="Engine\OptionsChanger.cs" />
         <Compile Include="Engine\PluginEvents.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesForm.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesForm.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CodeTemplate\Images.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CodeTemplate\Images.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerControllerPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.cs" />
+        <Compile Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\CompilerInternalErrorReport.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\CompilerInternalErrorReport.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\ErrorReport.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\ErrorReport.Designer.cs" />
+        <Compile Include="Engine\Plugins\Definitions\InternalErrorReport\InternalErrorReportPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\LanguageConverterPlugin.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\TextFormatterForm.cs" />
+        <Compile Include="Engine\Plugins\Definitions\LanguageConverter\TextFormatterForm.Designer.cs" />
+        <Compile Include="Engine\Plugins\PluginInjector.cs" />
+        <Compile Include="Engine\Plugins\Processors\CodeTemplateProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\ComplilerControllerProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\InjectorProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\InternalErrorReportProcessor.cs" />
+        <Compile Include="Engine\Plugins\Processors\LanguageConverterProcessor.cs" />
         <Compile Include="Engine\StickerManager.cs" />
         <Compile Include="Engine\TextEditorChanger.cs" />
         <Compile Include="Engine\ThemeSelectManager.cs" />
@@ -151,14 +179,17 @@
         <Compile Include="Export\ExportListener.cs" />
         <Compile Include="Export\ExternalExporter.cs" />
         <Compile Include="Export\PlainExporter.cs" />
+        <Compile Include="Export\YukiExporter.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionAllNames.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionHighlighter.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionKeyHandler.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionListView.cs" />
         <Compile Include="Style\CodeCompletion\CodeCompletionWindow.cs" />
-        <Compile Include="Style\CodeCompletion\DeclarationPopup.cs" />
-        <Compile Include="Style\CodeCompletion\InsightPopup.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationViewWindow.cs" />
+        <Compile Include="Style\CodeCompletion\DeclarationWindow.cs" />
+        <Compile Include="Style\CodeCompletion\InsightWindow.cs" />
+        <Compile Include="Style\CodeCompletion\PseudoDataProvider.cs" />
         <Compile Include="Style\CodeCompletion\TipPainter.cs" />
         <Compile Include="Style\CodeCompletion\TipPainterTools.cs" />
         <Compile Include="Style\CodeCompletion\TipSection.cs" />
@@ -197,39 +228,51 @@
         <Compile Include="Style\YukiDockPaneStrip.cs">
             <SubType>Component</SubType>
         </Compile>
-        <Compile Include="Tools\ColorHelper.cs" />
         <Compile Include="Tools\Converter.cs" />
         <Compile Include="Tools\Database\DatabaseHelper.cs" />
-        <Compile Include="Tools\Database\DatabaseManager.cs" />
+        <Compile Include="Tools\Database\DataSaver.cs" />
         <Compile Include="Tools\Database\FileDatabase.cs" />
         <Compile Include="Tools\Database\IDatabase.cs" />
-        <Compile Include="Tools\DokiKeysObtainer.cs" />
-        <Compile Include="Tools\DokiKeysTranslator.cs" />
-        <Compile Include="Tools\DokiThemeCollector.cs" />
+        <Compile Include="Tools\Doki\DokiKeysObtainer.cs" />
+        <Compile Include="Tools\Doki\DokiKeysTranslator.cs" />
+        <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
         <Compile Include="Tools\Enums.cs" />
+        <Compile Include="Tools\HandleWindowFinding.cs" />
+        <Compile Include="Tools\Helpers\ColorHelper.cs" />
+        <Compile Include="Tools\Helpers\CompletionFontSizeFinder.cs" />
+        <Compile Include="Tools\Helpers\ImageHelper.cs" />
+        <Compile Include="Tools\Helpers\MiscHelper.cs" />
+        <Compile Include="Tools\Helpers\ResourceDictionaryHelper.cs" />
+        <Compile Include="Tools\Helpers\ResourceHelper.cs" />
+        <Compile Include="Tools\Helpers\ZipHelper.cs" />
         <Compile Include="Tools\IconRenderer.cs" />
-        <Compile Include="Tools\ImageHelper.cs" />
         <Compile Include="Tools\ItemsControlExtensions.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
-        <Compile Include="Tools\MiscHelper.cs" />
         <Compile Include="Tools\Props.cs" />
         <Compile Include="Tools\Props.Designer.cs" />
-        <Compile Include="Tools\ResourceDictionaryHelper.cs" />
-        <Compile Include="Tools\ResourceHelper.cs" />
         <Compile Include="Tools\SettingsConst.cs" />
         <Compile Include="Tools\StickerPosition.cs" />
         <Compile Include="Tools\StickerPositionConverter.cs" />
         <Compile Include="Tools\SvgRenderer.cs" />
+        <Compile Include="Tools\ThemeDefinitions\Theme.cs" />
+        <Compile Include="Tools\ThemeDefinitions\ThemeField.cs" />
         <Compile Include="Tools\ThemeLoadInfo.cs" />
         <Compile Include="Tools\ThemeNameExtractor.cs" />
         <Compile Include="Tools\ThemeNames.cs" />
+        <Compile Include="Tools\ThemesLocation.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
         <Compile Include="Tools\WPFAdapter.cs" />
         <Compile Include="Tools\WpfColorContainer.cs" />
+        <Compile Include="Tools\YukiThemeCollector.cs" />
         <Compile Include="YukiTheme.cs" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Components\PluginSettingsControl.resx" />
+        <EmbeddedResource Include="Engine\Plugins\Definitions\CodeTemplate\CodeTemplatesForm.resx">
+          <DependentUpon>CodeTemplatesForm.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Engine\Plugins\Definitions\CompilerController\CompilerInformation.resx" />
+        <EmbeddedResource Include="Resources\Templates\YukiTemplate.xshd" />
         <EmbeddedResource Include="Resources\Themes\Doki\Aqua.json" />
         <EmbeddedResource Include="Resources\Themes\Doki\Astolfo.json" />
         <EmbeddedResource Include="Resources\Themes\Doki\Asuna Dark.json" />
@@ -328,6 +371,9 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+        <EmbeddedResource Include="..\Yuki-Theme\Resources\Themes\Default\Github Dark.xshd">
+          <Link>Resources\Default\theme.xshd</Link>
+        </EmbeddedResource>
         <Content Include="Fonts\Montserrat-Regular.ttf" />
         <Content Include="Fonts\SAOUITT-Regular.ttf" />
         <Content Include="Fonts\SAOWelcomeTT-Regular.ttf" />
@@ -335,7 +381,6 @@
         <EmbeddedResource Include="Resources\Icons\yuki128_2.png" />
         <EmbeddedResource Include="Resources\Default\background.png" />
         <EmbeddedResource Include="Resources\Default\sticker.png" />
-        <EmbeddedResource Include="Resources\Default\theme.xshd" />
         <EmbeddedResource Include="Resources\Templates\Template.xshd" />
         <EmbeddedResource Include="Resources\Themes\Default\Darcula.xshd" />
         <EmbeddedResource Include="Resources\Themes\Default\Dracula.xshd" />
@@ -701,6 +746,7 @@
         <Folder Include="Resources\Wallpapers\" />
     </ItemGroup>
     <ItemGroup>
+        <None Include="App.config" />
         <None Include="packages.config"/>
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets"/>

@@ -18,7 +18,7 @@ public class DokiExporter : Exporter
 		ExportListener.Instance.SetExporter(this);
 	}
 
-	protected override Exporter Next { get; } = new PlainExporter();
+	protected override Exporter Next { get; } = new YukiExporter();
 
 	protected override bool HasTheme(string name)
 	{

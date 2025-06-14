@@ -58,6 +58,10 @@ public partial class PluginSettingsControl : UserControl, IOptionsContent
 			_settingsPanel.Width = Width;
 			_settingsPanel.Height = Height;
 		}
+		else
+		{
+			_settingsPanel.UpdateThemeNames();
+		}
 
 		_settingsPanel.GetColors();
 	}

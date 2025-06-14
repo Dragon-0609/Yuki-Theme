@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components;
@@ -55,9 +56,12 @@ public class StickerManager : WindowManager
 			{
 				_sticker.SetImage(IDEAlterer.GetStickerWPF);
 				_sticker.SetSize();
+				UpdateOpacity();
 			}
-
-			UpdateOpacity();
+			else
+			{
+				if (!IsWindowNull()) _sticker.Opacity = 0;
+			}
 		}
 
 		_sticker.ResetPosition();

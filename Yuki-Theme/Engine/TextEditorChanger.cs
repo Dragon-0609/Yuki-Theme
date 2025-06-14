@@ -27,8 +27,10 @@ public class TextEditorChanger
 		SetMargin();
 		_editorComponents.TextArea.Paint += PaintBg;
 
-		_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += UpdateMarkerBGOnCaretPositionChanged;
-		_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += RemoveErrorMarksOnCaretPositionChanged;
+		_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged +=
+			UpdateMarkerBGOnCaretPositionChanged;
+		_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged +=
+			RemoveErrorMarksOnCaretPositionChanged;
 
 		_editorComponents.TextEditor.Controls[1].Paint += CtrlOnPaint;
 		_editorComponents.TextEditor.Controls[1].Invalidate();
@@ -42,7 +44,10 @@ public class TextEditorChanger
 			ReSetTextEditor();
 		};
 
-		Fm.MainDockPanel.ActiveContentChanged += (sender, e) => { _documentUpdator.Start(); };
+		Fm.MainDockPanel.ActiveContentChanged += (sender, e) =>
+		{
+			_documentUpdator.Start();
+		};
 	}
 
 	private void PaintBg(object sender, PaintEventArgs e)
@@ -62,7 +67,9 @@ public class TextEditorChanger
 				var lineHeight = _editorComponents.TextArea.TextView.FontHeight;
 				var yPos = lineNumber * lineHeight - _editorComponents.TextArea.VirtualTop.Y;
 				if ((bool)inside.Invoke(
-					    null, new object[] { yPos, yPos + lineHeight, _margin.DrawingPosition.Y, _margin.DrawingPosition.Height }))
+					    null,
+					    new object[]
+						    { yPos, yPos + lineHeight, _margin.DrawingPosition.Y, _margin.DrawingPosition.Height }))
 				{
 					if (lineNumber == _editorComponents.TextArea.Document.GetVisibleLine(mark.LineNumber - 1))
 						// marker is inside folded region, do not draw it
@@ -76,7 +83,8 @@ public class TextEditorChanger
 		if (_foldmargin != null)
 		{
 			SetMarginPosition();
-			e.Graphics.DrawLine(BrushRegistry.GetDotPen(ColorReference.BackgroundDefaultColor, ColorReference.BorderColor),
+			e.Graphics.DrawLine(
+				BrushRegistry.GetDotPen(ColorReference.BackgroundDefaultColor, ColorReference.BorderColor),
 				_foldmargin.DrawingPosition.X,
 				_foldmargin.DrawingPosition.Y,
 				_foldmargin.DrawingPosition.X,
@@ -112,8 +120,10 @@ public class TextEditorChanger
 			_editorComponents.TextArea.Paint -= PaintBg;
 			_editorInspector.StopInspectBrackets();
 
-			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= UpdateMarkerBGOnCaretPositionChanged;
-			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -= RemoveErrorMarksOnCaretPositionChanged;
+			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -=
+				UpdateMarkerBGOnCaretPositionChanged;
+			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged -=
+				RemoveErrorMarksOnCaretPositionChanged;
 
 			try
 			{
@@ -140,8 +150,10 @@ public class TextEditorChanger
 			Fm.CurrentCodeFileDocument.BackColor = ColorReference.BackgroundColor;
 
 			_editorComponents.TextArea.Paint += PaintBg;
-			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += UpdateMarkerBGOnCaretPositionChanged;
-			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += RemoveErrorMarksOnCaretPositionChanged;
+			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged +=
+				UpdateMarkerBGOnCaretPositionChanged;
+			_editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged +=
+				RemoveErrorMarksOnCaretPositionChanged;
 
 			_editorInspector.InspectBrackets();
 
@@ -167,7 +179,7 @@ public class TextEditorChanger
 		if (!VisualPABCSingleton.MainForm.UserOptions.HighlightOperatorBrackets ||
 		    WorkbenchServiceFactory.DebuggerManager.IsRunning)
 			return;
-		CodeCompletionHighlighter.UpdateMarkers(_editorComponents.TextArea);
+		CodeCompletionHighlighter.Highlight(_editorComponents.TextArea);
 	}
 
 	private void RemoveErrorMarksOnCaretPositionChanged(object sender, EventArgs e)
@@ -175,6 +187,7 @@ public class TextEditorChanger
 		ErrorLineBookmarkNew.Remove();
 	}
 
+	public float EditorFontSize => _editorComponents.TextEditor.ActiveTextAreaControl.TextArea.Font.Size;
 
 	#region Margins
 

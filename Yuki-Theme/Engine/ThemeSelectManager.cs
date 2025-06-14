@@ -14,6 +14,7 @@ public class ThemeWindowManager : WindowManager
 	{
 		WpfConverter.ConvertGuiColorsNBrushes();
 
+		var targetForm = IDEAlterer.Instance.Form1;
 		_themeSelect = new ThemeSelectWindow
 		{
 			AlignX = AlignmentX.Left,
@@ -21,16 +22,17 @@ public class ThemeWindowManager : WindowManager
 			BorderOutlineX = 0,
 			BorderOutlineY = 0
 		};
-		var targetForm = IDEAlterer.Instance.Form1;
 		_themeSelect.SetOwner(targetForm);
+		_themeSelect.AutoSize = true;
+		ElementHost.EnableModelessKeyboardInterop(_themeSelect);
+
 		_themeSelect.Width = targetForm.Width;
 		_themeSelect.Height = targetForm.Height;
-		_themeSelect.AutoSize = true;
 		_themeSelect.ResetPosition();
-		ElementHost.EnableModelessKeyboardInterop(_themeSelect);
 		_themeSelect.Show();
 		_themeSelect.Focus();
 
+		_themeSelect.SelectedTheme -= ThemeSelected;
 		_themeSelect.SelectedTheme += ThemeSelected;
 
 		IDEAlterer.Instance.Form1.Focus();

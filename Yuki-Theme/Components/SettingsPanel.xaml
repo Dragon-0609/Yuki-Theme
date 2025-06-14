@@ -34,6 +34,31 @@
                           SelectedIndex="0" />
             </WrapPanel>
 
+            <GroupBox Margin="0 5" Header="{DynamicResource settings.general.completion}"
+                      Style="{StaticResource CustomGroup}">
+                <WrapPanel>
+                    <CheckBox Content="{DynamicResource settings.general.completion.editor}" Margin="0 10 6 3"
+                              Style="{StaticResource CheckBoxUserControl}" Checked="CompletionFontSameAsEditor_Changed"
+                              Unchecked="CompletionFontSameAsEditor_Changed"
+                              HorizontalAlignment="Left" Name="CompletionFontSameAsEditor" />
+
+                    <WrapPanel Margin="0 5" Name="CompletionFontSetPanel">
+                        <TextBlock Margin="40 0 4 0" Style="{StaticResource TextBlockUserControl}"
+                                   VerticalAlignment="Center"
+                                   Text="{DynamicResource settings.general.completion.custom }" />
+
+                        <components:IntegerUpDown
+                            FontSize="12" Text="750" BorderBrush="DimGray" Padding="2 2"
+                            VerticalAlignment="Center" Width="70" Height="30"
+                            Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
+                            MinValue="6" DefaultValue="12" MaxValue="30" ValueChange="1" x:Name="CompletionFont" />
+                    </WrapPanel>
+                </WrapPanel>
+            </GroupBox>
+            <CheckBox Content="{DynamicResource settings.general.background.enabled}" Margin="0 10 6 3"
+                      Style="{StaticResource CheckBoxUserControl}"
+                      HorizontalAlignment="Left" Name="ShowBackground" />
+
             <GroupBox Margin="0 5" Header="{DynamicResource settings.general.sticker.title}"
                       Style="{StaticResource CustomGroup}">
                 <Grid>
@@ -94,11 +119,11 @@
                                        VerticalAlignment="Center"
                                        Text="{DynamicResource settings.general.hidedelay }" />
 
-                            <!--<controls:IntegerUpDown
-                                    FontSize="12" Text="750" BorderBrush="DimGray" Padding="2 2"
-                                    VerticalAlignment="Center" Width="70" Height="30"
-                                    Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
-                                    MinValue="100" DefaultValue="750" MaxValue="5000" ValueChange="50" x:Name="HideDelay" />-->
+                            <components:IntegerUpDown
+                                FontSize="12" Text="750" BorderBrush="DimGray" Padding="2 2"
+                                VerticalAlignment="Center" Width="70" Height="30"
+                                Tag="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Tag}"
+                                MinValue="100" DefaultValue="750" MaxValue="5000" ValueChange="50" x:Name="HideDelay" />
                         </WrapPanel>
 
                     </StackPanel>
