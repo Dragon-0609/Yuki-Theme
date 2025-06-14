@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using YukiTheme.Engine;
 
 namespace YukiTheme.Tools;
@@ -28,7 +29,43 @@ public class LinkCreator
 		IDEAlterer.ReleaseImages();
 		RunUtility();
 
+		if (HasFailedValidation())
+		{
+			string content = "Yuki Theme нужны права администратора для настройки плагина. Вы хотите разрешить?";
+			string title = "Настройка плагина Yuki Theme";
+			DialogResult userResponse = MessageBox.Show(
+				content,
+				title, MessageBoxButtons.YesNo);
+
+			if (userResponse == DialogResult.Yes)
+			{
+				RunUtility();
+				if (HasFailedValidation())
+				{
+					ShowWarning();
+				}
+			}
+			else
+			{
+				ShowWarning();
+			}
+		}
+
 		return true;
+
+		void ShowWarning()
+		{
+			string text =
+				$"Из-за того что права администратора не разрешены, настройка плагина не закончилась успехом.\nПерезапустите PascalABC.NET для завершения настройки.\nВ противном случае этот плагин не будет работать корректно.";
+			string caption = "Настройка плагина Yuki Theme не завершилась";
+			MessageBox.Show(text, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+		}
+
+		bool HasFailedValidation()
+		{
+			return !IsValid(themeExtension, false) || !IsValid(backgroundExtension, true) ||
+			       !IsValid(stickerExtension, true);
+		}
 	}
 
 	private bool IsValid(string nameAndExtension, bool isImage)
@@ -99,13 +136,20 @@ public class LinkCreator
 
 	private void RunUtility()
 	{
-		var psi = new ProcessStartInfo(
-			Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
-		// psi.CreateNoWindow = true;
-		// psi.UseShellExecute = false;
-		bool exited = Process.Start(psi).WaitForExit(5000);
-		if (!exited)
+		try
 		{
+			var psi = new ProcessStartInfo(
+				Path.Combine(YukiTheme_VisualPascalABCPlugin.GetCurrentFolder, "YukiUtility.exe"));
+			// psi.CreateNoWindow = true;
+			// psi.UseShellExecute = false;
+			bool exited = Process.Start(psi).WaitForExit(5000);
+			if (!exited)
+			{
+			}
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine($"User not granted permission. Skipping");
 		}
 	}
 

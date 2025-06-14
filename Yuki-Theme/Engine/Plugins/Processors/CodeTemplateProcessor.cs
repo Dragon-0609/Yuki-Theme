@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
-using Fluent;
-using Fluent.Lists;
 using VisualPascalABCPlugins;
 using WeifenLuo.WinFormsUI.Docking;
 using YukiTheme.Components;

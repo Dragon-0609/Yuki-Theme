@@ -52,7 +52,6 @@ public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 		_timer.Start();
 		_alterer.Init();
 
-
 		new WpfColorContainer();
 		// ToolBarItems.Add(Item);
 	}
