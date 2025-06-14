@@ -110,7 +110,7 @@ public class MenuReplacer
 			main.DropDownItems.Add(_menuSettings);
 			main.DropDownItems.Add(_resetStickerPosition);
 			// main.DropDownItems.Add(_updatePage);
-			main.DropDownItems.Add(_props);
+			// main.DropDownItems.Add(_props);
 			MoveIconToTop(ow, main);
 		}
 	}
