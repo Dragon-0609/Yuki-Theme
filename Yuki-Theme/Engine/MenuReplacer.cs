@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VisualPascalABC;
+using VisualPascalABCPlugins;
 using Yuki_Theme_Plugin;
 using YukiTheme.Tools;
 
@@ -28,7 +29,9 @@ public class MenuReplacer
 	private ToolStripMenuItem _quiet;
 	private ToolStripMenuItem _resetStickerPosition;
 	private ToolStripMenuItem _stick;
+
 	private ToolStripMenuItem _switchTheme;
+
 	// private ToolStripMenuItem _updatePage;
 	private ToolStripMenuItem _props;
 
@@ -94,7 +97,7 @@ public class MenuReplacer
 			_resetStickerPosition = CreateMenuItem("Reset Sticker Margins", ResetStickerPosition);
 			// _updatePage = CreateMenuItem("Show Update Notification", ShowUpdatePage);
 
-			// _props = CreateMenuItem("UI Debug", OpenProps);
+			_props = CreateMenuItem("UI Debug", OpenProps);
 
 			UpdateMenuIcons();
 			// _updatePage.Image = _menuSettings.Image;
@@ -107,7 +110,7 @@ public class MenuReplacer
 			main.DropDownItems.Add(_menuSettings);
 			main.DropDownItems.Add(_resetStickerPosition);
 			// main.DropDownItems.Add(_updatePage);
-			// main.DropDownItems.Add(_props);
+			main.DropDownItems.Add(_props);
 			MoveIconToTop(ow, main);
 		}
 	}
@@ -115,7 +118,7 @@ public class MenuReplacer
 	private void OpenProps(object sender, EventArgs e)
 	{
 		var props = new Props();
-		props.propertyGrid1.SelectedObject = props.root = ReferenceForm.Instance; //IDEAlterer.Instance.Form1;
+		props.propertyGrid1.SelectedObject = props.root = IDEAlterer.Instance.Form1; //IDEAlterer.Instance.Form1;
 		props.Show();
 	}
 
@@ -151,6 +154,7 @@ public class MenuReplacer
 			if (menuItem is ToolStripMenuItem)
 				foreach (ToolStripItem toolStripMenuItem in ((ToolStripMenuItem)menuItem).DropDownItems)
 					if (toolStripMenuItem is ToolStripMenuItem)
+					{
 						if (toolStripMenuItem.Text == "Yuki Theme")
 						{
 							_menuSettings = (ToolStripMenuItem)toolStripMenuItem;
@@ -159,6 +163,7 @@ public class MenuReplacer
 #endif
 							break;
 						}
+					}
 	}
 
 	private static void MoveIconToTop(ToolStrip ow, ToolStripMenuItem main)
@@ -186,7 +191,7 @@ public class MenuReplacer
 
 	private void ToggleWallpaper(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.BG_IMAGE, !IDEAlterer.IsWallpaperVisible);
+		DataSaver.Save(SettingsConst.BG_IMAGE, !IDEAlterer.IsWallpaperVisible);
 		IDEAlterer.Instance.UpdateWallpaperVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
 		UpdateMenuIcon(WALLPAPER_KEY, true, _backimage);
@@ -194,7 +199,7 @@ public class MenuReplacer
 
 	private void ToggleSticker(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.STICKER, !IDEAlterer.IsStickerVisible);
+		DataSaver.Save(SettingsConst.STICKER, !IDEAlterer.IsStickerVisible);
 		IDEAlterer.Instance.UpdateStickerVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
 		UpdateMenuIcon(STICKER_KEY, true, _stick);
@@ -202,7 +207,7 @@ public class MenuReplacer
 
 	private void ToggleQuiet(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.DISCRETE_MODE, !IDEAlterer.IsDiscreteActive);
+		DataSaver.Save(SettingsConst.DISCRETE_MODE, !IDEAlterer.IsDiscreteActive);
 		IDEAlterer.Instance.UpdateWallpaperVisibility();
 		IDEAlterer.Instance.UpdateStickerVisibility();
 		IDEAlterer.Instance.FocusEditorWindow();
@@ -211,13 +216,13 @@ public class MenuReplacer
 
 	private void StickersPositioning(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.ALLOW_POSITIONING,
-			DatabaseManager.Load(SettingsConst.ALLOW_POSITIONING, false));
+		DataSaver.Save(SettingsConst.ALLOW_POSITIONING,
+			DataSaver.Load(SettingsConst.ALLOW_POSITIONING, false));
 	}
 
 	private void ResetStickerPosition(object sender, EventArgs e)
 	{
-		DatabaseManager.Save(SettingsConst.STICKER_POSITION, "");
+		DataSaver.Save(SettingsConst.STICKER_POSITION, "");
 		PluginEvents.Instance.OnStickerMarginReset();
 	}
 

@@ -10,7 +10,9 @@ namespace YukiTheme.Components;
 
 public partial class SettingsPanel : UserControl
 {
-	private readonly string[] _themes = DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).ToArray();
+	private static string[] _themes =>
+		DefaultThemeNames.Themes.Union(DokiThemeNames.Themes).Union(YukiThemeNames.Themes).ToArray();
+
 	private bool _resetStickerMargin;
 	public SettingsPanelUtilities Utilities;
 
@@ -22,11 +24,13 @@ public partial class SettingsPanel : UserControl
 		_resetStickerMargin = false;
 		Utilities = new SettingsPanelUtilities(this);
 		Utilities.LoadSettings();
+		YukiThemeNames.Update();
 		Themes.ItemsSource = _themes;
 		SelectCurrentTheme();
 		LoadSvg();
-		_customStickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		_customStickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
 		VersionText.Text = $"Version: {YukiTheme_VisualPascalABCPlugin.VersionStatic}";
+		CompletionFontSameAsEditor_Changed(this, null);
 	}
 
 	private void LoadSvg()
@@ -89,10 +93,10 @@ public partial class SettingsPanel : UserControl
 
 	internal void SaveSettings()
 	{
-		bool customStickerEnabled = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false);
+		bool customStickerEnabled = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false);
 		Utilities.SaveSettings();
-		string prevStickerPath = DatabaseManager.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
-		DatabaseManager.Save(SettingsConst.CUSTOM_STICKER_PATH, _customStickerPath);
+		string prevStickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		DataSaver.Save(SettingsConst.CUSTOM_STICKER_PATH, _customStickerPath);
 
 		if (_resetStickerMargin)
 		{
@@ -100,7 +104,7 @@ public partial class SettingsPanel : UserControl
 		}
 
 		if (prevStickerPath != _customStickerPath ||
-		    customStickerEnabled != DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false))
+		    customStickerEnabled != DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false))
 		{
 			Utilities.ReLoadCustomSticker();
 		}
@@ -108,5 +112,17 @@ public partial class SettingsPanel : UserControl
 		_resetStickerMargin = false;
 		if (Themes.SelectedItem.ToString() != NameBar.ThemeName)
 			PluginEvents.Instance.OnThemeChanged(Themes.SelectedItem.ToString());
+	}
+
+	public void UpdateThemeNames()
+	{
+		YukiThemeNames.Update();
+		Themes.ItemsSource = _themes;
+	}
+
+	private void CompletionFontSameAsEditor_Changed(object sender, RoutedEventArgs e)
+	{
+		Visibility visible = CompletionFontSameAsEditor.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
+		CompletionFontSetPanel.Visibility = visible;
 	}
 }

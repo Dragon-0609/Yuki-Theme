@@ -20,6 +20,7 @@ public static class ColorReference
 	public static Color TypeColor => ColorChanger.Instance.GetColor(ColorChanger.TYPE);
 
 	public static Brush ForegroundBrush => ColorChanger.Instance.GetBrush(ColorChanger.FOREGROUND);
+	public static Brush BorderBrush => ColorChanger.Instance.GetBrush(ColorChanger.BORDER);
 
 	public static Brush BackgroundBrush => ColorChanger.Instance.GetBrush(ColorChanger.BG);
 	public static Brush BackgroundDefaultBrush => ColorChanger.Instance.GetBrush(ColorChanger.BG_DEF);

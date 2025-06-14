@@ -1,102 +1,73 @@
-﻿using System;
-using System.Reflection;
+using System;
+using System.Collections;
 using CodeCompletion;
 using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using KeywordKind = PascalABCCompiler.Parsers.KeywordKind;
 
-namespace YukiTheme.Style.CodeCompletion;
-
-public class CodeCompletionAllNames : CodeCompletionAllNamesAction
+namespace YukiTheme.Style.CodeCompletion
 {
-	private YukiCodeCompletionWindow codecomplet;
-
-	public override void Execute(TextArea _textArea)
+	public class CodeCompletionAllNames : ICSharpCode.TextEditor.Actions.AbstractEditAction
 	{
-		//try
+		YukiCodeCompletionWindow codeCompletionWindow;
+		public static TextArea textArea;
+		public static Hashtable comp_windows = new Hashtable();
+
+		public override void Execute(TextArea _textArea)
 		{
-			textArea = _textArea;
-			var off = textArea.Caret.Offset;
-			var text = textArea.Document.TextContent.Substring(0, textArea.Caret.Offset);
-			if (key == '\0')
-				if (off > 2 && text[off - 1] == '/' && text[off - 2] == '/' && text[off - 3] == '/')
-				{
-					CodeCompletionActionsManager.GenerateCommentTemplate(textArea);
+			//try
+			{
+				textArea = _textArea;
+				int off = textArea.Caret.Offset;
+				string text = textArea.Document.TextContent.Substring(0, textArea.Caret.Offset);
+
+				if (!WorkbenchServiceFactory.Workbench.UserOptions.CodeCompletionDot)
 					return;
-				}
-				else
-				{
-					var mthd = typeof(CodeCompletionAllNamesAction).GetMethod(
-						"get_prev_text", BindingFlags.Instance | BindingFlags.NonPublic);
-					var prev = (string)mthd.Invoke(this, new object[] { text, off - 1 });
 
-					if (!string.IsNullOrEmpty(prev))
-					{
-						CodeCompletionActionsManager.GenerateTemplate(prev, textArea);
-						return;
-					}
-				}
+				if (CodeCompletionController.CurrentParser == null) return;
+				CodeCompletionProvider completionDataProvider = new CodeCompletionProvider();
 
-			if (!WorkbenchServiceFactory.Workbench.UserOptions.CodeCompletionDot)
-				return;
-			if (CodeCompletionController.CurrentParser == null) return;
-			var completionDataProvider = new CodeCompletionProvider();
+				completionDataProvider.preSelection =
+					CodeCompletionController.CurrentParser.LanguageInformation.FindPattern(off, text,
+						out var is_pattern);
 
-			var is_pattern = false;
-
-
-			is_begin = true;
-
-			completionDataProvider.preSelection =
-				CodeCompletionController.CurrentParser.LanguageInformation.FindPattern(off, text, out is_pattern);
-
-			if (!is_pattern && off > 0 && text[off - 1] == '.')
-				key = '$';
-
-			codecomplet =
-				YukiCodeCompletionWindow.ShowCompletionWindow(
+				codeCompletionWindow = YukiCodeCompletionWindow.ShowCompletionWindow(
 					VisualPABCSingleton.MainForm, // The parent window for the completion window
 					textArea.MotherTextEditorControl, // The text editor to show the window for
 					textArea.MotherTextEditorControl.FileName, // Filename - will be passed back to the provider
 					completionDataProvider, // Provider to get the list of possible completions
-					key, // Key pressed - will be passed to the provider
+					'_', // Key pressed - will be passed to the provider
 					false,
 					false,
 					KeywordKind.None
 				);
+				CodeCompletionShiftSpaceActions.comp_windows[textArea] = codeCompletionWindow;
 
-			key = '_';
-			comp_windows[textArea] = codecomplet;
-
-			if (codecomplet != null)
-				// ShowCompletionWindow can return null when the provider returns an empty list
-				codecomplet.Closed += CloseCodeCompletionWindow;
+				if (codeCompletionWindow != null)
+				{
+					// ShowCompletionWindow can return null when the provider returns an empty list
+					codeCompletionWindow.Closed += new EventHandler(OnCodeCompletionWindowClosed);
+				}
+			}
+			//catch (Exception e)
+			{
+			}
 		}
-		//catch (Exception e)
+
+		// такой же метод есть в CodeCompletionKeyHandler   EVA
+		public void OnCodeCompletionWindowClosed(object sender, EventArgs e)
 		{
-		}
-	}
+			if (codeCompletionWindow != null)
+			{
+				codeCompletionWindow.Closed -= new(OnCodeCompletionWindowClosed);
+				CodeCompletionProvider.disp.Reset();
+				AssemblyDocCache.Reset();
+				UnitDocCache.Reset();
+				codeCompletionWindow.Dispose();
+				codeCompletionWindow = null;
+			}
 
-	private new void CloseCodeCompletionWindow(object sender, EventArgs e)
-	{
-		base.CloseCodeCompletionWindow(sender, e);
-		if (codecomplet != null)
-		{
-			codecomplet.Closed -= CloseCodeCompletionWindow;
-			CodeCompletionProvider.disp.Reset();
-			AssemblyDocCache.Reset();
-			UnitDocCache.Reset();
-			codecomplet.Dispose();
-			codecomplet = null;
+			comp_windows[textArea] = null;
 		}
-	}
-}
-
-public class CodeCompletionNamesOnlyInModule : CodeCompletionAllNames
-{
-	public override void Execute(TextArea _textArea)
-	{
-		key = '\0';
-		base.Execute(_textArea);
 	}
 }

@@ -23,6 +23,7 @@ public class IDEAlterer
 	private ThemeWindowManager _themeSelect;
 	private WallpaperManager _wallpaperManager;
 	internal Form1 Form1;
+	private IDEWindowsColorChanger _ideColorChanger;
 
 	internal IWorkbench Workbench;
 
@@ -38,7 +39,8 @@ public class IDEAlterer
 		_wallpaperManager = new WallpaperManager();
 		_stickerManager = new StickerManager();
 		_themeSelect = new ThemeWindowManager();
-		new DatabaseManager();
+		_ideColorChanger = new IDEWindowsColorChanger();
+		new DataSaver();
 		ThemeNameExtractor.ListenToReload();
 		StartExporter();
 	}
@@ -50,11 +52,11 @@ public class IDEAlterer
 
 	internal static bool CanShowSticker => Instance._imageLoader.HasImage && IsStickerVisible && !IsDiscreteActive;
 
-	internal static bool IsWallpaperVisible => DatabaseManager.Load(SettingsConst.BG_IMAGE);
+	internal static bool IsWallpaperVisible => DataSaver.Load(SettingsConst.BG_IMAGE);
 
-	internal static bool IsStickerVisible => DatabaseManager.Load(SettingsConst.STICKER);
+	internal static bool IsStickerVisible => DataSaver.Load(SettingsConst.STICKER);
 
-	internal static bool IsDiscreteActive => DatabaseManager.Load(SettingsConst.DISCRETE_MODE);
+	internal static bool IsDiscreteActive => DataSaver.Load(SettingsConst.DISCRETE_MODE);
 
 	internal static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
 	internal static Image GetSticker => GetCurrentSticker();
@@ -72,6 +74,8 @@ public class IDEAlterer
 		_editorAlterer.SubscribeComponents();
 		_editorAlterer.ChangeStyles();
 		_editorAlterer.StartMenuReplacement();
+		_editorAlterer.InjectToOtherPlugins();
+		_ideColorChanger.Subscribe();
 		_colorChanger.UpdateColors();
 		_wallpaperManager.Show();
 		_stickerManager.Show();
@@ -149,14 +153,14 @@ public class IDEAlterer
 
 	private static Image GetCurrentSticker()
 	{
-		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
 		                 Instance._imageLoader.HasCustomSticker;
 		return hasCustom ? Instance._imageLoader.GetCustomSticker : Instance._imageLoader.GetSticker;
 	}
 
 	private static ImageSource GetCurrentStickerWpf()
 	{
-		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
 		                 Instance._imageLoader.HasCustomSticker;
 		return hasCustom
 			? Instance._imageLoader.GetCustomStickerWPF
@@ -165,8 +169,10 @@ public class IDEAlterer
 
 	private static bool HasCurrentSticker()
 	{
-		bool hasCustom = DatabaseManager.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
 		                 Instance._imageLoader.HasCustomSticker;
 		return hasCustom ? Instance._imageLoader.HasCustomSticker : Instance._imageLoader.HasSticker;
 	}
+
+	public float EditorFontSize => _editorAlterer.EditorFontSize;
 }

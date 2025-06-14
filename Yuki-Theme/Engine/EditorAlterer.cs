@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using VisualPascalABC;
 using YukiTheme.Components.TempForm;
 using YukiTheme.Style;
+using YukiTheme.Tools;
 using static YukiTheme.Engine.ColorChanger;
 
 namespace YukiTheme.Engine;
@@ -14,6 +15,7 @@ public class EditorAlterer
 	private readonly TextEditorChanger _editorChanger = new();
 
 	private readonly MenuReplacer _menuReplacer = new();
+	private readonly PluginInjector _pluginInjector = new();
 
 	public EditorAlterer()
 	{
@@ -76,6 +78,11 @@ public class EditorAlterer
 		_menuReplacer.AddMenuItemsWithDelay(EditorComponents._menu);
 	}
 
+	internal void InjectToOtherPlugins()
+	{
+		_pluginInjector.InjectWithDelay(EditorComponents._menu);
+	}
+
 	internal void FocusEditorWindow()
 	{
 		Fm.Focus();
@@ -104,8 +111,6 @@ public class EditorAlterer
 		{
 			EditorComponents._projectSplitter.BackColor = color;
 		}
-
-		// TODO: Later change colors for references window
 
 		if (EditorComponents._referenceList != null)
 		{
@@ -188,6 +193,8 @@ public class EditorAlterer
 		b.ForeColor = ColorReference.ForegroundColor;
 		b.FlatAppearance.BorderColor = color;
 		b.FlatStyle = FlatStyle.Flat;
+		b.UseVisualStyleBackColor = false;
+		b.FlatAppearance.MouseOverBackColor = ColorReference.BackgroundClickColor;
 	}
 
 	internal void ChangeStyles()
@@ -204,6 +211,7 @@ public class EditorAlterer
 		var toolrenderer = new ToolRenderer();
 		EditorComponents._tools.Renderer = toolrenderer;
 		EditorComponents._tools.Paint += PaintOnToolBar;
+		EditorComponents.MenuRendererReady();
 	}
 
 	internal void RequestBottomBarUpdate()
@@ -235,6 +243,7 @@ public class EditorAlterer
 		EditorComponents._aboutBox.BackColor = ColorReference.BackgroundColor;
 		EditorComponents._aboutBox.ForeColor = ColorReference.ForegroundColor;
 		Button btn = null;
+
 		foreach (Control cont in EditorComponents._aboutBox.Controls)
 			if (cont is LinkLabel link)
 			{
@@ -295,4 +304,6 @@ public class EditorAlterer
 	}
 
 	public Form GetSettingsParent() => EditorComponents.GetSettingsParent();
+
+	public float EditorFontSize => _editorChanger.EditorFontSize;
 }

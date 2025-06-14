@@ -23,6 +23,7 @@ public class EditorInspector
 		_editor = editor;
 	}
 
+
 	internal void SubscribeCompletion()
 	{
 		// Console.WriteLine ("Unsubscribed");
@@ -30,10 +31,12 @@ public class EditorInspector
 		_ht[_editor.TextEditor] = handler;
 
 		_editor.TextEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += handler.TextAreaKeyEventHandler;
-		_editor.TextEditor.Disposed += handler.CloseCodeCompletionWindow;
-		ChangeEditorShortcutForCompletition();
+		// handler.AttachCaretPositionChanged();
+		_editor.TextEditor.Disposed += handler.OnCodeCompletionWindowClosed;
+		ChangeEditorShortcutForCompletion();
 
-		EventAdd(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea), "KeyEventHandler",
+		EventAdd(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea),
+			"KeyEventHandler",
 			_editor.TextEditor.ActiveTextAreaControl.TextArea);
 	}
 
@@ -45,24 +48,35 @@ public class EditorInspector
 	internal bool Unsubscribe(object target)
 	{
 		// Console.WriteLine (target.GetType ().Name);
-		var handler = target.GetType().GetMethod("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
+		var handler = target.GetType()
+			.GetMethod("TextAreaKeyEventHandler", BindingFlags.Instance | BindingFlags.NonPublic);
 		if (handler == null) return false;
+
+
+		/*
+		editor.ActiveTextAreaControl.TextArea.KeyEventHandler += h.TextAreaKeyEventHandler;
+		editor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += h.CaretPositionChangedEventHandler;
+		*/
 
 		handler = null;
 
 		EventRemove(target.GetType(), "TextAreaKeyEventHandler", target, typeof(TextArea), "KeyEventHandler",
 			_editor.TextEditor.ActiveTextAreaControl.TextArea);
 
-		EventRemove(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea), "KeyEventHandler",
+		EventRemove(target.GetType(), "CaretPositionChangedEventHandler", target, typeof(Caret), "PositionChanged",
+			_editor.TextEditor.ActiveTextAreaControl.TextArea.Caret);
+
+		EventRemove(typeof(Form1), "TextArea_KeyEventHandler", IDEAlterer.Instance.Form1, typeof(TextArea),
+			"KeyEventHandler",
 			_editor.TextEditor.ActiveTextAreaControl.TextArea);
 
-		EventRemove(target.GetType(), "CloseCodeCompletionWindow", target, typeof(TextEditorControl), "Disposed",
+		EventRemove(target.GetType(), "OnCodeCompletionWindowClosed", target, typeof(TextEditorControl), "Disposed",
 			_editor.TextEditor.ActiveTextAreaControl.TextArea);
 
 		return true;
 	}
 
-	internal void ChangeEditorShortcutForCompletition()
+	internal void ChangeEditorShortcutForCompletion()
 	{
 		ChangeShortcut(Keys.Space | Keys.Control, new CodeCompletionAllNames());
 	}
@@ -80,7 +94,8 @@ public class EditorInspector
 	private void InspectBracketsPaint(object sender, PaintEventArgs e)
 	{
 		var g = e.Graphics;
-		if (_editor.TextArea.TextView.Highlight != null && _editor.TextArea.TextView.Highlight.OpenBrace != null && _editor.TextArea.TextView.Highlight.CloseBrace != null)
+		if (_editor.TextArea.TextView.Highlight != null && _editor.TextArea.TextView.Highlight.OpenBrace != null &&
+		    _editor.TextArea.TextView.Highlight.CloseBrace != null)
 		{
 			// int lineNumber = _editor.TextArea.Caret.Line;
 			DrawLine(_editor.TextArea.TextView.Highlight.OpenBrace.Y, g);
@@ -96,7 +111,9 @@ public class EditorInspector
 
 		if (_editor.TextEditor.TextEditorProperties.EnableFolding)
 		{
-			var starts = _editor.TextArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber, startColumn - 1);
+			var starts =
+				_editor.TextArea.Document.FoldingManager.GetFoldedFoldingsWithStartAfterColumn(lineNumber,
+					startColumn - 1);
 			if (starts != null && starts.Count > 0)
 			{
 				var firstFolding = starts[0];
@@ -123,11 +140,15 @@ public class EditorInspector
 				continue;
 			}
 
-			if ((_editor.TextArea.TextView.Highlight.OpenBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.OpenBrace.X == currentWordOffset) ||
-			    (_editor.TextArea.TextView.Highlight.CloseBrace.Y == lineNumber && _editor.TextArea.TextView.Highlight.CloseBrace.X == currentWordOffset))
+			if ((_editor.TextArea.TextView.Highlight.OpenBrace.Y == lineNumber &&
+			     _editor.TextArea.TextView.Highlight.OpenBrace.X == currentWordOffset) ||
+			    (_editor.TextArea.TextView.Highlight.CloseBrace.Y == lineNumber &&
+			     _editor.TextArea.TextView.Highlight.CloseBrace.X == currentWordOffset))
 			{
 				var xpos = realPosX;
-				var liny = _editor.TextArea.TextView.DrawingPosition.Top + (lineNumber - _editor.TextArea.TextView.FirstVisibleLine) * _editor.TextArea.TextView.FontHeight -
+				var liny = _editor.TextArea.TextView.DrawingPosition.Top +
+				           (lineNumber - _editor.TextArea.TextView.FirstVisibleLine) *
+				           _editor.TextArea.TextView.FontHeight -
 				           _editor.TextArea.TextView.VisibleLineDrawingRemainder;
 
 				draw.Invoke(_editor.TextArea.TextView, new object[]
@@ -165,7 +186,8 @@ public class EditorInspector
 		actions[key] = val;
 	}
 
-	internal static void EventAdd(Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
+	internal static void EventAdd(Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent,
+		string nameOfEvent, object objectOfEvent)
 	{
 		var keyEventHandler = typeForMethod.GetMethod(nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
 		var evt = typeForEvent.GetEvent(nameOfEvent, BindingFlags.Instance | BindingFlags.Public);
@@ -177,7 +199,8 @@ public class EditorInspector
 		});
 	}
 
-	internal static void EventRemove(Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent, string nameOfEvent, object objectOfEvent)
+	internal static void EventRemove(Type typeForMethod, string nameOfMethod, object objectOfMethod, Type typeForEvent,
+		string nameOfEvent, object objectOfEvent)
 	{
 		var keyEventHandler = typeForMethod.GetMethod(nameOfMethod, BindingFlags.Instance | BindingFlags.NonPublic);
 		var evt = typeForEvent.GetEvent(nameOfEvent, BindingFlags.Instance | BindingFlags.Public);

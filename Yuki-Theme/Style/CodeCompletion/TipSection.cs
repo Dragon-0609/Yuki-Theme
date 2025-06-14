@@ -8,67 +8,83 @@
 using System;
 using System.Drawing;
 
-namespace YukiTheme.Style.CodeCompletion;
-
-internal abstract class TipSection
+namespace YukiTheme.Style.CodeCompletion
 {
-	public float GlobalMaxX;
-	public int LeftOffset;
-	private SizeF tipMaxSize;
-	private SizeF tipRequiredSize;
-
-	protected TipSection(Graphics graphics)
+	abstract class TipSection
 	{
-		Graphics = graphics;
-	}
-
-	public Graphics Graphics { get; }
-
-	public SizeF AllocatedSize { get; private set; }
-
-	public SizeF MaximumSize
-	{
-		get => tipMaxSize;
-		set => tipMaxSize = value;
-	}
-
-	public abstract void Draw(PointF location);
-
-	public SizeF GetRequiredSize()
-	{
-		return tipRequiredSize;
-	}
-
-	public void SetAllocatedSize(SizeF allocatedSize)
-	{
-		//Debug.Assert(allocatedSize.Width >= tipRequiredSize.Width &&
-		//             allocatedSize.Height >= tipRequiredSize.Height);
-
-		AllocatedSize = allocatedSize;
-		OnAllocatedSizeChanged();
-	}
-
-	public void SetMaximumSize(SizeF maximumSize)
-	{
-		tipMaxSize = maximumSize;
-		OnMaximumSizeChanged();
-	}
-
-	protected virtual void OnAllocatedSizeChanged()
-	{
-	}
-
-	protected virtual void OnMaximumSizeChanged()
-	{
-	}
-
-	public void SetRequiredSize(SizeF requiredSize)
-	{
-		requiredSize.Width = Math.Max(0, requiredSize.Width);
-		requiredSize.Height = Math.Max(0, requiredSize.Height);
-		requiredSize.Width = Math.Min(tipMaxSize.Width, requiredSize.Width);
-		requiredSize.Height = Math.Min(tipMaxSize.Height, requiredSize.Height);
-
-		tipRequiredSize = requiredSize;
+		SizeF    tipAllocatedSize;
+		Graphics tipGraphics;
+		SizeF    tipMaxSize;
+		SizeF    tipRequiredSize;
+		
+		public float GlobalMaxX;
+		public int LeftOffset;
+		
+		protected TipSection(Graphics graphics)
+		{
+			tipGraphics = graphics;
+		}
+		
+		public abstract void Draw(PointF location);
+		
+		public SizeF GetRequiredSize()
+		{
+			return tipRequiredSize;
+		}
+		
+		public void SetAllocatedSize(SizeF allocatedSize)
+		{
+			//Debug.Assert(allocatedSize.Width >= tipRequiredSize.Width &&
+			//             allocatedSize.Height >= tipRequiredSize.Height);
+			
+			tipAllocatedSize = allocatedSize; OnAllocatedSizeChanged();
+		}
+		
+		public void SetMaximumSize(SizeF maximumSize)
+		{
+			tipMaxSize = maximumSize; OnMaximumSizeChanged();
+		}
+		
+		protected virtual void OnAllocatedSizeChanged()
+		{
+			
+		}
+		
+		protected virtual void OnMaximumSizeChanged()
+		{
+			
+		}
+		
+		public void SetRequiredSize(SizeF requiredSize)
+		{
+			requiredSize.Width  = Math.Max(0, requiredSize.Width);
+			requiredSize.Height = Math.Max(0, requiredSize.Height);
+			requiredSize.Width  = Math.Min(tipMaxSize.Width, requiredSize.Width);
+			requiredSize.Height = Math.Min(tipMaxSize.Height, requiredSize.Height);
+			
+			tipRequiredSize = requiredSize;
+		}
+		
+		public Graphics Graphics	{
+			get {
+				return tipGraphics;
+			}
+		}
+		
+		public SizeF AllocatedSize {
+			get {
+				return tipAllocatedSize;
+			}
+		}
+		
+		public SizeF MaximumSize {
+			get {
+				return tipMaxSize;
+			}
+			set
+			{
+				tipMaxSize = value;
+			}
+		}
 	}
 }
