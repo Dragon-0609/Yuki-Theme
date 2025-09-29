@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using YukiTheme.Tools;
+using Application = System.Windows.Application;
 
 namespace YukiTheme.Components;
 
@@ -238,16 +239,21 @@ public class SnapWindow : Window
 				// var size = targetForm.ClientSize;
 				// return new Rect(0, 0, size.Width, size.Height);
 				var area = Screen.GetWorkingArea(TargetForm);
-				return area.ToRect();
+				return GetScaledBounds(area);
 			}
-
-			return new Rectangle(TargetForm.Location.X + 2, TargetForm.Location.Y, TargetForm.Size.Width, TargetForm.Size.Height).ToRect();
+			
+			return GetScaledBounds(new Rectangle(TargetForm.Location.X + 2, TargetForm.Location.Y, TargetForm.Width, TargetForm.Height));
 		}
 		// return targetForm.ClientRectangle.ToRect(targetForm);
 
 		throw new NullReferenceException("Owner wasn't set");
 	}
 
+	private Rect GetScaledBounds(Rectangle rectangle)
+	{
+		float scalingFactor = DPICalculator.GetScalingFactor();
+		return new Rect(rectangle.X / scalingFactor, rectangle.Y / scalingFactor, rectangle.Width / scalingFactor, rectangle.Height / scalingFactor);
+	}
 
 	#region Get
 
