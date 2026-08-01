@@ -8,7 +8,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	static class TipPainter
 	{

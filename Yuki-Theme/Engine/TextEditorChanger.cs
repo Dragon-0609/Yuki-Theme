@@ -7,7 +7,7 @@ using VisualPascalABC;
 using Yuki_Theme_Plugin;
 using YukiTheme.Style.Helpers;
 using YukiTheme.Tools;
-using CodeCompletionHighlighter = YukiTheme.Style.CodeCompletion.CodeCompletionHighlighter;
+using CodeCompletionHighlighter = YukiTheme.Style.CodeCompletion_new.CodeCompletionHighlighter;
 
 namespace YukiTheme.Engine;
 

@@ -14,7 +14,7 @@ using ICSharpCode.TextEditor.Document;
 using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using YukiTheme.Tools;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class YukiCodeCompletionWindow : AbstractCompletionWindow
 	{

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	class TipPainterTools
 	{
@@ -25,164 +25,156 @@ namespace YukiTheme.Style.CodeCompletion
 			Font font,
 			string countMessage,
 			string description,
-			int param_num, bool addit_info)
+			int param_num, int paramsCount, bool addit_info)
 		{
-			string basicDescription = null;
-			string documentation = null;
-			int bold_beg = -1;
-			int bold_len = 0;
-			if (IsVisibleText(description))
-			{
-				string[] splitDescription = description.Split(new char[] { '\n' }, 2);
-
-				if (splitDescription.Length > 0)
-				{
-					basicDescription = splitDescription[0];
-					int extensionIndex = basicDescription.IndexOf("(расширение") + 1;
-					if (param_num == 1)
-					{
-						bold_beg = basicDescription.IndexOf('(') + 1;
-						if (bold_beg != 0 && bold_beg == extensionIndex)
-							bold_beg = basicDescription.IndexOf('(', basicDescription.IndexOf(')') + 1) + 1;
-						if (bold_beg != 0)
-						{
-							int end = basicDescription.IndexOf(global::CodeCompletion.CodeCompletionController
-								.CurrentParser.LanguageInformation.ParameterDelimiter);
-							int end_sk = basicDescription.IndexOf(')', bold_beg);
-							if (end > end_sk || end == -1) end = end_sk;
-							//if (end == -1) end = basicDescription.IndexOf(')');
-							if (end != -1) bold_len = end - bold_beg;
-						}
-					}
-					else
-					{
-						int i = 1;
-						bold_beg = 0;
-						while (i < param_num)
-						{
-							bold_beg = basicDescription.IndexOf(
-								global::CodeCompletion.CodeCompletionController.CurrentParser.LanguageInformation
-									.ParameterDelimiter, bold_beg) + 1;
-							if (bold_beg == 0) break;
-							i++;
-						}
-
-						if (bold_beg != 0)
-						{
-							int end = basicDescription.IndexOf(
-								global::CodeCompletion.CodeCompletionController.CurrentParser.LanguageInformation
-									.ParameterDelimiter, bold_beg);
-							int end_sk = basicDescription.IndexOf(')', bold_beg);
-							if (end > end_sk || end == -1) end = end_sk;
-							if (end != -1) bold_len = end - bold_beg;
-						}
-					}
-
-					if (splitDescription.Length > 1)
-					{
-						documentation = splitDescription[1].Trim();
-					}
-				}
-			}
+			GetToolipParts(description, param_num, paramsCount, out var basicDescription, out var documentation,
+				out var bold_beg, out var bold_len);
 
 			return GetDrawingSizeDrawHelpTip(control, graphics, font, countMessage, basicDescription, documentation,
 				bold_beg, bold_len, param_num, addit_info);
-		}
-
-		public static Size DrawHelpTipFromCombinedDescription(
-			Control control,
-			Graphics graphics,
-			Font font,
-			string countMessage,
-			string description)
-		{
-			string basicDescription = null;
-			string documentation = null;
-			if (TipPainterTools.IsVisibleText(description))
-			{
-				string[] strArray = description.Split(new char[1]
-				{
-					'\n'
-				}, 2);
-				if (strArray.Length != 0)
-				{
-					basicDescription = strArray[0];
-					if (strArray.Length > 1)
-						documentation = strArray[1].Trim();
-				}
-			}
-
-			return TipPainterTools.DrawHelpTip(control, graphics, font, countMessage, basicDescription, documentation);
 		}
 
 		public static Size DrawHelpTipFromCombinedDescription(Control control,
 			Graphics graphics,
 			Font font,
 			string countMessage,
-			string description, int param_num, bool addit_info)
+			string description, int param_num, int paramsCount, bool addit_info)
 		{
-			string basicDescription = null;
-			string documentation = null;
-			int bold_beg = -1;
-			int bold_len = 0;
+			GetToolipParts(description, param_num, paramsCount, out var basicDescription, out var documentation,
+				out var bold_beg, out var bold_len);
 
+			return DrawHelpTip(control, graphics, font, countMessage,
+				basicDescription, documentation, bold_beg, bold_len, param_num, addit_info);
+		}
+
+		private static void GetToolipParts(string description, int param_num, int paramsCount,
+			out string basicDescription, out string documentation, out int bold_beg, out int bold_len)
+		{
+			basicDescription = null;
+			documentation = null;
+			bold_beg = 0;
+			bold_len = 0;
 			if (IsVisibleText(description))
 			{
-				string[] splitDescription = description.Split
-					(new char[] { '\n' }, 2);
+				string[] splitDescription = description.Split(new char[] { '\n' }, 2);
 
 				if (splitDescription.Length > 0)
 				{
-					basicDescription = splitDescription[0];
-					int extensionIndex = basicDescription.IndexOf("(расширение") + 1;
-					if (param_num == 1)
-					{
-						bold_beg = basicDescription.IndexOf('(') + 1;
-						if (bold_beg != 0 && bold_beg == extensionIndex)
-							bold_beg = basicDescription.IndexOf('(', basicDescription.IndexOf(')') + 1) + 1;
-						if (bold_beg != 0)
-						{
-							int end = basicDescription.IndexOf(global::CodeCompletion.CodeCompletionController
-								.CurrentParser.LanguageInformation.ParameterDelimiter);
-							int end_sk = basicDescription.IndexOf(')', bold_beg);
-							if (end > end_sk || end == -1) end = end_sk;
-							//if (end == -1) end = basicDescription.IndexOf(')');
-							if (end != -1) bold_len = end - bold_beg;
-						}
-					}
-					else
-					{
-						int i = 1;
-						bold_beg = 0;
-						while (i < param_num)
-						{
-							bold_beg = basicDescription.IndexOf(
-								global::CodeCompletion.CodeCompletionController.CurrentParser.LanguageInformation
-									.ParameterDelimiter, bold_beg) + 1;
-							if (bold_beg == 0) break;
-							i++;
-						}
-
-						if (bold_beg != 0)
-						{
-							int end = basicDescription.IndexOf(
-								global::CodeCompletion.CodeCompletionController.CurrentParser.LanguageInformation
-									.ParameterDelimiter, bold_beg);
-							int end_sk = basicDescription.IndexOf(')', bold_beg);
-							if (end > end_sk || end == -1) end = end_sk;
-							if (end != -1) bold_len = end - bold_beg;
-						}
-					}
-
 					if (splitDescription.Length > 1)
 					{
 						documentation = splitDescription[1].Trim();
 					}
+
+					basicDescription = splitDescription[0];
+
+					if (param_num == -1)
+						return;
+
+					var languageIntellisenseSupport = CodeCompletion.CodeCompletionController.CurrentLanguage
+						.LanguageIntellisenseSupport;
+
+					int startIndex = basicDescription.IndexOf("(",
+						basicDescription.IndexOf("(" +
+						                         PascalABCCompiler.StringResources.Get("CODE_COMPLETION_EXTENSION")) +
+						1) + 1;
+
+					int paranthesisIndex =
+						languageIntellisenseSupport.FindClosingParenthesis(basicDescription.Substring(startIndex), ')');
+
+					if (paranthesisIndex == -1)
+						return;
+
+					int end_sk = paranthesisIndex + startIndex;
+
+					if (param_num == 1)
+					{
+						bold_beg = startIndex;
+
+						if (bold_beg != 0)
+						{
+							int paramDelimIndex =
+								languageIntellisenseSupport.FindParamDelim(basicDescription.Substring(bold_beg), 1);
+
+							if (paramDelimIndex == -1)
+							{
+								bold_len = end_sk - bold_beg;
+							}
+							else
+							{
+								bold_len = paramDelimIndex;
+							}
+						}
+					}
+					else
+					{
+						// Здесь учтется случай последнего параметра типа params EVA
+						if (param_num > paramsCount)
+						{
+							if (paramsCount == 1)
+							{
+								string paramDescription = basicDescription.Substring(startIndex, paranthesisIndex);
+
+								if (languageIntellisenseSupport.IsParams(paramDescription))
+								{
+									bold_beg = startIndex;
+									bold_len = paranthesisIndex;
+								}
+							}
+							else
+							{
+								string descriptionAfterBracket = basicDescription.Substring(startIndex);
+
+								int paramDelimIndex =
+									languageIntellisenseSupport.FindParamDelim(descriptionAfterBracket,
+										paramsCount - 1);
+
+								if (paramDelimIndex != -1)
+								{
+									int paramDelimLength = languageIntellisenseSupport.ParameterDelimiter.Length;
+
+									// Проверка на всякий случай, чтобы не возникало ошибки с отрицательным length в Substring  EVA
+									if (paranthesisIndex - paramDelimLength < paramDelimLength)
+										return;
+
+									string paramDescription = descriptionAfterBracket.Substring(
+										paramDelimIndex + paramDelimLength,
+										paranthesisIndex - paramDelimIndex - paramDelimLength);
+
+									if (languageIntellisenseSupport.IsParams(paramDescription))
+									{
+										bold_beg = paramDelimIndex + startIndex + paramDelimLength;
+										bold_len = end_sk - bold_beg;
+									}
+								}
+							}
+						}
+						else
+						{
+							int paramDelimIndex =
+								languageIntellisenseSupport.FindParamDelim(basicDescription.Substring(startIndex),
+									param_num - 1);
+
+							if (paramDelimIndex != -1)
+							{
+								bold_beg = paramDelimIndex + startIndex +
+								           languageIntellisenseSupport.ParameterDelimiter.Length;
+								int secondParamDelimIndex =
+									languageIntellisenseSupport.FindParamDelim(basicDescription.Substring(startIndex),
+										param_num);
+
+								if (secondParamDelimIndex == -1)
+								{
+									bold_len = end_sk - bold_beg;
+								}
+								else
+								{
+									bold_len = secondParamDelimIndex + startIndex - bold_beg;
+								}
+							}
+						}
+					}
 				}
 			}
-
-			return DrawHelpTip(control, graphics, font, countMessage,
-				basicDescription, documentation, bold_beg, bold_len, param_num, addit_info);
 		}
 
 		// btw. I know it's ugly.
@@ -590,46 +582,6 @@ namespace YukiTheme.Style.CodeCompletion
 			}
 
 			return Size.Empty;
-		}
-
-		public static Size DrawHelpTip(
-			Control control,
-			Graphics graphics,
-			Font font,
-			string countMessage,
-			string basicDescription,
-			string documentation)
-		{
-			if (!IsVisibleText(countMessage) && !IsVisibleText(basicDescription) &&
-			    !IsVisibleText(documentation))
-				return Size.Empty;
-			CountTipText countTipText = new CountTipText(graphics, font, countMessage);
-			TipSpacer tipSpacer1 = new TipSpacer(graphics,
-				new SizeF(IsVisibleText(countMessage) ? 4f : 0.0f, 0.0f));
-			TipText tipText1 = new TipText(graphics, font, basicDescription);
-			TipSpacer tipSpacer2 = new TipSpacer(graphics,
-				new SizeF(0.0f, IsVisibleText(documentation) ? 4f : 0.0f));
-			TipText tipText2 = new TipText(graphics, font, documentation);
-			TipSplitter tipSplitter1 = new TipSplitter(graphics, false, new TipSection[2]
-			{
-				tipText1,
-				tipSpacer2
-			});
-			TipSplitter tipSplitter2 = new TipSplitter(graphics, true, new TipSection[3]
-			{
-				countTipText,
-				tipSpacer1,
-				tipSplitter1
-			});
-			TipSplitter tipData = new TipSplitter(graphics, false, new TipSection[2]
-			{
-				tipSplitter2,
-				tipText2
-			});
-			Size size = TipPainter.DrawTip(control, graphics, tipData);
-			DrawingRectangle1 = countTipText.DrawingRectangle1;
-			DrawingRectangle2 = countTipText.DrawingRectangle2;
-			return size;
 		}
 
 		static bool IsVisibleText(string text)

@@ -9,7 +9,7 @@ using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using YukiTheme.Engine;
-using YukiTheme.Style.CodeCompletion;
+using YukiTheme.Style.CodeCompletion_new;
 
 namespace Yuki_Theme_Plugin;
 

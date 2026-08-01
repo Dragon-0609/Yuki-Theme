@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using YukiTheme.Engine;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class DeclarationViewWindow : Form, IDeclarationViewWindow
 	{
@@ -82,7 +82,7 @@ namespace YukiTheme.Style.CodeCompletion
 		{
 			if (description == null || description.Length <= 0)
 				return;
-			TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, null, description);
+			TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, null, Description,-1, -1, false);
 		}
 
 		protected override void OnPaintBackground(PaintEventArgs pe)

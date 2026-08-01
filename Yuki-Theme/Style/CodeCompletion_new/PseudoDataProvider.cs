@@ -3,7 +3,7 @@ using ICSharpCode.TextEditor.Gui.InsightWindow;
 using VisualPascalABC;
 using YukiTheme.Tools;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public static class PseudoDataProvider
 	{

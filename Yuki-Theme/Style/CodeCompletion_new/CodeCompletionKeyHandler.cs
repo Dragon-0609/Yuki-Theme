@@ -5,12 +5,11 @@ using System;
 using System.Collections;
 using System.Drawing;
 using ICSharpCode.TextEditor;
-using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using ICSharpCode.TextEditor.Gui.InsightWindow;
 using VisualPascalABC;
 using YukiTheme.Tools;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class CodeCompletionKeyHandler
 	{
@@ -66,7 +65,7 @@ namespace YukiTheme.Style.CodeCompletion
 			if (!WorkbenchServiceFactory.Workbench.UserOptions.AllowCodeCompletion ||
 			    !VisualPABCSingleton.MainForm.VisualEnvironmentCompiler.compilerLoaded)
 				return false;
-			if (global::CodeCompletion.CodeCompletionController.CurrentParser == null) return false;
+            if (!CodeCompletion.CodeCompletionController.IntellisenseAvailable()) return false;
 			if (codeCompletionWindow != null)
 			{
 				// If completion window is open and wants to handle the key, don't let the text area
@@ -97,8 +96,6 @@ namespace YukiTheme.Style.CodeCompletion
 
 			if (key == '.')
 			{
-				if (global::CodeCompletion.CodeCompletionController.CurrentParser == null)
-					return false;
 				if (!string.IsNullOrEmpty(WorkbenchServiceFactory.DocumentService.CurrentCodeFileDocument.TextEditor
 					    .ActiveTextAreaControl.SelectionManager.SelectedText))
 				{
@@ -132,7 +129,6 @@ namespace YukiTheme.Style.CodeCompletion
 			}
 			else if (key == '(' || key == '[' || key == ',')
 			{
-				if (global::CodeCompletion.CodeCompletionController.CurrentParser == null) return false;
 				if (VisualPABCSingleton.MainForm.UserOptions.CodeCompletionParams)
 				{
 					IInsightDataProvider idp = PseudoDataProvider.Create(-1, false, key);
@@ -159,7 +155,6 @@ namespace YukiTheme.Style.CodeCompletion
 			}
 			else if (key == ' ')
 			{
-				if (global::CodeCompletion.CodeCompletionController.CurrentParser == null) return false;
 				if (VisualPABCSingleton.MainForm.UserOptions.CodeCompletionDot)
 				{
 					PascalABCCompiler.Parsers.KeywordKind keyw =
@@ -189,21 +184,15 @@ namespace YukiTheme.Style.CodeCompletion
 			}
 			else if (key == '\n')
 			{
-				if (VisualPABCSingleton.MainForm.UserOptions.AllowCodeCompletion &&
-				    global::CodeCompletion.CodeCompletionController.CurrentParser != null)
+                if (VisualPABCSingleton.MainForm.UserOptions.AllowCodeCompletion)
 				{
 					try
 					{
-						global::CodeCompletion.DomConverter dconv =
-							(global::CodeCompletion.DomConverter)global::CodeCompletion.CodeCompletionController
-								.comp_modules[
-									editor.FileName];
+                        CodeCompletion.DomConverter dconv = (CodeCompletion.DomConverter)CodeCompletion.CodeCompletionController.comp_modules[editor.FileName];
 						if (dconv != null)
 						{
 							// TODO: check endl error | added null check    EVA
-							global::CodeCompletion.SymScope ss = dconv.FindScopeByLocation(
-								editor.ActiveTextAreaControl.TextArea.Caret.Line + 1,
-								editor.ActiveTextAreaControl.TextArea.Caret.Column + 1);
+                            CodeCompletion.SymScope ss = dconv.FindScopeByLocation(editor.ActiveTextAreaControl.TextArea.Caret.Line + 1, editor.ActiveTextAreaControl.TextArea.Caret.Column + 1);
 							ss?.IncreaseEndLine();
 						}
 					}
@@ -217,12 +206,8 @@ namespace YukiTheme.Style.CodeCompletion
 			{
 				if (VisualPABCSingleton.MainForm.UserOptions.CodeCompletionDot)
 				{
-					if (global::CodeCompletion.CodeCompletionController.CurrentParser == null) return false;
-					PascalABCCompiler.Parsers.KeywordKind keyw =
-						KeywordChecker.TestForKeyword(editor.Document.TextContent,
-							editor.ActiveTextAreaControl.TextArea.Caret.Offset - 1);
-					if (global::CodeCompletion.CodeCompletionController.CurrentParser.LanguageInformation
-					    .IsDefinitionIdentifierAfterKeyword(keyw))
+                    PascalABCCompiler.Parsers.KeywordKind keyw = KeywordChecker.TestForKeyword(editor.Document.TextContent, editor.ActiveTextAreaControl.TextArea.Caret.Offset - 1);
+                    if (CodeCompletion.CodeCompletionController.CurrentLanguage.LanguageIntellisenseSupport.IsDefinitionIdentifierAfterKeyword(keyw))
 						return false;
 
 					// если не первый символ выражения (предыдущий тоже буква или "_"), то не открываем новое окно
@@ -252,7 +237,6 @@ namespace YukiTheme.Style.CodeCompletion
 			{
 				if (mainForm.UserOptions.AllowCodeFormatting)
 			    {
-					if (CodeCompletion.CodeCompletionController.currentParser == null) return false;
 					string bracket = CodeCompletion.CodeCompletionController.currentParser.LanguageInformation.GetBodyStartBracket();
 					string end_bracket = CodeCompletion.CodeCompletionController.currentParser.LanguageInformation.GetBodyEndBracket();
 					if (bracket != null)
@@ -302,8 +286,8 @@ namespace YukiTheme.Style.CodeCompletion
 			{
 				codeCompletionWindow.Closed -= new EventHandler(OnCodeCompletionWindowClosed);
 				CodeCompletionProvider.disp.Reset();
-				global::CodeCompletion.AssemblyDocCache.Reset();
-				global::CodeCompletion.UnitDocCache.Reset();
+                CodeCompletion.AssemblyDocCache.Reset();
+                CodeCompletion.UnitDocCache.Reset();
 				codeCompletionWindow.Dispose();
 
 				CodeCompletionShiftSpaceActions.comp_windows[editor.ActiveTextAreaControl.TextArea] = null;

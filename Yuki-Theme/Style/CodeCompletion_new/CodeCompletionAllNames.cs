@@ -5,7 +5,7 @@ using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using KeywordKind = PascalABCCompiler.Parsers.KeywordKind;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class CodeCompletionAllNames : ICSharpCode.TextEditor.Actions.AbstractEditAction
 	{
@@ -17,26 +17,25 @@ namespace YukiTheme.Style.CodeCompletion
 		{
 			//try
 			{
-				textArea = _textArea;
-				int off = textArea.Caret.Offset;
-				string text = textArea.Document.TextContent.Substring(0, textArea.Caret.Offset);
-
 				if (!WorkbenchServiceFactory.Workbench.UserOptions.CodeCompletionDot)
 					return;
 
-				if (CodeCompletionController.CurrentParser == null) return;
+				if (!CodeCompletionController.IntellisenseAvailable()) return;
+
+				textArea = _textArea;
+				int off = textArea.Caret.Offset;
+				string text = textArea.Document.TextContent.Substring(0, textArea.Caret.Offset);
+                
 				CodeCompletionProvider completionDataProvider = new CodeCompletionProvider();
 
-				completionDataProvider.preSelection =
-					CodeCompletionController.CurrentParser.LanguageInformation.FindPattern(off, text,
-						out var is_pattern);
+				completionDataProvider.preSelection = CodeCompletion.CodeCompletionController.CurrentLanguage.LanguageIntellisenseSupport.FindPattern(off, text, out var is_pattern);
 
 				codeCompletionWindow = YukiCodeCompletionWindow.ShowCompletionWindow(
-					VisualPABCSingleton.MainForm, // The parent window for the completion window
-					textArea.MotherTextEditorControl, // The text editor to show the window for
-					textArea.MotherTextEditorControl.FileName, // Filename - will be passed back to the provider
-					completionDataProvider, // Provider to get the list of possible completions
-					'_', // Key pressed - will be passed to the provider
+					VisualPABCSingleton.MainForm,					// The parent window for the completion window
+					textArea.MotherTextEditorControl, 					// The text editor to show the window for
+					textArea.MotherTextEditorControl.FileName,		// Filename - will be passed back to the provider
+					completionDataProvider,		// Provider to get the list of possible completions
+					'_',							// Key pressed - will be passed to the provider
 					false,
 					false,
 					KeywordKind.None
@@ -51,6 +50,7 @@ namespace YukiTheme.Style.CodeCompletion
 			}
 			//catch (Exception e)
 			{
+
 			}
 		}
 

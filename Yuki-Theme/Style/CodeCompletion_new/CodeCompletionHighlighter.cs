@@ -11,7 +11,7 @@ using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using YukiTheme.Engine;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class CodeCompletionHighlighter
 	{

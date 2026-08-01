@@ -14,7 +14,7 @@ using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using ICSharpCode.TextEditor.Gui.InsightWindow;
 using YukiTheme.Engine;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class YukiInsightWindow : AbstractCompletionWindow
 	{
@@ -215,19 +215,19 @@ namespace YukiTheme.Style.CodeCompletion
 			//pe.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
 			int num_param = PseudoDataProvider.Get<int>(DataProvider, "num_param");
+			int paramsCount = PseudoDataProvider.Get<int>(DataProvider, "param_count");
 			drawingSize = TipPainterTools.GetDrawingSizeHelpTipFromCombinedDescription(this,
 				pe.Graphics,
 				Font,
 				methodCountMessage,
-				description, num_param, true);
+				description, num_param, paramsCount, true);
 			if (drawingSize != Size)
 			{
 				SetLocation();
 			}
 			else
 			{
-				TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, methodCountMessage,
-					description, num_param, true);
+				TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, methodCountMessage, description, num_param, paramsCount, true);
 			}
 
 			lastCursorScreenPosition = control.ActiveTextAreaControl.TextArea.Caret.ScreenPosition;

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using ICSharpCode.TextEditor.Gui.CompletionWindow;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	public class DeclarationWindow : DeclarationViewWindow
 	{
@@ -26,8 +25,7 @@ namespace YukiTheme.Style.CodeCompletion
 			if (Description != null && Description.Length > 0)
 			{
 				if (!in_completion_list)
-					TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, null, Description, -1,
-						false);
+					TipPainterTools.DrawHelpTipFromCombinedDescription(this, pe.Graphics, Font, null, Description,-1, -1, false);
 				else
 				{
 					if (has_tags())

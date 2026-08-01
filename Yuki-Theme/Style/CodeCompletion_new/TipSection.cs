@@ -8,7 +8,7 @@
 using System;
 using System.Drawing;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	abstract class TipSection
 	{

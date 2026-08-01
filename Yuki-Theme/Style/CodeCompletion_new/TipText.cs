@@ -10,7 +10,7 @@ using System.Drawing;
 using ICSharpCode.TextEditor;
 using YukiTheme.Engine;
 
-namespace YukiTheme.Style.CodeCompletion
+namespace YukiTheme.Style.CodeCompletion_new
 {
 	class CountTipText : TipText
 	{
