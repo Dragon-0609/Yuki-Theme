@@ -29,7 +29,14 @@ public partial class SettingsPanel : UserControl
 		SelectCurrentTheme();
 		LoadSvg();
 		_customStickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
-		VersionText.Text = $"Version: {YukiTheme_VisualPascalABCPlugin.VersionStatic}";
+
+		string build = "";
+		if (SettingsConst.CURRENT_BUILD.Length > 0)
+		{
+			build = $"Build: {SettingsConst.CURRENT_BUILD}";
+		}
+		
+		VersionText.Text = $"Version: {YukiTheme_VisualPascalABCPlugin.VersionStatic} {(build)}";
 		CompletionFontSameAsEditor_Changed(this, null);
 	}
 

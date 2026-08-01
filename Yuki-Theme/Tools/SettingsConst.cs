@@ -35,4 +35,5 @@ public static class SettingsConst
 
 	public const double CURRENT_VERSION = 9.1;
 	public const string CURRENT_VERSION_ADD = "alpha";
+	public const string CURRENT_BUILD = "";
 }

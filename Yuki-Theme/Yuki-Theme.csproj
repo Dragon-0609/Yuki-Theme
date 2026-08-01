@@ -249,6 +249,7 @@
         <Compile Include="Tools\Doki\DokiKeysObtainer.cs" />
         <Compile Include="Tools\Doki\DokiKeysTranslator.cs" />
         <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
+        <Compile Include="Tools\DPICalculator.cs" />
         <Compile Include="Tools\Enums.cs" />
         <Compile Include="Tools\HandleWindowFinding.cs" />
         <Compile Include="Tools\Helpers\ColorHelper.cs" />
