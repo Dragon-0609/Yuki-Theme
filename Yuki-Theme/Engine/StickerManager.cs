@@ -1,8 +1,6 @@
-using System;
 using System.Windows;
 using System.Windows.Media;
-using YukiTheme.Components;
-using YukiTheme.Tools;
+using YukiTheme.Components.Windows;
 
 namespace YukiTheme.Engine;
 

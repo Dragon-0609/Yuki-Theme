@@ -1,0 +1,59 @@
+<windows:SnapWindow x:Class="YukiTheme.Components.Windows.PopupWindow"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:components="clr-namespace:YukiTheme.Components"
+                       xmlns:windows="clr-namespace:YukiTheme.Components.Windows"
+                       mc:Ignorable="d"
+                       Title="PopupWindow" Height="80" MinHeight="80" Width="320"
+                       SizeToContent="Height"
+                       BorderThickness="0" WindowStyle="None" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBlockStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Name="Border" BorderThickness="1">
+        <Grid Margin="12 4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Name="TitleText" Grid.Column="0" FontSize="16" FontWeight="Bold"
+                           VerticalAlignment="Center" Style="{StaticResource TextBlockWindow}" />
+
+                <Button Name="CloseButton" Grid.Column="1" Content="&#x2715;" FontSize="14"
+                        VerticalAlignment="Top" HorizontalContentAlignment="Center"
+                        Padding="6 0" Margin="8 0 0 0" Style="{DynamicResource TextButton}"
+                        Click="CloseButton_OnClick" />
+            </Grid>
+
+            <TextBlock Name="MessageText" Grid.Row="1" FontSize="14" TextWrapping="Wrap"
+                       Style="{StaticResource TextBlockWindow}" VerticalAlignment="Center" />
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 5">
+                <Button Name="PrimaryButton" Width="80" Margin="10 0 8 0"
+                        HorizontalContentAlignment="Center" Style="{DynamicResource TextButton}"
+                        Click="PrimaryButton_OnClick" FontSize="14" />
+                <Button Name="SecondaryButton" Width="80" Margin="0 0 0 0"
+                        HorizontalContentAlignment="Center" Style="{DynamicResource TextButton}"
+                        Click="SecondaryButton_OnClick" FontSize="14" />
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</windows:SnapWindow>

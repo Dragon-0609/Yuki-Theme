@@ -1,12 +1,16 @@
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using YukiTheme.Components.StatusBar;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 using Size = System.Drawing.Size;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public partial class SettingsPanel : UserControl
 {
@@ -131,5 +135,59 @@ public partial class SettingsPanel : UserControl
 	{
 		Visibility visible = CompletionFontSameAsEditor.IsChecked == true ? Visibility.Collapsed : Visibility.Visible;
 		CompletionFontSetPanel.Visibility = visible;
+	}
+	private void UpdateCheck_Changed(object sender, RoutedEventArgs e)
+	{
+		
+	}
+
+	private void CheckUpdate_Click(object sender, RoutedEventArgs e)
+	{
+		if (IDEAlterer.UpdateManager.CurrentDownloadWindow != null)
+		{
+			return;
+		}
+		
+		UpdateCheck.IsEnabled = false;
+		StartUpdateSpinner();
+
+		bool startedChecking = IDEAlterer.UpdateManager.Check(result =>
+		{
+			UpdateCheck.IsEnabled = true;
+			StopUpdateSpinner();
+
+			IDEAlterer.UpdateManager.HandleUpdate(result, true);
+		});
+
+		if (!startedChecking)
+		{
+			UpdateCheck.IsEnabled = true;
+			StopUpdateSpinner();
+		}
+	}
+
+	private void StartUpdateSpinner()
+	{
+		UpdateCheckLabel.SetResourceReference(TextBlock.TextProperty, "settings.general.update.checking");
+		UpdateCheckSpinner.Visibility = Visibility.Visible;
+		DoubleAnimation animation = new DoubleAnimation(0, 360, new Duration(TimeSpan.FromSeconds(1)))
+		{
+			RepeatBehavior = RepeatBehavior.Forever
+		};
+		RotateTransform rotate = ((TransformGroup)UpdateCheckSpinner.RenderTransform)
+			.Children.OfType<RotateTransform>().First();
+
+		rotate.BeginAnimation(RotateTransform.AngleProperty, animation);
+	}
+
+	private void StopUpdateSpinner()
+	{
+		UpdateCheckLabel.SetResourceReference(TextBlock.TextProperty, "settings.general.update.check");
+		RotateTransform rotate = ((TransformGroup)UpdateCheckSpinner.RenderTransform)
+			.Children.OfType<RotateTransform>().First();
+
+		rotate.BeginAnimation(RotateTransform.AngleProperty, null);
+		
+		UpdateCheckSpinner.Visibility = Visibility.Collapsed;
 	}
 }

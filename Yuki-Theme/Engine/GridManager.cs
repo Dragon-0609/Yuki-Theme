@@ -1,5 +1,5 @@
 using System.Windows.Media;
-using YukiTheme.Components;
+using YukiTheme.Components.Windows;
 using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;

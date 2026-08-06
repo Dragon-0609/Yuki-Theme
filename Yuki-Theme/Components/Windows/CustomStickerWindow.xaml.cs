@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Win32;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public partial class CustomStickerWindow : Window
 {

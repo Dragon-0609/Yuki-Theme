@@ -10,7 +10,7 @@ using YukiTheme.Tools;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using Point = System.Windows.Point;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public partial class StickerWindow : SnapWindow
 {

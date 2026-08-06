@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using ICSharpCode.TextEditor.Document;
 
 // ReSharper disable FieldCanBeMadeReadOnly.Local
@@ -22,6 +23,7 @@ public class ColorChanger
 	internal const string FOREGROUND = "foreground";
 	internal const string FG_HOVER = "fg_hover";
 	internal const string KEYWORD = "keyword";
+	internal const string KEYWORD2 = "begin";
 	internal static ColorChanger Instance;
 
 	private Dictionary<string, Brush> _brushes = new();
@@ -40,13 +42,14 @@ public class ColorChanger
 		{ TYPE, Color.Black },
 		{ FOREGROUND, Color.Black },
 		{ FG_HOVER, Color.Black },
-		{ KEYWORD, Color.Black }
+		{ KEYWORD, Color.Black },
+		{ KEYWORD2, Color.Red }
 	};
 
 	private string[] _keys =
 	{
 		BG, BG_DEF, CLICK_BG, CLICK_BG2, CLICK_BG3, SELECTION, BG_INACTIVE, BORDER, BORDER_THICK, TYPE, FOREGROUND,
-		FG_HOVER, KEYWORD
+		FG_HOVER, KEYWORD, KEYWORD2
 	};
 
 	private Dictionary<string, Pen> _pens = new();
@@ -105,7 +108,9 @@ public class ColorChanger
 
 		var defaultForeground = highlighting.GetColorFor("Default").Color;
 		var clr = DarkerOrLighter(defaultForeground, 0.2f);
-		var clrKey = highlighting.GetColorFor("Keywords").Color;
+		var clrKey = GetColorFromRuleSet(highlighting, "if").Color;
+
+		var clrKey2 = GetColorFromRuleSet(highlighting, "begin").Color;
 
 		_colors[BG] = bg;
 		_colors[BG_DEF] = bgdef;
@@ -120,6 +125,7 @@ public class ColorChanger
 		_colors[FOREGROUND] = clr;
 		_colors[FG_HOVER] = DarkerOrLighter(defaultForeground, 0.4f);
 		_colors[KEYWORD] = clrKey;
+		_colors[KEYWORD2] = clrKey2;
 
 		ResetBrush(BG_DEF);
 		ResetBrush(BG);
@@ -166,6 +172,64 @@ public class ColorChanger
 		UpdatedColors();
 
 		YukiTheme_VisualPascalABCPlugin.StopTimer();
+	}
+
+	private HighlightColor GetColorFromRuleSet(IHighlightingStrategy ruleSet, string name)
+	{
+		HighlightColor value = GetValueViaReflection(name, ruleSet.GetRuleSet(null).KeyWords);
+		return value != null ? value : new HighlightColor(Color.Red, false, false);
+	}
+
+	public HighlightColor GetValueViaReflection(string keyword, object target)
+	{
+		// 1. Get the Type of the class containing the code
+		Type trieType = target.GetType();
+
+		// 2. Get the root field
+		FieldInfo rootField = trieType.GetField("root", BindingFlags.NonPublic | BindingFlags.Instance);
+		object currentNode = rootField.GetValue(target);
+		IDEConsole.Log($"Has root: {currentNode != null}");
+
+		// 3. Get the private Node type and its fields
+		// Assuming Node is nested inside this class. If not, use the correct assembly lookup.
+		Type nodeType = trieType.GetNestedType("Node", BindingFlags.NonPublic);
+		FieldInfo leafField = nodeType.GetField("leaf", BindingFlags.Public | BindingFlags.Instance);
+		FieldInfo wordField = nodeType.GetField("word", BindingFlags.Public | BindingFlags.Instance);
+		FieldInfo colorField = nodeType.GetField("color", BindingFlags.Public | BindingFlags.Instance);
+
+		string searchKey = false ? keyword : keyword.ToUpper();
+
+		for (int i = 0; i < searchKey.Length; ++i)
+		{
+			if (currentNode == null)
+			{
+				IDEConsole.Log($"Current node null");
+				return null;
+			}
+
+			int index = (int)searchKey[i] % 256;
+
+			// 4. Access the 'leaf' array via reflection
+			Array leafArray = (Array)leafField.GetValue(currentNode);
+			currentNode = leafArray.GetValue(index);
+
+			if (currentNode == null)
+			{
+				IDEConsole.Log($"Current node null2");
+				return null;
+			}
+
+			// 5. Check if the 'word' field matches
+			string storedWord = (string)wordField.GetValue(currentNode);
+			if (storedWord == searchKey)
+			{
+				HighlightColor value = colorField.GetValue(currentNode) as HighlightColor;
+				return value;
+			}
+		}
+
+		IDEConsole.Log($"not found");
+		return null;
 	}
 
 	#region Color Management

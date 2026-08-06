@@ -19,6 +19,8 @@ public class WpfColorContainer
 	public Color BorderColor { get; set; }
 	public Color SelectionColor { get; set; }
 	public Color KeywordColor { get; set; }
+	public Color BeginEndColor { get; set; }
+	public Color TypeColor { get; set; }
 	public Brush BackgroundBrush { get; set; }
 	public Brush BackgroundDefaultBrush { get; set; }
 	public Brush BackgroundClickBrush { get; set; }
@@ -26,6 +28,8 @@ public class WpfColorContainer
 	public Brush BorderBrush { get; set; }
 	public Brush SelectionBrush { get; set; }
 	public Brush KeywordBrush { get; set; }
+	public Brush TypeBrush { get; set; }
+	public Brush BeginEndBrush { get; set; }
 
 	public void GetColorsAndBrushes()
 	{
@@ -36,6 +40,8 @@ public class WpfColorContainer
 		BorderColor = ColorReference.BorderColor.ToWPFColor();
 		SelectionColor = ColorReference.SelectionColor.ToWPFColor();
 		KeywordColor = ColorReference.KeywordColor.ToWPFColor();
+		BeginEndColor = ColorReference.BeginEndColor.ToWPFColor();
+		TypeColor = ColorReference.TypeColor.ToWPFColor();
 		BackgroundBrush = BackgroundColor.ToBrush();
 		BackgroundDefaultBrush = BackgroundDefaultColor.ToBrush();
 		BackgroundClickBrush = BackgroundClickColor.ToBrush();
@@ -43,5 +49,7 @@ public class WpfColorContainer
 		BorderBrush = BorderColor.ToBrush();
 		SelectionBrush = SelectionColor.ToBrush();
 		KeywordBrush = KeywordColor.ToBrush();
+		TypeBrush = TypeColor.ToBrush();
+		BeginEndBrush = BeginEndColor.ToBrush();
 	}
 }

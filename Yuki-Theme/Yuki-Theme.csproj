@@ -118,32 +118,36 @@
         <Reference Include="WindowsFormsIntegration"/>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Components\AlignmentHelper.cs">
-            <DependentUpon>StickerWindow.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Components\CustomStickerWindow.xaml.cs">
-          <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Components\GridWindow.xaml.cs"/>
         <Compile Include="Components\IntegerUpDown.xaml.cs"/>
         <Compile Include="Components\ListViewExt.cs" />
-        <Compile Include="Components\NameBar.cs"/>
         <Compile Include="Components\PluginSettingsControl.cs"/>
         <Compile Include="Components\PluginSettingsControl.Designer.cs"/>
-        <Compile Include="Components\SettingsPanel.xaml.cs"/>
         <Compile Include="Components\SettingsPanelUtilities.cs"/>
         <Compile Include="Components\Setting\SettingItem.cs" />
         <Compile Include="Components\SilentTextBox.cs" />
-        <Compile Include="Components\SnapWindow.cs" />
-        <Compile Include="Components\SnapWindowAlign.cs" />
-        <Compile Include="Components\StickerWindow.xaml.cs" />
+        <Compile Include="Components\StatusBar\DownloadBar.cs" />
+        <Compile Include="Components\StatusBar\NameBar.cs" />
+        <Compile Include="Components\StatusBar\StatusBarItem.cs" />
+        <Compile Include="Components\StatusBar\ThinProgressBar.cs" />
         <Compile Include="Components\Styles\CheckboxStyles.xaml.cs" />
         <Compile Include="Components\TempForm\ReferenceWindowClone.cs" />
-        <Compile Include="Components\ThemeSelectWindow.xaml.cs">
-            <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
+        <Compile Include="Components\Windows\AlignmentHelper.cs">
+          <DependentUpon>StickerWindow.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Components\WallpaperWindow.xaml.cs">
-            <DependentUpon>WallpaperWindow.xaml</DependentUpon>
+        <Compile Include="Components\Windows\CustomStickerWindow.xaml.cs">
+          <DependentUpon>CustomStickerWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\Windows\DownloadWindow.xaml.cs" />
+        <Compile Include="Components\Windows\GridWindow.xaml.cs" />
+        <Compile Include="Components\Windows\PopupWindow.xaml.cs" />
+        <Compile Include="Components\Windows\SettingsPanel.xaml.cs" />
+        <Compile Include="Components\Windows\SnapWindow.cs" />
+        <Compile Include="Components\Windows\StickerWindow.xaml.cs" />
+        <Compile Include="Components\Windows\ThemeSelectWindow.xaml.cs">
+          <DependentUpon>ThemeSelectWindow.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Components\Windows\WallpaperWindow.xaml.cs">
+          <DependentUpon>WallpaperWindow.xaml</DependentUpon>
         </Compile>
         <Compile Include="Engine\ColorChanger.cs" />
         <Compile Include="Engine\ColorReference.cs" />
@@ -185,6 +189,9 @@
         <Compile Include="Engine\TextEditorChanger.cs" />
         <Compile Include="Engine\ThemeSelectManager.cs" />
         <Compile Include="Engine\UpdateChecker.cs" />
+        <Compile Include="Engine\UpdateDownloader.cs" />
+        <Compile Include="Engine\UpdateInfo.cs" />
+        <Compile Include="Engine\UpdateManager.cs" />
         <Compile Include="Engine\WallpaperManager.cs" />
         <Compile Include="Engine\WindowManager.cs" />
         <Compile Include="Export\DokiExporter.cs" />
@@ -246,6 +253,7 @@
         <Compile Include="Tools\Database\DataSaver.cs" />
         <Compile Include="Tools\Database\FileDatabase.cs" />
         <Compile Include="Tools\Database\IDatabase.cs" />
+        <Compile Include="Tools\DataStructures.cs" />
         <Compile Include="Tools\Doki\DokiKeysObtainer.cs" />
         <Compile Include="Tools\Doki\DokiKeysTranslator.cs" />
         <Compile Include="Tools\Doki\DokiThemeCollector.cs" />
@@ -260,6 +268,7 @@
         <Compile Include="Tools\Helpers\ResourceHelper.cs" />
         <Compile Include="Tools\Helpers\ZipHelper.cs" />
         <Compile Include="Tools\IconRenderer.cs" />
+        <Compile Include="Tools\InstallationPreparer.cs" />
         <Compile Include="Tools\ItemsControlExtensions.cs" />
         <Compile Include="Tools\LinkCreator.cs" />
         <Compile Include="Tools\Props.cs" />
@@ -274,6 +283,10 @@
         <Compile Include="Tools\ThemeNameExtractor.cs" />
         <Compile Include="Tools\ThemeNames.cs" />
         <Compile Include="Tools\ThemesLocation.cs" />
+        <Compile Include="Tools\Unitylike\DebugTools.cs" />
+        <Compile Include="Tools\Unitylike\DelayedCall.cs" />
+        <Compile Include="Tools\Unitylike\Input.cs" />
+        <Compile Include="Tools\Unitylike\MonoBehaviour.cs" />
         <Compile Include="Tools\WindowsExtension.cs" />
         <Compile Include="Tools\WPFAdapter.cs" />
         <Compile Include="Tools\WpfColorContainer.cs" />
@@ -705,6 +718,7 @@
         <EmbeddedResource Include="Resources\Icons\switch.svg" />
         <EmbeddedResource Include="Resources\Icons\yuki_theme.svg" />
         <EmbeddedResource Include="Resources\Icons\positioning.svg" />
+        <EmbeddedResource Include="Resources\files.txt" />
         <Content Include="Style\Resources\Close_32.bmp" />
         <Content Include="Style\Resources\DockIndicator_PaneDiamond.bmp" />
         <Content Include="Style\Resources\DockIndicator_PaneDiamond_Bottom.bmp" />
@@ -736,11 +750,7 @@
         <Content Include="Style\Resources\Thumbs.db" />
     </ItemGroup>
     <ItemGroup>
-        <Page Include="Components\CustomStickerWindow.xaml" />
-        <Page Include="Components\GridWindow.xaml" />
         <Page Include="Components\IntegerUpDown.xaml" />
-        <Page Include="Components\SettingsPanel.xaml" />
-        <Page Include="Components\StickerWindow.xaml" />
         <Page Include="Components\Styles\ButtonStyles.xaml" />
         <Page Include="Components\Styles\CheckboxStyles.xaml" />
         <Page Include="Components\Styles\DropDownStyles.xaml" />
@@ -750,8 +760,14 @@
         <Page Include="Components\Styles\Strings.xaml" />
         <Page Include="Components\Styles\TextBlockStyles.xaml" />
         <Page Include="Components\Styles\TextBoxStyles.xaml" />
-        <Page Include="Components\ThemeSelectWindow.xaml" />
-        <Page Include="Components\WallpaperWindow.xaml" />
+        <Page Include="Components\Windows\CustomStickerWindow.xaml" />
+        <Page Include="Components\Windows\DownloadWindow.xaml" />
+        <Page Include="Components\Windows\GridWindow.xaml" />
+        <Page Include="Components\Windows\PopupWindow.xaml" />
+        <Page Include="Components\Windows\SettingsPanel.xaml" />
+        <Page Include="Components\Windows\StickerWindow.xaml" />
+        <Page Include="Components\Windows\ThemeSelectWindow.xaml" />
+        <Page Include="Components\Windows\WallpaperWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Interface" />

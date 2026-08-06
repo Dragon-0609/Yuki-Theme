@@ -36,6 +36,38 @@
         <Setter Property="Margin" Value="2 10 2 5" />
     </Style>
 
+    <Style TargetType="{x:Type Button}" x:Key="TextButton">
+        <Setter Property="Margin" Value="2 10 2 5" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="Foreground"
+                Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=Tag.KeywordBrush, TargetNullValue=Red, FallbackValue=Red}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="Transparent"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground"
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.BackgroundClickBrush, TargetNullValue=Red, FallbackValue=Red}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground"
+                                    Value="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Tag.SelectionBrush, FallbackValue=Red}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="ButtonUserControl" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonSource}">
         <Setter Property="Margin" Value="2 10 2 5" />
         <Setter Property="Foreground"
@@ -47,7 +79,8 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Margin="{TemplateBinding Padding}" />
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">

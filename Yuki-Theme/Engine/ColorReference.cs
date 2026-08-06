@@ -8,6 +8,7 @@ public static class ColorReference
 	public static Color ForegroundColor => ColorChanger.Instance.GetColor(ColorChanger.FOREGROUND);
 	public static Color ForegroundHoverColor => ColorChanger.Instance.GetColor(ColorChanger.FG_HOVER);
 	public static Color KeywordColor => ColorChanger.Instance.GetColor(ColorChanger.KEYWORD);
+	public static Color BeginEndColor => ColorChanger.Instance.GetColor(ColorChanger.KEYWORD2);
 
 	public static Color BackgroundColor => ColorChanger.Instance.GetColor(ColorChanger.BG);
 	public static Color BackgroundDefaultColor => ColorChanger.Instance.GetColor(ColorChanger.BG_DEF);

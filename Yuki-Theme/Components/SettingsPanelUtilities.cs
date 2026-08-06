@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using YukiTheme.Components.Setting;
+using YukiTheme.Components.Windows;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 
@@ -31,6 +32,8 @@ public class SettingsPanelUtilities
 			_settingsPanel.DimensionCapMax.ConvertToItem(SettingsConst.DIMENSION_CAP_MAX),
 			_settingsPanel.DimensionCapBy.ConvertToItem(SettingsConst.DIMENSION_CAP_UNIT),
 			_settingsPanel.CustomSticker.ConvertToItem(SettingsConst.USE_CUSTOM_STICKER),
+			_settingsPanel.UpdateChecker.ConvertToItem(SettingsConst.AUTO_UPDATE),
+			_settingsPanel.CheckBeta.ConvertToItem(SettingsConst.BETA),
 		];
 
 		_items = items.ToArray();

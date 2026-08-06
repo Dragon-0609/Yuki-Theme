@@ -13,7 +13,7 @@ public class DataSaver
 		{ SettingsConst.STICKER, true.ToInt().ToString() },
 		{ SettingsConst.STATUS_BAR, true.ToInt().ToString() },
 		{ SettingsConst.LOGO, true.ToInt().ToString() },
-		{ SettingsConst.BETA, true.ToInt().ToString() },
+		{ SettingsConst.BETA, false.ToInt().ToString() },
 		{ SettingsConst.LOGIN, false.ToInt().ToString() },
 		{ SettingsConst.STICKER_POSITION_UNIT, "1" },
 		{ SettingsConst.ALLOW_POSITIONING, false.ToInt().ToString() },

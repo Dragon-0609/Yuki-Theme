@@ -4,9 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using YukiTheme.Components.StatusBar;
 using YukiTheme.Tools;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public partial class ThemeSelectWindow : SnapWindow
 {

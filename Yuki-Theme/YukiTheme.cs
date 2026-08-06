@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using VisualPascalABCPlugins;
+using YukiTheme.Components.Windows;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 
@@ -65,6 +66,8 @@ public class YukiTheme_VisualPascalABCPlugin : IVisualPascalABCPlugin
 
 			if (_instance._reload)
 				_instance._alterer.Reload();
+
+			IDEAlterer.Instance.CheckIfCurrentUpdated();
 		}
 	}
 }

@@ -6,9 +6,8 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using YukiTheme.Tools;
-using Application = System.Windows.Application;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public class SnapWindow : Window
 {

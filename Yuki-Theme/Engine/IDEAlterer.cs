@@ -4,6 +4,7 @@ using System.Windows.Media;
 using ICSharpCode.TextEditor.Document;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
+using YukiTheme.Components.Windows;
 using YukiTheme.Export;
 using YukiTheme.Tools;
 
@@ -24,6 +25,8 @@ public class IDEAlterer
 	private WallpaperManager _wallpaperManager;
 	internal Form1 Form1;
 	private IDEWindowsColorChanger _ideColorChanger;
+	private UpdateManager _updateManager;
+	private DebugTools _debugTools;
 
 	internal IWorkbench Workbench;
 
@@ -41,6 +44,7 @@ public class IDEAlterer
 		_themeSelect = new ThemeWindowManager();
 		_ideColorChanger = new IDEWindowsColorChanger();
 		new DataSaver();
+		_updateManager = new UpdateManager();
 		ThemeNameExtractor.ListenToReload();
 		StartExporter();
 	}
@@ -82,6 +86,26 @@ public class IDEAlterer
 		ListenToThemeChange();
 		ThemeNameExtractor.LoadThemeInfo();
 		_editorAlterer.UpdateIconColors();
+
+		CheckIfCurrentUpdated();
+		CheckUpdate();
+
+		// _debugTools = new DebugTools();
+	}
+
+	public void CheckIfCurrentUpdated()
+	{
+		IDEConsole.Log($"Installed new version: {DataSaver.Load(SettingsConst.INSTALLED_NEW_VERSION, false)}");
+		if (DataSaver.Load(SettingsConst.INSTALLED_NEW_VERSION, false))
+		{
+			DataSaver.Save(SettingsConst.INSTALLED_NEW_VERSION, false);
+			DelayedCall.Run(0.5f, () =>
+			{
+				PopupWindow.ShowWindow($"Update completed", "Update to newer version was completed", "Ok", () =>
+				{
+				});
+			});
+		}
 	}
 
 	private void StartExporter()
@@ -175,4 +199,18 @@ public class IDEAlterer
 	}
 
 	public float EditorFontSize => _editorAlterer.EditorFontSize;
+
+	public static UpdateManager UpdateManager => Instance._updateManager;
+
+
+	private void CheckUpdate()
+	{
+		if (DataSaver.Load(SettingsConst.AUTO_UPDATE, false))
+		{
+			DelayedCall.Run(0.1f, () =>
+			{
+				_updateManager.Check(res => UpdateManager.HandleUpdate(res, false));
+			});
+		}
+	}
 }

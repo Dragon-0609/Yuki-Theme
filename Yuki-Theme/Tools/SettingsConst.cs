@@ -2,6 +2,7 @@ namespace YukiTheme.Tools;
 
 public static class SettingsConst
 {
+	
 	public const int AUTO_UPDATE = 1;
 	public const int BG_IMAGE = 2;
 	public const int STICKER = 3;
@@ -32,8 +33,10 @@ public static class SettingsConst
 	public const int DISCRETE_MODE = 27;
 	public const int COMPLETION_FONT = 28;
 	public const int COMPLETION_FONT_AS_EDITOR = 29;
+	public const int INSTALLED_NEW_VERSION = 220;
+	public static int IDE_PATH = 221;
 
-	public const double CURRENT_VERSION = 9.1;
+	public const double CURRENT_VERSION = 9.0;
 	public const string CURRENT_VERSION_ADD = "alpha";
 	public const string CURRENT_BUILD = "";
 }

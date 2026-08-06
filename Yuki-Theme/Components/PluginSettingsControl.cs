@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using VisualPascalABC;
 using VisualPascalABC.OptionsContent;
+using YukiTheme.Components.Windows;
 using YukiTheme.Engine;
 using YukiTheme.Tools;
 

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Media;
-using YukiTheme.Components;
+using YukiTheme.Components.Windows;
 using YukiTheme.Tools;
 
 namespace YukiTheme.Engine;

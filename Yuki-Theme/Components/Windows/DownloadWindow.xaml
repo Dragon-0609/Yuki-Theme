@@ -1,0 +1,86 @@
+<windows:SnapWindow x:Class="YukiTheme.Components.Windows.DownloadWindow"
+                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:components="clr-namespace:YukiTheme.Components"
+                       xmlns:windows="clr-namespace:YukiTheme.Components.Windows"
+                       mc:Ignorable="d" BorderThickness="0" WindowStyle="None"
+                       ResizeMode="NoResize" Title="DownloadWindow" Height="110" Width="340">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/ButtonStyles.xaml" />
+                <ResourceDictionary Source="/YukiTheme;component/Components/Styles/TextBlockStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ThinBar" TargetType="ProgressBar">
+                <Setter Property="Height" Value="6" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Border CornerRadius="3"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                <Grid x:Name="PART_Track" ClipToBounds="True">
+                                    <Border x:Name="PART_Indicator"
+                                            HorizontalAlignment="Left"
+                                            Background="{TemplateBinding Foreground}"
+                                            CornerRadius="3" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Name="Border" BorderThickness="1">
+        <Grid Margin="12 4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Name="TitleText" Grid.Row="0" Text="Yuki Theme: Downloading update..." FontSize="16"
+                           FontWeight="Bold" VerticalAlignment="Center" Style="{StaticResource TextBlockWindow}" />
+
+                <Button Name="ClosesButton" Grid.Column="1" Content="&#x2796;" FontSize="14"
+                        VerticalAlignment="Top" HorizontalContentAlignment="Center"
+                        Padding="6 0" Margin="8 0 0 0" Style="{DynamicResource TextButton}"
+                        Click="CloseButton_OnClick" />
+            </Grid>
+            
+
+            <Grid Grid.Row="1" Margin="0 8 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ProgressBar Name="Progress" Grid.Column="0" Minimum="0" Maximum="100" Value="0"
+                             VerticalAlignment="Center" Style="{StaticResource ThinBar}" />
+
+                <Button Name="CancelButton" Grid.Column="1" Content="&#x2715;" FontSize="12"
+                        Width="22" Height="22" Padding="0" Margin="8 0 0 0"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Style="{DynamicResource TextButton}" Click="CancelButton_OnClick" />
+            </Grid>
+
+            <TextBlock Name="ProgressText" Grid.Row="2" Text="0.0 MB / 0.0 MB  (0%)" FontSize="11"
+                       Margin="0 5 0 0" Style="{StaticResource TextBlockWindow}" />
+        </Grid>
+    </Border>
+</windows:SnapWindow>

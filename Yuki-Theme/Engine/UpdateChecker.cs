@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using YukiTheme.Tools;
@@ -13,96 +12,103 @@ public class UpdateChecker
 	private const string USER_AGENT =
 		"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36";
 
-	private const string STABLE_URL = "https://api.github.com/repos/dragon-0609/yuki-theme/releases";
-	private readonly string _githubUrl = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
-	private bool _isAvailable = false;
+	private const string RELEASES_URL = "https://api.github.com/repos/dragon-0609/yuki-theme/releases";
+	private const string LATEST_URL = "https://api.github.com/repos/Dragon-0609/Yuki-Theme/releases/latest";
+	private const string GITHUB_TAG_URL = "https://github.com/Dragon-0609/Yuki-Theme/releases/tag/";
+	private const string GITHUB_LATEST_URL = "https://github.com/Dragon-0609/Yuki-Theme/releases/latest";
 
-	private const double TEST_VERSION = 6.0;
-
-	public bool IsUpdateAvailable(bool testing = false)
+	public async Task<UpdateInfo> CheckForUpdateAsync()
 	{
-		_isAvailable = false;
-
-		CheckVersion(testing).Wait();
-		return _isAvailable;
-	}
-
-	public async Task CheckVersion(bool testing)
-	{
-		// try
-		// {
-		using (var client = new HttpClient())
+		try
 		{
-			client.DefaultRequestHeaders.Add("User-Agent", USER_AGENT);
-			HttpResponseMessage response;
-			try
-			{
-				response = await client.GetAsync(STABLE_URL);
-			}
-			catch (HttpRequestException)
-			{
-				response = null;
-			}
+			var info = new UpdateInfo { IsAvailable = false };
 
-			if (response != null)
+			using (var client = new HttpClient())
 			{
+				client.DefaultRequestHeaders.Add("User-Agent", USER_AGENT);
+
+				bool checkBeta = DataSaver.Load(SettingsConst.BETA);
+				string url = checkBeta ? RELEASES_URL : LATEST_URL;
+
+				HttpResponseMessage response;
+				try
+				{
+					response = await client.GetAsync(url);
+				}
+				catch (HttpRequestException e)
+				{
+					info.GotError = true;
+					info.ErrorMessage = e.Message;
+					return info;
+				}
+
+				if (response == null || !response.IsSuccessStatusCode)
+					return info;
+
 				var json = await response.Content.ReadAsStringAsync();
-				JObject jresponse;
 
-				jresponse = (JObject)JArray.Parse(json).First;
+				JObject release;
+				if (checkBeta)
+					release = (JObject)JArray.Parse(json).First;
+				else
+					release = JObject.Parse(json);
 
-				var tg = jresponse["tag_name"].ToString();
+				var tagName = release["tag_name"]?.ToString();
+				if (string.IsNullOrEmpty(tagName))
+					return info;
 
-				var nextVersion = "";
-				var hasBeta = tg.Contains("-");
-				nextVersion = ParseVersion(hasBeta, tg);
+				bool hasBeta = tagName.Contains("-");
+				string versionNumber = ParseVersionNumber(tagName, hasBeta);
+				double nextVer = double.Parse(versionNumber, CultureInfo.InvariantCulture);
 
-				var nextVer = double.Parse(nextVersion, CultureInfo.InvariantCulture);
-				_isAvailable = IsNewVersion(nextVer, testing) ||
-				               (Math.Abs(GetVersion(testing) - nextVer) < 1 &&
-				                SettingsConst.CURRENT_VERSION_ADD.Length != 0 && !hasBeta);
-				if (_isAvailable) PrepareForDownloading(jresponse);
-				// afterParsing(available);
+				bool isNewer = SettingsConst.CURRENT_VERSION < nextVer
+				               || (Math.Abs(SettingsConst.CURRENT_VERSION - nextVer) < 0.001
+				                   && SettingsConst.CURRENT_VERSION_ADD.Length != 0
+				                   && !hasBeta);
+
+				if (!isNewer)
+					return info;
+
+				var versionName = release["name"]?.ToString() ?? tagName;
+				if (versionName.StartsWith("v"))
+					versionName = versionName.Substring(1);
+
+				var sizeStr = release["assets"]?[0]?["size"]?.ToString();
+				long sizeBytes = 0;
+				if (!string.IsNullOrEmpty(sizeStr))
+					long.TryParse(sizeStr, out sizeBytes);
+
+				info.IsAvailable = true;
+				info.VersionName = versionName;
+				info.VersionNumber = nextVer;
+				info.IsBeta = hasBeta;
+				info.SizeBytes = sizeBytes;
+				info.DownloadUrl = release["assets"]?[0]?["browser_download_url"]?.ToString();
+				info.GitHubUrl = checkBeta ? GITHUB_TAG_URL + tagName : GITHUB_LATEST_URL;
 			}
+
+			return info;
+		}
+		catch (Exception e)
+		{
+			string error = e.Message;
+			return new UpdateInfo()
+			{
+				IsAvailable = false,
+				GotError = true,
+				ErrorMessage = error
+			};
 		}
 	}
 
-	private bool IsNewVersion(double nextVer, bool testing)
+	private static string ParseVersionNumber(string tag, bool hasBeta)
 	{
-		return GetVersion(testing) < nextVer;
-	}
-
-	private static double GetVersion(bool testing)
-	{
-		return testing ? TEST_VERSION : SettingsConst.CURRENT_VERSION;
-	}
-
-	private void PrepareForDownloading(JObject jresponse)
-	{
-		var _formattedSize = jresponse["assets"]?[0]?["size"]?.ToString();
-		_formattedSize = $"{double.Parse(_formattedSize ?? string.Empty) / 1024 / 1024:0.0} MB";
-		var _downloadUrl = jresponse["assets"][0]?["browser_download_url"]?.ToString();
-
-		var version = jresponse["name"].ToString();
-		if (version.StartsWith("v")) version = version.Substring(1);
-
-		string _approximateSize = jresponse["assets"][0]?["size"]?.ToString();
-		_approximateSize = $"{double.Parse(_approximateSize ?? string.Empty) / 1024 / 1024:0.0}";
-	}
-
-	private static string ParseVersion(bool hasBeta, string tg)
-	{
-		string nv;
 		if (hasBeta)
 		{
-			nv = tg.Split('-')[0];
-			nv = nv.Substring(1, nv.Length - 3);
-		}
-		else
-		{
-			nv = tg.Substring(1, tg.Length - 3);
+			var prefix = tag.Split('-')[0];
+			return prefix.Substring(1, prefix.Length - 3);
 		}
 
-		return nv;
+		return tag.Substring(1, tag.Length - 3);
 	}
 }

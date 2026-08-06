@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Windows.Interop;
+using System.Windows.Media;
 using YukiTheme.Style.Helpers;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
-public partial class GridWindow : SnapWindow
+public partial class WallpaperWindow : SnapWindow
 {
-	public GridWindow()
+	public WallpaperWindow()
 	{
 		InitializeComponent();
+	}
+
+	internal void SetImage(ImageSource source)
+	{
+		Wallpaper.Source = source;
 	}
 
 	protected override void OnSourceInitialized(EventArgs e)

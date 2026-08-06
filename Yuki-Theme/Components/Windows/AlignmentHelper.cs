@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Windows.Media;
 
-namespace YukiTheme.Components;
+namespace YukiTheme.Components.Windows;
 
 public class AlignmentHelper
 {

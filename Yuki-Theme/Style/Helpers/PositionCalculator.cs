@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components;
+using YukiTheme.Components.Windows;
 using Point = System.Windows.Point;
 
 namespace YukiTheme.Style.Helpers;

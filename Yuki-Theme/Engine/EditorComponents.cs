@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using ICSharpCode.TextEditor;
 using VisualPascalABC;
 using VisualPascalABCPlugins;
-using YukiTheme.Components;
+using YukiTheme.Components.StatusBar;
 using YukiTheme.Components.TempForm;
 using YukiTheme.Style;
 
@@ -128,9 +128,8 @@ public class EditorComponents
 
 		ChangeContextMenuRenderer(cons);
 
-		_nameBar = new NameBar();
-
-		_statusBar.Items.Add(_nameBar.GetControl());
+		_statusBar.Items.Add(new DownloadBar().GetControl());
+		_statusBar.Items.Add(new NameBar().GetControl());
 		_statusBar.Renderer = new ToolRenderer();
 	}
 

@@ -7,9 +7,10 @@ namespace YukiTest;
 public class UpdateTest
 {
 	// [Test]
-	public void TestUpdate()
+	public async System.Threading.Tasks.Task TestUpdate()
 	{
 		UpdateChecker checker = new UpdateChecker();
-		Assert.True(checker.IsUpdateAvailable(testing: true));
+		UpdateInfo info = await checker.CheckForUpdateAsync();
+		Assert.True(info.IsAvailable);
 	}
 }

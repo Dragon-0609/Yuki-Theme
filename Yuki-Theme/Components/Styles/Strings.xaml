@@ -29,6 +29,7 @@
     <system:String x:Key="settings.general.others">Other Settings</system:String>
     <system:String x:Key="settings.general.update.auto">Auto Check Updates</system:String>
     <system:String x:Key="settings.general.update.check">Check</system:String>
+    <system:String x:Key="settings.general.update.checking">Checking</system:String>
     <system:String x:Key="settings.general.update.install">Update&amp;#10;Manually</system:String>
     <system:String x:Key="settings.general.update.restart">Restart for update</system:String>
     <system:String x:Key="settings.general.update.beta">Check Beta Versions</system:String>

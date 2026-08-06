@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Converter;
-using System.IO;
 
 namespace VisualPascalABCPlugins
 {

@@ -1,13 +1,14 @@
-﻿<components:SnapWindow x:Class="YukiTheme.Components.StickerWindow"
+﻿<windows:SnapWindow x:Class="YukiTheme.Components.Windows.StickerWindow"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:components="clr-namespace:YukiTheme.Components"
+                       xmlns:windows="clr-namespace:YukiTheme.Components.Windows"
                        mc:Ignorable="d" Background="Transparent" BorderThickness="0" WindowStyle="None"
                        ResizeMode="NoResize"
                        AllowsTransparency="True"
                        Title="StickerWindow" Height="200" Width="200"
                        MouseEnter="Sticker_MouseEnter" MouseLeave="Sticker_MouseLeave">
     <Image Name="Sticker" MouseDown="FocusBack" />
-</components:SnapWindow>
+</windows:SnapWindow>
