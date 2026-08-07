@@ -1,0 +1,406 @@
+﻿name: Build
+
+on:
+  schedule:
+    # Runs once per day at around 23:36 UTC.
+    - cron: '36 23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  LIBRARIES_REPO: ${{ vars.LIBRARIES_REPO }}
+  LIBRARIES_RELEASE: ${{ vars.LIBRARIES_RELEASE }}
+  PROJECT_NAME: ${{ vars.PROJECT_NAME }}
+  SOLUTION_FILE: ${{ vars.SOLUTION_FILE }}
+  CONFIGURATION: Release
+
+jobs:
+  check_changes:
+    name: Check for new commits
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.check.outputs.should_build }}
+      current_sha: ${{ steps.check.outputs.current_sha }}
+      previous_sha: ${{ steps.check.outputs.previous_sha }}
+
+    steps:
+      - name: Checkout public repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if main changed since last nightly build
+        id: check
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          current_sha="$(git rev-parse HEAD)"
+          echo "current_sha=$current_sha" >> "$GITHUB_OUTPUT"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual run: building regardless of nightly tag."
+            echo "previous_sha=manual" >> "$GITHUB_OUTPUT"
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          git fetch --force --tags origin
+
+          if git rev-parse -q --verify "refs/tags/nightly" >/dev/null; then
+            previous_sha="$(git rev-parse refs/tags/nightly)"
+            echo "previous_sha=$previous_sha" >> "$GITHUB_OUTPUT"
+
+            echo "Current main SHA: $current_sha"
+            echo "Current nightly tag SHA: $previous_sha"
+
+            if [ "$current_sha" = "$previous_sha" ]; then
+              echo "No new commits since the last nightly build. Skipping build."
+              echo "should_build=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "New commits found. Build will run."
+              echo "should_build=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "Nightly tag does not exist yet. Build will run."
+            echo "previous_sha=none" >> "$GITHUB_OUTPUT"
+            echo "should_build=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build and package
+    needs: check_changes
+    if: needs.check_changes.outputs.should_build == 'true'
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout public repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Download private Libraries.zip
+        shell: pwsh
+        env:
+          LIBRARIES_TOKEN: ${{ secrets.LIBRARIES_TOKEN }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:LIBRARIES_TOKEN)) {
+            throw "LIBRARIES_TOKEN secret is missing. Add it in Settings > Secrets and variables > Actions."
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:LIBRARIES_REPO)) {
+            throw "LIBRARIES_REPO variable is missing."
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:LIBRARIES_RELEASE)) {
+            throw "LIBRARIES_RELEASE variable is missing."
+          }
+
+          New-Item -ItemType Directory -Force -Path "_download" | Out-Null
+
+          $headers = @{
+            "Authorization" = "Bearer $env:LIBRARIES_TOKEN"
+            "Accept" = "application/vnd.github+json"
+            "X-GitHub-Api-Version" = "2022-11-28"
+          }
+
+          $releaseUrl = "https://api.github.com/repos/$env:LIBRARIES_REPO/releases/tags/$env:LIBRARIES_RELEASE"
+
+          Write-Host "Reading release information from $releaseUrl"
+          $release = Invoke-RestMethod -Headers $headers -Uri $releaseUrl
+
+          $asset = $release.assets |
+            Where-Object { $_.name -eq "Libraries.zip" } |
+            Select-Object -First 1
+
+          if (-not $asset) {
+            throw "Could not find Libraries.zip in release $env:LIBRARIES_RELEASE of $env:LIBRARIES_REPO."
+          }
+
+          Write-Host "Downloading Libraries.zip"
+
+          $downloadHeaders = @{
+            "Authorization" = "Bearer $env:LIBRARIES_TOKEN"
+            "Accept" = "application/octet-stream"
+            "X-GitHub-Api-Version" = "2022-11-28"
+          }
+
+          Invoke-WebRequest `
+            -Headers $downloadHeaders `
+            -Uri $asset.url `
+            -OutFile "_download/Libraries.zip"
+
+          if (-not (Test-Path "_download/Libraries.zip")) {
+            throw "Libraries.zip was not downloaded."
+          }
+
+      - name: Extract Libraries.zip into PascalABCNET
+        shell: pwsh
+        run: |
+          # Find every project that references ..\..\PascalABCNET\bin\.
+          $projectFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse -Filter "*.csproj" |
+            Where-Object {
+              $content = Get-Content $_.FullName -Raw
+              $content -match "\.\.[\\/]\.\.[\\/]PascalABCNET[\\/]bin[\\/]"
+            }
+
+          if (-not $projectFiles) {
+            throw "No .csproj file was found with references to ..\..\PascalABCNET\bin\. Check your HintPath values."
+          }
+
+          $targetPaths = New-Object System.Collections.Generic.HashSet[string]
+
+          foreach ($project in $projectFiles) {
+            $projectDir = Split-Path $project.FullName -Parent
+
+            # Resolve ..\..\PascalABCNET relative to the .csproj directory.
+            $targetPascalABCNET = [System.IO.Path]::GetFullPath(
+              (Join-Path $projectDir "..\..\PascalABCNET")
+            )
+
+            [void]$targetPaths.Add($targetPascalABCNET)
+
+            Write-Host "Project file:"
+            Write-Host $project.FullName
+            Write-Host "Expected PascalABCNET folder:"
+            Write-Host $targetPascalABCNET
+          }
+
+          foreach ($target in $targetPaths) {
+            New-Item -ItemType Directory -Force -Path $target | Out-Null
+
+            $targetBin = Join-Path $target "bin"
+            if (Test-Path $targetBin) {
+              Remove-Item $targetBin -Recurse -Force
+            }
+
+            # Libraries.zip contains a top-level bin folder, so extracting into
+            # PascalABCNET produces PascalABCNET\bin\...
+            Expand-Archive `
+              -Path "_download/Libraries.zip" `
+              -DestinationPath $target `
+              -Force
+
+            if (-not (Test-Path $targetBin)) {
+              throw "Libraries.zip did not produce the expected PascalABCNET\bin folder at $targetBin."
+            }
+
+            Write-Host "Extracted private libraries to:"
+            Write-Host $target
+
+            Write-Host "PascalABCNET contents:"
+            Get-ChildItem -Path $target -Recurse
+          }
+
+      - name: Set nightly build metadata
+        shell: pwsh
+        env:
+          CURRENT_BUILD_SHA: ${{ needs.check_changes.outputs.current_sha }}
+        run: |
+          $settingsPath = Join-Path $env:GITHUB_WORKSPACE "Yuki-Theme/Tools/SettingsConst.cs"
+
+          if (-not (Test-Path $settingsPath)) {
+            throw "Could not find Yuki-Theme/Tools/SettingsConst.cs."
+          }
+
+          $currentBuildOld = 'public const string CURRENT_BUILD = "";'
+          $currentBuildNew = "public const string CURRENT_BUILD = `"$env:CURRENT_BUILD_SHA`";"
+          $versionAddOld = 'public const string CURRENT_VERSION_ADD = "";'
+          $versionAddNew = 'public const string CURRENT_VERSION_ADD = "nightly";'
+
+          $content = [System.IO.File]::ReadAllText($settingsPath)
+
+          if (-not $content.Contains($currentBuildOld)) {
+            throw "Could not find the expected CURRENT_BUILD declaration in $settingsPath."
+          }
+
+          if (-not $content.Contains($versionAddOld)) {
+            throw "Could not find the expected CURRENT_VERSION_ADD declaration in $settingsPath."
+          }
+
+          $content = $content.Replace($currentBuildOld, $currentBuildNew)
+          $content = $content.Replace($versionAddOld, $versionAddNew)
+
+          [System.IO.File]::WriteAllText(
+            $settingsPath,
+            $content,
+            [System.Text.UTF8Encoding]::new($false)
+          )
+
+          Write-Host "CURRENT_BUILD set to $env:CURRENT_BUILD_SHA"
+          Write-Host 'CURRENT_VERSION_ADD set to nightly'
+
+      - name: Build .NET Framework 4.8 solution
+        shell: pwsh
+        run: |
+          msbuild "$env:SOLUTION_FILE" `
+            /m `
+            /p:Configuration=$env:CONFIGURATION `
+            /p:Platform="Any CPU" `
+            /p:TargetFrameworkVersion=v4.8 `
+            /verbosity:minimal
+
+      - name: Create package folder
+        shell: pwsh
+        run: |
+          $themeProjectRoot = Join-Path $env:GITHUB_WORKSPACE "Yuki-Theme"
+          $utilityProjectRoot = Join-Path $env:GITHUB_WORKSPACE "YukiUtility"
+          $packageDir = Join-Path $env:GITHUB_WORKSPACE "package"
+
+          if (-not (Test-Path $themeProjectRoot)) {
+            throw "Could not find the Yuki-Theme project folder."
+          }
+
+          if (-not (Test-Path $utilityProjectRoot)) {
+            throw "Could not find the YukiUtility project folder."
+          }
+
+          if (Test-Path $packageDir) {
+            Remove-Item $packageDir -Recurse -Force
+          }
+          New-Item -ItemType Directory -Force -Path $packageDir | Out-Null
+
+          function Find-ProjectOutputFile {
+            param(
+              [Parameter(Mandatory = $true)][string]$ProjectRoot,
+              [Parameter(Mandatory = $true)][string]$FileName
+            )
+
+            $candidates = Get-ChildItem -Path $ProjectRoot -Recurse -File -Filter $FileName |
+              Where-Object {
+                $_.FullName -match "[\\/]bin[\\/]" -and
+                $_.FullName -notmatch "[\\/]obj[\\/]"
+              }
+
+            if (-not $candidates) {
+              throw "Could not find $FileName in a build output folder under $ProjectRoot."
+            }
+
+            $selected = $candidates |
+              Sort-Object `
+                @{ Expression = { if ($_.FullName -like "*\bin\*$env:CONFIGURATION\*") { 0 } else { 1 } } }, `
+                @{ Expression = { $_.LastWriteTimeUtc }; Descending = $true } |
+              Select-Object -First 1
+
+            return $selected
+          }
+
+          # Use YukiTheme.dll to identify Yuki-Theme's actual output directory,
+          # then require all Yuki-Theme package files to come from that same folder.
+          $themeAnchor = Find-ProjectOutputFile `
+            -ProjectRoot $themeProjectRoot `
+            -FileName "YukiTheme.dll"
+
+          $themeOutputDir = $themeAnchor.DirectoryName
+
+          $themeFiles = @(
+            "ExCSS.dll",
+            "Newtonsoft.Json.dll",
+            "Svg.dll",
+            "YukiTheme.dll",
+            "Yuki Installer.exe"
+          )
+
+          foreach ($fileName in $themeFiles) {
+            $source = Join-Path $themeOutputDir $fileName
+
+            if (-not (Test-Path $source)) {
+              throw "Could not find $fileName in Yuki-Theme output folder $themeOutputDir."
+            }
+
+            Copy-Item `
+              -Path $source `
+              -Destination (Join-Path $packageDir $fileName) `
+              -Force
+          }
+
+          $utilitySource = Find-ProjectOutputFile `
+            -ProjectRoot $utilityProjectRoot `
+            -FileName "YukiUtility.exe"
+
+          Copy-Item `
+            -Path $utilitySource.FullName `
+            -Destination (Join-Path $packageDir "YukiUtility.exe") `
+            -Force
+
+          Write-Host "Yuki-Theme output folder:"
+          Write-Host $themeOutputDir
+
+          Write-Host "YukiUtility output file:"
+          Write-Host $utilitySource.FullName
+
+          Write-Host "Package contents:"
+          Get-ChildItem -Path $packageDir
+
+      - name: Create ZIP
+        shell: pwsh
+        run: |
+          $zipName = "$env:PROJECT_NAME" + "_" + "$env:GITHUB_RUN_NUMBER" + ".zip"
+
+          if (Test-Path $zipName) {
+            Remove-Item $zipName -Force
+          }
+
+          # package/* places the six files directly at the ZIP root.
+          Compress-Archive `
+            -Path "package/*" `
+            -DestinationPath $zipName `
+            -Force
+
+          Add-Content -Path $env:GITHUB_ENV -Value "ZIP_NAME=$zipName"
+
+          Write-Host "Created $zipName"
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}
+          if-no-files-found: error
+
+      - name: Update Nightly Release
+        if: github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $nightlyTag = "nightly"
+          $nightlyZip = "$env:PROJECT_NAME-nightly.zip"
+
+          Copy-Item `
+            -Path "$env:ZIP_NAME" `
+            -Destination $nightlyZip `
+            -Force
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git tag -f $nightlyTag $env:GITHUB_SHA
+          git push origin $nightlyTag --force
+
+          $releaseExists = $true
+          gh release view $nightlyTag 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            $releaseExists = $false
+          }
+
+          if (-not $releaseExists) {
+            gh release create $nightlyTag `
+              --title "Nightly Build" `
+              --notes "Automatic nightly build from the latest main branch." `
+              --prerelease `
+              --latest=false
+          }
+
+          gh release upload $nightlyTag $nightlyZip --clobber
+
+          Write-Host "Nightly release updated."
+          Write-Host "Release page:"
+          Write-Host "https://github.com/$env:GITHUB_REPOSITORY/releases/tag/nightly"
+          Write-Host "Direct download:"
+          Write-Host "https://github.com/$env:GITHUB_REPOSITORY/releases/download/nightly/$nightlyZip"

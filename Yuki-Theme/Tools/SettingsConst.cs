@@ -40,7 +40,7 @@ public static class SettingsConst
 	public const int INSTALLED_NEW_VERSION = 220;
 	public static int IDE_PATH = 221;
 
-	public const double CURRENT_VERSION = 9.0;
-	public const string CURRENT_VERSION_ADD = "alpha";
+	public const double CURRENT_VERSION = 9.3;
+	public const string CURRENT_VERSION_ADD = "";
 	public const string CURRENT_BUILD = "";
 }
