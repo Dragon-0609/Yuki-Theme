@@ -10,6 +10,8 @@ namespace YukiTheme.Engine;
 
 public class ImageLoader
 {
+	public static ImageLoader Instance;
+	
 	private const string ImagesFolder = "Highlighting";
 	private const string PngFilter = "*.png";
 	private readonly string _stickerName = "sticker";
@@ -20,18 +22,24 @@ public class ImageLoader
 
 	internal Image GetSticker { get; private set; }
 	internal Image GetCustomSticker { get; private set; }
+	internal Image GetCustomWallpaper { get; private set; }
 
+	internal bool HasWallpaper => GetWallpaper is { Height: > 10 };
 	internal bool HasSticker => GetSticker is { Height: > 10 };
 	internal bool HasCustomSticker => GetCustomSticker != null;
+	internal bool HasCustomWallpaper => GetCustomWallpaper != null;
 
 	internal ImageSource GetWallpaperWPF { get; private set; }
 
 	internal ImageSource GetStickerWPF { get; private set; }
 	internal ImageSource GetCustomStickerWPF { get; private set; }
+	internal ImageSource GetCustomWallpaperWPF { get; private set; }
 
 	public ImageLoader()
 	{
+		Instance = this;
 		PluginEvents.Instance.CustomStickerPathChanged += ReLoadCustomSticker;
+		PluginEvents.Instance.CustomWallpaperPathChanged += ReLoadCustomWallpaper;
 	}
 
 	private void RemoveLastImage()
@@ -53,6 +61,7 @@ public class ImageLoader
 		GetStickerWPF = null;
 
 		ReleaseCustomSticker();
+		ReleaseCustomWallpaper();
 	}
 
 	internal void LoadImages()
@@ -89,6 +98,7 @@ public class ImageLoader
 		}
 
 		LoadCustomSticker();
+		LoadCustomWallpaper();
 	}
 
 	private void LoadCustomSticker()
@@ -101,11 +111,28 @@ public class ImageLoader
 		}
 	}
 
+	private void LoadCustomWallpaper()
+	{
+		var stickerPath = DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_PATH, "");
+		if (File.Exists(stickerPath))
+		{
+			GetCustomWallpaper = Image.FromFile(stickerPath);
+			Console.WriteLine($"Loaded {stickerPath}");
+		}
+	}
+
 	internal void ReLoadCustomSticker()
 	{
 		ReleaseCustomSticker();
 		LoadCustomSticker();
 		ApplyCustomSticker();
+	}
+
+	internal void ReLoadCustomWallpaper()
+	{
+		ReleaseCustomWallpaper();
+		LoadCustomWallpaper();
+		ApplyCustomWallpaper();
 	}
 
 	internal void ReleaseImages()
@@ -122,6 +149,7 @@ public class ImageLoader
 		}
 
 		ApplyCustomSticker();
+		ApplyCustomWallpaper();
 	}
 
 	private void ApplyCustomSticker()
@@ -129,6 +157,14 @@ public class ImageLoader
 		if (GetCustomSticker != null)
 		{
 			GetCustomStickerWPF = GetCustomSticker.ToWPFImage();
+		}
+	}
+
+	private void ApplyCustomWallpaper()
+	{
+		if (GetCustomWallpaper != null)
+		{
+			GetCustomWallpaperWPF = GetCustomWallpaper.ToWPFImage();
 		}
 	}
 
@@ -175,5 +211,16 @@ public class ImageLoader
 		}
 
 		GetCustomStickerWPF = null;
+	}
+
+	private void ReleaseCustomWallpaper()
+	{
+		if (GetCustomWallpaper != null)
+		{
+			GetCustomWallpaper.Dispose();
+			GetCustomWallpaper = null;
+		}
+
+		GetCustomWallpaperWPF = null;
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using YukiTheme.Components;
 using YukiTheme.Components.Windows;
 using YukiTheme.Engine;
@@ -8,12 +9,23 @@ public class DebugTools : MonoBehaviour
 {
 	private void Start()
 	{
-		IDEConsole.Log("DebugTools keys — popups: U available, N no-update, E error. " +
-		               "Download: O open, S step +10%, C complete, R error, X close.");
+		// IDEConsole.Log("DebugTools keys — popups: U available, N no-update, E error. " +
+		               // "Download: O open, S step +10%, C complete, R error, X close.");
 	}
 
 	private void Update()
 	{
+
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			Console.WriteLine($"Logging");
+			bool load = DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false);
+			Console.WriteLine(load);
+			Console.WriteLine(DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_PATH, ""));
+			Console.WriteLine(ImageLoader.Instance.HasCustomWallpaper);
+		}
+		
+		return;
 		if (Input.GetKeyDown(KeyCode.U))
 		{
 			ShowAvailablePopup();

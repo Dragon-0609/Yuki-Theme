@@ -34,6 +34,8 @@ public class SettingsPanelUtilities
 			_settingsPanel.CustomSticker.ConvertToItem(SettingsConst.USE_CUSTOM_STICKER),
 			_settingsPanel.UpdateChecker.ConvertToItem(SettingsConst.AUTO_UPDATE),
 			_settingsPanel.CheckBeta.ConvertToItem(SettingsConst.BETA),
+			_settingsPanel.CustomBackground.ConvertToItem(SettingsConst.USE_CUSTOM_BACKGROUND),
+			_settingsPanel.CustomWallpaperAlign.ConvertToItem(SettingsConst.CUSTOM_BACKGROUND_ALIGN, 1),
 		];
 
 		_items = items.ToArray();
@@ -73,5 +75,14 @@ public class SettingsPanelUtilities
 	public void ReLoadCustomSticker()
 	{
 		PluginEvents.Instance.OnCustomStickerPathChanged();
+	}
+	public void ReLoadCustomBackground()
+	{
+		PluginEvents.Instance.OnCustomBackgroundPathChanged();
+	}
+
+	public void ReLoadCustomBackgroundAlign()
+	{
+		PluginEvents.Instance.OnCustomWallpaperAlignChanged();
 	}
 }

@@ -55,9 +55,24 @@
                     </WrapPanel>
                 </WrapPanel>
             </GroupBox>
+            
             <CheckBox Content="{DynamicResource settings.general.background.enabled}" Margin="0 10 6 3"
                       Style="{StaticResource CheckBoxUserControl}"
                       HorizontalAlignment="Left" Name="ShowBackground" />
+            <WrapPanel Margin="0 0 6 3">
+                <Button Padding="8 2" Content="{DynamicResource settings.general.sticker.choose}"
+                        Margin="0 0 20 0" Style="{StaticResource ButtonUserControl}"
+                        Click="ChooseCustomBackground" />
+                <CheckBox Content="{DynamicResource settings.general.background.custom}"
+                          Style="{StaticResource CheckBoxUserControl}" Name="CustomBackground" />
+            </WrapPanel>
+            
+            <ComboBox Margin="5 0" Width="120" Style="{StaticResource DropdownUserControl}"
+                      Name="CustomWallpaperAlign">
+                <ComboBoxItem Content="Left" />
+                <ComboBoxItem IsSelected="True" Content="Center" />
+                <ComboBoxItem IsSelected="True" Content="Right" />
+            </ComboBox>
 
             <GroupBox Margin="0 5" Header="{DynamicResource settings.general.sticker.title}"
                       Style="{StaticResource CustomGroup}">

@@ -3,6 +3,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     <system:String x:Key="settings.general.background.title">Background Image</system:String>
     <system:String x:Key="settings.general.background.enabled">Show Background Image</system:String>
+    <system:String x:Key="settings.general.background.custom">Use Custom Background Image</system:String>
     <system:String x:Key="settings.general.fitbywidth">Auto Fit Background Image by Width</system:String>
     <system:String x:Key="settings.general.fitbywidth.help">Background Image will be fitted by width if&amp;#10;it's necessary</system:String>
     <system:String x:Key="settings.general.asktosave">Always ask to save</system:String>

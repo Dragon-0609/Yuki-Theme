@@ -49,7 +49,7 @@ public class IDEAlterer
 		StartExporter();
 	}
 
-	internal static bool HasWallpaper => Instance._imageLoader.HasImage;
+	internal static bool HasWallpaper => HasCurrentBackground();
 	internal static bool HasSticker => HasCurrentSticker();
 
 	internal static bool CanShowWallpaper => Instance._imageLoader.HasImage && IsWallpaperVisible && !IsDiscreteActive;
@@ -62,10 +62,10 @@ public class IDEAlterer
 
 	internal static bool IsDiscreteActive => DataSaver.Load(SettingsConst.DISCRETE_MODE);
 
-	internal static Image GetWallpaper => Instance._imageLoader.GetWallpaper;
+	internal static Image GetWallpaper => GetCurrentBackground();
 	internal static Image GetSticker => GetCurrentSticker();
 
-	internal static ImageSource GetWallpaperWPF => Instance._imageLoader.GetWallpaperWPF;
+	internal static ImageSource GetWallpaperWPF => GetCurrentBackgroundWpf();
 	internal static ImageSource GetStickerWPF => GetCurrentStickerWpf();
 
 	internal void Init()
@@ -196,6 +196,29 @@ public class IDEAlterer
 		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false) &&
 		                 Instance._imageLoader.HasCustomSticker;
 		return hasCustom ? Instance._imageLoader.HasCustomSticker : Instance._imageLoader.HasSticker;
+	}
+
+	private static Image GetCurrentBackground()
+	{
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false) &&
+		                 Instance._imageLoader.HasCustomWallpaper;
+		return hasCustom ? Instance._imageLoader.GetCustomWallpaper : Instance._imageLoader.GetWallpaper;
+	}
+
+	private static ImageSource GetCurrentBackgroundWpf()
+	{
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false) &&
+		                 Instance._imageLoader.HasCustomWallpaper;
+		return hasCustom
+			? Instance._imageLoader.GetCustomWallpaperWPF
+			: Instance._imageLoader.GetWallpaperWPF;
+	}
+
+	private static bool HasCurrentBackground()
+	{
+		bool hasCustom = DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false) &&
+		                 Instance._imageLoader.HasCustomWallpaper;
+		return hasCustom ? Instance._imageLoader.HasCustomWallpaper : Instance._imageLoader.HasWallpaper;
 	}
 
 	public float EditorFontSize => _editorAlterer.EditorFontSize;

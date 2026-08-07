@@ -21,6 +21,7 @@ public partial class SettingsPanel : UserControl
 	public SettingsPanelUtilities Utilities;
 
 	private string _customStickerPath;
+	private string _customBackgroundPath;
 
 	public SettingsPanel()
 	{
@@ -33,6 +34,7 @@ public partial class SettingsPanel : UserControl
 		SelectCurrentTheme();
 		LoadSvg();
 		_customStickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		_customBackgroundPath = DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_PATH, "");
 
 		string build = "";
 		if (SettingsConst.CURRENT_BUILD.Length > 0)
@@ -102,12 +104,39 @@ public partial class SettingsPanel : UserControl
 		}
 	}
 
+	private void ChooseCustomBackground(object sender, RoutedEventArgs e)
+	{
+		CustomStickerWindow imageSelector = new CustomStickerWindow
+		{
+			Tag = Tag,
+			Background = Background,
+			Foreground = Foreground,
+		};
+		imageSelector.ChangeTitle("Custom Background");
+		imageSelector.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+		WindowInteropHelper helper = new WindowInteropHelper(imageSelector);
+		helper.Owner = IDEAlterer.Instance.GetSettingsParent().Handle;
+
+		imageSelector.ImagePath.Text = _customBackgroundPath;
+		if (imageSelector.ShowDialog() == true)
+		{
+			_customBackgroundPath = imageSelector.ImagePath.Text;
+		}
+	}
+
 	internal void SaveSettings()
 	{
 		bool customStickerEnabled = DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false);
+		bool customBackgroundEnabled = DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false);
+		int alignIndex = DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_ALIGN, 1);
+		
 		Utilities.SaveSettings();
 		string prevStickerPath = DataSaver.Load(SettingsConst.CUSTOM_STICKER_PATH, "");
+		string prevBackgroundPath = DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_PATH, "");
+		
 		DataSaver.Save(SettingsConst.CUSTOM_STICKER_PATH, _customStickerPath);
+		DataSaver.Save(SettingsConst.CUSTOM_BACKGROUND_PATH, _customBackgroundPath);
 
 		if (_resetStickerMargin)
 		{
@@ -118,6 +147,15 @@ public partial class SettingsPanel : UserControl
 		    customStickerEnabled != DataSaver.Load(SettingsConst.USE_CUSTOM_STICKER, false))
 		{
 			Utilities.ReLoadCustomSticker();
+		}
+
+		if (prevBackgroundPath != _customBackgroundPath ||
+		    customBackgroundEnabled != DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false))
+		{
+			Utilities.ReLoadCustomBackground();
+		}else if (alignIndex != DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_ALIGN, 1))
+		{
+			Utilities.ReLoadCustomBackgroundAlign();
 		}
 
 		_resetStickerMargin = false;

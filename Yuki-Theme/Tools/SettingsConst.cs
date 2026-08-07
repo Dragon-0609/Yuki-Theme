@@ -33,6 +33,10 @@ public static class SettingsConst
 	public const int DISCRETE_MODE = 27;
 	public const int COMPLETION_FONT = 28;
 	public const int COMPLETION_FONT_AS_EDITOR = 29;
+	public const int CUSTOM_BACKGROUND_PATH = 30;
+	public const int USE_CUSTOM_BACKGROUND = 31;
+	public const int CUSTOM_BACKGROUND_ALIGN = 32;
+	
 	public const int INSTALLED_NEW_VERSION = 220;
 	public static int IDE_PATH = 221;
 

@@ -10,6 +10,12 @@ public partial class CustomStickerWindow : Window
 		InitializeComponent();
 	}
 
+	public void ChangeTitle(string title)
+	{
+		Title = title;
+		TitleText.Text = title;
+	}
+
 	private void SelectImageClicked(object sender, RoutedEventArgs e)
 	{
 		OpenFileDialog openFileDialog = new OpenFileDialog();

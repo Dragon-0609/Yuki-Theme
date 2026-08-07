@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Media;
 using YukiTheme.Components.Windows;
@@ -52,6 +53,8 @@ public class WallpaperManager : WindowManager
 		}));
 
 		IDEAlterer.Instance.Form1.Focus();
+		PluginEvents.Instance.CustomWallpaperPathChanged += UpdateWallpaper;
+		PluginEvents.Instance.CustomWallpaperAlignChanged += UpdateAlign;
 	}
 
 	internal override bool IsWindowNull()
@@ -73,7 +76,7 @@ public class WallpaperManager : WindowManager
 			UpdateOpacity();
 		}
 
-		_wallpaper.ResetPosition();
+		UpdateAlign();
 		UpdateVisibility();
 	}
 
@@ -98,6 +101,14 @@ public class WallpaperManager : WindowManager
 
 	private HorizontalAlignment GetXAlign()
 	{
+		if (DataSaver.Load(SettingsConst.USE_CUSTOM_BACKGROUND, false) && ImageLoader.Instance.HasCustomWallpaper)
+		{
+			int align = DataSaver.Load(SettingsConst.CUSTOM_BACKGROUND_ALIGN, 1);
+			align = align > 2 ? 2 : align < 0 ? 0 : align;
+
+			return (HorizontalAlignment)align;
+		}
+		
 		switch (_align)
 		{
 			case "left":

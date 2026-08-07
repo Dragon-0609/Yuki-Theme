@@ -16,6 +16,8 @@ public class PluginEvents
 
 	internal event Action StickerMarginReset;
 	internal event Action CustomStickerPathChanged;
+	internal event Action CustomWallpaperPathChanged;
+	internal event Action CustomWallpaperAlignChanged;
 
 	internal void OnThemeChanged(string name)
 	{
@@ -35,6 +37,16 @@ public class PluginEvents
 	internal void OnCustomStickerPathChanged()
 	{
 		CustomStickerPathChanged?.Invoke();
+	}
+
+	internal void OnCustomBackgroundPathChanged()
+	{
+		CustomWallpaperPathChanged?.Invoke();
+	}
+
+	internal void OnCustomWallpaperAlignChanged()
+	{
+		CustomWallpaperAlignChanged?.Invoke();
 	}
 
 	internal delegate void ThemeChange(string name);
