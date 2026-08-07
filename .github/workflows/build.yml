@@ -199,8 +199,6 @@ jobs:
 
       - name: Set nightly build metadata
         shell: pwsh
-        env:
-          CURRENT_BUILD_SHA: ${{ needs.check_changes.outputs.current_sha }}
         run: |
           $settingsPath = Join-Path $env:GITHUB_WORKSPACE "Yuki-Theme/Tools/SettingsConst.cs"
 
@@ -208,8 +206,13 @@ jobs:
             throw "Could not find Yuki-Theme/Tools/SettingsConst.cs."
           }
 
+          $shortSha = (git rev-parse --short=7 HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($shortSha)) {
+            throw "Could not determine the short commit SHA."
+          }
+
           $currentBuildOld = 'public const string CURRENT_BUILD = "";'
-          $currentBuildNew = "public const string CURRENT_BUILD = `"$env:CURRENT_BUILD_SHA`";"
+          $currentBuildNew = "public const string CURRENT_BUILD = `"$shortSha`";"
           $versionAddOld = 'public const string CURRENT_VERSION_ADD = "";'
           $versionAddNew = 'public const string CURRENT_VERSION_ADD = "nightly";'
 
@@ -232,7 +235,7 @@ jobs:
             [System.Text.UTF8Encoding]::new($false)
           )
 
-          Write-Host "CURRENT_BUILD set to $env:CURRENT_BUILD_SHA"
+          Write-Host "CURRENT_BUILD set to $shortSha"
           Write-Host 'CURRENT_VERSION_ADD set to nightly'
 
       - name: Build .NET Framework 4.8 solution
