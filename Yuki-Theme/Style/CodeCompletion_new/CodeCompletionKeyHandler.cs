@@ -118,7 +118,7 @@ namespace YukiTheme.Style.CodeCompletion_new
 						key, // Key pressed - will be passed to the provider
 						true,
 						true,
-						PascalABCCompiler.Parsers.KeywordKind.None
+						PascalABCCompiler.Contracts.Parsers.KeywordKind.None
 					);
 					CodeCompletionShiftSpaceActions.is_begin = true;
 					CodeCompletionShiftSpaceActions.comp_windows[editor.ActiveTextAreaControl.TextArea] =
@@ -157,11 +157,11 @@ namespace YukiTheme.Style.CodeCompletion_new
 			{
 				if (VisualPABCSingleton.MainForm.UserOptions.CodeCompletionDot)
 				{
-					PascalABCCompiler.Parsers.KeywordKind keyw =
+					PascalABCCompiler.Contracts.Parsers.KeywordKind keyw =
 						KeywordChecker.TestForKeyword(editor.Document.TextContent,
 							editor.ActiveTextAreaControl.TextArea.Caret.Offset - 1);
-					if (keyw == PascalABCCompiler.Parsers.KeywordKind.New ||
-					    keyw == PascalABCCompiler.Parsers.KeywordKind.Uses)
+					if (keyw == PascalABCCompiler.Contracts.Parsers.KeywordKind.New ||
+					    keyw == PascalABCCompiler.Contracts.Parsers.KeywordKind.Uses)
 					{
 						completionDataProvider = new CodeCompletionProvider();
 						codeCompletionWindow = YukiCodeCompletionWindow.ShowCompletionWindow(
@@ -206,7 +206,7 @@ namespace YukiTheme.Style.CodeCompletion_new
 			{
 				if (VisualPABCSingleton.MainForm.UserOptions.CodeCompletionDot)
 				{
-                    PascalABCCompiler.Parsers.KeywordKind keyw = KeywordChecker.TestForKeyword(editor.Document.TextContent, editor.ActiveTextAreaControl.TextArea.Caret.Offset - 1);
+                    PascalABCCompiler.Contracts.Parsers.KeywordKind keyw = KeywordChecker.TestForKeyword(editor.Document.TextContent, editor.ActiveTextAreaControl.TextArea.Caret.Offset - 1);
                     if (CodeCompletion.CodeCompletionController.CurrentLanguage.LanguageIntellisenseSupport.IsDefinitionIdentifierAfterKeyword(keyw))
 						return false;
 

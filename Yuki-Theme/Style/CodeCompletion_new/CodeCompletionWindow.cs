@@ -44,7 +44,7 @@ namespace YukiTheme.Style.CodeCompletion_new
 
 		public static YukiCodeCompletionWindow ShowCompletionWindow(Form parent, TextEditorControl control,
 			string fileName, ICompletionDataProvider completionDataProvider, char firstChar, bool visibleKeyPressed,
-			bool is_by_dot, PascalABCCompiler.Parsers.KeywordKind keyw)
+			bool is_by_dot, PascalABCCompiler.Contracts.Parsers.KeywordKind keyw)
 		{
 			ICompletionData[] completionData =
 				(completionDataProvider as VisualPascalABC.CodeCompletionProvider).GenerateCompletionDataWithKeyword(
@@ -85,7 +85,7 @@ namespace YukiTheme.Style.CodeCompletion_new
 
 		public static YukiCodeCompletionWindow ShowCompletionWindowWithFirstChar(Form parent,
 			TextEditorControl control, string fileName, ICompletionDataProvider completionDataProvider, char firstChar,
-			PascalABCCompiler.Parsers.KeywordKind keyw)
+			PascalABCCompiler.Contracts.Parsers.KeywordKind keyw)
 		{
 			ICompletionData[] completionData =
 				(completionDataProvider as VisualPascalABC.CodeCompletionProvider).GenerateCompletionDataByFirstChar(
