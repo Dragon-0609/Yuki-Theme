@@ -3,7 +3,7 @@ using System.Collections;
 using CodeCompletion;
 using ICSharpCode.TextEditor;
 using VisualPascalABC;
-using KeywordKind = PascalABCCompiler.Parsers.KeywordKind;
+using KeywordKind = PascalABCCompiler.Contracts.Parsers.KeywordKind;
 
 namespace YukiTheme.Style.CodeCompletion_new
 {

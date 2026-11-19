@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
+        <PascalABCNETPath Condition=" '$(PascalABCNETPath)' == '' and Exists('..\..\PascalABCNET\bin\PascalABCNET.exe') ">..\..\PascalABCNET\bin</PascalABCNETPath>
+        <PascalABCNETPath Condition=" '$(PascalABCNETPath)' == '' and Exists('C:\Program Files (x86)\PascalABC.NET\PascalABCNET.exe') ">C:\Program Files (x86)\PascalABC.NET</PascalABCNETPath>
+        <FrameworkPathOverride Condition=" '$(FrameworkPathOverride)' == '' and !Exists('$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8') and Exists('$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2') ">$(MSBuildProgramFiles32)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2</FrameworkPathOverride>
+
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
         <ProjectGuid>{5F9850DC-77D2-4738-9B06-A45EE54376F1}</ProjectGuid>
@@ -35,46 +39,54 @@
     <ItemGroup>
         <Reference Include="Accessibility" />
         <Reference Include="CodeCompletion">
-            <HintPath>..\..\PascalABCNET\bin\CodeCompletion.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\CodeCompletion.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ExCSS">
           <HintPath>..\packages\ExCSS.4.2.3\lib\net48\ExCSS.dll</HintPath>
         </Reference>
         <Reference Include="ICSharpCode.Core">
-            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\ICSharpCode.Core.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ICSharpCode.Core.WinForms">
-            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.Core.WinForms.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\ICSharpCode.Core.WinForms.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="ICSharpCode.TextEditor">
-            <HintPath>..\..\PascalABCNET\bin\ICSharpCode.TextEditor.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\ICSharpCode.TextEditor.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="LanguageIntegrator">
-          <HintPath>..\..\PascalABCNET\bin\LanguageIntegrator.dll</HintPath>
+          <HintPath>$(PascalABCNETPath)\LanguageIntegrator.dll</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="Localization">
-            <HintPath>..\..\PascalABCNET\bin\Localization.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\Localization.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="mscorlib"/>
         <Reference Include="Newtonsoft.Json">
           <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
         </Reference>
+                <Reference Include="ParserContracts">
+            <HintPath>$(PascalABCNETPath)\ParserContracts.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="CodeCompletionContracts">
+            <HintPath>$(PascalABCNETPath)\CodeCompletionContracts.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="ParserTools">
-            <HintPath>..\..\PascalABCNET\bin\ParserTools.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\ParserTools.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="PascalABCNET">
-          <HintPath>..\..\PascalABCNET\bin\PascalABCNET.exe</HintPath>
+          <HintPath>$(PascalABCNETPath)\PascalABCNET.exe</HintPath>
           <Private>False</Private>
         </Reference>
         <Reference Include="PluginsSupport">
-            <HintPath>..\..\PascalABCNET\bin\PluginsSupport.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\PluginsSupport.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="PresentationCore"/>
@@ -111,7 +123,7 @@
         <Reference Include="System.Xml"/>
         <Reference Include="System.Xml.Linq"/>
         <Reference Include="WeifenLuo.WinFormsUI.Docking">
-            <HintPath>..\..\PascalABCNET\bin\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+            <HintPath>$(PascalABCNETPath)\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="WindowsBase"/>
